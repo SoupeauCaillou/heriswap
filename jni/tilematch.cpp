@@ -5,10 +5,13 @@
 
 #include "importgl.h"
 
+#include "sac/base/Vector2.h"
+
 void
 Java_net_damsy_soupeaucaillou_tilematch_DemoRenderer_nativeInit( JNIEnv*  env )
 {
-	importGLInit();
+	Vector2 x(1, 2);
+	x = x - Vector2::UnitX;
 }
 
 void
@@ -21,7 +24,7 @@ Java_net_damsy_soupeaucaillou_tilematch_DemoRenderer_nativeResize( JNIEnv*  env,
 void
 Java_net_damsy_soupeaucaillou_tilematch_DemoRenderer_nativeDone( JNIEnv*  env )
 {
-	importGLDeinit();
+	
 }
 
 /* This is called to indicate to the render loop that it should
