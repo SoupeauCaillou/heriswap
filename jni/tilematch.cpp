@@ -6,12 +6,14 @@
 #include "importgl.h"
 
 #include "sac/base/Vector2.h"
+#include "../sources/Game.h"
+
+Game game;
 
 void
 Java_net_damsy_soupeaucaillou_tilematch_DemoRenderer_nativeInit( JNIEnv*  env )
 {
-	Vector2 x(1, 2);
-	x = x - Vector2::UnitX;
+	game.init();
 }
 
 void
@@ -39,4 +41,5 @@ Java_net_damsy_soupeaucaillou_tilematch_DemoGLSurfaceView_nativePause( JNIEnv*  
 void
 Java_net_damsy_soupeaucaillou_tilematch_DemoRenderer_nativeRender( JNIEnv*  env )
 {
+	game.tick(1.0f/60.0f);
 }

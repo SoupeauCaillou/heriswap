@@ -10,11 +10,13 @@ LOCAL_CFLAGS := -DANDROID_NDK \
 
 LOCAL_CXXFLAGS := -DANDROID_NDK \
                 -DDISABLE_IMPORTGL \
-				-I$(LOCAL_PATH)/..
+				-I$(LOCAL_PATH)/.. \
+				-I$(LOCAL_PATH)/../sac/
 
 LOCAL_SRC_FILES := \
     importgl.c \
     tilematch.cpp \
+	../sources/Game.cpp \
 
 LOCAL_SHARED_LIBRARIES := sac
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog
