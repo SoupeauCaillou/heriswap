@@ -2,7 +2,7 @@
 
 class Game {
 	public:
-		void init();
+		void init(int windowW, int windowH);
 		void tick(float dt);
 };
 
