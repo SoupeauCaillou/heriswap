@@ -9,8 +9,40 @@
 #include <cstdlib>
 #include "Game.h"
 
-char* loadPng(const char* assetName, int* width, int* height)
+static char* loadPng(const char* assetName, int* width, int* height);
+static char* loadTextfile(const char* assetName);
+
+int main() {
+	if (!glfwInit())
+		return 1;
+
+	if( !glfwOpenWindow( 420,700, 0,0,0,0,0,0, GLFW_WINDOW ) )
+		return 1;
+	
+	theRenderingSystem.setDecompressPNGImagePtr(&loadPng);
+	theRenderingSystem.setLoadShaderPtr(&loadTextfile);
+
+	Game game;
+	game.init(420, 700);
+	theRenderingSystem.init();
+
+	bool running = true;
+	while(running) {
+		game.tick(1.0f / 60.0f);
+		glfwSwapBuffers();
+
+		running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
+	}
+	Vector2 x(Vector2::Zero);
+
+	glfwTerminate();
+
+	return 0;
+}
+
+static char* loadPng(const char* assetName, int* width, int* height)
 {
+	std::cout << __FUNCTION__ << " : " << assetName << std::endl;
 	png_byte* PNG_image_buffer;
 	std::stringstream ss;
 	ss << "./res/raw/" << assetName;
@@ -124,27 +156,22 @@ char* loadPng(const char* assetName, int* width, int* height)
 	return (char*)PNG_image_buffer;
 }
 
-int main() {
-	if (!glfwInit())
-		return 1;
-
-	if( !glfwOpenWindow( 480,800, 0,0,0,0,0,0, GLFW_WINDOW ) )
-		return 1;
-	
-	theRenderingSystem.setDecompressPNGImagePtr(&loadPng);
-
-	Game game;
-	game.init(480, 800);
-	bool running = true;
-	while(running) {
-		game.tick(1.0f / 60.0f);
-		glfwSwapBuffers();
-
-		running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
+static char* loadTextfile(const char* assetName)
+{
+	std::cout << __FUNCTION__ << " : " << assetName << std::endl;
+	std::stringstream ss;
+	ss << "./res/raw/" << assetName;
+	FILE *file = fopen(ss.str().c_str(), "r");
+	if (file == NULL) {
+		std::cout << ss.str() << " not found" << std::endl;
+		return 0;
 	}
-	Vector2 x(Vector2::Zero);
 
-	glfwTerminate();
+	fseek(file, 0, SEEK_END);
+	long size = ftell(file);
+	rewind(file);
 
-	return 0;
+	char* output = (char*) malloc(size * sizeof(char));
+	fread(output, 1, size, file);
+	return output;
 }
