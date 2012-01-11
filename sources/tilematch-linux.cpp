@@ -171,7 +171,8 @@ static char* loadTextfile(const char* assetName)
 	long size = ftell(file);
 	rewind(file);
 
-	char* output = (char*) malloc(size * sizeof(char));
+	char* output = (char*) malloc(size * sizeof(char) + 1);
 	fread(output, 1, size, file);
+	output[size] = '\0';
 	return output;
 }
