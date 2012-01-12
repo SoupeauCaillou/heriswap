@@ -2,6 +2,7 @@
 
 #include "base/Vector2.h"
 #include "systems/RenderingSystem.h"
+#include "base/TouchInputManager.h"
 
 #include <png.h>
 #include <sstream>
@@ -11,6 +12,7 @@
 
 static char* loadPng(const char* assetName, int* width, int* height);
 static char* loadTextfile(const char* assetName);
+static bool mouse(Vector2* windowCoords);
 
 int main() {
 	if (!glfwInit())
@@ -21,10 +23,12 @@ int main() {
 	
 	theRenderingSystem.setDecompressPNGImagePtr(&loadPng);
 	theRenderingSystem.setLoadShaderPtr(&loadTextfile);
+	theTouchInputManager.setNativeTouchStatePtr(&mouse);
 
 	Game game;
 	game.init(420, 700);
 	theRenderingSystem.init();
+	theTouchInputManager.init(Vector2(10, 10. * 700. / 400.), Vector2(420, 700));
 
 	bool running = true;
 	while(running) {
@@ -175,4 +179,13 @@ static char* loadTextfile(const char* assetName)
 	fread(output, 1, size, file);
 	output[size] = '\0';
 	return output;
+}
+
+static bool mouse(Vector2* windowCoords) {
+	int x,y;
+	glfwGetMousePos(&x, &y);
+	windowCoords->X = x;
+	windowCoords->Y = y;
+
+	return glfwGetMouseButton(GLFW_MOUSE_BUTTON_1) == GLFW_PRESS;
 }
