@@ -13,13 +13,14 @@ Game game;
 void
 Java_net_damsy_soupeaucaillou_tilematch_DemoRenderer_nativeInit( JNIEnv*  env )
 {
-	game.init();
+	
 }
 
 void
 Java_net_damsy_soupeaucaillou_tilematch_DemoRenderer_nativeResize( JNIEnv*  env, jobject  thiz, jint w, jint h )
 {
     __android_log_print(ANDROID_LOG_INFO, "Tilematch", "resize w=%d h=%d", w, h);
+	game.init(w, h);
 }
 
 /* Call to finalize the graphics state */
