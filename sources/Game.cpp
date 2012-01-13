@@ -5,11 +5,19 @@
 #include "systems/ADSRSystem.h"
 
 #include "base/TouchInputManager.h"
+#include "base/MathUtil.h"
+
+#include <sstream>
 
 class Game::Data {
 	public:
-		Entity btn1, btn2;
-		Entity btn1Scale;
+		Entity grid[8][8];
+		Entity background;
+
+		Entity CreateEntity() {
+			static unsigned int e = 1;
+			return e++;
+		}
 };
 
 void Game::init(int windowW, int windowH) {
@@ -17,33 +25,30 @@ void Game::init(int windowW, int windowH) {
 
 	theRenderingSystem.setWindowSize(windowW, windowH);
 
-	datas->btn1 =  10;
-	theTransformationSystem.Add(datas->btn1);
-	TRANSFORM(datas->btn1)->position = Vector2(0.3, -4.5);
-	TRANSFORM(datas->btn1)->rotation = 0;
-	theRenderingSystem.Add(datas->btn1);
-	RENDERING(datas->btn1)->texture = theRenderingSystem.loadTextureFile("ic_launcher.png");
-	theButtonSystem.Add(datas->btn1);
-		
+	datas->background = datas->CreateEntity();
+	theTransformationSystem.Add(datas->background);
+	theRenderingSystem.Add(datas->background);
+	RENDERING(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
+	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 
-	datas->btn2 =  11;
-	theTransformationSystem.Add(datas->btn2);
-	TRANSFORM(datas->btn2)->position = Vector2(-2.3, -1.5);
-	TRANSFORM(datas->btn2)->rotation = 0;
-	theRenderingSystem.Add(datas->btn2);
-	RENDERING(datas->btn2)->texture = theRenderingSystem.loadTextureFile("ic_launcher.png");
-	RENDERING(datas->btn2)->size = Vector2(3, 2);
-	theButtonSystem.Add(datas->btn2);
-
-	datas->btn1Scale = 12;
-	theADSRSystem.Add(datas->btn1Scale);
-	ADSRComponent* ac = ADSR(datas->btn1Scale);
-	ac->idleValue = 1.0;
-	ac->attackValue = 1.3;
-	ac->attackTiming = 0.3;
-	ac->decayTiming = 0.2;
-	ac->sustainValue = 1.2;	
-	ac->releaseTiming = 0.2;
+	float offset = 0.2;
+	float scale = 0.95;
+	float size = (10 - 2 * offset) / 8;
+	for(int i=0; i<8; i++) {
+		for(int j=0; j<8; j++) {
+			datas->grid[i][j] = datas->CreateEntity();
+			theTransformationSystem.Add(datas->grid[i][j]);
+			TRANSFORM(datas->grid[i][j])->position = Vector2(
+				-5 + (i + 0.5) * size + offset,  -5 + (j + 0.5)*size + offset);
+			TRANSFORM(datas->grid[i][j])->rotation = 0;
+			theRenderingSystem.Add(datas->grid[i][j]);
+			int r = MathUtil::RandomInt(8);
+			std::stringstream s;
+			s << r << ".png";
+			RENDERING(datas->grid[i][j])->texture = theRenderingSystem.loadTextureFile(s.str());
+			RENDERING(datas->grid[i][j])->size = size * scale;
+		}
+	}
 }
 
 void Game::tick(float dt) {
@@ -55,8 +60,5 @@ void Game::tick(float dt) {
 
 	theButtonSystem.Update(dt);
 
-	ADSR(datas->btn1Scale)->active = BUTTON(datas->btn1)->mouseOver;
-	RENDERING(datas->btn1)->size = Vector2(1, 1) * ADSR(datas->btn1Scale)->value;
-	
 	theRenderingSystem.Update(dt);
 }
