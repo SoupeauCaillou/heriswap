@@ -3,6 +3,8 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/ADSRSystem.h"
+#include "systems/CombinaisonSystem.h"
+#include "systems/GridSystem.h"
 
 #include "base/TouchInputManager.h"
 #include "base/MathUtil.h"
@@ -52,6 +54,7 @@ void Game::init(int windowW, int windowH) {
 	RENDERING(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 
+	
 	for(int i=0; i<8; i++) {
 		for(int j=0; j<8; j++) {
 			datas->grid[i][j] = datas->CreateEntity();
@@ -59,14 +62,22 @@ void Game::init(int windowW, int windowH) {
 			TRANSFORM(datas->grid[i][j])->position = gridCoordsToPosition(i, j);
 			TRANSFORM(datas->grid[i][j])->rotation = 0;
 			theRenderingSystem.Add(datas->grid[i][j]);
+			
+
+			
+			theCombinaisonSystem.Add(datas->grid[i][j]);
 			int r = MathUtil::RandomInt(8);
 			std::stringstream s;
 			s << r << ".png";
 			RENDERING(datas->grid[i][j])->texture = theRenderingSystem.loadTextureFile(s.str());
 			RENDERING(datas->grid[i][j])->size = size * scale;
-
 			theADSRSystem.Add(datas->grid[i][j]);
 			ADSR(datas->grid[i][j])->idleValue = size * scale;
+			
+			theGridSystem.Add(datas->grid[i][j]);
+			GRID(datas->grid[i][j])->type = r;
+			GRID(datas->grid[i][j])->row = i;
+			GRID(datas->grid[i][j])->column = j;
 		}
 	}
 
@@ -223,6 +234,7 @@ void Game::tick(float dt) {
 	}
 
 	theButtonSystem.Update(dt);
-
+	theGridSystem.Update(dt);
+	
 	theRenderingSystem.Update(dt);
 }
