@@ -10,7 +10,6 @@
 
 #include <sstream>
 
-#define DT 1/20.
 
 class Game::Data {
 	public:
@@ -22,7 +21,6 @@ class Game::Data {
 			static unsigned int e = 1;
 			return e++;
 		}
-		float dtAccumuled, ElapsedTime;
 		// drag/drop
 		bool dragStarted;
 		Entity dragged;
@@ -46,8 +44,6 @@ bool isValidGridPosition(int i, int j) {
 
 void Game::init(int windowW, int windowH) {
 	datas = new Data();
-	datas->dtAccumuled = 0;
-	datas->ElapsedTime=0;
 	
 	theRenderingSystem.setWindowSize(windowW, windowH);
 
@@ -112,141 +108,129 @@ void diffToGridCoords(const Vector2& c, int* i, int* j) {
 }
 
 void Game::tick(float dt) {
-	if (dt > 1.0/20.0) {
-		std::cout << "LAG !" << std::endl;
-		dt = 1./20.;
-	}
-	
-	datas->dtAccumuled += dt;
-	while (datas->dtAccumuled >= DT){
-		datas->ElapsedTime += DT;
-	
-			
-		theTouchInputManager.Update(DT);
-	
-		/* drag/drop of cell */
-		if (!theTouchInputManager.wasTouched() && 
-			theTouchInputManager.isTouched()) {
-			// start drag
-			// find nearest cell
-			const Vector2& pos = theTouchInputManager.getTouchLastPosition();
-			datas->dragged = 0;
-			int i, j;
-			for( i=0; i<8 && !datas->dragged; i++) {
-				for(j=0; j<8; j++) {
-					if(ButtonSystem::inside(
-						pos, 
-						TRANSFORM(datas->grid[i][j])->worldPosition,
-						RENDERING(datas->grid[i][j])->size)) {
-						datas->dragged = datas->grid[i][j];
-						break;
-					}
+	theTouchInputManager.Update(dt);
+
+	/* drag/drop of cell */
+	if (!theTouchInputManager.wasTouched() && 
+		theTouchInputManager.isTouched()) {
+		// start drag
+		// find nearest cell
+		const Vector2& pos = theTouchInputManager.getTouchLastPosition();
+		datas->dragged = 0;
+		int i, j;
+		for( i=0; i<8 && !datas->dragged; i++) {
+			for(j=0; j<8; j++) {
+				if(ButtonSystem::inside(
+					pos, 
+					TRANSFORM(datas->grid[i][j])->worldPosition,
+					RENDERING(datas->grid[i][j])->size)) {
+					datas->dragged = datas->grid[i][j];
+					break;
 				}
 			}
-	
-			if (datas->dragged) {
-				i--;
-				datas->dragStarted = true;
-				datas->originI = i;
-				datas->originJ = j;
-				std::cout << i << ", " << j << std::endl;
-	
-				activateADSR(datas->dragged, 1.4, 1.2);
-	
-				// active neighboors
-				if ((i+1)<8)
-					activateADSR(datas->grid[i+1][j], 1.2, 1.1);
-				if ((j+1)<8)
-					activateADSR(datas->grid[i][j+1], 1.2, 1.1);
-				if ((i-1)>=0)
-					activateADSR(datas->grid[i-1][j], 1.2, 1.1);
-				if ((j-1)>=0)
-					activateADSR(datas->grid[i][j-1], 1.2, 1.1);
-			}
-		} else if (theTouchInputManager.wasTouched() && datas->dragStarted) {
-			if (theTouchInputManager.isTouched()) {
-				// continue drag
-				Vector2 diff = theTouchInputManager.getTouchLastPosition() 
-					- gridCoordsToPosition(datas->originI, datas->originJ);
-	
-				if (diff.Length() > 1) {
-					int i,j;
-					diffToGridCoords(diff, &i, &j);
-	
-					if (isValidGridPosition(datas->originI + i, datas->originJ + j)) {
-						if ((datas->swapI == i && datas->swapJ == j) ||
-							(datas->swapI == 0 && datas->swapJ == 0)) {
+		}
+
+		if (datas->dragged) {
+			i--;
+			datas->dragStarted = true;
+			datas->originI = i;
+			datas->originJ = j;
+			std::cout << i << ", " << j << std::endl;
+
+			activateADSR(datas->dragged, 1.4, 1.2);
+
+			// active neighboors
+			if ((i+1)<8)
+				activateADSR(datas->grid[i+1][j], 1.2, 1.1);
+			if ((j+1)<8)
+				activateADSR(datas->grid[i][j+1], 1.2, 1.1);
+			if ((i-1)>=0)
+				activateADSR(datas->grid[i-1][j], 1.2, 1.1);
+			if ((j-1)>=0)
+				activateADSR(datas->grid[i][j-1], 1.2, 1.1);
+		}
+	} else if (theTouchInputManager.wasTouched() && datas->dragStarted) {
+		if (theTouchInputManager.isTouched()) {
+			// continue drag
+			Vector2 diff = theTouchInputManager.getTouchLastPosition() 
+				- gridCoordsToPosition(datas->originI, datas->originJ);
+
+			if (diff.Length() > 1) {
+				int i,j;
+				diffToGridCoords(diff, &i, &j);
+
+				if (isValidGridPosition(datas->originI + i, datas->originJ + j)) {
+					if ((datas->swapI == i && datas->swapJ == j) ||
+						(datas->swapI == 0 && datas->swapJ == 0)) {
+						ADSR(datas->swapper)->active = true;
+						datas->swapI = i;
+						datas->swapJ = j;
+					} else {
+						if (ADSR(datas->swapper)->activationTime > 0) {
+							ADSR(datas->swapper)->active = false;
+						} else {
 							ADSR(datas->swapper)->active = true;
 							datas->swapI = i;
 							datas->swapJ = j;
-						} else {
-							if (ADSR(datas->swapper)->activationTime > 0) {
-								ADSR(datas->swapper)->active = false;
-							} else {
-								ADSR(datas->swapper)->active = true;
-								datas->swapI = i;
-								datas->swapJ = j;
-							}
 						}
-					} else {
-						ADSR(datas->swapper)->active = false;
 					}
 				} else {
 					ADSR(datas->swapper)->active = false;
 				}
-	
 			} else {
-				std::cout << "release " << std::endl;
-				// release drag
-				ADSR(datas->grid[datas->originI][datas->originJ])->active = false;
-				if ((datas->originI+1)<8)
-					ADSR(datas->grid[datas->originI+1][datas->originJ])->active = false;
-				if ((datas->originJ+1)<8)
-					ADSR(datas->grid[datas->originI][datas->originJ+1])->active = false;
-				if ((datas->originI-1)>=0)
-					ADSR(datas->grid[datas->originI-1][datas->originJ])->active = false;
-				if ((datas->originJ-1)>=0)
-					ADSR(datas->grid[datas->originI][datas->originJ-1])->active = false;
 				ADSR(datas->swapper)->active = false;
-	
-				/* must swap ? */
-				if (ADSR(datas->swapper)->value >= 0.99) {
-					datas->grid[datas->originI][datas->originJ] = 
-						datas->grid[datas->originI + datas->swapI][datas->originJ + datas->swapJ];
-					datas->grid[datas->originI + datas->swapI][datas->originJ + datas->swapJ] = datas->dragged;
-					ADSR(datas->swapper)->activationTime = 0;
-				}
 			}
-	
+
 		} else {
-			// cancel drag
+			std::cout << "release " << std::endl;
+			// release drag
+			ADSR(datas->grid[datas->originI][datas->originJ])->active = false;
+			if ((datas->originI+1)<8)
+				ADSR(datas->grid[datas->originI+1][datas->originJ])->active = false;
+			if ((datas->originJ+1)<8)
+				ADSR(datas->grid[datas->originI][datas->originJ+1])->active = false;
+			if ((datas->originI-1)>=0)
+				ADSR(datas->grid[datas->originI-1][datas->originJ])->active = false;
+			if ((datas->originJ-1)>=0)
+				ADSR(datas->grid[datas->originI][datas->originJ-1])->active = false;
 			ADSR(datas->swapper)->active = false;
-		}
-		theTransformationSystem.Update(DT);
-	
-		theADSRSystem.Update(DT);
-	
-		for(int i=0; i<8; i++) {
-			for(int j=0; j<8; j++) {
-				RENDERING(datas->grid[i][j])->size = ADSR(datas->grid[i][j])->value;
+
+			/* must swap ? */
+			if (ADSR(datas->swapper)->value >= 0.99) {
+				datas->grid[datas->originI][datas->originJ] = 
+					datas->grid[datas->originI + datas->swapI][datas->originJ + datas->swapJ];
+				datas->grid[datas->originI + datas->swapI][datas->originJ + datas->swapJ] = datas->dragged;
+				ADSR(datas->swapper)->activationTime = 0;
 			}
 		}
-	
-		if (ADSR(datas->swapper)->activationTime > 0) {
-			Vector2 pos1 = gridCoordsToPosition(datas->originI, datas->originJ);
-			Vector2 pos2 = gridCoordsToPosition(datas->originI + datas->swapI, datas->originJ + datas->swapJ);
-	
-			Vector2 interp1 = MathUtil::Lerp(pos1, pos2, ADSR(datas->swapper)->value);
-			Vector2 interp2 = MathUtil::Lerp(pos2, pos1, ADSR(datas->swapper)->value);
-	
-			TRANSFORM(datas->grid[datas->originI][datas->originJ])->position = interp1;
-			TRANSFORM(datas->grid[datas->originI + datas->swapI][datas->originJ + datas->swapJ])->position = interp2;
-		}
-	
-		theButtonSystem.Update(DT);
-		theGridSystem.Update(DT);
-		
-		theRenderingSystem.Update(DT);
-		datas->dtAccumuled -= DT;
+
+	} else {
+		// cancel drag
+		ADSR(datas->swapper)->active = false;
 	}
+	theTransformationSystem.Update(dt);
+
+	theADSRSystem.Update(dt);
+
+	for(int i=0; i<8; i++) {
+		for(int j=0; j<8; j++) {
+			RENDERING(datas->grid[i][j])->size = ADSR(datas->grid[i][j])->value;
+		}
+	}
+
+	if (ADSR(datas->swapper)->activationTime > 0) {
+		Vector2 pos1 = gridCoordsToPosition(datas->originI, datas->originJ);
+		Vector2 pos2 = gridCoordsToPosition(datas->originI + datas->swapI, datas->originJ + datas->swapJ);
+
+		Vector2 interp1 = MathUtil::Lerp(pos1, pos2, ADSR(datas->swapper)->value);
+		Vector2 interp2 = MathUtil::Lerp(pos2, pos1, ADSR(datas->swapper)->value);
+
+		TRANSFORM(datas->grid[datas->originI][datas->originJ])->position = interp1;
+		TRANSFORM(datas->grid[datas->originI + datas->swapI][datas->originJ + datas->swapJ])->position = interp2;
+	}
+
+	theButtonSystem.Update(dt);
+	theGridSystem.Update(dt);
+	
+	theRenderingSystem.Update(dt);
 }

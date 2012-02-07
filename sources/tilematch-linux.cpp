@@ -9,12 +9,28 @@
 #include <iostream>
 #include <cstdlib>
 #include "Game.h"
+#include <sys/time.h>
+
+#define DT 1/30.
+
 
 static char* loadPng(const char* assetName, int* width, int* height);
 static char* loadTextfile(const char* assetName);
 static bool mouse(Vector2* windowCoords);
 
+double tv_diff(struct timeval tv1) {
+	return (tv1.tv_sec+tv1.tv_usec/1000);
+}
+	
 int main() {
+	float dtAccumuled=0, dt = 0;
+	
+	struct timeval tv;
+	gettimeofday(&tv,NULL);
+	double time = tv_diff(tv);
+	
+	std::cout << time << std::endl;
+	
 	if (!glfwInit())
 		return 1;
 
@@ -32,10 +48,28 @@ int main() {
 
 	bool running = true;
 	while(running) {
-		game.tick(1.0f / 60.0f);
-		glfwSwapBuffers();
+		if (dt < DT)
+			usleep(DT-dt);
+			
+		gettimeofday(&tv,NULL);
+		dt = (tv_diff(tv) - time)/1000;
+	
+		std::cout << time << "    " << dt << std::endl;
 
-		running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
+		if (dt > 1.0/20.0) {
+			std::cout << "LAG !" << std::endl;
+			dt = 1./20.;
+		}
+		dtAccumuled += dt;
+		time += dt;
+		
+		while (dtAccumuled >= DT){
+			game.tick(DT);
+			glfwSwapBuffers();
+			running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
+			dtAccumuled -= DT;
+		}
+		//running = false;
 	}
 	Vector2 x(Vector2::Zero);
 
