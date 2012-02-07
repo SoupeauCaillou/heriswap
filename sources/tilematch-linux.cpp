@@ -11,7 +11,7 @@
 #include "Game.h"
 #include <sys/time.h>
 
-#define DT 1/30.
+#define DT 1/60.
 
 
 static char* loadPng(const char* assetName, int* width, int* height);
@@ -19,7 +19,7 @@ static char* loadTextfile(const char* assetName);
 static bool mouse(Vector2* windowCoords);
 
 double tv_diff(struct timeval tv1) {
-	return (tv1.tv_sec+tv1.tv_usec/1000);
+	return (tv1.tv_sec+tv1.tv_usec/1000000);
 }
 	
 int main() {
@@ -27,8 +27,8 @@ int main() {
 	
 	struct timeval tv;
 	gettimeofday(&tv,NULL);
-	double time = tv_diff(tv);
-	
+	double origine = tv_diff(tv);
+	double time = 0;
 	std::cout << time << std::endl;
 	
 	if (!glfwInit())
@@ -45,14 +45,16 @@ int main() {
 	game.init(420, 700);
 	theRenderingSystem.init();
 	theTouchInputManager.init(Vector2(10, 10. * 700. / 400.), Vector2(420, 700));
-
 	bool running = true;
+	int i=0;
 	while(running) {
-		if (dt < DT)
-			usleep(DT-dt);
-			
+		if (dt < DT){
+			usleep(1000*1000*(DT-dt));
+			std::cout << "waited" << 1000*1000*(DT-dt) << "µs \n";
+		}
+		
 		gettimeofday(&tv,NULL);
-		dt = (tv_diff(tv) - time)/1000;
+		dt = tv_diff(tv) - origine -time;
 	
 		std::cout << time << "    " << dt << std::endl;
 
@@ -69,7 +71,10 @@ int main() {
 			running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
 			dtAccumuled -= DT;
 		}
-		//running = false;
+		
+		if (i==10)
+			running = false;	
+		i++;
 	}
 	Vector2 x(Vector2::Zero);
 
