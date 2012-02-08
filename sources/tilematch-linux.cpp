@@ -20,19 +20,27 @@ static char* loadPng(const char* assetName, int* width, int* height);
 static char* loadTextfile(const char* assetName);
 static bool mouse(Vector2* windowCoords);
 
-int timeconverter(struct timeval tv) {
-	return (tv.tv_sec*US+tv.tv_usec);
+static struct timeval startup_time;
+
+float timeconverter(struct timeval tv) {
+	return (tv.tv_sec + tv.tv_usec / 1000000.0f);
+}
+
+float gettime() {
+	struct timeval tv;
+	gettimeofday(&tv,NULL);
+	timersub(&tv, &startup_time, &tv);
+	return timeconverter(tv);
 }
 	
 int main() {
-
-	
 	if (!glfwInit())
 		return 1;
 
 	if( !glfwOpenWindow( 420,700, 0,0,0,0,0,0, GLFW_WINDOW ) )
 		return 1;
 	
+	gettimeofday(&startup_time,NULL);
 	theRenderingSystem.setDecompressPNGImagePtr(&loadPng);
 	theRenderingSystem.setLoadShaderPtr(&loadTextfile);
 	theTouchInputManager.setNativeTouchStatePtr(&mouse);
@@ -45,33 +53,41 @@ int main() {
 	bool running = true;
 	
 	//Everything is saved into integers so that's µs not sec
-	int dtAccumuled=0, dt = 0, time = 0;
+	float dtAccumuled=0, dt = 0, time = 0;
 	
-	struct timeval tv;
-	gettimeofday(&tv,NULL);
-	time = timeconverter(tv);
+	time = gettime();
 
+	int frames = 0;
+	float nextfps = time + 5;
 	while(running) {
 		
-		if (dt<US*DT)
-			/*We could use sleep to sleep in sec*/
-			usleep(US*DT-dt);
-			
-		gettimeofday(&tv,NULL);
-		dt = timeconverter(tv)-time;
-		
-		if (dt > US/20) {
+		do {
+			dt = gettime() - time;
+			if (dt < DT) {
+				struct timespec ts;
+				ts.tv_sec = 0;
+				ts.tv_nsec = (DT - dt) * 1000000000LL;
+				nanosleep(&ts, 0);
+			}
+		} while (dt < DT);
+
+		if (dt > 1./20) {
 			std::cout << "LAG !" << std::endl;
-			dt = US/20.;
+			dt = 1./20.;
 		}
 		dtAccumuled += dt;
-		time += dt;
-		while (dtAccumuled >= US*DT){
-			/* !! But game is update in sec !*/
+		time = gettime();
+		while (dtAccumuled >= DT){
 			game.tick(DT);
 			glfwSwapBuffers();
 			running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
-			dtAccumuled -= US*DT;
+			dtAccumuled -= DT;
+			frames++;
+			if (time > nextfps) {
+				std::cout << "FPS: " << (frames / 5) << std::endl;
+				nextfps = time + 5;
+				frames = 0;
+			}
 		}
 	}
 	
