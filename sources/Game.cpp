@@ -230,7 +230,7 @@ void Game::tick(float dt) {
 	}
 
 	theButtonSystem.Update(dt);
-	//theGridSystem.Update(dt);
+	theGridSystem.Update(dt);
 	
 	theRenderingSystem.Update(dt);
 }
