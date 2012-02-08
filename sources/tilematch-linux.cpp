@@ -13,23 +13,19 @@
 
 #define DT 1/60.
 
+/*converting 1s in µs*/
+#define US 1000000
 
 static char* loadPng(const char* assetName, int* width, int* height);
 static char* loadTextfile(const char* assetName);
 static bool mouse(Vector2* windowCoords);
 
-double tv_diff(struct timeval tv1) {
-	return (tv1.tv_sec+tv1.tv_usec/1000000);
+int timeconverter(struct timeval tv) {
+	return (tv.tv_sec*US+tv.tv_usec);
 }
 	
 int main() {
-	float dtAccumuled=0, dt = 0;
-	
-	struct timeval tv;
-	gettimeofday(&tv,NULL);
-	double origine = tv_diff(tv);
-	double time = 0;
-	std::cout << time << std::endl;
+
 	
 	if (!glfwInit())
 		return 1;
@@ -45,37 +41,40 @@ int main() {
 	game.init(420, 700);
 	theRenderingSystem.init();
 	theTouchInputManager.init(Vector2(10, 10. * 700. / 400.), Vector2(420, 700));
-	bool running = true;
-	int i=0;
-	while(running) {
-		if (dt < DT){
-			usleep(1000*1000*(DT-dt));
-			std::cout << "waited" << 1000*1000*(DT-dt) << "µs \n";
-		}
-		
-		gettimeofday(&tv,NULL);
-		dt = tv_diff(tv) - origine -time;
 	
-		std::cout << time << "    " << dt << std::endl;
+	bool running = true;
+	
+	//Everything is saved into integers so that's µs not sec
+	int dtAccumuled=0, dt = 0, time = 0;
+	
+	struct timeval tv;
+	gettimeofday(&tv,NULL);
+	time = timeconverter(tv);
 
-		if (dt > 1.0/20.0) {
+	while(running) {
+		
+		if (dt<US*DT)
+			/*We could use sleep to sleep in sec*/
+			usleep(US*DT-dt);
+			
+		gettimeofday(&tv,NULL);
+		dt = timeconverter(tv)-time;
+		
+		if (dt > US/20) {
 			std::cout << "LAG !" << std::endl;
-			dt = 1./20.;
+			dt = US/20.;
 		}
 		dtAccumuled += dt;
 		time += dt;
-		
-		while (dtAccumuled >= DT){
+		while (dtAccumuled >= US*DT){
+			/* !! But game is update in sec !*/
 			game.tick(DT);
 			glfwSwapBuffers();
 			running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
-			dtAccumuled -= DT;
+			dtAccumuled -= US*DT;
 		}
-		
-		if (i==10)
-			running = false;	
-		i++;
 	}
+	
 	Vector2 x(Vector2::Zero);
 
 	glfwTerminate();
