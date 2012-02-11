@@ -5,14 +5,19 @@
 #include "systems/ADSRSystem.h"
 #include "systems/GridSystem.h"
 
+#include "systems/HUDManager.h"
 #include "base/TouchInputManager.h"
 #include "base/MathUtil.h"
 
 #include <sstream>
 
-#define GRIDSIZE 10
+#define GRIDSIZE 8
 class Game::Data {
 	public:
+		Data() {
+			hud.Setup();
+		}
+		
 		Entity background;
 		Entity swapper;
 
@@ -25,6 +30,7 @@ class Game::Data {
 		Entity dragged;
 		int originI, originJ;
 		int swapI, swapJ;
+		HUDManager hud;
 };	
 
 static const float offset = 0.2;
@@ -105,8 +111,8 @@ void Game::fillTheBlank()
 				
 				theGridSystem.Add(e);
 				GRID(e)->type = r;
-				GRID(e)->row = i;
-				GRID(e)->column = j;
+				GRID(e)->i = i;
+				GRID(e)->j = j;
 				std::cout << "nouvelle feuille en ("<<i<<","<<j<<")\n";
 			}
 		}	
@@ -207,14 +213,14 @@ void Game::tick(float dt) {
 			
 			if (ADSR(datas->swapper)->value >= 0.99) {
 				Entity e2 = theGridSystem.GetOnPos(datas->originI+ datas->swapI,datas->originJ+ datas->swapJ);
-				GRID(e2)->row = datas->originI;
-				GRID(e2)->column = datas->originJ;
+				GRID(e2)->i = datas->originI;
+				GRID(e2)->j = datas->originJ;
 				GRID(e2)->checkedH = false;
 				GRID(e2)->checkedV = false;
 				
 				Entity e1 = datas->dragged ;
-				GRID(e1)->row = datas->originI + datas->swapI;
-				GRID(e1)->column = datas->originJ + datas->swapJ;
+				GRID(e1)->i = datas->originI + datas->swapI;
+				GRID(e1)->j = datas->originJ + datas->swapJ;
 				GRID(e1)->checkedH = false;
 				GRID(e1)->checkedV = false;
 				
@@ -252,5 +258,6 @@ void Game::tick(float dt) {
 	theButtonSystem.Update(dt);
 	theGridSystem.Update(dt);
 	fillTheBlank();
+	datas->hud.Update(dt);
 	theRenderingSystem.Update(dt);
 }
