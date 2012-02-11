@@ -13,7 +13,6 @@
 
 class Game::Data {
 	public:
-		Entity grid[8][8];
 		Entity background;
 		Entity swapper;
 
@@ -52,30 +51,8 @@ void Game::init(int windowW, int windowH) {
 	theRenderingSystem.Add(datas->background);
 	RENDERING(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
-
 	
-	for(int i=0; i<8; i++) {
-		for(int j=0; j<8; j++) {
-			datas->grid[i][j] = datas->CreateEntity();
-			theTransformationSystem.Add(datas->grid[i][j]);
-			TRANSFORM(datas->grid[i][j])->position = gridCoordsToPosition(i, j);
-			TRANSFORM(datas->grid[i][j])->rotation = 0;
-			theRenderingSystem.Add(datas->grid[i][j]);
-						
-			int r = MathUtil::RandomInt(8);
-			std::stringstream s;
-			s << r << ".png";
-			RENDERING(datas->grid[i][j])->texture = theRenderingSystem.loadTextureFile(s.str());
-			RENDERING(datas->grid[i][j])->size = size * scale;
-			theADSRSystem.Add(datas->grid[i][j]);
-			ADSR(datas->grid[i][j])->idleValue = size * scale;
-			
-			theGridSystem.Add(datas->grid[i][j]);
-			GRID(datas->grid[i][j])->type = r;
-			GRID(datas->grid[i][j])->row = i;
-			GRID(datas->grid[i][j])->column = j;
-		}
-	}
+	fillTheBlank();
 
 	theADSRSystem.Add(datas->swapper);
 	ADSR(datas->swapper)->idleValue = 0;
@@ -107,6 +84,38 @@ void diffToGridCoords(const Vector2& c, int* i, int* j) {
 	}
 }
 
+
+void Game::fillTheBlank()
+{
+	for (int i=0; i<theGridSystem.GridSize; i++){
+		for (int j=0; j<theGridSystem.GridSize; j++){
+			if (theGridSystem.GetOnPos(i,j) == 0){
+				Entity e =  datas->CreateEntity();
+				theTransformationSystem.Add(e);
+				TRANSFORM(e)->position = gridCoordsToPosition(i, j);
+				TRANSFORM(e)->rotation = 0;
+				theRenderingSystem.Add(e);
+							
+				int r = MathUtil::RandomInt(8);
+				std::stringstream s;
+				s << r << ".png";
+				RENDERING(e)->texture = theRenderingSystem.loadTextureFile(s.str());
+				RENDERING(e)->size = size * scale;
+				theADSRSystem.Add(e);
+				ADSR(e)->idleValue = size * scale;
+				
+				theGridSystem.Add(e);
+				GRID(e)->type = r;
+				GRID(e)->row = i;
+				GRID(e)->column = j;
+				std::cout << "nouvelle feuille en ("<<i<<","<<j<<")\n";
+			}
+		}	
+	}							
+}
+
+
+
 void Game::tick(float dt) {
 	theTouchInputManager.Update(dt);
 
@@ -122,9 +131,9 @@ void Game::tick(float dt) {
 			for(j=0; j<8; j++) {
 				if(ButtonSystem::inside(
 					pos, 
-					TRANSFORM(datas->grid[i][j])->worldPosition,
-					RENDERING(datas->grid[i][j])->size)) {
-					datas->dragged = datas->grid[i][j];
+					TRANSFORM(theGridSystem.GetOnPos(i,j))->worldPosition,
+					RENDERING(theGridSystem.GetOnPos(i,j))->size)) {
+					datas->dragged = theGridSystem.GetOnPos(i,j);
 					break;
 				}
 			}
@@ -141,13 +150,13 @@ void Game::tick(float dt) {
 
 			// active neighboors
 			if ((i+1)<8)
-				activateADSR(datas->grid[i+1][j], 1.2, 1.1);
+				activateADSR(theGridSystem.GetOnPos(i+1,j), 1.2, 1.1);
 			if ((j+1)<8)
-				activateADSR(datas->grid[i][j+1], 1.2, 1.1);
+				activateADSR(theGridSystem.GetOnPos(i,j+1), 1.2, 1.1);
 			if ((i-1)>=0)
-				activateADSR(datas->grid[i-1][j], 1.2, 1.1);
+				activateADSR(theGridSystem.GetOnPos(i-1,j), 1.2, 1.1);
 			if ((j-1)>=0)
-				activateADSR(datas->grid[i][j-1], 1.2, 1.1);
+				activateADSR(theGridSystem.GetOnPos(i,j-1), 1.2, 1.1);
 		}
 	} else if (theTouchInputManager.wasTouched() && datas->dragStarted) {
 		if (theTouchInputManager.isTouched()) {
@@ -184,22 +193,23 @@ void Game::tick(float dt) {
 		} else {
 			std::cout << "release " << std::endl;
 			// release drag
-			ADSR(datas->grid[datas->originI][datas->originJ])->active = false;
+			ADSR(theGridSystem.GetOnPos(datas->originI,datas->originJ))->active = false;
 			if ((datas->originI+1)<8)
-				ADSR(datas->grid[datas->originI+1][datas->originJ])->active = false;
+				ADSR(theGridSystem.GetOnPos(datas->originI+1,datas->originJ))->active = false;
 			if ((datas->originJ+1)<8)
-				ADSR(datas->grid[datas->originI][datas->originJ+1])->active = false;
+				ADSR(theGridSystem.GetOnPos(datas->originI,datas->originJ+1))->active = false;
 			if ((datas->originI-1)>=0)
-				ADSR(datas->grid[datas->originI-1][datas->originJ])->active = false;
+				ADSR(theGridSystem.GetOnPos(datas->originI-1,datas->originJ))->active = false;
 			if ((datas->originJ-1)>=0)
-				ADSR(datas->grid[datas->originI][datas->originJ-1])->active = false;
+				ADSR(theGridSystem.GetOnPos(datas->originI,datas->originJ-1))->active = false;
 			ADSR(datas->swapper)->active = false;
 
 			/* must swap ? */
 			if (ADSR(datas->swapper)->value >= 0.99) {
-				datas->grid[datas->originI][datas->originJ] = 
-					datas->grid[datas->originI + datas->swapI][datas->originJ + datas->swapJ];
-				datas->grid[datas->originI + datas->swapI][datas->originJ + datas->swapJ] = datas->dragged;
+				Entity e1 = theGridSystem.GetOnPos(datas->originI,datas->originJ);
+				e1 = theGridSystem.GetOnPos(datas->originI + datas->swapI,datas->originJ + datas->swapJ);
+				Entity e2 = theGridSystem.GetOnPos(datas->originI + datas->swapI,datas->originJ + datas->swapJ);
+				e2 = datas->dragged;
 				ADSR(datas->swapper)->activationTime = 0;
 			}
 		}
@@ -214,7 +224,7 @@ void Game::tick(float dt) {
 
 	for(int i=0; i<8; i++) {
 		for(int j=0; j<8; j++) {
-			RENDERING(datas->grid[i][j])->size = ADSR(datas->grid[i][j])->value;
+			RENDERING(theGridSystem.GetOnPos(i,j))->size = ADSR(theGridSystem.GetOnPos(i,j))->value;
 		}
 	}
 
@@ -225,12 +235,12 @@ void Game::tick(float dt) {
 		Vector2 interp1 = MathUtil::Lerp(pos1, pos2, ADSR(datas->swapper)->value);
 		Vector2 interp2 = MathUtil::Lerp(pos2, pos1, ADSR(datas->swapper)->value);
 
-		TRANSFORM(datas->grid[datas->originI][datas->originJ])->position = interp1;
-		TRANSFORM(datas->grid[datas->originI + datas->swapI][datas->originJ + datas->swapJ])->position = interp2;
+		TRANSFORM(theGridSystem.GetOnPos(datas->originI,datas->originJ))->position = interp1;
+		TRANSFORM(theGridSystem.GetOnPos(datas->originI + datas->swapI,datas->originJ + datas->swapJ))->position = interp2;
 	}
 
 	theButtonSystem.Update(dt);
 	theGridSystem.Update(dt);
-	
+	fillTheBlank();
 	theRenderingSystem.Update(dt);
 }
