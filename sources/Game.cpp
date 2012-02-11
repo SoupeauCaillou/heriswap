@@ -10,7 +10,7 @@
 
 #include <sstream>
 
-
+#define GRIDSIZE 10
 class Game::Data {
 	public:
 		Entity background;
@@ -25,11 +25,11 @@ class Game::Data {
 		Entity dragged;
 		int originI, originJ;
 		int swapI, swapJ;
-};
+};	
 
 static const float offset = 0.2;
 static const float scale = 0.95;
-static const float size = (10 - 2 * offset) / 8;
+static const float size = (10 - 2 * offset) / GRIDSIZE;
 
 Vector2 gridCoordsToPosition(int i, int j) {
 	return Vector2(
@@ -38,12 +38,11 @@ Vector2 gridCoordsToPosition(int i, int j) {
 }
 
 bool isValidGridPosition(int i, int j) {
-	return (i>=0 && j>=0 && i<8 && j<8);
+	return (i>=0 && j>=0 && i<GRIDSIZE && j<GRIDSIZE);
 }
 
 void Game::init(int windowW, int windowH) {
 	datas = new Data();
-	
 	theRenderingSystem.setWindowSize(windowW, windowH);
 
 	datas->background = datas->CreateEntity();
@@ -127,8 +126,8 @@ void Game::tick(float dt) {
 		const Vector2& pos = theTouchInputManager.getTouchLastPosition();
 		datas->dragged = 0;
 		int i, j;
-		for( i=0; i<8 && !datas->dragged; i++) {
-			for(j=0; j<8; j++) {
+		for( i=0; i<theGridSystem.GridSize && !datas->dragged; i++) {
+			for(j=0; j<theGridSystem.GridSize; j++) {
 				if(ButtonSystem::inside(
 					pos, 
 					TRANSFORM(theGridSystem.GetOnPos(i,j))->worldPosition,
@@ -149,9 +148,9 @@ void Game::tick(float dt) {
 			activateADSR(datas->dragged, 1.4, 1.2);
 
 			// active neighboors
-			if ((i+1)<8)
+			if ((i+1)<GRIDSIZE)
 				activateADSR(theGridSystem.GetOnPos(i+1,j), 1.2, 1.1);
-			if ((j+1)<8)
+			if ((j+1)<GRIDSIZE)
 				activateADSR(theGridSystem.GetOnPos(i,j+1), 1.2, 1.1);
 			if ((i-1)>=0)
 				activateADSR(theGridSystem.GetOnPos(i-1,j), 1.2, 1.1);
@@ -194,9 +193,9 @@ void Game::tick(float dt) {
 			std::cout << "release " << std::endl;
 			// release drag
 			ADSR(theGridSystem.GetOnPos(datas->originI,datas->originJ))->active = false;
-			if ((datas->originI+1)<8)
+			if ((datas->originI+1)<GRIDSIZE)
 				ADSR(theGridSystem.GetOnPos(datas->originI+1,datas->originJ))->active = false;
-			if ((datas->originJ+1)<8)
+			if ((datas->originJ+1)<GRIDSIZE)
 				ADSR(theGridSystem.GetOnPos(datas->originI,datas->originJ+1))->active = false;
 			if ((datas->originI-1)>=0)
 				ADSR(theGridSystem.GetOnPos(datas->originI-1,datas->originJ))->active = false;
@@ -205,11 +204,22 @@ void Game::tick(float dt) {
 			ADSR(datas->swapper)->active = false;
 
 			/* must swap ? */
+			
 			if (ADSR(datas->swapper)->value >= 0.99) {
-				Entity e1 = theGridSystem.GetOnPos(datas->originI,datas->originJ);
-				e1 = theGridSystem.GetOnPos(datas->originI + datas->swapI,datas->originJ + datas->swapJ);
-				Entity e2 = theGridSystem.GetOnPos(datas->originI + datas->swapI,datas->originJ + datas->swapJ);
-				e2 = datas->dragged;
+				Entity e2 = theGridSystem.GetOnPos(datas->originI+ datas->swapI,datas->originJ+ datas->swapJ);
+				GRID(e2)->row = datas->originI;
+				GRID(e2)->column = datas->originJ;
+				GRID(e2)->checkedH = false;
+				GRID(e2)->checkedV = false;
+				
+				Entity e1 = datas->dragged ;
+				GRID(e1)->row = datas->originI + datas->swapI;
+				GRID(e1)->column = datas->originJ + datas->swapJ;
+				GRID(e1)->checkedH = false;
+				GRID(e1)->checkedV = false;
+				
+
+				std::cout << "swaped ("<<datas->originI<<","<<datas->originJ<<") avec ("<<datas->originI + datas->swapI<<","<<datas->originJ + datas->swapJ<<")\n";
 				ADSR(datas->swapper)->activationTime = 0;
 			}
 		}
@@ -222,8 +232,8 @@ void Game::tick(float dt) {
 
 	theADSRSystem.Update(dt);
 
-	for(int i=0; i<8; i++) {
-		for(int j=0; j<8; j++) {
+	for(int i=0; i<GRIDSIZE; i++) {
+		for(int j=0; j<GRIDSIZE; j++) {
 			RENDERING(theGridSystem.GetOnPos(i,j))->size = ADSR(theGridSystem.GetOnPos(i,j))->value;
 		}
 	}
