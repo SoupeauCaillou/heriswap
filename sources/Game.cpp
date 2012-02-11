@@ -51,6 +51,7 @@ void Game::init(int windowW, int windowH) {
 	datas = new Data();
 	theRenderingSystem.setWindowSize(windowW, windowH);
 
+	theGridSystem.GridSize = GRIDSIZE;
 	datas->background = datas->CreateEntity();
 	theTransformationSystem.Add(datas->background);
 	theRenderingSystem.Add(datas->background);
