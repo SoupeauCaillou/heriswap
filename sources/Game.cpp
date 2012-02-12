@@ -142,17 +142,17 @@ void Game::fillTheBlank()
 						 l[k] = theGridSystem.GetOnPos(i+2-k,j);
 						 c[k] = theGridSystem.GetOnPos(i,j+2-k);
 					 }
-					if (l[0] && GRID(l[0])->type == r && r == GRID(l[1])->type)
+					if (l[0] && l[1] && GRID(l[0])->type == r && r == GRID(l[1])->type)
 						pb++;
 					if (l[1] && l[3] && GRID(l[1])->type == r && r == GRID(l[3])->type)
 						pb++;
-					if (l[4] && GRID(l[3])->type == r && r == GRID(l[4])->type)
+					if (l[4] && l[4] && GRID(l[3])->type == r && r == GRID(l[4])->type)
 						pb++;
-					if (c[0] && GRID(c[0])->type == r && r == GRID(c[1])->type)
+					if (c[0] && c[1] && GRID(c[0])->type == r && r == GRID(c[1])->type)
 						pb++;
-					if (c[1] && c[3] &&GRID(c[1])->type == r && r == GRID(c[3])->type)
+					if (c[1] && c[3] && GRID(c[1])->type == r && r == GRID(c[3])->type)
 						pb++;
-					if (c[4] && GRID(c[3])->type == r && r == GRID(c[4])->type)
+					if (c[4] && c[3] && GRID(c[3])->type == r && r == GRID(c[4])->type)
 						pb++;
 					
 				} while (pb!=0 && pb<15);
