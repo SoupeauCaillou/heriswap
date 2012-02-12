@@ -12,7 +12,7 @@ class Game {
 
 		void updateSpawn(float dt);
 		void updateUserInput(float dt);
-		void updateSwap(float dt);
+		void updateRevertSwap(float dt);
 		void updateDelete(float dt);
 		void updateFall(float dt);
 	class Data;
