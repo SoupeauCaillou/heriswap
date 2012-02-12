@@ -132,7 +132,34 @@ void Game::fillTheBlank()
 	}							
 }
 
+void Game::handleCombinations(std::vector<Combinais>& combinaisons) {
+	if (combinaisons.size()>0){
+		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
+			datas->hud.ScoreCalc(it->points.size());
+			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
+				std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
+				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
+				if (e){
+					theRenderingSystem.Delete(e);
+					theTransformationSystem.Delete(e);
+					theADSRSystem.Delete(e);
+					theGridSystem.Delete(e);
+				}
+			}
+		}
+		datas->falling = theGridSystem.TileFall();
 
+		if (datas->falling.empty()) {
+			fillTheBlank();
+			// ca c'est à bouger à la fin de l'animation d'apparition
+			std::vector<Combinais> c = theGridSystem.LookForCombinaison();
+			handleCombinations(c);
+		} else {
+			ADSR(datas->fall)->active = true;
+			std::cout << datas->falling.size() << " falling" << std::endl;
+		}
+	}
+}
 
 void Game::tick(float dt) {
 	theTouchInputManager.Update(dt);
@@ -237,13 +264,16 @@ void Game::tick(float dt) {
 				GRID(e1)->j = datas->originJ + datas->swapJ;
 				GRID(e1)->checkedH = false;
 				GRID(e1)->checkedV = false;
-				
 
-				std::cout << "swaped ("<<datas->originI<<","<<datas->originJ<<") avec ("<<datas->originI + datas->swapI<<","<<datas->originJ + datas->swapJ<<")\n";
-				ADSR(datas->swapper)->activationTime = 0;
+				std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison();
+				if (combinaisons.empty()) {
+					// revert swap
+				} else {
+					ADSR(datas->swapper)->activationTime = 0;
+					handleCombinations(combinaisons);
+				}
 			}
 		}
-
 	} else {
 		// cancel drag
 		datas->dragged = 0;
@@ -275,30 +305,7 @@ void Game::tick(float dt) {
 	theButtonSystem.Update(dt);
 	//theGridSystem.Update(dt);
 	
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison();
-	if (combinaisons.size()>0){
-		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
-			datas->hud.ScoreCalc(it->points.size());
-			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
-				std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
-				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
-				if (e){
-					theRenderingSystem.Delete(e);
-					theTransformationSystem.Delete(e);
-					theADSRSystem.Delete(e);
-					theGridSystem.Delete(e);
-				}
-			}
-		}
-		datas->falling = theGridSystem.TileFall();
 
-		if (datas->falling.empty()) {
-			fillTheBlank();
-		} else {
-			ADSR(datas->fall)->active = true;
-			std::cout << datas->falling.size() << " falling" << std::endl;
-		}
-	}
 
 	if (!datas->falling.empty()) {
 		ADSRComponent* transition = ADSR(datas->fall);
@@ -318,6 +325,8 @@ void Game::tick(float dt) {
 		if (transition->value == 1) {
 			datas->falling.clear();
 			fillTheBlank();
+			std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison();
+			handleCombinations(combinaisons);
 		}
 	} else {
 		ADSR(datas->fall)->active = false;
