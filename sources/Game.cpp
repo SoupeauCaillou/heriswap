@@ -155,6 +155,7 @@ void Game::updateSpawn(float dt) {
 	if (datas->removing.empty()) {
 		datas->state = UserInput;
 	} else {
+		ADSR(datas->remove)->activationTime = 0;
 		datas->state = Delete;
 	}
 }
@@ -267,6 +268,7 @@ void Game::updateUserInput(float dt) {
 				} else {
 					ADSR(datas->swapper)->activationTime = 0;
 					datas->state = Delete;
+					ADSR(datas->remove)->activationTime = 0;
 					datas->removing = combinaisons;
 				}
 			}
@@ -308,10 +310,11 @@ void Game::updateDelete(float dt) {
 			datas->removing.clear();
 			datas->falling = theGridSystem.TileFall();
 			datas->state = Fall;
+			ADSR(datas->fall)->activationTime = 0;
 		}
 	} else {
 		transitionSuppr->active = false;
-		datas->state = Fall;
+		datas->state = Spawn;
 	}
 	//std::cout << transitionSuppr->value << std::endl;
 }
