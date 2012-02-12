@@ -113,3 +113,23 @@ TEST(GridFall)
 	CHECK_EQUAL(2, falls[0].fromY);
 	CHECK_EQUAL(0, falls[0].toY);
 }
+
+TEST(MultipleFalls)
+{
+	char grid[] = {
+		'A', 'B', 'B', 'C',
+		'C', '_', 'B', 'D',
+		'D', 'B', 'A', 'A',
+		'D', '_', 'A', 'A'
+	};
+	initGrid(grid, 4);
+	std::vector<CellFall> falls = theGridSystem.TileFall();
+	CHECK_EQUAL(2, falls.size());
+	if (falls[0].fromY == 1) {
+		CHECK_EQUAL(0, falls[0].toY);
+		CHECK_EQUAL(1, falls[1].toY);
+	} else {
+		CHECK_EQUAL(1, falls[0].toY);
+		CHECK_EQUAL(0, falls[1].toY);
+	}
+}
