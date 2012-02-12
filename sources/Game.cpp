@@ -149,34 +149,6 @@ void Game::fillTheBlank()
 	}							
 }
 
-void Game::handleCombinations(std::vector<Combinais>& combinaisons) {
-	if (combinaisons.size()>0){
-		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
-			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
-				std::cout << "(handleCombinations)suppression en ("<<itV->X<<","<<itV->Y<<")\n";
-				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
-				if (e){
-					theRenderingSystem.Delete(e);
-					theTransformationSystem.Delete(e);
-					theADSRSystem.Delete(e);
-					theGridSystem.Delete(e);
-				}
-			}
-		}
-		datas->falling = theGridSystem.TileFall();
-
-		if (datas->falling.empty()) {
-			fillTheBlank();
-			// ca c'est à bouger à la fin de l'animation d'apparition
-			std::vector<Combinais> c = theGridSystem.LookForCombinaison();
-			handleCombinations(c);
-		} else {
-			ADSR(datas->fall)->active = true;
-			std::cout << datas->falling.size() << " falling" << std::endl;
-		}
-	}
-}
-
 void Game::updateSpawn(float dt) {
 	fillTheBlank();
 	datas->removing = theGridSystem.LookForCombinaison();
