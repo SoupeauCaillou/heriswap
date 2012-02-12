@@ -130,8 +130,34 @@ void Game::fillTheBlank()
 				TRANSFORM(e)->position = gridCoordsToPosition(i, j);
 				TRANSFORM(e)->rotation = 0;
 				theRenderingSystem.Add(e);
-							
-				int r = MathUtil::RandomInt(8);
+				
+				int r;
+				int ok;
+				/*ne pas generer de combinaison*/
+				do {	
+					ok = 1;
+					r = MathUtil::RandomInt(8);
+					Entity l[5],c[5];
+					for (int k=0;k<5;k++){
+						 l[k] = theGridSystem.GetOnPos(i+2-k,j);
+						 c[k] = theGridSystem.GetOnPos(i,j+2-k);
+					 }
+					if (l[0] && GRID(l[0])->type == r && r == GRID(l[1])->type)
+						ok=0;
+					if (l[1] && l[3] && GRID(l[1])->type == r && r == GRID(l[3])->type)
+						ok=0;
+					if (l[4] && GRID(l[3])->type == r && r == GRID(l[4])->type)
+						ok=0;
+					if (c[0] && GRID(c[0])->type == r && r == GRID(c[1])->type)
+						ok=0;
+					if (c[1] && c[3] &&GRID(c[1])->type == r && r == GRID(c[3])->type)
+						ok=0;
+					if (c[4] && GRID(c[3])->type == r && r == GRID(c[4])->type)
+						ok=0;
+					
+				} while (!ok);
+				
+				
 				std::stringstream s;
 				s << r << ".png";
 				RENDERING(e)->texture = theRenderingSystem.loadTextureFile(s.str());
