@@ -17,9 +17,9 @@ static void initGrid(char* type, int size)
 				GRID(e)->j = j;
 				GRID(e)->type = t;
 			}
-			 std::cout << "("<<i<<";"<<j<<") : "<<	t << "\t";
+			// std::cout << "("<<i<<";"<<j<<") : "<<	t << "\t";
 		}
-		 std::cout << std::endl;
+		 //std::cout << std::endl;
 	}
 }
 

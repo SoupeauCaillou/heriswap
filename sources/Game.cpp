@@ -20,8 +20,7 @@ class Game::Data {
 		}
 		
 		Entity background;
-		Entity swapper, fall;
-
+		Entity swapper, fall, remove;
 		Entity CreateEntity() {
 			static unsigned int e = 1;
 			return e++;
@@ -79,6 +78,15 @@ void Game::init(int windowW, int windowH) {
 	ADSR(datas->fall)->decayTiming = 0.2;
 	ADSR(datas->fall)->sustainValue = 1.0;
 	ADSR(datas->fall)->releaseTiming = 0; 
+	
+	datas->remove = datas->CreateEntity();
+	theADSRSystem.Add(datas->remove);
+	ADSR(datas->remove)->idleValue = 0;
+	ADSR(datas->remove)->attackValue = 0.5;
+	ADSR(datas->remove)->attackTiming = 0.2;
+	ADSR(datas->remove)->decayTiming = 0.2;
+	ADSR(datas->remove)->sustainValue = 1.0;
+	ADSR(datas->remove)->releaseTiming = 0; 
 }
 
 void activateADSR(Entity e, float a, float s) {
@@ -279,14 +287,21 @@ void Game::tick(float dt) {
 	if (combinaisons.size()>0){
 		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
 			datas->hud.ScoreCalc(it->points.size());
+			
+			ADSRComponent* transitionSuppr = ADSR(datas->remove);
+			transitionSuppr->active = true;
 			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
-				std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
 				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
-				if (e){
-					theRenderingSystem.Delete(e);
-					theTransformationSystem.Delete(e);
-					theADSRSystem.Delete(e);
-					theGridSystem.Delete(e);
+				TRANSFORM(e)->rotation = transitionSuppr->value*7;
+				std::cout << transitionSuppr->value << std::endl;
+				if (transitionSuppr->value == 1) {
+					std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
+					if (e){
+						theRenderingSystem.Delete(e);
+						theTransformationSystem.Delete(e);
+						theADSRSystem.Delete(e);
+						theGridSystem.Delete(e);
+					}
 				}
 			}
 		}
@@ -307,8 +322,6 @@ void Game::tick(float dt) {
 			const CellFall& f = *it;
 			Vector2 targetPos = gridCoordsToPosition(f.x, f.toY);
 			Vector2 originPos = gridCoordsToPosition(f.x, f.fromY);
-			if (f.e==0)
-				std::cout << "nul!!!!" << f.e <<" "<< f.x <<" "<<  f.toY <<" "<<  f.fromY<<std::endl;
 			GRID(f.e)->checkedH = GRID(f.e)->checkedV = false;
 			TRANSFORM(f.e)->position = MathUtil::Lerp(originPos, targetPos, transition->value);
 			if (transition->value == 1) {
