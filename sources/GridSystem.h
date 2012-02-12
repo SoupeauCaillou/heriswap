@@ -9,7 +9,8 @@ struct Combinais {
 };
 
 struct CellFall {
-	CellFall(int _x=0, int fY=0, int tY=0) : x(_x), fromY(fY), toY(tY) {}
+	CellFall(Entity _e, int _x=0, int fY=0, int tY=0) : e(_e), x(_x), fromY(fY), toY(tY) {}
+	Entity e;
 	int x;
 	int fromY, toY;
 };

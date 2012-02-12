@@ -19,7 +19,7 @@ class Game::Data {
 		}
 		
 		Entity background;
-		Entity swapper;
+		Entity swapper, fall;
 
 		Entity CreateEntity() {
 			static unsigned int e = 1;
@@ -31,6 +31,7 @@ class Game::Data {
 		int originI, originJ;
 		int swapI, swapJ;
 		//HUDManager hud;
+		std::vector<CellFall> falling;
 };	
 
 static const float offset = 0.2;
@@ -59,7 +60,8 @@ void Game::init(int windowW, int windowH) {
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 	
 	fillTheBlank();
-
+	
+	datas->swapper = datas->CreateEntity();
 	theADSRSystem.Add(datas->swapper);
 	ADSR(datas->swapper)->idleValue = 0;
 	ADSR(datas->swapper)->attackValue = 1.0;
@@ -67,6 +69,15 @@ void Game::init(int windowW, int windowH) {
 	ADSR(datas->swapper)->decayTiming = 0;
 	ADSR(datas->swapper)->sustainValue = 1.0;
 	ADSR(datas->swapper)->releaseTiming = 0.2;
+
+	datas->fall = datas->CreateEntity();
+	theADSRSystem.Add(datas->fall);
+	ADSR(datas->fall)->idleValue = 0;
+	ADSR(datas->fall)->attackValue = 0.5;
+	ADSR(datas->fall)->attackTiming = 0.2;
+	ADSR(datas->fall)->decayTiming = 0.2;
+	ADSR(datas->fall)->sustainValue = 1.0;
+	ADSR(datas->fall)->releaseTiming = 0; 
 }
 
 void activateADSR(Entity e, float a, float s) {
@@ -135,11 +146,13 @@ void Game::tick(float dt) {
 		int i, j;
 		for( i=0; i<theGridSystem.GridSize && !datas->dragged; i++) {
 			for(j=0; j<theGridSystem.GridSize; j++) {
-				if(ButtonSystem::inside(
+				Entity e = theGridSystem.GetOnPos(i,j);
+
+				if(e && ButtonSystem::inside(
 					pos, 
-					TRANSFORM(theGridSystem.GetOnPos(i,j))->worldPosition,
-					RENDERING(theGridSystem.GetOnPos(i,j))->size)) {
-					datas->dragged = theGridSystem.GetOnPos(i,j);
+					TRANSFORM(e)->worldPosition,
+					RENDERING(e)->size)) {
+					datas->dragged = e;
 					break;
 				}
 			}
@@ -235,13 +248,15 @@ void Game::tick(float dt) {
 		datas->dragged = 0;
 		ADSR(datas->swapper)->active = false;
 	}
-	theTransformationSystem.Update(dt);
 
 	theADSRSystem.Update(dt);
 
 	for(int i=0; i<GRIDSIZE; i++) {
 		for(int j=0; j<GRIDSIZE; j++) {
-			RENDERING(theGridSystem.GetOnPos(i,j))->size = ADSR(theGridSystem.GetOnPos(i,j))->value;
+			Entity e = theGridSystem.GetOnPos(i,j);
+			if (e) {
+				RENDERING(e)->size = ADSR(e)->value;
+			}
 		}
 	}
 
@@ -257,15 +272,13 @@ void Game::tick(float dt) {
 	}
 
 	theButtonSystem.Update(dt);
-	theGridSystem.Update(dt);
+	//theGridSystem.Update(dt);
 	
 	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(3);
 	if (combinaisons.size()>0){
-		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
-		{
+		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
 			//HUDManager.ScoreCalc(it->points.size());
-			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
-			{
+			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
 				std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
 				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
 				if (e){
@@ -276,9 +289,32 @@ void Game::tick(float dt) {
 				}
 			}
 		}
-		theGridSystem.TileFall();
+		datas->falling = theGridSystem.TileFall();
+		ADSR(datas->fall)->active = true;
+		std::cout << datas->falling.size() << " falling" << std::endl;
 	}
-	fillTheBlank();
+
+	if (!datas->falling.empty()) {
+		ADSRComponent* transition = ADSR(datas->fall);
+		transition->active = true;
+		for(std::vector<CellFall>::iterator it=datas->falling.begin(); it!=datas->falling.end(); ++it) {
+			const CellFall& f = *it;
+			Vector2 targetPos = gridCoordsToPosition(f.x, f.toY);
+			Vector2 originPos = gridCoordsToPosition(f.x, f.fromY);
+			TRANSFORM(f.e)->position = MathUtil::Lerp(originPos, targetPos, transition->value);
+			if (transition->value == 1) {
+				GRID(f.e)->j = f.toY;
+			}
+		}
+		if (transition->value == 1) {
+			datas->falling.clear();
+			fillTheBlank();
+		}
+	} else {
+		ADSR(datas->fall)->active = false;
+	}
+	//fillTheBlank();
 	//datas->hud.Update(dt);
+	theTransformationSystem.Update(dt);
 	theRenderingSystem.Update(dt);
 }
