@@ -132,10 +132,10 @@ void Game::fillTheBlank()
 				theRenderingSystem.Add(e);
 				
 				int r;
-				int ok;
+				int pb;
 				/*ne pas generer de combinaison*/
 				do {	
-					ok = 1;
+					pb = 0;
 					r = MathUtil::RandomInt(8);
 					Entity l[5],c[5];
 					for (int k=0;k<5;k++){
@@ -143,19 +143,19 @@ void Game::fillTheBlank()
 						 c[k] = theGridSystem.GetOnPos(i,j+2-k);
 					 }
 					if (l[0] && GRID(l[0])->type == r && r == GRID(l[1])->type)
-						ok=0;
+						pb++;
 					if (l[1] && l[3] && GRID(l[1])->type == r && r == GRID(l[3])->type)
-						ok=0;
+						pb++;
 					if (l[4] && GRID(l[3])->type == r && r == GRID(l[4])->type)
-						ok=0;
+						pb++;
 					if (c[0] && GRID(c[0])->type == r && r == GRID(c[1])->type)
-						ok=0;
+						pb++;
 					if (c[1] && c[3] &&GRID(c[1])->type == r && r == GRID(c[3])->type)
-						ok=0;
+						pb++;
 					if (c[4] && GRID(c[3])->type == r && r == GRID(c[4])->type)
-						ok=0;
+						pb++;
 					
-				} while (!ok);
+				} while (pb!=0 && pb<15);
 				
 				
 				std::stringstream s;
