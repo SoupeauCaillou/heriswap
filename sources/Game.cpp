@@ -201,8 +201,11 @@ void Game::updateSpawn(float dt) {
 		if (transitionCree->value == 1) {
 			datas->spawning.clear();
 			datas->state = UserInput;
+			transitionCree->activationTime = 0;
+			transitionCree->active = false;
 		}
 	} else {
+		transitionCree->activationTime = 0;
 		transitionCree->active = false;
 		datas->state = UserInput;
 	}
