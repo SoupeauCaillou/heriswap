@@ -152,9 +152,8 @@ void Game::fillTheBlank()
 void Game::handleCombinations(std::vector<Combinais>& combinaisons) {
 	if (combinaisons.size()>0){
 		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
-			datas->hud.ScoreCalc(it->points.size());
 			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
-				std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
+				std::cout << "(handleCombinations)suppression en ("<<itV->X<<","<<itV->Y<<")\n";
 				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
 				if (e){
 					theRenderingSystem.Delete(e);
@@ -316,8 +315,8 @@ void Game::updateDelete(float dt) {
 	if (!datas->removing.empty()) {
 		transitionSuppr->active = true;
 		for ( std::vector<Combinais>::reverse_iterator it = datas->removing.rbegin(); it != datas->removing.rend(); ++it ) {
-			datas->hud.ScoreCalc(it->points.size());
-			
+			if (transitionSuppr->value == 1)
+				datas->hud.ScoreCalc(it->points.size());	
 			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
 				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
 				TRANSFORM(e)->rotation = transitionSuppr->value*7;
