@@ -26,6 +26,7 @@ class Game::Data {
 		Data() {
 			hud.Setup();
 			state = Spawn;
+			dragged = 0;
 		}
 		
 		State state;
