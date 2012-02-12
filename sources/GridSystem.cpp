@@ -19,11 +19,11 @@ void GridSystem::print() {
 			Entity e = GetOnPos(i, j);
 			if (e) {
 				char t = GRID(e)->type;
-				std::cout << t << " ";
+				std::cerr << t << " ";
 			} else
-				std::cout << "_ ";
+				std::cerr << "_ ";
 		}
-		std::cout << std::endl;
+		std::cerr << std::endl;
 	}
 }
 
@@ -34,6 +34,7 @@ Entity GridSystem::GetOnPos(int i, int j) {
 		if (bc->i == i && bc->j == j)
 			return a;
 	}
+
 	//std::cout << "Aucun element en position (" << i << ","<<j<<")\n";
 	return 0;
 }
@@ -117,6 +118,9 @@ std::vector<Combinais> GridSystem::LookForCombinaison() {
 			int k=j;
 			while (k>-1){
 				Entity next = GetOnPos(i,k);
+
+				if (!next) // bug
+					print();
 		
 				if (GRID(next)->type != gc->type){
 					k=-2;
@@ -132,6 +136,9 @@ std::vector<Combinais> GridSystem::LookForCombinaison() {
 			k = j+1;
 			while (k<GridSize){
 				Entity next = GetOnPos(i,k);
+
+				if (!next) // bug
+					print();
 
 				if (GRID(next)->type != gc->type){
 					k=GridSize;
@@ -163,6 +170,9 @@ std::vector<Combinais> GridSystem::LookForCombinaison() {
 			while (k>-1){
 				Entity next = GetOnPos(k,j);
 				
+				if (!next) // bug
+					print();
+
 				if (GRID(next)->type != gc->type) {
 					k=-2;
 				} else {
@@ -177,6 +187,9 @@ std::vector<Combinais> GridSystem::LookForCombinaison() {
 			k = i+1;
 			while (k<GridSize){
 				Entity next = GetOnPos(k,j);
+
+				if (!next) // bug
+					print();
 
 				if (GRID(next)->type != gc->type) {
 					k=(GridSize+1);

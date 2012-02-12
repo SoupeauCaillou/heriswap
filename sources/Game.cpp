@@ -17,7 +17,7 @@
 enum State {
 	Spawn,
 	UserInput,
-	Swap,
+	RevertSwap,
 	Delete,
 	Fall
 };
@@ -187,47 +187,48 @@ void Game::updateSpawn(float dt) {
 }
 
 void Game::updateUserInput(float dt) {
-/* drag/drop of cell */
+	/* drag/drop of cell */
 	if (!theTouchInputManager.wasTouched() && 
 		theTouchInputManager.isTouched()) {
-		// start drag
-		// find nearest cell
-		const Vector2& pos = theTouchInputManager.getTouchLastPosition();
-		datas->dragged = 0;
-		int i, j;
-		for( i=0; i<theGridSystem.GridSize && !datas->dragged; i++) {
-			for(j=0; j<theGridSystem.GridSize; j++) {
-				Entity e = theGridSystem.GetOnPos(i,j);
+		// don't start new drag while the previous one isn't finished
+		if (!datas->dragged) {
+			// start drag
+			// find nearest cell
+			const Vector2& pos = theTouchInputManager.getTouchLastPosition();
+			int i, j;
+			for( i=0; i<theGridSystem.GridSize && !datas->dragged; i++) {
+				for(j=0; j<theGridSystem.GridSize; j++) {
+					Entity e = theGridSystem.GetOnPos(i,j);
 
-				if(e && ButtonSystem::inside(
-					pos, 
-					TRANSFORM(e)->worldPosition,
-					RENDERING(e)->size)) {
-					datas->dragged = e;
-					break;
+					if(e && ButtonSystem::inside(
+						pos, 
+						TRANSFORM(e)->worldPosition,
+						RENDERING(e)->size)) {
+						datas->dragged = e;
+						break;
+					}
 				}
 			}
+
+			if (datas->dragged) {
+				i--;
+				datas->originI = i;
+				datas->originJ = j;
+
+				activateADSR(datas->dragged, 1.4, 1.2);
+
+				// active neighboors
+				if ((i+1)<GRIDSIZE)
+					activateADSR(theGridSystem.GetOnPos(i+1,j), 1.2, 1.1);
+				if ((j+1)<GRIDSIZE)
+					activateADSR(theGridSystem.GetOnPos(i,j+1), 1.2, 1.1);
+				if ((i-1)>=0)
+					activateADSR(theGridSystem.GetOnPos(i-1,j), 1.2, 1.1);
+				if ((j-1)>=0)
+					activateADSR(theGridSystem.GetOnPos(i,j-1), 1.2, 1.1);
+			}
 		}
-
-		if (datas->dragged) {
-			i--;
-			datas->originI = i;
-			datas->originJ = j;
-			std::cout << i << ", " << j << std::endl;
-
-			activateADSR(datas->dragged, 1.4, 1.2);
-
-			// active neighboors
-			if ((i+1)<GRIDSIZE)
-				activateADSR(theGridSystem.GetOnPos(i+1,j), 1.2, 1.1);
-			if ((j+1)<GRIDSIZE)
-				activateADSR(theGridSystem.GetOnPos(i,j+1), 1.2, 1.1);
-			if ((i-1)>=0)
-				activateADSR(theGridSystem.GetOnPos(i-1,j), 1.2, 1.1);
-			if ((j-1)>=0)
-				activateADSR(theGridSystem.GetOnPos(i,j-1), 1.2, 1.1);
-		}
-	} else if (theTouchInputManager.wasTouched() && datas->dragged) {
+	} else if (theTouchInputManager.wasTouched() && datas->dragged && ADSR(datas->dragged)->active) {
 		if (theTouchInputManager.isTouched()) {
 			// continue drag
 			Vector2 diff = theTouchInputManager.getTouchLastPosition() 
@@ -291,8 +292,11 @@ void Game::updateUserInput(float dt) {
 				std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison();
 				if (combinaisons.empty()) {
 					// revert swap
+					datas->state = RevertSwap;
+					datas->dragged = 0;
 				} else {
 					ADSR(datas->swapper)->activationTime = 0;
+					datas->dragged = 0;
 					datas->state = Delete;
 					ADSR(datas->remove)->activationTime = 0;
 					datas->removing = combinaisons;
@@ -300,14 +304,24 @@ void Game::updateUserInput(float dt) {
 			}
 		}
 	} else {
-		// cancel drag
-		datas->dragged = 0;
 		ADSR(datas->swapper)->active = false;
+		if (datas->dragged) ADSR(datas->dragged)->active = false;
+	}
+
+	if (datas->dragged) {
+		// reset 'dragged' cell only if both anim are ended
+		if (!ADSR(datas->dragged)->active && !ADSR(datas->swapper)->active) {
+			if (ADSR(datas->swapper)->activationTime <= 0 && ADSR(datas->dragged)->activationTime <= 0) {
+				datas->dragged = 0;
+			}
+		}
 	}
 }
 
-void Game::updateSwap(float dt) {
-
+void Game::updateRevertSwap(float dt) {
+	if (ADSR(datas->swapper)->activationTime <= 0) {
+		datas->state = UserInput;
+	}
 }
 
 void Game::updateDelete(float dt) {
@@ -379,8 +393,8 @@ void Game::tick(float dt) {
 		case UserInput:
 			updateUserInput(dt);
 			break;
-		case Swap:
-			updateSwap(dt);
+		case RevertSwap:
+			updateRevertSwap(dt);
 			break;
 		case Delete:
 			updateDelete(dt);
