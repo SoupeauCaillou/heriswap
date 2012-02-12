@@ -17,9 +17,7 @@ static void initGrid(char* type, int size)
 				GRID(e)->j = j;
 				GRID(e)->type = t;
 			}
-			// std::cout << "("<<i<<";"<<j<<") : "<<	t << "\t";
 		}
-		 //std::cout << std::endl;
 	}
 }
 
@@ -130,8 +128,6 @@ TEST(MultipleFalls)
 	};
 	initGrid(grid, 4);
 	std::vector<CellFall> falls = theGridSystem.TileFall();
-	for (int i=0; i<falls.size();i++){
-		std::cout << falls[i].x << " " << falls[i].fromY << "->"<< falls[i].toY<< std::endl;}
 	CHECK_EQUAL(2, falls.size());
 	if (falls[0].fromY == 1) {
 		CHECK_EQUAL(0, falls[0].toY);

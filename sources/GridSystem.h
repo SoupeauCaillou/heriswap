@@ -59,6 +59,8 @@ Combinais MergeVectors(Combinais c1, Combinais c2);
 /* Leaves fall if nothing below them */
 std::vector<CellFall> TileFall();
 
+void print();
+
 int GridSize;
 int nbmin;
 };
