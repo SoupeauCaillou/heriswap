@@ -6,7 +6,7 @@ link_directories (${PROJECT_BINARY_DIR}/sac)
 file(
         GLOB_RECURSE
         source_files
-        *
+        *.cpp *.h
 )
 
 add_executable(tilematch ${source_files})

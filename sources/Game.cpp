@@ -3,9 +3,9 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/ADSRSystem.h"
-#include "systems/GridSystem.h"
+#include "GridSystem.h"
 
-#include "systems/HUDManager.h"
+//#include "systems/HUDManager.h"
 #include "base/TouchInputManager.h"
 #include "base/MathUtil.h"
 
@@ -15,7 +15,7 @@
 class Game::Data {
 	public:
 		Data() {
-			hud.Setup();
+			//hud.Setup();
 		}
 		
 		Entity background;
@@ -30,7 +30,7 @@ class Game::Data {
 		Entity dragged;
 		int originI, originJ;
 		int swapI, swapJ;
-		HUDManager hud;
+		//HUDManager hud;
 };	
 
 static const float offset = 0.2;
@@ -147,7 +147,6 @@ void Game::tick(float dt) {
 
 		if (datas->dragged) {
 			i--;
-			datas->dragStarted = true;
 			datas->originI = i;
 			datas->originJ = j;
 			std::cout << i << ", " << j << std::endl;
@@ -164,7 +163,7 @@ void Game::tick(float dt) {
 			if ((j-1)>=0)
 				activateADSR(theGridSystem.GetOnPos(i,j-1), 1.2, 1.1);
 		}
-	} else if (theTouchInputManager.wasTouched() && datas->dragStarted) {
+	} else if (theTouchInputManager.wasTouched() && datas->dragged) {
 		if (theTouchInputManager.isTouched()) {
 			// continue drag
 			Vector2 diff = theTouchInputManager.getTouchLastPosition() 
@@ -233,6 +232,7 @@ void Game::tick(float dt) {
 
 	} else {
 		// cancel drag
+		datas->dragged = 0;
 		ADSR(datas->swapper)->active = false;
 	}
 	theTransformationSystem.Update(dt);
@@ -259,6 +259,6 @@ void Game::tick(float dt) {
 	theButtonSystem.Update(dt);
 	theGridSystem.Update(dt);
 	fillTheBlank();
-	datas->hud.Update(dt);
+	//datas->hud.Update(dt);
 	theRenderingSystem.Update(dt);
 }
