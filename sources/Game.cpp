@@ -3,9 +3,10 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/ADSRSystem.h"
+#include "systems/TextRenderingSystem.h"
 #include "GridSystem.h"
 
-//#include "systems/HUDManager.h"
+#include "systems/HUDManager.h"
 #include "base/TouchInputManager.h"
 #include "base/MathUtil.h"
 
@@ -15,7 +16,7 @@
 class Game::Data {
 	public:
 		Data() {
-			//hud.Setup();
+			hud.Setup();
 		}
 		
 		Entity background;
@@ -30,7 +31,7 @@ class Game::Data {
 		Entity dragged;
 		int originI, originJ;
 		int swapI, swapJ;
-		//HUDManager hud;
+		HUDManager hud;
 		std::vector<CellFall> falling;
 };	
 
@@ -277,7 +278,7 @@ void Game::tick(float dt) {
 	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(3);
 	if (combinaisons.size()>0){
 		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
-			//HUDManager.ScoreCalc(it->points.size());
+			datas->hud.ScoreCalc(it->points.size());
 			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
 				std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
 				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
@@ -290,8 +291,13 @@ void Game::tick(float dt) {
 			}
 		}
 		datas->falling = theGridSystem.TileFall();
-		ADSR(datas->fall)->active = true;
-		std::cout << datas->falling.size() << " falling" << std::endl;
+
+		if (datas->falling.empty()) {
+			fillTheBlank();
+		} else {
+			ADSR(datas->fall)->active = true;
+			std::cout << datas->falling.size() << " falling" << std::endl;
+		}
 	}
 
 	if (!datas->falling.empty()) {
@@ -314,7 +320,8 @@ void Game::tick(float dt) {
 		ADSR(datas->fall)->active = false;
 	}
 	//fillTheBlank();
-	//datas->hud.Update(dt);
+	datas->hud.Update(dt);
 	theTransformationSystem.Update(dt);
+	theTextRenderingSystem.Update(dt);
 	theRenderingSystem.Update(dt);
 }
