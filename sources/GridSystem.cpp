@@ -10,6 +10,7 @@ INSTANCE_IMPL(GridSystem);
 	
 GridSystem::GridSystem() : ComponentSystem<GridComponent>("Grid") { 
 	GridSize=8;
+	nbmin=3;
 }
 
 Entity GridSystem::GetOnPos(int i, int j) {
@@ -79,7 +80,7 @@ std::vector<Combinais> GridSystem::MergeCombinaison(std::vector<Combinais> combi
 	return combinmerged;
 }
 
-std::vector<Combinais> GridSystem::LookForCombinaison(int nbmin) { 
+std::vector<Combinais> GridSystem::LookForCombinaison() { 
 	std::vector<Combinais> combinaisons;
 
 	/* do not look for combis if the grid is not full */
@@ -203,7 +204,10 @@ std::vector<CellFall> GridSystem::TileFall() {
 					if (e) {
 						int fallHeight = k - j;
 						while (k < GridSize) {
-							result.push_back(CellFall(GetOnPos(i, k), i, k, k - fallHeight));
+							Entity e = GetOnPos(i, k);
+							if (e)
+								result.push_back(CellFall(e, i, k, k - fallHeight));
+							else fallHeight++;
 							k++;
 						}
 						break;
@@ -220,7 +224,7 @@ std::vector<CellFall> GridSystem::TileFall() {
 }
 void GridSystem::DoUpdate(float dt) {
 	std::vector<Combinais> combinaisons;
-	combinaisons = LookForCombinaison(3);
+	combinaisons = LookForCombinaison();
 
 	if (combinaisons.size()>0){
 		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )

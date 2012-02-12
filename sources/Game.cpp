@@ -275,7 +275,7 @@ void Game::tick(float dt) {
 	theButtonSystem.Update(dt);
 	//theGridSystem.Update(dt);
 	
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(3);
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison();
 	if (combinaisons.size()>0){
 		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
 			datas->hud.ScoreCalc(it->points.size());
@@ -307,6 +307,8 @@ void Game::tick(float dt) {
 			const CellFall& f = *it;
 			Vector2 targetPos = gridCoordsToPosition(f.x, f.toY);
 			Vector2 originPos = gridCoordsToPosition(f.x, f.fromY);
+			if (f.e==0)
+				std::cout << "nul!!!!" << f.e <<" "<< f.x <<" "<<  f.toY <<" "<<  f.fromY<<std::endl;
 			GRID(f.e)->checkedH = GRID(f.e)->checkedV = false;
 			TRANSFORM(f.e)->position = MathUtil::Lerp(originPos, targetPos, transition->value);
 			if (transition->value == 1) {

@@ -39,7 +39,7 @@ public:
 Entity GetOnPos(int i, int j);
 
 /* Return the finale list  of combinaisons*/ 
-std::vector<Combinais> LookForCombinaison(int nbmin);
+std::vector<Combinais> LookForCombinaison();
 
 /* Set Back all entity at "not checked"*/
 void ResetTest();
@@ -60,4 +60,5 @@ Combinais MergeVectors(Combinais c1, Combinais c2);
 std::vector<CellFall> TileFall();
 
 int GridSize;
+int nbmin;
 };
