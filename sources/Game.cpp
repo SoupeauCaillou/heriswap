@@ -307,6 +307,7 @@ void Game::tick(float dt) {
 			const CellFall& f = *it;
 			Vector2 targetPos = gridCoordsToPosition(f.x, f.toY);
 			Vector2 originPos = gridCoordsToPosition(f.x, f.fromY);
+			GRID(f.e)->checkedH = GRID(f.e)->checkedV = false;
 			TRANSFORM(f.e)->position = MathUtil::Lerp(originPos, targetPos, transition->value);
 			if (transition->value == 1) {
 				GRID(f.e)->j = f.toY;
