@@ -32,6 +32,7 @@ class Game::Data {
 		int swapI, swapJ;
 		HUDManager hud;
 		std::vector<CellFall> falling;
+		std::vector<Combinais> removing;
 };	
 
 static const float offset = 0.2;
@@ -313,17 +314,17 @@ void Game::tick(float dt) {
 	theButtonSystem.Update(dt);
 	//theGridSystem.Update(dt);
 	
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison();
-	if (combinaisons.size()>0){
-		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
+	datas->removing =  theGridSystem.LookForCombinaison();
+	
+	ADSRComponent* transitionSuppr = ADSR(datas->remove);
+	if (!datas->removing.empty()) {
+		transitionSuppr->active = true;
+		for ( std::vector<Combinais>::reverse_iterator it = datas->removing.rbegin(); it != datas->removing.rend(); ++it ) {
 			datas->hud.ScoreCalc(it->points.size());
 			
-			ADSRComponent* transitionSuppr = ADSR(datas->remove);
-			transitionSuppr->active = true;
 			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
 				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
 				TRANSFORM(e)->rotation = transitionSuppr->value*7;
-				std::cout << transitionSuppr->value << std::endl;
 				if (transitionSuppr->value == 1) {
 					std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
 					if (e){
@@ -334,9 +335,22 @@ void Game::tick(float dt) {
 					}
 				}
 			}
+			
 		}
-		datas->falling = theGridSystem.TileFall();
+		if (transitionSuppr->value == 1) {
+			datas->removing.clear();
+			datas->falling = theGridSystem.TileFall();
+		}
+	} else {
+		transitionSuppr->active = false;
 	}
+				//std::cout << transitionSuppr->value << std::endl;
+
+
+
+
+
+
 
 
 	if (!datas->falling.empty()) {
