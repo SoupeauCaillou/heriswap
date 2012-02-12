@@ -13,6 +13,20 @@ GridSystem::GridSystem() : ComponentSystem<GridComponent>("Grid") {
 	nbmin=3;
 }
 
+void GridSystem::print() {
+	for(int j=GridSize-1; j>=0; j--) {
+		for(int i=0; i<GridSize; i++) {
+			Entity e = GetOnPos(i, j);
+			if (e) {
+				char t = GRID(e)->type;
+				std::cout << t << " ";
+			} else
+				std::cout << "_ ";
+		}
+		std::cout << std::endl;
+	}
+}
+
 Entity GridSystem::GetOnPos(int i, int j) {
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
 		Entity a = (*it).first;			
