@@ -258,6 +258,26 @@ void Game::tick(float dt) {
 
 	theButtonSystem.Update(dt);
 	theGridSystem.Update(dt);
+	
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(3);
+	if (combinaisons.size()>0){
+		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
+		{
+			//HUDManager.ScoreCalc(it->points.size());
+			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
+			{
+				std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
+				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
+				if (e){
+					theRenderingSystem.Delete(e);
+					theTransformationSystem.Delete(e);
+					theADSRSystem.Delete(e);
+					theGridSystem.Delete(e);
+				}
+			}
+		}
+		theGridSystem.TileFall();
+	}
 	fillTheBlank();
 	//datas->hud.Update(dt);
 	theRenderingSystem.Update(dt);

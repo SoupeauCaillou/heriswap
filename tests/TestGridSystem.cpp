@@ -9,14 +9,17 @@ static void initGrid(char* type, int size)
 
 	for(int j=size-1; j>=0; j--) {
 		for(int i=0; i<size; i++) {
-			Entity e =  i * size + j + 1;
-			theGridSystem.Add(e);
-			GRID(e)->i = i;
-			GRID(e)->j = j;
-			GRID(e)->type = *type++;
-			//std::cout << "("<<i<<";"<<j<<") : "<<	GRID(e)->type << "\t";
+			char t = *type++;
+			if (t != '_') {
+				Entity e =  i * size + j;
+				theGridSystem.Add(e);
+				GRID(e)->i = i;
+				GRID(e)->j = j;
+				GRID(e)->type = t;
+			}
+			// std::cout << "("<<i<<";"<<j<<") : "<<	t << "\t";
 		}
-		//std::cout << std::endl;
+		// std::cout << std::endl;
 	}
 }
 
@@ -94,4 +97,19 @@ TEST(CombinationMergeN)
 	CHECK_EQUAL(combinaisons.size(), 2);
 	CHECK_EQUAL(combinaisons[0].type, 'X');
 	CHECK_EQUAL(combinaisons[1].type, 'X');
+}
+
+TEST(GridFall)
+{
+	char grid[] = {
+		'A', 'B', 'B',
+		'_', 'A', 'B',
+		'_', 'B', 'A'
+	};
+	initGrid(grid, 3);
+	std::vector<CellFall> falls = theGridSystem.TileFall();
+	CHECK_EQUAL(1, falls.size());
+	CHECK_EQUAL(0, falls[0].x);
+	CHECK_EQUAL(2, falls[0].fromY);
+	CHECK_EQUAL(0, falls[0].toY);
 }

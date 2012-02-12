@@ -186,26 +186,32 @@ std::vector<Combinais> GridSystem::LookForCombinaison(int nbmin) {
 	return MergeCombinaison(combinaisons);
 }
 
-void GridSystem::TileFall() {
+std::vector<CellFall> GridSystem::TileFall() {
+	std::vector<CellFall> result;
+
 	for (int i=0; i<GridSize; i++) {
 		for (int j=0; j<GridSize; j++) {
-			/* if below is empty, fall down*/
+			/* if call is empty, find nearest non empty cell above*/
 			if (!GetOnPos(i,j)){
-				//std::cout << i << " " << j << " est vide\n";
 				int k=j+1;
 				while (k<GridSize){
-					Entity e =GetOnPos(i,k);
-					if (e){
-						//std::cout << i << " " << k << " fera l'affaire \n";
-						GRID(e)->j = j;
-						k=GridSize;
+					if (GetOnPos(i, k)) {
+						int fallHeight = k - j;
+						while (k < GridSize) {
+							result.push_back(CellFall(i, k, k - fallHeight));
+							k++;
+						}
+						break;
 					} else {
 						k++;
 					}
 				}
+				/* only one fall possible per column */
+				break;
 			}
 		}
 	}
+	return result;
 }
 void GridSystem::DoUpdate(float dt) {
 	std::vector<Combinais> combinaisons;
@@ -223,31 +229,8 @@ void GridSystem::DoUpdate(float dt) {
 			
 		}
 	}
-	if (combinaisons.size()>0){
-		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
-		{
-			//HUDManager.ScoreCalc(it->points.size());
-			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
-			{
-				std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
-				Entity e = GetOnPos(itV->X,itV->Y);
-				if (e){
-					theRenderingSystem.Delete(e);
-					theTransformationSystem.Delete(e);
-					theADSRSystem.Delete(e);
-					theGridSystem.Delete(e);
-				}
-			}
-		}
-		TileFall();
-	}
 	
-	combinaisons.clear();
-			
-			
-
-	
-	
+	combinaisons.clear();	
 }
 
 

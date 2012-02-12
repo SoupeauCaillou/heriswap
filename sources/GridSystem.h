@@ -3,10 +3,16 @@
 
 #include "systems/System.h"
 #include "base/MathUtil.h"
-typedef struct Combinais {
+struct Combinais {
 	std::vector<Vector2> points;
 	int type;
-} Combinais;
+};
+
+struct CellFall {
+	CellFall(int _x=0, int fY=0, int tY=0) : x(_x), fromY(fY), toY(tY) {}
+	int x;
+	int fromY, toY;
+};
 
 struct GridComponent {
 	GridComponent() {
@@ -50,7 +56,7 @@ bool InVect(std::vector<Vector2> v1, Vector2 v2);
 Combinais MergeVectors(Combinais c1, Combinais c2);
 
 /* Leaves fall if nothing below them */
-void TileFall();
+std::vector<CellFall> TileFall();
 
 int GridSize;
 };
