@@ -13,12 +13,22 @@
 #include <sstream>
 
 #define GRIDSIZE 8
+
+enum State {
+	Spawn,
+	UserInput,
+	Swap,
+	Delete,
+	Fall
+};
 class Game::Data {
 	public:
 		Data() {
 			hud.Setup();
+			state = Spawn;
 		}
 		
+		State state;
 		Entity background;
 		Entity swapper, fall, remove;
 		Entity CreateEntity() {
@@ -59,9 +69,7 @@ void Game::init(int windowW, int windowH) {
 	theRenderingSystem.Add(datas->background);
 	RENDERING(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
-	
-	fillTheBlank();
-	
+
 	datas->swapper = datas->CreateEntity();
 	theADSRSystem.Add(datas->swapper);
 	ADSR(datas->swapper)->idleValue = 0;
@@ -170,10 +178,18 @@ void Game::handleCombinations(std::vector<Combinais>& combinaisons) {
 	}
 }
 
-void Game::tick(float dt) {
-	theTouchInputManager.Update(dt);
+void Game::updateSpawn(float dt) {
+	fillTheBlank();
+	datas->removing = theGridSystem.LookForCombinaison();
+	if (datas->removing.empty()) {
+		datas->state = UserInput;
+	} else {
+		datas->state = Delete;
+	}
+}
 
-	/* drag/drop of cell */
+void Game::updateUserInput(float dt) {
+/* drag/drop of cell */
 	if (!theTouchInputManager.wasTouched() && 
 		theTouchInputManager.isTouched()) {
 		// start drag
@@ -279,7 +295,8 @@ void Game::tick(float dt) {
 					// revert swap
 				} else {
 					ADSR(datas->swapper)->activationTime = 0;
-					handleCombinations(combinaisons);
+					datas->state = Delete;
+					datas->removing = combinaisons;
 				}
 			}
 		}
@@ -287,6 +304,90 @@ void Game::tick(float dt) {
 		// cancel drag
 		datas->dragged = 0;
 		ADSR(datas->swapper)->active = false;
+	}
+}
+
+void Game::updateSwap(float dt) {
+
+}
+
+void Game::updateDelete(float dt) {
+	ADSRComponent* transitionSuppr = ADSR(datas->remove);
+	if (!datas->removing.empty()) {
+		transitionSuppr->active = true;
+		for ( std::vector<Combinais>::reverse_iterator it = datas->removing.rbegin(); it != datas->removing.rend(); ++it ) {
+			datas->hud.ScoreCalc(it->points.size());
+			
+			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
+				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
+				TRANSFORM(e)->rotation = transitionSuppr->value*7;
+				if (transitionSuppr->value == 1) {
+					std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
+					if (e){
+						theRenderingSystem.Delete(e);
+						theTransformationSystem.Delete(e);
+						theADSRSystem.Delete(e);
+						theGridSystem.Delete(e);
+					}
+				}
+			}
+			
+		}
+		if (transitionSuppr->value == 1) {
+			datas->removing.clear();
+			datas->falling = theGridSystem.TileFall();
+			datas->state = Fall;
+		}
+	} else {
+		transitionSuppr->active = false;
+		datas->state = Fall;
+	}
+	//std::cout << transitionSuppr->value << std::endl;
+}
+
+void Game::updateFall(float dt) {
+	if (!datas->falling.empty()) {
+		ADSRComponent* transition = ADSR(datas->fall);
+		transition->active = true;
+		for(std::vector<CellFall>::iterator it=datas->falling.begin(); it!=datas->falling.end(); ++it) {
+			const CellFall& f = *it;
+			Vector2 targetPos = gridCoordsToPosition(f.x, f.toY);
+			Vector2 originPos = gridCoordsToPosition(f.x, f.fromY);
+			GRID(f.e)->checkedH = GRID(f.e)->checkedV = false;
+			TRANSFORM(f.e)->position = MathUtil::Lerp(originPos, targetPos, transition->value);
+			if (transition->value == 1) {
+				GRID(f.e)->j = f.toY;
+			}
+		}
+		if (transition->value == 1) {
+			datas->falling.clear();
+			datas->state = Spawn;
+		}
+	} else {
+		ADSR(datas->fall)->active = false;
+		datas->state = Spawn;
+	}
+}
+
+void Game::tick(float dt) {
+	theTouchInputManager.Update(dt);
+
+	switch (datas->state) {
+		case Spawn:
+			updateSpawn(dt);
+			break;
+		case UserInput:
+			updateUserInput(dt);
+			break;
+		case Swap:
+			updateSwap(dt);
+			break;
+		case Delete:
+			updateDelete(dt);
+			break;
+		case Fall:
+			updateFall(dt);
+			break;
 	}
 
 	theADSRSystem.Update(dt);
@@ -313,68 +414,7 @@ void Game::tick(float dt) {
 
 	theButtonSystem.Update(dt);
 	//theGridSystem.Update(dt);
-	
-	datas->removing =  theGridSystem.LookForCombinaison();
-	
-	ADSRComponent* transitionSuppr = ADSR(datas->remove);
-	if (!datas->removing.empty()) {
-		transitionSuppr->active = true;
-		for ( std::vector<Combinais>::reverse_iterator it = datas->removing.rbegin(); it != datas->removing.rend(); ++it ) {
-			datas->hud.ScoreCalc(it->points.size());
-			
-			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
-				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
-				TRANSFORM(e)->rotation = transitionSuppr->value*7;
-				if (transitionSuppr->value == 1) {
-					std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
-					if (e){
-						theRenderingSystem.Delete(e);
-						theTransformationSystem.Delete(e);
-						theADSRSystem.Delete(e);
-						theGridSystem.Delete(e);
-					}
-				}
-			}
-			
-		}
-		if (transitionSuppr->value == 1) {
-			datas->removing.clear();
-			datas->falling = theGridSystem.TileFall();
-		}
-	} else {
-		transitionSuppr->active = false;
-	}
-				//std::cout << transitionSuppr->value << std::endl;
 
-
-
-
-
-
-
-
-	if (!datas->falling.empty()) {
-		ADSRComponent* transition = ADSR(datas->fall);
-		transition->active = true;
-		for(std::vector<CellFall>::iterator it=datas->falling.begin(); it!=datas->falling.end(); ++it) {
-			const CellFall& f = *it;
-			Vector2 targetPos = gridCoordsToPosition(f.x, f.toY);
-			Vector2 originPos = gridCoordsToPosition(f.x, f.fromY);
-			GRID(f.e)->checkedH = GRID(f.e)->checkedV = false;
-			TRANSFORM(f.e)->position = MathUtil::Lerp(originPos, targetPos, transition->value);
-			if (transition->value == 1) {
-				GRID(f.e)->j = f.toY;
-			}
-		}
-		if (transition->value == 1) {
-			datas->falling.clear();
-			fillTheBlank();
-			std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison();
-			handleCombinations(combinaisons);
-		}
-	} else {
-		ADSR(datas->fall)->active = false;
-	}
 	//fillTheBlank();
 	datas->hud.Update(dt);
 	theTransformationSystem.Update(dt);
