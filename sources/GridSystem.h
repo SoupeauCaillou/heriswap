@@ -3,6 +3,13 @@
 
 #include "systems/System.h"
 #include "base/MathUtil.h"
+
+struct Feuille {
+	int X, Y;
+	Entity fe;
+	int type;
+};
+
 struct Combinais {
 	std::vector<Vector2> points;
 	int type;

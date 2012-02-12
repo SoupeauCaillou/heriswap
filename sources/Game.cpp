@@ -30,7 +30,7 @@ class Game::Data {
 		
 		State state;
 		Entity background;
-		Entity swapper, fall, remove;
+		Entity swapper, fall, remove, spawn;
 		Entity CreateEntity() {
 			static unsigned int e = 1;
 			return e++;
@@ -43,6 +43,7 @@ class Game::Data {
 		HUDManager hud;
 		std::vector<CellFall> falling;
 		std::vector<Combinais> removing;
+		std::vector<Feuille> spawning;
 };	
 
 static const float offset = 0.2;
@@ -96,6 +97,15 @@ void Game::init(int windowW, int windowH) {
 	ADSR(datas->remove)->decayTiming = 0.2;
 	ADSR(datas->remove)->sustainValue = 1.0;
 	ADSR(datas->remove)->releaseTiming = 0; 
+	
+	datas->spawn = datas->CreateEntity();
+	theADSRSystem.Add(datas->spawn);
+	ADSR(datas->spawn)->idleValue = 0;
+	ADSR(datas->spawn)->attackValue = 0.5;
+	ADSR(datas->spawn)->attackTiming = 0.2;
+	ADSR(datas->spawn)->decayTiming = 0.2;
+	ADSR(datas->spawn)->sustainValue = 1.0;
+	ADSR(datas->spawn)->releaseTiming = 0; 
 }
 
 void activateADSR(Entity e, float a, float s) {
@@ -125,12 +135,6 @@ void Game::fillTheBlank()
 	for (int i=0; i<theGridSystem.GridSize; i++){
 		for (int j=0; j<theGridSystem.GridSize; j++){
 			if (theGridSystem.GetOnPos(i,j) == 0){
-				Entity e =  datas->CreateEntity();
-				theTransformationSystem.Add(e);
-				TRANSFORM(e)->position = gridCoordsToPosition(i, j);
-				TRANSFORM(e)->rotation = 0;
-				theRenderingSystem.Add(e);
-				
 				int r;
 				int pb;
 				/*ne pas generer de combinaison*/
@@ -146,7 +150,7 @@ void Game::fillTheBlank()
 						pb++;
 					if (l[1] && l[3] && GRID(l[1])->type == r && r == GRID(l[3])->type)
 						pb++;
-					if (l[4] && l[4] && GRID(l[3])->type == r && r == GRID(l[4])->type)
+					if (l[4] && l[3] && GRID(l[3])->type == r && r == GRID(l[4])->type)
 						pb++;
 					if (c[0] && c[1] && GRID(c[0])->type == r && r == GRID(c[1])->type)
 						pb++;
@@ -157,19 +161,8 @@ void Game::fillTheBlank()
 					
 				} while (pb!=0 && pb<15);
 				
-				
-				std::stringstream s;
-				s << r << ".png";
-				RENDERING(e)->texture = theRenderingSystem.loadTextureFile(s.str());
-				RENDERING(e)->size = size * scale;
-				theADSRSystem.Add(e);
-				ADSR(e)->idleValue = size * scale;
-				
-				theGridSystem.Add(e);
-				GRID(e)->type = r;
-				GRID(e)->i = i;
-				GRID(e)->j = j;
-				std::cout << "nouvelle feuille en ("<<i<<","<<j<<")\n";
+				Feuille nouvfe = {i,j,0,r};
+				datas->spawning.push_back(nouvfe);
 			}
 		}	
 	}							
@@ -177,12 +170,41 @@ void Game::fillTheBlank()
 
 void Game::updateSpawn(float dt) {
 	fillTheBlank();
-	datas->removing = theGridSystem.LookForCombinaison();
-	if (datas->removing.empty()) {
-		datas->state = UserInput;
+	ADSRComponent* transitionCree = ADSR(datas->spawn);
+
+	if (!datas->spawning.empty()) {
+		transitionCree->active = true;
+		for ( std::vector<Feuille>::reverse_iterator it = datas->spawning.rbegin(); it != datas->spawning.rend(); ++it ) {
+			if (it->fe == 0) {
+				Entity e = datas->CreateEntity();
+				theTransformationSystem.Add(e);
+				TRANSFORM(e)->position = gridCoordsToPosition(it->X, it->Y);
+				theRenderingSystem.Add(e);
+				std::stringstream s;
+				s << it->type << ".png";
+				RENDERING(e)->texture = theRenderingSystem.loadTextureFile(s.str());
+				RENDERING(e)->size = size * scale;
+				theADSRSystem.Add(e);
+				ADSR(e)->idleValue = size * scale;
+				theGridSystem.Add(e);
+				GRID(e)->type = it->type;
+				GRID(e)->i = it->X;
+				GRID(e)->j = it->Y;
+				it->fe = e;
+				std::cout << "nouvelle feuille en ("<<it->X<<","<<it->Y<<")\n";	
+			} else if (transitionCree->value == 1){
+				TRANSFORM(it->fe)->rotation = 0;
+			} else {
+				TRANSFORM(it->fe)->rotation = transitionCree->value*7;
+			}
+		}
+		if (transitionCree->value == 1) {
+			datas->spawning.clear();
+			datas->state = UserInput;
+		}
 	} else {
-		ADSR(datas->remove)->activationTime = 0;
-		datas->state = Delete;
+		transitionCree->active = false;
+		datas->state = UserInput;
 	}
 }
 
@@ -346,8 +368,8 @@ void Game::updateDelete(float dt) {
 }
 
 void Game::updateFall(float dt) {
+	ADSRComponent* transition = ADSR(datas->fall);
 	if (!datas->falling.empty()) {
-		ADSRComponent* transition = ADSR(datas->fall);
 		transition->active = true;
 		for(std::vector<CellFall>::iterator it=datas->falling.begin(); it!=datas->falling.end(); ++it) {
 			const CellFall& f = *it;
@@ -364,7 +386,7 @@ void Game::updateFall(float dt) {
 			datas->state = Spawn;
 		}
 	} else {
-		ADSR(datas->fall)->active = false;
+		transition->active = false;
 		datas->state = Spawn;
 	}
 }
