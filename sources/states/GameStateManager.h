@@ -3,7 +3,6 @@
 enum GameState {
 	Spawn,
 	UserInput,
-	RevertSwap,
 	Delete,
 	Fall
 };

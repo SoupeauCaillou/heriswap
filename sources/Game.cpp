@@ -13,7 +13,6 @@
 #include "states/GameStateManager.h"
 #include "states/SpawnGameStateManager.h"
 #include "states/UserInputGameStateManager.h"
-#include "states/RevertSwapGameStateManager.h"
 #include "states/DeleteGameStateManager.h"
 #include "states/FallGameStateManager.h"
 
@@ -30,7 +29,6 @@ class Game::Data {
 
 			state2Manager[Spawn] = new SpawnGameStateManager();
 			state2Manager[UserInput] = new UserInputGameStateManager();
-			state2Manager[RevertSwap] = new RevertSwapGameStateManager();
 			state2Manager[Delete] = new DeleteGameStateManager();
 			state2Manager[Fall] = new FallGameStateManager();
 
