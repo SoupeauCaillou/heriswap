@@ -55,11 +55,11 @@ GameState SpawnGameStateManager::Update(float dt) {
 				GRID(e)->i = it->X;
 				GRID(e)->j = it->Y;
 				it->fe = e;
-				std::cout << "nouvelle feuille en ("<<it->X<<","<<it->Y<<")\n";	
+				std::cout << "nouvelle feuille (type="<<it->type<<") en ("<<it->X<<","<<it->Y<<")\n";
 			} else if (transitionCree->value == 1){
 				TRANSFORM(it->fe)->rotation = 0;
 			} else {
-				TRANSFORM(it->fe)->rotation = transitionCree->value*7;
+				TRANSFORM(it->fe)->rotation = -transitionCree->value*7;
 			}
 		}
 		if (transitionCree->value == 1) {
@@ -82,11 +82,10 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 		for (int j=0; j<theGridSystem.GridSize; j++){
 			if (theGridSystem.GetOnPos(i,j) == 0){
 				int r;
-				int pb;
+				int pb=0;
 				/*ne pas generer de combinaison*/
 				do {	
-					pb = 0;
-					r = MathUtil::RandomInt(8);
+					r = MathUtil::RandomInt(8)+1;
 					Entity l[5],c[5];
 					for (int k=0;k<5;k++){
 						 l[k] = theGridSystem.GetOnPos(i+2-k,j);
@@ -94,19 +93,31 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 					 }
 					if (l[0] && l[1] && GRID(l[0])->type == r && r == GRID(l[1])->type)
 						pb++;
-					if (l[1] && l[3] && GRID(l[1])->type == r && r == GRID(l[3])->type)
+					else if (l[1] && l[3] && GRID(l[1])->type == r && r == GRID(l[3])->type)
 						pb++;
-					if (l[4] && l[3] && GRID(l[3])->type == r && r == GRID(l[4])->type)
+					else if (l[4] && l[3] && GRID(l[3])->type == r && r == GRID(l[4])->type)
 						pb++;
-					if (c[0] && c[1] && GRID(c[0])->type == r && r == GRID(c[1])->type)
+					else if (c[0] && c[1] && GRID(c[0])->type == r && r == GRID(c[1])->type)
 						pb++;
-					if (c[1] && c[3] && GRID(c[1])->type == r && r == GRID(c[3])->type)
+					else if (c[1] && c[3] && GRID(c[1])->type == r && r == GRID(c[3])->type)
 						pb++;
-					if (c[4] && c[3] && GRID(c[3])->type == r && r == GRID(c[4])->type)
+					else if (c[4] && c[3] && GRID(c[3])->type == r && r == GRID(c[4])->type)
 						pb++;
-					
-				} while (pb!=0 && pb<15);
-				
+					else  {
+						pb=0;
+					}
+						
+					if (pb >= 15){
+						r = MathUtil::RandomInt(4)+1;
+						while (pb!=0) {
+							if (r==c[1]||r==c[3]||r==l[3]||r==l[1]) {
+								r++;
+							} else {
+								pb=0;
+							}
+						}
+					}
+				} while (pb!=0);
 				Feuille nouvfe = {i,j,0,r};
 				spawning.push_back(nouvfe);
 			}
