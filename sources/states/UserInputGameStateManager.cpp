@@ -129,6 +129,10 @@ GameState UserInputGameStateManager::Update(float dt) {
 				std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
 				if (combinaisons.empty()) {
 					// revert swap
+					GRID(e1)->i = originI;
+					GRID(e1)->j = originJ;
+					GRID(e2)->i = originI + swapI;
+					GRID(e2)->j = originJ + swapJ;
 					return UserInput;
 				} else {
 					return Delete;
