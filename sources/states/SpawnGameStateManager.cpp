@@ -39,7 +39,6 @@ void SpawnGameStateManager::Enter() {
 		for(int i=0; i<spawning.size(); i++) {
 			createCell(spawning[i]);
 		}
-		spawning.clear();
 		do {		
 			c = theGridSystem.LookForCombinaison(false);
 			// change type from cells in combi
@@ -52,7 +51,8 @@ void SpawnGameStateManager::Enter() {
 			}
 		} while(!c.empty());
 	}
-	
+	spawning.clear();
+
 	
 	
 	ADSRComponent* transitionCree = ADSR(eSpawn);
