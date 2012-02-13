@@ -4,7 +4,8 @@ enum GameState {
 	Spawn,
 	UserInput,
 	Delete,
-	Fall
+	Fall,
+	MainMenu
 };
 
 #include <map>

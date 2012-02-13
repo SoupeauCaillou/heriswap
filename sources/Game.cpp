@@ -15,6 +15,7 @@
 #include "states/UserInputGameStateManager.h"
 #include "states/DeleteGameStateManager.h"
 #include "states/FallGameStateManager.h"
+#include "states/MainMenuGameStateManager.h"
 
 #include <sstream>
 
@@ -25,13 +26,14 @@ class Game::Data {
 		Data() {
 			hud.Setup();
 
-			state = Spawn;
+			state = MainMenu;
 
+			state2Manager[MainMenu] = new MainMenuGameStateManager();
 			state2Manager[Spawn] = new SpawnGameStateManager();
 			state2Manager[UserInput] = new UserInputGameStateManager();
 			state2Manager[Delete] = new DeleteGameStateManager();
 			state2Manager[Fall] = new FallGameStateManager();
-
+			
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
 				it->second->Setup();
 			}
@@ -94,9 +96,10 @@ void Game::tick(float dt) {
 
 	theButtonSystem.Update(dt);
 
-	//fillTheBlank();
-	datas->hud.Update(dt);
+	if (newState != MainMenu)
+		datas->hud.Update(dt);
 	theTransformationSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);
 	theRenderingSystem.Update(dt);
+	
 }

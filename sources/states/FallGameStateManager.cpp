@@ -42,7 +42,6 @@ GameState FallGameStateManager::Update(float dt) {
 		}
 		if (transition->value == 1) {
 			std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
-			std::cout << "b " << combinaisons.size()<<std::endl;
 			if (combinaisons.empty()) return Spawn;
 			else return Delete;
 		}

@@ -25,28 +25,36 @@ void SpawnGameStateManager::Setup() {
 	ADSR(eSpawn)->sustainValue = 1.0;
 	ADSR(eSpawn)->releaseTiming = 0;
 
-	std::vector<Combinais> c;
-	fillTheBlank(spawning);
-	for(int i=0; i<spawning.size(); i++) {
-		createCell(spawning[i]);
-	}
-	spawning.clear();
-	do {		
-		c = theGridSystem.LookForCombinaison(false);
-		// change type from cells in combi
-		for(int i=0; i<c.size(); i++) {
-			for(int j=0; j<c[i].points.size(); j++) {
-				Entity e = theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y);
-				GRID(e)->type = MathUtil::RandomInt(8)+1;
-				RENDERING(e)->texture = textureFromType(GRID(e)->type);
-			}
-		}
-	} while(!c.empty());
+
 	
 }
 	
 void SpawnGameStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	
+	
+	std::vector<Combinais> c;
+	fillTheBlank(spawning);
+	if (spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
+		for(int i=0; i<spawning.size(); i++) {
+			createCell(spawning[i]);
+		}
+		spawning.clear();
+		do {		
+			c = theGridSystem.LookForCombinaison(false);
+			// change type from cells in combi
+			for(int i=0; i<c.size(); i++) {
+				for(int j=0; j<c[i].points.size(); j++) {
+					Entity e = theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y);
+					GRID(e)->type = MathUtil::RandomInt(8)+1;
+					RENDERING(e)->texture = textureFromType(GRID(e)->type);
+				}
+			}
+		} while(!c.empty());
+	}
+	
+	
+	
 	ADSRComponent* transitionCree = ADSR(eSpawn);
 	transitionCree->activationTime = 0;
 	transitionCree->active = false;
@@ -58,6 +66,9 @@ GameState SpawnGameStateManager::Update(float dt) {
 	ADSRComponent* transitionCree = ADSR(eSpawn);
 
 	if (!spawning.empty()) {
+
+		
+		
 		transitionCree->active = true;
 		for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
 			if (it->fe == 0) {
@@ -71,10 +82,15 @@ GameState SpawnGameStateManager::Update(float dt) {
 		}
 		if (transitionCree->value == 1) {
 			spawning.clear();
-			return UserInput;
+			std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
+			if (combinaisons.empty()) return UserInput;
+			else return Delete;
+		
 		}
 	} else {
-		return UserInput;
+		std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
+		if (combinaisons.empty()) return UserInput;
+		else return Delete;
 	}
 	return Spawn;
 }
