@@ -66,7 +66,6 @@ float Game::CellContentScale() {
 }
 
 void Game::init(int windowW, int windowH) {
-	datas = new Data();
 	theRenderingSystem.setWindowSize(windowW, windowH);
 
 	theGridSystem.GridSize = GRIDSIZE;
@@ -76,7 +75,7 @@ void Game::init(int windowW, int windowH) {
 	RENDERING(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 
-	
+	datas = new Data();
 	datas->state2Manager[datas->state]->Enter();
 }
 

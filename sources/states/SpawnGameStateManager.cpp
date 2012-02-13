@@ -8,6 +8,8 @@
 
 #include <sstream>
 static void fillTheBlank(std::vector<Feuille>& spawning);
+static Entity createCell(Feuille& f);
+static TextureRef textureFromType(int type);
 
 SpawnGameStateManager::SpawnGameStateManager() {
 
@@ -22,6 +24,25 @@ void SpawnGameStateManager::Setup() {
 	ADSR(eSpawn)->decayTiming = 0.2;
 	ADSR(eSpawn)->sustainValue = 1.0;
 	ADSR(eSpawn)->releaseTiming = 0;
+
+	std::vector<Combinais> c;
+	fillTheBlank(spawning);
+	for(int i=0; i<spawning.size(); i++) {
+		createCell(spawning[i]);
+	}
+	spawning.clear();
+	do {		
+		c = theGridSystem.LookForCombinaison(false);
+		// change type from cells in combi
+		for(int i=0; i<c.size(); i++) {
+			for(int j=0; j<c[i].points.size(); j++) {
+				Entity e = theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y);
+				GRID(e)->type = MathUtil::RandomInt(8)+1;
+				RENDERING(e)->texture = textureFromType(GRID(e)->type);
+			}
+		}
+	} while(!c.empty());
+	
 }
 	
 void SpawnGameStateManager::Enter() {
@@ -40,21 +61,7 @@ GameState SpawnGameStateManager::Update(float dt) {
 		transitionCree->active = true;
 		for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
 			if (it->fe == 0) {
-				Entity e = theEntityManager.CreateEntity();
-				theTransformationSystem.Add(e);
-				TRANSFORM(e)->position = Game::GridCoordsToPosition(it->X, it->Y);
-				theRenderingSystem.Add(e);
-				std::stringstream s;
-				s << it->type << ".png";
-				RENDERING(e)->texture = theRenderingSystem.loadTextureFile(s.str());
-				RENDERING(e)->size = Game::CellSize() * Game::CellContentScale();
-				theADSRSystem.Add(e);
-				ADSR(e)->idleValue = Game::CellSize() * Game::CellContentScale();
-				theGridSystem.Add(e);
-				GRID(e)->type = it->type;
-				GRID(e)->i = it->X;
-				GRID(e)->j = it->Y;
-				it->fe = e;
+				it->fe = createCell(*it);
 				std::cout << "nouvelle feuille (type="<<it->type<<") en ("<<it->X<<","<<it->Y<<")\n";
 			} else if (transitionCree->value == 1){
 				TRANSFORM(it->fe)->rotation = 0;
@@ -124,4 +131,27 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 		}	
 	}							
 }
+
+static TextureRef textureFromType(int type) {
+	std::stringstream s;
+	s << type << ".png";
+	return theRenderingSystem.loadTextureFile(s.str());
+}
+
+static Entity createCell(Feuille& f) {
+	Entity e = theEntityManager.CreateEntity();
+	theTransformationSystem.Add(e);
+	TRANSFORM(e)->position = Game::GridCoordsToPosition(f.X, f.Y);
+	theRenderingSystem.Add(e);
+	RENDERING(e)->texture = textureFromType(f.type);
+	RENDERING(e)->size = Game::CellSize() * Game::CellContentScale();
+	theADSRSystem.Add(e);
+	ADSR(e)->idleValue = Game::CellSize() * Game::CellContentScale();
+	theGridSystem.Add(e);
+	GRID(e)->type = f.type;
+	GRID(e)->i = f.X;
+	GRID(e)->j = f.Y;
+	return e;
+}
+
 
