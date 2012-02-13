@@ -13,15 +13,6 @@ class SpawnGameStateManager : public GameStateManager {
 		GameState Update(float dt);
 		void Exit();
 
-	public:
-		// input/ouput
-		struct Input {
-
-		} input;
-		struct Output {
-
-		} output;
-
 	private:
 		// datas
 		Entity eSpawn;

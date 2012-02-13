@@ -86,6 +86,9 @@ void Game::tick(float dt) {
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
 	}
+	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin(); it!=datas->state2Manager.end(); ++it) {
+		it->second->BackgroundUpdate(dt);
+	}
 
 	theADSRSystem.Update(dt);
 

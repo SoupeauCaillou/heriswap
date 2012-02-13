@@ -13,14 +13,6 @@ class DeleteGameStateManager : public GameStateManager {
 		GameState Update(float dt);
 		void Exit();
 
-	public:
-		// input/ouput
-		struct Input {
-			std::vector<Combinais> combinaisons;
-		} input;
-		struct Output {
-
-		} output;
 	private:
 		// datas
 		Entity eRemove;

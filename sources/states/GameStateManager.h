@@ -19,6 +19,8 @@ class GameStateManager {
 		virtual void Enter() = 0;
 		/* Update gamestate, and returns the new GameState */
 		virtual GameState Update(float dt) = 0;
+		/* Always called */
+		virtual void BackgroundUpdate(float dt) {};
 		/* Prepare to leave as the active manager */
 		virtual void Exit() = 0;
 };

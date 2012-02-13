@@ -12,16 +12,9 @@ class UserInputGameStateManager : public GameStateManager {
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
+		void BackgroundUpdate(float dt);
 		void Exit();
 
-	public:
-		// input/ouput
-		struct Input {
-
-		} input;
-		struct Output {
-			std::vector<Combinais> combinaisons;
-		} output;
 	private:
 		// datas
 		Entity eSwapper;

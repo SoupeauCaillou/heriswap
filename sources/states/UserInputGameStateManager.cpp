@@ -131,7 +131,6 @@ GameState UserInputGameStateManager::Update(float dt) {
 					// revert swap
 					return UserInput;
 				} else {
-					output.combinaisons = combinaisons;
 					return Delete;
 				}
 			}
@@ -149,7 +148,10 @@ GameState UserInputGameStateManager::Update(float dt) {
 			}
 		}
 	}
+	return UserInput;
+}
 
+void UserInputGameStateManager::BackgroundUpdate(float dt) {
 	for(int i=0; i<theGridSystem.GridSize; i++) {
 		for(int j=0; j<theGridSystem.GridSize; j++) {
 			Entity e = theGridSystem.GetOnPos(i,j);
@@ -169,8 +171,6 @@ GameState UserInputGameStateManager::Update(float dt) {
 		TRANSFORM(theGridSystem.GetOnPos(originI,originJ))->position = interp1;
 		TRANSFORM(theGridSystem.GetOnPos(originI + swapI,originJ + swapJ))->position = interp2;
 	}
-
-	return UserInput;
 }
 	
 void UserInputGameStateManager::Exit() {
