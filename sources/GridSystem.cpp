@@ -95,7 +95,7 @@ std::vector<Combinais> GridSystem::MergeCombinaison(std::vector<Combinais> combi
 	return combinmerged;
 }
 
-std::vector<Combinais> GridSystem::LookForCombinaison() { 
+std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked) { 
 	std::vector<Combinais> combinaisons;
 
 	/* do not look for combis if the grid is not full */
@@ -127,7 +127,7 @@ std::vector<Combinais> GridSystem::LookForCombinaison() {
 				} else {
 					/*Useless to check them later : we already did it now*/
 					potential.points.push_back(Vector2(i,k));
-					GRID(next)->checkedV = true;
+					if (markAsChecked) GRID(next)->checkedV = true;
 					k--;
 				}
 			}
@@ -143,7 +143,7 @@ std::vector<Combinais> GridSystem::LookForCombinaison() {
 				if (GRID(next)->type != gc->type){
 					k=GridSize;
 				} else {
-					GRID(next)->checkedV = true;
+					if (markAsChecked) GRID(next)->checkedV = true;
 					potential.points.push_back(Vector2(i,k));
 					k++;
 				}
@@ -157,7 +157,7 @@ std::vector<Combinais> GridSystem::LookForCombinaison() {
 				combinaisons.push_back(potential);
 			}
 			
-			gc->checkedV = true;
+			if (markAsChecked) gc->checkedV = true;
 		} 
 		
 		/*Check on i*/
@@ -177,7 +177,7 @@ std::vector<Combinais> GridSystem::LookForCombinaison() {
 					k=-2;
 				} else {
 					/*Useless to check them later : we already did it now*/
-					GRID(next)->checkedH = true;
+					if (markAsChecked) GRID(next)->checkedH = true;
 					potential.points.push_back(Vector2(k,j));
 					k--;
 				}
@@ -194,7 +194,7 @@ std::vector<Combinais> GridSystem::LookForCombinaison() {
 				if (GRID(next)->type != gc->type) {
 					k=(GridSize+1);
 				} else {
-					GRID(next)->checkedH = true;
+					if (markAsChecked) GRID(next)->checkedH = true;
 					potential.points.push_back(Vector2(k,j));
 					k++;
 				}
@@ -209,7 +209,7 @@ std::vector<Combinais> GridSystem::LookForCombinaison() {
 				combinaisons.push_back(potential);
 			}
 			
-			gc->checkedH = true;
+			if (markAsChecked) gc->checkedH = true;
 		} 
 		
 		
@@ -250,23 +250,7 @@ std::vector<CellFall> GridSystem::TileFall() {
 	return result;
 }
 void GridSystem::DoUpdate(float dt) {
-	std::vector<Combinais> combinaisons;
-	combinaisons = LookForCombinaison();
 
-	if (combinaisons.size()>0){
-		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
-		{
-			std::cout << it->points.size();
-			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
-			{
-				std::cout << "\t(" <<itV->X << ", "<< itV->Y << ")";
-			}
-			std::cout << std::endl;
-			
-		}
-	}
-	
-	combinaisons.clear();	
 }
 
 

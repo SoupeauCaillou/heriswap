@@ -6,15 +6,10 @@ class Game {
 
 		void init(int windowW, int windowH);
 		void tick(float dt);
-		void fillTheBlank();
 
-		void handleCombinations(std::vector<Combinais>& combinaisons);
-
-		void updateSpawn(float dt);
-		void updateUserInput(float dt);
-		void updateRevertSwap(float dt);
-		void updateDelete(float dt);
-		void updateFall(float dt);
+		static Vector2 GridCoordsToPosition(int i, int j);
+		static float CellSize();
+		static float CellContentScale();
 	class Data;
 	Data* datas;
 };

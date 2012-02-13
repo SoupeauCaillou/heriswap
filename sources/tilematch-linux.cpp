@@ -72,7 +72,6 @@ int main() {
 		} while (dt < DT);
 
 		if (dt > 1./20) {
-			std::cout << "LAG !" << std::endl;
 			dt = 1./20.;
 		}
 		dtAccumuled += dt;

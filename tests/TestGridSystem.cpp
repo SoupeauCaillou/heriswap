@@ -31,7 +31,7 @@ TEST(RowCombination)
 	};
 	initGrid(grid, 4);
 
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison();
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true);
 	CHECK_EQUAL(combinaisons.size(), 1);
 	CHECK_EQUAL(combinaisons[0].type, 'B');
 }
@@ -46,7 +46,7 @@ TEST(ColCombination)
 	};
 	initGrid(grid, 4);
 
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison();
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true);
 	CHECK_EQUAL(combinaisons.size(), 1);
 	CHECK_EQUAL(combinaisons[0].type, 'C');
 }
@@ -61,7 +61,7 @@ TEST(MultipleCombination)
 	};
 	initGrid(grid, 4);
 
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison();
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true);
 	CHECK_EQUAL(combinaisons.size(), 3);
 }
 
@@ -75,7 +75,7 @@ TEST(CombinationMergeL)
 	};
 	initGrid(grid, 4);
 
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison();
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true);
 	CHECK_EQUAL(combinaisons.size(), 1);
 	CHECK_EQUAL(combinaisons[0].type, 'A');
 	CHECK_EQUAL(combinaisons[0].points.size(), 6);
@@ -91,7 +91,7 @@ TEST(CombinationMergeN)
 	};
 	initGrid(grid, 4);
 
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison();
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true);
 	CHECK_EQUAL(combinaisons.size(), 2);
 	CHECK_EQUAL(combinaisons[0].type, 'X');
 	CHECK_EQUAL(combinaisons[1].type, 'X');
