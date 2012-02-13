@@ -41,10 +41,17 @@ GameState FallGameStateManager::Update(float dt) {
 			}
 		}
 		if (transition->value == 1) {
-			return Spawn;
+			std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
+			std::cout << "b " << combinaisons.size()<<std::endl;
+			if (combinaisons.empty()) return Spawn;
+			else return Delete;
 		}
 	} else {
-		return Spawn;
+		std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
+					std::cout << "a " << combinaisons.size()<<std::endl;
+
+		if (combinaisons.empty()) return Spawn;
+		else return Delete;
 	}
 	return Fall;
 }
