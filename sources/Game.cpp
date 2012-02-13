@@ -27,6 +27,7 @@ class Game::Data {
 			hud.Setup();
 			state = Spawn;
 			dragged = 0;
+			firstFill = true;
 		}
 		
 		State state;
@@ -37,7 +38,7 @@ class Game::Data {
 			return e++;
 		}
 		// drag/drop
-		bool dragStarted;
+		bool dragStarted, firstFill;
 		Entity dragged;
 		int originI, originJ;
 		int swapI, swapJ;
@@ -137,11 +138,10 @@ void Game::fillTheBlank()
 		for (int j=0; j<theGridSystem.GridSize; j++){
 			if (theGridSystem.GetOnPos(i,j) == 0){
 				int r;
-				int pb;
+				int pb=0;
 				/*ne pas generer de combinaison*/
 				do {	
-					pb = 0;
-					r = MathUtil::RandomInt(8);
+					r = MathUtil::RandomInt(8)+1;
 					Entity l[5],c[5];
 					for (int k=0;k<5;k++){
 						 l[k] = theGridSystem.GetOnPos(i+2-k,j);
@@ -149,19 +149,31 @@ void Game::fillTheBlank()
 					 }
 					if (l[0] && l[1] && GRID(l[0])->type == r && r == GRID(l[1])->type)
 						pb++;
-					if (l[1] && l[3] && GRID(l[1])->type == r && r == GRID(l[3])->type)
+					else if (l[1] && l[3] && GRID(l[1])->type == r && r == GRID(l[3])->type)
 						pb++;
-					if (l[4] && l[3] && GRID(l[3])->type == r && r == GRID(l[4])->type)
+					else if (l[4] && l[3] && GRID(l[3])->type == r && r == GRID(l[4])->type)
 						pb++;
-					if (c[0] && c[1] && GRID(c[0])->type == r && r == GRID(c[1])->type)
+					else if (c[0] && c[1] && GRID(c[0])->type == r && r == GRID(c[1])->type)
 						pb++;
-					if (c[1] && c[3] && GRID(c[1])->type == r && r == GRID(c[3])->type)
+					else if (c[1] && c[3] && GRID(c[1])->type == r && r == GRID(c[3])->type)
 						pb++;
-					if (c[4] && c[3] && GRID(c[3])->type == r && r == GRID(c[4])->type)
+					else if (c[4] && c[3] && GRID(c[3])->type == r && r == GRID(c[4])->type)
 						pb++;
-					
-				} while (pb!=0 && pb<15);
-				
+					else  {
+						pb=0;
+					}
+						
+					if (pb >= 15){
+						r = MathUtil::RandomInt(4)+1;
+						while (pb!=0) {
+							if (r==c[1]||r==c[3]||r==l[3]||r==l[1]) {
+								r++;
+							} else {
+								pb=0;
+							}
+						}
+					}
+				} while (pb!=0);
 				Feuille nouvfe = {i,j,0,r};
 				datas->spawning.push_back(nouvfe);
 			}
@@ -192,24 +204,28 @@ void Game::updateSpawn(float dt) {
 				GRID(e)->i = it->X;
 				GRID(e)->j = it->Y;
 				it->fe = e;
-				std::cout << "nouvelle feuille en ("<<it->X<<","<<it->Y<<")\n";	
+				std::cout << "nouvelle feuille (type="<<it->type<<") en ("<<it->X<<","<<it->Y<<")\n";	
 			} else if (transitionCree->value == 1){
 				TRANSFORM(it->fe)->rotation = 0;
 			} else {
-				TRANSFORM(it->fe)->rotation = transitionCree->value*7;
+				TRANSFORM(it->fe)->rotation = -transitionCree->value*7;
 			}
 		}
 		if (transitionCree->value == 1) {
 			datas->spawning.clear();
-			datas->state = UserInput;
+			if (datas->firstFill) datas->state=Delete;
+			else datas->state = UserInput;
 			transitionCree->activationTime = 0;
 			transitionCree->active = false;
 		}
 	} else {
 		transitionCree->activationTime = 0;
 		transitionCree->active = false;
-		datas->state = UserInput;
+		if (datas->firstFill) datas->state=Delete;
+		else datas->state = UserInput;
 	}
+
+	
 }
 
 void Game::updateUserInput(float dt) {
@@ -351,17 +367,13 @@ void Game::updateRevertSwap(float dt) {
 }
 
 void Game::updateDelete(float dt) {
-	ADSRComponent* transitionSuppr = ADSR(datas->remove);
-	if (!datas->removing.empty()) {
-		transitionSuppr->active = true;
-		for ( std::vector<Combinais>::reverse_iterator it = datas->removing.rbegin(); it != datas->removing.rend(); ++it ) {
-			if (transitionSuppr->value == 1)
-				datas->hud.ScoreCalc(it->points.size());	
-			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
-				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
-				TRANSFORM(e)->rotation = transitionSuppr->value*7;
-				if (transitionSuppr->value == 1) {
-					std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
+	std::cout << datas->firstFill;
+	if (datas->firstFill) {
+		datas->removing = theGridSystem.LookForCombinaison();
+		if (!datas->removing.empty()) {
+			for ( std::vector<Combinais>::reverse_iterator it = datas->removing.rbegin(); it != datas->removing.rend(); ++it ) {
+				for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
+					Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
 					if (e){
 						theRenderingSystem.Delete(e);
 						theTransformationSystem.Delete(e);
@@ -370,19 +382,43 @@ void Game::updateDelete(float dt) {
 					}
 				}
 			}
-			
-		}
-		if (transitionSuppr->value == 1) {
 			datas->removing.clear();
-			datas->falling = theGridSystem.TileFall();
-			datas->state = Fall;
-			ADSR(datas->fall)->activationTime = 0;
-		}
+			datas->state = Spawn;
+		} else
+			datas->firstFill = false;
 	} else {
-		transitionSuppr->active = false;
-		datas->state = Spawn;
+		ADSRComponent* transitionSuppr = ADSR(datas->remove);
+		if (!datas->removing.empty()) {
+			transitionSuppr->active = true;
+			for ( std::vector<Combinais>::reverse_iterator it = datas->removing.rbegin(); it != datas->removing.rend(); ++it ) {
+				if (transitionSuppr->value == 1)
+					datas->hud.ScoreCalc(it->points.size());	
+				for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
+					Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
+					TRANSFORM(e)->rotation = transitionSuppr->value*7;
+					if (transitionSuppr->value == 1) {
+						std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
+						if (e){
+							theRenderingSystem.Delete(e);
+							theTransformationSystem.Delete(e);
+							theADSRSystem.Delete(e);
+							theGridSystem.Delete(e);
+						}
+					}
+				}
+				
+			}
+			if (transitionSuppr->value == 1) {
+				datas->removing.clear();
+				datas->falling = theGridSystem.TileFall();
+				datas->state = Fall;
+				ADSR(datas->fall)->activationTime = 0;
+			}
+		} else {
+			transitionSuppr->active = false;
+			datas->state = Spawn;
+		}
 	}
-	//std::cout << transitionSuppr->value << std::endl;
 }
 
 void Game::updateFall(float dt) {
@@ -453,9 +489,7 @@ void Game::tick(float dt) {
 	}
 
 	theButtonSystem.Update(dt);
-	//theGridSystem.Update(dt);
 
-	//fillTheBlank();
 	datas->hud.Update(dt);
 	theTransformationSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);
