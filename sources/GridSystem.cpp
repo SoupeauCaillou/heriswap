@@ -98,10 +98,6 @@ std::vector<Combinais> GridSystem::MergeCombinaison(std::vector<Combinais> combi
 std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked) { 
 	std::vector<Combinais> combinaisons;
 
-	/* do not look for combis if the grid is not full */
-	if (components.size() != GridSize * GridSize)
-		return combinaisons;
-
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
 		Entity a = (*it).first;			
 		GridComponent* gc = (*it).second;
@@ -118,11 +114,8 @@ std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked) {
 			int k=j;
 			while (k>-1){
 				Entity next = GetOnPos(i,k);
-
-				if (!next) // bug
-					print();
-		
-				if (GRID(next)->type != gc->type){
+				
+				if (!next || GRID(next)->type != gc->type) {
 					k=-2;
 				} else {
 					/*Useless to check them later : we already did it now*/
@@ -137,10 +130,9 @@ std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked) {
 			while (k<GridSize){
 				Entity next = GetOnPos(i,k);
 
-				if (!next) // bug
-					print();
 
-				if (GRID(next)->type != gc->type){
+
+				if (!next || GRID(next)->type != gc->type){
 					k=GridSize;
 				} else {
 					if (markAsChecked) GRID(next)->checkedV = true;
@@ -170,10 +162,7 @@ std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked) {
 			while (k>-1){
 				Entity next = GetOnPos(k,j);
 				
-				if (!next) // bug
-					print();
-
-				if (GRID(next)->type != gc->type) {
+				if (!next || GRID(next)->type != gc->type) {
 					k=-2;
 				} else {
 					/*Useless to check them later : we already did it now*/
@@ -187,11 +176,8 @@ std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked) {
 			k = i+1;
 			while (k<GridSize){
 				Entity next = GetOnPos(k,j);
-
-				if (!next) // bug
-					print();
-
-				if (GRID(next)->type != gc->type) {
+				
+				if (!next || GRID(next)->type != gc->type) {
 					k=(GridSize+1);
 				} else {
 					if (markAsChecked) GRID(next)->checkedH = true;

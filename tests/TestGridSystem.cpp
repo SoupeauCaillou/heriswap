@@ -137,3 +137,37 @@ TEST(MultipleFalls)
 		CHECK_EQUAL(0, falls[1].toY);
 	}
 }
+
+TEST(MultipleNewCombiOnFalls)
+{
+	char grid[] = {
+		'D', 'A', 'B', 'C',
+		'C', 'B', 'A', 'A',
+		'C', 'D', 'D', 'C',
+		'A', 'C', 'A', 'A'
+	};
+	initGrid(grid, 4);
+
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
+	CHECK_EQUAL(combinaisons.size(), 0);
+	// swap (0,0) and (0,1)
+	Entity e1 = theGridSystem.GetOnPos(0,0);
+	Entity e2 = theGridSystem.GetOnPos(1,0);
+	GRID(e1)->i = 1;
+	GRID(e2)->i = 0;
+	
+	
+	combinaisons = theGridSystem.LookForCombinaison(false);
+	CHECK_EQUAL(2, combinaisons.size());
+	for (int i=0;i<combinaisons.size();i++)
+		for (int j=0;j<combinaisons[i].points.size();j++)
+			theGridSystem.Delete(theGridSystem.GetOnPos(combinaisons[i].points[j].X, combinaisons[i].points[j].Y));
+	
+	std::vector<CellFall> falls = theGridSystem.TileFall();
+	for (int i=0;i<falls.size();i++)
+		GRID(falls[i].e)->j = falls[i].toY;
+	
+	combinaisons = theGridSystem.LookForCombinaison(false);
+	CHECK_EQUAL(1, combinaisons.size());
+	
+}
