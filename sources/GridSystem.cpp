@@ -8,7 +8,7 @@
 				
 INSTANCE_IMPL(GridSystem);
 	
-GridSystem::GridSystem() : ComponentSystem<GridComponent>("Grid") { 
+GridSystem::GridSystem() : ComponentSystemImpl<GridComponent>("Grid") { 
 	GridSize=8;
 	nbmin=3;
 }
