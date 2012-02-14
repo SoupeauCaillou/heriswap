@@ -6,11 +6,6 @@ MainMenuGameStateManager::MainMenuGameStateManager() {
 }
 
 void MainMenuGameStateManager::Setup() {
-}
-	
-void MainMenuGameStateManager::Enter() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
-	
 	start = theEntityManager.CreateEntity();
 	score = theEntityManager.CreateEntity();
 	
@@ -79,31 +74,21 @@ void MainMenuGameStateManager::Enter() {
 	
 	TRANSFORM(score)->position = Vector2(0,1);
 	TRANSFORM(eScore)->position = Vector2(7, 1);
+}
 	
-
+void MainMenuGameStateManager::Enter() {
+	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	TEXT_RENDERING(eStart)->text = "s2345";
 	TEXT_RENDERING(eScore)->text = "1337 :";
+
+	TEXT_RENDERING(eStart)->hide = false;
+	TEXT_RENDERING(eScore)->hide = false;
+	RENDERING(start)->hide = false;
+	RENDERING(score)->hide = false;
 }
 
 GameState MainMenuGameStateManager::Update(float dt) {
 	if (theTouchInputManager.isTouched()){
-		theRenderingSystem.Delete(start);
-		theRenderingSystem.Delete(score);
-		theTransformationSystem.Delete(start);
-		theTransformationSystem.Delete(score);
-
-
-		
-		//A remettre mais ca bug en l'etat : je pense que les "fils" (les caracteres) plantent à ce moment là..
-		//Faudrait dans textrendering une gestion du delete, que ça supprime tous les fils ?
-		
-		theTextRenderingSystem.Delete(eScore);
-		//theTransformationSystem.Delete(eScore);
-
-		theTextRenderingSystem.Delete(eStart);
-		//theTransformationSystem.Delete(eStart);
-
-		
 		return Spawn;
 	}
 	TRANSFORM(start)->rotation += dt;
@@ -113,5 +98,9 @@ GameState MainMenuGameStateManager::Update(float dt) {
 	
 void MainMenuGameStateManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	TEXT_RENDERING(eStart)->hide = true;
+	TEXT_RENDERING(eScore)->hide = true;
+	RENDERING(start)->hide = true;
+	RENDERING(score)->hide = true;
 }
 
