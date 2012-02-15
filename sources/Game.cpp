@@ -4,6 +4,7 @@
 #include "systems/ButtonSystem.h"
 #include "systems/ADSRSystem.h"
 #include "systems/TextRenderingSystem.h"
+#include "systems/PlayerSystem.h"
 #include "GridSystem.h"
 
 #include "systems/HUDManager.h"
@@ -16,6 +17,8 @@
 #include "states/DeleteGameStateManager.h"
 #include "states/FallGameStateManager.h"
 #include "states/MainMenuGameStateManager.h"
+#include "states/ScoreBoardStateManager.h"
+#include "states/EndMenuStateManager.h"
 
 #include <sstream>
 
@@ -33,15 +36,18 @@ class Game::Data {
 			state2Manager[UserInput] = new UserInputGameStateManager();
 			state2Manager[Delete] = new DeleteGameStateManager();
 			state2Manager[Fall] = new FallGameStateManager();
+			state2Manager[ScoreBoard] = new ScoreBoardStateManager();
+			state2Manager[EndMenu] = new EndMenuStateManager();
 			
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
 				it->second->Setup();
 			}
+			time = 10.;
 		}
 
 		GameState state;
 		Entity background;
-
+		float time;
 		// drag/drop
 		HUDManager hud;
 		std::map<GameState, GameStateManager*> state2Manager;
@@ -77,12 +83,23 @@ void Game::init(int windowW, int windowH) {
 
 	datas = new Data();
 	datas->state2Manager[datas->state]->Enter();
+	
+	Entity eHUD = theEntityManager.CreateEntity();
+	thePlayerSystem.Add(eHUD);
 }
 
 void Game::tick(float dt) {
+
 	theTouchInputManager.Update(dt);
 
-	GameState newState = datas->state2Manager[datas->state]->Update(dt);
+	GameState newState;
+	if (datas->time<0) {
+		newState = EndMenu;
+		datas->time = 0;
+	} else {
+		newState = datas->state2Manager[datas->state]->Update(dt);
+	}
+	
 	if (newState != datas->state) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
@@ -93,13 +110,24 @@ void Game::tick(float dt) {
 	}
 
 	theADSRSystem.Update(dt);
-
 	theButtonSystem.Update(dt);
 
-	if (newState != MainMenu)
+	if (newState != MainMenu && newState != ScoreBoard && newState != EndMenu) {
+		datas->hud.Hide(false);
 		datas->hud.Update(dt);
+		if (datas->time > 0)
+			datas->time-=dt;
+		thePlayerSystem.Update(dt);
+	}
+	if (newState == EndMenu) {
+		datas->hud.Hide(true);
+		theGridSystem.DeleteAll();
+		datas->time = 10;
+	} else if (newState == MainMenu) {
+		thePlayerSystem.Reset();
+	}
+	
 	theTransformationSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);
-	theRenderingSystem.Update(dt);
-	
+	theRenderingSystem.Update(dt);		
 }

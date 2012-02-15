@@ -5,7 +5,9 @@ enum GameState {
 	UserInput,
 	Delete,
 	Fall,
-	MainMenu
+	MainMenu,
+	ScoreBoard,
+	EndMenu
 };
 
 #include <map>

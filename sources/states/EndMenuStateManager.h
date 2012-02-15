@@ -7,14 +7,15 @@
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 
-class MainMenuGameStateManager : public GameStateManager {
+class EndMenuStateManager : public GameStateManager {
 	public:
-		MainMenuGameStateManager();
+		EndMenuStateManager();
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
 		void Exit();
 	private:
-		Entity start, score, eScore, eStart;
+		Entity startbtn;
 };
+
 

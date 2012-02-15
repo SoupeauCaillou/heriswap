@@ -70,6 +70,8 @@ bool IsValidGridPosition(int i, int j) {
 	return (i>=0 && j>=0 && i<GridSize && j<GridSize);
 }
 
+void DeleteAll();
+
 void print();
 
 int GridSize;

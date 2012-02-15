@@ -27,6 +27,17 @@ void GridSystem::print() {
 	}
 }
 
+void GridSystem::DeleteAll() {
+	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
+		Entity e = (*it).first;			
+
+		theRenderingSystem.Delete(e);
+		theTransformationSystem.Delete(e);
+		theADSRSystem.Delete(e);
+		theGridSystem.Delete(e);
+	}
+}
+
 Entity GridSystem::GetOnPos(int i, int j) {
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
 		Entity a = (*it).first;			

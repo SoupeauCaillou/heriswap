@@ -3,6 +3,7 @@
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/ADSRSystem.h"
+#include "systems/PlayerSystem.h"
 #include "base/EntityManager.h"
 
 DeleteGameStateManager::DeleteGameStateManager() {
@@ -30,6 +31,8 @@ GameState DeleteGameStateManager::Update(float dt) {
 	if (!removing.empty()) {
 		transitionSuppr->active = true;
 		for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
+			if (transitionSuppr->value == 1) 
+				thePlayerSystem.ScoreCalc(it->points.size());
 			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
 				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
 				TRANSFORM(e)->rotation = transitionSuppr->value*7;
