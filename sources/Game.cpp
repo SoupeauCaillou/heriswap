@@ -42,7 +42,7 @@ class Game::Data {
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
 				it->second->Setup();
 			}
-			time = 10.;
+			time = TIMELIMIT;
 		}
 
 		GameState state;
@@ -122,7 +122,7 @@ void Game::tick(float dt) {
 	if (newState == EndMenu) {
 		datas->hud.Hide(true);
 		theGridSystem.DeleteAll();
-		datas->time = 10;
+		datas->time = TIMELIMIT;
 	} else if (newState == MainMenu) {
 		thePlayerSystem.Reset();
 	}

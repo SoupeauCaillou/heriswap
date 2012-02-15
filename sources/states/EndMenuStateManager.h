@@ -6,6 +6,7 @@
 #include "systems/TextRenderingSystem.h"
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
+#include "systems/PlayerSystem.h"
 
 class EndMenuStateManager : public GameStateManager {
 	public:
@@ -15,7 +16,7 @@ class EndMenuStateManager : public GameStateManager {
 		GameState Update(float dt);
 		void Exit();
 	private:
-		Entity startbtn;
+		Entity startbtn, eScore;
 };
 
 

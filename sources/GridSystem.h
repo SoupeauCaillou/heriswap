@@ -51,14 +51,14 @@ std::vector<Combinais> LookForCombinaison(bool markAsChecked);
 /* Set Back all entity at "not checked"*/
 void ResetTest();
 
-/* Return merged combinaisons */
+/* Return combinaisons without twice the same point*/
 std::vector<Combinais> MergeCombinaison(std::vector<Combinais> combinaisons);
 
 /* Return true if an element is in both vector */
 bool Intersec(std::vector<Vector2> v1, std::vector<Vector2> v2);
 
-/* Return true if v2 is in v1*/
-bool InVect(std::vector<Vector2> v1, Vector2 v2);
+/* Return true if e is in v*/
+bool InVect(std::vector<Vector2> v, Vector2 e);
 
 /* Merge 2 vector*/
 Combinais MergeVectors(Combinais c1, Combinais c2);
