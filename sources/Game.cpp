@@ -93,9 +93,8 @@ void Game::tick(float dt) {
 	theTouchInputManager.Update(dt);
 
 	GameState newState;
-	if (datas->time<0) {
+	if (TIMELIMIT - thePlayerSystem.GetTime()<0) {
 		newState = EndMenu;
-		datas->time = 0;
 	} else {
 		newState = datas->state2Manager[datas->state]->Update(dt);
 	}
@@ -115,14 +114,12 @@ void Game::tick(float dt) {
 	if (newState != MainMenu && newState != ScoreBoard && newState != EndMenu) {
 		datas->hud.Hide(false);
 		datas->hud.Update(dt);
-		if (datas->time > 0)
-			datas->time-=dt;
 		thePlayerSystem.Update(dt);
 	}
 	if (newState == EndMenu) {
 		datas->hud.Hide(true);
 		theGridSystem.DeleteAll();
-		datas->time = TIMELIMIT;
+		thePlayerSystem.SetTime(0);
 	} else if (newState == MainMenu) {
 		thePlayerSystem.Reset();
 	}
