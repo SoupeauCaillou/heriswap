@@ -173,8 +173,13 @@ void UserInputGameStateManager::BackgroundUpdate(float dt) {
 		Vector2 interp1 = MathUtil::Lerp(pos1, pos2, ADSR(eSwapper)->value);
 		Vector2 interp2 = MathUtil::Lerp(pos2, pos1, ADSR(eSwapper)->value);
 
-		TRANSFORM(theGridSystem.GetOnPos(originI,originJ))->position = interp1;
-		TRANSFORM(theGridSystem.GetOnPos(originI + swapI,originJ + swapJ))->position = interp2;
+		Entity e1 = theGridSystem.GetOnPos(originI,originJ);
+		Entity e2 = theGridSystem.GetOnPos(originI + swapI,originJ + swapJ);
+		
+		if (e1)
+			TRANSFORM(e1)->position = interp1;
+		if (e2)
+			TRANSFORM(e2)->position = interp2;
 	}
 }
 	
