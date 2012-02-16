@@ -7,6 +7,7 @@
 #include "systems/ADSRSystem.h"
 #include "base/EntityManager.h"
 #include "Game.h"
+#include <GL/glfw.h>
 
 static void activateADSR(Entity e, float a, float s);
 static void diffToGridCoords(const Vector2& c, int* i, int* j);
@@ -127,8 +128,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 				GRID(e1)->checkedV = false;
 
 				std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
-				if (combinaisons.empty()) {
-				//if (glfwGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT) != GLFW_PRESS && combinaisons.empty()) {
+				if (glfwGetMouseButton(GLFW_MOUSE_BUTTON_2) != GLFW_PRESS && combinaisons.empty()) {
 					// revert swap
 					GRID(e1)->i = originI;
 					GRID(e1)->j = originJ;
