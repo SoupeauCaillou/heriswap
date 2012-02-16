@@ -106,7 +106,7 @@ std::vector<Combinais> GridSystem::MergeCombinaison(std::vector<Combinais> combi
 	return combinmerged;
 }
 
-std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked) { 
+std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked, bool useChecked) { 
 	std::vector<Combinais> combinaisons;
 
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
@@ -118,7 +118,7 @@ std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked) {
 		potential.type = gc->type;
 
 		/*Check on j*/
-		if (!gc->checkedV) {
+		if (!useChecked || !gc->checkedV) {
 			Combinais potential;
 			potential.type = gc->type;
 			/*Looking for twins on the bottom of the point*/
@@ -164,7 +164,7 @@ std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked) {
 		} 
 		
 		/*Check on i*/
-		if (!gc->checkedH) {
+		if (!useChecked || !gc->checkedH) {
 			Combinais potential;
 			potential.type = gc->type;
 			
@@ -250,4 +250,38 @@ void GridSystem::DoUpdate(float dt) {
 
 }
 
+bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
+	//test right and top
+	bool res=false;
+	Entity e = GetOnPos(i+1,j);
+	if (e) {
+		GRID(e)->i--;
+		GRID(a)->i++;
+		std::vector<Combinais> combin = LookForCombinaison(false,false);
+		if (combin.size()>0) res=true;	
+		GRID(e)->i++;
+		GRID(a)->i--;
+	}
+	e = GetOnPos(i,j+1);
+	if (!res && e) {		
+		GRID(e)->j--;
+		GRID(a)->j++;
+		std::vector<Combinais> combin = LookForCombinaison(false,false);
+		if (combin.size()>0) res=true;	
+		GRID(e)->j++;
+		GRID(a)->j--;	
+	}	
+	return res;
+}
 
+bool GridSystem::StillCombinations() {
+	std::vector<Combinais> combin = LookForCombinaison(false,false);
+	if (combin.size()>0) return true;
+	
+	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
+		Entity a = (*it).first;			
+		GridComponent* gc = (*it).second;
+		if (NewCombiOnSwitch(a,gc->i,gc->j)) return true;
+	}	
+	return false;
+}

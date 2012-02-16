@@ -127,7 +127,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 				GRID(e1)->checkedH = false;
 				GRID(e1)->checkedV = false;
 
-				std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
+				std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
 				if (glfwGetMouseButton(GLFW_MOUSE_BUTTON_2) != GLFW_PRESS && combinaisons.empty()) {
 					// revert swap
 					GRID(e1)->i = originI;
