@@ -46,7 +46,7 @@ public:
 Entity GetOnPos(int i, int j);
 
 /* Return the finale list  of combinaisons*/ 
-std::vector<Combinais> LookForCombinaison(bool markAsChecked);
+std::vector<Combinais> LookForCombinaison(bool markAsChecked, bool useChecked);
 
 /* Set Back all entity at "not checked"*/
 void ResetTest();
@@ -65,6 +65,10 @@ Combinais MergeVectors(Combinais c1, Combinais c2);
 
 /* Leaves fall if nothing below them */
 std::vector<CellFall> TileFall();
+
+bool StillCombinations();
+
+bool NewCombiOnSwitch(Entity a, int i, int j);
 
 bool IsValidGridPosition(int i, int j) {
 	return (i>=0 && j>=0 && i<GridSize && j<GridSize);
