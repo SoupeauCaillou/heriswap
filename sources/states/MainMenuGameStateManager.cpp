@@ -32,7 +32,7 @@ void MainMenuGameStateManager::Setup() {
 	TRANSFORM(eStart)->position = TRANSFORM(start)->position + Vector2(3.5, 0);
 	
 	TRANSFORM(score)->position = Vector2(0,1);
-	TRANSFORM(eScore)->position = TRANSFORM(score)->position + Vector2(4, 0);
+	TRANSFORM(eScore)->position = TRANSFORM(score)->position + Vector2(3.5, 0);
 }
 	
 
@@ -40,8 +40,8 @@ void MainMenuGameStateManager::Setup() {
 
 void MainMenuGameStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
-	TEXT_RENDERING(eStart)->text = "s2345";
-	TEXT_RENDERING(eScore)->text = "1337 :";
+	TEXT_RENDERING(eStart)->text = "Play!";
+	TEXT_RENDERING(eScore)->text = "Score";
 
 	TEXT_RENDERING(eStart)->hide = false;
 	TEXT_RENDERING(eScore)->hide = false;
