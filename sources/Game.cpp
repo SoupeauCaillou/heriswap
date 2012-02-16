@@ -19,6 +19,7 @@
 #include "states/MainMenuGameStateManager.h"
 #include "states/ScoreBoardStateManager.h"
 #include "states/EndMenuStateManager.h"
+#include "states/BackgroundManager.h"
 
 #include <sstream>
 
@@ -38,7 +39,13 @@ class Game::Data {
 			state2Manager[Fall] = new FallGameStateManager();
 			state2Manager[ScoreBoard] = new ScoreBoardStateManager();
 			state2Manager[EndMenu] = new EndMenuStateManager();
-			
+
+			BackgroundManager* bg = new BackgroundManager();
+			bg->xStartRange = Vector2(6, 8);
+			bg->yRange = Vector2(-2, 9);
+			bg->scaleRange = Vector2(0.4, 1.5);
+			state2Manager[Background] = bg;
+
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
 				it->second->Setup();
 			}

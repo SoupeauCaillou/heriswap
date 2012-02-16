@@ -7,7 +7,8 @@ enum GameState {
 	Fall,
 	MainMenu,
 	ScoreBoard,
-	EndMenu
+	EndMenu,
+	Background
 };
 
 #include <map>
