@@ -17,7 +17,8 @@ SpawnGameStateManager::SpawnGameStateManager() {
 
 void SpawnGameStateManager::Setup() {
 	eSpawn = theEntityManager.CreateEntity();
-	theADSRSystem.Add(eSpawn);
+	ADD_COMPONENT(eSpawn, ADSR);
+
 	ADSR(eSpawn)->idleValue = 0;
 	ADSR(eSpawn)->attackValue = 0.5;
 	ADSR(eSpawn)->attackTiming = 0.2;
@@ -40,7 +41,7 @@ void SpawnGameStateManager::Enter() {
 			createCell(spawning[i]);
 		}
 		do {		
-			c = theGridSystem.LookForCombinaison(false);
+			c = theGridSystem.LookForCombinaison(false,true);
 			// change type from cells in combi
 			for(int i=0; i<c.size(); i++) {
 				for(int j=0; j<c[i].points.size(); j++) {
@@ -66,9 +67,6 @@ GameState SpawnGameStateManager::Update(float dt) {
 	ADSRComponent* transitionCree = ADSR(eSpawn);
 
 	if (!spawning.empty()) {
-
-		
-		
 		transitionCree->active = true;
 		for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
 			if (it->fe == 0) {
@@ -82,15 +80,29 @@ GameState SpawnGameStateManager::Update(float dt) {
 		}
 		if (transitionCree->value == 1) {
 			spawning.clear();
-			std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
-			if (combinaisons.empty()) return UserInput;
-			else return Delete;
+			std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
+			if (combinaisons.empty()) {
+				if (theGridSystem.StillCombinations()) return UserInput;
+				else {
+					std::cout << "nouvelle grille !\n";
+					theGridSystem.DeleteAll();
+					fillTheBlank(spawning);
+					return Spawn;
+				}
+			} else return Delete;
 		
 		}
 	} else {
-		std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
-		if (combinaisons.empty()) return UserInput;
-		else return Delete;
+		std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
+		if (combinaisons.empty()) {
+			if (theGridSystem.StillCombinations()) return UserInput;
+			else { 
+				std::cout << "nouvelle grille 999 !\n";
+				theGridSystem.DeleteAll();
+				fillTheBlank(spawning);
+				return Spawn;
+			}
+		} else return Delete;
 	}
 	return Spawn;
 }
@@ -156,14 +168,15 @@ static TextureRef textureFromType(int type) {
 
 static Entity createCell(Feuille& f) {
 	Entity e = theEntityManager.CreateEntity();
-	theTransformationSystem.Add(e);
+	ADD_COMPONENT(e, Transformation);
+	ADD_COMPONENT(e, Rendering);
+	ADD_COMPONENT(e, ADSR);
+	ADD_COMPONENT(e, Grid);
+
 	TRANSFORM(e)->position = Game::GridCoordsToPosition(f.X, f.Y);
-	theRenderingSystem.Add(e);
 	RENDERING(e)->texture = textureFromType(f.type);
 	RENDERING(e)->size = Game::CellSize() * Game::CellContentScale();
-	theADSRSystem.Add(e);
 	ADSR(e)->idleValue = Game::CellSize() * Game::CellContentScale();
-	theGridSystem.Add(e);
 	GRID(e)->type = f.type;
 	GRID(e)->i = f.X;
 	GRID(e)->j = f.Y;

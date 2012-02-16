@@ -12,7 +12,9 @@ DeleteGameStateManager::DeleteGameStateManager() {
 
 void DeleteGameStateManager::Setup() {
 	eRemove = theEntityManager.CreateEntity();
-	theADSRSystem.Add(eRemove);
+	
+	ADD_COMPONENT(eRemove, ADSR);
+
 	ADSR(eRemove)->idleValue = 0;
 	ADSR(eRemove)->attackValue = 0.5;
 	ADSR(eRemove)->attackTiming = 0.2;
@@ -23,7 +25,7 @@ void DeleteGameStateManager::Setup() {
 	
 void DeleteGameStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
-	removing = theGridSystem.LookForCombinaison(true);
+	removing = theGridSystem.LookForCombinaison(true,true);
 }
 
 GameState DeleteGameStateManager::Update(float dt) {
@@ -39,10 +41,7 @@ GameState DeleteGameStateManager::Update(float dt) {
 				if (transitionSuppr->value == 1) {
 					std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
 					if (e){
-						theRenderingSystem.Delete(e);
-						theTransformationSystem.Delete(e);
-						theADSRSystem.Delete(e);
-						theGridSystem.Delete(e);
+						theEntityManager.DeleteEntity(e);
 					}
 				}
 			}		

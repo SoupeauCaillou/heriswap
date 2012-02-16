@@ -91,9 +91,9 @@ void Game::init(int windowW, int windowH) {
 	RENDERING(datas->sky)->texture = theRenderingSystem.loadTextureFile("sky.png");
 	
 	datas->background = theEntityManager.CreateEntity();
-	theTransformationSystem.Add(datas->background);
+	ADD_COMPONENT(datas->background, Transformation);
+	ADD_COMPONENT(datas->background, Rendering);
 	TRANSFORM(datas->background)->z = 0;
-	theRenderingSystem.Add(datas->background);
 	RENDERING(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 
@@ -101,7 +101,8 @@ void Game::init(int windowW, int windowH) {
 	datas->state2Manager[datas->state]->Enter();
 	
 	Entity eHUD = theEntityManager.CreateEntity();
-	thePlayerSystem.Add(eHUD);
+
+	ADD_COMPONENT(eHUD, Player);
 }
 
 void Game::tick(float dt) {

@@ -12,7 +12,8 @@ FallGameStateManager::FallGameStateManager() {
 
 void FallGameStateManager::Setup() {
 	eFall = theEntityManager.CreateEntity();
-	theADSRSystem.Add(eFall);
+	ADD_COMPONENT(eFall, ADSR);
+
 	ADSR(eFall)->idleValue = 0;
 	ADSR(eFall)->attackValue = 0.5;
 	ADSR(eFall)->attackTiming = 0.2;
@@ -41,12 +42,12 @@ GameState FallGameStateManager::Update(float dt) {
 			}
 		}
 		if (transition->value == 1) {
-			std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
+			std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
 			if (combinaisons.empty()) return Spawn;
 			else return Delete;
 		}
 	} else {
-		std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
+		std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
 					std::cout << "a " << combinaisons.size()<<std::endl;
 
 		if (combinaisons.empty()) return Spawn;

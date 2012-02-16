@@ -31,7 +31,7 @@ TEST(RowCombination)
 	};
 	initGrid(grid, 4);
 
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true);
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true,true);
 	CHECK_EQUAL(combinaisons.size(), 1);
 	CHECK_EQUAL(combinaisons[0].type, 'B');
 }
@@ -46,7 +46,7 @@ TEST(ColCombination)
 	};
 	initGrid(grid, 4);
 
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true);
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true,true);
 	CHECK_EQUAL(combinaisons.size(), 1);
 	CHECK_EQUAL(combinaisons[0].type, 'C');
 }
@@ -61,7 +61,7 @@ TEST(MultipleCombination)
 	};
 	initGrid(grid, 4);
 
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true);
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true,true);
 	CHECK_EQUAL(combinaisons.size(), 3);
 }
 
@@ -75,7 +75,7 @@ TEST(CombinationMergeL)
 	};
 	initGrid(grid, 4);
 
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true);
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true,true);
 	CHECK_EQUAL(combinaisons.size(), 1);
 	CHECK_EQUAL(combinaisons[0].type, 'A');
 	CHECK_EQUAL(combinaisons[0].points.size(), 6);
@@ -91,7 +91,7 @@ TEST(CombinationMergeN)
 	};
 	initGrid(grid, 4);
 
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true);
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true,true);
 	CHECK_EQUAL(combinaisons.size(), 2);
 	CHECK_EQUAL(combinaisons[0].type, 'X');
 	CHECK_EQUAL(combinaisons[1].type, 'X');
@@ -148,7 +148,7 @@ TEST(MultipleNewCombiOnFalls)
 	};
 	initGrid(grid, 4);
 
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false);
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
 	CHECK_EQUAL(combinaisons.size(), 0);
 	// swap (0,0) and (0,1)
 	Entity e1 = theGridSystem.GetOnPos(0,0);
@@ -157,7 +157,7 @@ TEST(MultipleNewCombiOnFalls)
 	GRID(e2)->i = 0;
 	
 	
-	combinaisons = theGridSystem.LookForCombinaison(false);
+	combinaisons = theGridSystem.LookForCombinaison(false,true);
 	CHECK_EQUAL(2, combinaisons.size());
 	for (int i=0;i<combinaisons.size();i++)
 		for (int j=0;j<combinaisons[i].points.size();j++)
@@ -167,7 +167,21 @@ TEST(MultipleNewCombiOnFalls)
 	for (int i=0;i<falls.size();i++)
 		GRID(falls[i].e)->j = falls[i].toY;
 	
-	combinaisons = theGridSystem.LookForCombinaison(false);
+	combinaisons = theGridSystem.LookForCombinaison(false,true);
 	CHECK_EQUAL(1, combinaisons.size());
 	
+}
+
+TEST(NoMoreCombinations)
+{
+	char grid[] = {
+		'A', 'B', 'A', 'M', 
+		'C', 'L', 'B', 'C',
+		'C', 'D', 'Y', 'C', 
+		'A', 'B', 'A', 'P'
+	};
+	initGrid(grid, 4);
+
+	bool combinaisons = theGridSystem.StillCombinations();
+	CHECK_EQUAL(combinaisons, false);
 }
