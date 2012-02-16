@@ -171,3 +171,17 @@ TEST(MultipleNewCombiOnFalls)
 	CHECK_EQUAL(1, combinaisons.size());
 	
 }
+
+TEST(NoMoreCombinations)
+{
+	char grid[] = {
+		'A', 'B', 'A', 'M', 
+		'C', 'L', 'B', 'C',
+		'C', 'D', 'Y', 'C', 
+		'A', 'B', 'A', 'P'
+	};
+	initGrid(grid, 4);
+
+	bool combinaisons = theGridSystem.StillCombinations();
+	CHECK_EQUAL(combinaisons, false);
+}
