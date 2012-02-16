@@ -8,6 +8,6 @@ varying vec4 vColor;
 
 void main()
 {
-    gl_FragColor = texture2D(tex0, uvVarying);
+    gl_FragColor = texture2D(tex0, uvVarying) * vColor;
 }
 

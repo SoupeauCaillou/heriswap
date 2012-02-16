@@ -53,7 +53,7 @@ class Game::Data {
 		}
 
 		GameState state;
-		Entity background;
+		Entity background, sky;
 		float time;
 		// drag/drop
 		HUDManager hud;
@@ -82,8 +82,17 @@ void Game::init(int windowW, int windowH) {
 	theRenderingSystem.setWindowSize(windowW, windowH);
 
 	theGridSystem.GridSize = GRIDSIZE;
+
+	datas->sky = theEntityManager.CreateEntity();
+	theTransformationSystem.Add(datas->sky);
+	TRANSFORM(datas->sky)->z = -1;
+	theRenderingSystem.Add(datas->sky);
+	RENDERING(datas->sky)->size = Vector2(10, 10.0 * windowH / windowW);
+	RENDERING(datas->sky)->texture = theRenderingSystem.loadTextureFile("sky.png");
+	
 	datas->background = theEntityManager.CreateEntity();
 	theTransformationSystem.Add(datas->background);
+	TRANSFORM(datas->background)->z = 0;
 	theRenderingSystem.Add(datas->background);
 	RENDERING(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");

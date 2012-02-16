@@ -37,7 +37,7 @@ int main() {
 	if (!glfwInit())
 		return 1;
 
-	if( !glfwOpenWindow( 420,700, 0,0,0,0,0,0, GLFW_WINDOW ) )
+	if( !glfwOpenWindow( 420,700, 8,8,8,8,8,1, GLFW_WINDOW ) )
 		return 1;
 	
 	gettimeofday(&startup_time,NULL);
