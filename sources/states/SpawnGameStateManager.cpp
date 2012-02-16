@@ -17,7 +17,8 @@ SpawnGameStateManager::SpawnGameStateManager() {
 
 void SpawnGameStateManager::Setup() {
 	eSpawn = theEntityManager.CreateEntity();
-	theADSRSystem.Add(eSpawn);
+	ADD_COMPONENT(eSpawn, ADSR);
+
 	ADSR(eSpawn)->idleValue = 0;
 	ADSR(eSpawn)->attackValue = 0.5;
 	ADSR(eSpawn)->attackTiming = 0.2;
@@ -167,14 +168,15 @@ static TextureRef textureFromType(int type) {
 
 static Entity createCell(Feuille& f) {
 	Entity e = theEntityManager.CreateEntity();
-	theTransformationSystem.Add(e);
+	ADD_COMPONENT(e, Transformation);
+	ADD_COMPONENT(e, Rendering);
+	ADD_COMPONENT(e, ADSR);
+	ADD_COMPONENT(e, Grid);
+
 	TRANSFORM(e)->position = Game::GridCoordsToPosition(f.X, f.Y);
-	theRenderingSystem.Add(e);
 	RENDERING(e)->texture = textureFromType(f.type);
 	RENDERING(e)->size = Game::CellSize() * Game::CellContentScale();
-	theADSRSystem.Add(e);
 	ADSR(e)->idleValue = Game::CellSize() * Game::CellContentScale();
-	theGridSystem.Add(e);
 	GRID(e)->type = f.type;
 	GRID(e)->i = f.X;
 	GRID(e)->j = f.Y;

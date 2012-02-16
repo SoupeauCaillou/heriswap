@@ -9,18 +9,19 @@ void MainMenuGameStateManager::Setup() {
 	start = theEntityManager.CreateEntity();
 	score = theEntityManager.CreateEntity();
 	
-	theTransformationSystem.Add(start);
-	theRenderingSystem.Add(start);
+	ADD_COMPONENT(start, Transformation);
+	ADD_COMPONENT(start, Rendering);
+	ADD_COMPONENT(start, Button);
+
 	RENDERING(start)->texture = theRenderingSystem.loadTextureFile("1.png");
 	RENDERING(start)->size = Game::CellSize() * Game::CellContentScale();
-	theButtonSystem.Add(start);
 	BUTTON(start)->clicked = false;
-	
-	theTransformationSystem.Add(score);
-	theButtonSystem.Add(score);
-	BUTTON(score)->clicked = false;
 
-	theRenderingSystem.Add(score);
+	ADD_COMPONENT(score, Transformation);
+	ADD_COMPONENT(score, Rendering);
+	ADD_COMPONENT(score, Button);
+	
+	BUTTON(score)->clicked = false;
 	RENDERING(score)->texture = theRenderingSystem.loadTextureFile("2.png");
 	RENDERING(score)->size = Game::CellSize() * Game::CellContentScale();	
 	

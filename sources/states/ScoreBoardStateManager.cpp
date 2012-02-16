@@ -7,12 +7,13 @@ ScoreBoardStateManager::ScoreBoardStateManager() {
 
 void ScoreBoardStateManager::Setup() {
 	startbtn = theEntityManager.CreateEntity();
-	theTransformationSystem.Add(startbtn);
-	theRenderingSystem.Add(startbtn);
+	ADD_COMPONENT(startbtn, Transformation);
+	ADD_COMPONENT(startbtn, Rendering);
+	ADD_COMPONENT(startbtn, Button);
+
 	RENDERING(startbtn)->texture = theRenderingSystem.loadTextureFile("4.png");
 	RENDERING(startbtn)->hide = true;
 	RENDERING(startbtn)->size = Game::CellSize() * Game::CellContentScale();
-	theButtonSystem.Add(startbtn);
 	BUTTON(startbtn)->clicked = false;
 	TRANSFORM(startbtn)->position = Vector2(0,3);
 

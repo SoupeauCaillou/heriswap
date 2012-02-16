@@ -9,13 +9,13 @@ EndMenuStateManager::EndMenuStateManager() {
 void EndMenuStateManager::Setup() {
 	startbtn = theEntityManager.CreateEntity();
 	
+	ADD_COMPONENT(startbtn, Transformation);
+	ADD_COMPONENT(startbtn, Rendering);
+	ADD_COMPONENT(startbtn, Button);
 
-	theTransformationSystem.Add(startbtn);
-	theRenderingSystem.Add(startbtn);
 	RENDERING(startbtn)->texture = theRenderingSystem.loadTextureFile("5.png");
 	RENDERING(startbtn)->hide = true;
 	RENDERING(startbtn)->size = Game::CellSize() * Game::CellContentScale();
-	theButtonSystem.Add(startbtn);
 	BUTTON(startbtn)->clicked = false;
 	TRANSFORM(startbtn)->position = Vector2(0,3);
 	

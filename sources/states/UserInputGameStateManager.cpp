@@ -18,7 +18,7 @@ UserInputGameStateManager::UserInputGameStateManager() {
 
 void UserInputGameStateManager::Setup() {
 	eSwapper = theEntityManager.CreateEntity();
-	theADSRSystem.Add(eSwapper);
+	ADD_COMPONENT(eSwapper, ADSR);
 	ADSR(eSwapper)->idleValue = 0;
 	ADSR(eSwapper)->attackValue = 1.0;
 	ADSR(eSwapper)->attackTiming = 0.2;

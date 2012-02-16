@@ -12,7 +12,8 @@ FallGameStateManager::FallGameStateManager() {
 
 void FallGameStateManager::Setup() {
 	eFall = theEntityManager.CreateEntity();
-	theADSRSystem.Add(eFall);
+	ADD_COMPONENT(eFall, ADSR);
+
 	ADSR(eFall)->idleValue = 0;
 	ADSR(eFall)->attackValue = 0.5;
 	ADSR(eFall)->attackTiming = 0.2;

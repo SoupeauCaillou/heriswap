@@ -1,10 +1,11 @@
 #include <iostream>
 #include "GridSystem.h"
 
+#include "base/EntityManager.h"
+
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/ADSRSystem.h"
-				
 				
 INSTANCE_IMPL(GridSystem);
 	
@@ -30,11 +31,7 @@ void GridSystem::print() {
 void GridSystem::DeleteAll() {
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
 		Entity e = (*it).first;			
-
-		theRenderingSystem.Delete(e);
-		theTransformationSystem.Delete(e);
-		theADSRSystem.Delete(e);
-		theGridSystem.Delete(e);
+		theEntityManager.DeleteEntity(e);
 	}
 }
 
