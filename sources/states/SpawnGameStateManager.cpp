@@ -27,20 +27,20 @@ void SpawnGameStateManager::Setup() {
 	ADSR(eSpawn)->releaseTiming = 0;
 
 
-	
+
 }
-	
+
 void SpawnGameStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
-	
-	
+
+
 	std::vector<Combinais> c;
 	fillTheBlank(spawning);
 	if (spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
 		for(int i=0; i<spawning.size(); i++) {
 			createCell(spawning[i]);
 		}
-		do {		
+		do {
 			c = theGridSystem.LookForCombinaison(false,true);
 			// change type from cells in combi
 			for(int i=0; i<c.size(); i++) {
@@ -54,8 +54,8 @@ void SpawnGameStateManager::Enter() {
 	}
 	spawning.clear();
 
-	
-	
+
+
 	ADSRComponent* transitionCree = ADSR(eSpawn);
 	transitionCree->activationTime = 0;
 	transitionCree->active = false;
@@ -90,13 +90,13 @@ GameState SpawnGameStateManager::Update(float dt) {
 					return Spawn;
 				}
 			} else return Delete;
-		
+
 		}
 	} else {
 		std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
 		if (combinaisons.empty()) {
 			if (theGridSystem.StillCombinations()) return UserInput;
-			else { 
+			else {
 				std::cout << "nouvelle grille 999 !\n";
 				theGridSystem.DeleteAll();
 				fillTheBlank(spawning);
@@ -106,7 +106,7 @@ GameState SpawnGameStateManager::Update(float dt) {
 	}
 	return Spawn;
 }
-	
+
 void SpawnGameStateManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
@@ -119,7 +119,7 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 				int r;
 				int pb=0;
 				/*ne pas generer de combinaison*/
-				do {	
+				do {
 					r = MathUtil::RandomInt(8)+1;
 					Entity l[5],c[5];
 					for (int k=0;k<5;k++){
@@ -141,7 +141,7 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 					else  {
 						pb=0;
 					}
-						
+
 					if (pb >= 15){
 						r = MathUtil::RandomInt(4)+1;
 						while (pb!=0) {
@@ -156,8 +156,8 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 				Feuille nouvfe = {i,j,0,r};
 				spawning.push_back(nouvfe);
 			}
-		}	
-	}							
+		}
+	}
 }
 
 static TextureRef textureFromType(int type) {
@@ -174,6 +174,7 @@ static Entity createCell(Feuille& f) {
 	ADD_COMPONENT(e, Grid);
 
 	TRANSFORM(e)->position = Game::GridCoordsToPosition(f.X, f.Y);
+	TRANSFORM(e)->z = 10;
 	RENDERING(e)->texture = textureFromType(f.type);
 	RENDERING(e)->size = Game::CellSize() * Game::CellContentScale();
 	ADSR(e)->idleValue = Game::CellSize() * Game::CellContentScale();
