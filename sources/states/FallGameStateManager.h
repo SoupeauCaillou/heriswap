@@ -16,4 +16,5 @@ class FallGameStateManager : public GameStateManager {
 		// datas
 		Entity eFall;
 		std::vector<CellFall> falling;
+		std::vector<Entity> combinationMark;
 };
