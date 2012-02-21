@@ -136,7 +136,7 @@ void Game::tick(float dt) {
 	if (newState == EndMenu) {
 		datas->hud.Hide(true);
 		theGridSystem.DeleteAll();
-		thePlayerSystem.SetTime(0);
+		thePlayerSystem.SetTime(0, true);
 	} else if (newState == MainMenu) {
 		thePlayerSystem.Reset();
 	}
