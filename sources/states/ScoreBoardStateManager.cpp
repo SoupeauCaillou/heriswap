@@ -18,11 +18,11 @@ void ScoreBoardStateManager::Setup() {
 	RENDERING(startbtn)->hide = true;
 	RENDERING(startbtn)->size = Game::CellSize() * Game::CellContentScale();
 	BUTTON(startbtn)->clicked = false;
-	TRANSFORM(startbtn)->position = Vector2(0,7);
+	TRANSFORM(startbtn)->position = Vector2(0,5);
 
 	for (int i=0; i<10; i++) {
 		eScore[i] = theTextRenderingSystem.CreateLocalEntity(40);
-		TRANSFORM(eScore[i])->position = Vector2(0, 6-i);
+		TRANSFORM(eScore[i])->position = Vector2(-3, 3-i);
 		TEXT_RENDERING(eScore[i])->charSize = 0.3;
 		TEXT_RENDERING(eScore[i])->hide = true;
 		TEXT_RENDERING(eScore[i])->alignL = true;
@@ -45,7 +45,8 @@ void ScoreBoardStateManager::LoadScore() {
 			{
 			std::stringstream a;
 			a.precision(0);
-			a << std::fixed << nom[i] << " : " << nombre[i];
+			if (i==0) a << std::fixed << "1er."<< nom[i] << " : " << nombre[i];
+			else  a << std::fixed << i+1<<"eme."<< nom[i] << " : " << nombre[i];
 			TEXT_RENDERING(eScore[i])->text = a.str();	
 			}
 			TEXT_RENDERING(eScore[i])->hide = false;
