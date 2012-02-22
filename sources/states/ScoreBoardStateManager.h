@@ -11,11 +11,12 @@ class ScoreBoardStateManager : public GameStateManager {
 	public:
 		ScoreBoardStateManager();
 		void Setup();
+		void LoadScore();
 		void Enter();
 		GameState Update(float dt);
 		void Exit();
 	private:
-		Entity startbtn;
+		Entity startbtn, eScore[10];
 };
 
 
