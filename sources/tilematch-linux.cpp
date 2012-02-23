@@ -102,7 +102,7 @@ static char* loadPng(const char* assetName, int* width, int* height)
 	std::cout << __FUNCTION__ << " : " << assetName << std::endl;
 	png_byte* PNG_image_buffer;
 	std::stringstream ss;
-	ss << "./res/raw/" << assetName;
+	ss << "./assets/" << assetName;
 	FILE *PNG_file = fopen(ss.str().c_str(), "rb");
 	if (PNG_file == NULL) {
 		std::cout << ss.str() << " not found" << std::endl;
@@ -217,7 +217,7 @@ static char* loadTextfile(const char* assetName)
 {
 	std::cout << __FUNCTION__ << " : " << assetName << std::endl;
 	std::stringstream ss;
-	ss << "./res/raw/" << assetName;
+	ss << "./assets/" << assetName;
 	FILE *file = fopen(ss.str().c_str(), "r");
 	if (file == NULL) {
 		std::cout << ss.str() << " not found" << std::endl;
