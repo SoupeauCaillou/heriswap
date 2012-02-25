@@ -2,6 +2,7 @@
 #include "GridSystem.h"
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
+#include "systems/PlayerSystem.h"
 #include "systems/ButtonSystem.h"
 #include "base/TouchInputManager.h"
 #include "systems/ADSRSystem.h"
@@ -37,6 +38,7 @@ void UserInputGameStateManager::Enter() {
 
 GameState UserInputGameStateManager::Update(float dt) {
 	/* drag/drop of cell */
+	thePlayerSystem.SetTime(dt,false);
 	if (!theTouchInputManager.wasTouched() && 
 		theTouchInputManager.isTouched()) {
 		// don't start new drag while the previous one isn't finished

@@ -13,10 +13,12 @@ class EndMenuStateManager : public GameStateManager {
 		EndMenuStateManager();
 		void Setup();
 		void Enter();
+		int SaveScore();
+
 		GameState Update(float dt);
 		void Exit();
 	private:
-		Entity startbtn, eScore;
+		Entity startbtn, eScore, eMsg;
 };
 
 
