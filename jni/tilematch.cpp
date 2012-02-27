@@ -15,14 +15,17 @@
 #include "../sources/Game.h"
 #include "sac/systems/RenderingSystem.h"
 #include "sac/base/TouchInputManager.h"
+#include "../sources/states/ScoreBoardStateManager.h"
 #include <png.h>
+#include <algorithm>
 
 #include <sys/time.h>
 #define DT 1.0/60.
 
 struct saved_state {
+	int scoreCount;
 	int scoreboard[10];
-	char name[64];
+	char name[10][64];
 };
 
 /**
@@ -68,6 +71,40 @@ float gettime() {
 static char* loadTextfile(const char* assetName);
 static bool touch(Vector2* windowCoords);
 static char* loadPng(const char* assetName, int* width, int* height);
+
+class SaveStateScoreStorage: public ScoreStorage {	
+	public:
+	
+	saved_state* state;
+	
+	std::vector<ScoreEntry> loadFromStorage() {
+		std::vector<ScoreEntry> result;
+		for (int i=0; i<state->scoreCount; i++) {
+			ScoreEntry entry;
+			entry.points = state->scoreboard[i];
+			entry.name = state->name[i];
+			
+			LOGI("%s: #%d : %d,%s\n", __FUNCTION__, i, entry.points, entry.name.c_str());
+			result.push_back(entry);
+		}
+		std::sort(result.begin(), result.end(), ScoreStorage::ScoreEntryComp);
+		return result;	
+	}
+
+	void saveToStorage(const std::vector<ScoreEntry>& entries) {
+		state->scoreCount = entries.size();
+		if (state->scoreCount > 10) 
+			state->scoreCount = 10;
+		for (int i=0; i<state->scoreCount; i++) {
+			LOGI("%s: #%d : %d,%s\n", __FUNCTION__, i, entries[i].points, entries[i].name.c_str());
+			state->scoreboard[i] = entries[i].points;
+			strncpy(state->name[i], entries[i].name.c_str(), 64);
+			state->name[i][63] = '\0'; 
+		}
+	}
+};
+
+SaveStateScoreStorage saveState;
 
 /**
  * Initialize an EGL context for the current display.
@@ -140,6 +177,7 @@ static int engine_init_display(struct engine* engine) {
 static void engine_draw_frame(struct engine* engine) {
     if (engine->display == NULL) {
         // No display.
+        LOGW("NO DISPLAY");
         return;
     }
 	eglSwapBuffers(engine->display, engine->surface);
@@ -201,11 +239,12 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
             // The window is being shown, get it ready.
             if (engine->app->window != NULL) {
                 engine_init_display(engine);
+                LOGI("Window size: %dx%d\n", engine->width, engine->height);
                 engine->game = new Game();
-	theRenderingSystem.setDecompressPNGImagePtr(&loadPng);
-	theRenderingSystem.setLoadShaderPtr(&loadTextfile);
-	theTouchInputManager.setNativeTouchStatePtr(&touch);           
-	             engine->game->init(engine->width, engine->height);
+					 theRenderingSystem.setDecompressPNGImagePtr(&loadPng);
+					 theRenderingSystem.setLoadShaderPtr(&loadTextfile);
+					 theTouchInputManager.setNativeTouchStatePtr(&touch);           
+	             engine->game->init(&saveState, engine->width, engine->height);
 					theRenderingSystem.init();
    				theTouchInputManager.init(Vector2(10, 10. * engine->height / engine->width), Vector2(engine->width, engine->height));
                 engine_draw_frame(engine);
@@ -213,7 +252,7 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
             break;
         case APP_CMD_TERM_WINDOW:
             // The window is being hidden or closed, clean it up.
-            engine->animating = 0;
+				engine_term_display(engine);
             break;
         case APP_CMD_GAINED_FOCUS:
         		engine->animating = 1;
@@ -242,14 +281,9 @@ void android_main(struct android_app* state) {
     state->onInputEvent = engine_handle_input;
     engine.app = state;
     
+    saveState.state = &engine.state;
+    
     asset = state->activity->assetManager;
-
-    // Prepare to monitor accelerometer
-    engine.sensorManager = ASensorManager_getInstance();
-    engine.accelerometerSensor = ASensorManager_getDefaultSensor(engine.sensorManager,
-            ASENSOR_TYPE_ACCELEROMETER);
-    engine.sensorEventQueue = ASensorManager_createEventQueue(engine.sensorManager,
-            state->looper, LOOPER_ID_USER, NULL, NULL);
 
     // loop waiting for stuff to do.
     engine.game = 0;
@@ -314,7 +348,7 @@ void android_main(struct android_app* state) {
 		
 			dtAccumuled += dt;
 			time = gettime();
-			LOGW("dtAccumuled: %f (time since start:%f)\n", dtAccumuled, gettime());
+			// LOGW("dtAccumuled: %f (time since start:%f)\n", dtAccumuled, gettime());
 			while (dtAccumuled >= DT){
 					if (engine.game) {
 						engine.game->tick(dtAccumuled);
@@ -332,8 +366,6 @@ void android_main(struct android_app* state) {
 static char* loadPng(const char* assetName, int* width, int* height)
 {
 	LOGI("loadPng: %s\n", assetName);
-	FILE* f = fopen("file:///android_asset/figures.png", "rb");
-	LOGW("fopen: %p\n", f);
 	png_byte* PNG_image_buffer;
 	AAsset* aaa = AAssetManager_open(asset, assetName, AASSET_MODE_UNKNOWN);
 	if (!aaa) {
