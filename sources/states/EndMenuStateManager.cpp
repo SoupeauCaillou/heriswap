@@ -3,8 +3,10 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include "ScoreBoardStateManager.h"
+#include <algorithm>
 
-EndMenuStateManager::EndMenuStateManager() {
+EndMenuStateManager::EndMenuStateManager(ScoreStorage* str): storage(str) {
 
 }
 
@@ -32,61 +34,6 @@ void EndMenuStateManager::Setup() {
 	TEXT_RENDERING(eMsg)->color = Color(0.f,0.f,0.f);
 }
 
-int EndMenuStateManager::SaveScore() {
-	FILE* file = fopen("/home/gautier/c/tilematch/scores.txt", "r");
-	char name[50] = "AZEAZEAZ";
-	int score=thePlayerSystem.GetScore();
-	int place=0;
-	//Si le fichier des scores existe deja
-	if (file) {
-		char nom[10][30];
-		int nombre[10];
-		int i,j;
-		for (i=0;i<10;i++) {
-			nom[i][0] = '\0';
-			nombre[i] = 0;
-		}
-		i=0;
-		while(i<10 && fscanf(file, "%d%s\n", &(nombre[i]),nom[i])!=EOF) {
-			i++;
-		}
-		fclose(file);
-		file = fopen("scores.txt", "w");
-		//Si on a pas fait mieux que le 10eme score
-		if (i==10 && score < nombre[9]) {
-			std::cout << "vous n'avez pas atteint le top 10\n";
-			for (int k=0;k<10;k++)
-				fprintf(file, "%d%s\n", nombre[k], nom[k]);
-		//Sinon on est dans le top 10
-		} else {
-			j=i;
-			i--;
-			//On cherche notre place
-			while (i>-1 && nombre[i]<score)
-				i--;
-			printf("%d %d\n", j, i);
-			place=i+2;
-			//On remet tout dans le fichier en s'inserant
-			for (int k=0;k<=i;k++)
-				fprintf(file, "%d%s\n", nombre[k], nom[k]);
-			fprintf(file, "%d%s\n", score, name);
-			for (int k=i+1;k<j;k++)
-				fprintf(file, "%d%s\n", nombre[k], nom[k]);
-	
-			std::cout << name << ":" << score<< " score en "<<i+2<<"eme position\n";
-		}
-		fclose(file);
-	//Sinon nouveau fichier
-	} else {
-		file = fopen("scores.txt", "w");
-		place = 1;
-		std::cout << "creation du fichier des scores\n";
-		fprintf(file, "%d%s\n", score, name);
-		fclose(file);
-	}
-	return place;
-}
-
 void EndMenuStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 		
@@ -95,8 +42,17 @@ void EndMenuStateManager::Enter() {
 	
 	TEXT_RENDERING(eMsg)->hide = false;
 
-	int place = SaveScore();
-	
+	std::vector<ScoreStorage::ScoreEntry> entries = storage->loadFromStorage();
+	ScoreStorage::ScoreEntry entry;
+	entry.points = thePlayerSystem.GetScore();
+	entry.name = "plop";
+	entries.push_back(entry);
+	std::sort(entries.begin(), entries.end(), ScoreStorage::ScoreEntryComp);
+	if (entries.size() > 10) {
+		entries.resize(10);
+	}
+	storage->saveToStorage(entries);	
+
 	{
 	std::stringstream a;
 	a.precision(0);
@@ -104,7 +60,7 @@ void EndMenuStateManager::Enter() {
 	TEXT_RENDERING(eScore)->text = a.str();	
 	TEXT_RENDERING(eScore)->hide = false;	
 	}
-	
+	#if 0
 	{
 	std::stringstream a;
 	a.precision(0);
@@ -117,7 +73,7 @@ void EndMenuStateManager::Enter() {
 	TEXT_RENDERING(eMsg)->text = a.str();	
 	TEXT_RENDERING(eMsg)->hide = false;	
 	}
-	
+	#endif
 	
 }
 

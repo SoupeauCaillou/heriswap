@@ -28,10 +28,7 @@
 
 class Game::Data {
 	public:
-		Data() {
-		
-	LOGI("%s %d\n", __FUNCTION__, __LINE__);
-	
+		Data(ScoreStorage* storage) {
 			hud.Setup();
 
 			state = MainMenu;
@@ -41,8 +38,8 @@ class Game::Data {
 			state2Manager[UserInput] = new UserInputGameStateManager();
 			state2Manager[Delete] = new DeleteGameStateManager();
 			state2Manager[Fall] = new FallGameStateManager();
-			state2Manager[ScoreBoard] = new ScoreBoardStateManager();
-			state2Manager[EndMenu] = new EndMenuStateManager();
+			state2Manager[ScoreBoard] = new ScoreBoardStateManager(storage);
+			state2Manager[EndMenu] = new EndMenuStateManager(storage);
 
 			BackgroundManager* bg = new BackgroundManager();
 			bg->xStartRange = Vector2(6, 8);
@@ -82,9 +79,9 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-void Game::init(int windowW, int windowH) {
+void Game::init(ScoreStorage* storage, int windowW, int windowH) {
 	LOGI("%s\n", __FUNCTION__);
-	datas = new Data();
+	datas = new Data(storage);
 	
 	theRenderingSystem.setWindowSize(windowW, windowH);
 

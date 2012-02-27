@@ -24,10 +24,10 @@ void UserInputGameStateManager::Setup() {
 	ADD_COMPONENT(eSwapper, ADSR);
 	ADSR(eSwapper)->idleValue = 0;
 	ADSR(eSwapper)->attackValue = 1.0;
-	ADSR(eSwapper)->attackTiming = 0.2;
+	ADSR(eSwapper)->attackTiming = 0.1;
 	ADSR(eSwapper)->decayTiming = 0;
 	ADSR(eSwapper)->sustainValue = 1.0;
-	ADSR(eSwapper)->releaseTiming = 0.2;
+	ADSR(eSwapper)->releaseTiming = 0.1;
 }
 	
 void UserInputGameStateManager::Enter() {
@@ -144,6 +144,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 					GRID(e2)->j = originJ + swapJ;
 					return UserInput;
 				} else {
+					originI = originJ = -1;
 					return Delete;
 				}
 			}

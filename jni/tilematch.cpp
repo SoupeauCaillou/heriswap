@@ -17,6 +17,14 @@
 #include "sac/base/TouchInputManager.h"
 #include <png.h>
 
+#include <sys/time.h>
+#define DT 1.0/60.
+
+struct saved_state {
+	int scoreboard[10];
+	char name[64];
+};
+
 /**
  * Shared state for our app.
  */
@@ -35,12 +43,27 @@ struct engine {
     int32_t height;
     
     Game* game;
+    
+    saved_state state; 
 };
 
 struct __input {
     int touching;
     float x, y;
 } input;
+
+static struct timeval startup_time;
+
+float timeconverter(struct timeval tv) {
+	return (tv.tv_sec + tv.tv_usec / 1000000.0f);
+}
+
+float gettime() {
+	struct timeval tv;
+	gettimeofday(&tv,NULL);
+	timersub(&tv, &startup_time, &tv);
+	return timeconverter(tv);
+}
 
 static char* loadTextfile(const char* assetName);
 static bool touch(Vector2* windowCoords);
@@ -169,30 +192,24 @@ static void engine_handle_cmd(struct android_app* app, int32_t cmd) {
     struct engine* engine = (struct engine*)app->userData;
     switch (cmd) {
         case APP_CMD_SAVE_STATE:
+        		engine->app->savedState = new saved_state();
+            *((struct saved_state*)engine->app->savedState) = engine->state;
+            engine->app->savedStateSize = sizeof(struct saved_state);
             break;
         case APP_CMD_INIT_WINDOW:
         		engine->animating = 1;
             // The window is being shown, get it ready.
             if (engine->app->window != NULL) {
-                LOGW("ici");
                 engine_init_display(engine);
-                LOGW("ici %p", engine);
                 engine->game = new Game();
-	LOGW("ici");
 	theRenderingSystem.setDecompressPNGImagePtr(&loadPng);
-	LOGW("ici");
 	theRenderingSystem.setLoadShaderPtr(&loadTextfile);
-	LOGW("ici");
 	theTouchInputManager.setNativeTouchStatePtr(&touch);           
-	     LOGW("ici encore: %d %d", engine->width, engine->height);
-                engine->game->init(engine->width, engine->height);
-	LOGW("ici");
+	             engine->game->init(engine->width, engine->height);
 					theRenderingSystem.init();
-   LOGW("ici");
    				theTouchInputManager.init(Vector2(10, 10. * engine->height / engine->width), Vector2(engine->width, engine->height));
-   LOGW("ici");
                 engine_draw_frame(engine);
-   LOGW("ici fini");         }
+                }
             break;
         case APP_CMD_TERM_WINDOW:
             // The window is being hidden or closed, clean it up.
@@ -218,17 +235,15 @@ void android_main(struct android_app* state) {
 
     // Make sure glue isn't stripped.
     app_dummy();
-LOGI("%s %d\n", __PRETTY_FUNCTION__, __LINE__);
+
     memset(&engine, 0, sizeof(engine));
     state->userData = &engine;
     state->onAppCmd = engine_handle_cmd;
     state->onInputEvent = engine_handle_input;
     engine.app = state;
     
-LOGI("%s %d\n", __PRETTY_FUNCTION__, __LINE__);
     asset = state->activity->assetManager;
 
-LOGI("%s %d\n", __PRETTY_FUNCTION__, __LINE__);
     // Prepare to monitor accelerometer
     engine.sensorManager = ASensorManager_getInstance();
     engine.accelerometerSensor = ASensorManager_getDefaultSensor(engine.sensorManager,
@@ -236,24 +251,30 @@ LOGI("%s %d\n", __PRETTY_FUNCTION__, __LINE__);
     engine.sensorEventQueue = ASensorManager_createEventQueue(engine.sensorManager,
             state->looper, LOOPER_ID_USER, NULL, NULL);
 
-LOGI("%s %d\n", __PRETTY_FUNCTION__, __LINE__);
     // loop waiting for stuff to do.
     engine.game = 0;
 
+	 gettimeofday(&startup_time,NULL);
+	float dtAccumuled=0, dt = 0, time = 0;
+	
+    if (state->savedState != NULL) {
+        // We are starting with a previous saved state; restore from it.
+        engine.state = *(struct saved_state*)state->savedState;
+    }
+    
+	time = gettime();
+
     while (1) {
     
-//LOGI("%s %d\n", __PRETTY_FUNCTION__, __LINE__);	
         // Read all pending events.
         int ident;
         int events;
         struct android_poll_source* source;
-//LOGW("youpi");
         // If not animating, we will block forever waiting for events.
         // If animating, we loop until all events are read, then continue
         // to draw the next frame of animation.
         while ((ident=ALooper_pollAll(engine.game ? 0 : -1, NULL, &events,
                 (void**)&source)) >= 0) {
-//LOGW("plop");
             // Process this event.
             if (source != NULL) {
                 source->process(state, source);
@@ -281,11 +302,31 @@ LOGI("%s %d\n", __PRETTY_FUNCTION__, __LINE__);
         }
 
 		if (engine.animating) {
-			if (engine.game)
-				engine.game->tick(1.0/60);
-				engine_draw_frame(&engine);
-        }
-    }
+			do {
+				dt = gettime() - time;
+				if (dt < DT) {
+					struct timespec ts;
+					ts.tv_sec = 0;
+					ts.tv_nsec = (DT - dt) * 1000000000LL;
+					nanosleep(&ts, 0);
+				}
+			} while (dt < DT);
+		
+			dtAccumuled += dt;
+			time = gettime();
+			LOGW("dtAccumuled: %f (time since start:%f)\n", dtAccumuled, gettime());
+			while (dtAccumuled >= DT){
+					if (engine.game) {
+						engine.game->tick(dtAccumuled);
+						dtAccumuled = 0;
+				  }
+				// dtAccumuled -= DT;
+			}
+			engine_draw_frame(&engine);
+		 } else {
+		 	time = gettime();
+		 }
+		}
 }
 
 static char* loadPng(const char* assetName, int* width, int* height)

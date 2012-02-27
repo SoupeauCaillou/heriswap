@@ -8,16 +8,18 @@
 #include "systems/RenderingSystem.h"
 #include "systems/PlayerSystem.h"
 
+class ScoreStorage;
+
 class EndMenuStateManager : public GameStateManager {
 	public:
-		EndMenuStateManager();
+		EndMenuStateManager(ScoreStorage* str);
 		void Setup();
 		void Enter();
-		int SaveScore();
 
 		GameState Update(float dt);
 		void Exit();
 	private:
+		ScoreStorage* storage;
 		Entity startbtn, eScore, eMsg;
 };
 

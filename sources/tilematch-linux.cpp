@@ -3,13 +3,16 @@
 #include "base/Vector2.h"
 #include "systems/RenderingSystem.h"
 #include "base/TouchInputManager.h"
+#include "states/ScoreBoardStateManager.h"
 
 #include <png.h>
 #include <sstream>
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 #include "Game.h"
 #include <sys/time.h>
+#include <algorithm>
 
 #define DT 1/60.
 
@@ -33,6 +36,38 @@ float gettime() {
 	return timeconverter(tv);
 }
 	
+	class FileScoreStorage: public ScoreStorage {	
+	std::vector<ScoreEntry> loadFromStorage() {
+		std::vector<ScoreEntry> result;
+		FILE* file = fopen("scores.txt", "r");
+		if (file) {
+			ScoreEntry entry;
+			char name[128];
+			int i=0;
+			while(i<10 && fscanf(file, "%d:%s\n", &entry.points, name)!=EOF) {
+				entry.name = name;
+				result.push_back(entry);
+			
+				i++;
+			}
+			fclose(file);
+		} else {
+			std::cout << "impossible de lire les scores" << std::endl;	
+		}
+		
+		std::sort(result.begin(), result.end(), ScoreStorage::ScoreEntryComp);
+		return result;	
+	}
+
+	void saveToStorage(const std::vector<ScoreEntry>& entries) {
+		std::ofstream out("scores.txt", std::ios::out);
+		for(int i=0;i<entries.size(); i++) {
+			out << entries[i].points << ':' << entries[i].name << std::endl;
+		}
+		out.close();
+	}
+};
+
 int main() {
 	if (!glfwInit())
 		return 1;
@@ -46,7 +81,7 @@ int main() {
 	theTouchInputManager.setNativeTouchStatePtr(&mouse);
 
 	Game game;
-	game.init(420, 700);
+	game.init(new FileScoreStorage(), 420, 700);
 	theRenderingSystem.init();
 	theTouchInputManager.init(Vector2(10, 10. * 700. / 400.), Vector2(420, 700));
 	
@@ -242,3 +277,7 @@ static bool mouse(Vector2* windowCoords) {
 
 	return glfwGetMouseButton(GLFW_MOUSE_BUTTON_1) == GLFW_PRESS;
 }
+
+
+
+
