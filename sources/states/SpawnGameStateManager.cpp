@@ -3,6 +3,8 @@
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/ADSRSystem.h"
+#include "systems/PlayerSystem.h"
+
 #include "base/EntityManager.h"
 #include "Game.h"
 
@@ -81,26 +83,49 @@ void SpawnGameStateManager::Enter() {
 }
 
 GameState SpawnGameStateManager::Update(float dt) {
-	ADSRComponent* transitionCree = ADSR(eSpawn);
-
-	if (!spawning.empty()) {
-		transitionCree->active = true;
-		for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
-			if (it->fe == 0) {
-				it->fe = createCell(*it);
-				std::cout << "nouvelle feuille (type="<<it->type<<") en ("<<it->X<<","<<it->Y<<")\n";
-			} else if (transitionCree->value == 1){
-				TRANSFORM(it->fe)->rotation = 0;
-			} else {
-				TRANSFORM(it->fe)->rotation = -transitionCree->value*7;
+		
+	if (thePlayerSystem.LeveledUp()) return LevelChanged;
+	else {
+		ADSRComponent* transitionCree = ADSR(eSpawn);
+	
+		if (!spawning.empty()) {
+			transitionCree->active = true;
+			for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
+				if (it->fe == 0) {
+					it->fe = createCell(*it);
+					std::cout << "nouvelle feuille (type="<<it->type<<") en ("<<it->X<<","<<it->Y<<")\n";
+				} else if (transitionCree->value == 1){
+					TRANSFORM(it->fe)->rotation = 0;
+				} else {
+					TRANSFORM(it->fe)->rotation = -transitionCree->value*7;
+				}
 			}
-		}
-		if (transitionCree->value == 1) {
-			spawning.clear();
+			if (transitionCree->value == 1) {
+				spawning.clear();
+				std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
+				if (combinaisons.empty()) {
+					if (theGridSystem.StillCombinations()) return UserInput;
+					else {
+						ADSR(eGrid)->active = true;
+						std::vector<Entity> feuilles = theGridSystem.RetrieveAllActorWithComponent();
+						for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
+							TRANSFORM(*it)->rotation = 3*ADSR(eGrid)->value;
+						}
+						if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
+							std::cout << "nouvelle grille !\n";	
+							theGridSystem.DeleteAll();
+							fillTheBlank(spawning);
+							return Spawn;
+						}
+					}
+				} else return Delete;
+	
+			}
+		} else {
 			std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
 			if (combinaisons.empty()) {
 				if (theGridSystem.StillCombinations()) return UserInput;
-				else {
+				else { 
 					ADSR(eGrid)->active = true;
 					std::vector<Entity> feuilles = theGridSystem.RetrieveAllActorWithComponent();
 					for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
@@ -114,28 +139,9 @@ GameState SpawnGameStateManager::Update(float dt) {
 					}
 				}
 			} else return Delete;
-
 		}
-	} else {
-		std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
-		if (combinaisons.empty()) {
-			if (theGridSystem.StillCombinations()) return UserInput;
-			else { 
-				ADSR(eGrid)->active = true;
-				std::vector<Entity> feuilles = theGridSystem.RetrieveAllActorWithComponent();
-				for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
-					TRANSFORM(*it)->rotation = 3*ADSR(eGrid)->value;
-				}
-				if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
-					std::cout << "nouvelle grille !\n";	
-					theGridSystem.DeleteAll();
-					fillTheBlank(spawning);
-					return Spawn;
-				}
-			}
-		} else return Delete;
+		return Spawn;
 	}
-	return Spawn;
 }
 
 void SpawnGameStateManager::Exit() {

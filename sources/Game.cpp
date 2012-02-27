@@ -21,6 +21,7 @@
 #include "states/ScoreBoardStateManager.h"
 #include "states/EndMenuStateManager.h"
 #include "states/BackgroundManager.h"
+#include "states/LevelStateManager.h"
 
 #include <sstream>
 
@@ -38,6 +39,7 @@ class Game::Data {
 			state2Manager[UserInput] = new UserInputGameStateManager();
 			state2Manager[Delete] = new DeleteGameStateManager();
 			state2Manager[Fall] = new FallGameStateManager();
+			state2Manager[LevelChanged] = new LevelStateManager();
 			state2Manager[ScoreBoard] = new ScoreBoardStateManager(storage);
 			state2Manager[EndMenu] = new EndMenuStateManager(storage);
 

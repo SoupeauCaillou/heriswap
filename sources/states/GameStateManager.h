@@ -5,6 +5,7 @@ enum GameState {
 	UserInput,
 	Delete,
 	Fall,
+	LevelChanged,
 	MainMenu,
 	ScoreBoard,
 	EndMenu,
