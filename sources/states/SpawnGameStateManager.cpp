@@ -28,6 +28,18 @@ void SpawnGameStateManager::Setup() {
 
 
 	
+	
+	eGrid = theEntityManager.CreateEntity();
+	ADD_COMPONENT(eGrid, ADSR);
+
+	ADSR(eGrid)->idleValue = 0;
+	ADSR(eGrid)->attackValue = 0.5;
+	ADSR(eGrid)->attackTiming = 1.;
+	ADSR(eGrid)->decayTiming = 0.4;
+	ADSR(eGrid)->sustainValue = 3.0;
+	ADSR(eGrid)->releaseTiming = 0;
+
+
 }
 	
 void SpawnGameStateManager::Enter() {
@@ -60,6 +72,11 @@ void SpawnGameStateManager::Enter() {
 	transitionCree->activationTime = 0;
 	transitionCree->active = false;
 
+
+	ADSR(eGrid)->activationTime = 0;
+	ADSR(eGrid)->active = false;
+	
+	
 	fillTheBlank(spawning);
 }
 
@@ -84,10 +101,17 @@ GameState SpawnGameStateManager::Update(float dt) {
 			if (combinaisons.empty()) {
 				if (theGridSystem.StillCombinations()) return UserInput;
 				else {
-					std::cout << "nouvelle grille !\n";
-					theGridSystem.DeleteAll();
-					fillTheBlank(spawning);
-					return Spawn;
+					ADSR(eGrid)->active = true;
+					std::vector<Entity> feuilles = theGridSystem.RetrieveAllActorWithComponent();
+					for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
+						TRANSFORM(*it)->rotation = 3*ADSR(eGrid)->value;
+					}
+					if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
+						std::cout << "nouvelle grille !\n";	
+						theGridSystem.DeleteAll();
+						fillTheBlank(spawning);
+						return Spawn;
+					}
 				}
 			} else return Delete;
 		
@@ -97,10 +121,17 @@ GameState SpawnGameStateManager::Update(float dt) {
 		if (combinaisons.empty()) {
 			if (theGridSystem.StillCombinations()) return UserInput;
 			else { 
-				std::cout << "nouvelle grille 999 !\n";
-				theGridSystem.DeleteAll();
-				fillTheBlank(spawning);
-				return Spawn;
+				ADSR(eGrid)->active = true;
+				std::vector<Entity> feuilles = theGridSystem.RetrieveAllActorWithComponent();
+				for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
+					TRANSFORM(*it)->rotation = 3*ADSR(eGrid)->value;
+				}
+				if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
+					std::cout << "nouvelle grille !\n";	
+					theGridSystem.DeleteAll();
+					fillTheBlank(spawning);
+					return Spawn;
+				}
 			}
 		} else return Delete;
 	}
@@ -118,7 +149,7 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 			if (theGridSystem.GetOnPos(i,j) == 0){
 				int r;
 				int pb=0;
-				/*ne pas generer de combinaison*/
+				/*ne pas generer de combinaison (fonctionne seulement avec les cellules deja dans la grille)*/
 				do {	
 					r = MathUtil::RandomInt(8)+1;
 					Entity l[5],c[5];

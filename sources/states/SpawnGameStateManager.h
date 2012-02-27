@@ -15,6 +15,6 @@ class SpawnGameStateManager : public GameStateManager {
 
 	private:
 		// datas
-		Entity eSpawn;
+		Entity eSpawn, eGrid;
 		std::vector<Feuille> spawning;
 };
