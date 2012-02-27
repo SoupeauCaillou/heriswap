@@ -7,6 +7,7 @@
 #include "systems/PlayerSystem.h"
 #include "GridSystem.h"
 
+#include "base/Log.h"
 #include "systems/HUDManager.h"
 #include "base/TouchInputManager.h"
 #include "base/MathUtil.h"
@@ -27,7 +28,7 @@
 
 class Game::Data {
 	public:
-		Data() {
+		Data(ScoreStorage* storage) {
 			hud.Setup();
 
 			state = MainMenu;
@@ -37,8 +38,8 @@ class Game::Data {
 			state2Manager[UserInput] = new UserInputGameStateManager();
 			state2Manager[Delete] = new DeleteGameStateManager();
 			state2Manager[Fall] = new FallGameStateManager();
-			state2Manager[ScoreBoard] = new ScoreBoardStateManager();
-			state2Manager[EndMenu] = new EndMenuStateManager();
+			state2Manager[ScoreBoard] = new ScoreBoardStateManager(storage);
+			state2Manager[EndMenu] = new EndMenuStateManager(storage);
 
 			BackgroundManager* bg = new BackgroundManager();
 			bg->xStartRange = Vector2(6, 8);
@@ -78,7 +79,10 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-void Game::init(int windowW, int windowH) {
+void Game::init(ScoreStorage* storage, int windowW, int windowH) {
+	LOGI("%s\n", __FUNCTION__);
+	datas = new Data(storage);
+	
 	theRenderingSystem.setWindowSize(windowW, windowH);
 
 	theGridSystem.GridSize = GRIDSIZE;
@@ -97,7 +101,6 @@ void Game::init(int windowW, int windowH) {
 	RENDERING(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 
-	datas = new Data();
 	datas->state2Manager[datas->state]->Enter();
 	
 	Entity eHUD = theEntityManager.CreateEntity();
@@ -106,7 +109,6 @@ void Game::init(int windowW, int windowH) {
 }
 
 void Game::tick(float dt) {
-
 	theTouchInputManager.Update(dt);
 
 	GameState newState;
@@ -121,22 +123,23 @@ void Game::tick(float dt) {
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
 	}
+	
 	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin(); it!=datas->state2Manager.end(); ++it) {
 		it->second->BackgroundUpdate(dt);
 	}
-
+	
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
-
 	if (newState != MainMenu && newState != ScoreBoard && newState != EndMenu) {
 		datas->hud.Hide(false);
 		datas->hud.Update(dt);
 		thePlayerSystem.Update(dt);
 	}
+	
 	if (newState == EndMenu) {
 		datas->hud.Hide(true);
 		theGridSystem.DeleteAll();
-		thePlayerSystem.SetTime(0);
+		thePlayerSystem.SetTime(0, true);
 	} else if (newState == MainMenu) {
 		thePlayerSystem.Reset();
 	}

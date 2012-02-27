@@ -2,12 +2,15 @@
 #include "GridSystem.h"
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
+#include "systems/PlayerSystem.h"
 #include "systems/ButtonSystem.h"
 #include "base/TouchInputManager.h"
 #include "systems/ADSRSystem.h"
 #include "base/EntityManager.h"
 #include "Game.h"
+#ifndef ANDROID
 #include <GL/glfw.h>
+#endif
 
 static void activateADSR(Entity e, float a, float s);
 static void diffToGridCoords(const Vector2& c, int* i, int* j);
@@ -21,10 +24,10 @@ void UserInputGameStateManager::Setup() {
 	ADD_COMPONENT(eSwapper, ADSR);
 	ADSR(eSwapper)->idleValue = 0;
 	ADSR(eSwapper)->attackValue = 1.0;
-	ADSR(eSwapper)->attackTiming = 0.2;
+	ADSR(eSwapper)->attackTiming = 0.1;
 	ADSR(eSwapper)->decayTiming = 0;
 	ADSR(eSwapper)->sustainValue = 1.0;
-	ADSR(eSwapper)->releaseTiming = 0.2;
+	ADSR(eSwapper)->releaseTiming = 0.1;
 }
 	
 void UserInputGameStateManager::Enter() {
@@ -35,6 +38,7 @@ void UserInputGameStateManager::Enter() {
 
 GameState UserInputGameStateManager::Update(float dt) {
 	/* drag/drop of cell */
+	thePlayerSystem.SetTime(dt,false);
 	if (!theTouchInputManager.wasTouched() && 
 		theTouchInputManager.isTouched()) {
 		// don't start new drag while the previous one isn't finished
@@ -128,7 +132,11 @@ GameState UserInputGameStateManager::Update(float dt) {
 				GRID(e1)->checkedV = false;
 
 				std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
-				if (glfwGetMouseButton(GLFW_MOUSE_BUTTON_2) != GLFW_PRESS && combinaisons.empty()) {
+				if (
+				#ifndef ANDROID
+					glfwGetMouseButton(GLFW_MOUSE_BUTTON_2) != GLFW_PRESS && 
+				#endif
+					combinaisons.empty()) {
 					// revert swap
 					GRID(e1)->i = originI;
 					GRID(e1)->j = originJ;
@@ -136,6 +144,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 					GRID(e2)->j = originJ + swapJ;
 					return UserInput;
 				} else {
+					originI = originJ = -1;
 					return Delete;
 				}
 			}
