@@ -8,6 +8,7 @@
 #include "systems/ADSRSystem.h"
 #include "base/EntityManager.h"
 #include "Game.h"
+#include "base/Log.h"
 #ifndef ANDROID
 #include <GL/glfw.h>
 #endif
@@ -29,7 +30,7 @@ void UserInputGameStateManager::Setup() {
 	ADSR(eSwapper)->sustainValue = 1.0;
 	ADSR(eSwapper)->releaseTiming = 0.1;
 }
-	
+
 void UserInputGameStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	dragged = 0;
@@ -40,7 +41,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 	//on met à jour le temps
 	thePlayerSystem.SetTime(dt,false);
 	// drag/drop of cell
-	if (!theTouchInputManager.wasTouched() && 
+	if (!theTouchInputManager.wasTouched() &&
 		theTouchInputManager.isTouched()) {
 		// don't start new drag while the previous one isn't finished
 		if (!dragged) {
@@ -76,7 +77,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 	} else if (theTouchInputManager.wasTouched() && dragged && ADSR(dragged)->active) {
 		if (theTouchInputManager.isTouched()) {
 			// continue drag
-			Vector2 diff = theTouchInputManager.getTouchLastPosition() 
+			Vector2 diff = theTouchInputManager.getTouchLastPosition()
 				- Game::GridCoordsToPosition(originI, originJ);
 
 			if (diff.Length() > 1) {
@@ -118,14 +119,14 @@ GameState UserInputGameStateManager::Update(float dt) {
 				ADSR(theGridSystem.GetOnPos(originI,originJ-1))->active = false;
 			ADSR(eSwapper)->active = false;
 
-			/* must swap ? */			
+			/* must swap ? */
 			if (ADSR(eSwapper)->value >= 0.99) {
 				Entity e2 = theGridSystem.GetOnPos(originI+ swapI,originJ+ swapJ);
 				GRID(e2)->i = originI;
 				GRID(e2)->j = originJ;
 				GRID(e2)->checkedH = false;
 				GRID(e2)->checkedV = false;
-				
+
 				Entity e1 = dragged ;
 				GRID(e1)->i = originI + swapI;
 				GRID(e1)->j = originJ + swapJ;
@@ -135,7 +136,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 				std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
 				if (
 				#ifndef ANDROID
-					glfwGetMouseButton(GLFW_MOUSE_BUTTON_2) != GLFW_PRESS && 
+					glfwGetMouseButton(GLFW_MOUSE_BUTTON_2) != GLFW_PRESS &&
 				#endif
 					combinaisons.empty()) {
 					// revert swap
@@ -176,7 +177,8 @@ void UserInputGameStateManager::BackgroundUpdate(float dt) {
 		}
 	}
 
-	if (ADSR(eSwapper)->activationTime > 0) {
+	if (ADSR(eSwapper)->activationTime >= 0 && originI >= 0 && originJ >= 0) {
+
 		Vector2 pos1 = Game::GridCoordsToPosition(originI, originJ);
 		Vector2 pos2 = Game::GridCoordsToPosition(originI + swapI, originJ + swapJ);
 
@@ -185,14 +187,14 @@ void UserInputGameStateManager::BackgroundUpdate(float dt) {
 
 		Entity e1 = theGridSystem.GetOnPos(originI,originJ);
 		Entity e2 = theGridSystem.GetOnPos(originI + swapI,originJ + swapJ);
-		
+
 		if (e1)
 			TRANSFORM(e1)->position = interp1;
 		if (e2)
 			TRANSFORM(e2)->position = interp2;
 	}
 }
-	
+
 void UserInputGameStateManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
@@ -206,7 +208,7 @@ static void activateADSR(Entity e, float a, float s) {
 	ac->attackValue = size * a;
 	ac->attackTiming = 0.3;
 	ac->decayTiming = 0.2;
-	ac->sustainValue = size * s;	
+	ac->sustainValue = size * s;
 	ac->releaseTiming = 0.2;
 	ac->active = true;
 }
@@ -219,5 +221,3 @@ void diffToGridCoords(const Vector2& c, int* i, int* j) {
 		*j = (c.Y < 0) ? -1 : 1;
 	}
 }
-
-
