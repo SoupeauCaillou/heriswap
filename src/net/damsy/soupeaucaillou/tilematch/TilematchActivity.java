@@ -3,8 +3,10 @@ package net.damsy.soupeaucaillou.tilematch;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.WindowManager.LayoutParams;
 
 public class TilematchActivity extends Activity {
 	static public long game = 0 	;
@@ -13,6 +15,9 @@ public class TilematchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
          
+        getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN,
+    			LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.main);
         
         mGLView = (GLSurfaceView) findViewById(R.id.glview);
