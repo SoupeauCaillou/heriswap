@@ -22,6 +22,7 @@
 #include "states/EndMenuStateManager.h"
 #include "states/BackgroundManager.h"
 #include "states/LevelStateManager.h"
+#include "states/PauseStateManager.h"
 
 #include <sstream>
 
@@ -42,6 +43,7 @@ class Game::Data {
 			state2Manager[LevelChanged] = new LevelStateManager();
 			state2Manager[ScoreBoard] = new ScoreBoardStateManager(storage);
 			state2Manager[EndMenu] = new EndMenuStateManager(storage);
+			state2Manager[Pause] = new PauseStateManager();
 
 			BackgroundManager* bg = new BackgroundManager();
 			bg->xStartRange = Vector2(6, 8);
@@ -53,8 +55,9 @@ class Game::Data {
 				it->second->Setup();
 			}
 			time = TIMELIMIT;
+			gameIsPaused = false;
 		}
-
+		bool gameIsPaused;
 		GameState state;
 		Entity background, sky;
 		float time;
@@ -109,18 +112,34 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH) {
 
 	ADD_COMPONENT(eHUD, Player);
 }
+void Game::togglePause(bool activate) {
+	
+	static GameState currentState;
+	if (activate) {
+		currentState = datas->state;
+			datas->state2Manager[datas->state]->Exit();
+	datas->state = Pause;
+	} else {
+		datas->state2Manager[datas->state]->Exit();
+		datas->state = currentState;
+	}
+	datas->state2Manager[datas->state]->Enter();
+}
 
 void Game::tick(float dt) {
-	theTouchInputManager.Update(dt);
-
 	GameState newState;
+
+	theTouchInputManager.Update(dt);
+	
+	//si le chrono est fini, on passe au menu de fin
 	if (TIMELIMIT - thePlayerSystem.GetTime()<0) {
 		newState = EndMenu;
 	} else {
 		newState = datas->state2Manager[datas->state]->Update(dt);
 	}
-	
-	if (newState != datas->state) {
+	if (newState != datas->state && datas->state == Pause) {
+		togglePause(false);
+	} else if (newState != datas->state) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
@@ -132,6 +151,7 @@ void Game::tick(float dt) {
 	
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
+	//si on est ingame, on affiche le HUD
 	if (newState != MainMenu && newState != ScoreBoard && newState != EndMenu) {
 		datas->hud.Hide(false);
 		datas->hud.Update(dt);

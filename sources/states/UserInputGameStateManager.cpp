@@ -37,8 +37,9 @@ void UserInputGameStateManager::Enter() {
 }
 
 GameState UserInputGameStateManager::Update(float dt) {
-	/* drag/drop of cell */
+	//on met à jour le temps
 	thePlayerSystem.SetTime(dt,false);
+	// drag/drop of cell
 	if (!theTouchInputManager.wasTouched() && 
 		theTouchInputManager.isTouched()) {
 		// don't start new drag while the previous one isn't finished
