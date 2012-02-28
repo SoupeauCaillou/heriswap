@@ -102,7 +102,6 @@ int main() {
 
 	Game game;
 	game.init(new FileScoreStorage(), 420, 700);
-	theRenderingSystem.init();
 	theTouchInputManager.init(Vector2(10, 10. * 700. / 400.), Vector2(420, 700));
 
 	bool running = true;

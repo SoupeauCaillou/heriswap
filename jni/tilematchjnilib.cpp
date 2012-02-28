@@ -124,8 +124,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	theRenderingSystem.setNativeAssetLoader(new AndroidNativeAssetLoader(hld));
 	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
 	hld->game->init(&hld->storage, hld->width, hld->height);
-	theRenderingSystem.init();
-   theTouchInputManager.init(Vector2(10, 10. * hld->height / hld->width), Vector2(hld->width, hld->height));
+	theTouchInputManager.init(Vector2(10, 10. * hld->height / hld->width), Vector2(hld->width, hld->height));
 
 	gettimeofday(&hld->startup_time,NULL);
 	hld->time = gettime(hld);

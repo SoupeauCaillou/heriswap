@@ -64,7 +64,7 @@ class Game::Data {
 		// drag/drop
 		HUDManager hud;
 		std::map<GameState, GameStateManager*> state2Manager;
-};	
+};
 
 static const float offset = 0.2;
 static const float scale = 0.95;
@@ -85,9 +85,11 @@ float Game::CellContentScale() {
 }
 
 void Game::init(ScoreStorage* storage, int windowW, int windowH) {
+	theRenderingSystem.init();
+
 	LOGI("%s\n", __FUNCTION__);
 	datas = new Data(storage);
-	
+
 	theRenderingSystem.setWindowSize(windowW, windowH);
 
 	theGridSystem.GridSize = GRIDSIZE;
@@ -98,7 +100,7 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH) {
 	theRenderingSystem.Add(datas->sky);
 	RENDERING(datas->sky)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->sky)->texture = theRenderingSystem.loadTextureFile("sky.png");
-	
+
 	datas->background = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->background, Transformation);
 	ADD_COMPONENT(datas->background, Rendering);
@@ -107,13 +109,13 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH) {
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 
 	datas->state2Manager[datas->state]->Enter();
-	
+
 	Entity eHUD = theEntityManager.CreateEntity();
 
 	ADD_COMPONENT(eHUD, Player);
 }
 void Game::togglePause(bool activate) {
-	
+
 	static GameState currentState;
 	if (activate) {
 		currentState = datas->state;
@@ -130,7 +132,7 @@ void Game::tick(float dt) {
 	GameState newState;
 
 	theTouchInputManager.Update(dt);
-	
+
 	//si le chrono est fini, on passe au menu de fin
 	if (TIMELIMIT - thePlayerSystem.GetTime()<0) {
 		newState = EndMenu;
@@ -144,11 +146,11 @@ void Game::tick(float dt) {
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
 	}
-	
+
 	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin(); it!=datas->state2Manager.end(); ++it) {
 		it->second->BackgroundUpdate(dt);
 	}
-	
+
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
 	//si on est ingame, on affiche le HUD
@@ -157,7 +159,7 @@ void Game::tick(float dt) {
 		datas->hud.Update(dt);
 		thePlayerSystem.Update(dt);
 	}
-	
+
 	if (newState == EndMenu) {
 		datas->hud.Hide(true);
 		theGridSystem.DeleteAll();
@@ -165,8 +167,8 @@ void Game::tick(float dt) {
 	} else if (newState == MainMenu) {
 		thePlayerSystem.Reset();
 	}
-	
+
 	theTransformationSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);
-	theRenderingSystem.Update(dt);		
+	theRenderingSystem.Update(dt);
 }

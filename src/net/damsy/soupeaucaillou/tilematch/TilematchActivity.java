@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 
 public class TilematchActivity extends Activity {
-	static public long game;
+	static public long game = 0 	;
 	 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
