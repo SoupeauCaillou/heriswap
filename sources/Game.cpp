@@ -55,9 +55,7 @@ class Game::Data {
 				it->second->Setup();
 			}
 			time = TIMELIMIT;
-			gameIsPaused = false;
 		}
-		bool gameIsPaused;
 		GameState state;
 		Entity background, sky;
 		float time;
@@ -115,15 +113,20 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH) {
 void Game::togglePause(bool activate) {
 	
 	static GameState currentState;
-	if (activate) {
+	static bool gameIsPaused = false;
+	
+	if (activate && !gameIsPaused) {
+		gameIsPaused = true;
 		currentState = datas->state;
-			datas->state2Manager[datas->state]->Exit();
-	datas->state = Pause;
-	} else {
+		datas->state2Manager[datas->state]->Exit();
+		datas->state = Pause;
+		datas->state2Manager[datas->state]->Enter();
+	} else if (!activate) {
+		gameIsPaused = false;
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = currentState;
+		datas->state2Manager[datas->state]->Enter();
 	}
-	datas->state2Manager[datas->state]->Enter();
 }
 
 void Game::tick(float dt) {
@@ -152,14 +155,17 @@ void Game::tick(float dt) {
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
 	//si on est ingame, on affiche le HUD
-	if (newState != MainMenu && newState != ScoreBoard && newState != EndMenu) {
+	if (newState != MainMenu && newState != ScoreBoard && newState != EndMenu && newState != Pause) {
 		datas->hud.Hide(false);
 		datas->hud.Update(dt);
 		thePlayerSystem.Update(dt);
+		theGridSystem.HideAll(false);
+	} else {
+		datas->hud.Hide(true);
+		theGridSystem.HideAll(true);
 	}
 	
 	if (newState == EndMenu) {
-		datas->hud.Hide(true);
 		theGridSystem.DeleteAll();
 		thePlayerSystem.SetTime(0, true);
 	} else if (newState == MainMenu) {

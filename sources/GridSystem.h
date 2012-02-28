@@ -70,6 +70,8 @@ bool StillCombinations();
 
 bool NewCombiOnSwitch(Entity a, int i, int j);
 
+void HideAll(bool activate);
+
 bool IsValidGridPosition(int i, int j) {
 	return (i>=0 && j>=0 && i<GridSize && j<GridSize);
 }

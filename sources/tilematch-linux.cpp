@@ -135,6 +135,10 @@ int main() {
 			game.tick(DT);
 			glfwSwapBuffers();
 			running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
+			//pause ?
+			if (glfwGetKey( GLFW_KEY_SPACE ))
+				game.togglePause(true);
+			
 			dtAccumuled -= DT;
 			frames++;
 			if (time > nextfps) {
