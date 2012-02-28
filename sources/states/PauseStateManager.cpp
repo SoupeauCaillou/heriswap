@@ -19,7 +19,7 @@ void PauseStateManager::Setup() {
 
 	ADD_COMPONENT(eRestart, Button);
 	ADD_COMPONENT(eRestart, Rendering);
-	
+	TRANSFORM(eRestart)->z = 20;
 
 }
 
@@ -27,18 +27,20 @@ void PauseStateManager::Enter() {
 	
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	TEXT_RENDERING(eRestart)->hide = false;
-	BUTTON(eRestart)->clicked = false;
 }
 
 GameState PauseStateManager::Update(float dt) {
-	if (BUTTON(eRestart)->clicked)
-		return Spawn;
+	if (BUTTON(eRestart)->clicked) {
+		return ScoreBoard;
+	}
 	return Pause;
 }
 
 void PauseStateManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	TEXT_RENDERING(eRestart)->hide = true;
+	BUTTON(eRestart)->clicked = false;
+
 }
 
 

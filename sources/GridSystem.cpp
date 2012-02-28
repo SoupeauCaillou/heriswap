@@ -28,6 +28,13 @@ void GridSystem::print() {
 	}
 }
 
+void GridSystem::HideAll(bool activate) {
+	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
+		Entity e = (*it).first;			
+		RENDERING(e)->hide = activate;
+	}
+}
+
 void GridSystem::DeleteAll() {
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
 		Entity e = (*it).first;			
