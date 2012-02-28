@@ -8,7 +8,6 @@ PauseStateManager::PauseStateManager() {
 
 void PauseStateManager::Setup() {		
 	eRestart = theTextRenderingSystem.CreateLocalEntity(10);	
-	eRestart2 = theEntityManager.CreateEntity();
 
 	TRANSFORM(eRestart)->position = Vector2(3.5, 0);
 		
