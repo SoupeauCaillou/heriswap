@@ -2,21 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.damsy.soupeaucaillou.tilematch"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0" 
+    >
 
     <uses-sdk android:minSdkVersion="8" />
     
     <!-- This .apk has no Java code itself, so set hasCode to false. -->
-    <application android:label="Tilematch!" android:hasCode="false" android:debuggable="true">
-
+    <application android:label="Tilematch!" android:debuggable="true">
+    
         <!-- Our activity is the built-in NativeActivity framework class.
              This will take care of integrating with our NDK code. -->
-        <activity android:name="android.app.NativeActivity"
-                android:label="Tilematch!"
-                android:configChanges="orientation|keyboardHidden">
-            <!-- Tell NativeActivity the name of or .so -->
-            <meta-data android:name="android.app.lib_name"
-                    android:value="tilematch" />
+        <activity android:name="net.damsy.soupeaucaillou.tilematch.TilematchActivity"
+                android:label="Tilematch!" android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

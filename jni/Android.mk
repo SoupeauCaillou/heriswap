@@ -19,7 +19,7 @@ LOCAL_CXXFLAGS := -DANDROID_NDK \
 
 LOCAL_SRC_FILES := \
     importgl.c \
-    tilematch.cpp \
+    tilematchjnilib.cpp \
 	../sources/Game.cpp \
 	../sources/GridSystem.cpp \
 	../sources/states/BackgroundManager.cpp \
@@ -31,7 +31,7 @@ LOCAL_SRC_FILES := \
 	../sources/states/MainMenuGameStateManager.cpp \
 	../sources/states/ScoreBoardStateManager.cpp \
 
-LOCAL_STATIC_LIBRARIES := android_native_app_glue sac png
+LOCAL_STATIC_LIBRARIES := sac png
 LOCAL_LDLIBS := -lGLESv2 -lEGL -llog -landroid -lz
 
 include $(BUILD_SHARED_LIBRARY)
