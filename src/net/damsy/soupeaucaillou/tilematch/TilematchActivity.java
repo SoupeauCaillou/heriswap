@@ -3,6 +3,7 @@ package net.damsy.soupeaucaillou.tilematch;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 public class TilematchActivity extends Activity {
@@ -39,6 +40,19 @@ public class TilematchActivity extends Activity {
     	}
     	
     	return super.onTouchEvent(event);
+    }
+    
+    @Override
+    public void onBackPressed() {
+    	
+    }
+    
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+    	if (keyCode == KeyEvent.KEYCODE_MENU) {
+    		TilematchJNILib.pause(game);
+    	}
+    	return super.onKeyUp(keyCode, event);
     }
     
     private GLSurfaceView mGLView;

@@ -161,6 +161,13 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
 	}
 }
 
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_pause
+  (JNIEnv *, jclass, jlong g) {
+  	GameHolder* hld = (GameHolder*) g;
+
+	hld->game->togglePause(true);
+}
+
 /*
  * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
  * Method:    handleInputEvent

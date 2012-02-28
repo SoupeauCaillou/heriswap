@@ -31,6 +31,7 @@ LOCAL_SRC_FILES := \
 	../sources/states/MainMenuGameStateManager.cpp \
 	../sources/states/ScoreBoardStateManager.cpp \
 	../sources/states/LevelStateManager.cpp \
+	../sources/states/PauseStateManager.cpp \
 
 LOCAL_STATIC_LIBRARIES := sac png
 LOCAL_LDLIBS := -lGLESv2 -lEGL -llog -landroid -lz
