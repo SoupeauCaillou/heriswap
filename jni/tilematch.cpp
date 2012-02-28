@@ -72,37 +72,7 @@ static char* loadTextfile(const char* assetName);
 static bool touch(Vector2* windowCoords);
 static char* loadPng(const char* assetName, int* width, int* height);
 
-class SaveStateScoreStorage: public ScoreStorage {	
-	public:
-	
-	saved_state* state;
-	
-	std::vector<ScoreEntry> loadFromStorage() {
-		std::vector<ScoreEntry> result;
-		for (int i=0; i<state->scoreCount; i++) {
-			ScoreEntry entry;
-			entry.points = state->scoreboard[i];
-			entry.name = state->name[i];
-			
-			LOGI("%s: #%d : %d,%s\n", __FUNCTION__, i, entry.points, entry.name.c_str());
-			result.push_back(entry);
-		}
-		std::sort(result.begin(), result.end(), ScoreStorage::ScoreEntryComp);
-		return result;	
-	}
 
-	void saveToStorage(const std::vector<ScoreEntry>& entries) {
-		state->scoreCount = entries.size();
-		if (state->scoreCount > 10) 
-			state->scoreCount = 10;
-		for (int i=0; i<state->scoreCount; i++) {
-			LOGI("%s: #%d : %d,%s\n", __FUNCTION__, i, entries[i].points, entries[i].name.c_str());
-			state->scoreboard[i] = entries[i].points;
-			strncpy(state->name[i], entries[i].name.c_str(), 64);
-			state->name[i][63] = '\0'; 
-		}
-	}
-};
 
 SaveStateScoreStorage saveState;
 
@@ -509,4 +479,6 @@ static bool touch(Vector2* windowCoords) {
 
 	return input.touching;
 }
+
+
 

@@ -21,7 +21,28 @@
 
 static char* loadPng(const char* assetName, int* width, int* height);
 static char* loadTextfile(const char* assetName);
-static bool mouse(Vector2* windowCoords);
+
+struct LinuxNativeAssetLoader: public NativeAssetLoader {
+	char* decompressPngImage(const std::string& assetName, int* width, int* height) {
+		return loadPng(assetName.c_str(), width, height);
+	}
+
+	char* loadShaderFile(const std::string& assetName) {
+		return loadTextfile(assetName.c_str());
+	}
+};
+
+class MouseNativeTouchState: public NativeTouchState {
+	public:
+		bool isTouching(Vector2* windowCoords) const {
+			int x,y;
+			glfwGetMousePos(&x, &y);
+			windowCoords->X = x;
+			windowCoords->Y = y;
+
+			return glfwGetMouseButton(GLFW_MOUSE_BUTTON_1) == GLFW_PRESS;
+		}
+};
 
 static struct timeval startup_time;
 
@@ -35,8 +56,8 @@ float gettime() {
 	timersub(&tv, &startup_time, &tv);
 	return timeconverter(tv);
 }
-	
-	class FileScoreStorage: public ScoreStorage {	
+
+	class FileScoreStorage: public ScoreStorage {
 	std::vector<ScoreEntry> loadFromStorage() {
 		std::vector<ScoreEntry> result;
 		FILE* file = fopen("scores.txt", "r");
@@ -47,16 +68,16 @@ float gettime() {
 			while(i<10 && fscanf(file, "%d:%s\n", &entry.points, name)!=EOF) {
 				entry.name = name;
 				result.push_back(entry);
-			
+
 				i++;
 			}
 			fclose(file);
 		} else {
-			std::cout << "impossible de lire les scores" << std::endl;	
+			std::cout << "impossible de lire les scores" << std::endl;
 		}
-		
+
 		std::sort(result.begin(), result.end(), ScoreStorage::ScoreEntryComp);
-		return result;	
+		return result;
 	}
 
 	void saveToStorage(const std::vector<ScoreEntry>& entries) {
@@ -74,28 +95,27 @@ int main() {
 
 	if( !glfwOpenWindow( 420,700, 8,8,8,8,8,1, GLFW_WINDOW ) )
 		return 1;
-	
+
 	gettimeofday(&startup_time,NULL);
-	theRenderingSystem.setDecompressPNGImagePtr(&loadPng);
-	theRenderingSystem.setLoadShaderPtr(&loadTextfile);
-	theTouchInputManager.setNativeTouchStatePtr(&mouse);
+	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());
+	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());
 
 	Game game;
 	game.init(new FileScoreStorage(), 420, 700);
 	theRenderingSystem.init();
 	theTouchInputManager.init(Vector2(10, 10. * 700. / 400.), Vector2(420, 700));
-	
+
 	bool running = true;
-	
+
 	//Everything is saved into integers so that's µs not sec
 	float dtAccumuled=0, dt = 0, time = 0;
-	
+
 	time = gettime();
 
 	int frames = 0;
 	float nextfps = time + 5;
 	while(running) {
-		
+
 		do {
 			dt = gettime() - time;
 			if (dt < DT) {
@@ -124,7 +144,7 @@ int main() {
 			}
 		}
 	}
-	
+
 	Vector2 x(Vector2::Zero);
 
 	glfwTerminate();
@@ -143,15 +163,15 @@ static char* loadPng(const char* assetName, int* width, int* height)
 		std::cout << ss.str() << " not found" << std::endl;
 		return 0;
 	}
-		
+
 	GLubyte PNG_header[8];
-		
+
 	fread(PNG_header, 1, 8, PNG_file);
 	if (png_sig_cmp(PNG_header, 0, 8) != 0) {
 		std::cout << "ERROR: " << ss.str() << " is not a PNG." << std::endl;
 		return 0;
 	}
-		
+
 	png_structp PNG_reader = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	if (PNG_reader == NULL)
 	{
@@ -159,7 +179,7 @@ static char* loadPng(const char* assetName, int* width, int* height)
 		fclose(PNG_file);
 		return 0;
 	}
-		
+
 	png_infop PNG_info = png_create_info_struct(PNG_reader);
 	if (PNG_info == NULL)
 	{
@@ -168,7 +188,7 @@ static char* loadPng(const char* assetName, int* width, int* height)
 		fclose(PNG_file);
 		return 0;
 	}
-		
+
 	png_infop PNG_end_info = png_create_info_struct(PNG_reader);
 	if (PNG_end_info == NULL)
 	{
@@ -177,7 +197,7 @@ static char* loadPng(const char* assetName, int* width, int* height)
 		fclose(PNG_file);
 		return 0;
 	}
-		
+
 	if (setjmp(png_jmpbuf(PNG_reader)))
 	{
 		std::cout << "ERROR: Can't load " << ss.str() << std::endl;
@@ -188,9 +208,9 @@ static char* loadPng(const char* assetName, int* width, int* height)
 
 	png_init_io(PNG_reader, PNG_file);
 	png_set_sig_bytes(PNG_reader, 8);
-		
+
 	png_read_info(PNG_reader, PNG_info);
-		
+
 	*width = png_get_image_width(PNG_reader, PNG_info);
 	*height = png_get_image_height(PNG_reader, PNG_info);
 
@@ -203,7 +223,7 @@ static char* loadPng(const char* assetName, int* width, int* height)
 		png_set_palette_to_rgb(PNG_reader);
 	}
 
-	if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) 
+	if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
 	{
 		png_set_expand_gray_1_2_4_to_8(PNG_reader);
 	}
@@ -268,16 +288,3 @@ static char* loadTextfile(const char* assetName)
 	output[size] = '\0';
 	return output;
 }
-
-static bool mouse(Vector2* windowCoords) {
-	int x,y;
-	glfwGetMousePos(&x, &y);
-	windowCoords->X = x;
-	windowCoords->Y = y;
-
-	return glfwGetMouseButton(GLFW_MOUSE_BUTTON_1) == GLFW_PRESS;
-}
-
-
-
-
