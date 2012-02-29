@@ -52,13 +52,13 @@ public:
 Entity GetOnPos(int i, int j);
 
 /* Return the finale list  of combinaisons*/ 
-std::vector<Combinais> LookForCombinaison(bool markAsChecked, bool useChecked);
+std::vector<Combinais> LookForCombination(bool markAsChecked, bool useChecked);
 
 /* Set Back all entity at "not checked"*/
 void ResetTest();
 
 /* Return combinaisons without twice the same point*/
-std::vector<Combinais> MergeCombinaison(std::vector<Combinais> combinaisons);
+std::vector<Combinais> MergeCombination(std::vector<Combinais> combinaisons);
 
 /* Return true if an element is in both vector */
 bool Intersec(std::vector<Vector2> v1, std::vector<Vector2> v2);

@@ -85,7 +85,7 @@ Combinais GridSystem::MergeVectors(Combinais c1, Combinais c2) {
 	return merged;
 }
 	
-std::vector<Combinais> GridSystem::MergeCombinaison(std::vector<Combinais> combinaisons) {
+std::vector<Combinais> GridSystem::MergeCombination(std::vector<Combinais> combinaisons) {
 	std::vector<Combinais> combinmerged;
 		
 	for ( size_t i = 0; i < combinaisons.size(); ++i ) {
@@ -104,7 +104,7 @@ std::vector<Combinais> GridSystem::MergeCombinaison(std::vector<Combinais> combi
 	return combinmerged;
 }
 
-std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked, bool useChecked) { 
+std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool useChecked) { 
 	std::vector<Combinais> combinaisons;
 
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
@@ -210,7 +210,7 @@ std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked, bool u
 		
 	}
 	
-	return MergeCombinaison(combinaisons);
+	return MergeCombination(combinaisons);
 }
 
 std::vector<CellFall> GridSystem::TileFall() {
@@ -255,7 +255,7 @@ bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 	if (e) {
 		GRID(e)->i--;
 		GRID(a)->i++;
-		std::vector<Combinais> combin = LookForCombinaison(false,false);
+		std::vector<Combinais> combin = LookForCombination(false,false);
 		if (combin.size()>0) res=true;	
 		GRID(e)->i++;
 		GRID(a)->i--;
@@ -264,7 +264,7 @@ bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 	if (!res && e) {		
 		GRID(e)->j--;
 		GRID(a)->j++;
-		std::vector<Combinais> combin = LookForCombinaison(false,false);
+		std::vector<Combinais> combin = LookForCombination(false,false);
 		if (combin.size()>0) res=true;	
 		GRID(e)->j++;
 		GRID(a)->j--;	
@@ -273,7 +273,7 @@ bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 }
 
 bool GridSystem::StillCombinations() {
-	std::vector<Combinais> combin = LookForCombinaison(false,false);
+	std::vector<Combinais> combin = LookForCombination(false,false);
 	if (combin.size()>0) return true;
 	
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
