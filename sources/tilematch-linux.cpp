@@ -107,7 +107,7 @@ int main() {
 	theTouchInputManager.init(Vector2(10, 10. * 700. / 400.), Vector2(420, 700));
 
 	bool running = true;
-
+	float timer = 0;
 	float dtAccumuled=0, dt = 0, time = 0;
 
 	time = gettime();
@@ -139,8 +139,11 @@ int main() {
 			if (glfwGetKey( GLFW_KEY_SPACE ))
 				game.togglePause(true);
 			//magic key?
-			if (glfwGetKey( GLFW_KEY_ENTER ))
-				game.toggleShowCombi();
+			if (glfwGetKey( GLFW_KEY_ENTER ) && timer<=0) {
+				game.toggleShowCombi(false);
+				timer = 1;
+			}
+			timer -= DT;
 			dtAccumuled -= DT;
 			frames++;
 			if (time > nextfps) {

@@ -117,11 +117,11 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH) {
 	ADD_COMPONENT(eHUD, Player);
 }
 
-void Game::toggleShowCombi() {/*
+void Game::toggleShowCombi(bool forcedesactivate) {
 	static bool activated;
 	//on switch le bool
 	activated = !activated;
-
+	if (forcedesactivate) activated = false;
 	static std::vector<Entity> combinationMark;
 	if (activated) {
 		for (int j=0;j<2;j++) {
@@ -157,7 +157,7 @@ void Game::toggleShowCombi() {/*
 		std::cout << "destruction des marquages\n";
 		for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++)
 			theEntityManager.DeleteEntity(*it);
-	}*/
+	}
 }
 void Game::togglePause(bool activate) {
 
@@ -201,7 +201,7 @@ void Game::tick(float dt) {
 		it->second->BackgroundUpdate(dt);
 	}
 	if (newState == Delete)
-		toggleShowCombi();
+		toggleShowCombi(true);
 		
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);

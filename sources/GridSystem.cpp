@@ -248,6 +248,7 @@ void GridSystem::DoUpdate(float dt) {
 
 }
 
+
 bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 	//test right and top
 	Entity e = GetOnPos(i+1,j);
@@ -255,23 +256,22 @@ bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 		GRID(e)->i--;
 		GRID(a)->i++;
 		std::vector<Combinais> combin = LookForCombination(false,false);
-		if (combin.size()>0) return true;	
-
 		GRID(e)->i++;
 		GRID(a)->i--;
+		if (combin.size()>0) return true;	
 	}
 	e = GetOnPos(i,j+1);
 	if (e) {		
 		GRID(e)->j--;
 		GRID(a)->j++;
 		std::vector<Combinais> combin = LookForCombination(false,false);
-		if (combin.size()>0) return true;	
-
 		GRID(e)->j++;
 		GRID(a)->j--;	
+		if (combin.size()>0) return true;	
 	}	
 	return false;
 }
+
 
 bool GridSystem::StillCombinations() {
 	std::vector<Combinais> combin = LookForCombination(false,false);

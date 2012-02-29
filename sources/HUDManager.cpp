@@ -60,7 +60,7 @@ void HUDManager::Setup() {
 	ADD_COMPONENT(datas->fBonus, Rendering);
 
 	RENDERING(datas->fBonus)->size = Vector2(2,2);
-	TRANSFORM(datas->fBonus)->position = Vector2(2,7.5);
+	TRANSFORM(datas->fBonus)->position = Vector2(2,6);
 	TRANSFORM(datas->fBonus)->rotation = -.8;
 
 
@@ -120,7 +120,7 @@ void HUDManager::Update(float dt) {
 	//Level
 	{
 	std::stringstream a;
-	a << thePlayerSystem.GetLevel();
+	a << "Lvl : "<<thePlayerSystem.GetLevel();
 	TEXT_RENDERING(datas->eLevel)->text = a.str();
 	}
 	//Objectifs
