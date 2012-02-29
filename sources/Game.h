@@ -9,7 +9,8 @@ class Game {
 		void init(ScoreStorage* score, int windowW, int windowH);
 		void tick(float dt);
 		void togglePause(bool activate);
-
+		void toggleShowCombi();
+	
 		static Vector2 GridCoordsToPosition(int i, int j);
 		static float CellSize();
 		static float CellContentScale();

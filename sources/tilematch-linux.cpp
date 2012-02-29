@@ -1,23 +1,25 @@
+
 #include <GL/glfw.h>
-
-#include "base/Vector2.h"
-#include "systems/RenderingSystem.h"
-#include "base/TouchInputManager.h"
-#include "states/ScoreBoardStateManager.h"
-
 #include <png.h>
 #include <sstream>
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include "Game.h"
 #include <sys/time.h>
 #include <algorithm>
 
+#include "base/Vector2.h"
+#include "base/TouchInputManager.h"
+
+#include "systems/RenderingSystem.h"
+
+#include "Game.h"
+
+#include "states/ScoreBoardStateManager.h"
+
 #define DT 1/60.
 
-/*converting 1s in µs*/
-#define US 1000000
+
 
 static char* loadPng(const char* assetName, int* width, int* height);
 static char* loadTextfile(const char* assetName);
@@ -106,7 +108,6 @@ int main() {
 
 	bool running = true;
 
-	//Everything is saved into integers so that's µs not sec
 	float dtAccumuled=0, dt = 0, time = 0;
 
 	time = gettime();
@@ -137,7 +138,9 @@ int main() {
 			//pause ?
 			if (glfwGetKey( GLFW_KEY_SPACE ))
 				game.togglePause(true);
-			
+			//magic key?
+			if (glfwGetKey( GLFW_KEY_ENTER ))
+				game.toggleShowCombi();
 			dtAccumuled -= DT;
 			frames++;
 			if (time > nextfps) {

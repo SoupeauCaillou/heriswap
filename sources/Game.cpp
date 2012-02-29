@@ -116,6 +116,49 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH) {
 
 	ADD_COMPONENT(eHUD, Player);
 }
+
+void Game::toggleShowCombi() {/*
+	static bool activated;
+	//on switch le bool
+	activated = !activated;
+
+	static std::vector<Entity> combinationMark;
+	if (activated) {
+		for (int j=0;j<2;j++) {
+			std::vector<Vector2> combinaisons;
+			if (j) combinaisons = theGridSystem.LookForCombinationsOnSwitchHorizontal();
+			else combinaisons = theGridSystem.LookForCombinationsOnSwitchVertical();
+			
+			std::cout << "Combination possible : "<< combinaisons.size()<<"\r\n" ;
+			if (!combinaisons.empty())
+			{
+				for ( std::vector<Vector2>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
+				{
+					for (int i=0;i<2;i++) {
+						combinationMark.push_back(theEntityManager.CreateEntity());
+						theEntityManager.AddComponent(combinationMark.back(), &theTransformationSystem);
+						theEntityManager.AddComponent(combinationMark.back(), &theADSRSystem);
+						theEntityManager.AddComponent(combinationMark.back(), &theRenderingSystem);
+						if (j) {
+							TRANSFORM(combinationMark.back())->position = GridCoordsToPosition(it->X+i, it->Y);
+							RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark2.png");
+						} else { 
+							TRANSFORM(combinationMark.back())->position = GridCoordsToPosition(it->X, it->Y+i);
+							RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark.png");
+						}
+						TRANSFORM(combinationMark.back())->z = 5;
+						RENDERING(combinationMark.back())->size = CellSize();
+						std::cout << "nouvelle marque en " << it->X<<","<< it->Y << "\n";
+					}
+				}
+			}
+		}
+	} else {
+		std::cout << "destruction des marquages\n";
+		for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++)
+			theEntityManager.DeleteEntity(*it);
+	}*/
+}
 void Game::togglePause(bool activate) {
 
 	static GameState currentState;
@@ -157,7 +200,9 @@ void Game::tick(float dt) {
 	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin(); it!=datas->state2Manager.end(); ++it) {
 		it->second->BackgroundUpdate(dt);
 	}
-
+	if (newState == Delete)
+		toggleShowCombi();
+		
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
 	//si on est ingame, on affiche le HUD
