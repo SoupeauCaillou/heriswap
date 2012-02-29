@@ -256,6 +256,7 @@ bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 		GRID(a)->i++;
 		std::vector<Combinais> combin = LookForCombination(false,false);
 		if (combin.size()>0) return true;	
+
 		GRID(e)->i++;
 		GRID(a)->i--;
 	}
@@ -265,6 +266,7 @@ bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 		GRID(a)->j++;
 		std::vector<Combinais> combin = LookForCombination(false,false);
 		if (combin.size()>0) return true;	
+
 		GRID(e)->j++;
 		GRID(a)->j--;	
 	}	
