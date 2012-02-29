@@ -1,8 +1,14 @@
 #pragma once
 #include <vector>
+#include <iostream>
+
+#include "base/MathUtil.h"
+#include "base/EntityManager.h"
 
 #include "systems/System.h"
-#include "base/MathUtil.h"
+#include "systems/TransformationSystem.h"
+#include "systems/RenderingSystem.h"
+#include "systems/ADSRSystem.h"
 
 struct Feuille {
 	int X, Y;

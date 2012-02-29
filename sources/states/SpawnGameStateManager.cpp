@@ -1,14 +1,5 @@
 #include "SpawnGameStateManager.h"
-#include "GridSystem.h"
-#include "systems/TransformationSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/ADSRSystem.h"
-#include "systems/PlayerSystem.h"
 
-#include "base/EntityManager.h"
-#include "Game.h"
-
-#include <sstream>
 static void fillTheBlank(std::vector<Feuille>& spawning);
 static Entity createCell(Feuille& f);
 static TextureRef textureFromType(int type);

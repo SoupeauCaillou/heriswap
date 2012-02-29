@@ -1,17 +1,4 @@
 #include "UserInputGameStateManager.h"
-#include "GridSystem.h"
-#include "systems/TransformationSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/PlayerSystem.h"
-#include "systems/ButtonSystem.h"
-#include "base/TouchInputManager.h"
-#include "systems/ADSRSystem.h"
-#include "base/EntityManager.h"
-#include "Game.h"
-#include "base/Log.h"
-#ifndef ANDROID
-#include <GL/glfw.h>
-#endif
 
 static void activateADSR(Entity e, float a, float s);
 static void diffToGridCoords(const Vector2& c, int* i, int* j);

@@ -1,5 +1,4 @@
 #include "MainMenuGameStateManager.h"
-#include "Game.h"
 
 MainMenuGameStateManager::MainMenuGameStateManager() {
 

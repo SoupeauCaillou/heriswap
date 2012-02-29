@@ -1,5 +1,10 @@
+#pragma once
+
+#include "base/EntityManager.h"
+
+#include "Game.h"
 #include "GameStateManager.h"
-#include "systems/PlayerSystem.h"
+#include "PlayerSystem.h"
 
 class LevelStateManager : public GameStateManager {
 	public:

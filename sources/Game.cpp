@@ -1,17 +1,21 @@
-#include "Game.h"
+#include <sstream>
+
+#include "base/Log.h"
+#include "base/TouchInputManager.h"
+#include "base/MathUtil.h"
+#include "base/EntityManager.h"
+
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/ADSRSystem.h"
 #include "systems/TextRenderingSystem.h"
-#include "systems/PlayerSystem.h"
-#include "GridSystem.h"
 
-#include "base/Log.h"
-#include "systems/HUDManager.h"
-#include "base/TouchInputManager.h"
-#include "base/MathUtil.h"
-#include "base/EntityManager.h"
+#include "HUDManager.h"
+#include "GridSystem.h"
+#include "Game.h"
+#include "PlayerSystem.h"
+
 #include "states/GameStateManager.h"
 #include "states/SpawnGameStateManager.h"
 #include "states/UserInputGameStateManager.h"
@@ -24,7 +28,7 @@
 #include "states/LevelStateManager.h"
 #include "states/PauseStateManager.h"
 
-#include <sstream>
+
 
 #define GRIDSIZE 8
 

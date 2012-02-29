@@ -1,10 +1,4 @@
 #include "FallGameStateManager.h"
-#include "GridSystem.h"
-#include "systems/TransformationSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/ADSRSystem.h"
-#include "base/EntityManager.h"
-#include "Game.h"
 
 FallGameStateManager::FallGameStateManager() {
 

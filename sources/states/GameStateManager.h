@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 enum GameState {
 	Spawn,
 	UserInput,
@@ -13,7 +15,6 @@ enum GameState {
 	Background
 };
 
-#include <map>
 
 class GameStateManager {
 	public:

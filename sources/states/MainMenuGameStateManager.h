@@ -1,4 +1,5 @@
-#include "GameStateManager.h"
+#pragma once
+
 #include "base/EntityManager.h"
 #include "base/TouchInputManager.h"
 
@@ -6,6 +7,9 @@
 #include "systems/TextRenderingSystem.h"
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
+
+#include "Game.h"
+#include "GameStateManager.h"
 
 class MainMenuGameStateManager : public GameStateManager {
 	public:

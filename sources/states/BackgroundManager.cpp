@@ -1,11 +1,5 @@
 #include "BackgroundManager.h"
-#include "Game.h"
-#include "base/EntityManager.h"
-#include "systems/TransformationSystem.h"
-#include "systems/ADSRSystem.h"
-#include "systems/RenderingSystem.h"
 
-#include <sstream>
 
 struct BackgroundManager::Cloud {
 	Entity e;

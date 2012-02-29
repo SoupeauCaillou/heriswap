@@ -1,6 +1,5 @@
 #include "PauseStateManager.h"
 
-#include "Game.h"
 
 PauseStateManager::PauseStateManager() {
 

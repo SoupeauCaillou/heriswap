@@ -1,4 +1,10 @@
-#include "GameStateManager.h"
+#pragma once
+
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+
 #include "base/EntityManager.h"
 #include "base/TouchInputManager.h"
 
@@ -7,7 +13,9 @@
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 
-#include <vector>
+#include "Game.h"
+#include "GameStateManager.h"
+
 
 class ScoreStorage {
 	public:

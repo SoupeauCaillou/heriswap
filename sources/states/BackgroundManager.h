@@ -1,8 +1,16 @@
-#include "GameStateManager.h"
+#pragma once
+
+#include <sstream>
+
+#include "base/EntityManager.h"
 #include "base/EntityManager.h"
 
 #include "systems/TransformationSystem.h"
+#include "systems/ADSRSystem.h"
 #include "systems/RenderingSystem.h"
+
+#include "Game.h"
+#include "GameStateManager.h"
 
 class BackgroundManager : public GameStateManager {
 	public:

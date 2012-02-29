@@ -1,10 +1,5 @@
 #include "EndMenuStateManager.h"
-#include "Game.h"
-#include <sstream>
-#include <fstream>
-#include <string>
-#include "ScoreBoardStateManager.h"
-#include <algorithm>
+
 
 EndMenuStateManager::EndMenuStateManager(ScoreStorage* str): storage(str) {
 

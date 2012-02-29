@@ -1,8 +1,14 @@
-#include "GameStateManager.h"
-#include "GridSystem.h"
+#pragma once
+
+#include "base/EntityManager.h"
+
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/ADSRSystem.h"
+
+#include "GameStateManager.h"
+#include "GridSystem.h"
+#include "PlayerSystem.h"
 
 class DeleteGameStateManager : public GameStateManager {
 	public:

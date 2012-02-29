@@ -1,7 +1,5 @@
 #include "LevelStateManager.h"
 
-#include "base/EntityManager.h"
-#include "Game.h"
 
 LevelStateManager::LevelStateManager() {
 

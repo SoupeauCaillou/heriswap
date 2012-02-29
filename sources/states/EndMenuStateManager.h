@@ -1,4 +1,10 @@
-#include "GameStateManager.h"
+#pragma once
+
+#include <sstream>
+#include <fstream>
+#include <string>
+#include <algorithm>
+
 #include "base/EntityManager.h"
 #include "base/TouchInputManager.h"
 
@@ -6,7 +12,12 @@
 #include "systems/TextRenderingSystem.h"
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
-#include "systems/PlayerSystem.h"
+
+#include "ScoreBoardStateManager.h"
+#include "GameStateManager.h"
+#include "PlayerSystem.h"
+#include "Game.h"
+
 
 class ScoreStorage;
 

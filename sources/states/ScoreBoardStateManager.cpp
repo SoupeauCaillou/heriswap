@@ -1,8 +1,4 @@
 #include "ScoreBoardStateManager.h"
-#include "Game.h"
-#include <fstream>
-#include <sstream>
-#include <string>
 
 ScoreBoardStateManager::ScoreBoardStateManager(ScoreStorage* str): storage(str) {
 

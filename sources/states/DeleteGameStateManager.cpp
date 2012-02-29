@@ -1,10 +1,5 @@
 #include "DeleteGameStateManager.h"
-#include "GridSystem.h"
-#include "systems/TransformationSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/ADSRSystem.h"
-#include "systems/PlayerSystem.h"
-#include "base/EntityManager.h"
+
 
 DeleteGameStateManager::DeleteGameStateManager() {
 
