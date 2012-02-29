@@ -27,8 +27,8 @@ void FallGameStateManager::Enter() {
 		GRID(f.e)->j = f.toY;
 	}
 	// Recherche de combinaison
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(true,false);
-	std::cout << "Combinaison possible :"<< combinaisons.size()<<"\r\n" ;
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,false);
+	std::cout << "Combination possible : "<< combinaisons.size()<<"\r\n" ;
 
 	// On remet la grille comme avant
 	for (std::vector<CellFall>::iterator it=falling.begin(); it!=falling.end(); ++it)
@@ -72,12 +72,12 @@ GameState FallGameStateManager::Update(float dt) {
 			}
 		}
 		if (transition->value == 1) {
-			std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
+			std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
 			if (combinaisons.empty()) return Spawn;
 			else return Delete;
 		}
 	} else {
-		std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
+		std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
 		if (combinaisons.empty()) return Spawn;
 		else return Delete;
 	}

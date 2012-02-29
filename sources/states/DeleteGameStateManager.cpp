@@ -20,7 +20,7 @@ void DeleteGameStateManager::Setup() {
 	
 void DeleteGameStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
-	removing = theGridSystem.LookForCombinaison(true,true);
+	removing = theGridSystem.LookForCombination(true,true);
 }
 
 GameState DeleteGameStateManager::Update(float dt) {

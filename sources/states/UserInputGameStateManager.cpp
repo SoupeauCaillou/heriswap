@@ -120,7 +120,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 				GRID(e1)->checkedH = false;
 				GRID(e1)->checkedV = false;
 
-				std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
+				std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
 				if (
 				#ifndef ANDROID
 					glfwGetMouseButton(GLFW_MOUSE_BUTTON_2) != GLFW_PRESS &&

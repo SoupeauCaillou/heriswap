@@ -46,7 +46,7 @@ void SpawnGameStateManager::Enter() {
 			createCell(spawning[i]);
 		}
 		do {
-			c = theGridSystem.LookForCombinaison(false,true);
+			c = theGridSystem.LookForCombination(false,true);
 			// change type from cells in combi
 			for(int i=0; i<c.size(); i++) {
 				for(int j=0; j<c[i].points.size(); j++) {
@@ -93,7 +93,7 @@ GameState SpawnGameStateManager::Update(float dt) {
 			}
 			if (transitionCree->value == 1) {
 				spawning.clear();
-				std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
+				std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
 				if (combinaisons.empty()) {
 					if (theGridSystem.StillCombinations()) return UserInput;
 					else {
@@ -113,7 +113,7 @@ GameState SpawnGameStateManager::Update(float dt) {
 	
 			}
 		} else {
-			std::vector<Combinais> combinaisons = theGridSystem.LookForCombinaison(false,true);
+			std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
 			if (combinaisons.empty()) {
 				if (theGridSystem.StillCombinations()) return UserInput;
 				else { 
