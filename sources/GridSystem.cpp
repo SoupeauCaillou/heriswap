@@ -85,7 +85,7 @@ Combinais GridSystem::MergeVectors(Combinais c1, Combinais c2) {
 	return merged;
 }
 	
-std::vector<Combinais> GridSystem::MergeCombinaison(std::vector<Combinais> combinaisons) {
+std::vector<Combinais> GridSystem::MergeCombination(std::vector<Combinais> combinaisons) {
 	std::vector<Combinais> combinmerged;
 		
 	for ( size_t i = 0; i < combinaisons.size(); ++i ) {
@@ -104,7 +104,7 @@ std::vector<Combinais> GridSystem::MergeCombinaison(std::vector<Combinais> combi
 	return combinmerged;
 }
 
-std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked, bool useChecked) { 
+std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool useChecked) { 
 	std::vector<Combinais> combinaisons;
 
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
@@ -210,7 +210,7 @@ std::vector<Combinais> GridSystem::LookForCombinaison(bool markAsChecked, bool u
 		
 	}
 	
-	return MergeCombinaison(combinaisons);
+	return MergeCombination(combinaisons);
 }
 
 std::vector<CellFall> GridSystem::TileFall() {
@@ -250,30 +250,29 @@ void GridSystem::DoUpdate(float dt) {
 
 bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 	//test right and top
-	bool res=false;
 	Entity e = GetOnPos(i+1,j);
 	if (e) {
 		GRID(e)->i--;
 		GRID(a)->i++;
-		std::vector<Combinais> combin = LookForCombinaison(false,false);
-		if (combin.size()>0) res=true;	
+		std::vector<Combinais> combin = LookForCombination(false,false);
+		if (combin.size()>0) return true;	
 		GRID(e)->i++;
 		GRID(a)->i--;
 	}
 	e = GetOnPos(i,j+1);
-	if (!res && e) {		
+	if (e) {		
 		GRID(e)->j--;
 		GRID(a)->j++;
-		std::vector<Combinais> combin = LookForCombinaison(false,false);
-		if (combin.size()>0) res=true;	
+		std::vector<Combinais> combin = LookForCombination(false,false);
+		if (combin.size()>0) return true;	
 		GRID(e)->j++;
 		GRID(a)->j--;	
 	}	
-	return res;
+	return false;
 }
 
 bool GridSystem::StillCombinations() {
-	std::vector<Combinais> combin = LookForCombinaison(false,false);
+	std::vector<Combinais> combin = LookForCombination(false,false);
 	if (combin.size()>0) return true;
 	
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
@@ -282,4 +281,98 @@ bool GridSystem::StillCombinations() {
 		if (NewCombiOnSwitch(a,gc->i,gc->j)) return true;
 	}	
 	return false;
+}
+
+bool GridSystem::Egal(Combinais c1, Combinais c2) {
+	if (c1.points.size() != c2.points.size()) return false;
+	if (c1.type != c2.type) return false;
+	
+	bool match = false;
+	for (std::vector<Vector2>::reverse_iterator it = c1.points.rbegin(); it != c1.points.rend(); ++it) {
+		bool match = false;
+		for (std::vector<Vector2>::reverse_iterator it2 = c2.points.rbegin(); !match && it2 != c2.points.rend(); ++it2) {
+			if (it->X == it2->X && it->Y == it2->Y)
+				match = true;
+		} 
+		if (!match) return false;
+	}
+	return true;
+}
+
+bool GridSystem::EgalVec(std::vector<Combinais> v1, std::vector<Combinais> v2) {
+	if (v1.size()!=v2.size()) return false;
+	
+	for (std::vector<Combinais>::iterator it = v1.begin(); it != v1.end();) {
+		for (std::vector<Combinais>::iterator it2 = v2.begin(); it2 != v2.end();) {
+			if (Egal(*it,*it2))
+				it2 = v2.erase(it2);
+			else
+				return false;
+			it2++;
+		}
+		it++;
+	}
+	return true;
+}
+
+std::vector<Combinais> GridSystem::Diff(std::vector<Combinais> v1, std::vector<Combinais> v2) {
+	std::vector<Combinais> v;
+	for (std::vector<Combinais>::reverse_iterator it = v1.rbegin(); it != v1.rend(); ++it) {
+		bool single = true;
+		for (std::vector<Combinais>::reverse_iterator it2 = v2.rbegin(); single && it2 != v2.rend(); ++it2) {
+			if (Egal(*it,*it2)) single = false;
+		}
+		if (single)
+			v.push_back(*it);
+	}
+	return v;
+}
+
+std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchVertical() {
+	std::vector<Combinais> combinaisonsAvailable = LookForCombination(false,false), combinaisons;
+	std::vector<Vector2> combin;
+
+	for (int i=0; i<GridSize; i++) {
+		for (int j=0; j<GridSize; j++) {
+			Entity a = GetOnPos(i,j);	
+			Entity e = GetOnPos(i,j+1);
+			if (e) {		
+				GRID(e)->j--;
+				GRID(a)->j++;
+				combinaisons = LookForCombination(false,false);
+				combinaisons=Diff(combinaisons,combinaisonsAvailable);
+
+
+				if (combinaisons.size()>0)
+					combin.push_back(Vector2(i, j));
+				GRID(e)->j++;
+				GRID(a)->j--;	
+			}
+
+		}
+	}	
+	return combin;
+}
+
+std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchHorizontal() {
+	std::vector<Combinais> combinaisonsAvailable = LookForCombination(false,false), combinaisons;
+	std::vector<Vector2> combin;
+
+	for (int i=0; i<GridSize; i++) {
+		for (int j=0; j<GridSize; j++) {
+			Entity a = GetOnPos(i,j);	
+			Entity e = GetOnPos(i+1,j);
+			if (e) {
+				GRID(e)->i--;
+				GRID(a)->i++;
+				combinaisons = LookForCombination(false,false);
+				combinaisons=Diff(combinaisons,combinaisonsAvailable);
+				if (combinaisons.size()>0)
+					combin.push_back(Vector2(i, j));
+				GRID(e)->i++;
+				GRID(a)->i--;
+			}
+		}
+	}	
+	return combin;
 }
