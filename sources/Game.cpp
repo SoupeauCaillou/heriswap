@@ -122,6 +122,7 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 	//on switch le bool
 	activated = !activated;
 	if (forcedesactivate) activated = false;
+	if (datas->state != UserInput) activated = false;
 	static std::vector<Entity> combinationMark;
 	if (activated) {
 		for (int j=0;j<2;j++) {
@@ -154,9 +155,11 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 			}
 		}
 	} else {
-		std::cout << "destruction des marquages\n";
-		for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++)
-			theEntityManager.DeleteEntity(*it);
+		if (combinationMark.size() > 0) {
+			//std::cout << "destruction des marquages\n";
+			for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++)
+				theEntityManager.DeleteEntity(*it);
+		}
 	}
 }
 void Game::togglePause(bool activate) {
@@ -200,7 +203,7 @@ void Game::tick(float dt) {
 	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin(); it!=datas->state2Manager.end(); ++it) {
 		it->second->BackgroundUpdate(dt);
 	}
-	if (newState == Delete)
+	if (newState != UserInput)
 		toggleShowCombi(true);
 		
 	theADSRSystem.Update(dt);
