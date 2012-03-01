@@ -8,9 +8,7 @@
 #include <android/sensor.h>
 #include <android/log.h>
 
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "tilematch", __VA_ARGS__))
-#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "tilematch", __VA_ARGS__))
-
+#include "base/Log.h"
 #include "sac/base/Vector2.h"
 #include "../sources/Game.h"
 #include "sac/systems/RenderingSystem.h"
@@ -57,6 +55,7 @@ struct GameHolder {
 
 	JNIEnv *env;
 	jobject assetManager;
+	int openGLESVersion;
 };
 
 struct AndroidNativeTouchState : public NativeTouchState{
@@ -101,10 +100,11 @@ static float gettime(GameHolder* hld) {
  * Signature: ()J
  */
 JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_createGame
-  (JNIEnv *env, jclass, jobject asset) {
+  (JNIEnv *env, jclass, jobject asset, jint openglesVersion) {
 	GameHolder* hld = new GameHolder();
 	hld->game = new Game();
 	hld->env = env;
+	hld->openGLESVersion = openglesVersion;
 	hld->assetManager = (jobject)env->NewGlobalRef(asset);
 
 	return (jlong)hld;
@@ -122,6 +122,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	hld->height = h;
 
 	theRenderingSystem.setNativeAssetLoader(new AndroidNativeAssetLoader(hld));
+	theRenderingSystem.opengles2 = (hld->openGLESVersion == 2);
 	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
 	hld->game->init(&hld->storage, hld->width, hld->height);
 	theTouchInputManager.init(Vector2(10, 10. * hld->height / hld->width), Vector2(hld->width, hld->height));

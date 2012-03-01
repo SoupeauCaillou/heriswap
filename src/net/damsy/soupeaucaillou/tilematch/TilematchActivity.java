@@ -10,6 +10,7 @@ import android.view.WindowManager.LayoutParams;
 
 public class TilematchActivity extends Activity {
 	static public long game = 0 	;
+	static public int openGLESVersion = 2;
 	 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {

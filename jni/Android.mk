@@ -22,6 +22,8 @@ LOCAL_SRC_FILES := \
     tilematchjnilib.cpp \
 	../sources/Game.cpp \
 	../sources/GridSystem.cpp \
+   ../sources/PlayerSystem.cpp \
+   ../sources/HUDManager.cpp \
 	../sources/states/BackgroundManager.cpp \
 	../sources/states/DeleteGameStateManager.cpp \
 	../sources/states/UserInputGameStateManager.cpp \
@@ -34,7 +36,7 @@ LOCAL_SRC_FILES := \
 	../sources/states/PauseStateManager.cpp \
 
 LOCAL_STATIC_LIBRARIES := sac png
-LOCAL_LDLIBS := -lGLESv2 -lEGL -llog -landroid -lz
+LOCAL_LDLIBS := -lGLESv2 -lGLESv1_CM -lEGL -llog -landroid -lz
 
 include $(BUILD_SHARED_LIBRARY)
 
