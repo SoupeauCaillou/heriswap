@@ -10,6 +10,7 @@
 #include "systems/ButtonSystem.h"
 #include "systems/ADSRSystem.h"
 #include "systems/TextRenderingSystem.h"
+#include "systems/SoundSystem.h"
 
 #include "HUDManager.h"
 #include "GridSystem.h"
@@ -109,6 +110,8 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH) {
 	TRANSFORM(datas->background)->z = 0;
 	RENDERING(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
+	ADD_COMPONENT(datas->background, Sound);
+	SOUND(datas->background)->sound = theSoundSystem.loadSoundFile("audio/A.ogg");
 
 	datas->state2Manager[datas->state]->Enter();
 
@@ -130,7 +133,6 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 			std::vector<Vector2> combinaisons;
 			if (j) combinaisons = theGridSystem.LookForCombinationsOnSwitchHorizontal();
 			else combinaisons = theGridSystem.LookForCombinationsOnSwitchVertical();
-			
 			if (!combinaisons.empty())
 			{
 				for ( std::vector<Vector2>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
@@ -143,7 +145,7 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 						if (j) {
 							TRANSFORM(combinationMark.back())->position = GridCoordsToPosition(it->X+i, it->Y);
 							RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark2.png");
-						} else { 
+						} else {
 							TRANSFORM(combinationMark.back())->position = GridCoordsToPosition(it->X, it->Y+i);
 							RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark.png");
 						}
@@ -167,7 +169,7 @@ void Game::togglePause(bool activate) {
 
 	static GameState currentState;
 	static bool gameIsPaused = false;
-	
+
 	if (activate && !gameIsPaused) {
 		gameIsPaused = true;
 		currentState = datas->state;
@@ -206,7 +208,7 @@ void Game::tick(float dt) {
 	}
 	if (newState != UserInput)
 		toggleShowCombi(true);
-		
+
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
 	//si on est ingame, on affiche le HUD
@@ -227,7 +229,17 @@ void Game::tick(float dt) {
 		thePlayerSystem.Reset();
 	}
 
+	SoundComponent* sc = SOUND(datas->background);
+	if (sc->position >= 1) {
+		char c = MathUtil::RandomInt('H' - 'A' + 1) + 'A';
+		std::stringstream s;
+		s << "audio/" << c << ".ogg";
+		sc->sound = theSoundSystem.loadSoundFile(s.str());
+		sc->position = 0;
+	}
+
 	theTransformationSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);
 	theRenderingSystem.Update(dt);
+	theSoundSystem.Update(dt);
 }
