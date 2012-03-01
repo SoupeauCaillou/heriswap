@@ -125,12 +125,12 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 	if (datas->state != UserInput) activated = false;
 	static std::vector<Entity> combinationMark;
 	if (activated) {
+		std::cout << "Affiche magique de la triche ! \n" ;
 		for (int j=0;j<2;j++) {
 			std::vector<Vector2> combinaisons;
 			if (j) combinaisons = theGridSystem.LookForCombinationsOnSwitchHorizontal();
 			else combinaisons = theGridSystem.LookForCombinationsOnSwitchVertical();
 			
-			std::cout << "Combination possible : "<< combinaisons.size()<<"\r\n" ;
 			if (!combinaisons.empty())
 			{
 				for ( std::vector<Vector2>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
@@ -149,16 +149,17 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 						}
 						TRANSFORM(combinationMark.back())->z = 5;
 						RENDERING(combinationMark.back())->size = CellSize();
-						std::cout << "nouvelle marque en " << it->X<<","<< it->Y << "\n";
 					}
 				}
 			}
 		}
 	} else {
 		if (combinationMark.size() > 0) {
-			//std::cout << "destruction des marquages\n";
-			for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++)
+			std::cout << "Destruction des marquages et de la triche !\n";
+			for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++) {
 				theEntityManager.DeleteEntity(*it);
+			}
+			combinationMark.clear();
 		}
 	}
 }

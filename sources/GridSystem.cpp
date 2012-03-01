@@ -268,7 +268,7 @@ bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 		GRID(e)->j++;
 		GRID(a)->j--;	
 		if (combin.size()>0) return true;	
-	}	
+	}
 	return false;
 }
 
@@ -278,10 +278,8 @@ bool GridSystem::StillCombinations() {
 	if (combin.size()>0) return true;
 	
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-		Entity a = (*it).first;			
-		GridComponent* gc = (*it).second;
-		if (NewCombiOnSwitch(a,gc->i,gc->j)) return true;
-	}	
+		if (NewCombiOnSwitch(it->first,it->second->i,it->second->j)) return true;
+	}
 	return false;
 }
 

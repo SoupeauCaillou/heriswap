@@ -74,7 +74,7 @@ void SpawnGameStateManager::Enter() {
 }
 
 GameState SpawnGameStateManager::Update(float dt) {
-		
+	//si on change de niveau
 	if (thePlayerSystem.LeveledUp()) return LevelChanged;
 	else {
 		ADSRComponent* transitionCree = ADSR(eSpawn);
