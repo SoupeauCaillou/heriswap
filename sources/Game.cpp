@@ -112,6 +112,7 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH) {
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 	ADD_COMPONENT(datas->background, Sound);
 	SOUND(datas->background)->sound = theSoundSystem.loadSoundFile("audio/A.ogg");
+	SOUND(datas->background)->repeat = false;
 
 	datas->state2Manager[datas->state]->Enter();
 
@@ -230,7 +231,7 @@ void Game::tick(float dt) {
 	}
 
 	SoundComponent* sc = SOUND(datas->background);
-	if (sc->position >= 1) {
+	if (sc->sound >= InvalidSoundRef) {
 		char c = MathUtil::RandomInt('H' - 'A' + 1) + 'A';
 		std::stringstream s;
 		s << "audio/" << c << ".ogg";
