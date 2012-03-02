@@ -284,7 +284,7 @@ void GridSystem::SetCheckInCombi(std::vector<Combinais> c) {
 
 bool GridSystem::StillCombinations() {
 	//on utilise les checked pour pas recalculer toute la grille à chaque coup, apres on va juste en switch 2 à chaque fois donc les nouvelels combi
-	//peuvent etre qu'au niveau du switch. A la fin, on Reset tout le monde, quitte à devoir en tester certains inutilement ailleurs.
+	//peuvent etre qu'au niveau du switch. A la fin, on remet la grille comme au debut.
 	std::vector<Combinais> combin = LookForCombination(true,true);
 	if (combin.size()>0) {
 		SetCheckInCombi(combin);
