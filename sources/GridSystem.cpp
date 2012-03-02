@@ -255,7 +255,8 @@ bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 	if (e) {
 		GRID(e)->i--;
 		GRID(a)->i++;
-		std::vector<Combinais> combin = LookForCombination(false,false);
+		GRID(e)->checkedH = GRID(a)->checkedH = GRID(e)->checkedV = GRID(a)->checkedV = false;
+		std::vector<Combinais> combin = LookForCombination(true,true);
 		GRID(e)->i++;
 		GRID(a)->i--;
 		if (combin.size()>0) return true;	
@@ -264,7 +265,8 @@ bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 	if (e) {		
 		GRID(e)->j--;
 		GRID(a)->j++;
-		std::vector<Combinais> combin = LookForCombination(false,false);
+		GRID(e)->checkedH = GRID(a)->checkedH = GRID(e)->checkedV = GRID(a)->checkedV = false;
+		std::vector<Combinais> combin = LookForCombination(true,true);
 		GRID(e)->j++;
 		GRID(a)->j--;	
 		if (combin.size()>0) return true;	
@@ -274,12 +276,21 @@ bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 
 
 bool GridSystem::StillCombinations() {
-	std::vector<Combinais> combin = LookForCombination(false,false);
-	if (combin.size()>0) return true;
+	//on utilise les checked pour pas recalculer toute la grille à chaque coup, apres on va juste en switch 2 à chaque fois donc les nouvelels combi
+	//peuvent etre qu'au niveau du switch. A la fin, on Reset tout le monde, quitte à devoir en tester certains inutilement ailleurs.
+	std::vector<Combinais> combin = LookForCombination(true,true);
+	if (combin.size()>0) {
+		theGridSystem.ResetTest();
+		return true;
+	}
 	
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-		if (NewCombiOnSwitch(it->first,it->second->i,it->second->j)) return true;
+		if (NewCombiOnSwitch(it->first,it->second->i,it->second->j)) { 
+			theGridSystem.ResetTest();
+			return true;
+		}
 	}
+	theGridSystem.ResetTest();
 	return false;
 }
 
