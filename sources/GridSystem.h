@@ -78,6 +78,7 @@ std::vector<Vector2> LookForCombinationsOnSwitchHorizontal();
 bool StillCombinations();
 
 bool NewCombiOnSwitch(Entity a, int i, int j);
+void SetCheckInCombi(std::vector<Combinais> c);
 
 void HideAll(bool activate);
 

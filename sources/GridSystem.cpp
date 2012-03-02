@@ -274,24 +274,31 @@ bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 	return false;
 }
 
+void GridSystem::SetCheckInCombi(std::vector<Combinais> c) {
+	for (std::vector<Combinais>::reverse_iterator itc = c.rbegin(); itc != c.rend(); ++itc) {
+		for (std::vector<Vector2>::reverse_iterator it = itc->points.rbegin(); it != itc->points.rend(); ++it) {
+			GRID(GetOnPos(it->X, it->Y))->checkedV = GRID(GetOnPos(it->X,it->Y))->checkedH = false;
+		}
+	}
+}
 
 bool GridSystem::StillCombinations() {
 	//on utilise les checked pour pas recalculer toute la grille à chaque coup, apres on va juste en switch 2 à chaque fois donc les nouvelels combi
 	//peuvent etre qu'au niveau du switch. A la fin, on Reset tout le monde, quitte à devoir en tester certains inutilement ailleurs.
 	std::vector<Combinais> combin = LookForCombination(true,true);
 	if (combin.size()>0) {
-		theGridSystem.ResetTest();
+		SetCheckInCombi(combin);
 		return true;
 	}
 	
 
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
 		if (NewCombiOnSwitch(it->first,it->second->i,it->second->j)) { 
-			theGridSystem.ResetTest();
+			SetCheckInCombi(combin);
 			return true;
 		}
 	}
-	theGridSystem.ResetTest();
+	SetCheckInCombi(combin);
 	return false;
 }
 
