@@ -244,3 +244,17 @@ void Game::tick(float dt) {
 	theRenderingSystem.Update(dt);
 	theSoundSystem.Update(dt);
 }
+
+uint8_t* Game::saveState() {
+	/* save all entities/components */
+
+	/* save GameStateManager ? */
+
+	/* save System with assets ? (texture name -> texture ref map of RenderingSystem ?) */
+
+	/* save Game fields */
+}
+
+void Game::loadState(const uint8_t* state) {
+
+}
