@@ -8,6 +8,6 @@ CMakeCache.txt
 CMakeFiles
 Makefile
 cmake_install.cmake
-tilematch
+sources/tilematch
 tilematch_tests
 scores.txt
