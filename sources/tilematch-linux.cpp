@@ -18,7 +18,7 @@
 #include "states/ScoreBoardStateManager.h"
 
 #define DT 1/60.
-
+#define MAGICKEYTIME 0.1
 
 
 static char* loadPng(const char* assetName, int* width, int* height);
@@ -141,7 +141,7 @@ int main() {
 			//magic key?
 			if (glfwGetKey( GLFW_KEY_ENTER ) && timer<=0) {
 				game.toggleShowCombi(false);
-				timer = 1;
+				timer = MAGICKEYTIME;
 			}
 			timer -= DT;
 			dtAccumuled -= DT;

@@ -348,24 +348,22 @@ std::vector<Combinais> GridSystem::Diff(std::vector<Combinais> v1, std::vector<C
 }
 
 std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchVertical() {
-	std::vector<Combinais> combinaisonsAvailable = LookForCombination(false,false), combinaisons;
 	std::vector<Vector2> combin;
-
 	for (int i=0; i<GridSize; i++) {
 		for (int j=0; j<GridSize; j++) {
 			Entity a = GetOnPos(i,j);
 			Entity e = GetOnPos(i,j+1);
 			if (e) {
-				GRID(e)->j--;
-				GRID(a)->j++;
-				combinaisons = LookForCombination(false,false);
-				combinaisons=Diff(combinaisons,combinaisonsAvailable);
-
-
-				if (combinaisons.size()>0)
-					combin.push_back(Vector2(i, j));
-				GRID(e)->j++;
-				GRID(a)->j--;
+				//si on a une nouvelle combi parmi les 8 possibles (1vert,3hori chacun pour e, et pour a)
+				if ((j>=2 && GetOnPos(i,j-1) && GetOnPos(i,j-2) && GRID(e)->type == GRID(GetOnPos(i,j-1))->type &&  GRID(e)->type == GRID(GetOnPos(i,j-2))->type)
+				|| (i>1 && GetOnPos(i-1,j) && GetOnPos(i-2,j) && GRID(e)->type == GRID(GetOnPos(i-1,j))->type &&   GRID(e)->type == GRID(GetOnPos(i-2,j))->type)
+				|| (i>0 && GetOnPos(i+1,j) && GetOnPos(i-1,j) &&     GRID(e)->type == GRID(GetOnPos(i-1,j))->type &&   GRID(e)->type == GRID(GetOnPos(i+1,j))->type)
+				|| (i<GridSize-2 && GetOnPos(i+1,j) && GetOnPos(i+2,j) && GRID(e)->type == GRID(GetOnPos(i+2,j))->type &&   GRID(e)->type == GRID(GetOnPos(i+1,j))->type)
+				|| (j<GridSize-3 && GetOnPos(i,j+2) && GetOnPos(i,j+3) && GRID(a)->type == GRID(GetOnPos(i,j+2))->type &&  GRID(a)->type == GRID(GetOnPos(i,j+3))->type)
+				|| (i>1 && GetOnPos(i-1,j+1) && GetOnPos(i-2,j+1) && GRID(a)->type == GRID(GetOnPos(i-1,j+1))->type &&  GRID(a)->type == GRID(GetOnPos(i-2,j+1))->type)
+				|| (i>0 && GetOnPos(i+1,j+1) && GetOnPos(i-1,j+1) &&     GRID(a)->type == GRID(GetOnPos(i-1,j+1))->type && GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type)
+				|| (i<GridSize-2 && GetOnPos(i+1,j+1) && GetOnPos(i+2,j+1) && GRID(a)->type == GRID(GetOnPos(i+2,j+1))->type &&  GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type))
+					combin.push_back(Vector2(i, j));				
 			}
 
 		}
@@ -374,23 +372,23 @@ std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchVertical() {
 }
 
 std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchHorizontal() {
-	std::vector<Combinais> combinaisonsAvailable = LookForCombination(false,false), combinaisons;
 	std::vector<Vector2> combin;
-
 	for (int i=0; i<GridSize; i++) {
 		for (int j=0; j<GridSize; j++) {
 			Entity a = GetOnPos(i,j);
 			Entity e = GetOnPos(i+1,j);
 			if (e) {
-				GRID(e)->i--;
-				GRID(a)->i++;
-				combinaisons = LookForCombination(false,false);
-				combinaisons=Diff(combinaisons,combinaisonsAvailable);
-				if (combinaisons.size()>0)
-					combin.push_back(Vector2(i, j));
-				GRID(e)->i++;
-				GRID(a)->i--;
+				if ((i>=2 && GetOnPos(i-1,j) && GetOnPos(i-2,j) && GRID(e)->type == GRID(GetOnPos(i-1,j))->type &&  GRID(e)->type == GRID(GetOnPos(i-2,j))->type)
+				|| (j>1 && GetOnPos(i,j-1) && GetOnPos(i,j-2) && GRID(e)->type == GRID(GetOnPos(i,j-1))->type &&   GRID(e)->type == GRID(GetOnPos(i,j-2))->type)
+				|| (j>0 && GetOnPos(i,j+1) && GetOnPos(i,j-1) &&     GRID(e)->type == GRID(GetOnPos(i,j-1))->type &&   GRID(e)->type == GRID(GetOnPos(i,j+1))->type)
+				|| (j<GridSize-2 && GetOnPos(i,j+1) && GetOnPos(i,j+2) && GRID(e)->type == GRID(GetOnPos(i,j+2))->type &&   GRID(e)->type == GRID(GetOnPos(i,j+1))->type)
+				|| (i<GridSize-3 && GetOnPos(i+2,j) && GetOnPos(i+3,j) && GRID(a)->type == GRID(GetOnPos(i+2,j))->type &&  GRID(a)->type == GRID(GetOnPos(i+3,j))->type)
+				|| (j>1 && GetOnPos(i+1,j-1) && GetOnPos(i+1,j-2) && GRID(a)->type == GRID(GetOnPos(i+1,j-1))->type &&  GRID(a)->type == GRID(GetOnPos(i+1,j-2))->type)
+				|| (j>0 && GetOnPos(i+1,j+1) && GetOnPos(i+1,j-1) &&     GRID(a)->type == GRID(GetOnPos(i+1,j-1))->type && GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type)
+				|| (j<GridSize-2 && GetOnPos(i+1,j+1) && GetOnPos(i+1,j+2) && GRID(a)->type == GRID(GetOnPos(i+1,j+2))->type &&  GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type))
+					combin.push_back(Vector2(i, j));				
 			}
+
 		}
 	}
 	return combin;
