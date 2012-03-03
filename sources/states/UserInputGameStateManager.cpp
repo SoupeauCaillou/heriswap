@@ -77,6 +77,38 @@ GameState UserInputGameStateManager::Update(float dt) {
 						ADSR(eSwapper)->active = true;
 						swapI = i;
 						swapJ = j;
+											Entity a = dragged;
+							Entity e = theGridSystem.GetOnPos(originI+swapI, originJ+swapJ);
+							if (e && a) {
+								GRID(a)->i = originI + swapI;
+							GRID(a)->j = originJ + swapJ;
+							GRID(e)->i = originI;
+							GRID(e)->j = originJ;
+						}
+							std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,false);
+							if (e && a) {
+							GRID(a)->i = originI;
+							GRID(a)->j = originJ;
+							GRID(e)->i = originI+swapI;
+							GRID(e)->j =  originJ+swapJ;
+						}
+							if (!combinaisons.empty())
+							{	
+								for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
+									for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
+									{
+										combinationMark.push_back(theEntityManager.CreateEntity());
+										theEntityManager.AddComponent(combinationMark.back(), &theTransformationSystem);
+										theEntityManager.AddComponent(combinationMark.back(), &theADSRSystem);
+										theEntityManager.AddComponent(combinationMark.back(), &theRenderingSystem);
+										TRANSFORM(combinationMark.back())->position = Game::GridCoordsToPosition(itV->X, itV->Y);
+										TRANSFORM(combinationMark.back())->z = 5;
+										RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark.png");
+										RENDERING(combinationMark.back())->size = Game::CellSize();
+									}
+								}
+							}			
+
 					} else {
 						if (ADSR(eSwapper)->activationTime > 0) {
 							ADSR(eSwapper)->active = false;
@@ -94,6 +126,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 			}
 		} else {
 			std::cout << "release " << std::endl;
+			
 			// release drag
 			ADSR(theGridSystem.GetOnPos(originI,originJ))->active = false;
 			if (theGridSystem.IsValidGridPosition(originI+1, originJ))
@@ -119,7 +152,11 @@ GameState UserInputGameStateManager::Update(float dt) {
 				GRID(e1)->j = originJ + swapJ;
 				GRID(e1)->checkedH = false;
 				GRID(e1)->checkedV = false;
-
+				
+				for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++)
+					theEntityManager.DeleteEntity(*it);
+				combinationMark.clear();
+				
 				std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
 				if (
 				#ifndef ANDROID

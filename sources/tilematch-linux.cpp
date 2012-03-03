@@ -18,7 +18,7 @@
 #include "states/ScoreBoardStateManager.h"
 
 #define DT 1/60.
-#define MAGICKEYTIME 0.1
+#define MAGICKEYTIME 0.3
 
 
 static char* loadPng(const char* assetName, int* width, int* height);

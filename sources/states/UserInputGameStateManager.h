@@ -39,4 +39,5 @@ class UserInputGameStateManager : public GameStateManager {
 		Entity dragged;
 		int originI, originJ;
 		int swapI, swapJ;
+		std::vector<Entity> combinationMark;
 };

@@ -28,7 +28,7 @@ void FallGameStateManager::Enter() {
 	}
 	// Recherche de combinaison
 	std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,false);
-	std::cout << "Combination possible : "<< combinaisons.size()<<"\r\n" ;
+	std::cout << "Possible combinations : "<< combinaisons.size()<<"\r\n" ;
 
 	// On remet la grille comme avant
 	for (std::vector<CellFall>::iterator it=falling.begin(); it!=falling.end(); ++it)
@@ -89,6 +89,7 @@ void FallGameStateManager::Exit() {
 	ADSR(eFall)->active = false;
 	for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++)
 		theEntityManager.DeleteEntity(*it);
+	combinationMark.clear();
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
 
