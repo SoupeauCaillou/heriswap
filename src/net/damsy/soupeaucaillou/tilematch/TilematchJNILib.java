@@ -11,7 +11,7 @@ public class TilematchJNILib {
     }
     
     /* Create native game instance */
-    public static native long createGame(AssetManager mgr, int openGLESVersion, byte[] savedState);
+    public static native long createGame(AssetManager mgr, int openGLESVersion);
     /* Initialize game, reset graphics assets, etc... */
     public static native void init(long game, int width, int height);
     public static native void step(long game);

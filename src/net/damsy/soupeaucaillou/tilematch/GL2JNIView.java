@@ -55,15 +55,15 @@ class GL2JNIView extends GLSurfaceView {
 
     public GL2JNIView(Context context, AttributeSet set) {
         super(context, set);
-        init(false, 0, 0);
+        init(false, 0, 0, context.getAssets());
     }
 
     public GL2JNIView(Context context, boolean translucent, int depth, int stencil) {
         super(context);
-        init(translucent, depth, stencil);
+        init(translucent, depth, stencil, context.getAssets());
     }
 
-    private void init(boolean translucent, int depth, int stencil) {
+    private void init(boolean translucent, int depth, int stencil, AssetManager asset) {
 
         /* By default, GLSurfaceView() creates a RGB_565 opaque surface.
          * If we want a translucent one, we should change the surface's
@@ -86,7 +86,7 @@ class GL2JNIView extends GLSurfaceView {
                              new ConfigChooser(5, 6, 5, 0, depth, stencil) );
 
         /* Set the renderer responsible for frame rendering */
-        setRenderer(new Renderer());
+        setRenderer(new Renderer(asset));
     }
     
     private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
@@ -334,9 +334,11 @@ class GL2JNIView extends GLSurfaceView {
         private int[] mValue = new int[1];
     }
 
-    private static class Renderer implements GLSurfaceView.Renderer {    	
-    	public Renderer() {
+    private static class Renderer implements GLSurfaceView.Renderer {   
+    	AssetManager asset;
+    	public Renderer(AssetManager asset) {
     		super(); 
+    		this.asset = asset;
     	}
     	 
         public void onDrawFrame(GL10 gl) {
@@ -357,7 +359,7 @@ class GL2JNIView extends GLSurfaceView {
         }
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        	
+        	TilematchActivity.game = TilematchJNILib.createGame(asset, TilematchActivity.openGLESVersion);
         }
     }
 }
