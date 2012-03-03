@@ -176,6 +176,9 @@ GameState UserInputGameStateManager::Update(float dt) {
 			}
 		}
 	} else {
+		for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++)
+			theEntityManager.DeleteEntity(*it);
+		combinationMark.clear();
 		ADSR(eSwapper)->active = false;
 		if (dragged) ADSR(dragged)->active = false;
 	}

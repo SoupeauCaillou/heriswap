@@ -207,8 +207,14 @@ void Game::tick(float dt) {
 	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin(); it!=datas->state2Manager.end(); ++it) {
 		it->second->BackgroundUpdate(dt);
 	}
+	//si c'est pas à l'user de jouer, on cache de force les combi
 	if (newState != UserInput)
 		toggleShowCombi(true);
+	//si on est pas dans l'etat Spawn, on supprime les marqueurs de combi 
+	//if (newState != Spawn)
+		//datas->state2Manager[Spawn]->DeleteMarkers();
+
+
 
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
@@ -222,6 +228,7 @@ void Game::tick(float dt) {
 		datas->hud.Hide(true);
 		theGridSystem.HideAll(true);
 	}
+
 
 	if (newState == EndMenu) {
 		theGridSystem.DeleteAll();

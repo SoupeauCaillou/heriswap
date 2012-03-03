@@ -16,15 +16,17 @@
 
 class SpawnGameStateManager : public GameStateManager {
 	public:
-
 		SpawnGameStateManager();
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
+		void DeleteMarkers();
+		GameState NextState(bool marker);
 		void Exit();
-
+		
 	private:
 		// datas
 		Entity eSpawn, eGrid;
 		std::vector<Feuille> spawning;
+		std::vector<Entity> combinationMark;
 };

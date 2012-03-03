@@ -38,7 +38,8 @@ void SpawnGameStateManager::Setup() {
 void SpawnGameStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 
-
+	DeleteMarkers();
+	
 	std::vector<Combinais> c;
 	fillTheBlank(spawning);
 	if (spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
@@ -78,7 +79,7 @@ GameState SpawnGameStateManager::Update(float dt) {
 	if (thePlayerSystem.LeveledUp()) return LevelChanged;
 	else {
 		ADSRComponent* transitionCree = ADSR(eSpawn);
-
+		//si on doit recree des feuilles
 		if (!spawning.empty()) {
 			transitionCree->active = true;
 			for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
@@ -93,49 +94,64 @@ GameState SpawnGameStateManager::Update(float dt) {
 			}
 			if (transitionCree->value == 1) {
 				spawning.clear();
-				std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
-				if (combinaisons.empty()) {
-					if (theGridSystem.StillCombinations()) return UserInput;
-					else {
-						ADSR(eGrid)->active = true;
-						std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
-						for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
-							TRANSFORM(*it)->rotation = 3*ADSR(eGrid)->value;
-						}
-						if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
-							std::cout << "nouvelle grille !\n";
-							theGridSystem.DeleteAll();
-							fillTheBlank(spawning);
-							return Spawn;
-						}
-					}
-				} else return Delete;
-
+				return NextState(true);
 			}
+		//sinon on verifie qu'il reste des combi
 		} else {
-			std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
-			if (combinaisons.empty()) {
-				if (theGridSystem.StillCombinations()) return UserInput;
-				else {
-					ADSR(eGrid)->active = true;
-					std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
-					for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
-						TRANSFORM(*it)->rotation = 3*ADSR(eGrid)->value;
-					}
-					if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
-						std::cout << "nouvelle grille !\n";
-						theGridSystem.DeleteAll();
-						fillTheBlank(spawning);
-						return Spawn;
-					}
-				}
-			} else return Delete;
+			return NextState(false);
 		}
 		return Spawn;
 	}
 }
 
+GameState SpawnGameStateManager::NextState(bool marker) {
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
+	//si on a des combinaisons dans la grille on passe direct à Delete
+	if (!combinaisons.empty()) {
+		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
+		{
+			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
+			{
+				combinationMark.push_back(theEntityManager.CreateEntity());
+				theEntityManager.AddComponent(combinationMark.back(), &theTransformationSystem);
+				theEntityManager.AddComponent(combinationMark.back(), &theADSRSystem);
+				theEntityManager.AddComponent(combinationMark.back(), &theRenderingSystem);
+				TRANSFORM(combinationMark.back())->position = Game::GridCoordsToPosition(itV->X, itV->Y);
+				TRANSFORM(combinationMark.back())->z = 5;
+				RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark.png");
+				RENDERING(combinationMark.back())->size = Game::CellSize();
+			}
+		}	
+		
+		return Delete;
+	//sinon
+	} else {
+		//si y a des combi, c'est au player de player
+		if (theGridSystem.StillCombinations()) return UserInput;
+		//sinon on genere une nouvelle grille
+		else {
+			ADSR(eGrid)->active = true;
+			std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
+			for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
+				TRANSFORM(*it)->rotation = 3*ADSR(eGrid)->value;
+			}
+			if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
+				std::cout << "nouvelle grille !\n";
+				theGridSystem.DeleteAll();
+				fillTheBlank(spawning);
+			}
+		}
+	}
+	return Spawn;
+}
+
+void SpawnGameStateManager::DeleteMarkers() {
+	for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++)
+	theEntityManager.DeleteEntity(*it);
+	combinationMark.clear();
+}
 void SpawnGameStateManager::Exit() {
+
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
 
