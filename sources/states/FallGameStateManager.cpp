@@ -44,14 +44,7 @@ void FallGameStateManager::Enter() {
 		{
 			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
 			{
-				combinationMark.push_back(theEntityManager.CreateEntity());
-				theEntityManager.AddComponent(combinationMark.back(), &theTransformationSystem);
-				theEntityManager.AddComponent(combinationMark.back(), &theADSRSystem);
-				theEntityManager.AddComponent(combinationMark.back(), &theRenderingSystem);
-				TRANSFORM(combinationMark.back())->position = Game::GridCoordsToPosition(itV->X, itV->Y);
-				TRANSFORM(combinationMark.back())->z = 5;
-				RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark.png");
-				RENDERING(combinationMark.back())->size = Game::CellSize();
+				theCombinationMarkSystem.NewMarks(2, *itV);
 			}
 		}
 	}
@@ -87,9 +80,8 @@ GameState FallGameStateManager::Update(float dt) {
 void FallGameStateManager::Exit() {
 	falling.clear();
 	ADSR(eFall)->active = false;
-	for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++)
-		theEntityManager.DeleteEntity(*it);
-	combinationMark.clear();
+	theCombinationMarkSystem.DeleteMarks(2);
+
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
 

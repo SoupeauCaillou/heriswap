@@ -42,6 +42,7 @@ GameState DeleteGameStateManager::Update(float dt) {
 			}		
 		}
 		if (transitionSuppr->value  == transitionSuppr->sustainValue) {
+			theCombinationMarkSystem.DeleteMarks(3);
 			return Fall;
 		}
 	} else {

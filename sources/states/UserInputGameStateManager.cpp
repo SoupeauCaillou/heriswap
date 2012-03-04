@@ -97,14 +97,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 								for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
 									for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
 									{
-										combinationMark.push_back(theEntityManager.CreateEntity());
-										theEntityManager.AddComponent(combinationMark.back(), &theTransformationSystem);
-										theEntityManager.AddComponent(combinationMark.back(), &theADSRSystem);
-										theEntityManager.AddComponent(combinationMark.back(), &theRenderingSystem);
-										TRANSFORM(combinationMark.back())->position = Game::GridCoordsToPosition(itV->X, itV->Y);
-										TRANSFORM(combinationMark.back())->z = 5;
-										RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark.png");
-										RENDERING(combinationMark.back())->size = Game::CellSize();
+										theCombinationMarkSystem.NewMarks(1, *itV);
 									}
 								}
 							}			
@@ -153,9 +146,8 @@ GameState UserInputGameStateManager::Update(float dt) {
 				GRID(e1)->checkedH = false;
 				GRID(e1)->checkedV = false;
 				
-				for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++)
-					theEntityManager.DeleteEntity(*it);
-				combinationMark.clear();
+				theCombinationMarkSystem.DeleteMarks(1);
+
 				
 				std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
 				if (
@@ -176,9 +168,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 			}
 		}
 	} else {
-		for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++)
-			theEntityManager.DeleteEntity(*it);
-		combinationMark.clear();
+		theCombinationMarkSystem.DeleteMarks(1);
 		ADSR(eSwapper)->active = false;
 		if (dragged) ADSR(dragged)->active = false;
 	}

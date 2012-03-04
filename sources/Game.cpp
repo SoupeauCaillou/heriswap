@@ -16,6 +16,7 @@
 #include "GridSystem.h"
 #include "Game.h"
 #include "PlayerSystem.h"
+#include "CombinationMarkSystem.h"
 
 #include "states/GameStateManager.h"
 #include "states/SpawnGameStateManager.h"
@@ -148,7 +149,7 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 							RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark2.png");
 						} else {
 							TRANSFORM(combinationMark.back())->position = GridCoordsToPosition(it->X, it->Y+i);
-							RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark.png");
+							RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark1.png");
 						}
 						TRANSFORM(combinationMark.back())->z = 5;
 						RENDERING(combinationMark.back())->size = CellSize();
@@ -210,9 +211,6 @@ void Game::tick(float dt) {
 	//si c'est pas à l'user de jouer, on cache de force les combi
 	if (newState != UserInput)
 		toggleShowCombi(true);
-	//si on est pas dans l'etat Spawn, on supprime les marqueurs de combi 
-	//if (newState != Spawn)
-		//datas->state2Manager[Spawn]->DeleteMarkers();
 
 
 
@@ -245,7 +243,7 @@ void Game::tick(float dt) {
 		sc->sound = theSoundSystem.loadSoundFile(s.str());
 		sc->position = 0;
 	}
-
+	theCombinationMarkSystem.Update(dt);
 	theTransformationSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);
 	theRenderingSystem.Update(dt);

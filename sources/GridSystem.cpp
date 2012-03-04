@@ -244,6 +244,7 @@ std::vector<CellFall> GridSystem::TileFall() {
 	}
 	return result;
 }
+
 void GridSystem::DoUpdate(float dt) {
 
 }
@@ -290,8 +291,6 @@ bool GridSystem::StillCombinations() {
 		SetCheckInCombi(combin);
 		return true;
 	}
-	
-
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
 		if (NewCombiOnSwitch(it->first,it->second->i,it->second->j)) { 
 			SetCheckInCombi(combin);
@@ -302,50 +301,7 @@ bool GridSystem::StillCombinations() {
 	return false;
 }
 
-bool GridSystem::Egal(Combinais c1, Combinais c2) {
-	if (c1.points.size() != c2.points.size()) return false;
-	if (c1.type != c2.type) return false;
 
-	bool match = false;
-	for (std::vector<Vector2>::reverse_iterator it = c1.points.rbegin(); it != c1.points.rend(); ++it) {
-		bool match = false;
-		for (std::vector<Vector2>::reverse_iterator it2 = c2.points.rbegin(); !match && it2 != c2.points.rend(); ++it2) {
-			if (it->X == it2->X && it->Y == it2->Y)
-				match = true;
-		}
-		if (!match) return false;
-	}
-	return true;
-}
-
-bool GridSystem::EgalVec(std::vector<Combinais> v1, std::vector<Combinais> v2) {
-	if (v1.size()!=v2.size()) return false;
-
-	for (std::vector<Combinais>::iterator it = v1.begin(); it != v1.end();) {
-		for (std::vector<Combinais>::iterator it2 = v2.begin(); it2 != v2.end();) {
-			if (Egal(*it,*it2))
-				it2 = v2.erase(it2);
-			else
-				return false;
-			it2++;
-		}
-		it++;
-	}
-	return true;
-}
-
-std::vector<Combinais> GridSystem::Diff(std::vector<Combinais> v1, std::vector<Combinais> v2) {
-	std::vector<Combinais> v;
-	for (std::vector<Combinais>::reverse_iterator it = v1.rbegin(); it != v1.rend(); ++it) {
-		bool single = true;
-		for (std::vector<Combinais>::reverse_iterator it2 = v2.rbegin(); single && it2 != v2.rend(); ++it2) {
-			if (Egal(*it,*it2)) single = false;
-		}
-		if (single)
-			v.push_back(*it);
-	}
-	return v;
-}
 
 std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchVertical() {
 	std::vector<Vector2> combin;
@@ -393,3 +349,52 @@ std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchHorizontal() {
 	}
 	return combin;
 }
+
+/* a priori tout ca ne sert a rien, mais on sait jamais ... */
+
+/*
+bool GridSystem::Egal(Combinais c1, Combinais c2) {
+	if (c1.points.size() != c2.points.size()) return false;
+	if (c1.type != c2.type) return false;
+
+	bool match = false;
+	for (std::vector<Vector2>::reverse_iterator it = c1.points.rbegin(); it != c1.points.rend(); ++it) {
+		bool match = false;
+		for (std::vector<Vector2>::reverse_iterator it2 = c2.points.rbegin(); !match && it2 != c2.points.rend(); ++it2) {
+			if (it->X == it2->X && it->Y == it2->Y)
+				match = true;
+		}
+		if (!match) return false;
+	}
+	return true;
+}
+
+bool GridSystem::EgalVec(std::vector<Combinais> v1, std::vector<Combinais> v2) {
+	if (v1.size()!=v2.size()) return false;
+
+	for (std::vector<Combinais>::iterator it = v1.begin(); it != v1.end();) {
+		for (std::vector<Combinais>::iterator it2 = v2.begin(); it2 != v2.end();) {
+			if (Egal(*it,*it2))
+				it2 = v2.erase(it2);
+			else
+				return false;
+			it2++;
+		}
+		it++;
+	}
+	return true;
+}
+
+std::vector<Combinais> GridSystem::Diff(std::vector<Combinais> v1, std::vector<Combinais> v2) {
+	std::vector<Combinais> v;
+	for (std::vector<Combinais>::reverse_iterator it = v1.rbegin(); it != v1.rend(); ++it) {
+		bool single = true;
+		for (std::vector<Combinais>::reverse_iterator it2 = v2.rbegin(); single && it2 != v2.rend(); ++it2) {
+			if (Egal(*it,*it2)) single = false;
+		}
+		if (single)
+			v.push_back(*it);
+	}
+	return v;
+}
+*/

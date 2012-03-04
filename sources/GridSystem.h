@@ -72,27 +72,40 @@ Combinais MergeVectors(Combinais c1, Combinais c2);
 /* Leaves fall if nothing below them */
 std::vector<CellFall> TileFall();
 
+/* Returns points (x,y) which generate new Combi */
 std::vector<Vector2> LookForCombinationsOnSwitchVertical();
 std::vector<Vector2> LookForCombinationsOnSwitchHorizontal();
 
+/* return true if there is still at least 1 combi by switching 2 entites */
 bool StillCombinations();
 
+/* return true if a in (i,j) generates a new combination */
 bool NewCombiOnSwitch(Entity a, int i, int j);
+
+/* Reset checkH and checkV to true for entities in c */
 void SetCheckInCombi(std::vector<Combinais> c);
 
+/* Hide the grid's entities (pause state) */
 void HideAll(bool activate);
 
 bool IsValidGridPosition(int i, int j) {
 	return (i>=0 && j>=0 && i<GridSize && j<GridSize);
 }
 
+/* Clean the Grid from entities */
 void DeleteAll();
 
-bool EgalVec(std::vector<Combinais> v1, std::vector<Combinais> v2);
+/* Ces Fonctions ne servent plus en l'etat ... mais elles sont tjs en commentaire au cas où*/
+///* Return true if v1 = v2 */
+//bool EgalVec(std::vector<Combinais> v1, std::vector<Combinais> v2);
 
-bool Egal(Combinais c1, Combinais c2);
+///* Return true if c1 = c2 */
+//bool Egal(Combinais c1, Combinais c2);
 
-std::vector<Combinais> Diff(std::vector<Combinais> v1, std::vector<Combinais> v2);
+///*Return all the elements who are in v1 and not in v2 */
+//std::vector<Combinais> Diff(std::vector<Combinais> v1, std::vector<Combinais> v2);
+
+
 
 void print();
 

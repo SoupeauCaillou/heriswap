@@ -12,7 +12,7 @@
 #include "Game.h"
 #include "GameStateManager.h"
 #include "GridSystem.h"
-
+#include "CombinationMarkSystem.h"
 
 class SpawnGameStateManager : public GameStateManager {
 	public:
@@ -20,7 +20,6 @@ class SpawnGameStateManager : public GameStateManager {
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
-		void DeleteMarkers();
 		GameState NextState(bool marker);
 		void Exit();
 		
@@ -28,5 +27,4 @@ class SpawnGameStateManager : public GameStateManager {
 		// datas
 		Entity eSpawn, eGrid;
 		std::vector<Feuille> spawning;
-		std::vector<Entity> combinationMark;
 };

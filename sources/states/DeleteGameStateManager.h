@@ -9,6 +9,7 @@
 #include "GameStateManager.h"
 #include "GridSystem.h"
 #include "PlayerSystem.h"
+#include "CombinationMarkSystem.h"
 
 class DeleteGameStateManager : public GameStateManager {
 	public:

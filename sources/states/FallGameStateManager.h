@@ -9,6 +9,7 @@
 #include "Game.h"
 #include "GameStateManager.h"
 #include "GridSystem.h"
+#include "CombinationMarkSystem.h"
 
 class FallGameStateManager : public GameStateManager {
 	public:
@@ -23,5 +24,4 @@ class FallGameStateManager : public GameStateManager {
 		// datas
 		Entity eFall;
 		std::vector<CellFall> falling;
-		std::vector<Entity> combinationMark;
 };
