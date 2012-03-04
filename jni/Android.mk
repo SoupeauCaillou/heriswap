@@ -24,6 +24,7 @@ LOCAL_SRC_FILES := \
 	../sources/GridSystem.cpp \
    ../sources/PlayerSystem.cpp \
    ../sources/HUDManager.cpp \
+   ../sources/CombinationMarkSystem.cpp \
 	../sources/states/BackgroundManager.cpp \
 	../sources/states/DeleteGameStateManager.cpp \
 	../sources/states/UserInputGameStateManager.cpp \
