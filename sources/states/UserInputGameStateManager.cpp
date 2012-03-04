@@ -32,6 +32,8 @@ GameState UserInputGameStateManager::Update(float dt) {
 		theTouchInputManager.isTouched()) {
 		// don't start new drag while the previous one isn't finished
 		if (!dragged) {
+							theCombinationMarkSystem.DeleteMarks(3);
+
 			// start drag: find nearest cell
 			const Vector2& pos = theTouchInputManager.getTouchLastPosition();
 			int i, j;
@@ -62,6 +64,8 @@ GameState UserInputGameStateManager::Update(float dt) {
 			}
 		}
 	} else if (theTouchInputManager.wasTouched() && dragged && ADSR(dragged)->active) {
+		//si on a bouge on supprime les marques
+		theCombinationMarkSystem.DeleteMarks(1);
 		if (theTouchInputManager.isTouched()) {
 			// continue drag
 			Vector2 diff = theTouchInputManager.getTouchLastPosition()
@@ -77,30 +81,30 @@ GameState UserInputGameStateManager::Update(float dt) {
 						ADSR(eSwapper)->active = true;
 						swapI = i;
 						swapJ = j;
-											Entity a = dragged;
-							Entity e = theGridSystem.GetOnPos(originI+swapI, originJ+swapJ);
-							if (e && a) {
-								GRID(a)->i = originI + swapI;
+					
+						Entity a = dragged, e = theGridSystem.GetOnPos(originI+swapI, originJ+swapJ);
+						if (e && a) {
+							GRID(a)->i = originI + swapI;
 							GRID(a)->j = originJ + swapJ;
 							GRID(e)->i = originI;
 							GRID(e)->j = originJ;
 						}
-							std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,false);
-							if (e && a) {
+						std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,false);
+						if (e && a) {
 							GRID(a)->i = originI;
 							GRID(a)->j = originJ;
 							GRID(e)->i = originI+swapI;
 							GRID(e)->j =  originJ+swapJ;
 						}
-							if (!combinaisons.empty())
-							{	
-								for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
-									for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
-									{
-										theCombinationMarkSystem.NewMarks(1, *itV);
-									}
+						if (!combinaisons.empty())
+						{	
+							for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
+								for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
+								{
+									theCombinationMarkSystem.NewMarks(1, *itV);
 								}
-							}			
+							}
+						}			
 
 					} else {
 						if (ADSR(eSwapper)->activationTime > 0) {
@@ -151,15 +155,16 @@ GameState UserInputGameStateManager::Update(float dt) {
 				
 				std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
 				if (
-				#ifndef ANDROID
-					glfwGetMouseButton(GLFW_MOUSE_BUTTON_2) != GLFW_PRESS &&
-				#endif
-					combinaisons.empty()) {
+			#ifndef ANDROID
+				glfwGetMouseButton(GLFW_MOUSE_BUTTON_2) != GLFW_PRESS &&
+			#endif
+				combinaisons.empty()) {
 					// revert swap
 					GRID(e1)->i = originI;
 					GRID(e1)->j = originJ;
 					GRID(e2)->i = originI + swapI;
 					GRID(e2)->j = originJ + swapJ;
+
 					return UserInput;
 				} else {
 					originI = originJ = -1;
