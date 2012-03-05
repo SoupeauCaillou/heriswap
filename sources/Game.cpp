@@ -37,7 +37,8 @@
 class Game::Data {
 	public:
 		Data(ScoreStorage* storage) {
-			hud.Setup();
+			hud = new HUDManager;
+			hud->Setup();
 
 			state = MainMenu;
 
@@ -62,11 +63,11 @@ class Game::Data {
 			}
 			time = TIMELIMIT;
 		}
-		GameState state;
+		GameState state, stateBeforePause;
 		Entity background, sky;
 		float time;
 		// drag/drop
-		HUDManager hud;
+		HUDManager* hud;
 		std::map<GameState, GameStateManager*> state2Manager;
 };
 
@@ -168,20 +169,18 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 	}
 }
 void Game::togglePause(bool activate) {
-
-	static GameState currentState;
 	static bool gameIsPaused = false;
 
 	if (activate && !gameIsPaused) {
 		gameIsPaused = true;
-		currentState = datas->state;
+		datas->stateBeforePause = datas->state;
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = Pause;
 		datas->state2Manager[datas->state]->Enter();
 	} else if (!activate) {
 		gameIsPaused = false;
 		datas->state2Manager[datas->state]->Exit();
-		datas->state = currentState;
+		datas->state = datas->stateBeforePause;
 		datas->state2Manager[datas->state]->Enter();
 	}
 }
@@ -218,12 +217,12 @@ void Game::tick(float dt) {
 	theButtonSystem.Update(dt);
 	//si on est ingame, on affiche le HUD
 	if (newState != MainMenu && newState != ScoreBoard && newState != EndMenu && newState != Pause) {
-		datas->hud.Hide(false);
-		datas->hud.Update(dt);
+		datas->hud->Hide(false);
+		datas->hud->Update(dt);
 		thePlayerSystem.Update(dt);
 		theGridSystem.HideAll(false);
 	} else {
-		datas->hud.Hide(true);
+		datas->hud->Hide(true);
 		theGridSystem.HideAll(true);
 	}
 
@@ -250,16 +249,53 @@ void Game::tick(float dt) {
 	theSoundSystem.Update(dt);
 }
 
-uint8_t* Game::saveState() {
-	/* save all entities/components */
+int Game::saveState(uint8_t** out) {
+	/* delete game managers */
+	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin(); it!=datas->state2Manager.end(); ++it) {
+		delete (*it).second;
+	}
+	datas->state2Manager.clear();
+	delete datas->hud;
 
-	/* save GameStateManager ? */
+	/* delte local entities */
+	theEntityManager.DeleteEntity(datas->background);
+	theEntityManager.DeleteEntity(datas->sky);
+
+	/* save all entities/components */
+	uint8_t* entities = 0;
+	int eSize = theEntityManager.serialize(&entities);
 
 	/* save System with assets ? (texture name -> texture ref map of RenderingSystem ?) */
+	uint8_t* systems = 0;
+	int sSize = theRenderingSystem.saveInternalState(&systems);
 
 	/* save Game fields */
+	int finalSize = sizeof(datas->stateBeforePause) + sizeof(eSize) + sizeof(sSize) + eSize + sSize;
+	*out = new uint8_t[finalSize];
+	uint8_t* ptr = *out;
+	ptr = (uint8_t*)mempcpy(ptr, &datas->stateBeforePause, sizeof(datas->stateBeforePause));
+	ptr = (uint8_t*)mempcpy(ptr, &eSize, sizeof(eSize));
+	ptr = (uint8_t*)mempcpy(ptr, &sSize, sizeof(sSize));
+	ptr = (uint8_t*)mempcpy(ptr, entities, eSize);
+	ptr = (uint8_t*)mempcpy(ptr, systems, sSize);
+
+	std::cout << sizeof(datas->stateBeforePause) << " + " << sizeof(eSize) << " + " << sizeof(sSize) << " + " << eSize << " + " << sSize << " -> " << finalSize << std::endl;
+	return finalSize;
 }
 
-void Game::loadState(const uint8_t* state) {
-
+void Game::loadState(const uint8_t* in, int size) {
+	/* restore Game fields */
+	int index = 0;
+	memcpy(&datas->stateBeforePause, &in[index], sizeof(datas->stateBeforePause));
+	in += sizeof(datas->stateBeforePause);
+	int eSize, sSize;
+	memcpy(&eSize, &in[index], sizeof(eSize));
+	index += sizeof(eSize);
+	memcpy(&sSize, &in[index], sizeof(sSize));
+	index += sizeof(sSize);
+	/* restore entities */
+	theEntityManager.deserialize(&in[index], eSize);
+	index += eSize;
+	/* restore systems */
+	theRenderingSystem.restoreInternalState(&in[index], sSize);
 }

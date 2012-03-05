@@ -91,7 +91,7 @@ float gettime() {
 	}
 };
 
-int main() {
+int main(int argc, char** argv) {
 	if (!glfwInit())
 		return 1;
 
@@ -105,6 +105,21 @@ int main() {
 	Game game;
 	game.init(new FileScoreStorage(), 420, 700);
 	theTouchInputManager.init(Vector2(10, 10. * 700. / 400.), Vector2(420, 700));
+
+	if (argc > 1 && !strcmp(argv[1], "-restore")) {
+		FILE* file = fopen("dump.bin", "r+b");
+		if (file) {
+			std::cout << "Restoring game state from file" << std::endl;
+			fseek(file, 0, SEEK_END);
+			int size = ftell(file);
+			fseek(file, 0, SEEK_SET);
+			uint8_t* state = new uint8_t[size];
+			fread(state, size, 1, file);
+			fclose(file);
+			game.togglePause(true);
+			game.loadState(state, size);
+		}
+	}
 
 	bool running = true;
 	float timer = 0;
@@ -142,6 +157,16 @@ int main() {
 			if (glfwGetKey( GLFW_KEY_ENTER ) && timer<=0) {
 				game.toggleShowCombi(false);
 				timer = MAGICKEYTIME;
+			}
+			if (glfwGetKey( GLFW_KEY_LSHIFT)) {
+				game.togglePause(true);
+				uint8_t* state;
+				int size = game.saveState(&state);
+				FILE* file = fopen("dump.bin", "w+b");
+				fwrite(state, size, 1, file);
+				fclose(file);
+				running = false;
+				break;
 			}
 			timer -= DT;
 			dtAccumuled -= DT;

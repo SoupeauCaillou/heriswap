@@ -14,15 +14,16 @@
 
 class HUDManager {
 	public:
-			
+		~HUDManager();
+
 		void Setup();
-		
+
 		void Update(float dt);
-		
+
 		void ScoreCalc(int nb);
 
 		void Hide(bool toHide);
-		
+
 	private:
 		class HUDManagerData;
 		HUDManagerData* datas;
