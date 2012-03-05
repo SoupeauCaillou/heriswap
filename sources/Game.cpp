@@ -257,6 +257,12 @@ int Game::saveState(uint8_t** out) {
 	datas->state2Manager.clear();
 	delete datas->hud;
 
+	/* special case... */
+	std::vector<Entity> marks = theCombinationMarkSystem.RetrieveAllEntityWithComponent();
+	for (int i=0; i<marks.size(); i++) {
+		theEntityManager.DeleteEntity(marks[i]);
+	}
+
 	/* delte local entities */
 	theEntityManager.DeleteEntity(datas->background);
 	theEntityManager.DeleteEntity(datas->sky);
