@@ -14,6 +14,7 @@
 class MainMenuGameStateManager : public GameStateManager {
 	public:
 		MainMenuGameStateManager();
+		~MainMenuGameStateManager();
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
@@ -21,4 +22,3 @@ class MainMenuGameStateManager : public GameStateManager {
 	private:
 		Entity start, score, eScore, eStart;
 };
-

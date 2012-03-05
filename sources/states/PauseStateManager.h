@@ -13,6 +13,7 @@ class PauseStateManager : public GameStateManager {
 	public:
 
 	PauseStateManager();
+	~PauseStateManager();
 	void Setup();
 	void Enter();
 	GameState Update(float dt);
@@ -20,7 +21,5 @@ class PauseStateManager : public GameStateManager {
 
 	private:
 		Entity eRestart;
-	
+
 };
-
-

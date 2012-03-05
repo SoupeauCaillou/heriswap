@@ -4,10 +4,17 @@ MainMenuGameStateManager::MainMenuGameStateManager() {
 
 }
 
+MainMenuGameStateManager::~MainMenuGameStateManager() {
+	theEntityManager.DeleteEntity(start);
+	theEntityManager.DeleteEntity(score);
+	theEntityManager.DeleteEntity(eScore);
+	theEntityManager.DeleteEntity(eStart);
+}
+
 void MainMenuGameStateManager::Setup() {
 	start = theEntityManager.CreateEntity();
 	score = theEntityManager.CreateEntity();
-	
+
 	ADD_COMPONENT(start, Transformation);
 	ADD_COMPONENT(start, Rendering);
 	ADD_COMPONENT(start, Button);
@@ -19,21 +26,21 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(score, Transformation);
 	ADD_COMPONENT(score, Rendering);
 	ADD_COMPONENT(score, Button);
-	
+
 	BUTTON(score)->clicked = false;
 	RENDERING(score)->texture = theRenderingSystem.loadTextureFile("2.png");
-	RENDERING(score)->size = Game::CellSize() * Game::CellContentScale();	
-	
+	RENDERING(score)->size = Game::CellSize() * Game::CellContentScale();
+
 	eStart = theTextRenderingSystem.CreateLocalEntity(5);
 	eScore = theTextRenderingSystem.CreateLocalEntity(6);
-	
+
 	TRANSFORM(start)->position = Vector2(0,3);
 	TRANSFORM(eStart)->position = TRANSFORM(start)->position + Vector2(3.5, 0);
-	
+
 	TRANSFORM(score)->position = Vector2(0,1);
 	TRANSFORM(eScore)->position = TRANSFORM(score)->position + Vector2(3.5, 0);
 }
-	
+
 
 
 
@@ -46,7 +53,7 @@ void MainMenuGameStateManager::Enter() {
 	TEXT_RENDERING(eScore)->hide = false;
 	RENDERING(start)->hide = false;
 	RENDERING(score)->hide = false;
-	
+
 	BUTTON(score)->clicked = false;
 	BUTTON(start)->clicked = false;
 
@@ -58,12 +65,12 @@ GameState MainMenuGameStateManager::Update(float dt) {
 	} else if (BUTTON(score)->clicked) {
 		return ScoreBoard;
 	}
-	
+
 	TRANSFORM(start)->rotation += dt;
 	TRANSFORM(score)->rotation -= dt;
 	return MainMenu;
 }
-	
+
 void MainMenuGameStateManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	TEXT_RENDERING(eStart)->hide = true;

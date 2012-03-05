@@ -5,9 +5,13 @@ DeleteGameStateManager::DeleteGameStateManager() {
 
 }
 
+DeleteGameStateManager::~DeleteGameStateManager() {
+	theEntityManager.DeleteEntity(eRemove);
+}
+
 void DeleteGameStateManager::Setup() {
 	eRemove = theEntityManager.CreateEntity();
-	
+
 	ADD_COMPONENT(eRemove, ADSR);
 
 	ADSR(eRemove)->idleValue = 0;
@@ -15,9 +19,9 @@ void DeleteGameStateManager::Setup() {
 	ADSR(eRemove)->attackTiming = 0.2;
 	ADSR(eRemove)->decayTiming = 0.2;
 	ADSR(eRemove)->sustainValue = 1.0;
-	ADSR(eRemove)->releaseTiming = 0; 
+	ADSR(eRemove)->releaseTiming = 0;
 }
-	
+
 void DeleteGameStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	removing = theGridSystem.LookForCombination(true,true);
@@ -28,7 +32,7 @@ GameState DeleteGameStateManager::Update(float dt) {
 	if (!removing.empty()) {
 		transitionSuppr->active = true;
 		for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
-			if (transitionSuppr->value == transitionSuppr->sustainValue) 
+			if (transitionSuppr->value == transitionSuppr->sustainValue)
 				thePlayerSystem.ScoreCalc(it->points.size(), it->type);
 			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
 				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
@@ -39,7 +43,7 @@ GameState DeleteGameStateManager::Update(float dt) {
 						theEntityManager.DeleteEntity(e);
 					}
 				}
-			}		
+			}
 		}
 		if (transitionSuppr->value  == transitionSuppr->sustainValue) {
 			theCombinationMarkSystem.DeleteMarks(3);
@@ -50,10 +54,9 @@ GameState DeleteGameStateManager::Update(float dt) {
 	}
 	return Delete;
 }
-	
+
 void DeleteGameStateManager::Exit() {
 	ADSR(eRemove)->active = false;
 	removing.clear();
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
-

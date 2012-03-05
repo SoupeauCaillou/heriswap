@@ -5,9 +5,15 @@ EndMenuStateManager::EndMenuStateManager(ScoreStorage* str): storage(str) {
 
 }
 
+EndMenuStateManager::~EndMenuStateManager() {
+	theEntityManager.DeleteEntity(startbtn);
+	theEntityManager.DeleteEntity(eScore);
+	theEntityManager.DeleteEntity(eMsg);
+}
+
 void EndMenuStateManager::Setup() {
 	startbtn = theEntityManager.CreateEntity();
-	
+
 	ADD_COMPONENT(startbtn, Transformation);
 	ADD_COMPONENT(startbtn, Rendering);
 	ADD_COMPONENT(startbtn, Button);
@@ -17,10 +23,10 @@ void EndMenuStateManager::Setup() {
 	RENDERING(startbtn)->size = Game::CellSize() * Game::CellContentScale();
 	BUTTON(startbtn)->clicked = false;
 	TRANSFORM(startbtn)->position = Vector2(0,3);
-	
+
 	eScore = theTextRenderingSystem.CreateLocalEntity(5);
 	TRANSFORM(eScore)->position = Vector2(1, 6);
-	
+
 	eMsg = theTextRenderingSystem.CreateLocalEntity(28);
 	TRANSFORM(eMsg)->position = Vector2(-4, 1);
 	TEXT_RENDERING(eMsg)->charSize = 0.3;
@@ -31,10 +37,10 @@ void EndMenuStateManager::Setup() {
 
 void EndMenuStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
-		
-	RENDERING(startbtn)->hide = false;	
+
+	RENDERING(startbtn)->hide = false;
 	BUTTON(startbtn)->clicked = false;
-	
+
 	TEXT_RENDERING(eMsg)->hide = false;
 
 	std::vector<ScoreStorage::ScoreEntry> entries = storage->loadFromStorage();
@@ -46,14 +52,14 @@ void EndMenuStateManager::Enter() {
 	if (entries.size() > 10) {
 		entries.resize(10);
 	}
-	storage->saveToStorage(entries);	
+	storage->saveToStorage(entries);
 
 	{
 	std::stringstream a;
 	a.precision(0);
 	a << std::fixed << thePlayerSystem.GetScore();
-	TEXT_RENDERING(eScore)->text = a.str();	
-	TEXT_RENDERING(eScore)->hide = false;	
+	TEXT_RENDERING(eScore)->text = a.str();
+	TEXT_RENDERING(eScore)->hide = false;
 	}
 	#if 0
 	{
@@ -65,11 +71,11 @@ void EndMenuStateManager::Enter() {
 	} else {
 		a << std::fixed << "Noob. T'es meme pas 10eme";
 	}
-	TEXT_RENDERING(eMsg)->text = a.str();	
-	TEXT_RENDERING(eMsg)->hide = false;	
+	TEXT_RENDERING(eMsg)->text = a.str();
+	TEXT_RENDERING(eMsg)->hide = false;
 	}
 	#endif
-	
+
 }
 
 GameState EndMenuStateManager::Update(float dt) {
@@ -77,13 +83,12 @@ GameState EndMenuStateManager::Update(float dt) {
 		return MainMenu;
 	return EndMenu;
 }
-	
+
 void EndMenuStateManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	TEXT_RENDERING(eMsg)->hide = true;
-	RENDERING(startbtn)->hide = true;	
+	RENDERING(startbtn)->hide = true;
 	BUTTON(startbtn)->clicked = true;
-	TEXT_RENDERING(eScore)->hide = true;	
+	TEXT_RENDERING(eScore)->hide = true;
 
 }
-

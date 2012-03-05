@@ -4,6 +4,10 @@ FallGameStateManager::FallGameStateManager() {
 
 }
 
+FallGameStateManager::~FallGameStateManager() {
+	theEntityManager.DeleteEntity(eFall);
+}
+
 void FallGameStateManager::Setup() {
 	eFall = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eFall, ADSR);
@@ -84,4 +88,3 @@ void FallGameStateManager::Exit() {
 
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
-

@@ -7,6 +7,10 @@ UserInputGameStateManager::UserInputGameStateManager() {
 
 }
 
+UserInputGameStateManager::~UserInputGameStateManager() {
+	theEntityManager.DeleteEntity(eSwapper);
+}
+
 void UserInputGameStateManager::Setup() {
 	eSwapper = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSwapper, ADSR);
@@ -81,7 +85,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 						ADSR(eSwapper)->active = true;
 						swapI = i;
 						swapJ = j;
-					
+
 						Entity a = dragged, e = theGridSystem.GetOnPos(originI+swapI, originJ+swapJ);
 						if (e && a) {
 							GRID(a)->i = originI + swapI;
@@ -97,14 +101,14 @@ GameState UserInputGameStateManager::Update(float dt) {
 							GRID(e)->j =  originJ+swapJ;
 						}
 						if (!combinaisons.empty())
-						{	
+						{
 							for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
 								for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
 								{
 									theCombinationMarkSystem.NewMarks(1, *itV);
 								}
 							}
-						}			
+						}
 
 					} else {
 						if (ADSR(eSwapper)->activationTime > 0) {
@@ -123,7 +127,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 			}
 		} else {
 			std::cout << "release " << std::endl;
-			
+
 			// release drag
 			ADSR(theGridSystem.GetOnPos(originI,originJ))->active = false;
 			if (theGridSystem.IsValidGridPosition(originI+1, originJ))
@@ -149,10 +153,10 @@ GameState UserInputGameStateManager::Update(float dt) {
 				GRID(e1)->j = originJ + swapJ;
 				GRID(e1)->checkedH = false;
 				GRID(e1)->checkedV = false;
-				
+
 				theCombinationMarkSystem.DeleteMarks(1);
 
-				
+
 				std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
 				if (
 			#ifndef ANDROID

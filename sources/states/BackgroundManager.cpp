@@ -11,6 +11,14 @@ BackgroundManager::BackgroundManager() {
 
 }
 
+BackgroundManager::~BackgroundManager() {
+	for(int i=0; i<clouds.size(); i++) {
+		theEntityManager.DeleteEntity(clouds[i]->e);
+		delete clouds[i];
+	}
+	clouds.clear();
+}
+
 BackgroundManager::Cloud* BackgroundManager::initCloud(Cloud* c) {
 	float t = MathUtil::RandomFloat();
 	TRANSFORM(c->e)->position.X = xStartRange.Length() * MathUtil::RandomFloat() + xStartRange.X;
@@ -22,7 +30,7 @@ BackgroundManager::Cloud* BackgroundManager::initCloud(Cloud* c) {
 	RENDERING(c->e)->size = Vector2(2, 1) * MathUtil::Lerp(scaleRange.X, scaleRange.Y, t);
 	c->visible = false;
 	c->speed = MathUtil::Lerp(-0.2f, -1.5f, t);
-	
+
 	return c;
 }
 
@@ -40,7 +48,7 @@ void BackgroundManager::Setup() {
 	}
 	xStartRange = range;
 }
-	
+
 void BackgroundManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
@@ -49,9 +57,9 @@ GameState BackgroundManager::Update(float dt) {
 }
 
 void BackgroundManager::BackgroundUpdate(float dt) {
-	for (std::list<Cloud*>::iterator it=clouds.begin(); it!=clouds.end(); ++it) {
+	for (std::vector<Cloud*>::iterator it=clouds.begin(); it!=clouds.end(); ++it) {
 		Cloud* c = *it;
-		
+
 		TransformationComponent* tc = TRANSFORM(c->e);
 		tc->position.X += c->speed * dt;
 
@@ -63,8 +71,7 @@ void BackgroundManager::BackgroundUpdate(float dt) {
 		}
 	}
 }
-	
+
 void BackgroundManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
-

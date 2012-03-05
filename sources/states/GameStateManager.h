@@ -31,4 +31,3 @@ class GameStateManager {
 		/* Prepare to leave as the active manager */
 		virtual void Exit() = 0;
 };
-
