@@ -15,17 +15,19 @@ void PauseStateManager::Setup() {
 
 
 	TEXT_RENDERING(eRestart)->hide = true;
-
+	
 	ADD_COMPONENT(eRestart, Button);
 	ADD_COMPONENT(eRestart, Rendering);
 	TRANSFORM(eRestart)->z = 20;
 
+	RENDERING(eRestart)->hide = true;
 }
 
 void PauseStateManager::Enter() {
 	
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	TEXT_RENDERING(eRestart)->hide = false;
+	RENDERING(eRestart)->hide = false;
 }
 
 GameState PauseStateManager::Update(float dt) {
@@ -38,6 +40,7 @@ GameState PauseStateManager::Update(float dt) {
 void PauseStateManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	TEXT_RENDERING(eRestart)->hide = true;
+	RENDERING(eRestart)->hide = true;
 	BUTTON(eRestart)->clicked = false;
 
 }

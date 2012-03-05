@@ -29,7 +29,7 @@
 #include "states/BackgroundManager.h"
 #include "states/LevelStateManager.h"
 #include "states/PauseStateManager.h"
-
+#include "states/FadeStateManager.h"
 
 
 #define GRIDSIZE 8
@@ -39,8 +39,9 @@ class Game::Data {
 		Data(ScoreStorage* storage) {
 			hud.Setup();
 
-			state = MainMenu;
+			state = Fade;
 
+			state2Manager[Fade] = new FadeGameStateManager();
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
 			state2Manager[Spawn] = new SpawnGameStateManager();
 			state2Manager[UserInput] = new UserInputGameStateManager();
@@ -117,9 +118,11 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH) {
 
 	datas->state2Manager[datas->state]->Enter();
 
+
 	Entity eHUD = theEntityManager.CreateEntity();
 
 	ADD_COMPONENT(eHUD, Player);
+	
 }
 
 void Game::toggleShowCombi(bool forcedesactivate) {
