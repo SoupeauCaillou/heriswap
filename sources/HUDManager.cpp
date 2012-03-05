@@ -7,18 +7,33 @@ class HUDManager::HUDManagerData {
 	public:
 		HUDManagerData() {
 				frames = 0;
-				nextfps = FCRR;	
+				nextfps = FCRR;
 				fps = 60;
-				
 		}
+		~HUDManagerData() {
+			theEntityManager.DeleteEntity(eScore);
+			theEntityManager.DeleteEntity(eTime);
+			theEntityManager.DeleteEntity(eLevel);
+			theEntityManager.DeleteEntity(eFPS);
+			theEntityManager.DeleteEntity(fBonus);
+			for(int i=0; i<8; i++) {
+				theEntityManager.DeleteEntity(eObj[i]);
+				theEntityManager.DeleteEntity(fObj[i]);
+			}
+		}
+
 		Entity eScore, eTime, eLevel, eFPS, eObj[8],fBonus, fObj[8];
 		int frames;
 		float nextfps, fps;
 };
 
+HUDManager::~HUDManager() {
+	delete datas;
+}
+
 void HUDManager::Setup() {
 	this->datas = new HUDManagerData();
-	
+
 	datas->eScore = theTextRenderingSystem.CreateLocalEntity(10);
 	datas->eTime = theTextRenderingSystem.CreateLocalEntity(10);
 	datas->eFPS = theTextRenderingSystem.CreateLocalEntity(10);
@@ -48,14 +63,14 @@ void HUDManager::Setup() {
 		RENDERING(datas->fObj[i])->size = Vector2(1,1);
 		TRANSFORM(datas->fObj[i])->position = TRANSFORM(datas->eObj[i])->position+Vector2(-0.3,0);
 		std::stringstream a;
-		a << i+1 <<".png";	
+		a << i+1 <<".png";
 		RENDERING(datas->fObj[i])->texture = theRenderingSystem.loadTextureFile(a.str());
 
 	}
 
 	datas->fBonus = theEntityManager.CreateEntity();
-	
-	
+
+
 	ADD_COMPONENT(datas->fBonus, Transformation);
 	ADD_COMPONENT(datas->fBonus, Rendering);
 
@@ -66,7 +81,7 @@ void HUDManager::Setup() {
 
 	TEXT_RENDERING(datas->eFPS)->charSize /= 2;
 	TEXT_RENDERING(datas->eFPS)->color = Color(0.1, 0.5, 0.4);
-	
+
 	Hide(true);
 }
 
@@ -90,7 +105,7 @@ void HUDManager::Update(float dt) {
 	std::stringstream a;
 	a.precision(0);
 	a << std::fixed << thePlayerSystem.GetScore();
-	TEXT_RENDERING(datas->eScore)->text = a.str();	
+	TEXT_RENDERING(datas->eScore)->text = a.str();
 	}
 	//Temps
 	{
@@ -133,8 +148,7 @@ void HUDManager::Update(float dt) {
 	//Feuille Bonus
 	{
 	std::stringstream a;
-	a <<thePlayerSystem.GetBonus()<<".png";	
+	a <<thePlayerSystem.GetBonus()<<".png";
 	RENDERING(datas->fBonus)->texture = theRenderingSystem.loadTextureFile(a.str());
 	}
 }
-

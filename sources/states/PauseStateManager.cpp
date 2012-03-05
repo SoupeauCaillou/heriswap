@@ -5,11 +5,15 @@ PauseStateManager::PauseStateManager() {
 
 }
 
-void PauseStateManager::Setup() {		
-	eRestart = theTextRenderingSystem.CreateLocalEntity(10);	
+PauseStateManager::~PauseStateManager() {
+	theEntityManager.DeleteEntity(eRestart);
+}
+
+void PauseStateManager::Setup() {
+	eRestart = theTextRenderingSystem.CreateLocalEntity(10);
 
 	TRANSFORM(eRestart)->position = Vector2(3.5, 0);
-		
+
 
 	TEXT_RENDERING(eRestart)->text = "Reprendre";
 
@@ -24,7 +28,7 @@ void PauseStateManager::Setup() {
 }
 
 void PauseStateManager::Enter() {
-	
+
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	TEXT_RENDERING(eRestart)->hide = false;
 	RENDERING(eRestart)->hide = false;
@@ -44,6 +48,3 @@ void PauseStateManager::Exit() {
 	BUTTON(eRestart)->clicked = false;
 
 }
-
-
-

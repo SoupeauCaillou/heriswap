@@ -15,6 +15,7 @@
 class BackgroundManager : public GameStateManager {
 	public:
 		BackgroundManager();
+		~BackgroundManager();
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
@@ -23,13 +24,12 @@ class BackgroundManager : public GameStateManager {
 
 	private:
 		struct Cloud;
-		
+
 		Cloud* initCloud(Cloud* c);
-	
-		std::list<Cloud*> clouds;
+
+		std::vector<Cloud*> clouds;
 	public:
 		Vector2 xStartRange;
 		Vector2 yRange;
 		Vector2 scaleRange;
 };
-

@@ -23,11 +23,11 @@ class ScoreStorage {
 		int points;
 		std::string name;
 	};
-	
+
 	static bool ScoreEntryComp(const ScoreEntry& e1, const ScoreEntry& e2) {
 		return e1.points > e2.points;
 	}
-	
+
 	virtual std::vector<ScoreEntry> loadFromStorage() = 0;
 
 	virtual void saveToStorage(const std::vector<ScoreEntry>& entries) = 0;
@@ -37,8 +37,9 @@ class ScoreStorage {
 class ScoreBoardStateManager : public GameStateManager {
 	public:
 		ScoreBoardStateManager(ScoreStorage* storage);
+		~ScoreBoardStateManager();
 		void Setup();
-		
+
 		void Enter();
 		GameState Update(float dt);
 		void Exit();
@@ -47,5 +48,3 @@ class ScoreBoardStateManager : public GameStateManager {
 		ScoreStorage* storage;
 		Entity startbtn, eScore[10];
 };
-
-

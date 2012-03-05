@@ -15,8 +15,8 @@ class Game {
 		static float CellSize();
 		static float CellContentScale();
 
-		uint8_t* saveState();
-		void loadState(const uint8_t* state);
+		int saveState(uint8_t** out);
+		void loadState(const uint8_t* in, int size);
 
 	class Data;
 	Data* datas;

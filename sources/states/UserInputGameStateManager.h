@@ -26,6 +26,7 @@ class UserInputGameStateManager : public GameStateManager {
 	public:
 
 		UserInputGameStateManager();
+		~UserInputGameStateManager();
 		void Setup();
 		void Enter();
 		GameState Update(float dt);

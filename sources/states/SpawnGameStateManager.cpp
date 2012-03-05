@@ -8,6 +8,11 @@ SpawnGameStateManager::SpawnGameStateManager() {
 
 }
 
+SpawnGameStateManager::~SpawnGameStateManager() {
+	theEntityManager.DeleteEntity(eSpawn);
+	theEntityManager.DeleteEntity(eGrid);
+}
+
 void SpawnGameStateManager::Setup() {
 	eSpawn = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSpawn, ADSR);
@@ -37,7 +42,7 @@ void SpawnGameStateManager::Setup() {
 
 void SpawnGameStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
-	
+
 	std::vector<Combinais> c;
 	fillTheBlank(spawning);
 	if (spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
@@ -112,8 +117,8 @@ GameState SpawnGameStateManager::NextState(bool marker) {
 			{
 				theCombinationMarkSystem.NewMarks(3, *itV);
 			}
-		}	
-		
+		}
+
 		return Delete;
 	//sinon
 	} else {

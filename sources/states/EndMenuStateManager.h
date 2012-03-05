@@ -24,6 +24,7 @@ class ScoreStorage;
 class EndMenuStateManager : public GameStateManager {
 	public:
 		EndMenuStateManager(ScoreStorage* str);
+		~EndMenuStateManager();
 		void Setup();
 		void Enter();
 
@@ -33,5 +34,3 @@ class EndMenuStateManager : public GameStateManager {
 		ScoreStorage* storage;
 		Entity startbtn, eScore, eMsg;
 };
-
-

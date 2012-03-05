@@ -4,6 +4,13 @@ ScoreBoardStateManager::ScoreBoardStateManager(ScoreStorage* str): storage(str) 
 
 }
 
+ScoreBoardStateManager::~ScoreBoardStateManager() {
+	theEntityManager.DeleteEntity(startbtn);
+	for(int i=0; i<10; i++) {
+		theEntityManager.DeleteEntity(eScore[i]);
+	}
+}
+
 void ScoreBoardStateManager::Setup() {
 	startbtn = theEntityManager.CreateEntity();
 	ADD_COMPONENT(startbtn, Transformation);
@@ -23,15 +30,15 @@ void ScoreBoardStateManager::Setup() {
 		TEXT_RENDERING(eScore[i])->hide = true;
 		TEXT_RENDERING(eScore[i])->alignL = true;
 		TEXT_RENDERING(eScore[i])->color = Color(0.f,0.f,0.f);
-	}	
+	}
 }
 
 void ScoreBoardStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
-	
-	RENDERING(startbtn)->hide = false;	
+
+	RENDERING(startbtn)->hide = false;
 	BUTTON(startbtn)->clicked = false;
-	
+
 	std::vector<ScoreStorage::ScoreEntry> entries = storage->loadFromStorage();
 	for (int i=0; i<10; i++) {
 		TextRenderingComponent* trc = TEXT_RENDERING(eScore[i]);
@@ -48,15 +55,15 @@ void ScoreBoardStateManager::Enter() {
 }
 
 GameState ScoreBoardStateManager::Update(float dt) {
-	
+
 	if (BUTTON(startbtn)->clicked)
 		return MainMenu;
 	return ScoreBoard;
 }
-	
+
 void ScoreBoardStateManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
-	RENDERING(startbtn)->hide = true;	
+	RENDERING(startbtn)->hide = true;
 	BUTTON(startbtn)->clicked = true;
 	for (int i=0;i<10;i++) {
 		TEXT_RENDERING(eScore[i])->hide = true;

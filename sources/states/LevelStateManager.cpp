@@ -5,6 +5,10 @@ LevelStateManager::LevelStateManager() {
 
 }
 
+LevelStateManager::~LevelStateManager() {
+
+}
+
 void LevelStateManager::Setup() {
 
 }
@@ -20,5 +24,3 @@ GameState LevelStateManager::Update(float dt) {
 void LevelStateManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
-
-
