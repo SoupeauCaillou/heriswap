@@ -11,11 +11,10 @@ void FadeGameStateManager::Setup() {
 	TRANSFORM(eFading)->position = Vector2(0,0);
 	RENDERING(eFading)->size = Vector2(10,20);
 	RENDERING(eFading)->hide = true;
-	RENDERING(eFading)->texture = theRenderingSystem.loadTextureFile("combinationMark1.png");	
-	
-	
+	RENDERING(eFading)->texture = theRenderingSystem.loadTextureFile("combinationMark1.png");
+
 	TRANSFORM(eFading)->z = 40;
-		
+
 	ADD_COMPONENT(eFading, ADSR);
 	ADSR(eFading)->idleValue = 0;
 	ADSR(eFading)->attackValue = 0;
@@ -24,29 +23,35 @@ void FadeGameStateManager::Setup() {
 	ADSR(eFading)->sustainValue = 1.0;
 	ADSR(eFading)->releaseTiming = 2.;
 }
-	
 
-
+static void updateColor(Entity eFading, FadeType fading) {
+	float value = ADSR(eFading)->value;
+	if (fading == FadeIn)
+		RENDERING(eFading)->color = Color(value, value, value, 1-value);
+	else
+		RENDERING(eFading)->color = Color(1-value,1-value,1-value,value);
+}
 
 void FadeGameStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	RENDERING(eFading)->hide = false;
 	if (eThing) RENDERING(eThing)->hide = false;
 	ADSR(eFading)->active = true;
+
+	updateColor(eFading, fading);
 }
 
 GameState FadeGameStateManager::Update(float dt) {
-	if (fading == FadeIn) RENDERING(eFading)->color = Color(ADSR(eFading)->value,ADSR(eFading)->value,ADSR(eFading)->value,1-ADSR(eFading)->value);
-	else RENDERING(eFading)->color = Color(1-ADSR(eFading)->value,1-ADSR(eFading)->value,1-ADSR(eFading)->value,ADSR(eFading)->value);
+	updateColor(eFading, fading);
+
 	if (ADSR(eFading)->value == ADSR(eFading)->sustainValue)
 		return heIs;
 	return iAm;
 }
-	
+
 void FadeGameStateManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	RENDERING(eFading)->hide = true;
 	if (eThing) RENDERING(eThing)->hide = true;
 	ADSR(eFading)->active = false;
 }
-
