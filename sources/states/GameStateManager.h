@@ -9,11 +9,15 @@ enum GameState {
 	Fall,
 	LevelChanged,
 	Pause,
-	Fade,
 	MainMenu,
 	ScoreBoard,
 	EndMenu,
-	Background
+	Background,
+	BlackToLogoState,
+	LogoToBlackState,
+	BlackToMainMenu,
+	MainMenuToBlackState,
+	BlackToSpawn
 };
 
 

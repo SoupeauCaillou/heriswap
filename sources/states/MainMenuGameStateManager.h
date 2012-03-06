@@ -21,4 +21,5 @@ class MainMenuGameStateManager : public GameStateManager {
 		void Exit();
 	private:
 		Entity start, score, eScore, eStart;
+		float elapsedTime;
 };

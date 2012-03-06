@@ -39,6 +39,17 @@ void MainMenuGameStateManager::Setup() {
 
 	TRANSFORM(score)->position = Vector2(0,1);
 	TRANSFORM(eScore)->position = TRANSFORM(score)->position + Vector2(3.5, 0);
+	
+	
+	RENDERING(start)->hide = true;
+	RENDERING(score)->hide = true;
+
+	RENDERING(start)->color = Color(0,0,0,0);
+	RENDERING(score)->color = Color(0,0,0,0);
+	
+	TRANSFORM(start)->rotation = 0;
+	TRANSFORM(score)->rotation = 0;
+	
 }
 
 
@@ -46,6 +57,10 @@ void MainMenuGameStateManager::Setup() {
 
 void MainMenuGameStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	
+	//Pour les rotations et autres animations
+	elapsedTime = 0;
+	
 	TEXT_RENDERING(eStart)->text = "Play!";
 	TEXT_RENDERING(eScore)->text = "Score";
 
@@ -60,14 +75,21 @@ void MainMenuGameStateManager::Enter() {
 }
 
 GameState MainMenuGameStateManager::Update(float dt) {
+	elapsedTime += dt/4.;
 	if (BUTTON(start)->clicked){
-		return Spawn;
+		return MainMenuToBlackState;
 	} else if (BUTTON(score)->clicked) {
 		return ScoreBoard;
 	}
-
-	TRANSFORM(start)->rotation += dt;
-	TRANSFORM(score)->rotation -= dt;
+	
+	if (elapsedTime>1)
+		elapsedTime = 1;
+		
+	RENDERING(start)->color = Color(elapsedTime,elapsedTime,elapsedTime,elapsedTime);
+	RENDERING(score)->color = Color(elapsedTime,elapsedTime,elapsedTime,elapsedTime);
+	
+	TRANSFORM(start)->rotation += dt/elapsedTime;
+	TRANSFORM(score)->rotation -= dt/elapsedTime;
 	return MainMenu;
 }
 

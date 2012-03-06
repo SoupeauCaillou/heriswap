@@ -39,10 +39,30 @@ class Game::Data {
 		Data(ScoreStorage* storage) {
 			hud = new HUDManager;
 			hud->Setup();
+			state = BlackToLogoState;
+	
 
-			state = Fade;
 
-			state2Manager[Fade] = new FadeGameStateManager();
+			Entity logo;
+			logo = theEntityManager.CreateEntity();
+			ADD_COMPONENT(logo, Rendering);
+			ADD_COMPONENT(logo, Transformation);
+			TRANSFORM(logo)->position = Vector2(0,0);
+			RENDERING(logo)->size = Vector2(10,10*720/420);
+			TRANSFORM(logo)->z = 39;
+			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");	
+		
+		
+			state2Manager[BlackToLogoState] = new FadeGameStateManager(logo, FadeIn, BlackToLogoState, LogoToBlackState);
+			state2Manager[LogoToBlackState] = new FadeGameStateManager(logo, FadeOut, LogoToBlackState, BlackToMainMenu);
+			//to do : add entity || modif 0 du GameStateToBlack
+			//hm, ça implique d'en faire un pour chaque state..
+			state2Manager[BlackToMainMenu] = new FadeGameStateManager(0, FadeIn, BlackToMainMenu, MainMenu);	
+			
+			state2Manager[MainMenuToBlackState] = new FadeGameStateManager(0, FadeOut, MainMenuToBlackState, BlackToSpawn);	
+
+			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);	
+
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
 			state2Manager[Spawn] = new SpawnGameStateManager();
 			state2Manager[UserInput] = new UserInputGameStateManager();
@@ -52,6 +72,7 @@ class Game::Data {
 			state2Manager[ScoreBoard] = new ScoreBoardStateManager(storage);
 			state2Manager[EndMenu] = new EndMenuStateManager(storage);
 			state2Manager[Pause] = new PauseStateManager();
+
 
 			BackgroundManager* bg = new BackgroundManager();
 			bg->xStartRange = Vector2(6, 8);
@@ -219,7 +240,7 @@ void Game::tick(float dt) {
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
 	//si on est ingame, on affiche le HUD
-	if (newState != MainMenu && newState != ScoreBoard && newState != EndMenu && newState != Pause) {
+	if (newState == Spawn || newState == UserInput || newState == Delete || newState == Fall) {
 		datas->hud->Hide(false);
 		datas->hud->Update(dt);
 		thePlayerSystem.Update(dt);

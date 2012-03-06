@@ -9,15 +9,22 @@
 #include "Game.h"
 #include "GameStateManager.h"
 
+enum FadeType {
+	FadeIn, 
+	FadeOut
+};
+
 class FadeGameStateManager : public GameStateManager {
 	public:
-		FadeGameStateManager();
+		FadeGameStateManager(Entity eFade, FadeType fade, GameState whoAmI, GameState whoIsNext);
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
 		void Exit();
 	private:
-		Entity eFading;
+		Entity eFading, eThing;
+		FadeType fading;
+		GameState iAm, heIs;
 };
 
 
