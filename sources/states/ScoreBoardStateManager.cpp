@@ -7,7 +7,7 @@ ScoreBoardStateManager::ScoreBoardStateManager(ScoreStorage* str): storage(str) 
 ScoreBoardStateManager::~ScoreBoardStateManager() {
 	theEntityManager.DeleteEntity(startbtn);
 	for(int i=0; i<10; i++) {
-		theEntityManager.DeleteEntity(eScore[i]);
+		theTextRenderingSystem.DestroyLocalEntity(eScore[i]);
 	}
 }
 

@@ -7,8 +7,8 @@ EndMenuStateManager::EndMenuStateManager(ScoreStorage* str): storage(str) {
 
 EndMenuStateManager::~EndMenuStateManager() {
 	theEntityManager.DeleteEntity(startbtn);
-	theEntityManager.DeleteEntity(eScore);
-	theEntityManager.DeleteEntity(eMsg);
+	theTextRenderingSystem.DestroyLocalEntity(eScore);
+	theTextRenderingSystem.DestroyLocalEntity(eMsg);
 }
 
 void EndMenuStateManager::Setup() {

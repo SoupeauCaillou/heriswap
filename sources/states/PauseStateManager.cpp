@@ -6,7 +6,7 @@ PauseStateManager::PauseStateManager() {
 }
 
 PauseStateManager::~PauseStateManager() {
-	theEntityManager.DeleteEntity(eRestart);
+	theTextRenderingSystem.DestroyLocalEntity(eRestart);
 }
 
 void PauseStateManager::Setup() {
@@ -22,6 +22,7 @@ void PauseStateManager::Setup() {
 	
 	ADD_COMPONENT(eRestart, Button);
 	ADD_COMPONENT(eRestart, Rendering);
+	RENDERING(eRestart)->hide = true;
 	TRANSFORM(eRestart)->z = 20;
 
 	RENDERING(eRestart)->hide = true;

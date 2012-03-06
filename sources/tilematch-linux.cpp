@@ -102,24 +102,26 @@ int main(int argc, char** argv) {
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());
 	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());
 
-	Game game;
-	game.init(new FileScoreStorage(), 420, 700);
-	theTouchInputManager.init(Vector2(10, 10. * 700. / 400.), Vector2(420, 700));
-
+	uint8_t* state = 0;
+	int size = 0;
 	if (argc > 1 && !strcmp(argv[1], "-restore")) {
 		FILE* file = fopen("dump.bin", "r+b");
 		if (file) {
 			std::cout << "Restoring game state from file" << std::endl;
 			fseek(file, 0, SEEK_END);
-			int size = ftell(file);
+			size = ftell(file);
 			fseek(file, 0, SEEK_SET);
-			uint8_t* state = new uint8_t[size];
+			state = new uint8_t[size];
 			fread(state, size, 1, file);
 			fclose(file);
-			game.togglePause(true);
-			game.loadState(state, size);
 		}
 	}
+
+	Game game;
+	game.init(new FileScoreStorage(), 420, 700, state, size);
+	theTouchInputManager.init(Vector2(10, 10. * 700. / 400.), Vector2(420, 700));
+
+
 
 	bool running = true;
 	float timer = 0;

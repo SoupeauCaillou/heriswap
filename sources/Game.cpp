@@ -38,10 +38,6 @@ class Game::Data {
 	public:
 		Data(ScoreStorage* storage) {
 			hud = new HUDManager;
-			hud->Setup();
-			state = BlackToLogoState;
-	
-
 
 			Entity logo;
 			logo = theEntityManager.CreateEntity();
@@ -50,18 +46,19 @@ class Game::Data {
 			TRANSFORM(logo)->position = Vector2(0,0);
 			RENDERING(logo)->size = Vector2(10,10*720/420);
 			TRANSFORM(logo)->z = 39;
-			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");	
-		
-		
+			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
+
+
 			state2Manager[BlackToLogoState] = new FadeGameStateManager(logo, FadeIn, BlackToLogoState, LogoToBlackState);
 			state2Manager[LogoToBlackState] = new FadeGameStateManager(logo, FadeOut, LogoToBlackState, BlackToMainMenu);
 			//to do : add entity || modif 0 du GameStateToBlack
 			//hm, ça implique d'en faire un pour chaque state..
-			state2Manager[BlackToMainMenu] = new FadeGameStateManager(0, FadeIn, BlackToMainMenu, MainMenu);	
-			
-			state2Manager[MainMenuToBlackState] = new FadeGameStateManager(0, FadeOut, MainMenuToBlackState, BlackToSpawn);	
+			state2Manager[BlackToMainMenu] = new FadeGameStateManager(0, FadeIn, BlackToMainMenu, MainMenu);
 
-			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);	
+			state2Manager[MainMenuToBlackState] = new FadeGameStateManager(0, FadeOut, MainMenuToBlackState, BlackToSpawn);
+
+			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
+			state = BlackToLogoState;
 
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
 			state2Manager[Spawn] = new SpawnGameStateManager();
@@ -79,6 +76,10 @@ class Game::Data {
 			bg->yRange = Vector2(-2, 9);
 			bg->scaleRange = Vector2(0.4, 1.5);
 			state2Manager[Background] = bg;
+		}
+
+		void Setup() {
+			hud->Setup();
 
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
 				it->second->Setup();
@@ -111,13 +112,35 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-void Game::init(ScoreStorage* storage, int windowW, int windowH) {
+void Game::init(ScoreStorage* storage, int windowW, int windowH, const uint8_t* in, int size) {
 	theRenderingSystem.init();
 
 	LOGI("%s\n", __FUNCTION__);
 	datas = new Data(storage);
 
+	/* init all systems, hum hum */
+	theTransformationSystem;
+	theRenderingSystem;
+	theSoundSystem;
+	thePlayerSystem;
+	theGridSystem;
+	theCombinationMarkSystem;
+	theADSRSystem;
+	theButtonSystem;
+	theTextRenderingSystem;
+
 	theRenderingSystem.setWindowSize(windowW, windowH);
+
+	if (in && size) {
+		datas->state = Pause;
+		loadState(in, size);
+		theTransformationSystem.Update(0.1);
+	} else {
+		Entity eHUD = theEntityManager.CreateEntity();
+		ADD_COMPONENT(eHUD, Player);
+	}
+
+	datas->Setup();
 
 	theGridSystem.GridSize = GRIDSIZE;
 
@@ -139,12 +162,6 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH) {
 	SOUND(datas->background)->repeat = false;
 
 	datas->state2Manager[datas->state]->Enter();
-
-
-	Entity eHUD = theEntityManager.CreateEntity();
-
-	ADD_COMPONENT(eHUD, Player);
-	
 }
 
 void Game::toggleShowCombi(bool forcedesactivate) {
@@ -193,16 +210,12 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 	}
 }
 void Game::togglePause(bool activate) {
-	static bool gameIsPaused = false;
-
-	if (activate && !gameIsPaused) {
-		gameIsPaused = true;
+	if (activate && datas->state != Pause) {
 		datas->stateBeforePause = datas->state;
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = Pause;
 		datas->state2Manager[datas->state]->Enter();
 	} else if (!activate) {
-		gameIsPaused = false;
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = datas->stateBeforePause;
 		datas->state2Manager[datas->state]->Enter();

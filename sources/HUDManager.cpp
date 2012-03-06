@@ -11,13 +11,13 @@ class HUDManager::HUDManagerData {
 				fps = 60;
 		}
 		~HUDManagerData() {
-			theEntityManager.DeleteEntity(eScore);
-			theEntityManager.DeleteEntity(eTime);
-			theEntityManager.DeleteEntity(eLevel);
-			theEntityManager.DeleteEntity(eFPS);
+			theTextRenderingSystem.DestroyLocalEntity(eScore);
+			theTextRenderingSystem.DestroyLocalEntity(eTime);
+			theTextRenderingSystem.DestroyLocalEntity(eLevel);
+			theTextRenderingSystem.DestroyLocalEntity(eFPS);
 			theEntityManager.DeleteEntity(fBonus);
 			for(int i=0; i<8; i++) {
-				theEntityManager.DeleteEntity(eObj[i]);
+				theTextRenderingSystem.DestroyLocalEntity(eObj[i]);
 				theEntityManager.DeleteEntity(fObj[i]);
 			}
 		}

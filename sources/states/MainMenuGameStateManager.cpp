@@ -7,8 +7,8 @@ MainMenuGameStateManager::MainMenuGameStateManager() {
 MainMenuGameStateManager::~MainMenuGameStateManager() {
 	theEntityManager.DeleteEntity(start);
 	theEntityManager.DeleteEntity(score);
-	theEntityManager.DeleteEntity(eScore);
-	theEntityManager.DeleteEntity(eStart);
+	theTextRenderingSystem.DestroyLocalEntity(eScore);
+	theTextRenderingSystem.DestroyLocalEntity(eStart);
 }
 
 void MainMenuGameStateManager::Setup() {
@@ -21,6 +21,7 @@ void MainMenuGameStateManager::Setup() {
 
 	RENDERING(start)->texture = theRenderingSystem.loadTextureFile("1.png");
 	RENDERING(start)->size = Game::CellSize() * Game::CellContentScale();
+	RENDERING(start)->hide = true;
 	BUTTON(start)->clicked = false;
 
 	ADD_COMPONENT(score, Transformation);
@@ -30,6 +31,7 @@ void MainMenuGameStateManager::Setup() {
 	BUTTON(score)->clicked = false;
 	RENDERING(score)->texture = theRenderingSystem.loadTextureFile("2.png");
 	RENDERING(score)->size = Game::CellSize() * Game::CellContentScale();
+	RENDERING(score)->hide = true;
 
 	eStart = theTextRenderingSystem.CreateLocalEntity(5);
 	eScore = theTextRenderingSystem.CreateLocalEntity(6);
