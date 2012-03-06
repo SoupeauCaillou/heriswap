@@ -35,8 +35,8 @@ LOCAL_SRC_FILES := \
 	../sources/states/ScoreBoardStateManager.cpp \
 	../sources/states/LevelStateManager.cpp \
 	../sources/states/PauseStateManager.cpp \
-	../sources/states/FadeStateManager.cpp \
-	
+	../sources/states/FadeStateManager.cpp
+
 LOCAL_STATIC_LIBRARIES := sac png
 LOCAL_LDLIBS := -lGLESv2 -lGLESv1_CM -lEGL -llog -landroid -lz
 
