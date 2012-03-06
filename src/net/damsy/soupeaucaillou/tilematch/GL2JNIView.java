@@ -186,7 +186,7 @@ class GL2JNIView extends GLSurfaceView {
             EGLConfig[] configs = new EGLConfig[numConfigs];
             egl.eglChooseConfig(display, attribs, configs, numConfigs, num_config);
 
-            if (true) {
+            if (DEBUG) {
                  printConfigs(egl, display, configs);
             }
             /* Now return the "best" one
@@ -350,24 +350,33 @@ class GL2JNIView extends GLSurfaceView {
     	}
     	
         public void onDrawFrame(GL10 gl) {
-            TilematchJNILib.step(TilematchActivity.game);
+        	synchronized (TilematchActivity.mutex) {
+        		TilematchJNILib.step(TilematchActivity.game);
+        	}
             int err;
             while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
             	Log.e("tilematch", "GL error : " + GLU.gluErrorString(err));
-            }
+            } 
         }
 
+        boolean initDone = false;
         public void onSurfaceChanged(GL10 gl, int width, int height) {
         	Log.i("tilematch", "width: " + width + ", height: " + height);
-        	TilematchJNILib.init(TilematchActivity.game, width, height);
-        	int err;
+        	if (!initDone) {
+        		TilematchJNILib.init(TilematchActivity.game, width, height, TilematchActivity.savedState);
+        		initDone = true;
+        	} else {
+        		TilematchJNILib.restoreRenderingSystemState(TilematchActivity.game, null);
+        	}
+        		int err;
             while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
             	Log.e("tilematch", "_GL error : " + GLU.gluErrorString(err));
             }
         }
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        	TilematchActivity.game = TilematchJNILib.createGame(asset, TilematchActivity.openGLESVersion);
+        	if (TilematchActivity.game == 0)
+        		TilematchActivity.game = TilematchJNILib.createGame(asset, TilematchActivity.openGLESVersion);
         }
     }
 }

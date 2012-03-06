@@ -13,18 +13,18 @@ public class TilematchJNILib {
     /* Create native game instance */
     public static native long createGame(AssetManager mgr, int openGLESVersion);
     /* Initialize game, reset graphics assets, etc... */
-    public static native void init(long game, int width, int height);
+    public static native void init(long game, int width, int height, byte[] state);
     public static native void step(long game);
     public static native void pause(long game);
     public static native void handleInputEvent(long game, int event, float x, float y);
     public static native byte[] serialiazeState(long game);
-      
+    public static native byte[] saveRenderingSystemState(long game);
+    public static native void restoreRenderingSystemState(long game, byte[] state);
+ 
     static public byte[] assetToByteArray(AssetManager mgr, String assetName) {
     	try {
-    		Log.i("tilematch", "Loading asset:" + assetName);
-	    	InputStream stream = mgr.open(assetName);
+    		InputStream stream = mgr.open(assetName);
 	    	byte[] data = new byte[stream.available()];
-	    	Log.i("tilematch", "Asset size: " + data.length);
 	    	stream.read(data);
 	    	return data;	
     	} catch (Exception exc) {
