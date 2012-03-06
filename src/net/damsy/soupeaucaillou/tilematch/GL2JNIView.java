@@ -164,21 +164,29 @@ class GL2JNIView extends GLSurfaceView {
         public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
             /* Get the number of minimally matching EGL configurations
              */
-            int[] num_config = new int[2];
-            egl.eglChooseConfig(display, s_configAttribs1, null, 0, num_config);
+        	int[] attribs = s_configAttribs2;
+        	
+            int[] num_config = new int[1];
+            egl.eglChooseConfig(display, attribs, null, 0, num_config);
 
             int numConfigs = num_config[0];
 
             if (numConfigs <= 0) {
-                throw new IllegalArgumentException("No configs match configSpec");
+                Log.e("tilematch", "No opengles2 config found, retrying with opengles1");
+                attribs = s_configAttribs1;
+                egl.eglChooseConfig(display, attribs, null, 0, num_config);
+                numConfigs = num_config[0];
+                if (numConfigs <= 0) {
+                	throw new RuntimeException("No OpenGL ES config");
+                }
             }
 
             /* Allocate then read the array of minimally matching EGL configs
              */
             EGLConfig[] configs = new EGLConfig[numConfigs];
-            egl.eglChooseConfig(display, s_configAttribs1, configs, numConfigs, num_config);
+            egl.eglChooseConfig(display, attribs, configs, numConfigs, num_config);
 
-            if (DEBUG) {
+            if (true) {
                  printConfigs(egl, display, configs);
             }
             /* Now return the "best" one
@@ -335,12 +343,12 @@ class GL2JNIView extends GLSurfaceView {
     }
 
     private static class Renderer implements GLSurfaceView.Renderer {   
-    	AssetManager asset;
+    	AssetManager asset; 
     	public Renderer(AssetManager asset) {
     		super(); 
     		this.asset = asset;
     	}
-    	 
+    	
         public void onDrawFrame(GL10 gl) {
             TilematchJNILib.step(TilematchActivity.game);
             int err;
@@ -354,7 +362,7 @@ class GL2JNIView extends GLSurfaceView {
         	TilematchJNILib.init(TilematchActivity.game, width, height);
         	int err;
             while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
-            	Log.e("tilematch", "GL error : " + GLU.gluErrorString(err));
+            	Log.e("tilematch", "_GL error : " + GLU.gluErrorString(err));
             }
         }
 
