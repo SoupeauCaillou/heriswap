@@ -44,6 +44,7 @@ public class TilematchActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mGLView.onPause();
+        TilematchJNILib.pause(TilematchActivity.game);
         
         // renderingSystemState = TilematchJNILib.saveRenderingSystemState(TilematchActivity.game);
     }

@@ -375,8 +375,10 @@ class GL2JNIView extends GLSurfaceView {
         }
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        	if (TilematchActivity.game == 0)
+        	if (TilematchActivity.game == 0) {
+        		initDone = false;
         		TilematchActivity.game = TilematchJNILib.createGame(asset, TilematchActivity.openGLESVersion);
+        	}
         }
     }
 }
