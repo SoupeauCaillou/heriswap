@@ -36,18 +36,11 @@
 
 class Game::Data {
 	public:
+		/* can not use any system here */
 		Data(ScoreStorage* storage) {
 			hud = new HUDManager;
 
-			Entity logo;
 			logo = theEntityManager.CreateEntity();
-			ADD_COMPONENT(logo, Rendering);
-			ADD_COMPONENT(logo, Transformation);
-			TRANSFORM(logo)->position = Vector2(0,0);
-			RENDERING(logo)->size = Vector2(10,10*720/420);
-			RENDERING(logo)->hide = true;
-			TRANSFORM(logo)->z = 39;
-			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
 
 			state2Manager[BlackToLogoState] = new FadeGameStateManager(logo, FadeIn, BlackToLogoState, LogoToBlackState);
 			state2Manager[LogoToBlackState] = new FadeGameStateManager(logo, FadeOut, LogoToBlackState, BlackToMainMenu);
@@ -75,6 +68,14 @@ class Game::Data {
 		}
 
 		void Setup() {
+			ADD_COMPONENT(logo, Rendering);
+			ADD_COMPONENT(logo, Transformation);
+			TRANSFORM(logo)->position = Vector2(0,0);
+			RENDERING(logo)->size = Vector2(10,10*720/420);
+			RENDERING(logo)->hide = true;
+			TRANSFORM(logo)->z = 39;
+			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
+
 			hud->Setup();
 
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
@@ -83,7 +84,7 @@ class Game::Data {
 			time = TIMELIMIT;
 		}
 		GameState state, stateBeforePause;
-		Entity background, sky;
+		Entity logo, background, sky;
 		float time;
 		// drag/drop
 		HUDManager* hud;
@@ -108,22 +109,27 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-void Game::init(ScoreStorage* storage, int windowW, int windowH, const uint8_t* in, int size) {
-	theRenderingSystem.init();
+Game::Game(ScoreStorage* storage) {
+	/* create EntityManager */
+	EntityManager::CreateInstance();
 
-	LOGI("%s:%d %p\n", __FUNCTION__, __LINE__, datas);
+	/* create before system so it cannot use any of them (use Setup instead) */
 	datas = new Data(storage);
-	/* init all systems, hum hum */
-	theTransformationSystem;
-	theRenderingSystem;
-	theSoundSystem;
-	thePlayerSystem;
-	theGridSystem;
-	theCombinationMarkSystem;
-	theADSRSystem;
-	theButtonSystem;
-	theTextRenderingSystem;
 
+	/* create systems singleton */
+	TransformationSystem::CreateInstance();
+	RenderingSystem::CreateInstance();
+	SoundSystem::CreateInstance();
+	PlayerSystem::CreateInstance();
+	GridSystem::CreateInstance();
+	CombinationMarkSystem::CreateInstance();
+	ADSRSystem::CreateInstance();
+	ButtonSystem::CreateInstance();
+	TextRenderingSystem::CreateInstance();
+}
+
+void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
+	theRenderingSystem.init();
 	theRenderingSystem.setWindowSize(windowW, windowH);
 
 	if (in && size) {
@@ -144,6 +150,7 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH, const uint8_t* 
 	theRenderingSystem.Add(datas->sky);
 	RENDERING(datas->sky)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->sky)->texture = theRenderingSystem.loadTextureFile("sky.png");
+	RENDERING(datas->sky)->hide = false;
 
 	datas->background = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->background, Transformation);
@@ -151,6 +158,8 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH, const uint8_t* 
 	TRANSFORM(datas->background)->z = 0;
 	RENDERING(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
+	RENDERING(datas->background)->hide = false;
+
 	ADD_COMPONENT(datas->background, Sound);
 	SOUND(datas->background)->sound = theSoundSystem.loadSoundFile("audio/A.ogg");
 	SOUND(datas->background)->repeat = false;
@@ -281,23 +290,6 @@ void Game::tick(float dt) {
 }
 
 int Game::saveState(uint8_t** out) {
-	/* delete game managers */
-	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin(); it!=datas->state2Manager.end(); ++it) {
-		delete (*it).second;
-	}
-	datas->state2Manager.clear();
-	delete datas->hud;
-
-	/* special case... */
-	std::vector<Entity> marks = theCombinationMarkSystem.RetrieveAllEntityWithComponent();
-	for (int i=0; i<marks.size(); i++) {
-		theEntityManager.DeleteEntity(marks[i]);
-	}
-
-	/* delte local entities */
-	theEntityManager.DeleteEntity(datas->background);
-	theEntityManager.DeleteEntity(datas->sky);
-
 	/* save all entities/components */
 	uint8_t* entities = 0;
 	int eSize = theEntityManager.serialize(&entities);

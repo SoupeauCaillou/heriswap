@@ -5,8 +5,8 @@ class ScoreStorage;
 
 class Game {
 	public:
-
-		void init(ScoreStorage* score, int windowW, int windowH, const uint8_t* in = 0, int size = 0);
+		Game(ScoreStorage* storage);
+		void init(int windowW, int windowH, const uint8_t* in = 0, int size = 0);
 		void tick(float dt);
 		void togglePause(bool activate);
 		void toggleShowCombi(bool forcedesactivate);

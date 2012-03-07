@@ -99,8 +99,6 @@ int main(int argc, char** argv) {
 		return 1;
 
 	gettimeofday(&startup_time,NULL);
-	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());
-	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());
 
 	uint8_t* state = 0;
 	int size = 0;
@@ -117,8 +115,12 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	Game game;
-	game.init(new FileScoreStorage(), 420, 700, state, size);
+	Game game(new FileScoreStorage());
+
+	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());
+	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());
+
+	game.init(420, 700, state, size);
 	theTouchInputManager.init(Vector2(10, 10. * 700. / 400.), Vector2(420, 700));
 
 
