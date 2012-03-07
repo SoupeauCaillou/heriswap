@@ -163,12 +163,13 @@ int main(int argc, char** argv) {
 				timer = MAGICKEYTIME;
 			}
 			if (glfwGetKey( GLFW_KEY_LSHIFT)) {
-				game.togglePause(true);
 				uint8_t* state;
 				int size = game.saveState(&state);
-				FILE* file = fopen("dump.bin", "w+b");
-				fwrite(state, size, 1, file);
-				fclose(file);
+				if (size) {
+					FILE* file = fopen("dump.bin", "w+b");
+					fwrite(state, size, 1, file);
+					fclose(file);
+				}
 				running = false;
 				break;
 			}

@@ -219,15 +219,15 @@ JNIEXPORT jbyteArray JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJN
   (JNIEnv *env, jclass, jlong g) {
 	LOGW("%s -->", __FUNCTION__);
 	GameHolder* hld = (GameHolder*) g;
-	hld->game->togglePause(true);
 	uint8_t* state;
 	int size = hld->game->saveState(&state);
 
-	jbyteArray jb = env->NewByteArray(size);
-	env->SetByteArrayRegion(jb, 0, size, (jbyte*)state);
-	LOGW("Serialized state size: %d", size);
-	delete hld->game;
-	hld->game = 0;
+	if (size) {
+		jbyteArray jb = env->NewByteArray(size);
+		env->SetByteArrayRegion(jb, 0, size, (jbyte*)state);
+		LOGW("Serialized state size: %d", size);
+	}
+
 	LOGW("%s <--", __FUNCTION__);
 	return jb;
 }

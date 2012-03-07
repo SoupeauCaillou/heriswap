@@ -290,6 +290,25 @@ void Game::tick(float dt) {
 }
 
 int Game::saveState(uint8_t** out) {
+	bool saveState = false;
+	switch (datas->state) {
+		case Spawn:
+		case UserInput:
+		case Delete:
+		case Fall:
+		case LevelChanged:
+		case Pause:
+			saveState = true;
+			break;
+		default:
+			saveState = false;
+	}
+
+	if (!saveState) {
+		LOGI("Current state is '%d' -> nothing to save", datas->state);
+		return 0;
+	}
+
 	/* save all entities/components */
 	uint8_t* entities = 0;
 	int eSize = theEntityManager.serialize(&entities);
@@ -302,7 +321,7 @@ int Game::saveState(uint8_t** out) {
 	int finalSize = sizeof(datas->stateBeforePause) + sizeof(eSize) + sizeof(sSize) + eSize + sSize;
 	*out = new uint8_t[finalSize];
 	uint8_t* ptr = *out;
-	ptr = (uint8_t*)mempcpy(ptr, &datas->stateBeforePause, sizeof(datas->stateBeforePause));
+	ptr = (uint8_t*)mempcpy(ptr, &datas->state, sizeof(datas->state));
 	ptr = (uint8_t*)mempcpy(ptr, &eSize, sizeof(eSize));
 	ptr = (uint8_t*)mempcpy(ptr, &sSize, sizeof(sSize));
 	ptr = (uint8_t*)mempcpy(ptr, entities, eSize);
