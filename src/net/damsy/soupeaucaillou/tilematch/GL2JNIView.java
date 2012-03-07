@@ -351,24 +351,27 @@ class GL2JNIView extends GLSurfaceView {
     	
         public void onDrawFrame(GL10 gl) {
         	synchronized (TilematchActivity.mutex) {
+        		if (TilematchActivity.game == 0)
+        			return;
         		TilematchJNILib.step(TilematchActivity.game);
         	}
             int err;
             while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
             	Log.e("tilematch", "GL error : " + GLU.gluErrorString(err));
             } 
-        }
-
+        }   
+ 
         boolean initDone = false;
         public void onSurfaceChanged(GL10 gl, int width, int height) {
         	Log.i("tilematch", "width: " + width + ", height: " + height);
-        	if (!initDone) {
+        	if (!initDone || TilematchActivity.savedState != null) {
         		TilematchJNILib.init(TilematchActivity.game, width, height, TilematchActivity.savedState);
+        		TilematchActivity.savedState = null;
         		initDone = true;
-        	} else {
-        		TilematchJNILib.restoreRenderingSystemState(TilematchActivity.game, null);
         	}
-        		int err;
+        	TilematchJNILib.restoreRenderingSystemState(TilematchActivity.game, null);
+        	
+        	int err;
             while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
             	Log.e("tilematch", "_GL error : " + GLU.gluErrorString(err));
             }

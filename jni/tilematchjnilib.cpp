@@ -252,7 +252,7 @@ JNIEXPORT jbyteArray JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJN
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_restoreRenderingSystemState
   (JNIEnv *env, jclass, jlong, jbyteArray jstate) {
   LOGW("hack; theRenderingSystem.init");
-  theRenderingSystem.init();
+  theRenderingSystem.reloadTextures();
   return;
 
 	uint8_t* state = 0;

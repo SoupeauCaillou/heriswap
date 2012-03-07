@@ -45,21 +45,18 @@ class Game::Data {
 			ADD_COMPONENT(logo, Transformation);
 			TRANSFORM(logo)->position = Vector2(0,0);
 			RENDERING(logo)->size = Vector2(10,10*720/420);
+			RENDERING(logo)->hide = true;
 			TRANSFORM(logo)->z = 39;
 			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
-
 
 			state2Manager[BlackToLogoState] = new FadeGameStateManager(logo, FadeIn, BlackToLogoState, LogoToBlackState);
 			state2Manager[LogoToBlackState] = new FadeGameStateManager(logo, FadeOut, LogoToBlackState, BlackToMainMenu);
 			//to do : add entity || modif 0 du GameStateToBlack
 			//hm, ça implique d'en faire un pour chaque state..
 			state2Manager[BlackToMainMenu] = new FadeGameStateManager(0, FadeIn, BlackToMainMenu, MainMenu);
-
 			state2Manager[MainMenuToBlackState] = new FadeGameStateManager(0, FadeOut, MainMenuToBlackState, BlackToSpawn);
-
 			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
 			state = BlackToLogoState;
-
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
 			state2Manager[Spawn] = new SpawnGameStateManager();
 			state2Manager[UserInput] = new UserInputGameStateManager();
@@ -69,7 +66,6 @@ class Game::Data {
 			state2Manager[ScoreBoard] = new ScoreBoardStateManager(storage);
 			state2Manager[EndMenu] = new EndMenuStateManager(storage);
 			state2Manager[Pause] = new PauseStateManager();
-
 
 			BackgroundManager* bg = new BackgroundManager();
 			bg->xStartRange = Vector2(6, 8);
@@ -115,9 +111,8 @@ float Game::CellContentScale() {
 void Game::init(ScoreStorage* storage, int windowW, int windowH, const uint8_t* in, int size) {
 	theRenderingSystem.init();
 
-	LOGI("%s\n", __FUNCTION__);
+	LOGI("%s:%d %p\n", __FUNCTION__, __LINE__, datas);
 	datas = new Data(storage);
-
 	/* init all systems, hum hum */
 	theTransformationSystem;
 	theRenderingSystem;
@@ -134,9 +129,8 @@ void Game::init(ScoreStorage* storage, int windowW, int windowH, const uint8_t* 
 	if (in && size) {
 		datas->state = Pause;
 		loadState(in, size);
-		theTransformationSystem.Update(0.1);
 	} else {
-		Entity eHUD = theEntityManager.CreateEntity();
+		Entity eHUD = theEntityManager.CreateEntity(EntityManager::Persistent);
 		ADD_COMPONENT(eHUD, Player);
 	}
 

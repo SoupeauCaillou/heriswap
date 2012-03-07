@@ -44,7 +44,7 @@ public class TilematchActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mGLView.onPause();
-        TilematchJNILib.pause(TilematchActivity.game);
+        //TilematchJNILib.pause(TilematchActivity.game);
         
         // renderingSystemState = TilematchJNILib.saveRenderingSystemState(TilematchActivity.game);
     }
@@ -60,12 +60,13 @@ public class TilematchActivity extends Activity {
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-    	/*synchronized (TilematchActivity.mutex) {
+    	synchronized (TilematchActivity.mutex) {
 	    	Log.i("tilematch", "Save state!");
-	    	byte[] state = TilematchJNILib.serialiazeState(TilematchActivity.game);
-	    	outState.putByteArray(TILEMATCH_BUNDLE_KEY, state);
+	    	savedState = TilematchJNILib.serialiazeState(TilematchActivity.game);
+	    	outState.putByteArray(TILEMATCH_BUNDLE_KEY, savedState);
+	    	TilematchActivity.game = 0;
 	    	Log.i("tilematch", "State saved");
-    	}*/
+    	}
     	super.onSaveInstanceState(outState);
     }
     
