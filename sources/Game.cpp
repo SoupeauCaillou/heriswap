@@ -95,6 +95,20 @@ static const float offset = 0.2;
 static const float scale = 0.95;
 static const float size = (10 - 2 * offset) / GRIDSIZE;
 
+static bool pausableState(GameState state) {
+	switch (state) {
+		case Spawn:
+		case UserInput:
+		case Delete:
+		case Fall:
+		case LevelChanged:
+		case Pause:
+			return true;
+		default:
+			return false;
+	}
+}
+
 Vector2 Game::GridCoordsToPosition(int i, int j) {
 	return Vector2(
 		-5 + (i + 0.5) * size + offset,
@@ -213,7 +227,7 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 	}
 }
 void Game::togglePause(bool activate) {
-	if (activate && datas->state != Pause) {
+	if (activate && datas->state != Pause && pausableState(datas->state)) {
 		datas->stateBeforePause = datas->state;
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = Pause;
@@ -290,21 +304,8 @@ void Game::tick(float dt) {
 }
 
 int Game::saveState(uint8_t** out) {
-	bool saveState = false;
-	switch (datas->state) {
-		case Spawn:
-		case UserInput:
-		case Delete:
-		case Fall:
-		case LevelChanged:
-		case Pause:
-			saveState = true;
-			break;
-		default:
-			saveState = false;
-	}
-
-	if (!saveState) {
+	bool pausable = pausableState(datas->state);
+	if (!pausable) {
 		LOGI("Current state is '%d' -> nothing to save", datas->state);
 		return 0;
 	}
