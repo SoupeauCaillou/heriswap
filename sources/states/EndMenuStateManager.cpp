@@ -26,6 +26,7 @@ void EndMenuStateManager::Setup() {
 
 	eScore = theTextRenderingSystem.CreateLocalEntity(5);
 	TRANSFORM(eScore)->position = Vector2(1, 6);
+	TEXT_RENDERING(eScore)->hide = true;
 
 	eMsg = theTextRenderingSystem.CreateLocalEntity(28);
 	TRANSFORM(eMsg)->position = Vector2(-4, 1);
@@ -33,6 +34,7 @@ void EndMenuStateManager::Setup() {
 	TEXT_RENDERING(eMsg)->hide = true;
 	TEXT_RENDERING(eMsg)->alignL = true;
 	TEXT_RENDERING(eMsg)->color = Color(0.f,0.f,0.f);
+	
 }
 
 void EndMenuStateManager::Enter() {
@@ -40,8 +42,6 @@ void EndMenuStateManager::Enter() {
 
 	RENDERING(startbtn)->hide = false;
 	BUTTON(startbtn)->clicked = false;
-
-	TEXT_RENDERING(eMsg)->hide = false;
 
 	std::vector<ScoreStorage::ScoreEntry> entries = storage->loadFromStorage();
 	ScoreStorage::ScoreEntry entry;
@@ -53,7 +53,7 @@ void EndMenuStateManager::Enter() {
 		entries.resize(10);
 	}
 	storage->saveToStorage(entries);
-
+	
 	{
 	std::stringstream a;
 	a.precision(0);

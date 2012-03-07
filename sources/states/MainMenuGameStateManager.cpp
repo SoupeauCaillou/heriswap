@@ -33,18 +33,18 @@ void MainMenuGameStateManager::Setup() {
 	RENDERING(score)->size = Game::CellSize() * Game::CellContentScale();
 	RENDERING(score)->hide = true;
 
-	eStart = theTextRenderingSystem.CreateLocalEntity(5);
+	eStart = theTextRenderingSystem.CreateLocalEntity(7);
 	eScore = theTextRenderingSystem.CreateLocalEntity(6);
 
 	TRANSFORM(start)->position = Vector2(0,3);
-	TRANSFORM(eStart)->position = TRANSFORM(start)->position + Vector2(3.5, 0);
+	TRANSFORM(eStart)->position = TRANSFORM(start)->position + Vector2(1.5, 0);
 
 	TRANSFORM(score)->position = Vector2(0,1);
-	TRANSFORM(eScore)->position = TRANSFORM(score)->position + Vector2(3.5, 0);
+	TRANSFORM(eScore)->position = TRANSFORM(score)->position + Vector2(1.5, 0);
 
 
-	RENDERING(start)->hide = true;
-	RENDERING(score)->hide = true;
+	TEXT_RENDERING(eStart)->hide = true;
+	TEXT_RENDERING(eScore)->hide = true;
 
 	RENDERING(start)->color = Color(0,0,0,0);
 	RENDERING(score)->color = Color(0,0,0,0);
@@ -52,6 +52,10 @@ void MainMenuGameStateManager::Setup() {
 	TRANSFORM(start)->rotation = 0;
 	TRANSFORM(score)->rotation = 0;
 
+	TEXT_RENDERING(eStart)->text = "Play !";
+	TEXT_RENDERING(eScore)->text = "Score";
+	TEXT_RENDERING(eStart)->alignL = true;
+	TEXT_RENDERING(eScore)->alignL = true;
 }
 
 
@@ -63,8 +67,7 @@ void MainMenuGameStateManager::Enter() {
 	//Pour les rotations et autres animations
 	elapsedTime = 0;
 
-	TEXT_RENDERING(eStart)->text = "Play!";
-	TEXT_RENDERING(eScore)->text = "Score";
+
 
 	TEXT_RENDERING(eStart)->hide = false;
 	TEXT_RENDERING(eScore)->hide = false;

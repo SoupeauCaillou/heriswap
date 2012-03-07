@@ -35,9 +35,8 @@ class UserInputGameStateManager : public GameStateManager {
 
 	private:
 		// datas
-		Entity eSwapper;
+		Entity eSwapper, dragged;
 		bool dragStarted;
-		Entity dragged;
 		int originI, originJ;
 		int swapI, swapJ;
 };

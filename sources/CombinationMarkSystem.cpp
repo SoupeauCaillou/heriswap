@@ -13,12 +13,13 @@ void CombinationMarkSystem::NewMarks(int stat, Vector2 coord){
 	theEntityManager.AddComponent(e, &theRenderingSystem);
 	TRANSFORM(e)->position = Game::GridCoordsToPosition(coord.X, coord.Y);
 	TRANSFORM(e)->z = 5;
-	
+	RENDERING(e)->hide = false;
 	COMBIN(e)->state = stat;
 		
 	std::stringstream a;
 	a << "combinationMark"<< stat<<".png";
-	RENDERING(e)->texture = theRenderingSystem.loadTextureFile(a.str());
+	RENDERING(e)->texture = theRenderingSystem.loadTextureFile("combinationMark1.png");
+	RENDERING(e)->color = Color(stat*25,stat*25,stat*25,255);
 	RENDERING(e)->size = Game::CellSize();
 }
 

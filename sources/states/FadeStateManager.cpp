@@ -19,9 +19,10 @@ void FadeGameStateManager::Setup() {
 	ADSR(eFading)->idleValue = 0;
 	ADSR(eFading)->attackValue = 0;
 	ADSR(eFading)->attackTiming = 0.;
-	ADSR(eFading)->decayTiming = 2.;
+	ADSR(eFading)->decayTiming = 0.2;
 	ADSR(eFading)->sustainValue = 1.0;
-	ADSR(eFading)->releaseTiming = 2.;
+	ADSR(eFading)->releaseTiming = 0.2;
+	if (eThing) RENDERING(eThing)->hide = true;
 }
 
 static void updateColor(Entity eFading, FadeType fading) {

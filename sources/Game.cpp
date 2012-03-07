@@ -42,6 +42,8 @@ class Game::Data {
 
 			logo = theEntityManager.CreateEntity();
 
+			state = BlackToLogoState;
+
 			state2Manager[BlackToLogoState] = new FadeGameStateManager(logo, FadeIn, BlackToLogoState, LogoToBlackState);
 			state2Manager[LogoToBlackState] = new FadeGameStateManager(logo, FadeOut, LogoToBlackState, BlackToMainMenu);
 			//to do : add entity || modif 0 du GameStateToBlack
@@ -49,7 +51,6 @@ class Game::Data {
 			state2Manager[BlackToMainMenu] = new FadeGameStateManager(0, FadeIn, BlackToMainMenu, MainMenu);
 			state2Manager[MainMenuToBlackState] = new FadeGameStateManager(0, FadeOut, MainMenuToBlackState, BlackToSpawn);
 			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
-			state = BlackToLogoState;
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
 			state2Manager[Spawn] = new SpawnGameStateManager();
 			state2Manager[UserInput] = new UserInputGameStateManager();
@@ -173,43 +174,32 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 	activated = !activated;
 	if (forcedesactivate) activated = false;
 	if (datas->state != UserInput) activated = false;
-	static std::vector<Entity> combinationMark;
 	if (activated) {
 		std::cout << "Affiche magique de la triche ! \n" ;
+		//j=0 : vertical
+		//j=1 : h
 		for (int j=0;j<2;j++) {
 			std::vector<Vector2> combinaisons;
 			if (j) combinaisons = theGridSystem.LookForCombinationsOnSwitchHorizontal();
 			else combinaisons = theGridSystem.LookForCombinationsOnSwitchVertical();
+			std::cout << combinaisons.size() << " dispo ici en " << j << std::endl;
 			if (!combinaisons.empty())
 			{
 				for ( std::vector<Vector2>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
 				{
-					for (int i=0;i<2;i++) {
-						combinationMark.push_back(theEntityManager.CreateEntity());
-						theEntityManager.AddComponent(combinationMark.back(), &theTransformationSystem);
-						theEntityManager.AddComponent(combinationMark.back(), &theADSRSystem);
-						theEntityManager.AddComponent(combinationMark.back(), &theRenderingSystem);
-						if (j) {
-							TRANSFORM(combinationMark.back())->position = GridCoordsToPosition(it->X+i, it->Y);
-							RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark2.png");
-						} else {
-							TRANSFORM(combinationMark.back())->position = GridCoordsToPosition(it->X, it->Y+i);
-							RENDERING(combinationMark.back())->texture = theRenderingSystem.loadTextureFile("combinationMark1.png");
-						}
-						TRANSFORM(combinationMark.back())->z = 5;
-						RENDERING(combinationMark.back())->size = CellSize();
+					//rajout de 2 marques sur les elements a swich
+					for (int i=0;i<2;i++) {						
+						if (j) theCombinationMarkSystem.NewMarks(4, Vector2(it->X+i, it->Y));
+						else theCombinationMarkSystem.NewMarks(5, Vector2(it->X, it->Y+i));
+
 					}
 				}
 			}
 		}
 	} else {
-		if (combinationMark.size() > 0) {
-			std::cout << "Destruction des marquages et de la triche !\n";
-			for (std::vector<Entity>::iterator it=combinationMark.begin(); it!=combinationMark.end(); it++) {
-				theEntityManager.DeleteEntity(*it);
-			}
-			combinationMark.clear();
-		}
+		std::cout << "Destruction des marquages et de la triche !\n";
+		theCombinationMarkSystem.DeleteMarks(4);
+		theCombinationMarkSystem.DeleteMarks(5);
 	}
 }
 void Game::togglePause(bool activate) {

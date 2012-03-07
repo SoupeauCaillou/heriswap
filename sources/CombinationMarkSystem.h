@@ -16,6 +16,8 @@
  * 1 = spawn
  * 2 = fall
  * 3 = delete
+ * 4 = magickey vert
+ * 5 = magickey hori
 */
 struct CombinationMarkComponent {
 	CombinationMarkComponent() {
