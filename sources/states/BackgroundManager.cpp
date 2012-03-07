@@ -50,7 +50,7 @@ void BackgroundManager::Setup() {
 }
 
 void BackgroundManager::Enter() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 }
 
 GameState BackgroundManager::Update(float dt) {
@@ -73,5 +73,5 @@ void BackgroundManager::BackgroundUpdate(float dt) {
 }
 
 void BackgroundManager::Exit() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 }

@@ -41,7 +41,7 @@ void SpawnGameStateManager::Setup() {
 }
 
 void SpawnGameStateManager::Enter() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 
 	std::vector<Combinais> c;
 	fillTheBlank(spawning);
@@ -142,7 +142,7 @@ GameState SpawnGameStateManager::NextState(bool marker) {
 }
 
 void SpawnGameStateManager::Exit() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 }
 
 void fillTheBlank(std::vector<Feuille>& spawning)
@@ -201,7 +201,7 @@ static TextureRef textureFromType(int type) {
 }
 
 static Entity createCell(Feuille& f) {
-	Entity e = theEntityManager.CreateEntity();
+	Entity e = theEntityManager.CreateEntity(EntityManager::Persistent);
 	ADD_COMPONENT(e, Transformation);
 	ADD_COMPONENT(e, Rendering);
 	ADD_COMPONENT(e, ADSR);

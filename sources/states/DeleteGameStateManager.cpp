@@ -23,7 +23,7 @@ void DeleteGameStateManager::Setup() {
 }
 
 void DeleteGameStateManager::Enter() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 	removing = theGridSystem.LookForCombination(true,true);
 }
 
@@ -58,5 +58,5 @@ GameState DeleteGameStateManager::Update(float dt) {
 void DeleteGameStateManager::Exit() {
 	ADSR(eRemove)->active = false;
 	removing.clear();
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 }

@@ -23,7 +23,7 @@ void UserInputGameStateManager::Setup() {
 }
 
 void UserInputGameStateManager::Enter() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 	dragged = 0;
 	ADSR(eSwapper)->active = false;
 }
@@ -222,7 +222,7 @@ void UserInputGameStateManager::BackgroundUpdate(float dt) {
 }
 
 void UserInputGameStateManager::Exit() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 }
 
 static void activateADSR(Entity e, float a, float s) {

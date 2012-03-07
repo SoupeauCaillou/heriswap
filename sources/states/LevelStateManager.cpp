@@ -14,7 +14,7 @@ void LevelStateManager::Setup() {
 }
 
 void LevelStateManager::Enter() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 }
 
 GameState LevelStateManager::Update(float dt) {
@@ -22,5 +22,5 @@ GameState LevelStateManager::Update(float dt) {
 }
 
 void LevelStateManager::Exit() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 }

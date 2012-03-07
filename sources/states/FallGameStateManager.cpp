@@ -21,7 +21,7 @@ void FallGameStateManager::Setup() {
 }
 
 void FallGameStateManager::Enter() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 	falling = theGridSystem.TileFall();
 
 	// Creation de la nouvelle grille
@@ -86,5 +86,5 @@ void FallGameStateManager::Exit() {
 	ADSR(eFall)->active = false;
 	theCombinationMarkSystem.DeleteMarks(2);
 
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 }

@@ -36,7 +36,7 @@ void EndMenuStateManager::Setup() {
 }
 
 void EndMenuStateManager::Enter() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 
 	RENDERING(startbtn)->hide = false;
 	BUTTON(startbtn)->clicked = false;
@@ -85,7 +85,7 @@ GameState EndMenuStateManager::Update(float dt) {
 }
 
 void EndMenuStateManager::Exit() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 	TEXT_RENDERING(eMsg)->hide = true;
 	RENDERING(startbtn)->hide = true;
 	BUTTON(startbtn)->clicked = true;

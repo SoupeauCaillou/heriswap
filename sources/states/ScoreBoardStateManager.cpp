@@ -34,7 +34,7 @@ void ScoreBoardStateManager::Setup() {
 }
 
 void ScoreBoardStateManager::Enter() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 
 	RENDERING(startbtn)->hide = false;
 	BUTTON(startbtn)->clicked = false;
@@ -62,7 +62,7 @@ GameState ScoreBoardStateManager::Update(float dt) {
 }
 
 void ScoreBoardStateManager::Exit() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGI("%s", __PRETTY_FUNCTION__);
 	RENDERING(startbtn)->hide = true;
 	BUTTON(startbtn)->clicked = true;
 	for (int i=0;i<10;i++) {
