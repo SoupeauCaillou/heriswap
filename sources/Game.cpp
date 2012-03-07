@@ -220,13 +220,13 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 void Game::togglePause(bool activate) {
 	if (activate && datas->state != Pause && pausableState(datas->state)) {
 		datas->stateBeforePause = datas->state;
-		datas->state2Manager[datas->state]->Exit();
+		// datas->state2Manager[datas->state]->Exit();
 		datas->state = Pause;
 		datas->state2Manager[datas->state]->Enter();
 	} else if (!activate) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = datas->stateBeforePause;
-		datas->state2Manager[datas->state]->Enter();
+		// datas->state2Manager[datas->state]->Enter();
 	}
 }
 
@@ -244,12 +244,17 @@ void Game::tick(float dt) {
 	if (newState != datas->state && datas->state == Pause) {
 		togglePause(false);
 	} else if (newState != datas->state) {
+		if (newState == BlackToSpawn) {
+			datas->state2Manager[Spawn]->Enter();
+		}
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
 	}
 
-	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin(); it!=datas->state2Manager.end(); ++it) {
+	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin();
+		it!=datas->state2Manager.end();
+		++it) {
 		it->second->BackgroundUpdate(dt);
 	}
 	//si c'est pas à l'user de jouer, on cache de force les combi
@@ -268,7 +273,8 @@ void Game::tick(float dt) {
 		theGridSystem.HideAll(false);
 	} else {
 		datas->hud->Hide(true);
-		theGridSystem.HideAll(true);
+		if (newState != BlackToSpawn)
+			theGridSystem.HideAll(true);
 	}
 
 

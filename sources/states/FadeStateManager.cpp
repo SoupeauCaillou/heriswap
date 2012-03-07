@@ -1,4 +1,5 @@
 #include "FadeStateManager.h"
+#include "base/TouchInputManager.h"
 
 FadeGameStateManager::FadeGameStateManager(Entity eFade, FadeType fade, GameState whoAmI, GameState whoIsNext):
 	eThing(eFade), fading(fade), iAm(whoAmI), heIs(whoIsNext) {
@@ -44,7 +45,8 @@ void FadeGameStateManager::Enter() {
 GameState FadeGameStateManager::Update(float dt) {
 	updateColor(eFading, fading);
 
-	if (ADSR(eFading)->value == ADSR(eFading)->sustainValue)
+	if (ADSR(eFading)->value == ADSR(eFading)->sustainValue
+		|| (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()))
 		return heIs;
 	return iAm;
 }
