@@ -18,7 +18,7 @@ void FadeGameStateManager::Setup() {
 	ADD_COMPONENT(eFading, ADSR);
 	ADSR(eFading)->idleValue = 0;
 	ADSR(eFading)->attackValue = 0;
-	ADSR(eFading)->attackTiming = 0.;
+	ADSR(eFading)->attackTiming = 0.6;
 	ADSR(eFading)->decayTiming = .2;
 	ADSR(eFading)->sustainValue = 1.0;
 	ADSR(eFading)->releaseTiming = .2;
