@@ -12,7 +12,7 @@ void FadeGameStateManager::Setup() {
 	RENDERING(eFading)->size = Vector2(10,20);
 	RENDERING(eFading)->hide = true;
 	RENDERING(eFading)->texture = theRenderingSystem.loadTextureFile("combinationMark1.png");
-
+	RENDERING(eFading)->color = Color(0,0,0);
 	TRANSFORM(eFading)->z = 40;
 
 	ADD_COMPONENT(eFading, ADSR);
@@ -27,9 +27,9 @@ void FadeGameStateManager::Setup() {
 static void updateColor(Entity eFading, FadeType fading) {
 	float value = ADSR(eFading)->value;
 	if (fading == FadeIn)
-		RENDERING(eFading)->color = Color(value, value, value, 1-value);
+		RENDERING(eFading)->color.a = 1 - value;
 	else
-		RENDERING(eFading)->color = Color(1-value,1-value,1-value,value);
+		RENDERING(eFading)->color.a = value;
 }
 
 void FadeGameStateManager::Enter() {
