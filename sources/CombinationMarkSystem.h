@@ -12,13 +12,6 @@
 
 #include "Game.h"
 
-/* state :
- * 1 = spawn
- * 2 = fall
- * 3 = delete
- * 4 = magickey vert
- * 5 = magickey hori
-*/
 struct CombinationMarkComponent {
 	CombinationMarkComponent() {
 		state = 0;
@@ -35,6 +28,7 @@ UPDATABLE_SYSTEM(CombinationMark)
 public : 
 	void NewMarks(int stat, Vector2 coord);
 	void DeleteMarks(int stat);
+	int NumberOfThisType(int stat);
 
 };
 

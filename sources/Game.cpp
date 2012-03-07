@@ -196,7 +196,6 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 			std::vector<Vector2> combinaisons;
 			if (j) combinaisons = theGridSystem.LookForCombinationsOnSwitchHorizontal();
 			else combinaisons = theGridSystem.LookForCombinationsOnSwitchVertical();
-			std::cout << combinaisons.size() << " dispo ici en " << j << std::endl;
 			if (!combinaisons.empty())
 			{
 				for ( std::vector<Vector2>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
@@ -211,9 +210,11 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 			}
 		}
 	} else {
-		std::cout << "Destruction des marquages et de la triche !\n";
-		theCombinationMarkSystem.DeleteMarks(4);
-		theCombinationMarkSystem.DeleteMarks(5);
+		if (theCombinationMarkSystem.NumberOfThisType(4) || theCombinationMarkSystem.NumberOfThisType(5)) {
+			std::cout << "Destruction des marquages et de la triche !\n";
+			theCombinationMarkSystem.DeleteMarks(4);
+			theCombinationMarkSystem.DeleteMarks(5);
+		}
 	}
 }
 void Game::togglePause(bool activate) {

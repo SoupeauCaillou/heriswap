@@ -11,7 +11,6 @@ void FadeGameStateManager::Setup() {
 	TRANSFORM(eFading)->position = Vector2(0,0);
 	RENDERING(eFading)->size = Vector2(10,20);
 	RENDERING(eFading)->hide = true;
-	RENDERING(eFading)->texture = theRenderingSystem.loadTextureFile("combinationMark1.png");
 	RENDERING(eFading)->color = Color(0,0,0);
 	TRANSFORM(eFading)->z = 40;
 
@@ -19,9 +18,9 @@ void FadeGameStateManager::Setup() {
 	ADSR(eFading)->idleValue = 0;
 	ADSR(eFading)->attackValue = 0;
 	ADSR(eFading)->attackTiming = 0.;
-	ADSR(eFading)->decayTiming = 0.2;
+	ADSR(eFading)->decayTiming = .2;
 	ADSR(eFading)->sustainValue = 1.0;
-	ADSR(eFading)->releaseTiming = 0.2;
+	ADSR(eFading)->releaseTiming = .2;
 	if (eThing) RENDERING(eThing)->hide = true;
 }
 
