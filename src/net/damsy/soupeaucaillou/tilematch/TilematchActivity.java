@@ -12,8 +12,8 @@ public class TilematchActivity extends Activity {
 	static final String TILEMATCH_BUNDLE_KEY = "plop";
 	static public long game = 0 	;
 	static public Object mutex;
-	static public int openGLESVersion = 2;
 	static public byte[] savedState;
+	static public int openGLESVersion = 2;
 	byte[] renderingSystemState;
 	
 	@Override
@@ -44,27 +44,24 @@ public class TilematchActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mGLView.onPause();
-        //TilematchJNILib.pause(TilematchActivity.game);
-        
-        // renderingSystemState = TilematchJNILib.saveRenderingSystemState(TilematchActivity.game);
+        TilematchJNILib.pause(TilematchActivity.game);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mGLView.onResume();
-        
-        // TilematchJNILib.restoreRenderingSystemState(TilematchActivity.game, renderingSystemState);
-        // renderingSystemState = null;
     }
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+    	/* save current state; we'll be used only if app get killed */
     	synchronized (TilematchActivity.mutex) {
 	    	Log.i("tilematch", "Save state!");
-	    	savedState = TilematchJNILib.serialiazeState(TilematchActivity.game);
-	    	outState.putByteArray(TILEMATCH_BUNDLE_KEY, savedState);
-	    	TilematchActivity.game = 0;
+	    	byte[] savedState = TilematchJNILib.serialiazeState(TilematchActivity.game);
+	    	if (savedState != null) {
+	    		outState.putByteArray(TILEMATCH_BUNDLE_KEY, savedState);
+	    	}
 	    	Log.i("tilematch", "State saved");
     	}
     	super.onSaveInstanceState(outState);

@@ -335,6 +335,7 @@ void Game::loadState(const uint8_t* in, int size) {
 	/* restore Game fields */
 	int index = 0;
 	memcpy(&datas->stateBeforePause, &in[index], sizeof(datas->stateBeforePause));
+	datas->state = Pause;
 	in += sizeof(datas->stateBeforePause);
 	int eSize, sSize;
 	memcpy(&eSize, &in[index], sizeof(eSize));
