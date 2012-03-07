@@ -327,7 +327,8 @@ int Game::saveState(uint8_t** out) {
 	ptr = (uint8_t*)mempcpy(ptr, entities, eSize);
 	ptr = (uint8_t*)mempcpy(ptr, systems, sSize);
 
-	std::cout << sizeof(datas->stateBeforePause) << " + " << sizeof(eSize) << " + " << sizeof(sSize) << " + " << eSize << " + " << sSize << " -> " << finalSize << std::endl;
+	LOGI("%d + %d + %d + %d + %d -> %d",
+		sizeof(datas->stateBeforePause), sizeof(eSize), sizeof(sSize), eSize, sSize, finalSize);
 	return finalSize;
 }
 
