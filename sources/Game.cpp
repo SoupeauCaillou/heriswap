@@ -253,6 +253,9 @@ void Game::tick(float dt) {
 	if (newState != datas->state && datas->state == Pause) {
 		togglePause(false);
 	} else if (newState != datas->state) {
+		if (newState == BlackToSpawn) {
+			datas->state2Manager[Spawn]->Enter();
+		}
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
@@ -279,7 +282,8 @@ void Game::tick(float dt) {
 		theGridSystem.HideAll(false);
 	} else {
 		datas->hud->Hide(true);
-		theGridSystem.HideAll(true);
+		if (newState != BlackToSpawn)
+			theGridSystem.HideAll(true);
 	}
 
 

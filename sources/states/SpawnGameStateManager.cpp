@@ -211,6 +211,7 @@ static Entity createCell(Feuille& f) {
 	TRANSFORM(e)->z = 10;
 	RENDERING(e)->texture = textureFromType(f.type);
 	RENDERING(e)->size = Game::CellSize() * Game::CellContentScale();
+	RENDERING(e)->hide = false;
 	ADSR(e)->idleValue = Game::CellSize() * Game::CellContentScale();
 	GRID(e)->type = f.type;
 	GRID(e)->i = f.X;
