@@ -18,8 +18,7 @@ public class TilematchJNILib {
     public static native void pause(long game);
     public static native void handleInputEvent(long game, int event, float x, float y);
     public static native byte[] serialiazeState(long game);
-    public static native byte[] saveRenderingSystemState(long game);
-    public static native void restoreRenderingSystemState(long game, byte[] state);
+    public static native void initAndReloadTextures(long game);
  
     static public byte[] assetToByteArray(AssetManager mgr, String assetName) {
     	try {

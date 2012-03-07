@@ -103,10 +103,15 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
   (JNIEnv *env, jclass, jobject asset, jint openglesVersion) {
   	LOGW("%s -->", __FUNCTION__);
 	GameHolder* hld = new GameHolder();
-	hld->game = new Game();
+	hld->game = new Game(&hld->storage);
 	hld->env = env;
 	hld->openGLESVersion = openglesVersion;
 	hld->assetManager = (jobject)env->NewGlobalRef(asset);
+
+	theRenderingSystem.setNativeAssetLoader(new AndroidNativeAssetLoader(hld));
+	theRenderingSystem.opengles2 = (hld->openGLESVersion == 2);
+	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
+
 	LOGW("%s <--", __FUNCTION__);
 	return (jlong)hld;
 }
@@ -123,10 +128,6 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	hld->width = w;
 	hld->height = h;
 
-	theRenderingSystem.setNativeAssetLoader(new AndroidNativeAssetLoader(hld));
-	theRenderingSystem.opengles2 = (hld->openGLESVersion == 2);
-	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
-
 	uint8_t* state = 0;
 	int size = 0;
 	if (jstate) {
@@ -137,7 +138,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 		LOGW("No saved state: creating a new Game instance from scratch");
 	}
 
-	hld->game->init(&hld->storage, hld->width, hld->height, state, size);
+	hld->game->init(hld->width, hld->height, state, size);
 	theTouchInputManager.init(Vector2(10, 10. * hld->height / hld->width), Vector2(hld->width, hld->height));
 
 	gettimeofday(&hld->startup_time,NULL);
@@ -219,27 +220,16 @@ JNIEXPORT jbyteArray JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJN
   (JNIEnv *env, jclass, jlong g) {
 	LOGW("%s -->", __FUNCTION__);
 	GameHolder* hld = (GameHolder*) g;
-	hld->game->togglePause(true);
 	uint8_t* state;
 	int size = hld->game->saveState(&state);
 
-	jbyteArray jb = env->NewByteArray(size);
-	env->SetByteArrayRegion(jb, 0, size, (jbyte*)state);
-	LOGW("Serialized state size: %d", size);
-	delete hld->game;
-	hld->game = 0;
-	LOGW("%s <--", __FUNCTION__);
-	return jb;
-}
+	jbyteArray jb = 0;
+	if (size) {
+		jb = env->NewByteArray(size);
+		env->SetByteArrayRegion(jb, 0, size, (jbyte*)state);
+		LOGW("Serialized state size: %d", size);
+	}
 
-JNIEXPORT jbyteArray JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_saveRenderingSystemState
-  (JNIEnv *env, jclass, jlong g) {
-	LOGW("%s -->", __FUNCTION__);
-	uint8_t* state;
-	int size = theRenderingSystem.saveInternalState(&state);
-
-	jbyteArray jb = env->NewByteArray(size);
-	env->SetByteArrayRegion(jb, 0, size, (jbyte*)state);
 	LOGW("%s <--", __FUNCTION__);
 	return jb;
 }
@@ -249,21 +239,10 @@ JNIEXPORT jbyteArray JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJN
  * Method:    restoreRenderingSystemState
  * Signature: (J[B)V
  */
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_restoreRenderingSystemState
-  (JNIEnv *env, jclass, jlong, jbyteArray jstate) {
-  LOGW("hack; theRenderingSystem.init");
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_initAndReloadTextures
+  (JNIEnv *env, jclass, jlong) {
+  theRenderingSystem.init();
   theRenderingSystem.reloadTextures();
-  return;
-
-	uint8_t* state = 0;
-	int size = 0;
-	if (jstate) {
-		size = env->GetArrayLength(jstate);
-		state = (uint8_t*)env->GetByteArrayElements(jstate, NULL);
-		LOGW("Restoring saved state (size:%d)", size);
-
-		theRenderingSystem.restoreInternalState(state, size);
-	}
 }
 
 static char* loadAsset(GameHolder* hld, const std::string& assetName, int* length) {

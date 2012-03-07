@@ -96,6 +96,20 @@ static const float offset = 0.2;
 static const float scale = 0.95;
 static const float size = (10 - 2 * offset) / GRIDSIZE;
 
+static bool pausableState(GameState state) {
+	switch (state) {
+		case Spawn:
+		case UserInput:
+		case Delete:
+		case Fall:
+		case LevelChanged:
+		case Pause:
+			return true;
+		default:
+			return false;
+	}
+}
+
 Vector2 Game::GridCoordsToPosition(int i, int j) {
 	return Vector2(
 		-5 + (i + 0.5) * size + offset,
@@ -203,7 +217,7 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 	}
 }
 void Game::togglePause(bool activate) {
-	if (activate && datas->state != Pause) {
+	if (activate && datas->state != Pause && pausableState(datas->state)) {
 		datas->stateBeforePause = datas->state;
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = Pause;
@@ -280,6 +294,12 @@ void Game::tick(float dt) {
 }
 
 int Game::saveState(uint8_t** out) {
+	bool pausable = pausableState(datas->state);
+	if (!pausable) {
+		LOGI("Current state is '%d' -> nothing to save", datas->state);
+		return 0;
+	}
+
 	/* save all entities/components */
 	uint8_t* entities = 0;
 	int eSize = theEntityManager.serialize(&entities);
@@ -292,13 +312,14 @@ int Game::saveState(uint8_t** out) {
 	int finalSize = sizeof(datas->stateBeforePause) + sizeof(eSize) + sizeof(sSize) + eSize + sSize;
 	*out = new uint8_t[finalSize];
 	uint8_t* ptr = *out;
-	ptr = (uint8_t*)mempcpy(ptr, &datas->stateBeforePause, sizeof(datas->stateBeforePause));
+	ptr = (uint8_t*)mempcpy(ptr, &datas->state, sizeof(datas->state));
 	ptr = (uint8_t*)mempcpy(ptr, &eSize, sizeof(eSize));
 	ptr = (uint8_t*)mempcpy(ptr, &sSize, sizeof(sSize));
 	ptr = (uint8_t*)mempcpy(ptr, entities, eSize);
 	ptr = (uint8_t*)mempcpy(ptr, systems, sSize);
 
-	std::cout << sizeof(datas->stateBeforePause) << " + " << sizeof(eSize) << " + " << sizeof(sSize) << " + " << eSize << " + " << sSize << " -> " << finalSize << std::endl;
+	LOGI("%d + %d + %d + %d + %d -> %d",
+		sizeof(datas->stateBeforePause), sizeof(eSize), sizeof(sSize), eSize, sSize, finalSize);
 	return finalSize;
 }
 
@@ -306,6 +327,7 @@ void Game::loadState(const uint8_t* in, int size) {
 	/* restore Game fields */
 	int index = 0;
 	memcpy(&datas->stateBeforePause, &in[index], sizeof(datas->stateBeforePause));
+	datas->state = Pause;
 	in += sizeof(datas->stateBeforePause);
 	int eSize, sSize;
 	memcpy(&eSize, &in[index], sizeof(eSize));
