@@ -18,9 +18,9 @@ void SpawnGameStateManager::Setup() {
 	ADD_COMPONENT(eSpawn, ADSR);
 
 	ADSR(eSpawn)->idleValue = 0;
-	ADSR(eSpawn)->attackValue = 0.5;
-	ADSR(eSpawn)->attackTiming = 0.2;
-	ADSR(eSpawn)->decayTiming = 0.2;
+	ADSR(eSpawn)->attackValue = 1.0;
+	ADSR(eSpawn)->attackTiming = 0.4;
+	ADSR(eSpawn)->decayTiming = 0;
 	ADSR(eSpawn)->sustainValue = 1.0;
 	ADSR(eSpawn)->releaseTiming = 0;
 
@@ -30,14 +30,11 @@ void SpawnGameStateManager::Setup() {
 	ADD_COMPONENT(eGrid, ADSR);
 
 	ADSR(eGrid)->idleValue = 0;
-	ADSR(eGrid)->attackValue = 0.5;
+	ADSR(eGrid)->attackValue = 3.0;
 	ADSR(eGrid)->attackTiming = 1.;
-	ADSR(eGrid)->decayTiming = 0.4;
+	ADSR(eGrid)->decayTiming = 0;
 	ADSR(eGrid)->sustainValue = 3.0;
 	ADSR(eGrid)->releaseTiming = 0;
-
-
-
 }
 
 void SpawnGameStateManager::Enter() {

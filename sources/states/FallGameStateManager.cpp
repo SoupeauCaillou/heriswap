@@ -13,9 +13,9 @@ void FallGameStateManager::Setup() {
 	ADD_COMPONENT(eFall, ADSR);
 
 	ADSR(eFall)->idleValue = 0;
-	ADSR(eFall)->attackValue = 0.5;
-	ADSR(eFall)->attackTiming = .2;
-	ADSR(eFall)->decayTiming = 0.2;
+	ADSR(eFall)->attackValue = 1.0;
+	ADSR(eFall)->attackTiming = .3;
+	ADSR(eFall)->decayTiming = 0;
 	ADSR(eFall)->sustainValue = 1.0;
 	ADSR(eFall)->releaseTiming = 0;
 
