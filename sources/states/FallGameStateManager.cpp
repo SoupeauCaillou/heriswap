@@ -22,8 +22,9 @@ void FallGameStateManager::Setup() {
 	
 	
 
-	ADSR(eFall)->moding = Quadratic;
-	//	ADSR(eFall)->moding = Linear;
+	ADSR(eFall)->attackMode = Quadratic;
+	ADSR(eFall)->decayMode = Quadratic;
+	ADSR(eFall)->releaseMode = Quadratic;
 
 
 }
