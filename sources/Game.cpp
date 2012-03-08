@@ -11,6 +11,7 @@
 #include "systems/ADSRSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/SoundSystem.h"
+#include "systems/ContainerSystem.h"
 
 #include "HUDManager.h"
 #include "GridSystem.h"
@@ -142,6 +143,7 @@ Game::Game(ScoreStorage* storage) {
 	ADSRSystem::CreateInstance();
 	ButtonSystem::CreateInstance();
 	TextRenderingSystem::CreateInstance();
+	ContainerSystem::CreateInstance();
 }
 
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
@@ -298,6 +300,7 @@ void Game::tick(float dt) {
 	theCombinationMarkSystem.Update(dt);
 	theTransformationSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);
+	theContainerSystem.Update(dt);
 	theRenderingSystem.Update(dt);
 	theSoundSystem.Update(dt);
 }

@@ -1,4 +1,5 @@
 #include "MainMenuGameStateManager.h"
+#include "systems/ContainerSystem.h"
 
 MainMenuGameStateManager::MainMenuGameStateManager() {
 
@@ -17,18 +18,14 @@ void MainMenuGameStateManager::Setup() {
 
 	ADD_COMPONENT(start, Transformation);
 	ADD_COMPONENT(start, Rendering);
-	ADD_COMPONENT(start, Button);
 
 	RENDERING(start)->texture = theRenderingSystem.loadTextureFile("1.png");
 	TRANSFORM(start)->size = Game::CellSize() * Game::CellContentScale();
 	RENDERING(start)->hide = true;
-	BUTTON(start)->clicked = false;
-
+	
 	ADD_COMPONENT(score, Transformation);
 	ADD_COMPONENT(score, Rendering);
-	ADD_COMPONENT(score, Button);
 
-	BUTTON(score)->clicked = false;
 	RENDERING(score)->texture = theRenderingSystem.loadTextureFile("2.png");
 	TRANSFORM(score)->size = Game::CellSize() * Game::CellContentScale();
 	RENDERING(score)->hide = true;
@@ -56,10 +53,21 @@ void MainMenuGameStateManager::Setup() {
 	TEXT_RENDERING(eScore)->text = "Score";
 	TEXT_RENDERING(eStart)->alignL = true;
 	TEXT_RENDERING(eScore)->alignL = true;
+	
+	bStart = theEntityManager.CreateEntity();
+	ADD_COMPONENT(bStart, Transformation);
+	ADD_COMPONENT(bStart, Container);
+	ADD_COMPONENT(bStart, Button);
+	ADD_COMPONENT(bStart, Rendering);
+	RENDERING(bStart)->color = Color(1.0, .0, .0, .5);
+	
+	bScore = theEntityManager.CreateEntity();
+	ADD_COMPONENT(bScore, Transformation);
+	ADD_COMPONENT(bScore, Container);
+	ADD_COMPONENT(bScore, Button);
+	ADD_COMPONENT(bScore, Rendering);
+	RENDERING(bScore)->color = Color(.0, 1.0, .0, .5);
 }
-
-
-
 
 void MainMenuGameStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
@@ -67,23 +75,33 @@ void MainMenuGameStateManager::Enter() {
 	//Pour les rotations et autres animations
 	elapsedTime = 0;
 
-
-
 	TEXT_RENDERING(eStart)->hide = false;
 	TEXT_RENDERING(eScore)->hide = false;
 	RENDERING(start)->hide = false;
 	RENDERING(score)->hide = false;
 
-	BUTTON(score)->clicked = false;
-	BUTTON(start)->clicked = false;
-
+	BUTTON(bScore)->clicked = false;
+	BUTTON(bStart)->clicked = false;
+	
+	CONTAINER(bScore)->entities.push_back(score);
+	CONTAINER(bScore)->entities.push_back(eScore);
+	CONTAINER(bScore)->includeChildren = true;
+	CONTAINER(bStart)->entities.push_back(start);
+	CONTAINER(bStart)->entities.push_back(eStart);
+	CONTAINER(bStart)->includeChildren = true;
+	RENDERING(bScore)->hide = false;
+	RENDERING(bStart)->hide = false;
 }
 
 GameState MainMenuGameStateManager::Update(float dt) {
+	/* adjust buttons position/size to text + icon position & size */
+	Vector2 startBL = TRANSFORM(start)->worldPosition - TRANSFORM(start)->size * .5;
+	Vector2 startTR = TRANSFORM(start)->worldPosition - TRANSFORM(start)->size * .5;
+	
 	elapsedTime += dt/4.;
-	if (BUTTON(start)->clicked){
+	if (BUTTON(bStart)->clicked){
 		return MainMenuToBlackState;
-	} else if (BUTTON(score)->clicked) {
+	} else if (BUTTON(bScore)->clicked) {
 		return ScoreBoard;
 	}
 
@@ -104,4 +122,9 @@ void MainMenuGameStateManager::Exit() {
 	TEXT_RENDERING(eScore)->hide = true;
 	RENDERING(start)->hide = true;
 	RENDERING(score)->hide = true;
+	RENDERING(bScore)->hide = true;
+	RENDERING(bStart)->hide = true;
+	
+	CONTAINER(bStart)->entities.clear();
+	CONTAINER(bScore)->entities.clear();
 }

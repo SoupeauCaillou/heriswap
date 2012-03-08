@@ -20,6 +20,6 @@ class MainMenuGameStateManager : public GameStateManager {
 		GameState Update(float dt);
 		void Exit();
 	private:
-		Entity start, score, eScore, eStart;
+		Entity start, score, eScore, eStart, bStart, bScore;
 		float elapsedTime;
 };
