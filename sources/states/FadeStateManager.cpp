@@ -22,6 +22,7 @@ void FadeGameStateManager::Setup() {
 	ADSR(eFading)->decayTiming = 0;
 	ADSR(eFading)->sustainValue = 1.0;
 	ADSR(eFading)->releaseTiming = .2;
+	ADSR(eFading)->attackMode = Quadratic;
 	if (eThing) RENDERING(eThing)->hide = true;
 }
 
