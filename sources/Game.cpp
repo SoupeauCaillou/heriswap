@@ -85,6 +85,7 @@ class Game::Data {
 			time = TIMELIMIT;
 		}
 		GameState state, stateBeforePause;
+		bool stateBeforePauseNeedEnter;
 		Entity logo, background, sky;
 		float time;
 		// drag/drop
@@ -201,7 +202,7 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 				for ( std::vector<Vector2>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
 				{
 					//rajout de 2 marques sur les elements a swich
-					for (int i=0;i<2;i++) {						
+					for (int i=0;i<2;i++) {
 						if (j) theCombinationMarkSystem.NewMarks(4, Vector2(it->X+i, it->Y));
 						else theCombinationMarkSystem.NewMarks(5, Vector2(it->X, it->Y+i));
 
@@ -220,13 +221,14 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 void Game::togglePause(bool activate) {
 	if (activate && datas->state != Pause && pausableState(datas->state)) {
 		datas->stateBeforePause = datas->state;
-		// datas->state2Manager[datas->state]->Exit();
+		datas->stateBeforePauseNeedEnter = false;
 		datas->state = Pause;
 		datas->state2Manager[datas->state]->Enter();
 	} else if (!activate) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = datas->stateBeforePause;
-		// datas->state2Manager[datas->state]->Enter();
+		if (datas->stateBeforePauseNeedEnter)
+			datas->state2Manager[datas->state]->Enter();
 	}
 }
 
@@ -335,6 +337,7 @@ void Game::loadState(const uint8_t* in, int size) {
 	int index = 0;
 	memcpy(&datas->stateBeforePause, &in[index], sizeof(datas->stateBeforePause));
 	datas->state = Pause;
+	datas->stateBeforePauseNeedEnter = true;
 	in += sizeof(datas->stateBeforePause);
 	int eSize, sSize;
 	memcpy(&eSize, &in[index], sizeof(eSize));
