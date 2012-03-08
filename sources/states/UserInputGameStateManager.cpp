@@ -47,7 +47,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 						if(e && ButtonSystem::inside(
 						pos,
 						TRANSFORM(e)->worldPosition,
-						RENDERING(e)->size)) {
+						TRANSFORM(e)->size)) {
 						dragged = e;
 						break;
 					}
@@ -126,7 +126,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 				ADSR(eSwapper)->active = false;
 			}
 		} else {
-			std::cout << "release " << std::endl;
+			LOGI("release\n");
 
 			// release drag
 			ADSR(theGridSystem.GetOnPos(originI,originJ))->active = false;
@@ -198,7 +198,7 @@ void UserInputGameStateManager::BackgroundUpdate(float dt) {
 		for(int j=0; j<theGridSystem.GridSize; j++) {
 			Entity e = theGridSystem.GetOnPos(i,j);
 			if (e) {
-				RENDERING(e)->size = ADSR(e)->value;
+				TRANSFORM(e)->size = ADSR(e)->value;
 			}
 		}
 	}
@@ -228,7 +228,7 @@ void UserInputGameStateManager::Exit() {
 static void activateADSR(Entity e, float a, float s) {
 	if (!e)
 		return;
-	float size = RENDERING(e)->size.X;
+	float size = TRANSFORM(e)->size.X;
 	ADSRComponent* ac = ADSR(e);
 	ac->idleValue = size;
 	ac->attackValue = size * a;

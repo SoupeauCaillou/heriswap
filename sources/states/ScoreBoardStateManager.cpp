@@ -19,7 +19,7 @@ void ScoreBoardStateManager::Setup() {
 
 	RENDERING(startbtn)->texture = theRenderingSystem.loadTextureFile("4.png");
 	RENDERING(startbtn)->hide = true;
-	RENDERING(startbtn)->size = Game::CellSize() * Game::CellContentScale();
+	TRANSFORM(startbtn)->size = Game::CellSize() * Game::CellContentScale();
 	BUTTON(startbtn)->clicked = false;
 	TRANSFORM(startbtn)->position = Vector2(0,5);
 

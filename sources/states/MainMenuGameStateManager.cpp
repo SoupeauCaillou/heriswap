@@ -20,7 +20,7 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(start, Button);
 
 	RENDERING(start)->texture = theRenderingSystem.loadTextureFile("1.png");
-	RENDERING(start)->size = Game::CellSize() * Game::CellContentScale();
+	TRANSFORM(start)->size = Game::CellSize() * Game::CellContentScale();
 	RENDERING(start)->hide = true;
 	BUTTON(start)->clicked = false;
 
@@ -30,7 +30,7 @@ void MainMenuGameStateManager::Setup() {
 
 	BUTTON(score)->clicked = false;
 	RENDERING(score)->texture = theRenderingSystem.loadTextureFile("2.png");
-	RENDERING(score)->size = Game::CellSize() * Game::CellContentScale();
+	TRANSFORM(score)->size = Game::CellSize() * Game::CellContentScale();
 	RENDERING(score)->hide = true;
 
 	eStart = theTextRenderingSystem.CreateLocalEntity(7);

@@ -60,7 +60,7 @@ void HUDManager::Setup() {
 		ADD_COMPONENT(datas->fObj[i], Transformation);
 		ADD_COMPONENT(datas->fObj[i], Rendering);
 		TRANSFORM(datas->fObj[i])->z = 5;
-		RENDERING(datas->fObj[i])->size = Vector2(1,1);
+		TRANSFORM(datas->fObj[i])->size = Vector2(1,1);
 		TRANSFORM(datas->fObj[i])->position = TRANSFORM(datas->eObj[i])->position+Vector2(-0.3,0);
 		std::stringstream a;
 		a << i+1 <<".png";
@@ -74,7 +74,7 @@ void HUDManager::Setup() {
 	ADD_COMPONENT(datas->fBonus, Transformation);
 	ADD_COMPONENT(datas->fBonus, Rendering);
 
-	RENDERING(datas->fBonus)->size = Vector2(2,2);
+	TRANSFORM(datas->fBonus)->size = Vector2(2,2);
 	TRANSFORM(datas->fBonus)->position = Vector2(2,6);
 	TRANSFORM(datas->fBonus)->rotation = -.8;
 

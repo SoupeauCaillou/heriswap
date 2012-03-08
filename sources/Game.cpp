@@ -72,7 +72,7 @@ class Game::Data {
 			ADD_COMPONENT(logo, Rendering);
 			ADD_COMPONENT(logo, Transformation);
 			TRANSFORM(logo)->position = Vector2(0,0);
-			RENDERING(logo)->size = Vector2(10,10*720/420);
+			TRANSFORM(logo)->size = Vector2(10,10*720/420);
 			RENDERING(logo)->hide = true;
 			TRANSFORM(logo)->z = 39;
 			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
@@ -163,7 +163,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	theTransformationSystem.Add(datas->sky);
 	TRANSFORM(datas->sky)->z = -1;
 	theRenderingSystem.Add(datas->sky);
-	RENDERING(datas->sky)->size = Vector2(10, 10.0 * windowH / windowW);
+	TRANSFORM(datas->sky)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->sky)->texture = theRenderingSystem.loadTextureFile("sky.png");
 	RENDERING(datas->sky)->hide = false;
 
@@ -171,7 +171,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	ADD_COMPONENT(datas->background, Transformation);
 	ADD_COMPONENT(datas->background, Rendering);
 	TRANSFORM(datas->background)->z = 0;
-	RENDERING(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
+	TRANSFORM(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 	RENDERING(datas->background)->hide = false;
 

@@ -10,7 +10,7 @@ void FadeGameStateManager::Setup() {
 	ADD_COMPONENT(eFading, Transformation);
 	ADD_COMPONENT(eFading, Rendering);
 	TRANSFORM(eFading)->position = Vector2(0,0);
-	RENDERING(eFading)->size = Vector2(10,20);
+	TRANSFORM(eFading)->size = Vector2(10,20);
 	RENDERING(eFading)->hide = true;
 	RENDERING(eFading)->color = Color(0,0,0);
 	TRANSFORM(eFading)->z = 40;
