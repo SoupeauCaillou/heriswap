@@ -18,13 +18,13 @@ void CombinationMarkSystem::NewMarks(int stat, Vector2 coord){
 
 	switch (stat) {
 		case 1 : // user input
-			RENDERING(e)->color = Color(.7f,.7f,0.f,0.f);
+			RENDERING(e)->color = Color(.7f,.7f,0.f,0.3f);
 			break;
 		case 2 : // fall
-			RENDERING(e)->color = Color(1.f,0.f,0.f,0.f);
+			RENDERING(e)->color = Color(1.f,0.f,0.f,0.3f);
 			break;
 		case 3 : // delete
-			RENDERING(e)->color = Color(0.f,1.f,0.f,0.f);
+			RENDERING(e)->color = Color(0.f,1.f,0.f,0.3f);
 			break;
 		case 4 : // magickey vert
 			RENDERING(e)->color = Color(1.0f,0.0f,0.0f,0.3f);
