@@ -15,7 +15,6 @@ void CombinationMarkSystem::NewMarks(int stat, Vector2 coord){
 	TRANSFORM(e)->z = 5;
 	RENDERING(e)->hide = false;
 	TRANSFORM(e)->size = Game::CellSize();
-			//	RENDERING(e)->texture = theRenderingSystem.loadTextureFile("combinationMark2.png");
 
 	switch (stat) {
 		case 1 : // user input

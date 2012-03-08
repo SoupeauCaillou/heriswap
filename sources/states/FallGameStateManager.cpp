@@ -14,10 +14,18 @@ void FallGameStateManager::Setup() {
 
 	ADSR(eFall)->idleValue = 0;
 	ADSR(eFall)->attackValue = 0.5;
-	ADSR(eFall)->attackTiming = 0.2;
+	ADSR(eFall)->attackTiming = .2;
 	ADSR(eFall)->decayTiming = 0.2;
 	ADSR(eFall)->sustainValue = 1.0;
 	ADSR(eFall)->releaseTiming = 0;
+
+	
+	
+
+	ADSR(eFall)->moding = Quadratic;
+	//	ADSR(eFall)->moding = Linear;
+
+
 }
 
 void FallGameStateManager::Enter() {
@@ -64,11 +72,11 @@ GameState FallGameStateManager::Update(float dt) {
 			Vector2 originPos = Game::GridCoordsToPosition(f.x, f.fromY);
 			GRID(f.e)->checkedH = GRID(f.e)->checkedV = false;
 			TRANSFORM(f.e)->position = MathUtil::Lerp(originPos, targetPos, transition->value);
-			if (transition->value == 1) {
+			if (transition->value == 1.) {
 				GRID(f.e)->j = f.toY;
 			}
 		}
-		if (transition->value == 1) {
+		if (transition->value == 1.) {
 			std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
 			if (combinaisons.empty()) return Spawn;
 			else return Delete;

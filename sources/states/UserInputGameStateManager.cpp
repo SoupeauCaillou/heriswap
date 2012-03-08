@@ -126,7 +126,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 				ADSR(eSwapper)->active = false;
 			}
 		} else {
-			LOGI("release\n");
+			LOGI("release");
 
 			// release drag
 			ADSR(theGridSystem.GetOnPos(originI,originJ))->active = false;
