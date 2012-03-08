@@ -16,7 +16,7 @@ enum FadeType {
 
 class FadeGameStateManager : public GameStateManager {
 	public:
-		FadeGameStateManager(Entity eFade, FadeType fade, GameState whoAmI, GameState whoIsNext);
+		FadeGameStateManager(Entity eFade, FadeType fade, GameState whoAmI, GameState whoIsNext, float timeout = 0.0);
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
@@ -25,6 +25,7 @@ class FadeGameStateManager : public GameStateManager {
 		Entity eFading, eThing;
 		FadeType fading;
 		GameState iAm, heIs;
+		float timeout, accum;
 };
 
 

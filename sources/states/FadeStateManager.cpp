@@ -1,8 +1,8 @@
 #include "FadeStateManager.h"
 #include "base/TouchInputManager.h"
 
-FadeGameStateManager::FadeGameStateManager(Entity eFade, FadeType fade, GameState whoAmI, GameState whoIsNext):
-	eThing(eFade), fading(fade), iAm(whoAmI), heIs(whoIsNext) {
+FadeGameStateManager::FadeGameStateManager(Entity eFade, FadeType fade, GameState whoAmI, GameState whoIsNext, float t):
+	eThing(eFade), fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(t) {
 }
 
 void FadeGameStateManager::Setup() {
@@ -40,15 +40,22 @@ void FadeGameStateManager::Enter() {
 	if (eThing) RENDERING(eThing)->hide = false;
 	ADSR(eFading)->active = true;
 
+	accum = 0;
 	updateColor(eFading, fading);
 }
 
 GameState FadeGameStateManager::Update(float dt) {
 	updateColor(eFading, fading);
 
-	if (ADSR(eFading)->value == ADSR(eFading)->sustainValue
-		|| (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()))
+	if (ADSR(eFading)->value == ADSR(eFading)->sustainValue) {
+		accum += dt;
+		if (accum >= timeout)
+			return heIs;
+		else
+			return iAm;
+	} else if (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()) {
 		return heIs;
+	}
 	return iAm;
 }
 

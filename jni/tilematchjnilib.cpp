@@ -50,6 +50,7 @@ struct GameHolder {
 		 int touching;
 		 float x, y;
 	} input;
+	bool firstCall;
 	struct timeval startup_time;
 	float dtAccumuled, time;
 
@@ -144,8 +145,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	hld->game->init(hld->width, hld->height, state, size);
 	theTouchInputManager.init(Vector2(10, 10. * hld->height / hld->width), Vector2(hld->width, hld->height));
 
-	gettimeofday(&hld->startup_time,NULL);
-	hld->time = gettime(hld);
+	hld->firstCall = true;
 	hld->dtAccumuled = 0;
 	LOGW("%s <--", __FUNCTION__);
 }
@@ -161,6 +161,12 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
   	UPDATE_ENV_PTR(hld, env);
 	if (!hld->game)
   		return;
+  		
+  	if (hld->firstCall) {
+		gettimeofday(&hld->startup_time,NULL);
+		hld->time = gettime(hld);
+		hld->firstCall = false;
+	}
 
 	float dt;
 	do {

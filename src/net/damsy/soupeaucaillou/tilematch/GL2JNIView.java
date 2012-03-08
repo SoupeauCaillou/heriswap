@@ -359,7 +359,7 @@ class GL2JNIView extends GLSurfaceView {
             while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
             	Log.e("tilematch", "GL error : " + GLU.gluErrorString(err));
             } 
-        }   
+        }
 
         boolean initDone = false;
         public void onSurfaceChanged(GL10 gl, int width, int height) {

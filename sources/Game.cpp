@@ -45,7 +45,7 @@ class Game::Data {
 
 			state = BlackToLogoState;
 
-			state2Manager[BlackToLogoState] = new FadeGameStateManager(logo, FadeIn, BlackToLogoState, LogoToBlackState);
+			state2Manager[BlackToLogoState] = new FadeGameStateManager(logo, FadeIn, BlackToLogoState, LogoToBlackState, 1.5);
 			state2Manager[LogoToBlackState] = new FadeGameStateManager(logo, FadeOut, LogoToBlackState, BlackToMainMenu);
 			//to do : add entity || modif 0 du GameStateToBlack
 			//hm, ça implique d'en faire un pour chaque state..
