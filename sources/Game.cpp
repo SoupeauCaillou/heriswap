@@ -324,7 +324,10 @@ int Game::saveState(uint8_t** out) {
 	int finalSize = sizeof(datas->stateBeforePause) + sizeof(eSize) + sizeof(sSize) + eSize + sSize;
 	*out = new uint8_t[finalSize];
 	uint8_t* ptr = *out;
-	ptr = (uint8_t*)mempcpy(ptr, &datas->state, sizeof(datas->state));
+	if (datas->state == Pause)
+		ptr = (uint8_t*)mempcpy(ptr, &datas->stateBeforePause, sizeof(datas->state));
+	else
+		ptr = (uint8_t*)mempcpy(ptr, &datas->state, sizeof(datas->state));
 	ptr = (uint8_t*)mempcpy(ptr, &eSize, sizeof(eSize));
 	ptr = (uint8_t*)mempcpy(ptr, &sSize, sizeof(sSize));
 	ptr = (uint8_t*)mempcpy(ptr, entities, eSize);
@@ -352,4 +355,6 @@ void Game::loadState(const uint8_t* in, int size) {
 	index += eSize;
 	/* restore systems */
 	theRenderingSystem.restoreInternalState(&in[index], sSize);
+	
+	LOGW("RESTORED STATE: %d", datas->stateBeforePause);
 }

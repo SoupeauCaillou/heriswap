@@ -360,12 +360,13 @@ class GL2JNIView extends GLSurfaceView {
             	Log.e("tilematch", "GL error : " + GLU.gluErrorString(err));
             } 
         }   
-  
+
         boolean initDone = false;
         public void onSurfaceChanged(GL10 gl, int width, int height) {
         	Log.i("tilematch", "surface changed-> width: " + width + ", height: " + height + ", " + initDone);
-        	if (!initDone || TilematchActivity.savedState != null) {
+        	if (!initDone) {
         		TilematchJNILib.init(TilematchActivity.game, width, height, TilematchActivity.savedState);
+        		TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
         		TilematchActivity.savedState = null;
         		initDone = true;
         	} else {
@@ -379,10 +380,12 @@ class GL2JNIView extends GLSurfaceView {
         }
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        	Log.i("tilematch", "Surface created (game: "  + TilematchActivity.game + ")");
+        	Log.i("tilematch", "Surface created (game: "  + TilematchActivity.game + ", " + initDone + ")");
         	if (TilematchActivity.game == 0) {
         		initDone = false;
         		TilematchActivity.game = TilematchJNILib.createGame(asset, TilematchActivity.openGLESVersion);
+        	} else {
+        		initDone = true;
         	}
         }
     }

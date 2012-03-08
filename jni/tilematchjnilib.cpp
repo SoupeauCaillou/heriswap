@@ -94,6 +94,8 @@ static float gettime(GameHolder* hld) {
 	return timeconverter(tv);
 }
 
+#define UPDATE_ENV_PTR(hld, env) if (hld->env != env) hld->env = env
+
 /*
  * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
  * Method:    createGame
@@ -104,7 +106,7 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
   	LOGW("%s -->", __FUNCTION__);
 	GameHolder* hld = new GameHolder();
 	hld->game = new Game(&hld->storage);
-	hld->env = env;
+	UPDATE_ENV_PTR(hld, env);
 	hld->openGLESVersion = openglesVersion;
 	hld->assetManager = (jobject)env->NewGlobalRef(asset);
 
@@ -125,6 +127,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
   (JNIEnv *env, jclass, jlong g, jint w, jint h, jbyteArray jstate) {
   LOGW("%s -->", __FUNCTION__);
 	GameHolder* hld = (GameHolder*) g;
+	UPDATE_ENV_PTR(hld, env);
 	hld->width = w;
 	hld->height = h;
 
@@ -153,8 +156,9 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
  * Signature: (J)V
  */
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_step
-  (JNIEnv *, jclass, jlong g) {
+  (JNIEnv *env, jclass, jlong g) {
   	GameHolder* hld = (GameHolder*) g;
+  	UPDATE_ENV_PTR(hld, env);
 	if (!hld->game)
   		return;
 
@@ -180,8 +184,9 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
 }
 
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_pause
-  (JNIEnv *, jclass, jlong g) {
+  (JNIEnv *env, jclass, jlong g) {
   	GameHolder* hld = (GameHolder*) g;
+  	UPDATE_ENV_PTR(hld, env);
 	LOGW("%s -->", __FUNCTION__);
   	if (!hld->game)
   		return;
@@ -196,8 +201,9 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_p
  * Signature: (JIFF)V
  */
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_handleInputEvent
-  (JNIEnv *, jclass, jlong g, jint evt, jfloat x, jfloat y) {
+  (JNIEnv *env, jclass, jlong g, jint evt, jfloat x, jfloat y) {
 	GameHolder* hld = (GameHolder*) g;
+	UPDATE_ENV_PTR(hld, env);
 
 	/* ACTION_DOWN == 0 | ACTION_MOVE == 2 */
    if (evt == 0 || evt == 2) {
@@ -240,13 +246,20 @@ JNIEXPORT jbyteArray JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJN
  * Signature: (J[B)V
  */
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_initAndReloadTextures
-  (JNIEnv *env, jclass, jlong) {
+  (JNIEnv *env, jclass, jlong g) {
+  LOGW("%s -->", __FUNCTION__);
+  GameHolder* hld = (GameHolder*) g;
+  UPDATE_ENV_PTR(hld, env);
   theRenderingSystem.init();
   theRenderingSystem.reloadTextures();
+  LOGW("%s <--", __FUNCTION__);
 }
 
 static char* loadAsset(GameHolder* hld, const std::string& assetName, int* length) {
 	jclass util = hld->env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
+	if (!util) {
+		LOGW("ERROR - cannot find class (%p)", hld->env);
+	}
 	jmethodID mid = hld->env->GetStaticMethodID(util, "assetToByteArray", "(Landroid/content/res/AssetManager;Ljava/lang/String;)[B");
 
 	jstring asset = (hld->env)->NewStringUTF(assetName.c_str());
