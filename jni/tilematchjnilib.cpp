@@ -12,6 +12,7 @@
 #include "sac/base/Vector2.h"
 #include "../sources/Game.h"
 #include "sac/systems/RenderingSystem.h"
+#include "sac/systems/SoundSystem.h"
 #include "sac/base/TouchInputManager.h"
 #include "../sources/states/ScoreBoardStateManager.h"
 #include <png.h>
@@ -43,6 +44,7 @@ class SaveStateScoreStorage: public ScoreStorage {
 
 struct GameHolder {
 	Game* game;
+	JavaSoundAPI* api;
 	int width, height;
 	SaveStateScoreStorage storage;
 
@@ -95,7 +97,7 @@ static float gettime(GameHolder* hld) {
 	return timeconverter(tv);
 }
 
-#define UPDATE_ENV_PTR(hld, env) if (hld->env != env) hld->env = env
+#define UPDATE_ENV_PTR(hld, env) if (hld->env != env) hld->env = hld->api->env = env
 
 /*
  * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
@@ -107,14 +109,25 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
   	LOGW("%s -->", __FUNCTION__);
 	GameHolder* hld = new GameHolder();
 	hld->game = new Game(&hld->storage);
-	UPDATE_ENV_PTR(hld, env);
+	hld->env = env;
 	hld->openGLESVersion = openglesVersion;
 	hld->assetManager = (jobject)env->NewGlobalRef(asset);
-
 	theRenderingSystem.setNativeAssetLoader(new AndroidNativeAssetLoader(hld));
 	theRenderingSystem.opengles2 = (hld->openGLESVersion == 2);
 	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
-
+	
+	LOGW("Build Java sound API proxy");
+	hld->api = new JavaSoundAPI();
+	hld->api->env = env;
+	hld->api->javaSoundApi = (jclass)env->NewGlobalRef(hld->env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
+	hld->api->jloadSound = (hld->env->GetStaticMethodID(hld->api->javaSoundApi, "loadSound", "(Landroid/content/res/AssetManager;Ljava/lang/String;Z)I"));
+	hld->api->jplaySound = (hld->env->GetStaticMethodID(hld->api->javaSoundApi, "playSound", "(IZ)I"));
+	hld->api->jpauseSounds = (hld->env->GetStaticMethodID(hld->api->javaSoundApi, "pauseAllSounds", "()V"));
+	hld->api->jresumeSounds = (hld->env->GetStaticMethodID(hld->api->javaSoundApi, "resumeAllSounds", "()V"));	
+	hld->api->jmusicPos = (hld->env->GetStaticMethodID(hld->api->javaSoundApi, "musicPosition", "(I)F"));
+	hld->api->assetManager = hld->assetManager;
+	theSoundSystem.androidSoundAPI = hld->api;
+	
 	LOGW("%s <--", __FUNCTION__);
 	return (jlong)hld;
 }

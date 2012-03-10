@@ -1,6 +1,12 @@
 package net.damsy.soupeaucaillou.tilematch;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +21,8 @@ public class TilematchActivity extends Activity {
 	static public byte[] savedState;
 	static public int openGLESVersion = 2;
 	byte[] renderingSystemState;
+	static public SoundPool soundPool;
+	static public List<MediaPlayer> players;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +35,12 @@ public class TilematchActivity extends Activity {
         setContentView(R.layout.main);
         
         mGLView = (GLSurfaceView) findViewById(R.id.glview);
+        
+        TilematchActivity.soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
+        TilematchActivity.players = new ArrayList<MediaPlayer>(4);
+        for(int i=0; i<4; i++) {
+        	TilematchActivity.players.add(new MediaPlayer());
+        } 
         
         if (savedInstanceState != null) {
 	        TilematchActivity.savedState = savedInstanceState.getByteArray(TILEMATCH_BUNDLE_KEY);
@@ -45,6 +59,10 @@ public class TilematchActivity extends Activity {
         super.onPause();
         mGLView.onPause();
         TilematchJNILib.pause(TilematchActivity.game);
+        TilematchActivity.soundPool.autoPause();
+        for(MediaPlayer p : TilematchActivity.players) {
+        	p.pause();
+        }
     }
 
     @Override

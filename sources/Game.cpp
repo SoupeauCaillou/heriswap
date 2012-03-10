@@ -178,8 +178,10 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 	RENDERING(datas->background)->hide = false;
 
+	LOGW("Adding Sound component to background");
 	ADD_COMPONENT(datas->background, Sound);
-	SOUND(datas->background)->sound = theSoundSystem.loadSoundFile("audio/A.ogg");
+	SOUND(datas->background)->sound = theSoundSystem.loadSoundFile("audio/A.ogg", true);
+	SOUND(datas->background)->type = SoundComponent::MUSIC;
 	SOUND(datas->background)->repeat = false;
 
 	datas->state2Manager[datas->state]->Enter();
@@ -290,11 +292,11 @@ void Game::tick(float dt) {
 	}
 
 	SoundComponent* sc = SOUND(datas->background);
-	if (sc->sound >= InvalidSoundRef) {
-		char c = MathUtil::RandomInt('H' - 'A' + 1) + 'A';
+	if (sc->sound == InvalidSoundRef) {
+		char c = MathUtil::RandomInt('G' - 'A' + 1) + 'A';
 		std::stringstream s;
 		s << "audio/" << c << ".ogg";
-		sc->sound = theSoundSystem.loadSoundFile(s.str());
+		sc->sound = theSoundSystem.loadSoundFile(s.str(), true);
 		sc->position = 0;
 	}
 	theCombinationMarkSystem.Update(dt);
