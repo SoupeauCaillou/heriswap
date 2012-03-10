@@ -1,4 +1,5 @@
 #include "UserInputGameStateManager.h"
+#include "systems/SoundSystem.h"
 
 static void activateADSR(Entity e, float a, float s);
 static void diffToGridCoords(const Vector2& c, int* i, int* j);
@@ -12,6 +13,10 @@ UserInputGameStateManager::~UserInputGameStateManager() {
 }
 
 void UserInputGameStateManager::Setup() {
+	// preload sound effect
+	theSoundSystem.loadSoundFile("audio/line1.wav", false);
+	theSoundSystem.loadSoundFile("audio/line2.wav", false);
+	
 	eSwapper = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSwapper, ADSR);
 	ADSR(eSwapper)->idleValue = 0;
@@ -20,6 +25,9 @@ void UserInputGameStateManager::Setup() {
 	ADSR(eSwapper)->decayTiming = 0;
 	ADSR(eSwapper)->sustainValue = 1.0;
 	ADSR(eSwapper)->releaseTiming = 0.1;
+	
+	ADD_COMPONENT(eSwapper, Sound);
+	SOUND(eSwapper)->type = SoundComponent::EFFECT;
 }
 
 void UserInputGameStateManager::Enter() {
@@ -169,9 +177,11 @@ GameState UserInputGameStateManager::Update(float dt) {
 					GRID(e2)->i = originI + swapI;
 					GRID(e2)->j = originJ + swapJ;
 
+					SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/line2.wav", false);
 					return UserInput;
 				} else {
 					originI = originJ = -1;
+					SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/line1.wav", false);
 					return Delete;
 				}
 			}

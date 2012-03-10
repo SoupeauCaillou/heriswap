@@ -1,5 +1,6 @@
 #include "MainMenuGameStateManager.h"
 #include "systems/ContainerSystem.h"
+#include "systems/SoundSystem.h"
 
 MainMenuGameStateManager::MainMenuGameStateManager() {
 
@@ -57,6 +58,8 @@ void MainMenuGameStateManager::Setup() {
 	bStart = theEntityManager.CreateEntity();
 	ADD_COMPONENT(bStart, Transformation);
 	ADD_COMPONENT(bStart, Container);
+	ADD_COMPONENT(bStart, Sound);
+	SOUND(bStart)->type = SoundComponent::EFFECT;
 	ADD_COMPONENT(bStart, Button);
 	ADD_COMPONENT(bStart, Rendering);
 	RENDERING(bStart)->color = Color(1.0, .0, .0, .5);
@@ -71,6 +74,9 @@ void MainMenuGameStateManager::Setup() {
 
 void MainMenuGameStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
+	
+	// preload sound effect
+	theSoundSystem.loadSoundFile("audio/click.wav", false);
 
 	//Pour les rotations et autres animations
 	elapsedTime = 0;
@@ -100,6 +106,7 @@ GameState MainMenuGameStateManager::Update(float dt) {
 	
 	elapsedTime += dt/4.;
 	if (BUTTON(bStart)->clicked){
+		SOUND(bStart)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
 		return MainMenuToBlackState;
 	} else if (BUTTON(bScore)->clicked) {
 		return ScoreBoard;

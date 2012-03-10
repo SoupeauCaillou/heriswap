@@ -33,7 +33,7 @@ public class TilematchJNILib {
     		return null;
     	}
     }
-    
+     
     static public int loadSound(AssetManager mgr, String assetPath, boolean music) {
     	try {
 	    	if (music) {
@@ -43,7 +43,7 @@ public class TilematchJNILib {
 	    			if (!p.isPlaying()) {
 	    				p.reset();
 	    				p.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
-	    				p.setVolume(1.0f, 1.0f);
+	    				p.setVolume(0.8f, 0.8f);
 	    				p.prepare();
 	    				return TilematchActivity.players.indexOf(p);
 	    			}
