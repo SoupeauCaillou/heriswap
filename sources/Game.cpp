@@ -4,6 +4,7 @@
 #include "base/TouchInputManager.h"
 #include "base/MathUtil.h"
 #include "base/EntityManager.h"
+#include "base/TimeUtil.h"
 
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
@@ -91,6 +92,14 @@ class Game::Data {
 				SOUND(music[i])->type = SoundComponent::MUSIC;
 				SOUND(music[i])->repeat = false;
 			}
+			
+			bench = theEntityManager.CreateEntity();
+			ADD_COMPONENT(bench, Rendering);
+			ADD_COMPONENT(bench, Transformation);
+			TRANSFORM(bench)->position = Vector2(0,-7);
+			TRANSFORM(bench)->size = Vector2(5,720/420);
+			TRANSFORM(bench)->z = 39;
+
 		}
 		GameState state, stateBeforePause;
 		bool stateBeforePauseNeedEnter;
@@ -100,6 +109,8 @@ class Game::Data {
 		// drag/drop
 		HUDManager* hud;
 		std::map<GameState, GameStateManager*> state2Manager;
+		
+		Entity bench;
 };
 
 static const float offset = 0.2;
@@ -289,12 +300,17 @@ void Game::tick(float dt) {
 		++it) {
 		it->second->BackgroundUpdate(dt);
 	}
+	
+	
 	//si c'est pas à l'user de jouer, on cache de force les combi
 	if (newState != UserInput)
 		toggleShowCombi(true);
 
-
-
+	//bench settings
+	for (int i =0 ;i < 30; i++)
+		theGridSystem.LookForCombination(false,false);
+	RENDERING(datas->bench)->color = Color(5.*dt, 5.*(1/5.-dt), 0.f, 1.f);;
+	//LOGI("%f", dt);
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
 	//si on est ingame, on affiche le HUD
@@ -303,7 +319,11 @@ void Game::tick(float dt) {
 		datas->hud->Update(dt);
 		thePlayerSystem.Update(dt);
 		theGridSystem.HideAll(false);
+		
+		RENDERING(datas->bench)->hide = false;
 	} else {
+		RENDERING(datas->bench)->hide = true;
+		
 		datas->hud->Hide(true);
 		if (newState != BlackToSpawn)
 			theGridSystem.HideAll(true);

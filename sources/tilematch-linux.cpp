@@ -10,6 +10,7 @@
 
 #include "base/Vector2.h"
 #include "base/TouchInputManager.h"
+#include "base/TimeUtil.h"
 
 #include "systems/RenderingSystem.h"
 
@@ -46,18 +47,9 @@ class MouseNativeTouchState: public NativeTouchState {
 		}
 };
 
+
+
 static struct timeval startup_time;
-
-float timeconverter(struct timeval tv) {
-	return (tv.tv_sec + tv.tv_usec / 1000000.0f);
-}
-
-float gettime() {
-	struct timeval tv;
-	gettimeofday(&tv,NULL);
-	timersub(&tv, &startup_time, &tv);
-	return timeconverter(tv);
-}
 
 	class FileScoreStorage: public ScoreStorage {
 	std::vector<ScoreEntry> loadFromStorage() {
@@ -129,14 +121,14 @@ int main(int argc, char** argv) {
 	float timer = 0;
 	float dtAccumuled=0, dt = 0, time = 0;
 
-	time = gettime();
+	time = TimeUtil::getTime(&startup_time);
 
 	int frames = 0;
 	float nextfps = time + 5;
 	while(running) {
 
 		do {
-			dt = gettime() - time;
+			dt = TimeUtil::getTime(&startup_time) - time;
 			if (dt < DT) {
 				struct timespec ts;
 				ts.tv_sec = 0;
@@ -149,7 +141,7 @@ int main(int argc, char** argv) {
 			dt = 1./20.;
 		}
 		dtAccumuled += dt;
-		time = gettime();
+		time = TimeUtil::getTime(&startup_time);
 		while (dtAccumuled >= DT){
 			game.tick(DT);
 			glfwSwapBuffers();
