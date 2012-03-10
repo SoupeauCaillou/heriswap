@@ -39,32 +39,37 @@ public class TilematchJNILib {
 	    	if (music) {
 	    		AssetFileDescriptor fd = mgr.openFd(assetPath);
 	    		// find available MediaPlayer
-	    		for(MediaPlayer p : TilematchActivity.players) {
-	    			if (!p.isPlaying()) {
-	    				p.reset();
-	    				p.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
-	    				p.setVolume(0.8f, 0.8f);
-	    				p.prepare();
-	    				return TilematchActivity.players.indexOf(p);
+	    		for(MediaPlayer p : TilematchActivity.availablePlayers) {
+	    			p.reset();
+	    			p.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
+	    			p.setVolume(0.8f, 0.8f);
+	    			p.prepare();
+	    			TilematchActivity.availablePlayers.remove(p);
+	    			for (int i=0; i<4; i++) {
+	    				if (TilematchActivity.activePlayers[i] == null) {
+	    					TilematchActivity.activePlayers[i] = p;
+	    					return i;
+	    				}
 	    			}
+	    			throw new RuntimeException("Mouarf buggy code");
 	    		}
-	    		Log.w("tilematch", "No available MediaPlayer for playing: " + assetPath);
+	    		Log.w("tilematchJava", "No available MediaPlayer for playing: " + assetPath);
 	    		return -1;
 	    	} else {
 		    	return TilematchActivity.soundPool.load(mgr.openFd(assetPath), 1);
 	    	}
     	} catch (Exception exc) {
-    		Log.e("tilematch", "Unable to load sound: " + assetPath);
+    		Log.e("tilematchJava", "Unable to load sound: " + assetPath);
     		return -1;
     	}
     }
-    
+ 
     static public int playSound(int soundID, boolean music) {
     	if (soundID < 0)
     		return soundID;
     	if (music) {
-    		Log.i("tilematch", "play: " + soundID);
-    		TilematchActivity.players.get(soundID).start();
+    		Log.i("tilematchJava", "play: " + soundID);
+    		TilematchActivity.activePlayers[soundID].start();
     		return soundID;
     	} else { 
     		return TilematchActivity.soundPool.play(soundID, 1.0f, 1.0f, 0, 0, 1.0f);
@@ -73,9 +78,17 @@ public class TilematchJNILib {
      
     static public float musicPosition(int soundID) {
     	if (soundID >= 0) {
-    		// Log.i("tilematch", soundID + " position: " + TilematchActivity.players.get(soundID).getCurrentPosition() + ", duration: "+ TilematchActivity.players.get(soundID).getDuration());
-    		return TilematchActivity.players.get(soundID).getCurrentPosition() /
-    				(float) TilematchActivity.players.get(soundID).getDuration();
+    		MediaPlayer p = TilematchActivity.activePlayers[soundID];
+    		float result = p.getCurrentPosition() / (float) p.getDuration();
+    		if (result >= 0.99) {
+    			Log.i("tilematchJava", "done: " + soundID);
+    			p.stop();
+    			p.reset();
+    			TilematchActivity.activePlayers[soundID] = null;
+    			TilematchActivity.availablePlayers.add(p);
+    			return 1;
+    		}
+    		return result;
     	} else {
     		return 0;
     	}
@@ -83,15 +96,16 @@ public class TilematchJNILib {
     
     static public void pauseAllSounds() {
     	TilematchActivity.soundPool.autoPause();
-    	for(MediaPlayer p : TilematchActivity.players) {
-    		p.pause();
+    	for(MediaPlayer p : TilematchActivity.activePlayers) {
+    		if (p!=null)
+    			p.pause();
     	}    	
     }
     
     static public void resumeAllSounds() {
     	TilematchActivity.soundPool.autoResume();
-    	for(MediaPlayer p : TilematchActivity.players) {
-    		if (p.isPlaying()) // ?
+    	for(MediaPlayer p : TilematchActivity.activePlayers) {
+    		if (p!=null)
     			p.start(); 
     	}
     }

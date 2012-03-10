@@ -84,10 +84,18 @@ class Game::Data {
 				it->second->Setup();
 			}
 			time = TIMELIMIT;
+			
+			for (int i=0; i<4; i++) {
+				music[i] = theEntityManager.CreateEntity();
+				ADD_COMPONENT(music[i], Sound);
+				SOUND(music[i])->type = SoundComponent::MUSIC;
+				SOUND(music[i])->repeat = false;
+			}
 		}
 		GameState state, stateBeforePause;
 		bool stateBeforePauseNeedEnter;
 		Entity logo, background, sky;
+		Entity music[4];
 		float time;
 		// drag/drop
 		HUDManager* hud;
@@ -178,12 +186,6 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 	RENDERING(datas->background)->hide = false;
 
-	LOGW("Adding Sound component to background");
-	ADD_COMPONENT(datas->background, Sound);
-	SOUND(datas->background)->sound = theSoundSystem.loadSoundFile("audio/A.ogg", true);
-	SOUND(datas->background)->type = SoundComponent::MUSIC;
-	SOUND(datas->background)->repeat = false;
-
 	datas->state2Manager[datas->state]->Enter();
 }
 
@@ -222,6 +224,30 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 		}
 	}
 }
+
+static void updateMusic(Entity* music) {
+	/* are all started entities done yet ? */
+	for (int i=0; i<4; i++) {
+		if (SOUND(music[i])->sound != InvalidSoundRef)
+			return;
+	}
+	
+	int count = MathUtil::RandomInt(4) + 1;
+	LOGW("starting %d music", count);
+	std::list<char> l;
+	for (int i=0; i<count; i++) {
+		SoundComponent* sc = SOUND(music[i]);
+		char c;
+		do {
+			c = MathUtil::RandomInt('G' - 'A' + 1) + 'A';
+		} while (std::find(l.begin(), l.end(), c) != l.end());
+		
+		std::stringstream s;
+		s << "audio/" << c << ".ogg";
+		sc->sound = theSoundSystem.loadSoundFile(s.str(), true);
+	}
+}
+
 void Game::togglePause(bool activate) {
 	if (activate && datas->state != Pause && pausableState(datas->state)) {
 		datas->stateBeforePause = datas->state;
@@ -291,14 +317,8 @@ void Game::tick(float dt) {
 		thePlayerSystem.Reset();
 	}
 
-	SoundComponent* sc = SOUND(datas->background);
-	if (sc->sound == InvalidSoundRef) {
-		char c = MathUtil::RandomInt('G' - 'A' + 1) + 'A';
-		std::stringstream s;
-		s << "audio/" << c << ".ogg";
-		sc->sound = theSoundSystem.loadSoundFile(s.str(), true);
-		sc->position = 0;
-	}
+	updateMusic(datas->music);
+	
 	theCombinationMarkSystem.Update(dt);
 	theTransformationSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);

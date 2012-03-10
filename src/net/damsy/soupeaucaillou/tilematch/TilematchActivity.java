@@ -22,7 +22,8 @@ public class TilematchActivity extends Activity {
 	static public int openGLESVersion = 2;
 	byte[] renderingSystemState;
 	static public SoundPool soundPool;
-	static public List<MediaPlayer> players;
+	static public List<MediaPlayer> availablePlayers;
+	static public MediaPlayer[] activePlayers;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +38,21 @@ public class TilematchActivity extends Activity {
         mGLView = (GLSurfaceView) findViewById(R.id.glview);
         
         TilematchActivity.soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
-        TilematchActivity.players = new ArrayList<MediaPlayer>(4);
+        TilematchActivity.availablePlayers = new ArrayList<MediaPlayer>(4);
+        TilematchActivity.activePlayers = new MediaPlayer[4];
         for(int i=0; i<4; i++) {
-        	TilematchActivity.players.add(new MediaPlayer());
+        	TilematchActivity.availablePlayers.add(new MediaPlayer());
         } 
         
         if (savedInstanceState != null) {
 	        TilematchActivity.savedState = savedInstanceState.getByteArray(TILEMATCH_BUNDLE_KEY);
 	        if (TilematchActivity.savedState != null) {
-	        	Log.i("tilematch", "State restored from app bundle");
+	        	Log.i("tilematchJava", "State restored from app bundle");
 	        } else {
-	        	Log.i("tilematch", "WTF?");
+	        	Log.i("tilematchJava", "WTF?");
 	        }
         } else {
-        	Log.i("tilematch", "savedInstanceState is null");
+        	Log.i("tilematchJava", "savedInstanceState is null");
         }
     }
 
@@ -59,28 +61,27 @@ public class TilematchActivity extends Activity {
         super.onPause();
         mGLView.onPause();
         TilematchJNILib.pause(TilematchActivity.game);
-        TilematchActivity.soundPool.autoPause();
-        for(MediaPlayer p : TilematchActivity.players) {
-        	p.pause();
-        }
+        TilematchJNILib.pauseAllSounds();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mGLView.onResume();
+        // pas bien, à faire uniquement qd on clique sur Reprendre
+        TilematchJNILib.resumeAllSounds();
     }
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	/* save current state; we'll be used only if app get killed */
     	synchronized (TilematchActivity.mutex) {
-	    	Log.i("tilematch", "Save state!");
+	    	Log.i("tilematchJava", "Save state!");
 	    	byte[] savedState = TilematchJNILib.serialiazeState(TilematchActivity.game);
 	    	if (savedState != null) {
 	    		outState.putByteArray(TILEMATCH_BUNDLE_KEY, savedState);
 	    	}
-	    	Log.i("tilematch", "State saved");
+	    	Log.i("tilematchJava", "State saved");
     	}
     	super.onSaveInstanceState(outState);
     }

@@ -99,12 +99,12 @@ class GL2JNIView extends GLSurfaceView {
             int[] value = new int[1];
             egl.eglGetConfigAttrib(display, eglConfig, EGL10.EGL_RENDERABLE_TYPE, value);
             if (value[0] == 4 /*EGL_OPENGL_ES2_BIT*/) {
-            	Log.i("tilematch", "Creating OpenGL ES2 context");
+            	Log.i("tilematchJava", "Creating OpenGL ES2 context");
             	int[] attrib_list_es2 = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE };
                 context = egl.eglCreateContext(display, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list_es2);	
                 TilematchActivity.openGLESVersion = 2;
             } else {
-            	Log.i("tilematch", "Creating OpenGL ES1 context");
+            	Log.i("tilematchJava", "Creating OpenGL ES1 context");
             	int[] attrib_list_es1 = {EGL_CONTEXT_CLIENT_VERSION, 1, EGL10.EGL_NONE };
                 context = egl.eglCreateContext(display, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list_es1);
                 TilematchActivity.openGLESVersion = 1;
@@ -124,7 +124,7 @@ class GL2JNIView extends GLSurfaceView {
     private static void checkEglError(String prompt, EGL10 egl) {
         int error;
         while ((error = egl.eglGetError()) != EGL10.EGL_SUCCESS) {
-            Log.e(TAG, String.format("%s: EGL error: 0x%x", prompt, error));
+            Log.e("tilematchJava", String.format("%s: EGL error: 0x%x", prompt, error));
         }
     }
 
@@ -172,7 +172,7 @@ class GL2JNIView extends GLSurfaceView {
             int numConfigs = num_config[0];
 
             if (numConfigs <= 0) {
-                Log.e("tilematch", "No opengles2 config found, retrying with opengles1");
+                Log.e("tilematchJava", "No opengles2 config found, retrying with opengles1");
                 attribs = s_configAttribs1;
                 egl.eglChooseConfig(display, attribs, null, 0, num_config);
                 numConfigs = num_config[0];
@@ -357,13 +357,13 @@ class GL2JNIView extends GLSurfaceView {
         	}
             int err;
             while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
-            	Log.e("tilematch", "GL error : " + GLU.gluErrorString(err));
+            	Log.e("tilematchJava", "GL error : " + GLU.gluErrorString(err));
             } 
         }
 
         boolean initDone = false;
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-        	Log.i("tilematch", "surface changed-> width: " + width + ", height: " + height + ", " + initDone);
+        	Log.i("tilematchJava", "surface changed-> width: " + width + ", height: " + height + ", " + initDone);
         	if (!initDone) {
         		TilematchJNILib.init(TilematchActivity.game, width, height, TilematchActivity.savedState);
         		TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
@@ -375,12 +375,12 @@ class GL2JNIView extends GLSurfaceView {
         	
         	int err;
             while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
-            	Log.e("tilematch", "_GL error : " + GLU.gluErrorString(err));
+            	Log.e("tilematchJava", "_GL error : " + GLU.gluErrorString(err));
             }
         }
 
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        	Log.i("tilematch", "Surface created (game: "  + TilematchActivity.game + ", " + initDone + ")");
+        	Log.i("tilematchJava", "Surface created (game: "  + TilematchActivity.game + ", " + initDone + ")");
         	if (TilematchActivity.game == 0) {
         		initDone = false;
         		TilematchActivity.game = TilematchJNILib.createGame(asset, TilematchActivity.openGLESVersion);
