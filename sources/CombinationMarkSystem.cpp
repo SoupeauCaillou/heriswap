@@ -59,5 +59,7 @@ int CombinationMarkSystem::NumberOfThisType(int stat) {
 }
 
 void CombinationMarkSystem::DoUpdate(float dt) {
+		for (int i =0 ;i < 30; i++)
+		theGridSystem.LookForCombination(false,false);
 }
 

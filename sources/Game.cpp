@@ -282,8 +282,10 @@ void Game::tick(float dt) {
 	if (TIMELIMIT - thePlayerSystem.GetTime()<0) {
 		newState = EndMenu;
 	} else {
+	//sinon on passe a l'etat suivant
 		newState = datas->state2Manager[datas->state]->Update(dt);
 	}
+	//si on est passé de pause à quelque chose different de pause, on desactive la pause
 	if (newState != datas->state && datas->state == Pause) {
 		togglePause(false);
 	} else if (newState != datas->state) {
@@ -307,10 +309,13 @@ void Game::tick(float dt) {
 		toggleShowCombi(true);
 
 	//bench settings
-	for (int i =0 ;i < 30; i++)
-		theGridSystem.LookForCombination(false,false);
+	//for (int i =0 ;i < 30; i++)
+		//theGridSystem.LookForCombination(false,false);
 	RENDERING(datas->bench)->color = Color(5.*dt, 5.*(1/5.-dt), 0.f, 1.f);;
-	//LOGI("%f", dt);
+	
+	
+	
+	
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
 	//si on est ingame, on affiche le HUD
@@ -345,6 +350,29 @@ void Game::tick(float dt) {
 	theContainerSystem.Update(dt);
 	theRenderingSystem.Update(dt);
 	theSoundSystem.Update(dt);
+	
+	
+	static int azazaz = 0;
+	azazaz++;
+	if (azazaz>=60) {
+	azazaz=0;
+	LOGI("theADSRSystem:%f\n"
+	"theButtonSystem:%f\n"
+	"theCombinationMarkSystem:%f\n"
+	"theTransformationSystem:%f\n"
+	"theTextRenderingSystem:%f\n"
+	"theContainerSystem:%f\n"
+	"theRenderingSystem:%f\n"
+	"theSoundSystem:%f\n\n\n",
+	theADSRSystem.timeSpent,
+	theButtonSystem.timeSpent,
+	theCombinationMarkSystem.timeSpent, 
+	theTransformationSystem.timeSpent,
+	theTextRenderingSystem.timeSpent, 
+	theContainerSystem.timeSpent, 
+	theRenderingSystem.timeSpent, 
+	theSoundSystem.timeSpent);
+	}
 }
 
 int Game::saveState(uint8_t** out) {
