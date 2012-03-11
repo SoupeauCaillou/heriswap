@@ -355,23 +355,15 @@ void Game::tick(float dt) {
 	static int azazaz = 0;
 	azazaz++;
 	if (azazaz>=60) {
-	azazaz=0;
-	LOGI("theADSRSystem:%f\n"
-	"theButtonSystem:%f\n"
-	"theCombinationMarkSystem:%f\n"
-	"theTransformationSystem:%f\n"
-	"theTextRenderingSystem:%f\n"
-	"theContainerSystem:%f\n"
-	"theRenderingSystem:%f\n"
-	"theSoundSystem:%f\n\n\n",
-	theADSRSystem.timeSpent,
-	theButtonSystem.timeSpent,
-	theCombinationMarkSystem.timeSpent, 
-	theTransformationSystem.timeSpent,
-	theTextRenderingSystem.timeSpent, 
-	theContainerSystem.timeSpent, 
-	theRenderingSystem.timeSpent, 
-	theSoundSystem.timeSpent);
+		azazaz=0;
+		if (theADSRSystem.timeSpent) LOGI("theADSRSystem:%f",theADSRSystem.timeSpent);
+		if (theButtonSystem.timeSpent) LOGI("theButtonSystem:%f", theButtonSystem.timeSpent);
+		if (theCombinationMarkSystem.timeSpent) LOGI("theCombinationMarkSystem:%f", theCombinationMarkSystem.timeSpent);
+		if (theTransformationSystem.timeSpent) LOGI("theTransformationSystem:%f", 	theTransformationSystem.timeSpent);
+		if (theTextRenderingSystem.timeSpent) LOGI("theTextRenderingSystem:%f", 	theTextRenderingSystem.timeSpent); 
+		if (theContainerSystem.timeSpent) LOGI("theContainerSystem:%f", 	theContainerSystem.timeSpent);
+		if (theRenderingSystem.timeSpent) LOGI("theRenderingSystem:%f", 	theRenderingSystem.timeSpent);
+		if (theSoundSystem.timeSpent) LOGI("theSoundSystem:%f\n" ,	theSoundSystem.timeSpent);
 	}
 }
 

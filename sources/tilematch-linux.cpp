@@ -49,7 +49,6 @@ class MouseNativeTouchState: public NativeTouchState {
 
 
 
-static struct timeval startup_time;
 
 	class FileScoreStorage: public ScoreStorage {
 	std::vector<ScoreEntry> loadFromStorage() {
@@ -90,7 +89,8 @@ int main(int argc, char** argv) {
 	if( !glfwOpenWindow( 420,700, 8,8,8,8,8,1, GLFW_WINDOW ) )
 		return 1;
 
-	gettimeofday(&startup_time,NULL);
+	// pose de l'origine du temps ici t = 0
+	TimeUtil::init();
 
 	uint8_t* state = 0;
 	int size = 0;
@@ -121,14 +121,14 @@ int main(int argc, char** argv) {
 	float timer = 0;
 	float dtAccumuled=0, dt = 0, time = 0;
 
-	time = TimeUtil::getTime(&startup_time);
+	time = TimeUtil::getTime();
 
 	int frames = 0;
 	float nextfps = time + 5;
 	while(running) {
 
 		do {
-			dt = TimeUtil::getTime(&startup_time) - time;
+			dt = TimeUtil::getTime() - time;
 			if (dt < DT) {
 				struct timespec ts;
 				ts.tv_sec = 0;
@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
 			dt = 1./20.;
 		}
 		dtAccumuled += dt;
-		time = TimeUtil::getTime(&startup_time);
+		time = TimeUtil::getTime();
 		while (dtAccumuled >= DT){
 			game.tick(DT);
 			glfwSwapBuffers();
