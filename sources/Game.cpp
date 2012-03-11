@@ -117,7 +117,7 @@ class Game::Data {
 			TRANSFORM(textBenchTimeSystem[1])->position = Vector2(-4.2,-7.7);
 			TEXT_RENDERING(textBenchTimeSystem[1])->color = Color(0.f,0.f,0.f,1.f);
 			TEXT_RENDERING(textBenchTimeSystem[1])->alignL = true;
-			TEXT_RENDERING(textBenchTimeSystem[1])->charSize = 0.2f;
+			TEXT_RENDERING(textBenchTimeSystem[1])->charSize = 0.34f;
 			TRANSFORM(textBenchTimeSystem[1])->z = 41;
 		}
 		//bench data
@@ -455,7 +455,7 @@ void Game::tick(float dt) {
 				r = 1; g = 0;
 				break; 
 		}
-		sprintf(buff, "%2d   ", (int)(100*r));
+		sprintf(buff, "%.2d ", (int)(100*r));
 		strcat(tmp, buff);		
 		RENDERING(datas->benchTimeSystem[i])->color = Color(r, g, 0.f, 1.f);
 	}
