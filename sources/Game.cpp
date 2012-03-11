@@ -363,7 +363,12 @@ void Game::tick(float dt) {
 		if (theTextRenderingSystem.timeSpent) LOGI("theTextRenderingSystem:%f", 	theTextRenderingSystem.timeSpent); 
 		if (theContainerSystem.timeSpent) LOGI("theContainerSystem:%f", 	theContainerSystem.timeSpent);
 		if (theRenderingSystem.timeSpent) LOGI("theRenderingSystem:%f", 	theRenderingSystem.timeSpent);
-		if (theSoundSystem.timeSpent) LOGI("theSoundSystem:%f\n" ,	theSoundSystem.timeSpent);
+		if (theSoundSystem.timeSpent) LOGI("theSoundSystem:%f" ,	theSoundSystem.timeSpent);
+		float tt = theADSRSystem.timeSpent+theButtonSystem.timeSpent+
+		theCombinationMarkSystem.timeSpent+theTransformationSystem.timeSpent+
+		theTextRenderingSystem.timeSpent+theContainerSystem.timeSpent+
+		theRenderingSystem.timeSpent+theSoundSystem.timeSpent;
+		LOGI("temps passer dans les systemes : %f sur %f total (%f %)\n", tt, dt, 100*tt/dt);
 	}
 }
 
