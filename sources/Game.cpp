@@ -35,6 +35,7 @@
 
 
 #define GRIDSIZE 8
+#define NB_SYSTEMS 10
 
 class Game::Data {
 	public:
@@ -85,44 +86,44 @@ class Game::Data {
 				it->second->Setup();
 			}
 			time = TIMELIMIT;
-			
+
 			for (int i=0; i<4; i++) {
 				music[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(music[i], Sound);
 				SOUND(music[i])->type = SoundComponent::MUSIC;
 				SOUND(music[i])->repeat = false;
 			}
-			
+
 			benchTotalTime = theEntityManager.CreateEntity();
 			ADD_COMPONENT(benchTotalTime, Rendering);
 			ADD_COMPONENT(benchTotalTime, Transformation);
 			TRANSFORM(benchTotalTime)->position = Vector2(0,-7.5);
 			TRANSFORM(benchTotalTime)->size = Vector2(10,720/420);
 			TRANSFORM(benchTotalTime)->z = 39;
-			for (int i = 0; i < 9 ; i ++) {
+			for (int i = 0; i < NB_SYSTEMS ; i ++) {
 				benchTimeSystem[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(benchTimeSystem[i], Rendering);
 				ADD_COMPONENT(benchTimeSystem[i], Transformation);
-				TRANSFORM(benchTimeSystem[i])->position = Vector2(i-4,-7.5);
-				TRANSFORM(benchTimeSystem[i])->size = Vector2(.8,1.);
+				TRANSFORM(benchTimeSystem[i])->position = Vector2(i-4.5,-7.5);
+				TRANSFORM(benchTimeSystem[i])->size = Vector2(.8,0.8);
 				TRANSFORM(benchTimeSystem[i])->z = 40;
-			}				
+			}
 			textBenchTimeSystem[0] = theTextRenderingSystem.CreateLocalEntity(8);
-			TRANSFORM(textBenchTimeSystem[0])->position = Vector2(-4.2,-7.3);
+			TRANSFORM(textBenchTimeSystem[0])->position = Vector2(-4.7,-7.3);
 			TEXT_RENDERING(textBenchTimeSystem[0])->color = Color(0.f,0.f,0.f,1.f);
 			TEXT_RENDERING(textBenchTimeSystem[0])->alignL = true;
 			TEXT_RENDERING(textBenchTimeSystem[0])->charSize = 0.2f;
 			TRANSFORM(textBenchTimeSystem[0])->z = 41;
 			textBenchTimeSystem[1] = theTextRenderingSystem.CreateLocalEntity(8);
-			TRANSFORM(textBenchTimeSystem[1])->position = Vector2(-4.2,-7.7);
+			TRANSFORM(textBenchTimeSystem[1])->position = Vector2(-4.7,-7.7);
 			TEXT_RENDERING(textBenchTimeSystem[1])->color = Color(0.f,0.f,0.f,1.f);
 			TEXT_RENDERING(textBenchTimeSystem[1])->alignL = true;
 			TEXT_RENDERING(textBenchTimeSystem[1])->charSize = 0.34f;
 			TRANSFORM(textBenchTimeSystem[1])->z = 41;
 		}
 		//bench data
-		Entity benchTimeSystem[9], textBenchTimeSystem[2], benchTotalTime;
-		
+		Entity benchTimeSystem[NB_SYSTEMS], textBenchTimeSystem[2], benchTotalTime;
+
 		GameState state, stateBeforePause;
 		bool stateBeforePauseNeedEnter;
 		Entity logo, background, sky;
@@ -131,7 +132,7 @@ class Game::Data {
 		// drag/drop
 		HUDManager* hud;
 		std::map<GameState, GameStateManager*> state2Manager;
-		
+
 };
 
 static const float offset = 0.2;
@@ -263,7 +264,7 @@ static void updateMusic(Entity* music) {
 		if (SOUND(music[i])->sound != InvalidSoundRef)
 			return;
 	}
-	
+
 	int count = MathUtil::RandomInt(4) + 1;
 	LOGW("starting %d music", count);
 	std::list<char> l;
@@ -273,7 +274,7 @@ static void updateMusic(Entity* music) {
 		do {
 			c = MathUtil::RandomInt('G' - 'A' + 1) + 'A';
 		} while (std::find(l.begin(), l.end(), c) != l.end());
-		
+
 		std::stringstream s;
 		s << "audio/" << c << ".ogg";
 		sc->sound = theSoundSystem.loadSoundFile(s.str(), true);
@@ -296,7 +297,7 @@ void Game::togglePause(bool activate) {
 
 void Game::tick(float dt) {
 	float updateDuration = TimeUtil::getTime();
-	
+
 	GameState newState;
 
 	theTouchInputManager.Update(dt);
@@ -325,15 +326,15 @@ void Game::tick(float dt) {
 		++it) {
 		it->second->BackgroundUpdate(dt);
 	}
-	
-	
+
+
 	//si c'est pas à l'user de jouer, on cache de force les combi
 	if (newState != UserInput)
 		toggleShowCombi(true);
 
 
-	
-	
+
+
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
 	//si on est ingame, on affiche le HUD
@@ -342,9 +343,9 @@ void Game::tick(float dt) {
 		datas->hud->Update(dt);
 		thePlayerSystem.Update(dt);
 		theGridSystem.HideAll(false);
-		
+
 		RENDERING(datas->benchTotalTime)->hide = false;
-		for (int i=0;i<9;i++) 
+		for (int i=0;i<9;i++)
 			RENDERING(datas->benchTimeSystem[i])->hide = false;
 		TEXT_RENDERING(datas->textBenchTimeSystem[0])->hide = false;
 		TEXT_RENDERING(datas->textBenchTimeSystem[1])->hide = false;
@@ -369,50 +370,51 @@ void Game::tick(float dt) {
 	}
 
 	updateMusic(datas->music);
-	
+
 	theCombinationMarkSystem.Update(dt);
 	theTransformationSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);
 	theContainerSystem.Update(dt);
 	theRenderingSystem.Update(dt);
 	theSoundSystem.Update(dt);
-	
+
 
 	//bench settings
-	
+
 	updateDuration = TimeUtil::getTime()-updateDuration;
-	
+
 	float tt = theADSRSystem.timeSpent+theButtonSystem.timeSpent+
 		theCombinationMarkSystem.timeSpent+theTransformationSystem.timeSpent+
 		theTextRenderingSystem.timeSpent+theContainerSystem.timeSpent+
-		theRenderingSystem.timeSpent+theSoundSystem.timeSpent; //total time in systems
-	
+		theRenderingSystem.timeSpent+theSoundSystem.timeSpent+thePlayerSystem.timeSpent; //total time in systems
+
 	static int azazaz = 0;
 	azazaz++;
-	if (azazaz>=60) {
+	if (azazaz>=5*60) {
 		azazaz=0;
 		if (theADSRSystem.timeSpent) LOGI("theADSRSystem:%f",theADSRSystem.timeSpent);
 		if (theButtonSystem.timeSpent) LOGI("theButtonSystem:%f", theButtonSystem.timeSpent);
 		if (theCombinationMarkSystem.timeSpent) LOGI("theCombinationMarkSystem:%f", theCombinationMarkSystem.timeSpent);
 		if (theTransformationSystem.timeSpent) LOGI("theTransformationSystem:%f", 	theTransformationSystem.timeSpent);
-		if (theTextRenderingSystem.timeSpent) LOGI("theTextRenderingSystem:%f", 	theTextRenderingSystem.timeSpent); 
+		if (theTextRenderingSystem.timeSpent) LOGI("theTextRenderingSystem:%f", 	theTextRenderingSystem.timeSpent);
 		if (theContainerSystem.timeSpent) LOGI("theContainerSystem:%f", 	theContainerSystem.timeSpent);
 		if (theRenderingSystem.timeSpent) LOGI("theRenderingSystem:%f", 	theRenderingSystem.timeSpent);
 		if (theSoundSystem.timeSpent) LOGI("theSoundSystem:%f" ,	theSoundSystem.timeSpent);
+		if (thePlayerSystem.timeSpent) LOGI("thePlayerSystem:%f" ,	thePlayerSystem.timeSpent);
 
 		LOGI("temps passer dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", tt, updateDuration, 100*tt/updateDuration, dt);
 	}
 
 	RENDERING(datas->benchTotalTime)->color = Color(5.*updateDuration, 5.*(1/5.-updateDuration), 0.3f, .3f);
-	
+
 	char tmp[150] = "\0"; // en attendant mieux (ie savoir cmt on garde que 2 decimales
 		//avec l'autre methode
 	std::stringstream s;
 
-	for (int i=0; i<9; i++) {
+	for (int i=0; i<NB_SYSTEMS; i++) {
 		float r, g;
 		char buff[10];
-		
+
 		switch (i) {
 			//temps passé en dehors des systemes
 			case 0:
@@ -451,15 +453,19 @@ void Game::tick(float dt) {
 				r = theSoundSystem.timeSpent/ tt; g = 1 - r;
 				s << "snd"<< r/updateDuration;
 				break;
+			case 9:
+				r = thePlayerSystem.timeSpent/ tt; g = 1 - r;
+				s << "plr"<< r/updateDuration;
+				break;
 			default:
 				r = 1; g = 0;
-				break; 
+				break;
 		}
 		sprintf(buff, "%.2d ", (int)(100*r));
-		strcat(tmp, buff);		
+		strcat(tmp, buff);
 		RENDERING(datas->benchTimeSystem[i])->color = Color(r, g, 0.f, 1.f);
 	}
-	TEXT_RENDERING(datas->textBenchTimeSystem[0])->text = "out  adsr butt comb tran txt  ctn  rend snd";	
+	TEXT_RENDERING(datas->textBenchTimeSystem[0])->text = "out  adsr butt comb tran txt  ctn  rend snd plr";
 	TEXT_RENDERING(datas->textBenchTimeSystem[1])->text = tmp;
 
 	//TEXT_RENDERING(datas->textBenchTimeSystem[i])->text = s.str();
@@ -515,6 +521,6 @@ void Game::loadState(const uint8_t* in, int size) {
 	index += eSize;
 	/* restore systems */
 	theRenderingSystem.restoreInternalState(&in[index], sSize);
-	
+
 	LOGW("RESTORED STATE: %d", datas->stateBeforePause);
 }
