@@ -6,12 +6,12 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 import android.util.Log;
-
+ 
 public class TilematchJNILib {
     static {
         System.loadLibrary("tilematch");
     }
-    
+      
     /* Create native game instance */
     public static native long createGame(AssetManager mgr, int openGLESVersion);
     /* Initialize game, reset graphics assets, etc... */

@@ -385,20 +385,18 @@ void Game::tick(float dt) {
 
 	//bench settings
 	updateDuration = TimeUtil::getTime() - updateDuration;
-	
 	static float benchAccum = 0;
 	benchAccum += dt;
-	if (benchAccum>=1 && updateDuration > 0 && !RENDERING(datas->benchTotalTime)->hide) {
+	if (benchAccum>=1 && (updateDuration > 0) && !RENDERING(datas->benchTotalTime)->hide) {
 		// draw update duration
 		if (updateDuration > 1.0/60) {
-			RENDERING(datas->benchTotalTime)->color = Color(1.0, 0,0);
+			RENDERING(datas->benchTotalTime)->color = Color(1.0, 0,0, 1);
 		} else {
-			RENDERING(datas->benchTotalTime)->color = Color(0.0, 1.0,0);
+			RENDERING(datas->benchTotalTime)->color = Color(0.0, 1.0,0,1);
 		}
 		float frameWidth = MathUtil::Min(updateDuration / (1.f/60), 1.0f) * 10;
 		TRANSFORM(datas->benchTotalTime)->size.X = frameWidth;
 		TRANSFORM(datas->benchTotalTime)->position.X = -5 + frameWidth * 0.5;
-		RENDERING(datas->benchTotalTime)->color = Color(5.*updateDuration, 5.*(1/5.-updateDuration), 0.3f, .3f);
 
 		// for each system adjust rectangle size/position to time spent
 		float timeSpentInSystems = 0;
