@@ -422,39 +422,39 @@ void Game::tick(float dt) {
 				s << " out" << r/updateDuration;
 				break;
 			case 1:
-				r = theADSRSystem.timeSpent/ tt; g = 1 - r;
+				r = theADSRSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << " adsr"<< r/updateDuration;
 				break;
 			case 2:
-				r = theButtonSystem.timeSpent/ tt; g = 1 - r;
+				r = theButtonSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "butt"<< r/updateDuration;
 				break;
 			case 3:
-				r = theCombinationMarkSystem.timeSpent/ tt; g = 1 - r;
+				r = theCombinationMarkSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "comb"<< r/updateDuration;
 				break;
 			case 4:
-				r = theTransformationSystem.timeSpent/ tt; g = 1 - r;
+				r = theTransformationSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "tran"<< r/updateDuration;
 				break;
 			case 5:
-				r = theTextRenderingSystem.timeSpent/ tt; g = 1 - r;
+				r = theTextRenderingSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "txt"<< r/updateDuration;
 				break;
 			case 6:
-				r = theContainerSystem.timeSpent/ tt; g = 1 - r;
+				r = theContainerSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "ctn"<< r/updateDuration;
 				break;
 			case 7:
-				r = theRenderingSystem.timeSpent/ tt; g = 1 - r;
+				r = theRenderingSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "rend"<< r/updateDuration;
 				break;
 			case 8:
-				r = theSoundSystem.timeSpent/ tt; g = 1 - r;
+				r = theSoundSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "snd"<< r/updateDuration;
 				break;
 			case 9:
-				r = thePlayerSystem.timeSpent/ tt; g = 1 - r;
+				r = thePlayerSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "plr"<< r/updateDuration;
 				break;
 			default:
