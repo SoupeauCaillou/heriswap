@@ -35,7 +35,6 @@
 
 
 #define GRIDSIZE 8
-#define NB_SYSTEMS 10
 
 class Game::Data {
 	public:
@@ -98,15 +97,19 @@ class Game::Data {
 			ADD_COMPONENT(benchTotalTime, Rendering);
 			ADD_COMPONENT(benchTotalTime, Transformation);
 			TRANSFORM(benchTotalTime)->position = Vector2(0,-7.5);
-			TRANSFORM(benchTotalTime)->size = Vector2(10,720/420);
+			TRANSFORM(benchTotalTime)->size = Vector2(10,1);
 			TRANSFORM(benchTotalTime)->z = 39;
-			for (int i = 0; i < NB_SYSTEMS ; i ++) {
-				benchTimeSystem[i] = theEntityManager.CreateEntity();
-				ADD_COMPONENT(benchTimeSystem[i], Rendering);
-				ADD_COMPONENT(benchTimeSystem[i], Transformation);
-				TRANSFORM(benchTimeSystem[i])->position = Vector2(i-4.5,-7.5);
-				TRANSFORM(benchTimeSystem[i])->size = Vector2(.8,0.8);
-				TRANSFORM(benchTimeSystem[i])->z = 40;
+			
+			std::vector<std::string> allSystems = ComponentSystem::registeredSystemNames();
+			for (int i = 0; i < allSystems.size() ; i ++) {
+				Entity b = theEntityManager.CreateEntity();
+				ADD_COMPONENT(b, Rendering);
+				ADD_COMPONENT(b, Transformation);
+				TRANSFORM(b)->position = Vector2(0, -7.5);
+				TRANSFORM(b)->size = Vector2(.8,0.8);
+				TRANSFORM(b)->z = 40;
+				RENDERING(b)->color = (i % 2) ? Color(0.1, 0.1, 0.1):Color(0.8,0.8,0.8);
+				benchTimeSystem[allSystems[i]] = b;
 			}
 			textBenchTimeSystem[0] = theTextRenderingSystem.CreateLocalEntity(8);
 			TRANSFORM(textBenchTimeSystem[0])->position = Vector2(-4.7,-7.3);
@@ -122,7 +125,9 @@ class Game::Data {
 			TRANSFORM(textBenchTimeSystem[1])->z = 41;
 		}
 		//bench data
-		Entity benchTimeSystem[NB_SYSTEMS], textBenchTimeSystem[2], benchTotalTime;
+		std::map<std::string, Entity> benchTimeSystem;
+		Entity textBenchTimeSystem[2];
+		Entity benchTotalTime, targetTime;
 
 		GameState state, stateBeforePause;
 		bool stateBeforePauseNeedEnter;
@@ -138,6 +143,18 @@ class Game::Data {
 static const float offset = 0.2;
 static const float scale = 0.95;
 static const float size = (10 - 2 * offset) / GRIDSIZE;
+
+static bool inGameState(GameState state) {
+	switch (state) {
+		case Spawn:
+		case UserInput:
+		case Delete:
+		case Fall:
+			return true;
+		default:
+			return false;
+	}
+}
 
 static bool pausableState(GameState state) {
 	switch (state) {
@@ -319,6 +336,31 @@ void Game::tick(float dt) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
+		
+		if (inGameState(newState)) {
+			datas->hud->Hide(false);
+			theGridSystem.HideAll(false);
+
+			RENDERING(datas->benchTotalTime)->hide = false;
+			for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
+				it != datas->benchTimeSystem.end(); ++it) {
+				RENDERING(it->second)->hide = false;
+			}
+			TEXT_RENDERING(datas->textBenchTimeSystem[0])->hide = false;
+			TEXT_RENDERING(datas->textBenchTimeSystem[1])->hide = false;
+		} else {
+			RENDERING(datas->benchTotalTime)->hide = true;
+			for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
+				it != datas->benchTimeSystem.end(); ++it) {
+				RENDERING(it->second)->hide = true;
+			}
+			TEXT_RENDERING(datas->textBenchTimeSystem[0])->hide = true;
+			TEXT_RENDERING(datas->textBenchTimeSystem[1])->hide = true;
+
+			datas->hud->Hide(true);
+			if (newState != BlackToSpawn)
+				theGridSystem.HideAll(true);
+		}
 	}
 
 	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin();
@@ -332,35 +374,14 @@ void Game::tick(float dt) {
 	if (newState != UserInput)
 		toggleShowCombi(true);
 
-
-
-
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
+	
 	//si on est ingame, on affiche le HUD
 	if (newState == Spawn || newState == UserInput || newState == Delete || newState == Fall) {
-		datas->hud->Hide(false);
 		datas->hud->Update(dt);
 		thePlayerSystem.Update(dt);
-		theGridSystem.HideAll(false);
-
-		RENDERING(datas->benchTotalTime)->hide = false;
-		for (int i=0;i<9;i++)
-			RENDERING(datas->benchTimeSystem[i])->hide = false;
-		TEXT_RENDERING(datas->textBenchTimeSystem[0])->hide = false;
-		TEXT_RENDERING(datas->textBenchTimeSystem[1])->hide = false;
-	} else {
-		RENDERING(datas->benchTotalTime)->hide = true;
-		for (int i=0;i<9;i++)
-			RENDERING(datas->benchTimeSystem[i])->hide = true;
-		TEXT_RENDERING(datas->textBenchTimeSystem[0])->hide = true;
-		TEXT_RENDERING(datas->textBenchTimeSystem[1])->hide = true;
-
-		datas->hud->Hide(true);
-		if (newState != BlackToSpawn)
-			theGridSystem.HideAll(true);
 	}
-
 
 	if (newState == EndMenu) {
 		theGridSystem.DeleteAll();
@@ -378,97 +399,36 @@ void Game::tick(float dt) {
 	theRenderingSystem.Update(dt);
 	theSoundSystem.Update(dt);
 
-
 	//bench settings
+	updateDuration = TimeUtil::getTime() - updateDuration;
+	
+	static float benchAccum = 0;
+	benchAccum += dt;
+	if (benchAccum>=1 && updateDuration > 0 && !RENDERING(datas->benchTotalTime)->hide) {
+		// draw update duration
+		float frameWidth = MathUtil::Min(updateDuration / (1.f/60), 1.0f) * 10;
+		TRANSFORM(datas->benchTotalTime)->size.X = frameWidth;
+		TRANSFORM(datas->benchTotalTime)->position.X = -5 + frameWidth * 0.5;
+		RENDERING(datas->benchTotalTime)->color = Color(5.*updateDuration, 5.*(1/5.-updateDuration), 0.3f, .3f);
 
-	updateDuration = TimeUtil::getTime()-updateDuration;
+		// for each system adjust rectangle size/position to time spent
+		float timeSpentInSystems = 0;
+		float x = -5;
+		for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
+				it != datas->benchTimeSystem.end(); ++it) {
+			float timeSpent = ComponentSystem::Named(it->first)->timeSpent;
+			timeSpentInSystems += timeSpent;
+			float width = frameWidth * (timeSpent / updateDuration);
+			TRANSFORM(it->second)->size.X = width;
+			TRANSFORM(it->second)->position.X = x + width * 0.5;
+			x += width;
+			
+			LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
+		}	
 
-	float tt = theADSRSystem.timeSpent+theButtonSystem.timeSpent+
-		theCombinationMarkSystem.timeSpent+theTransformationSystem.timeSpent+
-		theTextRenderingSystem.timeSpent+theContainerSystem.timeSpent+
-		theRenderingSystem.timeSpent+theSoundSystem.timeSpent+thePlayerSystem.timeSpent; //total time in systems
-
-	static int azazaz = 0;
-	azazaz++;
-	if (azazaz>=5*60) {
-		azazaz=0;
-		if (theADSRSystem.timeSpent) LOGI("theADSRSystem:%f",theADSRSystem.timeSpent);
-		if (theButtonSystem.timeSpent) LOGI("theButtonSystem:%f", theButtonSystem.timeSpent);
-		if (theCombinationMarkSystem.timeSpent) LOGI("theCombinationMarkSystem:%f", theCombinationMarkSystem.timeSpent);
-		if (theTransformationSystem.timeSpent) LOGI("theTransformationSystem:%f", 	theTransformationSystem.timeSpent);
-		if (theTextRenderingSystem.timeSpent) LOGI("theTextRenderingSystem:%f", 	theTextRenderingSystem.timeSpent);
-		if (theContainerSystem.timeSpent) LOGI("theContainerSystem:%f", 	theContainerSystem.timeSpent);
-		if (theRenderingSystem.timeSpent) LOGI("theRenderingSystem:%f", 	theRenderingSystem.timeSpent);
-		if (theSoundSystem.timeSpent) LOGI("theSoundSystem:%f" ,	theSoundSystem.timeSpent);
-		if (thePlayerSystem.timeSpent) LOGI("thePlayerSystem:%f" ,	thePlayerSystem.timeSpent);
-
-		LOGI("temps passer dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", tt, updateDuration, 100*tt/updateDuration, dt);
+		LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
+		benchAccum = 0;
 	}
-
-	RENDERING(datas->benchTotalTime)->color = Color(5.*updateDuration, 5.*(1/5.-updateDuration), 0.3f, .3f);
-
-	char tmp[150] = "\0"; // en attendant mieux (ie savoir cmt on garde que 2 decimales
-		//avec l'autre methode
-	std::stringstream s;
-
-	for (int i=0; i<NB_SYSTEMS; i++) {
-		float r, g;
-		char buff[10];
-
-		switch (i) {
-			//temps passé en dehors des systemes
-			case 0:
-				r = (updateDuration-tt) / updateDuration; g = 1 - r;
-				s << " out" << r/updateDuration;
-				break;
-			case 1:
-				r = theADSRSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << " adsr"<< r/updateDuration;
-				break;
-			case 2:
-				r = theButtonSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "butt"<< r/updateDuration;
-				break;
-			case 3:
-				r = theCombinationMarkSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "comb"<< r/updateDuration;
-				break;
-			case 4:
-				r = theTransformationSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "tran"<< r/updateDuration;
-				break;
-			case 5:
-				r = theTextRenderingSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "txt"<< r/updateDuration;
-				break;
-			case 6:
-				r = theContainerSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "ctn"<< r/updateDuration;
-				break;
-			case 7:
-				r = theRenderingSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "rend"<< r/updateDuration;
-				break;
-			case 8:
-				r = theSoundSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "snd"<< r/updateDuration;
-				break;
-			case 9:
-				r = thePlayerSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "plr"<< r/updateDuration;
-				break;
-			default:
-				r = 1; g = 0;
-				break;
-		}
-		sprintf(buff, "%.2d ", (int)(100*r));
-		strcat(tmp, buff);
-		RENDERING(datas->benchTimeSystem[i])->color = Color(r, g, 0.f, 1.f);
-	}
-	TEXT_RENDERING(datas->textBenchTimeSystem[0])->text = "out  adsr butt comb tran txt  ctn  rend snd plr";
-	TEXT_RENDERING(datas->textBenchTimeSystem[1])->text = tmp;
-
-	//TEXT_RENDERING(datas->textBenchTimeSystem[i])->text = s.str();
 }
 
 int Game::saveState(uint8_t** out) {
