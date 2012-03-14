@@ -8,11 +8,14 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager.LayoutParams;
+import android.widget.RelativeLayout;
 
 public class TilematchActivity extends Activity {
 	static final String TILEMATCH_BUNDLE_KEY = "plop";
@@ -24,7 +27,7 @@ public class TilematchActivity extends Activity {
 	static public SoundPool soundPool;
 	static public List<MediaPlayer> availablePlayers;
 	static public MediaPlayer[] activePlayers;
-	
+
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +38,24 @@ public class TilematchActivity extends Activity {
 
         setContentView(R.layout.main);
         
-        mGLView = (GLSurfaceView) findViewById(R.id.glview);
+        RelativeLayout rl = (RelativeLayout) findViewById(R.id.parent_frame);
+        
+        Renderer r = new TilematchRenderer(getAssets());
+        assert(r != null);
+        try {
+        	if (true) throw new RuntimeException();
+        	mGLView = new GL2JNIView(this, r, null);
+        	TilematchActivity.openGLESVersion = 2;
+        } catch (Exception exc) {
+        	Log.e("tilematchJava", "Failed to create OpenGL ES2 context, try ES1");
+        	mGLView = new GLSurfaceView(this);
+        	mGLView.setRenderer(r);
+        	TilematchActivity.openGLESVersion = 1;
+        }
+        
+        
+        rl.addView(mGLView);
+        
         
         TilematchActivity.soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
         TilematchActivity.availablePlayers = new ArrayList<MediaPlayer>(4);

@@ -21,13 +21,10 @@ import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
-import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -53,17 +50,17 @@ class GL2JNIView extends GLSurfaceView {
     private static String TAG = "GL2JNIView";
     private static final boolean DEBUG = false;
 
-    public GL2JNIView(Context context, AttributeSet set) {
+    public GL2JNIView(Context context, Renderer r, AttributeSet set) {
         super(context, set);
-        init(false, 0, 0, context.getAssets());
+        init(r, false, 0, 0);
     }
 
-    public GL2JNIView(Context context, boolean translucent, int depth, int stencil) {
+    public GL2JNIView(Context context, Renderer r, boolean translucent, int depth, int stencil) {
         super(context);
-        init(translucent, depth, stencil, context.getAssets());
+        init(r, translucent, depth, stencil);
     }
 
-    private void init(boolean translucent, int depth, int stencil, AssetManager asset) {
+    private void init(Renderer r, boolean translucent, int depth, int stencil) {
 
         /* By default, GLSurfaceView() creates a RGB_565 opaque surface.
          * If we want a translucent one, we should change the surface's
@@ -84,9 +81,8 @@ class GL2JNIView extends GLSurfaceView {
         setEGLConfigChooser( translucent ?
                              new ConfigChooser(8, 8, 8, 8, depth, stencil) :
                              new ConfigChooser(5, 6, 5, 0, depth, stencil) );
-
-        /* Set the renderer responsible for frame rendering */
-        setRenderer(new Renderer(asset));
+        
+        setRenderer(r);
     }
     
     private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
@@ -98,17 +94,9 @@ class GL2JNIView extends GLSurfaceView {
             EGLContext context;
             int[] value = new int[1];
             egl.eglGetConfigAttrib(display, eglConfig, EGL10.EGL_RENDERABLE_TYPE, value);
-            if (value[0] == 4 /*EGL_OPENGL_ES2_BIT*/) {
-            	Log.i("tilematchJava", "Creating OpenGL ES2 context");
-            	int[] attrib_list_es2 = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE };
-                context = egl.eglCreateContext(display, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list_es2);	
-                TilematchActivity.openGLESVersion = 2;
-            } else {
-            	Log.i("tilematchJava", "Creating OpenGL ES1 context");
-            	int[] attrib_list_es1 = {EGL_CONTEXT_CLIENT_VERSION, 1, EGL10.EGL_NONE };
-                context = egl.eglCreateContext(display, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list_es1);
-                TilematchActivity.openGLESVersion = 1;
-            }
+           	int[] attrib_list_es2 = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE };
+            context = egl.eglCreateContext(display, eglConfig, EGL10.EGL_NO_CONTEXT, attrib_list_es2);	
+           
             checkEglError("After eglCreateContext", egl);
             
             if (context == null)
@@ -153,13 +141,6 @@ class GL2JNIView extends GLSurfaceView {
             EGL10.EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
             EGL10.EGL_NONE
         };
-        private static int[] s_configAttribs1 =
-        {
-            EGL10.EGL_RED_SIZE, 4,
-            EGL10.EGL_GREEN_SIZE, 4,
-            EGL10.EGL_BLUE_SIZE, 4,
-            EGL10.EGL_NONE
-        };
 
         public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
             /* Get the number of minimally matching EGL configurations
@@ -172,13 +153,7 @@ class GL2JNIView extends GLSurfaceView {
             int numConfigs = num_config[0];
 
             if (numConfigs <= 0) {
-                Log.e("tilematchJava", "No opengles2 config found, retrying with opengles1");
-                attribs = s_configAttribs1;
-                egl.eglChooseConfig(display, attribs, null, 0, num_config);
-                numConfigs = num_config[0];
-                if (numConfigs <= 0) {
-                	throw new RuntimeException("No OpenGL ES config");
-                }
+            	throw new RuntimeException("No OpenGL ES2 config");
             }
 
             /* Allocate then read the array of minimally matching EGL configs
@@ -340,53 +315,5 @@ class GL2JNIView extends GLSurfaceView {
         protected int mDepthSize;
         protected int mStencilSize;
         private int[] mValue = new int[1];
-    }
-
-    private static class Renderer implements GLSurfaceView.Renderer {   
-    	AssetManager asset; 
-    	public Renderer(AssetManager asset) {
-    		super(); 
-    		this.asset = asset;
-    	}
-    	
-        public void onDrawFrame(GL10 gl) {
-        	synchronized (TilematchActivity.mutex) {
-        		if (TilematchActivity.game == 0)
-        			return;
-        		TilematchJNILib.step(TilematchActivity.game);
-        	}
-            int err;
-            while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
-            	Log.e("tilematchJava", "GL error : " + GLU.gluErrorString(err));
-            } 
-        }
-
-        boolean initDone = false;
-        public void onSurfaceChanged(GL10 gl, int width, int height) {
-        	Log.i("tilematchJava", "surface changed-> width: " + width + ", height: " + height + ", " + initDone);
-        	if (!initDone) {
-        		TilematchJNILib.init(TilematchActivity.game, width, height, TilematchActivity.savedState);
-        		TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
-        		TilematchActivity.savedState = null;
-        		initDone = true;
-        	} else {
-        		TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
-        	}
-        	
-        	int err;
-            while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
-            	Log.e("tilematchJava", "_GL error : " + GLU.gluErrorString(err));
-            }
-        }
-
-        public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        	Log.i("tilematchJava", "Surface created (game: "  + TilematchActivity.game + ", " + initDone + ")");
-        	if (TilematchActivity.game == 0) {
-        		initDone = false;
-        		TilematchActivity.game = TilematchJNILib.createGame(asset, TilematchActivity.openGLESVersion);
-        	} else {
-        		initDone = true;
-        	}
-        }
     }
 }

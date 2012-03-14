@@ -11,7 +11,7 @@ public class TilematchJNILib {
     static {
         System.loadLibrary("tilematch");
     }
-      
+
     /* Create native game instance */
     public static native long createGame(AssetManager mgr, int openGLESVersion);
     /* Initialize game, reset graphics assets, etc... */
