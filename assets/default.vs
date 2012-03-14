@@ -11,12 +11,12 @@ varying vec2 uvVarying;
 void main()
 {
 	mat3 rotation = mat3(
-        vec3( cos(aPosRot.w),  sin(aPosRot.w),  0.0),
-        vec3(-sin(aPosRot.w),  cos(aPosRot.w),  0.0),
+        vec3( cos(aPosRot.z),  sin(aPosRot.z),  0.0),
+        vec3(-sin(aPosRot.z),  cos(aPosRot.z),  0.0),
         vec3(        0.0,         0.0,  1.0)
     );
 	
-	vec4 position = uMvp *  vec4(rotation * aPosition.xyz + aPosRot.xyz, 1.);
+	vec4 position = uMvp *  vec4(rotation * aPosition.xyz + vec3(aPosRot.xy, 0), 1.);
 	vColor = aColor;
 	gl_Position = position;
 	uvVarying = aTexCoord;

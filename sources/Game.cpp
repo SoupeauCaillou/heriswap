@@ -301,6 +301,20 @@ void Game::togglePause(bool activate) {
 }
 
 void Game::tick(float dt) {
+	{
+		#define COUNT 50
+		static int frameCount = 0;
+		static float accum = 0, t = 0;
+		frameCount++;
+		accum += dt;
+		if (frameCount == COUNT) {
+			LOGI("%d frames: %.3f s - diff: %.3f s - ms per frame: %.3f", COUNT, accum, TimeUtil::getTime() - t, accum / COUNT);
+			t = TimeUtil::getTime();
+			accum = 0;
+			frameCount = 0;
+		}
+	}
+
 	float updateDuration = TimeUtil::getTime();
 
 	GameState newState;
