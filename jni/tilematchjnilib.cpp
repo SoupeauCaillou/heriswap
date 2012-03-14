@@ -106,7 +106,7 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
 	theRenderingSystem.opengles2 = (hld->openGLESVersion == 2);
 	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
 	
-	LOGW("Build Java sound API proxy");
+	LOGW("Build Java sound API proxy env:%p", env);
 	hld->api = new JavaSoundAPI();
 	hld->api->env = env;
 	hld->api->javaSoundApi = (jclass)env->NewGlobalRef(hld->env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
@@ -194,8 +194,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_pause
   (JNIEnv *env, jclass, jlong g) {
   	GameHolder* hld = (GameHolder*) g;
-  	UPDATE_ENV_PTR(hld, env);
-	LOGW("%s -->", __FUNCTION__);
+  	LOGW("%s -->", __FUNCTION__);
   	if (!hld->game)
   		return;
 
@@ -211,7 +210,6 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_p
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_handleInputEvent
   (JNIEnv *env, jclass, jlong g, jint evt, jfloat x, jfloat y) {
 	GameHolder* hld = (GameHolder*) g;
-	UPDATE_ENV_PTR(hld, env);
 
 	/* ACTION_DOWN == 0 | ACTION_MOVE == 2 */
    if (evt == 0 || evt == 2) {
