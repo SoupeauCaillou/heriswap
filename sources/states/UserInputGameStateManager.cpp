@@ -180,6 +180,10 @@ GameState UserInputGameStateManager::Update(float dt) {
 					SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/line2.wav", false);
 					return UserInput;
 				} else {
+					// validate position
+					TRANSFORM(e1)->position = Game::GridCoordsToPosition(GRID(e1)->i, GRID(e1)->j);
+					TRANSFORM(e2)->position = Game::GridCoordsToPosition(GRID(e2)->i, GRID(e2)->j);
+					
 					originI = originJ = -1;
 					SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/line1.wav", false);
 					return Delete;
