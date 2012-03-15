@@ -2,7 +2,6 @@
 
 static void fillTheBlank(std::vector<Feuille>& spawning);
 static Entity createCell(Feuille& f);
-static TextureRef textureFromType(int type);
 
 SpawnGameStateManager::SpawnGameStateManager() {
 
@@ -52,8 +51,12 @@ void SpawnGameStateManager::Enter() {
 			for(int i=0; i<c.size(); i++) {
 				for(int j=0; j<c[i].points.size(); j++) {
 					Entity e = theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y);
-					GRID(e)->type = MathUtil::RandomInt(8)+1;
-					RENDERING(e)->texture = textureFromType(GRID(e)->type);
+					int type = MathUtil::RandomInt(8);
+					GRID(e)->type = type;
+					RenderingComponent* rc = RENDERING(e);
+					rc->texture = theRenderingSystem.loadTextureFile("feuilles.png");
+					rc->bottomLeftUV = Vector2(type / 8.0, 0);
+					rc->topRightUV = rc->bottomLeftUV + Vector2(1 / 8.0, 1);
 				}
 			}
 		} while(!c.empty());
@@ -151,7 +154,7 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 				int pb=0;
 				/*ne pas generer de combinaison (fonctionne seulement avec les cellules deja dans la grille)*/
 				do {
-					r = MathUtil::RandomInt(8)+1;
+					r = MathUtil::RandomInt(8);
 					Entity l[5],c[5];
 					for (int k=0;k<5;k++){
 						 l[k] = theGridSystem.GetOnPos(i+2-k,j);
@@ -191,12 +194,6 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 	}
 }
 
-static TextureRef textureFromType(int type) {
-	std::stringstream s;
-	s << type << ".png";
-	return theRenderingSystem.loadTextureFile(s.str());
-}
-
 static Entity createCell(Feuille& f) {
 	Entity e = theEntityManager.CreateEntity(EntityManager::Persistent);
 	ADD_COMPONENT(e, Transformation);
@@ -206,9 +203,14 @@ static Entity createCell(Feuille& f) {
 
 	TRANSFORM(e)->position = Game::GridCoordsToPosition(f.X, f.Y);
 	TRANSFORM(e)->z = 10;
-	RENDERING(e)->texture = textureFromType(f.type);
+	
+	RenderingComponent* rc = RENDERING(e);
+	rc->texture = theRenderingSystem.loadTextureFile("feuilles.png");
+	rc->bottomLeftUV = Vector2(f.type / 8.0, 0);
+	rc->topRightUV = rc->bottomLeftUV + Vector2(1 / 8.0, 1);
+	rc->hide = false;
+	
 	TRANSFORM(e)->size = Game::CellSize() * Game::CellContentScale();
-	RENDERING(e)->hide = false;
 	ADSR(e)->idleValue = Game::CellSize() * Game::CellContentScale();
 	GRID(e)->type = f.type;
 	GRID(e)->i = f.X;

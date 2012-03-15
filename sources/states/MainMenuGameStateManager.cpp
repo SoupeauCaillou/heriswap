@@ -20,14 +20,18 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(start, Transformation);
 	ADD_COMPONENT(start, Rendering);
 
-	RENDERING(start)->texture = theRenderingSystem.loadTextureFile("1.png");
+	RENDERING(start)->texture = theRenderingSystem.loadTextureFile("feuilles.png");
+	RENDERING(start)->bottomLeftUV = Vector2(0, 0);
+	RENDERING(start)->topRightUV = Vector2(1 / 8.0, 1);
 	TRANSFORM(start)->size = Game::CellSize() * Game::CellContentScale();
 	RENDERING(start)->hide = true;
 	
 	ADD_COMPONENT(score, Transformation);
 	ADD_COMPONENT(score, Rendering);
 
-	RENDERING(score)->texture = theRenderingSystem.loadTextureFile("2.png");
+	RENDERING(score)->texture = theRenderingSystem.loadTextureFile("feuilles.png");
+	RENDERING(score)->bottomLeftUV = Vector2(1/8.0, 0);
+	RENDERING(score)->topRightUV = Vector2(2/8.0, 1);
 	TRANSFORM(score)->size = Game::CellSize() * Game::CellContentScale();
 	RENDERING(score)->hide = true;
 

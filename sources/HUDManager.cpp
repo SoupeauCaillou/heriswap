@@ -62,9 +62,9 @@ void HUDManager::Setup() {
 		TRANSFORM(datas->fObj[i])->z = 5;
 		TRANSFORM(datas->fObj[i])->size = Vector2(1,1);
 		TRANSFORM(datas->fObj[i])->position = TRANSFORM(datas->eObj[i])->position+Vector2(-0.3,0);
-		std::stringstream a;
-		a << i+1 <<".png";
-		RENDERING(datas->fObj[i])->texture = theRenderingSystem.loadTextureFile(a.str());
+		RENDERING(datas->fObj[i])->bottomLeftUV = Vector2(i / 8.0, 0);
+		RENDERING(datas->fObj[i])->topRightUV = RENDERING(datas->fObj[i])->bottomLeftUV + Vector2(1 / 8.0, 1);	
+		RENDERING(datas->fObj[i])->texture = theRenderingSystem.loadTextureFile("feuilles.png");
 
 	}
 
@@ -73,6 +73,7 @@ void HUDManager::Setup() {
 
 	ADD_COMPONENT(datas->fBonus, Transformation);
 	ADD_COMPONENT(datas->fBonus, Rendering);
+	RENDERING(datas->fBonus)->texture = theRenderingSystem.loadTextureFile("feuilles.png");
 
 	TRANSFORM(datas->fBonus)->size = Vector2(2,2);
 	TRANSFORM(datas->fBonus)->position = Vector2(2,6);
@@ -147,8 +148,9 @@ void HUDManager::Update(float dt) {
 	}
 	//Feuille Bonus
 	{
-	std::stringstream a;
-	a <<thePlayerSystem.GetBonus()<<".png";
-	RENDERING(datas->fBonus)->texture = theRenderingSystem.loadTextureFile(a.str());
+	int type = thePlayerSystem.GetBonus();	
+	RenderingComponent* rc = RENDERING(datas->fBonus);
+	rc->bottomLeftUV = Vector2(type / 8.0, 0);
+	rc->topRightUV = rc->bottomLeftUV + Vector2(1 / 8.0, 1);
 	}
 }
