@@ -396,16 +396,9 @@ void Game::tick(float dt) {
 		datas->hud->Update(dt);
 		theGridSystem.HideAll(false);
 		RENDERING(datas->benchTotalTime)->hide = false;
-		for (int i=0;i<9;i++)
-			RENDERING(datas->benchTimeSystem[i])->hide = false;
-		TEXT_RENDERING(datas->textBenchTimeSystem[0])->hide = false;
-		TEXT_RENDERING(datas->textBenchTimeSystem[1])->hide = false;
 	} else {
 		RENDERING(datas->benchTotalTime)->hide = true;
-		for (int i=0;i<9;i++)
-			RENDERING(datas->benchTimeSystem[i])->hide = true;
-		TEXT_RENDERING(datas->textBenchTimeSystem[0])->hide = true;
-		TEXT_RENDERING(datas->textBenchTimeSystem[1])->hide = true;
+
 		datas->hud->Hide(true);
 		if (newState != BlackToSpawn)
 			theGridSystem.HideAll(true);
@@ -437,120 +430,38 @@ void Game::tick(float dt) {
 
 void Game::bench(bool active, float updateDuration, float dt) {
 	if (active) {
+		updateDuration = TimeUtil::getTime() - updateDuration;
+		static float benchAccum = 0;
+		benchAccum += dt;
+		if (benchAccum>=1 && (updateDuration > 0) && !RENDERING(datas->benchTotalTime)->hide) {
+			// draw update duration
+			if (updateDuration > 1.0/60) {
+				RENDERING(datas->benchTotalTime)->color = Color(1.0, 0,0, 1);
+			} else {
+				RENDERING(datas->benchTotalTime)->color = Color(0.0, 1.0,0,1);
+			}
+			float frameWidth = MathUtil::Min(updateDuration / (1.f/60), 1.0f) * 10;
+			TRANSFORM(datas->benchTotalTime)->size.X = frameWidth;
+			TRANSFORM(datas->benchTotalTime)->position.X = -5 + frameWidth * 0.5;
 
-	float tt = theADSRSystem.timeSpent+theButtonSystem.timeSpent+
-		theCombinationMarkSystem.timeSpent+theTransformationSystem.timeSpent+
-		theTextRenderingSystem.timeSpent+theContainerSystem.timeSpent+
-		theRenderingSystem.timeSpent+theSoundSystem.timeSpent; //total time in systems
+			// for each system adjust rectangle size/position to time spent
+			float timeSpentInSystems = 0;
+			float x = -5;
+			for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
+					it != datas->benchTimeSystem.end(); ++it) {
+				float timeSpent = ComponentSystem::Named(it->first)->timeSpent;
+				timeSpentInSystems += timeSpent;
+				float width = frameWidth * (timeSpent / updateDuration);
+				TRANSFORM(it->second)->size.X = width;
+				TRANSFORM(it->second)->position.X = x + width * 0.5;
+				x += width;
 
-	static int azazaz = 0;
-	/*azazaz++;
-	if (azazaz>=5*60) {
-		azazaz=0;
-		if (theADSRSystem.timeSpent) LOGI("theADSRSystem:%f",theADSRSystem.timeSpent);
-		if (theButtonSystem.timeSpent) LOGI("theButtonSystem:%f", theButtonSystem.timeSpent);
-		if (theCombinationMarkSystem.timeSpent) LOGI("theCombinationMarkSystem:%f", theCombinationMarkSystem.timeSpent);
-		if (theTransformationSystem.timeSpent) LOGI("theTransformationSystem:%f", 	theTransformationSystem.timeSpent);
-		if (theTextRenderingSystem.timeSpent) LOGI("theTextRenderingSystem:%f", 	theTextRenderingSystem.timeSpent);
-		if (theContainerSystem.timeSpent) LOGI("theContainerSystem:%f", 	theContainerSystem.timeSpent);
-		if (theRenderingSystem.timeSpent) LOGI("theRenderingSystem:%f", 	theRenderingSystem.timeSpent);
-		if (theSoundSystem.timeSpent) LOGI("theSoundSystem:%f" ,	theSoundSystem.timeSpent);
-		//if (thePlayerSystem.timeSpent) LOGI("thePlayerSystem:%f" ,	thePlayerSystem.timeSpent);
+				LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
+			}
 
-		LOGI("temps passer dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", tt, updateDuration, 100*tt/updateDuration, dt);
-	}*/
-
-	RENDERING(datas->benchTotalTime)->color = Color(5.*updateDuration, 5.*(1/5.-updateDuration), 0.3f, .3f);
-
-	char tmp[150] = "\0"; // en attendant mieux (ie savoir cmt on garde que 2 decimales
-		//avec l'autre methode
-	std::stringstream s;
-
-	for (int i=0; i<NB_SYSTEMS; i++) {
-		float r = 0, g = 1;
-		char buff[10];
-
-		switch (i) {
-			//temps passé en dehors des systemes
-			case 0:
-				r = (updateDuration-tt) / updateDuration; g = 1 - r;
-				s << " out" << r/updateDuration;
-				break;
-			case 1:
-				r = theADSRSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << " adsr"<< r/updateDuration;
-				break;
-			case 2:
-				r = theButtonSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "butt"<< r/updateDuration;
-				break;
-			case 3:
-				r = theCombinationMarkSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "comb"<< r/updateDuration;
-				break;
-			case 4:
-				r = theTransformationSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "tran"<< r/updateDuration;
-				break;
-			case 5:
-				r = theTextRenderingSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "txt"<< r/updateDuration;
-				break;
-			case 6:
-				r = theContainerSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "ctn"<< r/updateDuration;
-				break;
-			case 7:
-				r = theRenderingSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "rend"<< r/updateDuration;
-				break;
-			case 8:
-				r = theSoundSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "snd"<< r/updateDuration;
-				break;
-			case 9:
-				//r = thePlayerSystem.timeSpent/ updateDuration; g = 1 - r;
-				s << "plr"<< r/updateDuration;
-				break;
-			default:
-				r = 1; g = 0;
-				break;
-
-	updateDuration = TimeUtil::getTime() - updateDuration;
-	static float benchAccum = 0;
-	benchAccum += dt;
-	if (benchAccum>=1 && (updateDuration > 0) && !RENDERING(datas->benchTotalTime)->hide) {
-		// draw update duration
-		if (updateDuration > 1.0/60) {
-			RENDERING(datas->benchTotalTime)->color = Color(1.0, 0,0, 1);
-		} else {
-			RENDERING(datas->benchTotalTime)->color = Color(0.0, 1.0,0,1);
+			LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
+			benchAccum = 0;
 		}
-		float frameWidth = MathUtil::Min(updateDuration / (1.f/60), 1.0f) * 10;
-		TRANSFORM(datas->benchTotalTime)->size.X = frameWidth;
-		TRANSFORM(datas->benchTotalTime)->position.X = -5 + frameWidth * 0.5;
-
-		// for each system adjust rectangle size/position to time spent
-		float timeSpentInSystems = 0;
-		float x = -5;
-		for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
-				it != datas->benchTimeSystem.end(); ++it) {
-			float timeSpent = ComponentSystem::Named(it->first)->timeSpent;
-			timeSpentInSystems += timeSpent;
-			float width = frameWidth * (timeSpent / updateDuration);
-			TRANSFORM(it->second)->size.X = width;
-			TRANSFORM(it->second)->position.X = x + width * 0.5;
-			x += width;
-
-			LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
-		}
-
-		LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
-		benchAccum = 0;
-	}
-	TEXT_RENDERING(datas->textBenchTimeSystem[0])->text = "out  adsr butt comb tran txt  ctn  rend snd plr";
-	TEXT_RENDERING(datas->textBenchTimeSystem[1])->text = tmp;
-	//TEXT_RENDERING(datas->textBenchTimeSystem[i])->text = s.str();
 	}
 }
 int Game::saveState(uint8_t** out) {
