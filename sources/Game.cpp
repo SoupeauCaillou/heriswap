@@ -39,7 +39,6 @@
 #include "HUDManager.h"
 
 #define GRIDSIZE 8
-#define NB_SYSTEMS 10
 
 class Game::Data {
 	public:
@@ -84,11 +83,11 @@ class Game::Data {
 
 		}
 
-		void Setup() {
+		void Setup(int windowW, int windowH) {
 			ADD_COMPONENT(logo, Rendering);
 			ADD_COMPONENT(logo, Transformation);
 			TRANSFORM(logo)->position = Vector2(0,0);
-			TRANSFORM(logo)->size = Vector2(10,10*720/420);
+			TRANSFORM(logo)->size = Vector2(10,(10.0*windowH)/windowW);
 			RENDERING(logo)->hide = true;
 			TRANSFORM(logo)->z = 39;
 			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
@@ -106,35 +105,29 @@ class Game::Data {
 				SOUND(music[i])->repeat = false;
 			}
 
+			float benchPos = - 5.0*windowH/windowW + 0.5;
 			benchTotalTime = theEntityManager.CreateEntity();
 			ADD_COMPONENT(benchTotalTime, Rendering);
 			ADD_COMPONENT(benchTotalTime, Transformation);
-			TRANSFORM(benchTotalTime)->position = Vector2(0,-7.5);
-			TRANSFORM(benchTotalTime)->size = Vector2(10,720/420);
+			TRANSFORM(benchTotalTime)->position = Vector2(0,benchPos);
+			TRANSFORM(benchTotalTime)->size = Vector2(10,1);
 			TRANSFORM(benchTotalTime)->z = 39;
-			for (int i = 0; i < NB_SYSTEMS ; i ++) {
-				benchTimeSystem[i] = theEntityManager.CreateEntity();
-				ADD_COMPONENT(benchTimeSystem[i], Rendering);
-				ADD_COMPONENT(benchTimeSystem[i], Transformation);
-				TRANSFORM(benchTimeSystem[i])->position = Vector2(i-4.5,-7.5);
-				TRANSFORM(benchTimeSystem[i])->size = Vector2(.8,0.8);
-				TRANSFORM(benchTimeSystem[i])->z = 40;
+
+			std::vector<std::string> allSystems = ComponentSystem::registeredSystemNames();
+			for (int i = 0; i < allSystems.size() ; i ++) {
+				Entity b = theEntityManager.CreateEntity();
+				ADD_COMPONENT(b, Rendering);
+				ADD_COMPONENT(b, Transformation);
+				TRANSFORM(b)->position = Vector2(0, benchPos);
+				TRANSFORM(b)->size = Vector2(.8,0.8);
+				TRANSFORM(b)->z = 40;
+				RENDERING(b)->color = (i % 2) ? Color(0.1, 0.1, 0.1):Color(0.8,0.8,0.8);
+				benchTimeSystem[allSystems[i]] = b;
 			}
-			textBenchTimeSystem[0] = theTextRenderingSystem.CreateLocalEntity(8);
-			TRANSFORM(textBenchTimeSystem[0])->position = Vector2(-4.7,-7.3);
-			TEXT_RENDERING(textBenchTimeSystem[0])->color = Color(0.f,0.f,0.f,1.f);
-			TEXT_RENDERING(textBenchTimeSystem[0])->alignL = true;
-			TEXT_RENDERING(textBenchTimeSystem[0])->charSize = 0.2f;
-			TRANSFORM(textBenchTimeSystem[0])->z = 41;
-			textBenchTimeSystem[1] = theTextRenderingSystem.CreateLocalEntity(8);
-			TRANSFORM(textBenchTimeSystem[1])->position = Vector2(-4.7,-7.7);
-			TEXT_RENDERING(textBenchTimeSystem[1])->color = Color(0.f,0.f,0.f,1.f);
-			TEXT_RENDERING(textBenchTimeSystem[1])->alignL = true;
-			TEXT_RENDERING(textBenchTimeSystem[1])->charSize = 0.34f;
-			TRANSFORM(textBenchTimeSystem[1])->z = 41;
 		}
 		//bench data
-		Entity benchTimeSystem[NB_SYSTEMS], textBenchTimeSystem[2], benchTotalTime;
+		std::map<std::string, Entity> benchTimeSystem;
+		Entity benchTotalTime, targetTime;
 
 		GameState state, stateBeforePause;
 		bool stateBeforePauseNeedEnter;
@@ -152,6 +145,18 @@ class Game::Data {
 static const float offset = 0.2;
 static const float scale = 0.95;
 static const float size = (10 - 2 * offset) / GRIDSIZE;
+
+static bool inGameState(GameState state) {
+	switch (state) {
+		case Spawn:
+		case UserInput:
+		case Delete:
+		case Fall:
+			return true;
+		default:
+			return false;
+	}
+}
 
 static bool pausableState(GameState state) {
 	switch (state) {
@@ -211,7 +216,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 		Entity eHUD = theEntityManager.CreateEntity(EntityManager::Persistent);
 	}
 
-	datas->Setup();
+	datas->Setup(windowW, windowH);
 
 	theGridSystem.GridSize = GRIDSIZE;
 
@@ -308,6 +313,20 @@ void Game::togglePause(bool activate) {
 }
 
 void Game::tick(float dt) {
+	{
+		#define COUNT 50
+		static int frameCount = 0;
+		static float accum = 0, t = 0;
+		frameCount++;
+		accum += dt;
+		if (frameCount == COUNT) {
+			LOGI("%d frames: %.3f s - diff: %.3f s - ms per frame: %.3f", COUNT, accum, TimeUtil::getTime() - t, accum / COUNT);
+			t = TimeUtil::getTime();
+			accum = 0;
+			frameCount = 0;
+		}
+	}
+
 	float updateDuration = TimeUtil::getTime();
 	static bool ended = false;
 
@@ -333,6 +352,27 @@ void Game::tick(float dt) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
+
+		if (inGameState(newState)) {
+			datas->hud->Hide(false);
+			theGridSystem.HideAll(false);
+
+			RENDERING(datas->benchTotalTime)->hide = false;
+			for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
+				it != datas->benchTimeSystem.end(); ++it) {
+				RENDERING(it->second)->hide = false;
+			}
+		} else {
+			RENDERING(datas->benchTotalTime)->hide = true;
+			for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
+				it != datas->benchTimeSystem.end(); ++it) {
+				RENDERING(it->second)->hide = true;
+			}
+
+			datas->hud->Hide(true);
+			if (newState != BlackToSpawn)
+				theGridSystem.HideAll(true);
+		}
 	}
 
 	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin();
@@ -371,7 +411,6 @@ void Game::tick(float dt) {
 			theGridSystem.HideAll(true);
 	}
 
-
 	if (newState == EndMenu) {
 		theGridSystem.DeleteAll();
 		datas->mode2Manager[datas->mode]->time = 0;
@@ -387,7 +426,6 @@ void Game::tick(float dt) {
 	theContainerSystem.Update(dt);
 	theRenderingSystem.Update(dt);
 	theSoundSystem.Update(dt);
-
 
 	//bench settings
 
@@ -477,10 +515,38 @@ void Game::bench(bool active, float updateDuration, float dt) {
 			default:
 				r = 1; g = 0;
 				break;
+
+	updateDuration = TimeUtil::getTime() - updateDuration;
+	static float benchAccum = 0;
+	benchAccum += dt;
+	if (benchAccum>=1 && (updateDuration > 0) && !RENDERING(datas->benchTotalTime)->hide) {
+		// draw update duration
+		if (updateDuration > 1.0/60) {
+			RENDERING(datas->benchTotalTime)->color = Color(1.0, 0,0, 1);
+		} else {
+			RENDERING(datas->benchTotalTime)->color = Color(0.0, 1.0,0,1);
 		}
-		sprintf(buff, "%.2d ", (int)(100*r));
-		strcat(tmp, buff);
-		RENDERING(datas->benchTimeSystem[i])->color = Color(r, g, 0.f, 1.f);
+		float frameWidth = MathUtil::Min(updateDuration / (1.f/60), 1.0f) * 10;
+		TRANSFORM(datas->benchTotalTime)->size.X = frameWidth;
+		TRANSFORM(datas->benchTotalTime)->position.X = -5 + frameWidth * 0.5;
+
+		// for each system adjust rectangle size/position to time spent
+		float timeSpentInSystems = 0;
+		float x = -5;
+		for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
+				it != datas->benchTimeSystem.end(); ++it) {
+			float timeSpent = ComponentSystem::Named(it->first)->timeSpent;
+			timeSpentInSystems += timeSpent;
+			float width = frameWidth * (timeSpent / updateDuration);
+			TRANSFORM(it->second)->size.X = width;
+			TRANSFORM(it->second)->position.X = x + width * 0.5;
+			x += width;
+
+			LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
+		}
+
+		LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
+		benchAccum = 0;
 	}
 	TEXT_RENDERING(datas->textBenchTimeSystem[0])->text = "out  adsr butt comb tran txt  ctn  rend snd plr";
 	TEXT_RENDERING(datas->textBenchTimeSystem[1])->text = tmp;

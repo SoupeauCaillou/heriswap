@@ -86,17 +86,6 @@ struct AndroidNativeAssetLoader: public NativeAssetLoader {
 static char* loadTextfile(const char* assetName);
 static char* loadPng(const char* assetName, int* width, int* height);
 
-static float timeconverter(struct timeval tv) {
-	return (tv.tv_sec + tv.tv_usec / 1000000.0f);
-}
-
-static float gettime(GameHolder* hld) {
-	struct timeval tv;
-	gettimeofday(&tv,NULL);
-	timersub(&tv, &hld->startup_time, &tv);
-	return timeconverter(tv);
-}
-
 #define UPDATE_ENV_PTR(hld, env) if (hld->env != env) hld->env = hld->api->env = env
 
 /*
@@ -107,6 +96,7 @@ static float gettime(GameHolder* hld) {
 JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_createGame
   (JNIEnv *env, jclass, jobject asset, jint openglesVersion) {
   	LOGW("%s -->", __FUNCTION__);
+  	TimeUtil::init();
 	GameHolder* hld = new GameHolder();
 	hld->game = new Game(&hld->storage);
 	hld->env = env;
@@ -116,7 +106,7 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
 	theRenderingSystem.opengles2 = (hld->openGLESVersion == 2);
 	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
 	
-	LOGW("Build Java sound API proxy");
+	LOGW("Build Java sound API proxy env:%p", env);
 	hld->api = new JavaSoundAPI();
 	hld->api->env = env;
 	hld->api->javaSoundApi = (jclass)env->NewGlobalRef(hld->env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
@@ -176,14 +166,13 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
   		return;
   		
   	if (hld->firstCall) {
-		gettimeofday(&hld->startup_time,NULL);
-		hld->time = gettime(hld);
+		hld->time = TimeUtil::getTime();
 		hld->firstCall = false;
 	}
 
 	float dt;
 	do {
-		dt = gettime(hld) - hld->time;
+		dt = TimeUtil::getTime() - hld->time;
 		if (dt < DT) {
 			struct timespec ts;
 			ts.tv_sec = 0;
@@ -193,7 +182,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
 	} while (dt < DT);
 
 	hld->dtAccumuled += dt;
-	hld->time = gettime(hld);
+	hld->time = TimeUtil::getTime();
 
 	while (hld->dtAccumuled >= DT){
 		hld->game->tick(hld->dtAccumuled);
@@ -205,8 +194,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_pause
   (JNIEnv *env, jclass, jlong g) {
   	GameHolder* hld = (GameHolder*) g;
-  	UPDATE_ENV_PTR(hld, env);
-	LOGW("%s -->", __FUNCTION__);
+  	LOGW("%s -->", __FUNCTION__);
   	if (!hld->game)
   		return;
 
@@ -222,7 +210,6 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_p
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_handleInputEvent
   (JNIEnv *env, jclass, jlong g, jint evt, jfloat x, jfloat y) {
 	GameHolder* hld = (GameHolder*) g;
-	UPDATE_ENV_PTR(hld, env);
 
 	/* ACTION_DOWN == 0 | ACTION_MOVE == 2 */
    if (evt == 0 || evt == 2) {

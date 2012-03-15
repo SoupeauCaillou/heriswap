@@ -4,11 +4,6 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/parent_frame"
   android:layout_height="fill_parent" android:layout_width="fill_parent">
-  
-<net.damsy.soupeaucaillou.tilematch.GL2JNIView
-    android:id="@+id/glview"
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent"
-    />
+ 
 </RelativeLayout>
 
