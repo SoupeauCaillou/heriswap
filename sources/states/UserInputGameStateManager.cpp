@@ -4,8 +4,7 @@
 static void activateADSR(Entity e, float a, float s);
 static void diffToGridCoords(const Vector2& c, int* i, int* j);
 
-UserInputGameStateManager::UserInputGameStateManager() {
-
+UserInputGameStateManager::UserInputGameStateManager(GameModeManager* moding) : mode(moding){
 }
 
 UserInputGameStateManager::~UserInputGameStateManager() {
@@ -16,7 +15,7 @@ void UserInputGameStateManager::Setup() {
 	// preload sound effect
 	theSoundSystem.loadSoundFile("audio/line1.wav", false);
 	theSoundSystem.loadSoundFile("audio/line2.wav", false);
-	
+
 	eSwapper = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSwapper, ADSR);
 	ADSR(eSwapper)->idleValue = 0;
@@ -25,7 +24,7 @@ void UserInputGameStateManager::Setup() {
 	ADSR(eSwapper)->decayTiming = 0;
 	ADSR(eSwapper)->sustainValue = 1.0;
 	ADSR(eSwapper)->releaseTiming = 0.1;
-	
+
 	ADD_COMPONENT(eSwapper, Sound);
 	SOUND(eSwapper)->type = SoundComponent::EFFECT;
 }
@@ -38,14 +37,13 @@ void UserInputGameStateManager::Enter() {
 
 GameState UserInputGameStateManager::Update(float dt) {
 	//on met à jour le temps
-	thePlayerSystem.SetTime(dt,false);
+	mode->time += dt;
 	// drag/drop of cell
 	if (!theTouchInputManager.wasTouched() &&
 		theTouchInputManager.isTouched()) {
 		// don't start new drag while the previous one isn't finished
 		if (!dragged) {
-							theCombinationMarkSystem.DeleteMarks(3);
-
+			theCombinationMarkSystem.DeleteMarks(3);
 			// start drag: find nearest cell
 			const Vector2& pos = theTouchInputManager.getTouchLastPosition();
 			int i, j;

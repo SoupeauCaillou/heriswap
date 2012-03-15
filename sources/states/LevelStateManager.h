@@ -4,7 +4,6 @@
 
 #include "Game.h"
 #include "GameStateManager.h"
-#include "PlayerSystem.h"
 
 class LevelStateManager : public GameStateManager {
 	public:

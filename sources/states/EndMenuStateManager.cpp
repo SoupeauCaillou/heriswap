@@ -1,11 +1,10 @@
 #include "EndMenuStateManager.h"
 
 
-EndMenuStateManager::EndMenuStateManager(ScoreStorage* str): storage(str) {
-
+EndMenuStateManager::EndMenuStateManager(ScoreStorage* str, GameModeManager* moding, GameMode modd) : mode(moding), storage(str), modeType(modd) {
 }
 
-EndMenuStateManager::~EndMenuStateManager() {
+EndMenuStateManager::~EndMenuStateManager(){
 	theEntityManager.DeleteEntity(startbtn);
 	theTextRenderingSystem.DestroyLocalEntity(eScore);
 	theTextRenderingSystem.DestroyLocalEntity(eMsg);
@@ -34,7 +33,7 @@ void EndMenuStateManager::Setup() {
 	TEXT_RENDERING(eMsg)->hide = true;
 	TEXT_RENDERING(eMsg)->alignL = true;
 	TEXT_RENDERING(eMsg)->color = Color(0.f,0.f,0.f);
-	
+
 }
 
 void EndMenuStateManager::Enter() {
@@ -45,7 +44,7 @@ void EndMenuStateManager::Enter() {
 
 	std::vector<ScoreStorage::ScoreEntry> entries = storage->loadFromStorage();
 	ScoreStorage::ScoreEntry entry;
-	entry.points = thePlayerSystem.GetScore();
+	entry.points = mode->score;
 	entry.name = "plop";
 	entries.push_back(entry);
 	std::sort(entries.begin(), entries.end(), ScoreStorage::ScoreEntryComp);
@@ -53,15 +52,17 @@ void EndMenuStateManager::Enter() {
 		entries.resize(10);
 	}
 	storage->saveToStorage(entries);
-	
+
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << thePlayerSystem.GetScore();
+	if (modeType == Normal || modeType == StaticTime) a << std::fixed << mode->score;
+	else a << (int)mode->time<<"s";
 	TEXT_RENDERING(eScore)->text = a.str();
 	TEXT_RENDERING(eScore)->hide = false;
 	}
-	#if 0
+
+	/*
 	{
 	std::stringstream a;
 	a.precision(0);
@@ -74,8 +75,7 @@ void EndMenuStateManager::Enter() {
 	TEXT_RENDERING(eMsg)->text = a.str();
 	TEXT_RENDERING(eMsg)->hide = false;
 	}
-	#endif
-
+	*/
 }
 
 GameState EndMenuStateManager::Update(float dt) {

@@ -4,7 +4,7 @@ static void fillTheBlank(std::vector<Feuille>& spawning);
 static Entity createCell(Feuille& f);
 static TextureRef textureFromType(int type);
 
-SpawnGameStateManager::SpawnGameStateManager() {
+SpawnGameStateManager::SpawnGameStateManager(GameModeManager* moding) : mode(moding){
 
 }
 
@@ -76,7 +76,8 @@ void SpawnGameStateManager::Enter() {
 
 GameState SpawnGameStateManager::Update(float dt) {
 	//si on change de niveau
-	if (thePlayerSystem.LeveledUp()) return LevelChanged;
+	//if (mode->LeveledUp()) return LevelChanged;
+	if (false);
 	else {
 		ADSRComponent* transitionCree = ADSR(eSpawn);
 		//si on doit recree des feuilles

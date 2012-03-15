@@ -17,7 +17,7 @@
 #include "GameStateManager.h"
 #include "GridSystem.h"
 #include "Game.h"
-#include "PlayerSystem.h"
+#include "modes/GameModeManager.h"
 #include "CombinationMarkSystem.h"
 
 
@@ -25,7 +25,7 @@
 class UserInputGameStateManager : public GameStateManager {
 	public:
 
-		UserInputGameStateManager();
+		UserInputGameStateManager(GameModeManager* moding);
 		~UserInputGameStateManager();
 		void Setup();
 		void Enter();
@@ -39,4 +39,5 @@ class UserInputGameStateManager : public GameStateManager {
 		bool dragStarted;
 		int originI, originJ;
 		int swapI, swapJ;
+		GameModeManager* mode;
 };

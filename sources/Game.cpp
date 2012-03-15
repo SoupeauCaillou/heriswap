@@ -14,10 +14,8 @@
 #include "systems/SoundSystem.h"
 #include "systems/ContainerSystem.h"
 
-#include "HUDManager.h"
 #include "GridSystem.h"
 #include "Game.h"
-#include "PlayerSystem.h"
 #include "CombinationMarkSystem.h"
 
 #include "states/GameStateManager.h"
@@ -33,6 +31,12 @@
 #include "states/PauseStateManager.h"
 #include "states/FadeStateManager.h"
 
+#include "modes/GameModeManager.h"
+#include "modes/NormalModeManager.h"
+#include "modes/StaticTimeModeManager.h"
+#include "modes/ScoreAttackModeManager.h"
+
+#include "HUDManager.h"
 
 #define GRIDSIZE 8
 #define NB_SYSTEMS 10
@@ -42,6 +46,12 @@ class Game::Data {
 		/* can not use any system here */
 		Data(ScoreStorage* storage) {
 			hud = new HUDManager;
+
+
+			mode = ScoreAttack;
+			mode2Manager[Normal] = new NormalGameModeManager();
+			mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager();
+			mode2Manager[StaticTime] = new StaticTimeGameModeManager();
 
 			logo = theEntityManager.CreateEntity();
 
@@ -55,13 +65,15 @@ class Game::Data {
 			state2Manager[MainMenuToBlackState] = new FadeGameStateManager(0, FadeOut, MainMenuToBlackState, BlackToSpawn);
 			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
-			state2Manager[Spawn] = new SpawnGameStateManager();
-			state2Manager[UserInput] = new UserInputGameStateManager();
-			state2Manager[Delete] = new DeleteGameStateManager();
+
+			state2Manager[Spawn] = new SpawnGameStateManager(mode2Manager[mode]);
+			state2Manager[UserInput] = new UserInputGameStateManager(mode2Manager[mode]);
+			state2Manager[Delete] = new DeleteGameStateManager(mode2Manager[mode]);
 			state2Manager[Fall] = new FallGameStateManager();
+
 			state2Manager[LevelChanged] = new LevelStateManager();
 			state2Manager[ScoreBoard] = new ScoreBoardStateManager(storage);
-			state2Manager[EndMenu] = new EndMenuStateManager(storage);
+			state2Manager[EndMenu] = new EndMenuStateManager(storage, mode2Manager[mode], mode);
 			state2Manager[Pause] = new PauseStateManager();
 
 			BackgroundManager* bg = new BackgroundManager();
@@ -69,6 +81,7 @@ class Game::Data {
 			bg->yRange = Vector2(-2, 9);
 			bg->scaleRange = Vector2(0.4, 1.5);
 			state2Manager[Background] = bg;
+
 		}
 
 		void Setup() {
@@ -80,12 +93,11 @@ class Game::Data {
 			TRANSFORM(logo)->z = 39;
 			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
 
-			hud->Setup();
+			hud->Setup(mode2Manager[mode], mode);
 
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
 				it->second->Setup();
 			}
-			time = TIMELIMIT;
 
 			for (int i=0; i<4; i++) {
 				music[i] = theEntityManager.CreateEntity();
@@ -128,11 +140,13 @@ class Game::Data {
 		bool stateBeforePauseNeedEnter;
 		Entity logo, background, sky;
 		Entity music[4];
-		float time;
 		// drag/drop
 		HUDManager* hud;
 		std::map<GameState, GameStateManager*> state2Manager;
+		std::map<GameMode, GameModeManager*> mode2Manager;
 
+
+		GameMode mode;
 };
 
 static const float offset = 0.2;
@@ -178,7 +192,6 @@ Game::Game(ScoreStorage* storage) {
 	TransformationSystem::CreateInstance();
 	RenderingSystem::CreateInstance();
 	SoundSystem::CreateInstance();
-	PlayerSystem::CreateInstance();
 	GridSystem::CreateInstance();
 	CombinationMarkSystem::CreateInstance();
 	ADSRSystem::CreateInstance();
@@ -196,7 +209,6 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 		loadState(in, size);
 	} else {
 		Entity eHUD = theEntityManager.CreateEntity(EntityManager::Persistent);
-		ADD_COMPONENT(eHUD, Player);
 	}
 
 	datas->Setup();
@@ -297,14 +309,16 @@ void Game::togglePause(bool activate) {
 
 void Game::tick(float dt) {
 	float updateDuration = TimeUtil::getTime();
+	static bool ended = false;
 
 	GameState newState;
 
 	theTouchInputManager.Update(dt);
 
 	//si le chrono est fini, on passe au menu de fin
-	if (TIMELIMIT - thePlayerSystem.GetTime()<0) {
+	if (ended) {
 		newState = EndMenu;
+		ended = false;
 	} else {
 	//sinon on passe a l'etat suivant
 		newState = datas->state2Manager[datas->state]->Update(dt);
@@ -332,18 +346,15 @@ void Game::tick(float dt) {
 	if (newState != UserInput)
 		toggleShowCombi(true);
 
-
-
-
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
+
 	//si on est ingame, on affiche le HUD
 	if (newState == Spawn || newState == UserInput || newState == Delete || newState == Fall) {
+		ended = datas->mode2Manager[datas->mode]->Update(dt);
 		datas->hud->Hide(false);
 		datas->hud->Update(dt);
-		thePlayerSystem.Update(dt);
 		theGridSystem.HideAll(false);
-
 		RENDERING(datas->benchTotalTime)->hide = false;
 		for (int i=0;i<9;i++)
 			RENDERING(datas->benchTimeSystem[i])->hide = false;
@@ -355,7 +366,6 @@ void Game::tick(float dt) {
 			RENDERING(datas->benchTimeSystem[i])->hide = true;
 		TEXT_RENDERING(datas->textBenchTimeSystem[0])->hide = true;
 		TEXT_RENDERING(datas->textBenchTimeSystem[1])->hide = true;
-
 		datas->hud->Hide(true);
 		if (newState != BlackToSpawn)
 			theGridSystem.HideAll(true);
@@ -364,9 +374,9 @@ void Game::tick(float dt) {
 
 	if (newState == EndMenu) {
 		theGridSystem.DeleteAll();
-		thePlayerSystem.SetTime(0, true);
+		datas->mode2Manager[datas->mode]->time = 0;
 	} else if (newState == MainMenu) {
-		thePlayerSystem.Reset();
+		datas->mode2Manager[datas->mode]->Reset();
 	}
 
 	updateMusic(datas->music);
@@ -383,13 +393,20 @@ void Game::tick(float dt) {
 
 	updateDuration = TimeUtil::getTime()-updateDuration;
 
+	bench(true, updateDuration, dt);
+
+}
+
+void Game::bench(bool active, float updateDuration, float dt) {
+	if (active) {
+
 	float tt = theADSRSystem.timeSpent+theButtonSystem.timeSpent+
 		theCombinationMarkSystem.timeSpent+theTransformationSystem.timeSpent+
 		theTextRenderingSystem.timeSpent+theContainerSystem.timeSpent+
-		theRenderingSystem.timeSpent+theSoundSystem.timeSpent+thePlayerSystem.timeSpent; //total time in systems
+		theRenderingSystem.timeSpent+theSoundSystem.timeSpent; //total time in systems
 
 	static int azazaz = 0;
-	azazaz++;
+	/*azazaz++;
 	if (azazaz>=5*60) {
 		azazaz=0;
 		if (theADSRSystem.timeSpent) LOGI("theADSRSystem:%f",theADSRSystem.timeSpent);
@@ -400,10 +417,10 @@ void Game::tick(float dt) {
 		if (theContainerSystem.timeSpent) LOGI("theContainerSystem:%f", 	theContainerSystem.timeSpent);
 		if (theRenderingSystem.timeSpent) LOGI("theRenderingSystem:%f", 	theRenderingSystem.timeSpent);
 		if (theSoundSystem.timeSpent) LOGI("theSoundSystem:%f" ,	theSoundSystem.timeSpent);
-		if (thePlayerSystem.timeSpent) LOGI("thePlayerSystem:%f" ,	thePlayerSystem.timeSpent);
+		//if (thePlayerSystem.timeSpent) LOGI("thePlayerSystem:%f" ,	thePlayerSystem.timeSpent);
 
 		LOGI("temps passer dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", tt, updateDuration, 100*tt/updateDuration, dt);
-	}
+	}*/
 
 	RENDERING(datas->benchTotalTime)->color = Color(5.*updateDuration, 5.*(1/5.-updateDuration), 0.3f, .3f);
 
@@ -412,7 +429,7 @@ void Game::tick(float dt) {
 	std::stringstream s;
 
 	for (int i=0; i<NB_SYSTEMS; i++) {
-		float r, g;
+		float r = 0, g = 1;
 		char buff[10];
 
 		switch (i) {
@@ -422,39 +439,39 @@ void Game::tick(float dt) {
 				s << " out" << r/updateDuration;
 				break;
 			case 1:
-				r = theADSRSystem.timeSpent/ tt; g = 1 - r;
+				r = theADSRSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << " adsr"<< r/updateDuration;
 				break;
 			case 2:
-				r = theButtonSystem.timeSpent/ tt; g = 1 - r;
+				r = theButtonSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "butt"<< r/updateDuration;
 				break;
 			case 3:
-				r = theCombinationMarkSystem.timeSpent/ tt; g = 1 - r;
+				r = theCombinationMarkSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "comb"<< r/updateDuration;
 				break;
 			case 4:
-				r = theTransformationSystem.timeSpent/ tt; g = 1 - r;
+				r = theTransformationSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "tran"<< r/updateDuration;
 				break;
 			case 5:
-				r = theTextRenderingSystem.timeSpent/ tt; g = 1 - r;
+				r = theTextRenderingSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "txt"<< r/updateDuration;
 				break;
 			case 6:
-				r = theContainerSystem.timeSpent/ tt; g = 1 - r;
+				r = theContainerSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "ctn"<< r/updateDuration;
 				break;
 			case 7:
-				r = theRenderingSystem.timeSpent/ tt; g = 1 - r;
+				r = theRenderingSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "rend"<< r/updateDuration;
 				break;
 			case 8:
-				r = theSoundSystem.timeSpent/ tt; g = 1 - r;
+				r = theSoundSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "snd"<< r/updateDuration;
 				break;
 			case 9:
-				r = thePlayerSystem.timeSpent/ tt; g = 1 - r;
+				//r = thePlayerSystem.timeSpent/ updateDuration; g = 1 - r;
 				s << "plr"<< r/updateDuration;
 				break;
 			default:
@@ -467,10 +484,9 @@ void Game::tick(float dt) {
 	}
 	TEXT_RENDERING(datas->textBenchTimeSystem[0])->text = "out  adsr butt comb tran txt  ctn  rend snd plr";
 	TEXT_RENDERING(datas->textBenchTimeSystem[1])->text = tmp;
-
 	//TEXT_RENDERING(datas->textBenchTimeSystem[i])->text = s.str();
+	}
 }
-
 int Game::saveState(uint8_t** out) {
 	bool pausable = pausableState(datas->state);
 	if (!pausable) {
