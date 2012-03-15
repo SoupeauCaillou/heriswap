@@ -26,6 +26,7 @@ void ScoreBoardStateManager::Setup() {
 	for (int i=0; i<10; i++) {
 		eScore[i] = theTextRenderingSystem.CreateLocalEntity(40);
 		TRANSFORM(eScore[i])->position = Vector2(-3, 3-i);
+		TRANSFORM(eScore[i])->z = 30;
 		TEXT_RENDERING(eScore[i])->charSize = 0.3;
 		TEXT_RENDERING(eScore[i])->hide = true;
 		TEXT_RENDERING(eScore[i])->alignL = true;

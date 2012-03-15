@@ -350,7 +350,7 @@ void Game::tick(float dt) {
 	theButtonSystem.Update(dt);
 
 	//si on est ingame, on affiche le HUD
-	if (newState == Spawn || newState == UserInput || newState == Delete || newState == Fall) {
+	if (newState == Spawn || newState == UserInput || newState == Delete || newState == Fall || newState == LevelChanged) {
 		ended = datas->mode2Manager[datas->mode]->Update(dt);
 		datas->hud->Hide(false);
 		datas->hud->Update(dt);

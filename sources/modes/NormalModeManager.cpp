@@ -2,7 +2,7 @@
 
 
 NormalGameModeManager::NormalGameModeManager() {
-	limit = 5.0;
+	limit = 45.0;
 	time = 0.;
 
 
@@ -78,9 +78,9 @@ void NormalGameModeManager::LevelUp() {
 
 
 bool NormalGameModeManager::LeveledUp() {
-		bool bid = levelUp;
-		levelUp = false;
-		return bid;
+	bool bid = levelUp;
+	levelUp = false;
+	return bid;
 }
 
 int NormalGameModeManager::GetBonus() {

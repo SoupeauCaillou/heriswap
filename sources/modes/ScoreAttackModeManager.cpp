@@ -2,7 +2,7 @@
 
 
 ScoreAttackGameModeManager::ScoreAttackGameModeManager() {
-	limit = 100.;
+	limit = 3000.;
 	time = 0.;
 
 

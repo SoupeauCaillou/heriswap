@@ -94,10 +94,11 @@ void HUDManager::Hide(bool toHide) {
 	TEXT_RENDERING(datas->eFPS)->hide = toHide;
 	TEXT_RENDERING(datas->eLevel)->hide = toHide;
 	RENDERING(datas->fBonus)->hide = toHide;
-
-	for (int i=0;i<8;i++) {
-		TEXT_RENDERING(datas->eObj[i])->hide = toHide;
-		RENDERING(datas->fObj[i])->hide = toHide;
+	if (toHide || datas->modeType == Normal || datas->modeType == StaticTime) {
+		for (int i=0;i<8;i++) {
+			TEXT_RENDERING(datas->eObj[i])->hide = toHide;
+			RENDERING(datas->fObj[i])->hide = toHide;
+		}
 	}
 }
 
