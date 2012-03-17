@@ -18,7 +18,7 @@ void EndMenuStateManager::Setup() {
 	ADD_COMPONENT(startbtn, Rendering);
 	ADD_COMPONENT(startbtn, Button);
 
-	RENDERING(startbtn)->texture = theRenderingSystem.loadTextureFile("5.png");
+	RENDERING(startbtn)->texture = theRenderingSystem.loadTextureFile("feuilles.png");
 	RENDERING(startbtn)->hide = true;
 	TRANSFORM(startbtn)->size = Game::CellSize() * Game::CellContentScale();
 	BUTTON(startbtn)->clicked = false;
