@@ -430,7 +430,6 @@ void Game::tick(float dt) {
 
 void Game::bench(bool active, float updateDuration, float dt) {
 	if (active) {
-		updateDuration = TimeUtil::getTime() - updateDuration;
 		static float benchAccum = 0;
 		benchAccum += dt;
 		if (benchAccum>=1 && (updateDuration > 0) && !RENDERING(datas->benchTotalTime)->hide) {
