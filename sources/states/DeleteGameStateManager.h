@@ -8,13 +8,13 @@
 
 #include "GameStateManager.h"
 #include "GridSystem.h"
-#include "PlayerSystem.h"
 #include "CombinationMarkSystem.h"
+#include "modes/GameModeManager.h"
 
 class DeleteGameStateManager : public GameStateManager {
 	public:
 
-		DeleteGameStateManager();
+		DeleteGameStateManager(GameModeManager* moding);
 		~DeleteGameStateManager();
 		void Setup();
 		void Enter();
@@ -25,4 +25,5 @@ class DeleteGameStateManager : public GameStateManager {
 		// datas
 		Entity eRemove;
 		std::vector<Combinais> removing;
+		GameModeManager* mode;
 };

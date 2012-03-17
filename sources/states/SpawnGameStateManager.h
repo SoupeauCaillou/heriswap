@@ -8,7 +8,7 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ADSRSystem.h"
 
-#include "PlayerSystem.h"
+#include "modes/GameModeManager.h"
 #include "Game.h"
 #include "GameStateManager.h"
 #include "GridSystem.h"
@@ -16,7 +16,7 @@
 
 class SpawnGameStateManager : public GameStateManager {
 	public:
-		SpawnGameStateManager();
+		SpawnGameStateManager(GameModeManager* moding);
 		~SpawnGameStateManager();
 		void Setup();
 		void Enter();
@@ -28,4 +28,5 @@ class SpawnGameStateManager : public GameStateManager {
 		// datas
 		Entity eSpawn, eGrid;
 		std::vector<Feuille> spawning;
+		GameModeManager* mode;
 };

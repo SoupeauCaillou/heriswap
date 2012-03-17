@@ -21,7 +21,8 @@ class HUDManager::HUDManagerData {
 				theEntityManager.DeleteEntity(fObj[i]);
 			}
 		}
-
+		GameModeManager* mode;
+		GameMode modeType;
 		Entity eScore, eTime, eLevel, eFPS, eObj[8],fBonus, fObj[8];
 		int frames;
 		float nextfps, fps;
@@ -31,13 +32,15 @@ HUDManager::~HUDManager() {
 	delete datas;
 }
 
-void HUDManager::Setup() {
+void HUDManager::Setup(GameModeManager* moding, GameMode modingType) {
 	this->datas = new HUDManagerData();
 
 	datas->eScore = theTextRenderingSystem.CreateLocalEntity(10);
 	datas->eTime = theTextRenderingSystem.CreateLocalEntity(10);
 	datas->eFPS = theTextRenderingSystem.CreateLocalEntity(10);
 	datas->eLevel = theTextRenderingSystem.CreateLocalEntity(10);
+	datas->mode = moding;
+	datas->modeType = modingType;
 
 	TRANSFORM(datas->eLevel)->position = Vector2(5, 8);
 	TRANSFORM(datas->eScore)->position = Vector2(5, 7);
@@ -92,10 +95,11 @@ void HUDManager::Hide(bool toHide) {
 	TEXT_RENDERING(datas->eFPS)->hide = toHide;
 	TEXT_RENDERING(datas->eLevel)->hide = toHide;
 	RENDERING(datas->fBonus)->hide = toHide;
-
-	for (int i=0;i<8;i++) {
-		TEXT_RENDERING(datas->eObj[i])->hide = toHide;
-		RENDERING(datas->fObj[i])->hide = toHide;
+	if (toHide || datas->modeType == Normal || datas->modeType == StaticTime) {
+		for (int i=0;i<8;i++) {
+			TEXT_RENDERING(datas->eObj[i])->hide = toHide;
+			RENDERING(datas->fObj[i])->hide = toHide;
+		}
 	}
 }
 
@@ -105,13 +109,18 @@ void HUDManager::Update(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << thePlayerSystem.GetScore();
+	if (datas->modeType == Normal || datas->modeType == StaticTime)
+		a << std::fixed << datas->mode->score;
+	else
+		a << std::fixed << datas->mode->limit-datas->mode->score;
 	TEXT_RENDERING(datas->eScore)->text = a.str();
 	}
 	//Temps
 	{
 	std::stringstream a;
-	int time = TIMELIMIT-thePlayerSystem.GetTime();
+	int time = 0;
+	if (datas->modeType == Normal || datas->modeType == StaticTime) time = datas->mode->limit-datas->mode->time;
+	else time = datas->mode->time;
 	int minute = time/60;
 	int seconde= time%60;
 	// faudrait que a soit de la forme xx:xx s, meme 01:03 s
@@ -136,14 +145,14 @@ void HUDManager::Update(float dt) {
 	//Level
 	{
 	std::stringstream a;
-	a << "Lvl : "<<thePlayerSystem.GetLevel();
+	a << "Lvl : "<<datas->mode->GetLevel();
 	TEXT_RENDERING(datas->eLevel)->text = a.str();
 	}
 	//Objectifs
 	for (int i=0;i<8;i++)
 	{
 	std::stringstream a;
-	a << thePlayerSystem.GetRemain(i);
+	a << datas->mode->GetRemain(i);
 	TEXT_RENDERING(datas->eObj[i])->text = a.str();
 	}
 	//Feuille Bonus

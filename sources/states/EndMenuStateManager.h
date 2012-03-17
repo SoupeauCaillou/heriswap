@@ -15,7 +15,7 @@
 
 #include "ScoreBoardStateManager.h"
 #include "GameStateManager.h"
-#include "PlayerSystem.h"
+#include "modes/GameModeManager.h"
 #include "Game.h"
 
 
@@ -23,7 +23,7 @@ class ScoreStorage;
 
 class EndMenuStateManager : public GameStateManager {
 	public:
-		EndMenuStateManager(ScoreStorage* str);
+		EndMenuStateManager(ScoreStorage* str, GameModeManager* moding, GameMode modeeType);
 		~EndMenuStateManager();
 		void Setup();
 		void Enter();
@@ -33,4 +33,6 @@ class EndMenuStateManager : public GameStateManager {
 	private:
 		ScoreStorage* storage;
 		Entity startbtn, eScore, eMsg;
+		GameModeManager* mode;
+		GameMode modeType;
 };

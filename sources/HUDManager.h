@@ -7,7 +7,7 @@
 #include "systems/TransformationSystem.h"
 #include "systems/System.h"
 
-#include "PlayerSystem.h"
+#include "modes/GameModeManager.h"
 
 
 
@@ -16,7 +16,7 @@ class HUDManager {
 	public:
 		~HUDManager();
 
-		void Setup();
+		void Setup(GameModeManager* moding, GameMode modingType);
 
 		void Update(float dt);
 

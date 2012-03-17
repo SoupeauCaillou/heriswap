@@ -3,7 +3,7 @@
 static void fillTheBlank(std::vector<Feuille>& spawning);
 static Entity createCell(Feuille& f);
 
-SpawnGameStateManager::SpawnGameStateManager() {
+SpawnGameStateManager::SpawnGameStateManager(GameModeManager* moding) : mode(moding){
 
 }
 
@@ -79,7 +79,7 @@ void SpawnGameStateManager::Enter() {
 
 GameState SpawnGameStateManager::Update(float dt) {
 	//si on change de niveau
-	if (thePlayerSystem.LeveledUp()) return LevelChanged;
+	if (mode->LeveledUp()) return LevelChanged;
 	else {
 		ADSRComponent* transitionCree = ADSR(eSpawn);
 		//si on doit recree des feuilles
@@ -108,7 +108,7 @@ GameState SpawnGameStateManager::Update(float dt) {
 }
 
 GameState SpawnGameStateManager::NextState(bool marker) {
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,marker);
 	//si on a des combinaisons dans la grille on passe direct à Delete
 	if (!combinaisons.empty()) {
 		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )

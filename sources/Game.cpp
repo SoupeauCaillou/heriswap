@@ -14,10 +14,8 @@
 #include "systems/SoundSystem.h"
 #include "systems/ContainerSystem.h"
 
-#include "HUDManager.h"
 #include "GridSystem.h"
 #include "Game.h"
-#include "PlayerSystem.h"
 #include "CombinationMarkSystem.h"
 
 #include "states/GameStateManager.h"
@@ -33,6 +31,12 @@
 #include "states/PauseStateManager.h"
 #include "states/FadeStateManager.h"
 
+#include "modes/GameModeManager.h"
+#include "modes/NormalModeManager.h"
+#include "modes/StaticTimeModeManager.h"
+#include "modes/ScoreAttackModeManager.h"
+
+#include "HUDManager.h"
 
 #define GRIDSIZE 8
 
@@ -41,6 +45,12 @@ class Game::Data {
 		/* can not use any system here */
 		Data(ScoreStorage* storage) {
 			hud = new HUDManager;
+
+
+			mode = ScoreAttack;
+			mode2Manager[Normal] = new NormalGameModeManager();
+			mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager();
+			mode2Manager[StaticTime] = new StaticTimeGameModeManager();
 
 			logo = theEntityManager.CreateEntity();
 
@@ -54,13 +64,15 @@ class Game::Data {
 			state2Manager[MainMenuToBlackState] = new FadeGameStateManager(0, FadeOut, MainMenuToBlackState, BlackToSpawn);
 			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
-			state2Manager[Spawn] = new SpawnGameStateManager();
-			state2Manager[UserInput] = new UserInputGameStateManager();
-			state2Manager[Delete] = new DeleteGameStateManager();
+
+			state2Manager[Spawn] = new SpawnGameStateManager(mode2Manager[mode]);
+			state2Manager[UserInput] = new UserInputGameStateManager(mode2Manager[mode]);
+			state2Manager[Delete] = new DeleteGameStateManager(mode2Manager[mode]);
 			state2Manager[Fall] = new FallGameStateManager();
+
 			state2Manager[LevelChanged] = new LevelStateManager();
 			state2Manager[ScoreBoard] = new ScoreBoardStateManager(storage);
-			state2Manager[EndMenu] = new EndMenuStateManager(storage);
+			state2Manager[EndMenu] = new EndMenuStateManager(storage, mode2Manager[mode], mode);
 			state2Manager[Pause] = new PauseStateManager();
 
 			BackgroundManager* bg = new BackgroundManager();
@@ -68,6 +80,7 @@ class Game::Data {
 			bg->yRange = Vector2(-2, 9);
 			bg->scaleRange = Vector2(0.4, 1.5);
 			state2Manager[Background] = bg;
+
 		}
 
 		void Setup(int windowW, int windowH) {
@@ -79,12 +92,11 @@ class Game::Data {
 			TRANSFORM(logo)->z = 39;
 			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
 
-			hud->Setup();
+			hud->Setup(mode2Manager[mode], mode);
 
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
 				it->second->Setup();
 			}
-			time = TIMELIMIT;
 
 			for (int i=0; i<4; i++) {
 				music[i] = theEntityManager.CreateEntity();
@@ -100,7 +112,7 @@ class Game::Data {
 			TRANSFORM(benchTotalTime)->position = Vector2(0,benchPos);
 			TRANSFORM(benchTotalTime)->size = Vector2(10,1);
 			TRANSFORM(benchTotalTime)->z = 39;
-			
+
 			std::vector<std::string> allSystems = ComponentSystem::registeredSystemNames();
 			for (int i = 0; i < allSystems.size() ; i ++) {
 				Entity b = theEntityManager.CreateEntity();
@@ -121,11 +133,13 @@ class Game::Data {
 		bool stateBeforePauseNeedEnter;
 		Entity logo, background, sky;
 		Entity music[4];
-		float time;
 		// drag/drop
 		HUDManager* hud;
 		std::map<GameState, GameStateManager*> state2Manager;
+		std::map<GameMode, GameModeManager*> mode2Manager;
 
+
+		GameMode mode;
 };
 
 static const float offset = 0.2;
@@ -183,7 +197,6 @@ Game::Game(ScoreStorage* storage) {
 	TransformationSystem::CreateInstance();
 	RenderingSystem::CreateInstance();
 	SoundSystem::CreateInstance();
-	PlayerSystem::CreateInstance();
 	GridSystem::CreateInstance();
 	CombinationMarkSystem::CreateInstance();
 	ADSRSystem::CreateInstance();
@@ -201,7 +214,6 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 		loadState(in, size);
 	} else {
 		Entity eHUD = theEntityManager.CreateEntity(EntityManager::Persistent);
-		ADD_COMPONENT(eHUD, Player);
 	}
 
 	datas->Setup(windowW, windowH);
@@ -316,14 +328,16 @@ void Game::tick(float dt) {
 	}
 
 	float updateDuration = TimeUtil::getTime();
+	static bool ended = false;
 
 	GameState newState;
 
 	theTouchInputManager.Update(dt);
 
 	//si le chrono est fini, on passe au menu de fin
-	if (TIMELIMIT - thePlayerSystem.GetTime()<0) {
+	if (ended) {
 		newState = EndMenu;
+		ended = false;
 	} else {
 	//sinon on passe a l'etat suivant
 		newState = datas->state2Manager[datas->state]->Update(dt);
@@ -338,7 +352,7 @@ void Game::tick(float dt) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
-		
+
 		if (inGameState(newState)) {
 			datas->hud->Hide(false);
 			theGridSystem.HideAll(false);
@@ -374,18 +388,27 @@ void Game::tick(float dt) {
 
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
-	
+
 	//si on est ingame, on affiche le HUD
-	if (newState == Spawn || newState == UserInput || newState == Delete || newState == Fall) {
+	if (newState == Spawn || newState == UserInput || newState == Delete || newState == Fall || newState == LevelChanged) {
+		ended = datas->mode2Manager[datas->mode]->Update(dt);
+		datas->hud->Hide(false);
 		datas->hud->Update(dt);
-		thePlayerSystem.Update(dt);
+		theGridSystem.HideAll(false);
+		RENDERING(datas->benchTotalTime)->hide = false;
+	} else {
+		RENDERING(datas->benchTotalTime)->hide = true;
+
+		datas->hud->Hide(true);
+		if (newState != BlackToSpawn)
+			theGridSystem.HideAll(true);
 	}
 
 	if (newState == EndMenu) {
 		theGridSystem.DeleteAll();
-		thePlayerSystem.SetTime(0, true);
+		datas->mode2Manager[datas->mode]->time = 0;
 	} else if (newState == MainMenu) {
-		thePlayerSystem.Reset();
+		datas->mode2Manager[datas->mode]->Reset();
 	}
 
 	updateMusic(datas->music);
@@ -398,40 +421,49 @@ void Game::tick(float dt) {
 	theSoundSystem.Update(dt);
 
 	//bench settings
-	updateDuration = TimeUtil::getTime() - updateDuration;
-	static float benchAccum = 0;
-	benchAccum += dt;
-	if (benchAccum>=1 && (updateDuration > 0) && !RENDERING(datas->benchTotalTime)->hide) {
-		// draw update duration
-		if (updateDuration > 1.0/60) {
-			RENDERING(datas->benchTotalTime)->color = Color(1.0, 0,0, 1);
-		} else {
-			RENDERING(datas->benchTotalTime)->color = Color(0.0, 1.0,0,1);
-		}
-		float frameWidth = MathUtil::Min(updateDuration / (1.f/60), 1.0f) * 10;
-		TRANSFORM(datas->benchTotalTime)->size.X = frameWidth;
-		TRANSFORM(datas->benchTotalTime)->position.X = -5 + frameWidth * 0.5;
 
-		// for each system adjust rectangle size/position to time spent
-		float timeSpentInSystems = 0;
-		float x = -5;
-		for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
-				it != datas->benchTimeSystem.end(); ++it) {
-			float timeSpent = ComponentSystem::Named(it->first)->timeSpent;
-			timeSpentInSystems += timeSpent;
-			float width = frameWidth * (timeSpent / updateDuration);
-			TRANSFORM(it->second)->size.X = width;
-			TRANSFORM(it->second)->position.X = x + width * 0.5;
-			x += width;
-			
-			LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
-		}	
+	updateDuration = TimeUtil::getTime()-updateDuration;
 
-		LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
-		benchAccum = 0;
-	}
+	bench(true, updateDuration, dt);
+
 }
 
+void Game::bench(bool active, float updateDuration, float dt) {
+	if (active) {
+		updateDuration = TimeUtil::getTime() - updateDuration;
+		static float benchAccum = 0;
+		benchAccum += dt;
+		if (benchAccum>=1 && (updateDuration > 0) && !RENDERING(datas->benchTotalTime)->hide) {
+			// draw update duration
+			if (updateDuration > 1.0/60) {
+				RENDERING(datas->benchTotalTime)->color = Color(1.0, 0,0, 1);
+			} else {
+				RENDERING(datas->benchTotalTime)->color = Color(0.0, 1.0,0,1);
+			}
+			float frameWidth = MathUtil::Min(updateDuration / (1.f/60), 1.0f) * 10;
+			TRANSFORM(datas->benchTotalTime)->size.X = frameWidth;
+			TRANSFORM(datas->benchTotalTime)->position.X = -5 + frameWidth * 0.5;
+
+			// for each system adjust rectangle size/position to time spent
+			float timeSpentInSystems = 0;
+			float x = -5;
+			for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
+					it != datas->benchTimeSystem.end(); ++it) {
+				float timeSpent = ComponentSystem::Named(it->first)->timeSpent;
+				timeSpentInSystems += timeSpent;
+				float width = frameWidth * (timeSpent / updateDuration);
+				TRANSFORM(it->second)->size.X = width;
+				TRANSFORM(it->second)->position.X = x + width * 0.5;
+				x += width;
+
+				LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
+			}
+
+			LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
+			benchAccum = 0;
+		}
+	}
+}
 int Game::saveState(uint8_t** out) {
 	bool pausable = pausableState(datas->state);
 	if (!pausable) {
