@@ -157,7 +157,7 @@ void HUDManager::Update(float dt) {
 	}
 	//Feuille Bonus
 	{
-	int type = thePlayerSystem.GetBonus();	
+	int type = datas->mode->GetBonus();	
 	RenderingComponent* rc = RENDERING(datas->fBonus);
 	rc->bottomLeftUV = Vector2(type / 8.0, 0);
 	rc->topRightUV = rc->bottomLeftUV + Vector2(1 / 8.0, 1);
