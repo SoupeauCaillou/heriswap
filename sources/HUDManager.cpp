@@ -1,5 +1,5 @@
 #include "HUDManager.h"
-
+#include <iomanip>
 
 //FCRR : FPS Calculation Refresh Rate
 #define FCRR 1.
@@ -124,7 +124,7 @@ void HUDManager::Update(float dt) {
 	int minute = time/60;
 	int seconde= time%60;
 	// faudrait que a soit de la forme xx:xx s, meme 01:03 s
-	a << minute << ":" << seconde << " s";
+	a << minute << ":" << std::setw(2) << std::setfill('0') << seconde << " s";
 	TEXT_RENDERING(datas->eTime)->text = a.str();
 	}
 	//FPS
