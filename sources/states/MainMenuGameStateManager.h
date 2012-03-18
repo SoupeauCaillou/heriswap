@@ -10,6 +10,7 @@
 
 #include "Game.h"
 #include "GameStateManager.h"
+#include "../modes/GameModeManager.h"
 
 class MainMenuGameStateManager : public GameStateManager {
 	public:
@@ -20,6 +21,9 @@ class MainMenuGameStateManager : public GameStateManager {
 		GameState Update(float dt);
 		void Exit();
 	private:
-		Entity start, score, eScore, eStart, bStart, bScore;
+		Entity start[2], score, eScore, eStart[2], bStart[2], bScore;
 		float elapsedTime;
+		
+	public:
+		GameMode choosenGameMode;
 };
