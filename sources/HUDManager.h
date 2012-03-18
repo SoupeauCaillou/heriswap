@@ -16,9 +16,9 @@ class HUDManager {
 	public:
 		~HUDManager();
 
-		void Setup(GameModeManager* moding, GameMode modingType);
+		void Setup();
 
-		void Update(float dt);
+		void Update(float dt, GameModeManager* moding, GameMode modingType);
 
 		void ScoreCalc(int nb);
 

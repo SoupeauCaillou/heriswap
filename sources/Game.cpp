@@ -92,7 +92,7 @@ class Game::Data {
 			TRANSFORM(logo)->z = 39;
 			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
 
-			hud->Setup(mode2Manager[mode], mode);
+			hud->Setup();
 
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
 				it->second->Setup();
@@ -348,6 +348,8 @@ void Game::tick(float dt) {
 	} else if (newState != datas->state) {
 		if (newState == BlackToSpawn) {
 			datas->state2Manager[Spawn]->Enter();
+		} else if (newState == MainMenuToBlackState) {
+			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
 		}
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
@@ -393,7 +395,7 @@ void Game::tick(float dt) {
 	if (newState == Spawn || newState == UserInput || newState == Delete || newState == Fall || newState == LevelChanged) {
 		ended = datas->mode2Manager[datas->mode]->Update(dt);
 		datas->hud->Hide(false);
-		datas->hud->Update(dt);
+		datas->hud->Update(dt, datas->mode2Manager[datas->mode], datas->mode);
 		theGridSystem.HideAll(false);
 		RENDERING(datas->benchTotalTime)->hide = false;
 	} else {
