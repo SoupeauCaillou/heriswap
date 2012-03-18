@@ -16,7 +16,7 @@
 
 class SpawnGameStateManager : public GameStateManager {
 	public:
-		SpawnGameStateManager(GameModeManager* moding);
+		SpawnGameStateManager();
 		~SpawnGameStateManager();
 		void Setup();
 		void Enter();
@@ -28,5 +28,4 @@ class SpawnGameStateManager : public GameStateManager {
 		// datas
 		Entity eSpawn, eGrid;
 		std::vector<Feuille> spawning;
-		GameModeManager* mode;
 };

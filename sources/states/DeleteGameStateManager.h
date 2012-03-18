@@ -14,7 +14,7 @@
 class DeleteGameStateManager : public GameStateManager {
 	public:
 
-		DeleteGameStateManager(GameModeManager* moding);
+		DeleteGameStateManager();
 		~DeleteGameStateManager();
 		void Setup();
 		void Enter();
@@ -25,5 +25,4 @@ class DeleteGameStateManager : public GameStateManager {
 		// datas
 		Entity eRemove;
 		std::vector<Combinais> removing;
-		GameModeManager* mode;
 };

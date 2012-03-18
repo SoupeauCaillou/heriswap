@@ -22,7 +22,7 @@ class HUDManager {
 
 		void ScoreCalc(int nb);
 
-		void Hide(bool toHide);
+		void Hide(bool toHide, GameMode mode);
 
 	private:
 		class HUDManagerData;

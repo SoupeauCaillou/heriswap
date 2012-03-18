@@ -4,7 +4,8 @@
 static void activateADSR(Entity e, float a, float s);
 static void diffToGridCoords(const Vector2& c, int* i, int* j);
 
-UserInputGameStateManager::UserInputGameStateManager(GameModeManager* moding) : mode(moding){
+UserInputGameStateManager::UserInputGameStateManager(){
+	modeMng = 0;
 }
 
 UserInputGameStateManager::~UserInputGameStateManager() {
@@ -37,7 +38,7 @@ void UserInputGameStateManager::Enter() {
 
 GameState UserInputGameStateManager::Update(float dt) {
 	//on met à jour le temps
-	mode->time += dt;
+	if (modeMng) modeMng->time += dt;
 	// drag/drop of cell
 	if (!theTouchInputManager.wasTouched() &&
 		theTouchInputManager.isTouched()) {

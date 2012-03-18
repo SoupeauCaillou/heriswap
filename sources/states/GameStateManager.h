@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include "modes/GameModeManager.h"
 
 enum GameState {
 	Spawn,
@@ -35,4 +36,7 @@ class GameStateManager {
 		virtual void BackgroundUpdate(float dt) {};
 		/* Prepare to leave as the active manager */
 		virtual void Exit() = 0;
+		
+		GameMode mode;
+		GameModeManager* modeMng;
 };

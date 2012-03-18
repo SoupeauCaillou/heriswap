@@ -3,8 +3,8 @@
 static void fillTheBlank(std::vector<Feuille>& spawning);
 static Entity createCell(Feuille& f);
 
-SpawnGameStateManager::SpawnGameStateManager(GameModeManager* moding) : mode(moding){
-
+SpawnGameStateManager::SpawnGameStateManager(){
+	modeMng = 0;
 }
 
 SpawnGameStateManager::~SpawnGameStateManager() {
@@ -79,7 +79,7 @@ void SpawnGameStateManager::Enter() {
 
 GameState SpawnGameStateManager::Update(float dt) {
 	//si on change de niveau
-	if (mode->LeveledUp()) return LevelChanged;
+	if (modeMng && modeMng->LeveledUp()) return LevelChanged;
 	else {
 		ADSRComponent* transitionCree = ADSR(eSpawn);
 		//si on doit recree des feuilles
@@ -177,7 +177,7 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 					}
 
 					if (pb >= 15){
-						r = MathUtil::RandomInt(4)+1;
+						r = MathUtil::RandomInt(4);
 						while (pb!=0) {
 							if (r==c[1]||r==c[3]||r==l[3]||r==l[1]) {
 								r++;

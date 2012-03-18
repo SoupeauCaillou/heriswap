@@ -1,8 +1,8 @@
 #include "DeleteGameStateManager.h"
 
 
-DeleteGameStateManager::DeleteGameStateManager(GameModeManager* moding) : mode(moding) {
-
+DeleteGameStateManager::DeleteGameStateManager() {
+	modeMng = 0;
 }
 
 DeleteGameStateManager::~DeleteGameStateManager() {
@@ -32,8 +32,8 @@ GameState DeleteGameStateManager::Update(float dt) {
 	if (!removing.empty()) {
 		transitionSuppr->active = true;
 		for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
-			if (transitionSuppr->value == transitionSuppr->sustainValue)
-				mode->ScoreCalc(it->points.size(), it->type);
+			if (transitionSuppr->value == transitionSuppr->sustainValue && modeMng)
+				modeMng->ScoreCalc(it->points.size(), it->type);
 			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
 				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
 				TRANSFORM(e)->rotation = transitionSuppr->value*7;

@@ -10,7 +10,7 @@ ScoreAttackGameModeManager::ScoreAttackGameModeManager() {
 	levelUp = false;
 	isReadyToStart = false;
 	level = 1;
-	bonus = MathUtil::RandomInt(8)+1;
+	bonus = MathUtil::RandomInt(8);
 	for (int i=0;i<50;i++)
 		obj[i]=3+i;
 
@@ -37,10 +37,10 @@ void ScoreAttackGameModeManager::ScoreCalc(int nb, int type) {
 	else
 		score += 10*level*nb*nb*nb/6;
 
-	remain[type-1] -= nb;
+	remain[type] -= nb;
 
-	if (remain[type-1]<0)
-		remain[type-1]=0;
+	if (remain[type]<0)
+		remain[type]=0;
 }
 
 void ScoreAttackGameModeManager::LevelUp() {
@@ -100,7 +100,7 @@ void ScoreAttackGameModeManager::Reset() {
 
 	isReadyToStart = false;
 	level = 1;
-	bonus = MathUtil::RandomInt(8)+1;
+	bonus = MathUtil::RandomInt(8);
 
 	for (int i=0;i<8;i++) remain[i]=obj[0];
 

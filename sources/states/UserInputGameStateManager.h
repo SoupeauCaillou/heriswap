@@ -25,7 +25,7 @@
 class UserInputGameStateManager : public GameStateManager {
 	public:
 
-		UserInputGameStateManager(GameModeManager* moding);
+		UserInputGameStateManager();
 		~UserInputGameStateManager();
 		void Setup();
 		void Enter();
@@ -39,5 +39,4 @@ class UserInputGameStateManager : public GameStateManager {
 		bool dragStarted;
 		int originI, originJ;
 		int swapI, swapJ;
-		GameModeManager* mode;
 };

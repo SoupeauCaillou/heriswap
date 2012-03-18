@@ -10,7 +10,7 @@ NormalGameModeManager::NormalGameModeManager() {
 	levelUp = false;
 	isReadyToStart = false;
 	level = 1;
-	bonus = MathUtil::RandomInt(8)+1;
+	bonus = MathUtil::RandomInt(8);
 	for (int i=0;i<50;i++)
 		obj[i]=3+i;
 
@@ -37,13 +37,13 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 	else
 		score += 10*level*nb*nb*nb/6;
 
-	remain[type-1] -= nb;
+	remain[type] -= nb;
 	time -= 2;
 	if (time < 0)
 		time = 0;
 
-	if (remain[type-1]<0)
-		remain[type-1]=0;
+	if (remain[type]<0)
+		remain[type]=0;
 }
 
 void NormalGameModeManager::LevelUp() {
@@ -61,21 +61,11 @@ void NormalGameModeManager::LevelUp() {
 		if (time < 0)
 			time = 0;
 		std::cout << "Level up to level " << level << std::endl;
-		bonus = MathUtil::RandomInt(8)+1;
+		bonus = MathUtil::RandomInt(8);
 		for (int i=0;i<8;i++)
 			remain[i] = obj[level-1];
 	}
 }
-
-
-
-
-
-
-
-
-
-
 
 bool NormalGameModeManager::LeveledUp() {
 	bool bid = levelUp;
@@ -105,7 +95,7 @@ void NormalGameModeManager::Reset() {
 
 	isReadyToStart = false;
 	level = 1;
-	bonus = MathUtil::RandomInt(8)+1;
+	bonus = MathUtil::RandomInt(8);
 
 	for (int i=0;i<8;i++) remain[i]=obj[0];
 

@@ -82,16 +82,16 @@ void HUDManager::Setup() {
 	TEXT_RENDERING(datas->eFPS)->charSize /= 2;
 	TEXT_RENDERING(datas->eFPS)->color = Color(0.1, 0.5, 0.4);
 
-	Hide(true);
+	Hide(true, Normal);
 }
 
-void HUDManager::Hide(bool toHide) {
+void HUDManager::Hide(bool toHide, GameMode modeType) {
 	TEXT_RENDERING(datas->eScore)->hide = toHide;
 	TEXT_RENDERING(datas->eTime)->hide = toHide;
 	TEXT_RENDERING(datas->eFPS)->hide = toHide;
 	TEXT_RENDERING(datas->eLevel)->hide = toHide;
 	RENDERING(datas->fBonus)->hide = toHide;
-	if (toHide) {
+	if (toHide || !toHide && (modeType == Normal || modeType == ScoreAttack)) {
 		for (int i=0;i<8;i++) {
 			TEXT_RENDERING(datas->eObj[i])->hide = toHide;
 			RENDERING(datas->fObj[i])->hide = toHide;

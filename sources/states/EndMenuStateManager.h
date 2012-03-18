@@ -23,7 +23,7 @@ class ScoreStorage;
 
 class EndMenuStateManager : public GameStateManager {
 	public:
-		EndMenuStateManager(ScoreStorage* str, GameModeManager* moding, GameMode modeeType);
+		EndMenuStateManager(ScoreStorage* str);
 		~EndMenuStateManager();
 		void Setup();
 		void Enter();
@@ -33,6 +33,4 @@ class EndMenuStateManager : public GameStateManager {
 	private:
 		ScoreStorage* storage;
 		Entity startbtn, eScore, eMsg;
-		GameModeManager* mode;
-		GameMode modeType;
 };

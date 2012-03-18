@@ -21,6 +21,6 @@ class StaticTimeGameModeManager : public GameModeManager {
 		int GetLevel();
 
 	private:
-		int level, obj[50], remain[8], bonus;
-		bool isReadyToStart, levelUp;
+		int bonus;
+		bool isReadyToStart;
 };
