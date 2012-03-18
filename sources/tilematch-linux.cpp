@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
 
 	// pose de l'origine du temps ici t = 0
 	TimeUtil::init();
-
+	theSoundSystem.init();
 	uint8_t* state = 0;
 	int size = 0;
 	if (argc > 1 && !strcmp(argv[1], "-restore")) {
