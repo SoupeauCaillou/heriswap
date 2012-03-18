@@ -455,10 +455,10 @@ void Game::bench(bool active, float updateDuration, float dt) {
 				TRANSFORM(it->second)->position.X = x + width * 0.5;
 				x += width;
 
-				LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
+				//LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
 			}
 
-			LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
+			//LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
 			benchAccum = 0;
 		}
 	}
