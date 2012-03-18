@@ -314,7 +314,7 @@ void Game::togglePause(bool activate) {
 
 void Game::tick(float dt) {
 	{
-		#define COUNT 50
+		#define COUNT 250
 		static int frameCount = 0;
 		static float accum = 0, t = 0;
 		frameCount++;

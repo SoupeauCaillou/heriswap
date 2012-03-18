@@ -27,6 +27,7 @@ BackgroundManager::Cloud* BackgroundManager::initCloud(Cloud* c) {
 	std::stringstream tex;
 	tex << "cloud" << 1+MathUtil::RandomInt(3) << ".png";
 	RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile(tex.str());
+	RENDERING(c->e)->hide = false;
 	TRANSFORM(c->e)->size = Vector2(2, 1) * MathUtil::Lerp(scaleRange.X, scaleRange.Y, t);
 	c->visible = false;
 	c->speed = MathUtil::Lerp(-0.2f, -1.5f, t);
