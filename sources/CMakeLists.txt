@@ -11,4 +11,4 @@ file(
 
 add_executable(tilematch ${source_files})
 
-target_link_libraries(tilematch sac glfw png openal)
+target_link_libraries(tilematch sac glfw png openal sndfile)

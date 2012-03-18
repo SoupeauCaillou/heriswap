@@ -13,6 +13,7 @@
 #include "base/TimeUtil.h"
 
 #include "systems/RenderingSystem.h"
+#include "systems/SoundSystem.h"
 
 #include "Game.h"
 
@@ -114,8 +115,7 @@ int main(int argc, char** argv) {
 
 	game.init(420, 700, state, size);
 	theTouchInputManager.init(Vector2(10, 10. * 700. / 400.), Vector2(420, 700));
-
-
+	theSoundSystem.linuxSoundAPI = new OpenAlSoundAPI();
 
 	bool running = true;
 	float timer = 0;
