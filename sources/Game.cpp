@@ -301,7 +301,7 @@ static void updateMusic(Entity* music) {
 		do {
 			c = MathUtil::RandomInt('G' - 'A' + 1) + 'A';
 		} while (std::find(l.begin(), l.end(), c) != l.end());
-
+		l.push_back(c);
 		std::stringstream s;
 		s << "audio/" << c << ".ogg";
 		sc->sound = theSoundSystem.loadSoundFile(s.str(), true);
