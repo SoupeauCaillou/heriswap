@@ -22,7 +22,6 @@ LOCAL_SRC_FILES := \
     tilematchjnilib.cpp \
 	../sources/Game.cpp \
 	../sources/GridSystem.cpp \
-   ../sources/PlayerSystem.cpp \
    ../sources/HUDManager.cpp \
    ../sources/CombinationMarkSystem.cpp \
 	../sources/states/BackgroundManager.cpp \
@@ -35,7 +34,10 @@ LOCAL_SRC_FILES := \
 	../sources/states/ScoreBoardStateManager.cpp \
 	../sources/states/LevelStateManager.cpp \
 	../sources/states/PauseStateManager.cpp \
-	../sources/states/FadeStateManager.cpp
+	../sources/states/FadeStateManager.cpp	\
+	../sources/modes/NormalModeManager.cpp \
+	../sources/modes/StaticTimeModeManager.cpp \
+	../sources/modes/ScoreAttackModeManager.cpp
 
 LOCAL_STATIC_LIBRARIES := sac png
 LOCAL_LDLIBS := -lGLESv2 -lGLESv1_CM -lEGL -llog -lz

@@ -1,6 +1,7 @@
 #include "MainMenuGameStateManager.h"
 #include "systems/ContainerSystem.h"
 #include "systems/SoundSystem.h"
+#include <sstream>
 
 MainMenuGameStateManager::MainMenuGameStateManager() {
 
