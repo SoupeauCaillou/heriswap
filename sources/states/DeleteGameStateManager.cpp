@@ -16,7 +16,7 @@ void DeleteGameStateManager::Setup() {
 
 	ADSR(eRemove)->idleValue = 0;
 	ADSR(eRemove)->attackValue = 1.0;
-	ADSR(eRemove)->attackTiming = 0.3;
+	ADSR(eRemove)->attackTiming = 0.3*FAST;
 	ADSR(eRemove)->decayTiming = 0.;
 	ADSR(eRemove)->sustainValue = 1.0;
 	ADSR(eRemove)->releaseTiming = 0;

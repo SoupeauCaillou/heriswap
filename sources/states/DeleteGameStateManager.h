@@ -10,6 +10,7 @@
 #include "GridSystem.h"
 #include "CombinationMarkSystem.h"
 #include "modes/GameModeManager.h"
+#include "Game.h"
 
 class DeleteGameStateManager : public GameStateManager {
 	public:
