@@ -38,7 +38,7 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 		score += 10*level*nb*nb*nb/6;
 
 	remain[type] -= nb;
-	time -= 2;
+	time -= nb/4;
 	if (time < 0)
 		time = 0;
 

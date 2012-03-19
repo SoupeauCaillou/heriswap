@@ -35,8 +35,8 @@ void CombinationMarkSystem::NewMarks(int stat, Vector2 coord){
 		default :
 			RENDERING(e)->color = Color(.8f,.1f,.5f,.3f);
 			break;
-	}	
-			
+	}
+
 	COMBIN(e)->state = stat;
 }
 
@@ -44,7 +44,7 @@ void CombinationMarkSystem::DeleteMarks(int stat) {
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
 		Entity a = (*it).first;
 		CombinationMarkComponent* cmc = (*it).second;
-		if (cmc->state == stat)
+		if (stat==-1 || cmc->state == stat)
 			theEntityManager.DeleteEntity(a);
 	}
 }

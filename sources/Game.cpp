@@ -242,11 +242,11 @@ void Game::setMode() {
 	datas->state2Manager[Spawn]->mode = datas->mode;
 	datas->state2Manager[UserInput]->mode = datas->mode;
 	datas->state2Manager[Delete]->mode = datas->mode;
-	
+
 	datas->state2Manager[EndMenu]->modeMng = datas->mode2Manager[datas->mode];
 	datas->state2Manager[Spawn]->modeMng = datas->mode2Manager[datas->mode];
 	datas->state2Manager[UserInput]->modeMng = datas->mode2Manager[datas->mode];
-	datas->state2Manager[Delete]->modeMng = datas->mode2Manager[datas->mode];		
+	datas->state2Manager[Delete]->modeMng = datas->mode2Manager[datas->mode];
 }
 
 void Game::toggleShowCombi(bool forcedesactivate) {
@@ -418,6 +418,7 @@ void Game::tick(float dt) {
 	}
 
 	if (newState == EndMenu) {
+		theCombinationMarkSystem.DeleteMarks(-1);
 		theGridSystem.DeleteAll();
 		datas->mode2Manager[datas->mode]->time = 0;
 	} else if (newState == MainMenu) {
