@@ -73,7 +73,7 @@ void MainMenuGameStateManager::Setup() {
 	RENDERING(score)->color = Color(0,0,0,0);
 	TEXT_RENDERING(eScore)->alignL = true;
 
-	TEXT_RENDERING(eStart[0])->text = "Normal";
+	//TEXT_RENDERING(eStart[0])->text = "Normal";
 	TEXT_RENDERING(eStart[1])->text = "Score Atk";
 	TEXT_RENDERING(eStart[2])->text = "Frozen Time";
 	TEXT_RENDERING(eScore)->text = "Score";
@@ -146,7 +146,14 @@ GameState MainMenuGameStateManager::Update(float dt) {
 	} else if (BUTTON(bScore)->clicked) {
 		return ScoreBoard;
 	}
-
+	static int i = 100;
+	if (i>3) {
+std::stringstream a;
+			a.precision(0);
+			a << std::fixed << i;
+			TEXT_RENDERING(eStart[0])->text = a.str();		
+			i--;
+} 
 	if (elapsedTime>1)
 		elapsedTime = 1;
 
