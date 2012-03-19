@@ -1,7 +1,7 @@
 #pragma once
 #include "GridSystem.h"
 
-#define FAST 0.2
+#define FAST 1.
 
 class ScoreStorage;
 
