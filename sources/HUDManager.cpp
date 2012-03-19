@@ -100,7 +100,7 @@ void HUDManager::Hide(bool toHide, GameMode modeType) {
 }
 
 
-void HUDManager::Update(float dt, GameModeManager* mode, GameMode modeType) {
+void HUDManager::Update(float dt, GameModeManager* mode, GameMode modeType, GameState state) {
 	//Score
 	{
 	std::stringstream a;
@@ -124,6 +124,8 @@ void HUDManager::Update(float dt, GameModeManager* mode, GameMode modeType) {
 	// faudrait que a soit de la forme xx:xx s, meme 01:03 s
 	a << minute << ":" << std::setw(2) << std::setfill('0') << seconde << " s";
 	TEXT_RENDERING(datas->eTime)->text = a.str();
+	if (state == UserInput) TEXT_RENDERING(datas->eTime)->color = Color(1.0f,0.f,0.f,1.f);
+	else  TEXT_RENDERING(datas->eTime)->color = Color(1.0f,1.f,1.f,1.f);
 	}
 	//FPS
 	{

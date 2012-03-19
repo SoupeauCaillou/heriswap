@@ -406,7 +406,7 @@ void Game::tick(float dt) {
 	if (newState == Spawn || newState == UserInput || newState == Delete || newState == Fall || newState == LevelChanged) {
 		ended = datas->mode2Manager[datas->mode]->Update(dt);
 		datas->hud->Hide(false, datas->mode);
-		datas->hud->Update(dt, datas->mode2Manager[datas->mode], datas->mode);
+		datas->hud->Update(dt, datas->mode2Manager[datas->mode], datas->mode, datas->state);
 		theGridSystem.HideAll(false);
 		RENDERING(datas->benchTotalTime)->hide = false;
 	} else {

@@ -8,7 +8,7 @@
 #include "systems/System.h"
 
 #include "modes/GameModeManager.h"
-
+#include "states/GameStateManager.h"
 
 
 
@@ -18,7 +18,7 @@ class HUDManager {
 
 		void Setup();
 
-		void Update(float dt, GameModeManager* moding, GameMode modingType);
+		void Update(float dt, GameModeManager* moding, GameMode modingType, GameState state);
 
 		void ScoreCalc(int nb);
 
