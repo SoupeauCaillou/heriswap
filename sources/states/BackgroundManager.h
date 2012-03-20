@@ -23,13 +23,20 @@ class BackgroundManager : public GameStateManager {
 		void Exit();
 
 	private:
-		struct Cloud;
+		struct Actor;
+		struct AnimatedActor;
 
-		Cloud* initCloud(Cloud* c);
+		Actor* initCloud(Actor* c);
+		AnimatedActor* initAnimal(AnimatedActor* a);
 
-		std::vector<Cloud*> clouds;
+		std::vector<Actor*> clouds;
+		std::vector<AnimatedActor*> animals;
+
+		void switchAnim(AnimatedActor* a);
+
 	public:
-		Vector2 xStartRange;
-		Vector2 yRange;
-		Vector2 scaleRange;
+		Vector2 xCloudStartRange, yCloudRange, cloudScaleRange;
+		Vector2 xHerissonStartRange, yHerissonRange, herissonScaleRange;
+		Vector2 xPapillonStartRange, yPapillonRange, papillonScaleRange;
 };
+

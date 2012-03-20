@@ -75,9 +75,9 @@ class Game::Data {
 			state2Manager[Pause] = new PauseStateManager();
 
 			BackgroundManager* bg = new BackgroundManager();
-			bg->xStartRange = Vector2(6, 8);
-			bg->yRange = Vector2(-2, 9);
-			bg->scaleRange = Vector2(0.4, 1.5);
+			bg->xCloudStartRange = Vector2(6, 8);
+			bg->yCloudRange = Vector2(-2, 9);
+			bg->cloudScaleRange = Vector2(0.4, 1.5);
 			state2Manager[Background] = bg;
 		}
 
@@ -129,7 +129,7 @@ class Game::Data {
 
 		GameState state, stateBeforePause;
 		bool stateBeforePauseNeedEnter;
-		Entity logo, background, sky;
+		Entity logo, background, sky, tree;
 		Entity music[4];
 		// drag/drop
 		HUDManager* hud;
@@ -233,6 +233,15 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	TRANSFORM(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 	RENDERING(datas->background)->hide = false;
+
+	datas->tree = theEntityManager.CreateEntity();
+	ADD_COMPONENT(datas->tree, Transformation);
+	ADD_COMPONENT(datas->tree, Rendering);
+	TRANSFORM(datas->tree)->z = 1;
+	TRANSFORM(datas->tree)->size = Vector2(10, 10.0 * windowH / windowW);
+	RENDERING(datas->tree)->texture = theRenderingSystem.loadTextureFile("tree.png");
+	RENDERING(datas->tree)->hide = false;
+
 
 	datas->state2Manager[datas->state]->Enter();
 }
