@@ -2,6 +2,7 @@
 #include "systems/ContainerSystem.h"
 #include "systems/SoundSystem.h"
 #include <sstream>
+#include "../DepthLayer.h"
 
 MainMenuGameStateManager::MainMenuGameStateManager() {
 
@@ -52,16 +53,16 @@ void MainMenuGameStateManager::Setup() {
 
 	//Settings position and rotation on screen
 	for (int i=0; i<3; i++) {
-		TRANSFORM(start[i])->z = 40;
+		TRANSFORM(start[i])->z = DL_MainMenuUI;
 		TRANSFORM(start[i])->rotation = 0;
 		TRANSFORM(start[i])->position = Vector2(-2,1 + i*2);
-		TRANSFORM(eStart[i])->z = 40;
+		TRANSFORM(eStart[i])->z = DL_MainMenuUI;
 		TRANSFORM(eStart[i])->position = TRANSFORM(start[i])->position + Vector2(1.5, 0);
 	}
-	TRANSFORM(score)->z = 40;
+	TRANSFORM(score)->z = DL_MainMenuUI;
 	TRANSFORM(score)->rotation = 0;
 	TRANSFORM(score)->position = Vector2(-2,-1);
-	TRANSFORM(eScore)->z = 40;
+	TRANSFORM(eScore)->z = DL_MainMenuUI;
 	TRANSFORM(eScore)->position = TRANSFORM(score)->position + Vector2(1.5, 0);
 
 	//Text settings
@@ -89,7 +90,7 @@ void MainMenuGameStateManager::Setup() {
 		ADD_COMPONENT(bStart[i], Button);
 		ADD_COMPONENT(bStart[i], Rendering);
 		RENDERING(bStart[i])->color = Color(1.0, .0, .0, .5);
-		TRANSFORM(bStart[i])->z = 40;
+		TRANSFORM(bStart[i])->z = DL_MainMenuUI;
 	}
 	bScore = theEntityManager.CreateEntity();
 	ADD_COMPONENT(bScore, Transformation);
@@ -97,7 +98,7 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(bScore, Button);
 	ADD_COMPONENT(bScore, Rendering);
 	RENDERING(bScore)->color = Color(.0, 1.0, .0, .5);
-	TRANSFORM(bScore)->z = 40;
+	TRANSFORM(bScore)->z = DL_MainMenuUI;
 }
 
 void MainMenuGameStateManager::Enter() {

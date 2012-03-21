@@ -1,4 +1,5 @@
 #include "BackgroundManager.h"
+#include "../DepthLayer.h"
 
 
 struct BackgroundManager::Cloud {
@@ -23,7 +24,7 @@ BackgroundManager::Cloud* BackgroundManager::initCloud(Cloud* c) {
 	float t = MathUtil::RandomFloat();
 	TRANSFORM(c->e)->position.X = xStartRange.Length() * MathUtil::RandomFloat() + xStartRange.X;
 	TRANSFORM(c->e)->position.Y = t * yRange.Length() + yRange.X;
-	TRANSFORM(c->e)->z = -0.5;
+	TRANSFORM(c->e)->z = DL_Cloud;
 	std::stringstream tex;
 	tex << "cloud" << 1+MathUtil::RandomInt(3) << ".png";
 	RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile(tex.str());

@@ -36,6 +36,8 @@
 #include "modes/StaticTimeModeManager.h"
 #include "modes/ScoreAttackModeManager.h"
 
+#include "DepthLayer.h"
+
 #include "HUDManager.h"
 
 #define GRIDSIZE 8
@@ -87,7 +89,7 @@ class Game::Data {
 			TRANSFORM(logo)->position = Vector2(0,0);
 			TRANSFORM(logo)->size = Vector2(10,(10.0*windowH)/windowW);
 			RENDERING(logo)->hide = true;
-			TRANSFORM(logo)->z = 39;
+			TRANSFORM(logo)->z = DL_Logo;
 			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
 
 			hud->Setup();
@@ -109,7 +111,7 @@ class Game::Data {
 			ADD_COMPONENT(benchTotalTime, Transformation);
 			TRANSFORM(benchTotalTime)->position = Vector2(0,benchPos);
 			TRANSFORM(benchTotalTime)->size = Vector2(10,1);
-			TRANSFORM(benchTotalTime)->z = 39;
+			TRANSFORM(benchTotalTime)->z = DL_Benchmark;
 
 			std::vector<std::string> allSystems = ComponentSystem::registeredSystemNames();
 			for (int i = 0; i < allSystems.size() ; i ++) {
@@ -118,7 +120,7 @@ class Game::Data {
 				ADD_COMPONENT(b, Transformation);
 				TRANSFORM(b)->position = Vector2(0, benchPos);
 				TRANSFORM(b)->size = Vector2(.8,0.8);
-				TRANSFORM(b)->z = 40;
+				TRANSFORM(b)->z = DL_Benchmark;
 				RENDERING(b)->color = (i % 2) ? Color(0.1, 0.1, 0.1):Color(0.8,0.8,0.8);
 				benchTimeSystem[allSystems[i]] = b;
 			}
@@ -220,7 +222,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 
 	datas->sky = theEntityManager.CreateEntity();
 	theTransformationSystem.Add(datas->sky);
-	TRANSFORM(datas->sky)->z = -1;
+	TRANSFORM(datas->sky)->z = DL_Sky;
 	theRenderingSystem.Add(datas->sky);
 	TRANSFORM(datas->sky)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->sky)->texture = theRenderingSystem.loadTextureFile("sky.png");
@@ -229,7 +231,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	datas->background = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->background, Transformation);
 	ADD_COMPONENT(datas->background, Rendering);
-	TRANSFORM(datas->background)->z = 0;
+	TRANSFORM(datas->background)->z = DL_Background;
 	TRANSFORM(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 	RENDERING(datas->background)->hide = false;
@@ -468,10 +470,10 @@ void Game::bench(bool active, float updateDuration, float dt) {
 				TRANSFORM(it->second)->position.X = x + width * 0.5;
 				x += width;
 
-				//LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
+				LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
 			}
 
-			//LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
+			LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
 			benchAccum = 0;
 		}
 	}

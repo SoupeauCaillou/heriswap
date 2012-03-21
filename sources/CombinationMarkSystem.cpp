@@ -1,4 +1,5 @@
 #include "CombinationMarkSystem.h"
+#include "DepthLayer.h"
 
 INSTANCE_IMPL(CombinationMarkSystem);
 
@@ -12,7 +13,7 @@ void CombinationMarkSystem::NewMarks(int stat, Vector2 coord){
 	theEntityManager.AddComponent(e, &theADSRSystem);
 	theEntityManager.AddComponent(e, &theRenderingSystem);
 	TRANSFORM(e)->position = Game::GridCoordsToPosition(coord.X, coord.Y);
-	TRANSFORM(e)->z = 5;
+	TRANSFORM(e)->z = DL_CombinationMark;
 	RENDERING(e)->hide = false;
 	TRANSFORM(e)->size = Game::CellSize();
 
