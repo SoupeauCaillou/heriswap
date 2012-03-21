@@ -1,4 +1,5 @@
 #include "SpawnGameStateManager.h"
+#include "../DepthLayer.h"
 
 static void fillTheBlank(std::vector<Feuille>& spawning);
 static Entity createCell(Feuille& f);
@@ -202,7 +203,7 @@ static Entity createCell(Feuille& f) {
 	ADD_COMPONENT(e, Grid);
 
 	TRANSFORM(e)->position = Game::GridCoordsToPosition(f.X, f.Y);
-	TRANSFORM(e)->z = 10;
+	TRANSFORM(e)->z = DL_Cell;
 	
 	RenderingComponent* rc = RENDERING(e);
 	rc->texture = theRenderingSystem.loadTextureFile("feuilles.png");

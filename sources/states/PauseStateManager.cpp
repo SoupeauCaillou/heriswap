@@ -1,5 +1,5 @@
 #include "PauseStateManager.h"
-
+#include "../DepthLayer.h"
 
 PauseStateManager::PauseStateManager() {
 
@@ -14,7 +14,7 @@ void PauseStateManager::Setup() {
 	ADD_COMPONENT(eRestart, Button);
 	ADD_COMPONENT(eRestart, Rendering);
 	TRANSFORM(eRestart)->position = Vector2(3.5, 0);
-	TRANSFORM(eRestart)->z = 20;
+	TRANSFORM(eRestart)->z = DL_PauseUI;
 	TEXT_RENDERING(eRestart)->text = "Reprendre";
 	TEXT_RENDERING(eRestart)->hide = true;
 }

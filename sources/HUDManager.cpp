@@ -1,5 +1,6 @@
 #include "HUDManager.h"
 #include <iomanip>
+#include "DepthLayer.h"
 
 //FCRR : FPS Calculation Refresh Rate
 #define FCRR 1.
@@ -43,22 +44,22 @@ void HUDManager::Setup() {
 	TRANSFORM(datas->eTime)->position = Vector2(0, 7);
 	TRANSFORM(datas->eFPS)->position = Vector2(-2.5, 8);
 
-	TRANSFORM(datas->eLevel)->z = 6;
-	TRANSFORM(datas->eScore)->z = 6;
-	TRANSFORM(datas->eTime)->z = 6;
-	TRANSFORM(datas->eFPS)->z = 6;
+	TRANSFORM(datas->eLevel)->z = DL_Hud;
+	TRANSFORM(datas->eScore)->z = DL_Hud;
+	TRANSFORM(datas->eTime)->z = DL_Hud;
+	TRANSFORM(datas->eFPS)->z = DL_Hud;
 
 	for (int i=0;i<8;i++) {
 		datas->eObj[i] = theTextRenderingSystem.CreateLocalEntity(5);
 		TRANSFORM(datas->eObj[i])->position = Vector2(i-3.5,-6);
-		TRANSFORM(datas->eObj[i])->z = 6;
+		TRANSFORM(datas->eObj[i])->z = DL_Hud;
 		TEXT_RENDERING(datas->eObj[i])->charSize /= 2;
 		TEXT_RENDERING(datas->eObj[i])->color = Color(0., 0., 0.);
 
 		datas->fObj[i] = theEntityManager.CreateEntity();
 		ADD_COMPONENT(datas->fObj[i], Transformation);
 		ADD_COMPONENT(datas->fObj[i], Rendering);
-		TRANSFORM(datas->fObj[i])->z = 5;
+		TRANSFORM(datas->fObj[i])->z = DL_Hud - 1;
 		TRANSFORM(datas->fObj[i])->size = Vector2(1,1);
 		TRANSFORM(datas->fObj[i])->position = TRANSFORM(datas->eObj[i])->position+Vector2(-0.3,0);
 		RENDERING(datas->fObj[i])->bottomLeftUV = Vector2(i / 8.0, 0);

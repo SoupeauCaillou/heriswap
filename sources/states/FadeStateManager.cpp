@@ -1,5 +1,6 @@
 #include "FadeStateManager.h"
 #include "base/TouchInputManager.h"
+#include "../DepthLayer.h"
 
 FadeGameStateManager::FadeGameStateManager(Entity eFade, FadeType fade, GameState whoAmI, GameState whoIsNext, float t):
 	eThing(eFade), fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(t) {
@@ -13,7 +14,7 @@ void FadeGameStateManager::Setup() {
 	TRANSFORM(eFading)->size = Vector2(10,20);
 	RENDERING(eFading)->hide = true;
 	RENDERING(eFading)->color = Color(0,0,0);
-	TRANSFORM(eFading)->z = 40;
+	TRANSFORM(eFading)->z = DL_Fading;
 
 	ADD_COMPONENT(eFading, ADSR);
 	ADSR(eFading)->idleValue = 0;
