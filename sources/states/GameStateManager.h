@@ -1,7 +1,6 @@
 #pragma once
 
 #include <map>
-#include "modes/GameModeManager.h"
 
 enum GameState {
 	Spawn,
@@ -21,6 +20,8 @@ enum GameState {
 	BlackToSpawn
 };
 
+class GameModeManager;
+
 
 class GameStateManager {
 	public:
@@ -31,12 +32,9 @@ class GameStateManager {
 		/* Prepare to become the active manager */
 		virtual void Enter() = 0;
 		/* Update gamestate, and returns the new GameState */
-		virtual GameState Update(float dt) = 0;
+		virtual GameState Update(float dt, GameModeManager* mode) = 0;
 		/* Always called */
 		virtual void BackgroundUpdate(float dt) {};
 		/* Prepare to leave as the active manager */
 		virtual void Exit() = 0;
-
-		GameMode mode;
-		GameModeManager* modeMng;
 };
