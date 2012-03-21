@@ -10,7 +10,7 @@
 #include "GameStateManager.h"
 
 enum FadeType {
-	FadeIn, 
+	FadeIn,
 	FadeOut
 };
 
@@ -19,7 +19,7 @@ class FadeGameStateManager : public GameStateManager {
 		FadeGameStateManager(Entity eFade, FadeType fade, GameState whoAmI, GameState whoIsNext, float timeout = 0.0);
 		void Setup();
 		void Enter();
-		GameState Update(float dt);
+		GameState Update(float dt, GameModeManager* mode);
 		void Exit();
 	private:
 		Entity eFading, eThing;

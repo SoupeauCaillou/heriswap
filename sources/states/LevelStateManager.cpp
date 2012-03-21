@@ -32,7 +32,7 @@ void LevelStateManager::Enter() {
 	}
 }
 
-GameState LevelStateManager::Update(float dt) {
+GameState LevelStateManager::Update(float dt, GameModeManager* modeMng) {
 	LOGI("%f", ADSR(eGrid)->value);
 	for ( std::vector<FeuilleOrientee>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
 		TRANSFORM(it->e)->rotation = 0.3*it->sens*ADSR(eGrid)->value;

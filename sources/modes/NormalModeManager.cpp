@@ -4,9 +4,58 @@
 class NormalGameModeManager::HUDManagerData {
 	public:
 		HUDManagerData() {
-				frames = 0;
-				nextfps = FCRR;
-				fps = 60;
+			frames = 0;
+			nextfps = FCRR;
+			fps = 60;
+
+
+			eScore = theTextRenderingSystem.CreateLocalEntity(10);
+			eTime = theTextRenderingSystem.CreateLocalEntity(10);
+			eFPS = theTextRenderingSystem.CreateLocalEntity(10);
+			eLevel = theTextRenderingSystem.CreateLocalEntity(10);
+
+			TRANSFORM(eLevel)->position = Vector2(5, 8);
+			TRANSFORM(eScore)->position = Vector2(5, 7);
+			TRANSFORM(eTime)->position = Vector2(0, 7);
+			TRANSFORM(eFPS)->position = Vector2(-2.5, 8);
+
+			TRANSFORM(eLevel)->z = 6;
+			TRANSFORM(eScore)->z = 6;
+			TRANSFORM(eTime)->z = 6;
+			TRANSFORM(eFPS)->z = 6;
+
+			for (int i=0;i<8;i++) {
+				eObj[i] = theTextRenderingSystem.CreateLocalEntity(5);
+				TRANSFORM(eObj[i])->position = Vector2(i-3.5,-6);
+				TRANSFORM(eObj[i])->z = 6;
+				TEXT_RENDERING(eObj[i])->charSize /= 2;
+				TEXT_RENDERING(eObj[i])->color = Color(0., 0., 0.);
+
+				fObj[i] = theEntityManager.CreateEntity();
+				ADD_COMPONENT(fObj[i], Transformation);
+				ADD_COMPONENT(fObj[i], Rendering);
+				TRANSFORM(fObj[i])->z = 5;
+				TRANSFORM(fObj[i])->size = Vector2(1,1);
+				TRANSFORM(fObj[i])->position = TRANSFORM(eObj[i])->position+Vector2(-0.3,0);
+				RENDERING(fObj[i])->bottomLeftUV = Vector2(i / 8.0, 0);
+				RENDERING(fObj[i])->topRightUV = RENDERING(fObj[i])->bottomLeftUV + Vector2(1 / 8.0, 1);
+				RENDERING(fObj[i])->texture = theRenderingSystem.loadTextureFile("feuilles.png");
+			}
+
+			fBonus = theEntityManager.CreateEntity();
+
+
+			ADD_COMPONENT(fBonus, Transformation);
+			ADD_COMPONENT(fBonus, Rendering);
+			RENDERING(fBonus)->texture = theRenderingSystem.loadTextureFile("feuilles.png");
+
+			TRANSFORM(fBonus)->size = Vector2(2,2);
+			TRANSFORM(fBonus)->position = Vector2(2,6);
+			TRANSFORM(fBonus)->rotation = -.8;
+
+
+			TEXT_RENDERING(eFPS)->charSize /= 2;
+			TEXT_RENDERING(eFPS)->color = Color(0.1, 0.5, 0.4);
 		}
 		~HUDManagerData() {
 			theTextRenderingSystem.DestroyLocalEntity(eScore);
@@ -40,7 +89,7 @@ NormalGameModeManager::NormalGameModeManager() {
 	for (int i=0; i<8;i++)
 		remain[i]=obj[0];
 	datas = new HUDManagerData();
-	Setup();
+	HideUI(true);
 }
 
 NormalGameModeManager::~NormalGameModeManager() {
@@ -48,56 +97,6 @@ NormalGameModeManager::~NormalGameModeManager() {
 }
 
 void NormalGameModeManager::Setup() {
-	datas->eScore = theTextRenderingSystem.CreateLocalEntity(10);
-	datas->eTime = theTextRenderingSystem.CreateLocalEntity(10);
-	datas->eFPS = theTextRenderingSystem.CreateLocalEntity(10);
-	datas->eLevel = theTextRenderingSystem.CreateLocalEntity(10);
-
-	TRANSFORM(datas->eLevel)->position = Vector2(5, 8);
-	TRANSFORM(datas->eScore)->position = Vector2(5, 7);
-	TRANSFORM(datas->eTime)->position = Vector2(0, 7);
-	TRANSFORM(datas->eFPS)->position = Vector2(-2.5, 8);
-
-	TRANSFORM(datas->eLevel)->z = 6;
-	TRANSFORM(datas->eScore)->z = 6;
-	TRANSFORM(datas->eTime)->z = 6;
-	TRANSFORM(datas->eFPS)->z = 6;
-
-	for (int i=0;i<8;i++) {
-		datas->eObj[i] = theTextRenderingSystem.CreateLocalEntity(5);
-		TRANSFORM(datas->eObj[i])->position = Vector2(i-3.5,-6);
-		TRANSFORM(datas->eObj[i])->z = 6;
-		TEXT_RENDERING(datas->eObj[i])->charSize /= 2;
-		TEXT_RENDERING(datas->eObj[i])->color = Color(0., 0., 0.);
-
-		datas->fObj[i] = theEntityManager.CreateEntity();
-		ADD_COMPONENT(datas->fObj[i], Transformation);
-		ADD_COMPONENT(datas->fObj[i], Rendering);
-		TRANSFORM(datas->fObj[i])->z = 5;
-		TRANSFORM(datas->fObj[i])->size = Vector2(1,1);
-		TRANSFORM(datas->fObj[i])->position = TRANSFORM(datas->eObj[i])->position+Vector2(-0.3,0);
-		RENDERING(datas->fObj[i])->bottomLeftUV = Vector2(i / 8.0, 0);
-		RENDERING(datas->fObj[i])->topRightUV = RENDERING(datas->fObj[i])->bottomLeftUV + Vector2(1 / 8.0, 1);
-		RENDERING(datas->fObj[i])->texture = theRenderingSystem.loadTextureFile("feuilles.png");
-
-	}
-
-	datas->fBonus = theEntityManager.CreateEntity();
-
-
-	ADD_COMPONENT(datas->fBonus, Transformation);
-	ADD_COMPONENT(datas->fBonus, Rendering);
-	RENDERING(datas->fBonus)->texture = theRenderingSystem.loadTextureFile("feuilles.png");
-
-	TRANSFORM(datas->fBonus)->size = Vector2(2,2);
-	TRANSFORM(datas->fBonus)->position = Vector2(2,6);
-	TRANSFORM(datas->fBonus)->rotation = -.8;
-
-
-	TEXT_RENDERING(datas->eFPS)->charSize /= 2;
-	TEXT_RENDERING(datas->eFPS)->color = Color(0.1, 0.5, 0.4);
-
-	HideUI(true);
 }
 
 
@@ -190,7 +189,7 @@ void NormalGameModeManager::Reset() {
 
 
 void NormalGameModeManager::HideUI(bool toHide) {
-	TEXT_RENDERING(datas->eScore)->hide = toHide;
+	/*TEXT_RENDERING(datas->eScore)->hide = toHide;
 	TEXT_RENDERING(datas->eTime)->hide = toHide;
 	TEXT_RENDERING(datas->eFPS)->hide = toHide;
 	TEXT_RENDERING(datas->eLevel)->hide = toHide;
@@ -198,10 +197,10 @@ void NormalGameModeManager::HideUI(bool toHide) {
 	for (int i=0;i<8;i++) {
 		TEXT_RENDERING(datas->eObj[i])->hide = toHide;
 		RENDERING(datas->fObj[i])->hide = toHide;
-	}
+	}*/
 }
 
-void NormalGameModeManager::UpdateUI(float dt, GameState state) {
+void NormalGameModeManager::UpdateUI(float dt, int state) {
 	//Score
 	{
 	std::stringstream a;

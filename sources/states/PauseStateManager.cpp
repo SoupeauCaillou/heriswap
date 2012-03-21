@@ -25,7 +25,7 @@ void PauseStateManager::Enter() {
 	TEXT_RENDERING(eRestart)->hide = false;
 }
 
-GameState PauseStateManager::Update(float dt) {
+GameState PauseStateManager::Update(float dt, GameModeManager* modeMng) {
 	if (BUTTON(eRestart)->clicked) {
 		return ScoreBoard;
 	}

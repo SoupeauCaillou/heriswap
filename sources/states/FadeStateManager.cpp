@@ -45,7 +45,7 @@ void FadeGameStateManager::Enter() {
 	updateColor(eFading, fading);
 }
 
-GameState FadeGameStateManager::Update(float dt) {
+GameState FadeGameStateManager::Update(float dt, GameModeManager* mode) {
 	updateColor(eFading, fading);
 
 	if (ADSR(eFading)->value == ADSR(eFading)->sustainValue) {

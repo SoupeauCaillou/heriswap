@@ -20,7 +20,7 @@ class SpawnGameStateManager : public GameStateManager {
 		~SpawnGameStateManager();
 		void Setup();
 		void Enter();
-		GameState Update(float dt);
+		GameState Update(float dt, GameModeManager* modeMng);
 		GameState NextState(bool marker);
 		void Exit();
 

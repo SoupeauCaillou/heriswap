@@ -129,7 +129,7 @@ void BackgroundManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 }
 
-GameState BackgroundManager::Update(float dt) {
+GameState BackgroundManager::Update(float dt, GameModeManager* modeMng) {
 }
 
 void BackgroundManager::BackgroundUpdate(float dt) {

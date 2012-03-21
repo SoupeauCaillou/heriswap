@@ -16,8 +16,8 @@ class Game {
 		static Vector2 GridCoordsToPosition(int i, int j);
 		static float CellSize();
 		static float CellContentScale();
-		
-		void setMode();
+
+		//void setMode();
 
 		int saveState(uint8_t** out);
 	private:

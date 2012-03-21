@@ -2,7 +2,6 @@
 
 
 DeleteGameStateManager::DeleteGameStateManager() {
-	modeMng = 0;
 }
 
 DeleteGameStateManager::~DeleteGameStateManager() {
@@ -27,7 +26,7 @@ void DeleteGameStateManager::Enter() {
 	removing = theGridSystem.LookForCombination(true,true);
 }
 
-GameState DeleteGameStateManager::Update(float dt) {
+GameState DeleteGameStateManager::Update(float dt, GameModeManager* modeMng) {
 	ADSRComponent* transitionSuppr = ADSR(eRemove);
 	if (!removing.empty()) {
 		transitionSuppr->active = true;

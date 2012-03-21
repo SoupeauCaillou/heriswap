@@ -18,7 +18,7 @@ class BackgroundManager : public GameStateManager {
 		~BackgroundManager();
 		void Setup();
 		void Enter();
-		GameState Update(float dt);
+		GameState Update(float dt, GameModeManager* modeMng);
 		void BackgroundUpdate(float dt);
 		void Exit();
 

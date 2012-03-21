@@ -5,7 +5,6 @@ static void fillTheBlank(std::vector<Feuille>& spawning);
 static Entity createCell(Feuille& f);
 
 SpawnGameStateManager::SpawnGameStateManager(){
-	modeMng = 0;
 }
 
 SpawnGameStateManager::~SpawnGameStateManager() {
@@ -78,7 +77,7 @@ void SpawnGameStateManager::Enter() {
 	fillTheBlank(spawning);
 }
 
-GameState SpawnGameStateManager::Update(float dt) {
+GameState SpawnGameStateManager::Update(float dt, GameModeManager* modeMng) {
 	//si on change de niveau
 	if (modeMng && modeMng->LeveledUp()) return LevelChanged;
 	else {
@@ -204,13 +203,13 @@ static Entity createCell(Feuille& f) {
 
 	TRANSFORM(e)->position = Game::GridCoordsToPosition(f.X, f.Y);
 	TRANSFORM(e)->z = DL_Cell;
-	
+
 	RenderingComponent* rc = RENDERING(e);
 	rc->texture = theRenderingSystem.loadTextureFile("feuilles.png");
 	rc->bottomLeftUV = Vector2(f.type / 8.0, 0);
 	rc->topRightUV = rc->bottomLeftUV + Vector2(1 / 8.0, 1);
 	rc->hide = false;
-	
+
 	TRANSFORM(e)->size = Game::CellSize() * Game::CellContentScale();
 	ADSR(e)->idleValue = Game::CellSize() * Game::CellContentScale();
 	GRID(e)->type = f.type;

@@ -29,7 +29,7 @@ class UserInputGameStateManager : public GameStateManager {
 		~UserInputGameStateManager();
 		void Setup();
 		void Enter();
-		GameState Update(float dt);
+		GameState Update(float dt, GameModeManager* mode);
 		void BackgroundUpdate(float dt);
 		void Exit();
 

@@ -10,7 +10,7 @@
 #include "systems/TransformationSystem.h"
 #include "systems/System.h"
 
-#include "states/GameStateManager.h"
+//#include "states/GameStateManager.h"
 
 
 //FCRR : FPS Calculation Refresh Rate
@@ -33,7 +33,7 @@ class GameModeManager {
 		/* Update gamestate, and returns true if end of the mode */
 		virtual bool Update(float dt) = 0;
 
-		virtual void UpdateUI(float dt, GameState state) = 0;
+		virtual void UpdateUI(float dt, int state) = 0;
 		virtual void HideUI(bool toHide) = 0;
 
 		/* Every modes need to calc score */

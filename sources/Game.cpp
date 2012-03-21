@@ -239,7 +239,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 
 	datas->state2Manager[datas->state]->Enter();
 }
-
+/*
 void Game::setMode() {
 	datas->state2Manager[EndMenu]->mode = datas->mode;
 	datas->state2Manager[Spawn]->mode = datas->mode;
@@ -251,7 +251,7 @@ void Game::setMode() {
 	datas->state2Manager[UserInput]->modeMng = datas->mode2Manager[datas->mode];
 	datas->state2Manager[Delete]->modeMng = datas->mode2Manager[datas->mode];
 }
-
+*/
 void Game::toggleShowCombi(bool forcedesactivate) {
 	static bool activated;
 	//on switch le bool
@@ -353,7 +353,7 @@ void Game::tick(float dt) {
 		ended = false;
 	} else {
 	//sinon on passe a l'etat suivant
-		newState = datas->state2Manager[datas->state]->Update(dt);
+		newState = datas->state2Manager[datas->state]->Update(dt, datas->mode2Manager[datas->mode]);
 	}
 	//si on est passé de pause à quelque chose different de pause, on desactive la pause
 	if (newState != datas->state && datas->state == Pause) {
@@ -363,7 +363,7 @@ void Game::tick(float dt) {
 			datas->state2Manager[Spawn]->Enter();
 		} else if (newState == MainMenuToBlackState) {
 			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
-			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
+		//setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
 		}
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;

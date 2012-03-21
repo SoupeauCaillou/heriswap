@@ -19,8 +19,8 @@ void FallGameStateManager::Setup() {
 	ADSR(eFall)->sustainValue = 1.0;
 	ADSR(eFall)->releaseTiming = 0;
 
-	
-	
+
+
 
 	ADSR(eFall)->attackMode = Quadratic;
 	ADSR(eFall)->decayMode = Quadratic;
@@ -63,7 +63,7 @@ void FallGameStateManager::Enter() {
 	}
 }
 
-GameState FallGameStateManager::Update(float dt) {
+GameState FallGameStateManager::Update(float dt, GameModeManager* modeMng) {
 	ADSRComponent* transition = ADSR(eFall);
 	if (!falling.empty()) {
 		transition->active = true;

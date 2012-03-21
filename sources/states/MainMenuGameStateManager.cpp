@@ -30,10 +30,10 @@ void MainMenuGameStateManager::Setup() {
 	}
 	ADD_COMPONENT(score, Transformation);
 	ADD_COMPONENT(score, Rendering);
-	
-	
+
+
 	//Loading leaf texture
-	for(int i=0; i<3; i++) {	
+	for(int i=0; i<3; i++) {
 		RENDERING(start[i])->texture = theRenderingSystem.loadTextureFile("feuilles.png");
 		RENDERING(start[i])->bottomLeftUV = Vector2(i / 8.0, 0);
 		RENDERING(start[i])->topRightUV = RENDERING(start[i])->bottomLeftUV + Vector2(1 / 8.0, 1);
@@ -70,7 +70,7 @@ void MainMenuGameStateManager::Setup() {
 		TEXT_RENDERING(eStart[i])->hide = true;
 		TEXT_RENDERING(eStart[i])->alignL = true;
 		RENDERING(start[i])->color = Color(0,0,0,0);
-	}	
+	}
 	TEXT_RENDERING(eScore)->hide = true;
 	RENDERING(score)->color = Color(0,0,0,0);
 	TEXT_RENDERING(eScore)->alignL = true;
@@ -79,7 +79,7 @@ void MainMenuGameStateManager::Setup() {
 	TEXT_RENDERING(eStart[1])->text = "Score Atk";
 	TEXT_RENDERING(eStart[2])->text = "Frozen Time";
 	TEXT_RENDERING(eScore)->text = "Score";
-	
+
 	//Adding containers for clickable areas
 	for (int i=0; i<3; i++) {
 		bStart[i] = theEntityManager.CreateEntity();
@@ -103,7 +103,7 @@ void MainMenuGameStateManager::Setup() {
 
 void MainMenuGameStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-	
+
 	// preload sound effect
 	theSoundSystem.loadSoundFile("audio/click.wav", false);
 
@@ -119,7 +119,7 @@ void MainMenuGameStateManager::Enter() {
 	RENDERING(score)->hide = false;
 	BUTTON(bScore)->clicked = false;
 	RENDERING(bScore)->hide = false;
-	
+
 	CONTAINER(bScore)->entities.push_back(score);
 	CONTAINER(bScore)->entities.push_back(eScore);
 	CONTAINER(bScore)->includeChildren = true;
@@ -131,7 +131,7 @@ void MainMenuGameStateManager::Enter() {
 	}
 }
 
-GameState MainMenuGameStateManager::Update(float dt) {
+GameState MainMenuGameStateManager::Update(float dt, GameModeManager* modeMng) {
 	elapsedTime += dt/4.;
 	if (BUTTON(bStart[0])->clicked) {
 		choosenGameMode = Normal;
@@ -153,7 +153,7 @@ GameState MainMenuGameStateManager::Update(float dt) {
 		elapsedTime = 1;
 
 	for (int i=0; i<3; i++) {
-		RENDERING(start[i])->color = Color(elapsedTime,elapsedTime,elapsedTime,elapsedTime);	
+		RENDERING(start[i])->color = Color(elapsedTime,elapsedTime,elapsedTime,elapsedTime);
 		TRANSFORM(start[i])->rotation += dt/elapsedTime;
 	}
 	RENDERING(score)->color = Color(elapsedTime,elapsedTime,elapsedTime,elapsedTime);
@@ -169,7 +169,7 @@ void MainMenuGameStateManager::Exit() {
 		RENDERING(bStart[i])->hide = true;
 		CONTAINER(bStart[i])->entities.clear();
 	}
-	
+
 	TEXT_RENDERING(eScore)->hide = true;
 	RENDERING(score)->hide = true;
 	RENDERING(bScore)->hide = true;

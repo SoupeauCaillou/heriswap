@@ -5,7 +5,6 @@ static void activateADSR(Entity e, float a, float s);
 static void diffToGridCoords(const Vector2& c, int* i, int* j);
 
 UserInputGameStateManager::UserInputGameStateManager(){
-	modeMng = 0;
 }
 
 UserInputGameStateManager::~UserInputGameStateManager() {
@@ -36,7 +35,7 @@ void UserInputGameStateManager::Enter() {
 	ADSR(eSwapper)->active = false;
 }
 
-GameState UserInputGameStateManager::Update(float dt) {
+GameState UserInputGameStateManager::Update(float dt, GameModeManager* modeMng) {
 	//on met à jour le temps
 	if (modeMng) modeMng->time += dt;
 	// drag/drop of cell
@@ -182,7 +181,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 					// validate position
 					TRANSFORM(e1)->position = Game::GridCoordsToPosition(GRID(e1)->i, GRID(e1)->j);
 					TRANSFORM(e2)->position = Game::GridCoordsToPosition(GRID(e2)->i, GRID(e2)->j);
-					
+
 					originI = originJ = -1;
 					SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/line1.wav", false);
 					return Delete;

@@ -18,12 +18,12 @@ class MainMenuGameStateManager : public GameStateManager {
 		~MainMenuGameStateManager();
 		void Setup();
 		void Enter();
-		GameState Update(float dt);
+		GameState Update(float dt, GameModeManager* modeMng);
 		void Exit();
 	private:
 		Entity start[3], score, eScore, eStart[3], bStart[3], bScore;
 		float elapsedTime;
-		
+
 	public:
 		GameMode choosenGameMode;
 };

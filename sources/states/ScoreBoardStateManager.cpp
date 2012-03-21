@@ -58,7 +58,7 @@ void ScoreBoardStateManager::Enter() {
 	}
 }
 
-GameState ScoreBoardStateManager::Update(float dt) {
+GameState ScoreBoardStateManager::Update(float dt, GameModeManager* modeMng) {
 
 	if (BUTTON(startbtn)->clicked)
 		return MainMenu;
