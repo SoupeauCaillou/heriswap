@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Game.h"
 #include "GameModeManager.h"
 
 class StaticTimeGameModeManager : public GameModeManager {
@@ -9,6 +8,9 @@ class StaticTimeGameModeManager : public GameModeManager {
 		~StaticTimeGameModeManager();
 		void Setup();
 		bool Update(float dt);
+		void UpdateUI(float dt, GameState state);
+		void HideUI(bool toHide);
+
 
 		int GetBonus();
 		void LevelUp();

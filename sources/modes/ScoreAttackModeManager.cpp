@@ -107,3 +107,5 @@ void ScoreAttackGameModeManager::Reset() {
 }
 
 
+void ScoreAttackGameModeManager::UpdateUI(float dt, GameState state) {;}
+		void ScoreAttackGameModeManager::HideUI(bool toHide) {;}

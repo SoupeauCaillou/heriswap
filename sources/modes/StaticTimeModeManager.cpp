@@ -48,3 +48,6 @@ void StaticTimeGameModeManager::Reset() {
 		int StaticTimeGameModeManager::GetLevel() {return 0;}
 		void StaticTimeGameModeManager::LevelUp() { ;}
 		bool StaticTimeGameModeManager::LeveledUp() {return false;}
+
+void StaticTimeGameModeManager::UpdateUI(float dt, GameState state) { ;}
+		void StaticTimeGameModeManager::HideUI(bool toHide) {;}

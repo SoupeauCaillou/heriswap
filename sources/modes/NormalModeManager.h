@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Game.h"
 #include "GameModeManager.h"
 
 class NormalGameModeManager : public GameModeManager {
@@ -9,6 +8,9 @@ class NormalGameModeManager : public GameModeManager {
 		~NormalGameModeManager();
 		void Setup();
 		bool Update(float dt);
+
+		void UpdateUI(float dt, GameState state);
+		void HideUI(bool toHide);
 
 		int GetBonus();
 		void LevelUp();
@@ -21,6 +23,8 @@ class NormalGameModeManager : public GameModeManager {
 		int GetLevel();
 
 	private:
+		class HUDManagerData;
 		int level, obj[50], remain[8], bonus;
 		bool isReadyToStart, levelUp;
+		HUDManagerData* datas;
 };

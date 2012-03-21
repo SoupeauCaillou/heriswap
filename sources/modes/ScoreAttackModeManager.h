@@ -9,6 +9,9 @@ class ScoreAttackGameModeManager : public GameModeManager {
 		~ScoreAttackGameModeManager();
 		void Setup();
 		bool Update(float dt);
+		void UpdateUI(float dt, GameState state);
+		void HideUI(bool toHide);
+
 
 		int GetBonus();
 		void LevelUp();

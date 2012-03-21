@@ -1,6 +1,21 @@
 #pragma once
 
 #include <map>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+
+#include "systems/TextRenderingSystem.h"
+#include "systems/RenderingSystem.h"
+#include "systems/TransformationSystem.h"
+#include "systems/System.h"
+
+#include "states/GameStateManager.h"
+
+
+//FCRR : FPS Calculation Refresh Rate
+#define FCRR 1.
+
 
 enum GameMode {
 	Normal,
@@ -17,8 +32,10 @@ class GameModeManager {
 		virtual void Setup() = 0;
 		/* Update gamestate, and returns true if end of the mode */
 		virtual bool Update(float dt) = 0;
-		/* Always called */
-		virtual void BackgroundUpdate(float dt) {};
+
+		virtual void UpdateUI(float dt, GameState state) = 0;
+		virtual void HideUI(bool toHide) = 0;
+
 		/* Every modes need to calc score */
 		virtual int GetBonus() = 0;
 		virtual void LevelUp() = 0;

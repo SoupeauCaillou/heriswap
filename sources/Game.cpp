@@ -36,22 +36,18 @@
 #include "modes/StaticTimeModeManager.h"
 #include "modes/ScoreAttackModeManager.h"
 
-#include "HUDManager.h"
-
 #define GRIDSIZE 8
 
 class Game::Data {
 	public:
 		/* can not use any system here */
 		Data(ScoreStorage* storage) {
-			hud = new HUDManager;
-
-
 			mode = ScoreAttack;
 			mode2Manager[Normal] = new NormalGameModeManager();
 			mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager();
 			mode2Manager[StaticTime] = new StaticTimeGameModeManager();
 			logo = theEntityManager.CreateEntity();
+
 
 			state = BlackToLogoState;
 
@@ -89,8 +85,6 @@ class Game::Data {
 			RENDERING(logo)->hide = true;
 			TRANSFORM(logo)->z = 39;
 			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
-
-			hud->Setup();
 
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
 				it->second->Setup();
@@ -132,7 +126,6 @@ class Game::Data {
 		Entity logo, background, sky, tree;
 		Entity music[4];
 		// drag/drop
-		HUDManager* hud;
 		std::map<GameState, GameStateManager*> state2Manager;
 		std::map<GameMode, GameModeManager*> mode2Manager;
 
@@ -210,10 +203,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	if (in && size) {
 		datas->state = Pause;
 		loadState(in, size);
-	} else {
-		Entity eHUD = theEntityManager.CreateEntity(EntityManager::Persistent);
 	}
-
 	datas->Setup(windowW, windowH);
 
 	theGridSystem.GridSize = GRIDSIZE;
@@ -376,7 +366,7 @@ void Game::tick(float dt) {
 		datas->state2Manager[datas->state]->Enter();
 
 		if (inGameState(newState)) {
-			datas->hud->Hide(false, datas->mode);
+			datas->mode2Manager[datas->mode]->HideUI(false);
 			theGridSystem.HideAll(false);
 
 			RENDERING(datas->benchTotalTime)->hide = false;
@@ -391,7 +381,7 @@ void Game::tick(float dt) {
 				RENDERING(it->second)->hide = true;
 			}
 
-			datas->hud->Hide(true, datas->mode);
+			datas->mode2Manager[datas->mode]->HideUI(true);
 			if (newState != BlackToSpawn)
 				theGridSystem.HideAll(true);
 		}
@@ -414,14 +404,14 @@ void Game::tick(float dt) {
 	//si on est ingame, on affiche le HUD
 	if (newState == Spawn || newState == UserInput || newState == Delete || newState == Fall || newState == LevelChanged) {
 		ended = datas->mode2Manager[datas->mode]->Update(dt);
-		datas->hud->Hide(false, datas->mode);
-		datas->hud->Update(dt, datas->mode2Manager[datas->mode], datas->mode, datas->state);
+		datas->mode2Manager[datas->mode]->HideUI(false);
+		datas->mode2Manager[datas->mode]->UpdateUI(dt,0); //a changer par datas->state)
 		theGridSystem.HideAll(false);
 		RENDERING(datas->benchTotalTime)->hide = false;
 	} else {
 		RENDERING(datas->benchTotalTime)->hide = true;
 
-		datas->hud->Hide(true, datas->mode);
+		datas->mode2Manager[datas->mode]->HideUI(true);
 		if (newState != BlackToSpawn)
 			theGridSystem.HideAll(true);
 	}
