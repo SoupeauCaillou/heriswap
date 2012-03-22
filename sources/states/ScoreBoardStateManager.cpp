@@ -1,5 +1,4 @@
 #include "ScoreBoardStateManager.h"
-#include "../DepthLayer.h"
 
 ScoreBoardStateManager::ScoreBoardStateManager(ScoreStorage* str): storage(str) {
 
@@ -58,7 +57,7 @@ void ScoreBoardStateManager::Enter() {
 	}
 }
 
-GameState ScoreBoardStateManager::Update(float dt, GameModeManager* modeMng) {
+GameState ScoreBoardStateManager::Update(float dt) {
 
 	if (BUTTON(startbtn)->clicked)
 		return MainMenu;

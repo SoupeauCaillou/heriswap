@@ -1,5 +1,4 @@
 #include "PauseStateManager.h"
-#include "../DepthLayer.h"
 
 PauseStateManager::PauseStateManager() {
 
@@ -25,7 +24,7 @@ void PauseStateManager::Enter() {
 	TEXT_RENDERING(eRestart)->hide = false;
 }
 
-GameState PauseStateManager::Update(float dt, GameModeManager* modeMng) {
+GameState PauseStateManager::Update(float dt) {
 	if (BUTTON(eRestart)->clicked) {
 		return ScoreBoard;
 	}

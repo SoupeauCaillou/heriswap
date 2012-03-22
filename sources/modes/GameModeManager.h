@@ -33,7 +33,7 @@ class GameModeManager {
 		/* Update gamestate, and returns true if end of the mode */
 		virtual bool Update(float dt) = 0;
 
-		virtual void UpdateUI(float dt, int state) = 0;
+		virtual void UpdateUI(float dt) = 0;
 		virtual void HideUI(bool toHide) = 0;
 
 		/* Every modes need to calc score */
@@ -46,7 +46,7 @@ class GameModeManager {
 		virtual int GetRemain(int type) = 0;
 		virtual int GetObj() = 0;
 		virtual int GetLevel() = 0;
-
+		virtual std::string finalScore() = 0;
 		float time, limit;
 		int score;
 };

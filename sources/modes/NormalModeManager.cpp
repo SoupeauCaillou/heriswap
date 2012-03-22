@@ -76,7 +76,7 @@ class NormalGameModeManager::HUDManagerData {
 NormalGameModeManager::NormalGameModeManager() {
 	limit = 45.0;
 	time = 0.;
-
+	datas=0;
 
 	score=0;
 	levelUp = false;
@@ -88,8 +88,6 @@ NormalGameModeManager::NormalGameModeManager() {
 
 	for (int i=0; i<8;i++)
 		remain[i]=obj[0];
-	datas = new HUDManagerData();
-	HideUI(true);
 }
 
 NormalGameModeManager::~NormalGameModeManager() {
@@ -97,13 +95,19 @@ NormalGameModeManager::~NormalGameModeManager() {
 }
 
 void NormalGameModeManager::Setup() {
+	datas = new HUDManagerData();
+	HideUI(true);
 }
 
 
 
 bool NormalGameModeManager::Update(float dt) {
+	//on met à jour le temps si on est dans userinput
+	//if (game.state(UserInput)) time += dt;
+	
+	//a changer
+	time+=dt;
 	LevelUp();
-
 	return (limit - time <0);
 }
 
@@ -178,18 +182,8 @@ void NormalGameModeManager::Reset() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
 void NormalGameModeManager::HideUI(bool toHide) {
-	/*TEXT_RENDERING(datas->eScore)->hide = toHide;
+	TEXT_RENDERING(datas->eScore)->hide = toHide;
 	TEXT_RENDERING(datas->eTime)->hide = toHide;
 	TEXT_RENDERING(datas->eFPS)->hide = toHide;
 	TEXT_RENDERING(datas->eLevel)->hide = toHide;
@@ -197,10 +191,10 @@ void NormalGameModeManager::HideUI(bool toHide) {
 	for (int i=0;i<8;i++) {
 		TEXT_RENDERING(datas->eObj[i])->hide = toHide;
 		RENDERING(datas->fObj[i])->hide = toHide;
-	}*/
+	}
 }
 
-void NormalGameModeManager::UpdateUI(float dt, int state) {
+void NormalGameModeManager::UpdateUI(float dt) {
 	//Score
 	{
 	std::stringstream a;
@@ -218,9 +212,8 @@ void NormalGameModeManager::UpdateUI(float dt, int state) {
 	a << minute << ":" << std::setw(2) << std::setfill('0') << seconde << " s";
 	TEXT_RENDERING(datas->eTime)->text = a.str();
 	//if (state == UserInput)
-	if (true)
 	TEXT_RENDERING(datas->eTime)->color = Color(1.0f,0.f,0.f,1.f);
-	else  TEXT_RENDERING(datas->eTime)->color = Color(1.0f,1.f,1.f,1.f);
+	//else  TEXT_RENDERING(datas->eTime)->color = Color(1.0f,1.f,1.f,1.f);
 	}
 	//FPS
 	{
@@ -258,3 +251,10 @@ void NormalGameModeManager::UpdateUI(float dt, int state) {
 	rc->topRightUV = rc->bottomLeftUV + Vector2(1 / 8.0, 1);
 	}
 }
+
+std::string NormalGameModeManager::finalScore() {
+	std::stringstream a;
+	a << score;
+	return a.str();
+}
+

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base/EntityManager.h"
+#include "base/TouchInputManager.h"
 
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
@@ -8,6 +9,7 @@
 
 #include "Game.h"
 #include "GameStateManager.h"
+#include "DepthLayer.h"
 
 enum FadeType {
 	FadeIn,
@@ -19,7 +21,7 @@ class FadeGameStateManager : public GameStateManager {
 		FadeGameStateManager(Entity eFade, FadeType fade, GameState whoAmI, GameState whoIsNext, float timeout = 0.0);
 		void Setup();
 		void Enter();
-		GameState Update(float dt, GameModeManager* mode);
+		GameState Update(float dt);
 		void Exit();
 	private:
 		Entity eFading, eThing;

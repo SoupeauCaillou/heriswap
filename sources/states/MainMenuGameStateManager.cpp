@@ -1,8 +1,5 @@
 #include "MainMenuGameStateManager.h"
-#include "systems/ContainerSystem.h"
-#include "systems/SoundSystem.h"
-#include <sstream>
-#include "../DepthLayer.h"
+
 
 MainMenuGameStateManager::MainMenuGameStateManager() {
 
@@ -131,7 +128,7 @@ void MainMenuGameStateManager::Enter() {
 	}
 }
 
-GameState MainMenuGameStateManager::Update(float dt, GameModeManager* modeMng) {
+GameState MainMenuGameStateManager::Update(float dt) {
 	elapsedTime += dt/4.;
 	if (BUTTON(bStart[0])->clicked) {
 		choosenGameMode = Normal;

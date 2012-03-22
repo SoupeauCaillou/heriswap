@@ -9,7 +9,7 @@ class NormalGameModeManager : public GameModeManager {
 		void Setup();
 		bool Update(float dt);
 
-		void UpdateUI(float dt, int state);
+		void UpdateUI(float dt);
 		void HideUI(bool toHide);
 
 		int GetBonus();
@@ -21,6 +21,7 @@ class NormalGameModeManager : public GameModeManager {
 		int GetRemain(int type);
 		int GetObj();
 		int GetLevel();
+		std::string finalScore();
 
 	private:
 		class HUDManagerData;

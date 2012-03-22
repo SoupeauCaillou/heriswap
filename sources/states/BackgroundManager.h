@@ -11,6 +11,7 @@
 
 #include "Game.h"
 #include "GameStateManager.h"
+#include "DepthLayer.h"
 
 class BackgroundManager : public GameStateManager {
 	public:
@@ -18,7 +19,7 @@ class BackgroundManager : public GameStateManager {
 		~BackgroundManager();
 		void Setup();
 		void Enter();
-		GameState Update(float dt, GameModeManager* modeMng);
+		GameState Update(float dt);
 		void BackgroundUpdate(float dt);
 		void Exit();
 

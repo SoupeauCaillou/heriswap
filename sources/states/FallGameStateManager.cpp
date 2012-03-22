@@ -63,7 +63,7 @@ void FallGameStateManager::Enter() {
 	}
 }
 
-GameState FallGameStateManager::Update(float dt, GameModeManager* modeMng) {
+GameState FallGameStateManager::Update(float dt) {
 	ADSRComponent* transition = ADSR(eFall);
 	if (!falling.empty()) {
 		transition->active = true;

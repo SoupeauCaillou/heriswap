@@ -1,5 +1,4 @@
 #include "UserInputGameStateManager.h"
-#include "systems/SoundSystem.h"
 
 static void activateADSR(Entity e, float a, float s);
 static void diffToGridCoords(const Vector2& c, int* i, int* j);
@@ -35,9 +34,7 @@ void UserInputGameStateManager::Enter() {
 	ADSR(eSwapper)->active = false;
 }
 
-GameState UserInputGameStateManager::Update(float dt, GameModeManager* modeMng) {
-	//on met à jour le temps
-	if (modeMng) modeMng->time += dt;
+GameState UserInputGameStateManager::Update(float dt) {	
 	// drag/drop of cell
 	if (!theTouchInputManager.wasTouched() &&
 		theTouchInputManager.isTouched()) {

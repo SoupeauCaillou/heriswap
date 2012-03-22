@@ -8,6 +8,7 @@
 
 #include "GameStateManager.h"
 #include "Game.h"
+#include "DepthLayer.h"
 
 class PauseStateManager : public GameStateManager {
 	public:
@@ -16,7 +17,7 @@ class PauseStateManager : public GameStateManager {
 	~PauseStateManager();
 	void Setup();
 	void Enter();
-	GameState Update(float dt, GameModeManager* modeMng);
+	GameState Update(float dt);
 	void Exit();
 
 	private:

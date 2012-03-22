@@ -20,7 +20,7 @@ class LevelStateManager : public GameStateManager {
 	~LevelStateManager();
 	void Setup();
 	void Enter();
-	GameState Update(float dt, GameModeManager* modeMng);
+	GameState Update(float dt);
 	void Exit();
 
 	private:

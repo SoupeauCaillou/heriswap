@@ -2,6 +2,7 @@
 
 
 DeleteGameStateManager::DeleteGameStateManager() {
+	modeMgr=0;
 }
 
 DeleteGameStateManager::~DeleteGameStateManager() {
@@ -26,13 +27,13 @@ void DeleteGameStateManager::Enter() {
 	removing = theGridSystem.LookForCombination(true,true);
 }
 
-GameState DeleteGameStateManager::Update(float dt, GameModeManager* modeMng) {
+GameState DeleteGameStateManager::Update(float dt) {
 	ADSRComponent* transitionSuppr = ADSR(eRemove);
 	if (!removing.empty()) {
 		transitionSuppr->active = true;
 		for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
-			if (transitionSuppr->value == transitionSuppr->sustainValue && modeMng)
-				modeMng->ScoreCalc(it->points.size(), it->type);
+			if (transitionSuppr->value == transitionSuppr->sustainValue)
+				modeMgr->ScoreCalc(it->points.size(), it->type);
 			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
 				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
 				TRANSFORM(e)->rotation = transitionSuppr->value*7;

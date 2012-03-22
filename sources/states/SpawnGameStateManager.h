@@ -8,11 +8,11 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ADSRSystem.h"
 
-#include "modes/GameModeManager.h"
 #include "Game.h"
 #include "GameStateManager.h"
 #include "GridSystem.h"
 #include "CombinationMarkSystem.h"
+#include "DepthLayer.h"
 
 class SpawnGameStateManager : public GameStateManager {
 	public:
@@ -20,7 +20,7 @@ class SpawnGameStateManager : public GameStateManager {
 		~SpawnGameStateManager();
 		void Setup();
 		void Enter();
-		GameState Update(float dt, GameModeManager* modeMng);
+		GameState Update(float dt);
 		GameState NextState(bool marker);
 		void Exit();
 

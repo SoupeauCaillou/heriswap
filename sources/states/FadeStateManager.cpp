@@ -1,6 +1,4 @@
 #include "FadeStateManager.h"
-#include "base/TouchInputManager.h"
-#include "../DepthLayer.h"
 
 FadeGameStateManager::FadeGameStateManager(Entity eFade, FadeType fade, GameState whoAmI, GameState whoIsNext, float t):
 	eThing(eFade), fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(t) {
@@ -45,9 +43,8 @@ void FadeGameStateManager::Enter() {
 	updateColor(eFading, fading);
 }
 
-GameState FadeGameStateManager::Update(float dt, GameModeManager* mode) {
+GameState FadeGameStateManager::Update(float dt) {
 	updateColor(eFading, fading);
-
 	if (ADSR(eFading)->value == ADSR(eFading)->sustainValue) {
 		accum += dt;
 		if (accum >= timeout)

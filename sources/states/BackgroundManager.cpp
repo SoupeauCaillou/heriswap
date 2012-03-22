@@ -1,5 +1,4 @@
 #include "BackgroundManager.h"
-#include "../DepthLayer.h"
 
 struct BackgroundManager::Actor {
 	Entity e;
@@ -129,7 +128,7 @@ void BackgroundManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 }
 
-GameState BackgroundManager::Update(float dt, GameModeManager* modeMng) {
+GameState BackgroundManager::Update(float dt) {
 }
 
 void BackgroundManager::BackgroundUpdate(float dt) {

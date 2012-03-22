@@ -38,18 +38,16 @@
 
 #include "DepthLayer.h"
 
-#include "HUDManager.h"
-
 #define GRIDSIZE 8
 
 class Game::Data {
 	public:
 		/* can not use any system here */
 		Data(ScoreStorage* storage) {
-			mode = ScoreAttack;
+			mode = Normal;
 			mode2Manager[Normal] = new NormalGameModeManager();
-			mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager();
-			mode2Manager[StaticTime] = new StaticTimeGameModeManager();
+			//mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager();
+			//mode2Manager[StaticTime] = new StaticTimeGameModeManager();
 			logo = theEntityManager.CreateEntity();
 
 
@@ -57,8 +55,6 @@ class Game::Data {
 
 			state2Manager[BlackToLogoState] = new FadeGameStateManager(logo, FadeIn, BlackToLogoState, LogoToBlackState, 1.5);
 			state2Manager[LogoToBlackState] = new FadeGameStateManager(logo, FadeOut, LogoToBlackState, BlackToMainMenu);
-			//to do : add entity || modif 0 du GameStateToBlack
-			//hm, ça implique d'en faire un pour chaque state..
 			state2Manager[BlackToMainMenu] = new FadeGameStateManager(0, FadeIn, BlackToMainMenu, MainMenu);
 			state2Manager[MainMenuToBlackState] = new FadeGameStateManager(0, FadeOut, MainMenuToBlackState, BlackToSpawn);
 			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
@@ -68,7 +64,6 @@ class Game::Data {
 			state2Manager[UserInput] = new UserInputGameStateManager();
 			state2Manager[Delete] = new DeleteGameStateManager();
 			state2Manager[Fall] = new FallGameStateManager();
-
 			state2Manager[LevelChanged] = new LevelStateManager();
 			state2Manager[ScoreBoard] = new ScoreBoardStateManager(storage);
 			state2Manager[EndMenu] = new EndMenuStateManager(storage);
@@ -204,6 +199,9 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	theRenderingSystem.init();
 	theRenderingSystem.setWindowSize(windowW, windowH);
 
+
+	datas->mode2Manager[Normal]->Setup();
+	
 	if (in && size) {
 		datas->state = Pause;
 		loadState(in, size);
@@ -237,21 +235,16 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	RENDERING(datas->tree)->hide = false;
 
 
+	setMode();
+	
 	datas->state2Manager[datas->state]->Enter();
 }
-/*
-void Game::setMode() {
-	datas->state2Manager[EndMenu]->mode = datas->mode;
-	datas->state2Manager[Spawn]->mode = datas->mode;
-	datas->state2Manager[UserInput]->mode = datas->mode;
-	datas->state2Manager[Delete]->mode = datas->mode;
 
-	datas->state2Manager[EndMenu]->modeMng = datas->mode2Manager[datas->mode];
-	datas->state2Manager[Spawn]->modeMng = datas->mode2Manager[datas->mode];
-	datas->state2Manager[UserInput]->modeMng = datas->mode2Manager[datas->mode];
-	datas->state2Manager[Delete]->modeMng = datas->mode2Manager[datas->mode];
+void Game::setMode() {
+	datas->state2Manager[EndMenu]->modeMgr = datas->mode2Manager[datas->mode];
+	datas->state2Manager[Delete]->modeMgr = datas->mode2Manager[datas->mode];
 }
-*/
+
 void Game::toggleShowCombi(bool forcedesactivate) {
 	static bool activated;
 	//on switch le bool
@@ -353,7 +346,7 @@ void Game::tick(float dt) {
 		ended = false;
 	} else {
 	//sinon on passe a l'etat suivant
-		newState = datas->state2Manager[datas->state]->Update(dt, datas->mode2Manager[datas->mode]);
+		newState = datas->state2Manager[datas->state]->Update(dt);
 	}
 	//si on est passé de pause à quelque chose different de pause, on desactive la pause
 	if (newState != datas->state && datas->state == Pause) {
@@ -363,16 +356,20 @@ void Game::tick(float dt) {
 			datas->state2Manager[Spawn]->Enter();
 		} else if (newState == MainMenuToBlackState) {
 			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
-		//setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
+			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
 		}
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
 
+
+		if (datas->state = UserInput) 
+			ended = datas->mode2Manager[datas->mode]->Update(dt);
+
 		if (inGameState(newState)) {
 			datas->mode2Manager[datas->mode]->HideUI(false);
+			datas->mode2Manager[datas->mode]->UpdateUI(dt);
 			theGridSystem.HideAll(false);
-
 			RENDERING(datas->benchTotalTime)->hide = false;
 			for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
 				it != datas->benchTimeSystem.end(); ++it) {
@@ -384,13 +381,15 @@ void Game::tick(float dt) {
 				it != datas->benchTimeSystem.end(); ++it) {
 				RENDERING(it->second)->hide = true;
 			}
-
 			datas->mode2Manager[datas->mode]->HideUI(true);
 			if (newState != BlackToSpawn)
 				theGridSystem.HideAll(true);
 		}
 	}
-
+	
+	//si on change de niveau
+	if (datas->state==UserInput && datas->mode2Manager[datas->mode]->LeveledUp()) newState=LevelChanged;
+		
 	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin();
 		it!=datas->state2Manager.end();
 		++it) {
@@ -405,20 +404,6 @@ void Game::tick(float dt) {
 	theADSRSystem.Update(dt);
 	theButtonSystem.Update(dt);
 
-	//si on est ingame, on affiche le HUD
-	if (newState == Spawn || newState == UserInput || newState == Delete || newState == Fall || newState == LevelChanged) {
-		ended = datas->mode2Manager[datas->mode]->Update(dt);
-		datas->mode2Manager[datas->mode]->HideUI(false);
-		datas->mode2Manager[datas->mode]->UpdateUI(dt,0); //a changer par datas->state)
-		theGridSystem.HideAll(false);
-		RENDERING(datas->benchTotalTime)->hide = false;
-	} else {
-		RENDERING(datas->benchTotalTime)->hide = true;
-
-		datas->mode2Manager[datas->mode]->HideUI(true);
-		if (newState != BlackToSpawn)
-			theGridSystem.HideAll(true);
-	}
 
 	if (newState == EndMenu) {
 		theCombinationMarkSystem.DeleteMarks(-1);

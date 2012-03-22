@@ -14,9 +14,8 @@
 #include "systems/RenderingSystem.h"
 
 #include "ScoreBoardStateManager.h"
-#include "GameStateManager.h"
+#include "states/GameStateManager.h"
 #include "modes/GameModeManager.h"
-#include "Game.h"
 
 
 class ScoreStorage;
@@ -28,7 +27,7 @@ class EndMenuStateManager : public GameStateManager {
 		void Setup();
 		void Enter();
 
-		GameState Update(float dt, GameModeManager* modeMng);
+		GameState Update(float dt);
 		void Exit();
 	private:
 		ScoreStorage* storage;

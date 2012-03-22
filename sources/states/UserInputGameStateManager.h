@@ -12,12 +12,12 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ADSRSystem.h"
 #include "systems/ButtonSystem.h"
+#include "systems/SoundSystem.h"
 
 
 #include "GameStateManager.h"
 #include "GridSystem.h"
 #include "Game.h"
-#include "modes/GameModeManager.h"
 #include "CombinationMarkSystem.h"
 
 
@@ -29,7 +29,7 @@ class UserInputGameStateManager : public GameStateManager {
 		~UserInputGameStateManager();
 		void Setup();
 		void Enter();
-		GameState Update(float dt, GameModeManager* mode);
+		GameState Update(float dt);
 		void BackgroundUpdate(float dt);
 		void Exit();
 

@@ -1,5 +1,4 @@
 #include "SpawnGameStateManager.h"
-#include "../DepthLayer.h"
 
 static void fillTheBlank(std::vector<Feuille>& spawning);
 static Entity createCell(Feuille& f);
@@ -77,34 +76,30 @@ void SpawnGameStateManager::Enter() {
 	fillTheBlank(spawning);
 }
 
-GameState SpawnGameStateManager::Update(float dt, GameModeManager* modeMng) {
-	//si on change de niveau
-	if (modeMng && modeMng->LeveledUp()) return LevelChanged;
-	else {
-		ADSRComponent* transitionCree = ADSR(eSpawn);
-		//si on doit recree des feuilles
-		if (!spawning.empty()) {
-			transitionCree->active = true;
-			for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
-				if (it->fe == 0) {
-					it->fe = createCell(*it);
-					std::cout << "nouvelle feuille (type="<<it->type<<") en ("<<it->X<<","<<it->Y<<")\n";
-				} else if (transitionCree->value == 1){
-					TRANSFORM(it->fe)->rotation = 0;
-				} else {
-					TRANSFORM(it->fe)->rotation = -transitionCree->value*7;
-				}
+GameState SpawnGameStateManager::Update(float dt) {
+	ADSRComponent* transitionCree = ADSR(eSpawn);
+	//si on doit recree des feuilles
+	if (!spawning.empty()) {
+		transitionCree->active = true;
+		for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
+			if (it->fe == 0) {
+				it->fe = createCell(*it);
+				std::cout << "nouvelle feuille (type="<<it->type<<") en ("<<it->X<<","<<it->Y<<")\n";
+			} else if (transitionCree->value == 1){
+				TRANSFORM(it->fe)->rotation = 0;
+			} else {
+				TRANSFORM(it->fe)->rotation = -transitionCree->value*7;
 			}
-			if (transitionCree->value == 1) {
-				spawning.clear();
-				return NextState(true);
-			}
-		//sinon on verifie qu'il reste des combi
-		} else {
-			return NextState(false);
 		}
-		return Spawn;
+		if (transitionCree->value == 1) {
+			spawning.clear();
+			return NextState(true);
+		}
+	//sinon on verifie qu'il reste des combi
+	} else {
+		return NextState(false);
 	}
+	return Spawn;
 }
 
 GameState SpawnGameStateManager::NextState(bool marker) {

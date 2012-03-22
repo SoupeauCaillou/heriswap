@@ -6,11 +6,11 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ADSRSystem.h"
 
-#include "GameStateManager.h"
+#include "states/GameStateManager.h"
 #include "GridSystem.h"
 #include "CombinationMarkSystem.h"
-#include "modes/GameModeManager.h"
 #include "Game.h"
+#include "modes/GameModeManager.h"
 
 class DeleteGameStateManager : public GameStateManager {
 	public:
@@ -19,7 +19,7 @@ class DeleteGameStateManager : public GameStateManager {
 		~DeleteGameStateManager();
 		void Setup();
 		void Enter();
-		GameState Update(float dt, GameModeManager* modeMng);
+		GameState Update(float dt);
 		void Exit();
 
 	private:

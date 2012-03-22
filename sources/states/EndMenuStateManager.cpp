@@ -2,6 +2,7 @@
 
 
 EndMenuStateManager::EndMenuStateManager(ScoreStorage* str) : storage(str) {
+	modeMgr=0;
 }
 
 EndMenuStateManager::~EndMenuStateManager(){
@@ -60,12 +61,12 @@ void EndMenuStateManager::Enter() {
 
 }
 
-GameState EndMenuStateManager::Update(float dt, GameModeManager* modeMng) {
+GameState EndMenuStateManager::Update(float dt) {
 	if (BUTTON(startbtn)->clicked) {
 		BUTTON(startbtn)->clicked = false;
 		std::vector<ScoreStorage::ScoreEntry> entries = storage->loadFromStorage();
 		ScoreStorage::ScoreEntry entry;
-		entry.points = modeMng->score;
+		entry.points = modeMgr->score;
 		entry.name = "plop";
 		entries.push_back(entry);
 		std::sort(entries.begin(), entries.end(), ScoreStorage::ScoreEntryComp);
@@ -77,10 +78,8 @@ GameState EndMenuStateManager::Update(float dt, GameModeManager* modeMng) {
 		{
 		std::stringstream a;
 		a.precision(0);
-		a << std::fixed << modeMng->score;
-		/* a refaire
-		if (mode == Normal || mode == StaticTime) a << std::fixed << modeMng->score;
-		else a << (int)modeMng->time<<"s";*/
+		a << std::fixed << modeMgr->score;
+		a << std::fixed << modeMgr->finalScore();
 		TEXT_RENDERING(eScore)->text = a.str();
 		TEXT_RENDERING(eScore)->hide = false;
 		}
