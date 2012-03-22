@@ -19,22 +19,22 @@ class NormalGameModeManager::HUDManagerData {
 			TRANSFORM(eTime)->position = Vector2(0, 7);
 			TRANSFORM(eFPS)->position = Vector2(-2.5, 8);
 
-			TRANSFORM(eLevel)->z = 6;
-			TRANSFORM(eScore)->z = 6;
-			TRANSFORM(eTime)->z = 6;
-			TRANSFORM(eFPS)->z = 6;
+			TRANSFORM(eLevel)->z = DL_Hud;
+			TRANSFORM(eScore)->z = DL_Hud;
+			TRANSFORM(eTime)->z = DL_Hud;
+			TRANSFORM(eFPS)->z = DL_Hud;
 
 			for (int i=0;i<8;i++) {
 				eObj[i] = theTextRenderingSystem.CreateLocalEntity(5);
 				TRANSFORM(eObj[i])->position = Vector2(i-3.5,-6);
-				TRANSFORM(eObj[i])->z = 6;
+				TRANSFORM(eObj[i])->z = DL_Hud;
 				TEXT_RENDERING(eObj[i])->charSize /= 2;
 				TEXT_RENDERING(eObj[i])->color = Color(0., 0., 0.);
 
 				fObj[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(fObj[i], Transformation);
 				ADD_COMPONENT(fObj[i], Rendering);
-				TRANSFORM(fObj[i])->z = 5;
+				TRANSFORM(fObj[i])->z = DL_Hud-0.001;
 				TRANSFORM(fObj[i])->size = Vector2(1,1);
 				TRANSFORM(fObj[i])->position = TRANSFORM(eObj[i])->position+Vector2(-0.3,0);
 				RENDERING(fObj[i])->bottomLeftUV = Vector2(i / 8.0, 0);

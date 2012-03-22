@@ -102,7 +102,6 @@ BackgroundManager::AnimatedActor* BackgroundManager::initAnimal(AnimatedActor* c
 
 		TRANSFORM(c->actor.e)->position.X = MathUtil::RandomFloat() * (xHerissonStartRange.Y-xHerissonStartRange.X) + xHerissonStartRange.X;
 		TRANSFORM(c->actor.e)->position.Y = t * (yHerissonRange.Y-yHerissonRange.X) + yHerissonRange.X;
-		TRANSFORM(c->actor.e)->z = .5;
 		TRANSFORM(c->actor.e)->size = Vector2(2, 1) * MathUtil::Lerp(herissonScaleRange.X, herissonScaleRange.Y, t);
 	} else {
 		int i = MathUtil::RandomInt(8);
@@ -113,10 +112,10 @@ BackgroundManager::AnimatedActor* BackgroundManager::initAnimal(AnimatedActor* c
 		c->anim.push_back(tex.str());
 		TRANSFORM(c->actor.e)->position.X = MathUtil::RandomFloat() * (xPapillonStartRange.Y-xPapillonStartRange.X) + xPapillonStartRange.X;
 		TRANSFORM(c->actor.e)->position.Y = t * (yPapillonRange.Y-yPapillonRange.X) + yPapillonRange.X;
-		TRANSFORM(c->actor.e)->z = .5;
 		TRANSFORM(c->actor.e)->size = Vector2(2, 1) * MathUtil::Lerp(papillonScaleRange.X, papillonScaleRange.Y, t);
 		c->actor.speed = MathUtil::Lerp(0.6f, 1.8f, t);
 	}
+	TRANSFORM(c->actor.e)->z = DL_Animal;
 	RENDERING(c->actor.e)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 	RENDERING(c->actor.e)->hide = false;
 	c->actor.visible = false;

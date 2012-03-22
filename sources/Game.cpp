@@ -229,7 +229,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	datas->tree = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->tree, Transformation);
 	ADD_COMPONENT(datas->tree, Rendering);
-	TRANSFORM(datas->tree)->z = 1;
+	TRANSFORM(datas->tree)->z = DL_Tree;
 	TRANSFORM(datas->tree)->size = Vector2(10, 10.0 * windowH / windowW);
 	RENDERING(datas->tree)->texture = theRenderingSystem.loadTextureFile("tree.png");
 	RENDERING(datas->tree)->hide = false;
@@ -363,7 +363,7 @@ void Game::tick(float dt) {
 		datas->state2Manager[datas->state]->Enter();
 
 
-		if (datas->state = UserInput) 
+		if (datas->state == UserInput) 
 			ended = datas->mode2Manager[datas->mode]->Update(dt);
 
 		if (inGameState(newState)) {

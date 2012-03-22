@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameModeManager.h"
+#include "DepthLayer.h"
 
 class NormalGameModeManager : public GameModeManager {
 	public:
