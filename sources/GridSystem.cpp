@@ -246,7 +246,6 @@ std::vector<CellFall> GridSystem::TileFall() {
 }
 
 void GridSystem::DoUpdate(float dt) {
-
 }
 
 
