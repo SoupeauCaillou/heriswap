@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
 	if (!glfwInit())
 		return 1;
 
-	if( !glfwOpenWindow( 420,700, 8,8,8,8,8,1, GLFW_WINDOW ) )
+	if( !glfwOpenWindow( 420,700, 8,8,8,8,8,8, GLFW_WINDOW ) )
 		return 1;
 
 	// pose de l'origine du temps ici t = 0
@@ -143,7 +143,8 @@ int main(int argc, char** argv) {
 		dtAccumuled += dt;
 		time = TimeUtil::getTime();
 		while (dtAccumuled >= DT){
-			game.tick(DT);
+			dtAccumuled -= DT;
+			game.tick(DT, dtAccumuled < DT);
 			glfwSwapBuffers();
 			running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
 			//pause ?
@@ -166,7 +167,6 @@ int main(int argc, char** argv) {
 				break;
 			}
 			timer -= DT;
-			dtAccumuled -= DT;
 			frames++;
 			if (time > nextfps) {
 				std::cout << "FPS: " << (frames / 5) << std::endl;

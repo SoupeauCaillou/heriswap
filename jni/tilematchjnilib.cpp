@@ -185,7 +185,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
 	hld->time = TimeUtil::getTime();
 
 	while (hld->dtAccumuled >= DT){
-		hld->game->tick(hld->dtAccumuled);
+		hld->game->tick(hld->dtAccumuled, true);
 		hld->dtAccumuled = 0;
 		// hld->dtAccumuled -= DT;
 	}

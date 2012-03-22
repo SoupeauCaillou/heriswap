@@ -1,4 +1,5 @@
 #include "ScoreBoardStateManager.h"
+#include "../DepthLayer.h"
 
 ScoreBoardStateManager::ScoreBoardStateManager(ScoreStorage* str): storage(str) {
 
