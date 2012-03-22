@@ -47,8 +47,8 @@ BackgroundManager::~BackgroundManager() {
 
 BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c) {
 	float t = MathUtil::RandomFloat();
-	TRANSFORM(c->e)->position.X = xStartRange.Length() * MathUtil::RandomFloat() + xStartRange.X;
-	TRANSFORM(c->e)->position.Y = t * yRange.Length() + yRange.X;
+	TRANSFORM(c->e)->position.X = xCloudStartRange.Length() * MathUtil::RandomFloat() + xCloudStartRange.X;
+	TRANSFORM(c->e)->position.Y =  t * (yCloudRange.Y-yCloudRange.X) + yCloudRange.X;
 	TRANSFORM(c->e)->z = DL_Cloud;
 	std::stringstream tex;
 	tex << "cloud" << 1+MathUtil::RandomInt(3) << ".png";

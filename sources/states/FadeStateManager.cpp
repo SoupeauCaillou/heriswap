@@ -1,9 +1,6 @@
 #include "FadeStateManager.h"
-<<<<<<< HEAD
-=======
 #include "base/TouchInputManager.h"
 #include "../DepthLayer.h"
->>>>>>> lop
 
 FadeGameStateManager::FadeGameStateManager(Entity eFade, FadeType fade, GameState whoAmI, GameState whoIsNext, float t):
 	eThing(eFade), fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(t) {
