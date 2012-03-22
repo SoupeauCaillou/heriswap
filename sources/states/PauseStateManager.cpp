@@ -1,4 +1,5 @@
 #include "PauseStateManager.h"
+#include "../DepthLayer.h"
 
 PauseStateManager::PauseStateManager() {
 

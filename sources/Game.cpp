@@ -318,7 +318,7 @@ void Game::togglePause(bool activate) {
 	}
 }
 
-void Game::tick(float dt) {
+void Game::tick(float dt, bool doRendering) {
 	{
 		#define COUNT 250
 		static int frameCount = 0;
@@ -402,6 +402,7 @@ void Game::tick(float dt) {
 		toggleShowCombi(true);
 
 	theADSRSystem.Update(dt);
+	theGridSystem.Update(dt);
 	theButtonSystem.Update(dt);
 
 
@@ -419,15 +420,15 @@ void Game::tick(float dt) {
 	theTransformationSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);
 	theContainerSystem.Update(dt);
-	theRenderingSystem.Update(dt);
 	theSoundSystem.Update(dt);
-
+	if (doRendering)
+		theRenderingSystem.Update(dt);
+	
 	//bench settings
 
 	updateDuration = TimeUtil::getTime()-updateDuration;
 
 	bench(true, updateDuration, dt);
-
 }
 
 void Game::bench(bool active, float updateDuration, float dt) {

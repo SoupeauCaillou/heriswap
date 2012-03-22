@@ -37,7 +37,7 @@ public class TilematchActivity extends Activity {
     			LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.main);
-        
+       
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.parent_frame);
         
         Renderer r = new TilematchRenderer(getAssets());
