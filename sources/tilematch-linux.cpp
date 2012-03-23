@@ -144,8 +144,7 @@ int main(int argc, char** argv) {
 		time = TimeUtil::getTime();
 		while (dtAccumuled >= DT){
 			dtAccumuled -= DT;
-			game.tick(DT, dtAccumuled < DT);
-			glfwSwapBuffers();
+			game.tick(DT);
 			running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
 			//pause ?
 			if (glfwGetKey( GLFW_KEY_SPACE ))
@@ -174,6 +173,9 @@ int main(int argc, char** argv) {
 				frames = 0;
 			}
 		}
+		
+		theRenderingSystem.render();
+		glfwSwapBuffers();
 	}
 
 	Vector2 x(Vector2::Zero);

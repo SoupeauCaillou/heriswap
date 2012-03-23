@@ -318,7 +318,7 @@ void Game::togglePause(bool activate) {
 	}
 }
 
-void Game::tick(float dt, bool doRendering) {
+void Game::tick(float dt) {
 	{
 		#define COUNT 250
 		static int frameCount = 0;
@@ -363,7 +363,7 @@ void Game::tick(float dt, bool doRendering) {
 		datas->state2Manager[datas->state]->Enter();
 
 
-		if (datas->state = UserInput) 
+		if (datas->state == UserInput) 
 			ended = datas->mode2Manager[datas->mode]->Update(dt);
 
 		if (inGameState(newState)) {
@@ -421,8 +421,7 @@ void Game::tick(float dt, bool doRendering) {
 	theTextRenderingSystem.Update(dt);
 	theContainerSystem.Update(dt);
 	theSoundSystem.Update(dt);
-	if (doRendering)
-		theRenderingSystem.Update(dt);
+	theRenderingSystem.Update(dt);
 	
 	//bench settings
 

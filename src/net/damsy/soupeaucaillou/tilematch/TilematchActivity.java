@@ -43,7 +43,7 @@ public class TilematchActivity extends Activity {
         Renderer r = new TilematchRenderer(getAssets());
         assert(r != null);
         try {
-        	if (true) throw new RuntimeException();
+        	if (false) throw new RuntimeException();
         	mGLView = new GL2JNIView(this, r, null);
         	TilematchActivity.openGLESVersion = 2;
         } catch (Exception exc) {
