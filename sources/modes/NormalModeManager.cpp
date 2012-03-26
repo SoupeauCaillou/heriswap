@@ -149,7 +149,6 @@ void NormalGameModeManager::LevelUp() {
 bool NormalGameModeManager::LeveledUp() {
 	bool bid = levelUp;
 	levelUp = false;
-	if (bid) LOGI("level uppppppppppppppppp");
 	return bid;
 }
 

@@ -383,13 +383,17 @@ void Game::tick(float dt, bool doRendering) {
 	//updating time
 	if (datas->state == UserInput) {
 		ended = datas->mode2Manager[datas->mode]->Update(dt);
+		//si on change de niveau
+		if (datas->mode2Manager[datas->mode]->LeveledUp()) {
+			datas->state2Manager[datas->state]->Exit();
+			datas->state = LevelChanged;
+			datas->state2Manager[datas->state]->Enter();
+		}
 	}//updating HUD
 	if (inGameState(newState)) {
 		datas->mode2Manager[datas->mode]->UpdateUI(dt);
 	}
-	//si on change de niveau
-	if (datas->state==UserInput && datas->mode2Manager[datas->mode]->LeveledUp()) newState=LevelChanged;
-		
+
 	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin();
 		it!=datas->state2Manager.end();
 		++it) {

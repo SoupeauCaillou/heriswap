@@ -33,7 +33,6 @@ void LevelStateManager::Enter() {
 }
 
 GameState LevelStateManager::Update(float dt) {
-	LOGI("%f", ADSR(eGrid)->value);
 	for ( std::vector<FeuilleOrientee>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
 		TRANSFORM(it->e)->rotation = 0.3*it->sens*ADSR(eGrid)->value;
 		TRANSFORM(it->e)->position = it->pos - Vector2(0,ADSR(eGrid)->value);
