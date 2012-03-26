@@ -332,7 +332,6 @@ void Game::tick(float dt, bool doRendering) {
 			frameCount = 0;
 		}
 	}
-
 	float updateDuration = TimeUtil::getTime();
 	static bool ended = false;
 
@@ -362,13 +361,8 @@ void Game::tick(float dt, bool doRendering) {
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
 
-
-		if (datas->state == UserInput) 
-			ended = datas->mode2Manager[datas->mode]->Update(dt);
-
 		if (inGameState(newState)) {
 			datas->mode2Manager[datas->mode]->HideUI(false);
-			datas->mode2Manager[datas->mode]->UpdateUI(dt);
 			theGridSystem.HideAll(false);
 			RENDERING(datas->benchTotalTime)->hide = false;
 			for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
@@ -386,7 +380,13 @@ void Game::tick(float dt, bool doRendering) {
 				theGridSystem.HideAll(true);
 		}
 	}
-	
+	//updating time
+	if (datas->state == UserInput) {
+		ended = datas->mode2Manager[datas->mode]->Update(dt);
+	}//updating HUD
+	if (inGameState(newState)) {
+		datas->mode2Manager[datas->mode]->UpdateUI(dt);
+	}
 	//si on change de niveau
 	if (datas->state==UserInput && datas->mode2Manager[datas->mode]->LeveledUp()) newState=LevelChanged;
 		
@@ -428,7 +428,7 @@ void Game::tick(float dt, bool doRendering) {
 
 	updateDuration = TimeUtil::getTime()-updateDuration;
 
-	bench(true, updateDuration, dt);
+	//bench(true, updateDuration, dt);
 }
 
 void Game::bench(bool active, float updateDuration, float dt) {

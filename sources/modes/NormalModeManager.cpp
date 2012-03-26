@@ -6,8 +6,7 @@ class NormalGameModeManager::HUDManagerData {
 		HUDManagerData() {
 			frames = 0;
 			nextfps = FCRR;
-			fps = 60;
-
+			fps = 60;		
 
 			eScore = theTextRenderingSystem.CreateLocalEntity(10);
 			eTime = theTextRenderingSystem.CreateLocalEntity(10);
@@ -150,6 +149,7 @@ void NormalGameModeManager::LevelUp() {
 bool NormalGameModeManager::LeveledUp() {
 	bool bid = levelUp;
 	levelUp = false;
+	if (bid) LOGI("level uppppppppppppppppp");
 	return bid;
 }
 
@@ -205,15 +205,16 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	//Temps
 	{
 	std::stringstream a;
-	int time = limit - time;
-	int minute = time/60;
-	int seconde= time%60;
+	int timeA = limit - time;
+	int minute = timeA/60;
+	int seconde= timeA%60;
 
 	a << minute << ":" << std::setw(2) << std::setfill('0') << seconde << " s";
 	TEXT_RENDERING(datas->eTime)->text = a.str();
 	//if (state == UserInput)
-	TEXT_RENDERING(datas->eTime)->color = Color(1.0f,0.f,0.f,1.f);
-	//else  TEXT_RENDERING(datas->eTime)->color = Color(1.0f,1.f,1.f,1.f);
+	//TEXT_RENDERING(datas->eTime)->color = Color(1.0f,0.f,0.f,1.f);
+	//else
+	TEXT_RENDERING(datas->eTime)->color = Color(1.0f,1.f,1.f,1.f);
 	}
 	//FPS
 	{
