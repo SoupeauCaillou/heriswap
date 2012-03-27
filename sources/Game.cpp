@@ -46,8 +46,8 @@ class Game::Data {
 		Data(ScoreStorage* storage) {
 			mode = Normal;
 			mode2Manager[Normal] = new NormalGameModeManager();
-			//mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager();
-			//mode2Manager[StaticTime] = new StaticTimeGameModeManager();
+			mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager();
+			mode2Manager[StaticTime] = new StaticTimeGameModeManager();
 			logo = theEntityManager.CreateEntity();
 
 

@@ -152,22 +152,6 @@ bool NormalGameModeManager::LeveledUp() {
 	return bid;
 }
 
-int NormalGameModeManager::GetBonus() {
-	return bonus;
-}
-
-int NormalGameModeManager::GetRemain(int type) {
-	return remain[type];
-}
-
-int NormalGameModeManager::GetObj() {
-	return obj[level-1];
-}
-
-int NormalGameModeManager::GetLevel() {
-	return level;
-}
-
 void NormalGameModeManager::Reset() {
 	time = 0;
 	score = 0;
@@ -233,19 +217,19 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	//Level
 	{
 	std::stringstream a;
-	a << "Lvl : "<<GetLevel();
+	a << "Lvl : "<<level;
 	TEXT_RENDERING(datas->eLevel)->text = a.str();
 	}
 	//Objectifs
 	for (int i=0;i<8;i++)
 	{
-	std::stringstream a;
-	a << GetRemain(i);
-	TEXT_RENDERING(datas->eObj[i])->text = a.str();
+		std::stringstream a;
+		a << remain[i];
+		TEXT_RENDERING(datas->eObj[i])->text = a.str();
 	}
 	//Feuille Bonus
 	{
-	int type = GetBonus();
+	int type = bonus;
 	RenderingComponent* rc = RENDERING(datas->fBonus);
 	rc->bottomLeftUV = Vector2(type / 8.0, 0);
 	rc->topRightUV = rc->bottomLeftUV + Vector2(1 / 8.0, 1);
