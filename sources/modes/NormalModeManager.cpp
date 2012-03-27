@@ -6,7 +6,7 @@ class NormalGameModeManager::HUDManagerData {
 		HUDManagerData() {
 			frames = 0;
 			nextfps = FCRR;
-			fps = 60;		
+			fps = 60;
 
 			eScore = theTextRenderingSystem.CreateLocalEntity(10);
 			eTime = theTextRenderingSystem.CreateLocalEntity(10);
@@ -103,7 +103,7 @@ void NormalGameModeManager::Setup() {
 bool NormalGameModeManager::Update(float dt) {
 	//on met à jour le temps si on est dans userinput
 	//if (game.state(UserInput)) time += dt;
-	
+
 	//a changer
 	time+=dt;
 	LevelUp();
@@ -166,14 +166,16 @@ void NormalGameModeManager::Reset() {
 
 
 void NormalGameModeManager::HideUI(bool toHide) {
-	TEXT_RENDERING(datas->eScore)->hide = toHide;
-	TEXT_RENDERING(datas->eTime)->hide = toHide;
-	TEXT_RENDERING(datas->eFPS)->hide = toHide;
-	TEXT_RENDERING(datas->eLevel)->hide = toHide;
-	RENDERING(datas->fBonus)->hide = toHide;
-	for (int i=0;i<8;i++) {
-		TEXT_RENDERING(datas->eObj[i])->hide = toHide;
-		RENDERING(datas->fObj[i])->hide = toHide;
+	if (datas) {
+		TEXT_RENDERING(datas->eScore)->hide = toHide;
+		TEXT_RENDERING(datas->eTime)->hide = toHide;
+		TEXT_RENDERING(datas->eFPS)->hide = toHide;
+		TEXT_RENDERING(datas->eLevel)->hide = toHide;
+		RENDERING(datas->fBonus)->hide = toHide;
+		for (int i=0;i<8;i++) {
+			TEXT_RENDERING(datas->eObj[i])->hide = toHide;
+			RENDERING(datas->fObj[i])->hide = toHide;
+		}
 	}
 }
 

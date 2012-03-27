@@ -3,10 +3,10 @@
 #include "GameModeManager.h"
 #include "DepthLayer.h"
 
-class StaticTimeModeManager : public GameModeManager {
+class StaticTimeGameModeManager : public GameModeManager {
 	public:
-		StaticTimeModeManager();
-		~StaticTimeModeManager();
+		StaticTimeGameModeManager();
+		~StaticTimeGameModeManager();
 		void Setup();
 		bool Update(float dt);
 
@@ -23,7 +23,7 @@ class StaticTimeModeManager : public GameModeManager {
 
 	private:
 		class HUDManagerData;
-		
+
 		int bonus;
 		bool isReadyToStart;
 		HUDManagerData* datas;

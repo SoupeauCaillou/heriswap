@@ -6,7 +6,7 @@ class StaticTimeGameModeManager::HUDManagerData {
 		HUDManagerData() {
 			frames = 0;
 			nextfps = FCRR;
-			fps = 60;		
+			fps = 60;
 
 			eScore = theTextRenderingSystem.CreateLocalEntity(10);
 			eTime = theTextRenderingSystem.CreateLocalEntity(10);
@@ -71,7 +71,7 @@ void StaticTimeGameModeManager::Setup() {
 bool StaticTimeGameModeManager::Update(float dt) {
 	//on met à jour le temps si on est dans userinput
 	//if (game.state(UserInput)) time += dt;
-	
+
 	//a changer
 	time+=dt;
 	return (limit - time <0);
@@ -79,17 +79,9 @@ bool StaticTimeGameModeManager::Update(float dt) {
 
 void StaticTimeGameModeManager::ScoreCalc(int nb, int type) {
 	if (type == bonus)
-		score += 10*level*2*nb*nb*nb/6;
+		score += 10*2*nb*nb*nb/6;
 	else
-		score += 10*level*nb*nb*nb/6;
-
-	remain[type] -= nb;
-	time -= nb/4;
-	if (time < 0)
-		time = 0;
-
-	if (remain[type]<0)
-		remain[type]=0;
+		score += 10*nb*nb*nb/6;
 }
 
 void StaticTimeGameModeManager::LevelUp() {
@@ -109,10 +101,12 @@ void StaticTimeGameModeManager::Reset() {
 
 
 void StaticTimeGameModeManager::HideUI(bool toHide) {
-	TEXT_RENDERING(datas->eScore)->hide = toHide;
-	TEXT_RENDERING(datas->eTime)->hide = toHide;
-	TEXT_RENDERING(datas->eFPS)->hide = toHide;
-	RENDERING(datas->fBonus)->hide = toHide;
+	if (datas) {
+		TEXT_RENDERING(datas->eScore)->hide = toHide;
+		TEXT_RENDERING(datas->eTime)->hide = toHide;
+		TEXT_RENDERING(datas->eFPS)->hide = toHide;
+		RENDERING(datas->fBonus)->hide = toHide;
+	}
 }
 
 void StaticTimeGameModeManager::UpdateUI(float dt) {

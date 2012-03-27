@@ -3,10 +3,10 @@
 #include "GameModeManager.h"
 #include "DepthLayer.h"
 
-class ScoreAttackModeManager : public GameModeManager {
+class ScoreAttackGameModeManager : public GameModeManager {
 	public:
-		ScoreAttackModeManager();
-		~ScoreAttackModeManager();
+		ScoreAttackGameModeManager();
+		~ScoreAttackGameModeManager();
 		void Setup();
 		bool Update(float dt);
 
@@ -23,7 +23,7 @@ class ScoreAttackModeManager : public GameModeManager {
 
 	private:
 		class HUDManagerData;
-		
+
 		int level, obj[50], remain[8], bonus;
 		bool isReadyToStart, levelUp;
 		HUDManagerData* datas;

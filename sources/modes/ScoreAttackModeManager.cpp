@@ -6,7 +6,7 @@ class ScoreAttackGameModeManager::HUDManagerData {
 		HUDManagerData() {
 			frames = 0;
 			nextfps = FCRR;
-			fps = 60;		
+			fps = 60;
 
 			eScore = theTextRenderingSystem.CreateLocalEntity(10);
 			eTime = theTextRenderingSystem.CreateLocalEntity(10);
@@ -73,7 +73,7 @@ class ScoreAttackGameModeManager::HUDManagerData {
 };
 
 ScoreAttackGameModeManager::ScoreAttackGameModeManager() {
-	limit = 45.0;
+	limit = 3000;
 	time = 0.;
 	datas=0;
 
@@ -103,11 +103,11 @@ void ScoreAttackGameModeManager::Setup() {
 bool ScoreAttackGameModeManager::Update(float dt) {
 	//on met à jour le temps si on est dans userinput
 	//if (game.state(UserInput)) time += dt;
-	
+
 	//a changer
 	time+=dt;
 	LevelUp();
-	return (limit - time <0);
+	return (limit - score <0);
 }
 
 void ScoreAttackGameModeManager::ScoreCalc(int nb, int type) {
@@ -166,14 +166,16 @@ void ScoreAttackGameModeManager::Reset() {
 
 
 void ScoreAttackGameModeManager::HideUI(bool toHide) {
-	TEXT_RENDERING(datas->eScore)->hide = toHide;
-	TEXT_RENDERING(datas->eTime)->hide = toHide;
-	TEXT_RENDERING(datas->eFPS)->hide = toHide;
-	TEXT_RENDERING(datas->eLevel)->hide = toHide;
-	RENDERING(datas->fBonus)->hide = toHide;
-	for (int i=0;i<8;i++) {
-		TEXT_RENDERING(datas->eObj[i])->hide = toHide;
-		RENDERING(datas->fObj[i])->hide = toHide;
+	if (datas) {
+		TEXT_RENDERING(datas->eScore)->hide = toHide;
+		TEXT_RENDERING(datas->eTime)->hide = toHide;
+		TEXT_RENDERING(datas->eFPS)->hide = toHide;
+		TEXT_RENDERING(datas->eLevel)->hide = toHide;
+		RENDERING(datas->fBonus)->hide = toHide;
+		for (int i=0;i<8;i++) {
+			TEXT_RENDERING(datas->eObj[i])->hide = toHide;
+			RENDERING(datas->fObj[i])->hide = toHide;
+		}
 	}
 }
 
@@ -182,13 +184,13 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << score;
+	a << std::fixed << limit - score;
 	TEXT_RENDERING(datas->eScore)->text = a.str();
 	}
 	//Temps
 	{
 	std::stringstream a;
-	int timeA = limit - time;
+	int timeA = time;
 	int minute = timeA/60;
 	int seconde= timeA%60;
 

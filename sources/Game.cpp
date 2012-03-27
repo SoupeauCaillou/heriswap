@@ -48,8 +48,9 @@ class Game::Data {
 			mode2Manager[Normal] = new NormalGameModeManager();
 			mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager();
 			mode2Manager[StaticTime] = new StaticTimeGameModeManager();
-			logo = theEntityManager.CreateEntity();
 
+
+			logo = theEntityManager.CreateEntity();
 
 			state = BlackToLogoState;
 
@@ -200,8 +201,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	theRenderingSystem.setWindowSize(windowW, windowH);
 
 
-	datas->mode2Manager[Normal]->Setup();
-	
+
 	if (in && size) {
 		datas->state = Pause;
 		loadState(in, size);
@@ -234,9 +234,6 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	RENDERING(datas->tree)->texture = theRenderingSystem.loadTextureFile("tree.png");
 	RENDERING(datas->tree)->hide = false;
 
-
-	setMode();
-	
 	datas->state2Manager[datas->state]->Enter();
 }
 
@@ -355,6 +352,7 @@ void Game::tick(float dt, bool doRendering) {
 			datas->state2Manager[Spawn]->Enter();
 		} else if (newState == MainMenuToBlackState) {
 			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
+			datas->mode2Manager[datas->mode]->Setup();
 			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
 		}
 		datas->state2Manager[datas->state]->Exit();
@@ -427,7 +425,7 @@ void Game::tick(float dt, bool doRendering) {
 	theSoundSystem.Update(dt);
 	if (doRendering)
 		theRenderingSystem.Update(dt);
-	
+
 	//bench settings
 
 	updateDuration = TimeUtil::getTime()-updateDuration;
