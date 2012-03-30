@@ -10,16 +10,29 @@ import android.util.Log;
 
 public class TilematchRenderer implements GLSurfaceView.Renderer {   
 	AssetManager asset; 
+	Thread gameThread;
+	int frameCount = 0;
+	long time;
 	public TilematchRenderer(AssetManager asset) {
-		super(); 
+		super();
 		this.asset = asset;
+		frameCount = 0;
+		time = System.currentTimeMillis();
 	}
 	
     public void onDrawFrame(GL10 gl) {
     	synchronized (TilematchActivity.mutex) {
-    		if (TilematchActivity.game == 0)
+    		if (TilematchActivity.game == 0 || !initDone)
     	 		return;
-    		TilematchJNILib.step(TilematchActivity.game);
+    		
+    		TilematchJNILib.render(TilematchActivity.game);
+    		
+    		frameCount++;
+    		if (frameCount == 20) {
+    			Log.w("tilematchJava", "Render thread FPS: " + 20000.0 / (System.currentTimeMillis() - time));
+    			frameCount = 0;
+    			time = System.currentTimeMillis();
+    		}
     	}
         int err;
         while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
@@ -28,13 +41,26 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
     }
 
     boolean initDone = false;
-    public void onSurfaceChanged(GL10 gl, int width, int height) {
+    public void onSurfaceChanged(GL10 gl, final int width, final int height) {
     	Log.i("tilematchJava", "surface changed-> width: " + width + ", height: " + height + ", " + initDone);
     	if (!initDone) {
-    		TilematchJNILib.init(TilematchActivity.game, width, height, TilematchActivity.savedState);
-    		TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
+			TilematchJNILib.initFromRenderThread(TilematchActivity.game, width, height, TilematchActivity.savedState);
+    		// TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
     		TilematchActivity.savedState = null;
-    		initDone = true;
+       
+    		Log.i("tilematchJava", "Start game thread");
+    		// create game thread
+    		gameThread = new Thread(new Runnable() {
+				public void run() {
+					TilematchJNILib.initFromGameThread(TilematchActivity.game);
+					initDone = true;
+					while (true) {
+						TilematchJNILib.step(TilematchActivity.game);
+						// TilematchActivity.mGLView.requestRender();
+					}
+				}
+			});
+    		gameThread.start();
     	} else {
     		TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
     	}

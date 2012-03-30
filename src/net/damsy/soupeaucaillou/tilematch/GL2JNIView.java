@@ -52,14 +52,14 @@ class GL2JNIView extends GLSurfaceView {
 
     public GL2JNIView(Context context, Renderer r, AttributeSet set) {
         super(context, set);
-        init(r, false, 8, 0);
-    }
+        init(r, false, 0, 0);
+    } 
 
     public GL2JNIView(Context context, Renderer r, boolean translucent, int depth, int stencil) {
         super(context);
         init(r, translucent, depth, stencil);
     }
-
+ 
     private void init(Renderer r, boolean translucent, int depth, int stencil) {
 
         /* By default, GLSurfaceView() creates a RGB_565 opaque surface.

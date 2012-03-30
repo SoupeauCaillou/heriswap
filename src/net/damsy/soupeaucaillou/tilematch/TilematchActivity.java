@@ -10,7 +10,6 @@ import android.media.SoundPool;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -45,6 +44,7 @@ public class TilematchActivity extends Activity {
         try {
         	if (false) throw new RuntimeException();
         	mGLView = new GL2JNIView(this, r, null);
+        	// mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         	TilematchActivity.openGLESVersion = 2;
         } catch (Exception exc) {
         	Log.e("tilematchJava", "Failed to create OpenGL ES2 context, try ES1");
@@ -131,7 +131,7 @@ public class TilematchActivity extends Activity {
     	return super.onKeyUp(keyCode, event);
     }
     
-    private GLSurfaceView mGLView;
+    public static GLSurfaceView mGLView;
 
     static {
         System.loadLibrary("tilematch");

@@ -1,5 +1,5 @@
 #include "NormalModeManager.h"
-
+#include "Game.h"
 
 class NormalGameModeManager::HUDManagerData {
 	public:
@@ -37,9 +37,7 @@ class NormalGameModeManager::HUDManagerData {
 				TRANSFORM(fObj[i])->z = 5;
 				TRANSFORM(fObj[i])->size = Vector2(1,1);
 				TRANSFORM(fObj[i])->position = TRANSFORM(eObj[i])->position+Vector2(-0.3,0);
-				RENDERING(fObj[i])->bottomLeftUV = Vector2(i / 8.0, 0);
-				RENDERING(fObj[i])->topRightUV = RENDERING(fObj[i])->bottomLeftUV + Vector2(1 / 8.0, 1);
-				RENDERING(fObj[i])->texture = theRenderingSystem.loadTextureFile("feuilles.png");
+				RENDERING(fObj[i])->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(i));
 			}
 
 			fBonus = theEntityManager.CreateEntity();
@@ -47,7 +45,7 @@ class NormalGameModeManager::HUDManagerData {
 
 			ADD_COMPONENT(fBonus, Transformation);
 			ADD_COMPONENT(fBonus, Rendering);
-			RENDERING(fBonus)->texture = theRenderingSystem.loadTextureFile("feuilles.png");
+			RENDERING(fBonus)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(0));
 
 			TRANSFORM(fBonus)->size = Vector2(2,2);
 			TRANSFORM(fBonus)->position = Vector2(2,6);
@@ -247,8 +245,7 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	{
 	int type = GetBonus();
 	RenderingComponent* rc = RENDERING(datas->fBonus);
-	rc->bottomLeftUV = Vector2(type / 8.0, 0);
-	rc->topRightUV = rc->bottomLeftUV + Vector2(1 / 8.0, 1);
+	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(type));
 	}
 }
 

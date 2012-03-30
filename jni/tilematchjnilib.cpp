@@ -56,7 +56,7 @@ struct GameHolder {
 	struct timeval startup_time;
 	float dtAccumuled, time;
 
-	JNIEnv *env;
+	JNIEnv *gameThreadEnv, *renderThreadEnv;
 	jobject assetManager;
 	int openGLESVersion;
 };
@@ -85,9 +85,19 @@ struct AndroidNativeAssetLoader: public NativeAssetLoader {
 
 static char* loadTextfile(const char* assetName);
 static char* loadPng(const char* assetName, int* width, int* height);
+static void initJavaSoundApi(JavaSoundAPI* api, JNIEnv* env);
 
-#define UPDATE_ENV_PTR(hld, env) if (hld->env != env) hld->env = hld->api->env = env
+#define UPDATE_ENV_PTR(ptr, env) if (ptr != env) ptr = env
 
+static void initJavaSoundApi(JavaSoundAPI* api, JNIEnv* env) {
+	api->env = env;
+	api->javaSoundApi = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
+	api->jloadSound = (env->GetStaticMethodID(api->javaSoundApi, "loadSound", "(Landroid/content/res/AssetManager;Ljava/lang/String;Z)I"));
+	api->jplaySound = (env->GetStaticMethodID(api->javaSoundApi, "playSound", "(IZ)I"));
+	api->jpauseSounds = (env->GetStaticMethodID(api->javaSoundApi, "pauseAllSounds", "()V"));
+	api->jresumeSounds = (env->GetStaticMethodID(api->javaSoundApi, "resumeAllSounds", "()V"));	
+	api->jmusicPos = (env->GetStaticMethodID(api->javaSoundApi, "musicPosition", "(I)F"));
+}
 /*
  * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
  * Method:    createGame
@@ -99,7 +109,7 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
   	TimeUtil::init();
 	GameHolder* hld = new GameHolder();
 	hld->game = new Game(&hld->storage);
-	hld->env = env;
+	hld->renderThreadEnv = env;
 	hld->openGLESVersion = openglesVersion;
 	hld->assetManager = (jobject)env->NewGlobalRef(asset);
 	theRenderingSystem.setNativeAssetLoader(new AndroidNativeAssetLoader(hld));
@@ -107,16 +117,8 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
 	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
 	
 	LOGW("Build Java sound API proxy env:%p", env);
-	hld->api = new JavaSoundAPI();
-	hld->api->env = env;
-	hld->api->javaSoundApi = (jclass)env->NewGlobalRef(hld->env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
-	hld->api->jloadSound = (hld->env->GetStaticMethodID(hld->api->javaSoundApi, "loadSound", "(Landroid/content/res/AssetManager;Ljava/lang/String;Z)I"));
-	hld->api->jplaySound = (hld->env->GetStaticMethodID(hld->api->javaSoundApi, "playSound", "(IZ)I"));
-	hld->api->jpauseSounds = (hld->env->GetStaticMethodID(hld->api->javaSoundApi, "pauseAllSounds", "()V"));
-	hld->api->jresumeSounds = (hld->env->GetStaticMethodID(hld->api->javaSoundApi, "resumeAllSounds", "()V"));	
-	hld->api->jmusicPos = (hld->env->GetStaticMethodID(hld->api->javaSoundApi, "musicPosition", "(I)F"));
-	hld->api->assetManager = hld->assetManager;
-	theSoundSystem.androidSoundAPI = hld->api;
+	theSoundSystem.androidSoundAPI = new JavaSoundAPI();
+	theSoundSystem.androidSoundAPI->assetManager = hld->assetManager;
 	
 	LOGW("%s <--", __FUNCTION__);
 	return (jlong)hld;
@@ -127,13 +129,14 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
  * Method:    init
  * Signature: (JII)V
  */
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_init
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_initFromRenderThread
   (JNIEnv *env, jclass, jlong g, jint w, jint h, jbyteArray jstate) {
   LOGW("%s -->", __FUNCTION__);
 	GameHolder* hld = (GameHolder*) g;
-	UPDATE_ENV_PTR(hld, env);
+	UPDATE_ENV_PTR(hld->gameThreadEnv, env);
 	hld->width = w;
 	hld->height = h;
+	initJavaSoundApi(theSoundSystem.androidSoundAPI, env);
 
 	uint8_t* state = 0;
 	int size = 0;
@@ -153,6 +156,11 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	LOGW("%s <--", __FUNCTION__);
 }
 
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_initFromGameThread
+  (JNIEnv *env, jclass, jlong g) {
+	initJavaSoundApi(theSoundSystem.androidSoundAPI, env);
+}
+
 /*
  * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
  * Method:    step
@@ -161,7 +169,11 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_step
   (JNIEnv *env, jclass, jlong g) {
   	GameHolder* hld = (GameHolder*) g;
-  	UPDATE_ENV_PTR(hld, env);
+
+	if (theSoundSystem.androidSoundAPI->env == 0)
+		initJavaSoundApi(theSoundSystem.androidSoundAPI, env);
+	else
+  		UPDATE_ENV_PTR(hld->gameThreadEnv, env);
 	if (!hld->game)
   		return;
   		
@@ -188,6 +200,23 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
 		hld->game->tick(hld->dtAccumuled);
 		hld->dtAccumuled = 0;
 		// hld->dtAccumuled -= DT;
+	}
+}
+
+static int frameCount = 0;
+static float tttttt = 0;
+
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_render
+  (JNIEnv *env, jclass, jlong g) {
+  	GameHolder* hld = (GameHolder*) g;
+  	UPDATE_ENV_PTR(hld->renderThreadEnv, env);
+	theRenderingSystem.render();  	
+	
+	frameCount++;
+	if (frameCount >= 20) {
+		LOGW("fps render: %.2f", 20.0 / (TimeUtil::getTime() - tttttt));
+		tttttt = TimeUtil::getTime();
+		frameCount = 0;
 	}
 }
 
@@ -255,28 +284,28 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
   (JNIEnv *env, jclass, jlong g) {
   LOGW("%s -->", __FUNCTION__);
   GameHolder* hld = (GameHolder*) g;
-  UPDATE_ENV_PTR(hld, env);
+  UPDATE_ENV_PTR(hld->renderThreadEnv, env);
   theRenderingSystem.init();
   theRenderingSystem.reloadTextures();
   LOGW("%s <--", __FUNCTION__);
 }
 
-static char* loadAsset(GameHolder* hld, const std::string& assetName, int* length) {
-	jclass util = hld->env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
+static char* loadAsset(JNIEnv *env, jobject assetManager, const std::string& assetName, int* length) {
+	jclass util = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
 	if (!util) {
-		LOGW("ERROR - cannot find class (%p)", hld->env);
+		LOGW("ERROR - cannot find class (%p)", env);
 	}
-	jmethodID mid = hld->env->GetStaticMethodID(util, "assetToByteArray", "(Landroid/content/res/AssetManager;Ljava/lang/String;)[B");
+	jmethodID mid = env->GetStaticMethodID(util, "assetToByteArray", "(Landroid/content/res/AssetManager;Ljava/lang/String;)[B");
 
-	jstring asset = (hld->env)->NewStringUTF(assetName.c_str());
+	jstring asset = env->NewStringUTF(assetName.c_str());
 
-	jobject _a = hld->env->CallStaticObjectMethod(util, mid, hld->assetManager, asset);
+	jobject _a = env->CallStaticObjectMethod(util, mid, assetManager, asset);
 
 	if (_a) {
 		jbyteArray a = (jbyteArray)_a;
-		*length = (hld->env)->GetArrayLength(a);
+		*length = env->GetArrayLength(a);
 		jbyte* res = new jbyte[*length + 1];
-		(hld->env)->GetByteArrayRegion(a, 0, *length, res);
+		env->GetByteArrayRegion(a, 0, *length, res);
 		res[*length] = '\0';
 		return (char*)res;
 	} else {
@@ -300,7 +329,7 @@ char* AndroidNativeAssetLoader::decompressPngImage(const std::string& assetName,
 	LOGI("loadPng: %s\n", assetName.c_str());
 	png_byte* PNG_image_buffer;
 	int length = 0;
-	char* data = loadAsset(holder, assetName, &length);
+	char* data = loadAsset(holder->renderThreadEnv, holder->assetManager, assetName, &length);
 
 	GLubyte PNG_header[8];
 
@@ -411,7 +440,7 @@ char* AndroidNativeAssetLoader::loadShaderFile(const std::string& assetName)
 {
 	LOGI("loadTextFile: %s", assetName.c_str());
 	int length = 0;
-	char* result = loadAsset(holder, assetName, &length);
+	char* result = loadAsset(holder->renderThreadEnv, holder->assetManager, assetName, &length);
 	return result;
 }
 

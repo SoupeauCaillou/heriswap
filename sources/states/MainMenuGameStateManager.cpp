@@ -34,15 +34,11 @@ void MainMenuGameStateManager::Setup() {
 
 	//Loading leaf texture
 	for(int i=0; i<3; i++) {
-		RENDERING(start[i])->texture = theRenderingSystem.loadTextureFile("feuilles.png");
-		RENDERING(start[i])->bottomLeftUV = Vector2(i / 8.0, 0);
-		RENDERING(start[i])->topRightUV = RENDERING(start[i])->bottomLeftUV + Vector2(1 / 8.0, 1);
+		RENDERING(start[i])->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(6));
 		TRANSFORM(start[i])->size = Game::CellSize() * Game::CellContentScale();
 		RENDERING(start[i])->hide = true;
 	}
-	RENDERING(score)->texture = theRenderingSystem.loadTextureFile("feuilles.png");
-	RENDERING(score)->bottomLeftUV = Vector2(3/8.0, 0);
-	RENDERING(score)->topRightUV = Vector2(4/8.0, 1);
+	RENDERING(score)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(7));
 	TRANSFORM(score)->size = Game::CellSize() * Game::CellContentScale();
 	RENDERING(score)->hide = true;
 

@@ -22,7 +22,6 @@ LOCAL_SRC_FILES := \
     tilematchjnilib.cpp \
 	../sources/Game.cpp \
 	../sources/GridSystem.cpp \
-   ../sources/HUDManager.cpp \
    ../sources/CombinationMarkSystem.cpp \
 	../sources/states/BackgroundManager.cpp \
 	../sources/states/DeleteGameStateManager.cpp \

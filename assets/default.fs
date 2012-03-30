@@ -1,5 +1,5 @@
 #ifdef GL_ES
-precision mediump float;
+precision lowp float;
 #endif
 uniform sampler2D tex0;
 
@@ -9,6 +9,4 @@ varying vec4 vColor;
 void main()
 {
     gl_FragColor = texture2D(tex0, uvVarying) * vColor;
-    if (gl_FragColor.a <= 0.0)
-    	discard;
 }

@@ -198,7 +198,7 @@ Game::Game(ScoreStorage* storage) {
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	theRenderingSystem.init();
 	theRenderingSystem.setWindowSize(windowW, windowH);
-
+	theRenderingSystem.loadAtlas("atlas");
 
 	datas->mode2Manager[Normal]->Setup();
 	
@@ -210,31 +210,39 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 
 	theGridSystem.GridSize = GRIDSIZE;
 
+	float fullscreenWidth = 10.0;
+	float fullscreenHeight = 10.0 * windowH / windowW;
+	
 	datas->sky = theEntityManager.CreateEntity();
 	theTransformationSystem.Add(datas->sky);
 	TRANSFORM(datas->sky)->z = DL_Sky;
 	theRenderingSystem.Add(datas->sky);
-	TRANSFORM(datas->sky)->size = Vector2(10, 10.0 * windowH / windowW);
+	TRANSFORM(datas->sky)->size = Vector2(fullscreenWidth, fullscreenHeight);
 	RENDERING(datas->sky)->texture = theRenderingSystem.loadTextureFile("sky.png");
 	RENDERING(datas->sky)->hide = false;
+	// RENDERING(datas->sky)->drawGroup = RenderingComponent::FrontToBack;
 
 	datas->background = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->background, Transformation);
 	ADD_COMPONENT(datas->background, Rendering);
 	TRANSFORM(datas->background)->z = DL_Background;
-	TRANSFORM(datas->background)->size = Vector2(10, 10.0 * windowH / windowW);
+	TRANSFORM(datas->background)->size = Vector2(fullscreenWidth, fullscreenWidth * 428.0/480);
+	TRANSFORM(datas->background)->position = Vector2(0, (-fullscreenHeight + TRANSFORM(datas->background)->size.Y ) * 0.5);
 	RENDERING(datas->background)->texture = theRenderingSystem.loadTextureFile("background.png");
 	RENDERING(datas->background)->hide = false;
+	// RENDERING(datas->background)->drawGroup = RenderingComponent::FrontToBack;
 
 	datas->tree = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->tree, Transformation);
 	ADD_COMPONENT(datas->tree, Rendering);
 	TRANSFORM(datas->tree)->z = 1;
-	TRANSFORM(datas->tree)->size = Vector2(10, 10.0 * windowH / windowW);
+	TRANSFORM(datas->tree)->size = Vector2(fullscreenHeight * 250.0 / 800, fullscreenHeight);
+	TRANSFORM(datas->tree)->position = Vector2(-5 + TRANSFORM(datas->tree)->size.X * 0.5, 0);
 	RENDERING(datas->tree)->texture = theRenderingSystem.loadTextureFile("tree.png");
 	RENDERING(datas->tree)->hide = false;
+	// RENDERING(datas->tree)->drawGroup = RenderingComponent::FrontToBack;
 
-
+std::cout << TRANSFORM(datas->sky)->size << "," << TRANSFORM(datas->background)->size << ","<<TRANSFORM(datas->tree)->size << std::endl;
 	setMode();
 	
 	datas->state2Manager[datas->state]->Enter();
@@ -517,4 +525,10 @@ void Game::loadState(const uint8_t* in, int size) {
 	theRenderingSystem.restoreInternalState(&in[index], sSize);
 
 	LOGW("RESTORED STATE: %d", datas->stateBeforePause);
+}
+
+std::string Game::cellTypeToTextureName(int type) {
+	std::stringstream s;
+	s << "feuille" << (type+1) << ".png";
+	return s.str();
 }

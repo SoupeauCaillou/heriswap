@@ -15,8 +15,10 @@ public class TilematchJNILib {
     /* Create native game instance */
     public static native long createGame(AssetManager mgr, int openGLESVersion);
     /* Initialize game, reset graphics assets, etc... */
-    public static native void init(long game, int width, int height, byte[] state);
+    public static native void initFromRenderThread(long game, int width, int height, byte[] state);
+    public static native void initFromGameThread(long game);
     public static native void step(long game);
+    public static native void render(long game);
     public static native void pause(long game);
     public static native void handleInputEvent(long game, int event, float x, float y);
     public static native byte[] serialiazeState(long game);
