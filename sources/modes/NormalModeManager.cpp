@@ -8,7 +8,6 @@ class NormalGameModeManager::HUDManagerData {
 			nextfps = FCRR;
 			fps = 60;
 
-
 			eScore = theTextRenderingSystem.CreateLocalEntity(10);
 			eTime = theTextRenderingSystem.CreateLocalEntity(10);
 			eFPS = theTextRenderingSystem.CreateLocalEntity(10);
@@ -19,22 +18,22 @@ class NormalGameModeManager::HUDManagerData {
 			TRANSFORM(eTime)->position = Vector2(0, 7);
 			TRANSFORM(eFPS)->position = Vector2(-2.5, 8);
 
-			TRANSFORM(eLevel)->z = 6;
-			TRANSFORM(eScore)->z = 6;
-			TRANSFORM(eTime)->z = 6;
-			TRANSFORM(eFPS)->z = 6;
+			TRANSFORM(eLevel)->z = DL_Hud;
+			TRANSFORM(eScore)->z = DL_Hud;
+			TRANSFORM(eTime)->z = DL_Hud;
+			TRANSFORM(eFPS)->z = DL_Hud;
 
 			for (int i=0;i<8;i++) {
 				eObj[i] = theTextRenderingSystem.CreateLocalEntity(5);
 				TRANSFORM(eObj[i])->position = Vector2(i-3.5,-6);
-				TRANSFORM(eObj[i])->z = 6;
+				TRANSFORM(eObj[i])->z = DL_Hud;
 				TEXT_RENDERING(eObj[i])->charSize /= 2;
 				TEXT_RENDERING(eObj[i])->color = Color(0., 0., 0.);
 
 				fObj[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(fObj[i], Transformation);
 				ADD_COMPONENT(fObj[i], Rendering);
-				TRANSFORM(fObj[i])->z = 5;
+				TRANSFORM(fObj[i])->z = DL_Hud-0.001;
 				TRANSFORM(fObj[i])->size = Vector2(1,1);
 				TRANSFORM(fObj[i])->position = TRANSFORM(eObj[i])->position+Vector2(-0.3,0);
 				RENDERING(fObj[i])->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(i));
@@ -102,7 +101,7 @@ void NormalGameModeManager::Setup() {
 bool NormalGameModeManager::Update(float dt) {
 	//on met à jour le temps si on est dans userinput
 	//if (game.state(UserInput)) time += dt;
-	
+
 	//a changer
 	time+=dt;
 	LevelUp();
@@ -151,22 +150,6 @@ bool NormalGameModeManager::LeveledUp() {
 	return bid;
 }
 
-int NormalGameModeManager::GetBonus() {
-	return bonus;
-}
-
-int NormalGameModeManager::GetRemain(int type) {
-	return remain[type];
-}
-
-int NormalGameModeManager::GetObj() {
-	return obj[level-1];
-}
-
-int NormalGameModeManager::GetLevel() {
-	return level;
-}
-
 void NormalGameModeManager::Reset() {
 	time = 0;
 	score = 0;
@@ -181,14 +164,16 @@ void NormalGameModeManager::Reset() {
 
 
 void NormalGameModeManager::HideUI(bool toHide) {
-	TEXT_RENDERING(datas->eScore)->hide = toHide;
-	TEXT_RENDERING(datas->eTime)->hide = toHide;
-	TEXT_RENDERING(datas->eFPS)->hide = toHide;
-	TEXT_RENDERING(datas->eLevel)->hide = toHide;
-	RENDERING(datas->fBonus)->hide = toHide;
-	for (int i=0;i<8;i++) {
-		TEXT_RENDERING(datas->eObj[i])->hide = toHide;
-		RENDERING(datas->fObj[i])->hide = toHide;
+	if (datas) {
+		TEXT_RENDERING(datas->eScore)->hide = toHide;
+		TEXT_RENDERING(datas->eTime)->hide = toHide;
+		TEXT_RENDERING(datas->eFPS)->hide = toHide;
+		TEXT_RENDERING(datas->eLevel)->hide = toHide;
+		RENDERING(datas->fBonus)->hide = toHide;
+		for (int i=0;i<8;i++) {
+			TEXT_RENDERING(datas->eObj[i])->hide = toHide;
+			RENDERING(datas->fObj[i])->hide = toHide;
+		}
 	}
 }
 
@@ -203,15 +188,16 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	//Temps
 	{
 	std::stringstream a;
-	int time = limit - time;
-	int minute = time/60;
-	int seconde= time%60;
+	int timeA = limit - time;
+	int minute = timeA/60;
+	int seconde= timeA%60;
 
 	a << minute << ":" << std::setw(2) << std::setfill('0') << seconde << " s";
 	TEXT_RENDERING(datas->eTime)->text = a.str();
 	//if (state == UserInput)
-	TEXT_RENDERING(datas->eTime)->color = Color(1.0f,0.f,0.f,1.f);
-	//else  TEXT_RENDERING(datas->eTime)->color = Color(1.0f,1.f,1.f,1.f);
+	//TEXT_RENDERING(datas->eTime)->color = Color(1.0f,0.f,0.f,1.f);
+	//else
+	TEXT_RENDERING(datas->eTime)->color = Color(1.0f,1.f,1.f,1.f);
 	}
 	//FPS
 	{
@@ -231,19 +217,19 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	//Level
 	{
 	std::stringstream a;
-	a << "Lvl : "<<GetLevel();
+	a << "Lvl : "<<level;
 	TEXT_RENDERING(datas->eLevel)->text = a.str();
 	}
 	//Objectifs
 	for (int i=0;i<8;i++)
 	{
-	std::stringstream a;
-	a << GetRemain(i);
-	TEXT_RENDERING(datas->eObj[i])->text = a.str();
+		std::stringstream a;
+		a << remain[i];
+		TEXT_RENDERING(datas->eObj[i])->text = a.str();
 	}
 	//Feuille Bonus
 	{
-	int type = GetBonus();
+	int type = bonus;
 	RenderingComponent* rc = RENDERING(datas->fBonus);
 	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(type));
 	}

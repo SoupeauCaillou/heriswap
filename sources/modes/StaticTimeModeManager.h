@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameModeManager.h"
+#include "DepthLayer.h"
 
 class StaticTimeGameModeManager : public GameModeManager {
 	public:
@@ -8,21 +9,22 @@ class StaticTimeGameModeManager : public GameModeManager {
 		~StaticTimeGameModeManager();
 		void Setup();
 		bool Update(float dt);
-		void UpdateUI(float dt, int state);
+
+		void UpdateUI(float dt);
 		void HideUI(bool toHide);
 
-
-		int GetBonus();
 		void LevelUp();
 		//permet de savoir si on a change de niveau
 		bool LeveledUp();
+
 		void ScoreCalc(int nb, int type);
 		void Reset();
-		int GetRemain(int type);
-		int GetObj();
-		int GetLevel();
+		std::string finalScore();
 
 	private:
+		class HUDManagerData;
+
 		int bonus;
 		bool isReadyToStart;
+		HUDManagerData* datas;
 };

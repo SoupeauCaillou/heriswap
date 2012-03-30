@@ -46,10 +46,11 @@ class Game::Data {
 		Data(ScoreStorage* storage) {
 			mode = Normal;
 			mode2Manager[Normal] = new NormalGameModeManager();
-			//mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager();
-			//mode2Manager[StaticTime] = new StaticTimeGameModeManager();
-			logo = theEntityManager.CreateEntity();
+			mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager();
+			mode2Manager[StaticTime] = new StaticTimeGameModeManager();
 
+
+			logo = theEntityManager.CreateEntity();
 
 			state = BlackToLogoState;
 
@@ -200,8 +201,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	theRenderingSystem.setWindowSize(windowW, windowH);
 	theRenderingSystem.loadAtlas("atlas");
 
-	datas->mode2Manager[Normal]->Setup();
-	
+
 	if (in && size) {
 		datas->state = Pause;
 		loadState(in, size);
@@ -235,16 +235,13 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	datas->tree = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->tree, Transformation);
 	ADD_COMPONENT(datas->tree, Rendering);
-	TRANSFORM(datas->tree)->z = 1;
+	TRANSFORM(datas->tree)->z = DL_Tree;
 	TRANSFORM(datas->tree)->size = Vector2(fullscreenHeight * 250.0 / 800, fullscreenHeight);
 	TRANSFORM(datas->tree)->position = Vector2(-5 + TRANSFORM(datas->tree)->size.X * 0.5, 0);
 	RENDERING(datas->tree)->texture = theRenderingSystem.loadTextureFile("tree.png");
 	RENDERING(datas->tree)->hide = false;
 	// RENDERING(datas->tree)->drawGroup = RenderingComponent::FrontToBack;
 
-std::cout << TRANSFORM(datas->sky)->size << "," << TRANSFORM(datas->background)->size << ","<<TRANSFORM(datas->tree)->size << std::endl;
-	setMode();
-	
 	datas->state2Manager[datas->state]->Enter();
 }
 
@@ -340,7 +337,6 @@ void Game::tick(float dt) {
 			frameCount = 0;
 		}
 	}
-
 	float updateDuration = TimeUtil::getTime();
 	static bool ended = false;
 
@@ -364,19 +360,15 @@ void Game::tick(float dt) {
 			datas->state2Manager[Spawn]->Enter();
 		} else if (newState == MainMenuToBlackState) {
 			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
+			datas->mode2Manager[datas->mode]->Setup();
 			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
 		}
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
 
-
-		if (datas->state == UserInput) 
-			ended = datas->mode2Manager[datas->mode]->Update(dt);
-
 		if (inGameState(newState)) {
 			datas->mode2Manager[datas->mode]->HideUI(false);
-			datas->mode2Manager[datas->mode]->UpdateUI(dt);
 			theGridSystem.HideAll(false);
 			RENDERING(datas->benchTotalTime)->hide = false;
 			for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
@@ -394,10 +386,20 @@ void Game::tick(float dt) {
 				theGridSystem.HideAll(true);
 		}
 	}
-	
-	//si on change de niveau
-	if (datas->state==UserInput && datas->mode2Manager[datas->mode]->LeveledUp()) newState=LevelChanged;
-		
+	//updating time
+	if (datas->state == UserInput) {
+		ended = datas->mode2Manager[datas->mode]->Update(dt);
+		//si on change de niveau
+		if (datas->mode2Manager[datas->mode]->LeveledUp()) {
+			datas->state2Manager[datas->state]->Exit();
+			datas->state = LevelChanged;
+			datas->state2Manager[datas->state]->Enter();
+		}
+	}//updating HUD
+	if (inGameState(newState)) {
+		datas->mode2Manager[datas->mode]->UpdateUI(dt);
+	}
+
 	for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin();
 		it!=datas->state2Manager.end();
 		++it) {
@@ -435,7 +437,7 @@ void Game::tick(float dt) {
 
 	updateDuration = TimeUtil::getTime()-updateDuration;
 
-	bench(true, updateDuration, dt);
+	//bench(true, updateDuration, dt);
 }
 
 void Game::bench(bool active, float updateDuration, float dt) {

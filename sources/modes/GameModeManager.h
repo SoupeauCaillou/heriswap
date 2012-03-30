@@ -36,17 +36,17 @@ class GameModeManager {
 		virtual void UpdateUI(float dt) = 0;
 		virtual void HideUI(bool toHide) = 0;
 
-		/* Every modes need to calc score */
-		virtual int GetBonus() = 0;
+		virtual void ScoreCalc(int nb, int type) = 0;
+		virtual std::string finalScore() = 0;
+
+
 		virtual void LevelUp() = 0;
 		//permet de savoir si on a change de niveau
 		virtual bool LeveledUp() = 0;
-		virtual void ScoreCalc(int nb, int type) = 0;
+		
 		virtual void Reset() = 0;
-		virtual int GetRemain(int type) = 0;
-		virtual int GetObj() = 0;
-		virtual int GetLevel() = 0;
-		virtual std::string finalScore() = 0;
+
 		float time, limit;
 		int score;
+		
 };

@@ -1,10 +1,81 @@
 #include "ScoreAttackModeManager.h"
 
 
-ScoreAttackGameModeManager::ScoreAttackGameModeManager() {
-	limit = 3000.;
-	time = 0.;
+class ScoreAttackGameModeManager::HUDManagerData {
+	public:
+		HUDManagerData() {
+			frames = 0;
+			nextfps = FCRR;
+			fps = 60;
 
+			eScore = theTextRenderingSystem.CreateLocalEntity(10);
+			eTime = theTextRenderingSystem.CreateLocalEntity(10);
+			eFPS = theTextRenderingSystem.CreateLocalEntity(10);
+			eLevel = theTextRenderingSystem.CreateLocalEntity(10);
+
+			TRANSFORM(eLevel)->position = Vector2(5, 8);
+			TRANSFORM(eScore)->position = Vector2(5, 7);
+			TRANSFORM(eTime)->position = Vector2(0, 7);
+			TRANSFORM(eFPS)->position = Vector2(-2.5, 8);
+
+			TRANSFORM(eLevel)->z = DL_Hud;
+			TRANSFORM(eScore)->z = DL_Hud;
+			TRANSFORM(eTime)->z = DL_Hud;
+			TRANSFORM(eFPS)->z = DL_Hud;
+
+			for (int i=0;i<8;i++) {
+				eObj[i] = theTextRenderingSystem.CreateLocalEntity(5);
+				TRANSFORM(eObj[i])->position = Vector2(i-3.5,-6);
+				TRANSFORM(eObj[i])->z = DL_Hud;
+				TEXT_RENDERING(eObj[i])->charSize /= 2;
+				TEXT_RENDERING(eObj[i])->color = Color(0., 0., 0.);
+
+				fObj[i] = theEntityManager.CreateEntity();
+				ADD_COMPONENT(fObj[i], Transformation);
+				ADD_COMPONENT(fObj[i], Rendering);
+				TRANSFORM(fObj[i])->z = DL_Hud-0.001;
+				TRANSFORM(fObj[i])->size = Vector2(1,1);
+				TRANSFORM(fObj[i])->position = TRANSFORM(eObj[i])->position+Vector2(-0.3,0);
+				RENDERING(fObj[i])->bottomLeftUV = Vector2(i / 8.0, 0);
+				RENDERING(fObj[i])->topRightUV = RENDERING(fObj[i])->bottomLeftUV + Vector2(1 / 8.0, 1);
+				RENDERING(fObj[i])->texture = theRenderingSystem.loadTextureFile("feuilles.png");
+			}
+
+			fBonus = theEntityManager.CreateEntity();
+
+
+			ADD_COMPONENT(fBonus, Transformation);
+			ADD_COMPONENT(fBonus, Rendering);
+			RENDERING(fBonus)->texture = theRenderingSystem.loadTextureFile("feuilles.png");
+
+			TRANSFORM(fBonus)->size = Vector2(2,2);
+			TRANSFORM(fBonus)->position = Vector2(2,6);
+			TRANSFORM(fBonus)->rotation = -.8;
+
+
+			TEXT_RENDERING(eFPS)->charSize /= 2;
+			TEXT_RENDERING(eFPS)->color = Color(0.1, 0.5, 0.4);
+		}
+		~HUDManagerData() {
+			theTextRenderingSystem.DestroyLocalEntity(eScore);
+			theTextRenderingSystem.DestroyLocalEntity(eTime);
+			theTextRenderingSystem.DestroyLocalEntity(eLevel);
+			theTextRenderingSystem.DestroyLocalEntity(eFPS);
+			theEntityManager.DeleteEntity(fBonus);
+			for(int i=0; i<8; i++) {
+				theTextRenderingSystem.DestroyLocalEntity(eObj[i]);
+				theEntityManager.DeleteEntity(fObj[i]);
+			}
+		}
+		Entity eScore, eTime, eLevel, eFPS, eObj[8],fBonus, fObj[8];
+		int frames;
+		float nextfps, fps;
+};
+
+ScoreAttackGameModeManager::ScoreAttackGameModeManager() {
+	limit = 3000;
+	time = 0.;
+	datas=0;
 
 	score=0;
 	levelUp = false;
@@ -16,17 +87,25 @@ ScoreAttackGameModeManager::ScoreAttackGameModeManager() {
 
 	for (int i=0; i<8;i++)
 		remain[i]=obj[0];
-
 }
 
 ScoreAttackGameModeManager::~ScoreAttackGameModeManager() {
+	delete datas;
 }
 
 void ScoreAttackGameModeManager::Setup() {
-
+	datas = new HUDManagerData();
+	HideUI(true);
 }
 
+
+
 bool ScoreAttackGameModeManager::Update(float dt) {
+	//on met à jour le temps si on est dans userinput
+	//if (game.state(UserInput)) time += dt;
+
+	//a changer
+	time+=dt;
 	LevelUp();
 	return (limit - score <0);
 }
@@ -38,6 +117,9 @@ void ScoreAttackGameModeManager::ScoreCalc(int nb, int type) {
 		score += 10*level*nb*nb*nb/6;
 
 	remain[type] -= nb;
+	time -= nb/4;
+	if (time < 0)
+		time = 0;
 
 	if (remain[type]<0)
 		remain[type]=0;
@@ -54,44 +136,20 @@ void ScoreAttackGameModeManager::LevelUp() {
 	if (match) {
 		level++;
 		levelUp = true;
+		time -= 20;
+		if (time < 0)
+			time = 0;
 		std::cout << "Level up to level " << level << std::endl;
-		bonus = MathUtil::RandomInt(8)+1;
+		bonus = MathUtil::RandomInt(8);
 		for (int i=0;i<8;i++)
 			remain[i] = obj[level-1];
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
 bool ScoreAttackGameModeManager::LeveledUp() {
-		bool bid = levelUp;
-		levelUp = false;
-		return bid;
-}
-
-int ScoreAttackGameModeManager::GetBonus() {
-	return bonus;
-}
-
-
-int ScoreAttackGameModeManager::GetRemain(int type) {
-	return remain[type];
-}
-
-int ScoreAttackGameModeManager::GetObj() {
-	return obj[level-1];
-}
-
-int ScoreAttackGameModeManager::GetLevel() {
-	return level;
+	bool bid = levelUp;
+	levelUp = false;
+	return bid;
 }
 
 void ScoreAttackGameModeManager::Reset() {
@@ -107,5 +165,82 @@ void ScoreAttackGameModeManager::Reset() {
 }
 
 
-void ScoreAttackGameModeManager::UpdateUI(float dt, int state) {;}
-		void ScoreAttackGameModeManager::HideUI(bool toHide) {;}
+void ScoreAttackGameModeManager::HideUI(bool toHide) {
+	if (datas) {
+		TEXT_RENDERING(datas->eScore)->hide = toHide;
+		TEXT_RENDERING(datas->eTime)->hide = toHide;
+		TEXT_RENDERING(datas->eFPS)->hide = toHide;
+		TEXT_RENDERING(datas->eLevel)->hide = toHide;
+		RENDERING(datas->fBonus)->hide = toHide;
+		for (int i=0;i<8;i++) {
+			TEXT_RENDERING(datas->eObj[i])->hide = toHide;
+			RENDERING(datas->fObj[i])->hide = toHide;
+		}
+	}
+}
+
+void ScoreAttackGameModeManager::UpdateUI(float dt) {
+	//Score
+	{
+	std::stringstream a;
+	a.precision(0);
+	a << std::fixed << limit - score;
+	TEXT_RENDERING(datas->eScore)->text = a.str();
+	}
+	//Temps
+	{
+	std::stringstream a;
+	int timeA = time;
+	int minute = timeA/60;
+	int seconde= timeA%60;
+
+	a << minute << ":" << std::setw(2) << std::setfill('0') << seconde << " s";
+	TEXT_RENDERING(datas->eTime)->text = a.str();
+	//if (state == UserInput)
+	//TEXT_RENDERING(datas->eTime)->color = Color(1.0f,0.f,0.f,1.f);
+	//else
+	TEXT_RENDERING(datas->eTime)->color = Color(1.0f,1.f,1.f,1.f);
+	}
+	//FPS
+	{
+	std::stringstream a;
+	datas->nextfps-=dt;
+	datas->frames++;
+
+	if (datas->nextfps<0) {
+		datas->fps = datas->frames/FCRR;
+		datas->nextfps = FCRR;
+		datas->frames = 0;
+	}
+	a << "FPS : " << datas->fps;
+	TEXT_RENDERING(datas->eFPS)->text = a.str();
+	}
+
+	//Level
+	{
+	std::stringstream a;
+	a << "Lvl : "<<level;
+	TEXT_RENDERING(datas->eLevel)->text = a.str();
+	}
+	//Objectifs
+	for (int i=0;i<8;i++)
+	{
+		std::stringstream a;
+		a << remain[i];
+		TEXT_RENDERING(datas->eObj[i])->text = a.str();
+	}
+	//Feuille Bonus
+	{
+	int type = bonus;
+	RenderingComponent* rc = RENDERING(datas->fBonus);
+	rc->bottomLeftUV = Vector2(type / 8.0, 0);
+	rc->topRightUV = rc->bottomLeftUV + Vector2(1 / 8.0, 1);
+	}
+}
+
+std::string ScoreAttackGameModeManager::finalScore() {
+	std::stringstream a;
+	a << score;
+	return a.str();
+}
+
