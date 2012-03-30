@@ -1,5 +1,5 @@
 #include "StaticTimeModeManager.h"
-
+#include "Game.h"
 
 class StaticTimeGameModeManager::HUDManagerData {
 	public:
@@ -25,7 +25,7 @@ class StaticTimeGameModeManager::HUDManagerData {
 
 			ADD_COMPONENT(fBonus, Transformation);
 			ADD_COMPONENT(fBonus, Rendering);
-			RENDERING(fBonus)->texture = theRenderingSystem.loadTextureFile("feuilles.png");
+			RENDERING(fBonus)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(0));
 
 			TRANSFORM(fBonus)->size = Vector2(2,2);
 			TRANSFORM(fBonus)->position = Vector2(2,6);
@@ -150,8 +150,7 @@ void StaticTimeGameModeManager::UpdateUI(float dt) {
 	{
 	int type = bonus;
 	RenderingComponent* rc = RENDERING(datas->fBonus);
-	rc->bottomLeftUV = Vector2(type / 8.0, 0);
-	rc->topRightUV = rc->bottomLeftUV + Vector2(1 / 8.0, 1);
+	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(type));
 	}
 }
 

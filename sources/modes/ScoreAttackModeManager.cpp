@@ -1,5 +1,5 @@
 #include "ScoreAttackModeManager.h"
-
+#include "Game.h"
 
 class ScoreAttackGameModeManager::HUDManagerData {
 	public:
@@ -36,9 +36,7 @@ class ScoreAttackGameModeManager::HUDManagerData {
 				TRANSFORM(fObj[i])->z = DL_Hud-0.001;
 				TRANSFORM(fObj[i])->size = Vector2(1,1);
 				TRANSFORM(fObj[i])->position = TRANSFORM(eObj[i])->position+Vector2(-0.3,0);
-				RENDERING(fObj[i])->bottomLeftUV = Vector2(i / 8.0, 0);
-				RENDERING(fObj[i])->topRightUV = RENDERING(fObj[i])->bottomLeftUV + Vector2(1 / 8.0, 1);
-				RENDERING(fObj[i])->texture = theRenderingSystem.loadTextureFile("feuilles.png");
+				RENDERING(fObj[i])->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(i));
 			}
 
 			fBonus = theEntityManager.CreateEntity();
@@ -233,8 +231,7 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	{
 	int type = bonus;
 	RenderingComponent* rc = RENDERING(datas->fBonus);
-	rc->bottomLeftUV = Vector2(type / 8.0, 0);
-	rc->topRightUV = rc->bottomLeftUV + Vector2(1 / 8.0, 1);
+	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(type));
 	}
 }
 
