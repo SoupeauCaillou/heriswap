@@ -81,7 +81,7 @@ class Game::Data {
 			ADD_COMPONENT(logo, Rendering);
 			ADD_COMPONENT(logo, Transformation);
 			TRANSFORM(logo)->position = Vector2(0,0);
-			TRANSFORM(logo)->size = Vector2(10,(10.0*windowH)/windowW);
+			TRANSFORM(logo)->size = Vector2(10,10);
 			RENDERING(logo)->hide = true;
 			TRANSFORM(logo)->z = DL_Logo;
 			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
@@ -200,8 +200,9 @@ Game::Game(ScoreStorage* storage) {
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	theRenderingSystem.init();
 	theRenderingSystem.setWindowSize(windowW, windowH);
-	theRenderingSystem.loadAtlas("atlas");
-
+	theRenderingSystem.loadAtlas("sprites");
+	theRenderingSystem.loadAtlas("animals");
+	theRenderingSystem.loadAtlas("alphabet");
 
 	if (in && size) {
 		datas->state = Pause;
