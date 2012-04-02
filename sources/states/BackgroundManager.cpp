@@ -93,10 +93,10 @@ BackgroundManager::AnimatedActor* BackgroundManager::initAnimal(AnimatedActor* c
 	std::stringstream tex;
 	if (MathUtil::RandomInt(2)) {
 		int i = MathUtil::RandomInt(8);
-		tex << "animals/herisson0_" << i << ".png";
+		tex << "herisson0_" << i << ".png";
 		c->anim.push_back(tex.str());
 		tex.str("");
-		tex << "animals/herisson1_" << i << ".png";
+		tex << "herisson1_" << i << ".png";
 		c->anim.push_back(tex.str());
 
 		c->actor.speed = MathUtil::Lerp(-0.2f, -1.5f, t);
@@ -106,10 +106,10 @@ BackgroundManager::AnimatedActor* BackgroundManager::initAnimal(AnimatedActor* c
 		TRANSFORM(c->actor.e)->size = Vector2(2, 1) * MathUtil::Lerp(herissonScaleRange.X, herissonScaleRange.Y, t);
 	} else {
 		int i = MathUtil::RandomInt(8);
-		tex << "animals/papillon0_" << i << ".png";
+		tex << "papillon0_" << i << ".png";
 		c->anim.push_back(tex.str());
 		tex.str("");
-		tex << "animals/papillon1_" << i << ".png";
+		tex << "papillon1_" << i << ".png";
 		c->anim.push_back(tex.str());
 		TRANSFORM(c->actor.e)->position.X = MathUtil::RandomFloat() * (xPapillonStartRange.Y-xPapillonStartRange.X) + xPapillonStartRange.X;
 		TRANSFORM(c->actor.e)->position.Y = t * (yPapillonRange.Y-yPapillonRange.X) + yPapillonRange.X;
