@@ -113,7 +113,8 @@ class Game::Data {
 				TRANSFORM(b)->position = Vector2(0, benchPos);
 				TRANSFORM(b)->size = Vector2(.8,0.8);
 				TRANSFORM(b)->z = DL_Benchmark;
-				RENDERING(b)->color = (i % 2) ? Color(0.1, 0.1, 0.1):Color(0.8,0.8,0.8);
+				RENDERING(b)->color = (i % 2) ? Color(0.1, 0.1, 0.1,0.5):Color(0.8,0.8,0.8,0.5);
+				RENDERING(b)->hide = true;
 				benchTimeSystem[allSystems[i]] = b;
 			}
 		}
@@ -437,7 +438,7 @@ void Game::tick(float dt) {
 
 	updateDuration = TimeUtil::getTime()-updateDuration;
 
-	//bench(true, updateDuration, dt);
+	bench(true, updateDuration, dt);
 }
 
 void Game::bench(bool active, float updateDuration, float dt) {
@@ -462,9 +463,10 @@ void Game::bench(bool active, float updateDuration, float dt) {
 					it != datas->benchTimeSystem.end(); ++it) {
 				float timeSpent = ComponentSystem::Named(it->first)->timeSpent;
 				timeSpentInSystems += timeSpent;
-				float width = frameWidth * (timeSpent / updateDuration);
+				float width = 10 * (timeSpent / updateDuration);
 				TRANSFORM(it->second)->size.X = width;
 				TRANSFORM(it->second)->position.X = x + width * 0.5;
+				RENDERING(it->second)->hide = false;
 				x += width;
 
 				LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
