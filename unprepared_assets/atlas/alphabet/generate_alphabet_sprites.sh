@@ -14,5 +14,3 @@ for i in {0..9};
 do 
         convert -background transparent -fill white -font Cantarell-Bold -pointsize 50 label:$i $i.png
 done
-
-
