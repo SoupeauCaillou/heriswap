@@ -218,6 +218,10 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 		loadState(in, size);
 	}
 	datas->Setup(windowW, windowH);
+	
+	if (in && size) {
+		RENDERING(datas->logo_bg)->hide = true;
+	}
 
 	theGridSystem.GridSize = GRIDSIZE;
 
@@ -512,6 +516,7 @@ int Game::saveState(uint8_t** out) {
 		ptr = (uint8_t*)mempcpy(ptr, &datas->stateBeforePause, sizeof(datas->state));
 	else
 		ptr = (uint8_t*)mempcpy(ptr, &datas->state, sizeof(datas->state));
+	ptr = (uint8_t*)mempcpy(ptr, &datas->mode, sizeof(datas->mode));
 	ptr = (uint8_t*)mempcpy(ptr, &eSize, sizeof(eSize));
 	ptr = (uint8_t*)mempcpy(ptr, &sSize, sizeof(sSize));
 	ptr = (uint8_t*)mempcpy(ptr, entities, eSize);
@@ -529,6 +534,10 @@ void Game::loadState(const uint8_t* in, int size) {
 	datas->state = Pause;
 	datas->stateBeforePauseNeedEnter = true;
 	in += sizeof(datas->stateBeforePause);
+	memcpy(&datas->mode, &in[index], sizeof(datas->mode));
+	in += sizeof(datas->mode);
+	datas->mode2Manager[datas->mode]->Setup();
+	setMode();
 	int eSize, sSize;
 	memcpy(&eSize, &in[index], sizeof(eSize));
 	index += sizeof(eSize);

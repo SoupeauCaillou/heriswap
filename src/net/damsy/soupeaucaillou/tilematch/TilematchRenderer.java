@@ -40,6 +40,22 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
         	Log.e("tilematchJava", "GL error : " + GLU.gluErrorString(err));
         } 
     }
+    
+    void startGameThread() {
+    	gameThread = new Thread(new Runnable() {
+			public void run() {
+				TilematchJNILib.initFromGameThread(TilematchActivity.game);
+				initDone = true;
+				while ( TilematchActivity.isRunning) {
+					TilematchJNILib.step(TilematchActivity.game);
+					// TilematchActivity.mGLView.requestRender();
+				}
+				Log.i("tilematchJava", "Activity paused - exiting game thread");
+				gameThread = null;
+			}
+		});
+		gameThread.start();
+    }
 
     boolean initDone = false;
     public void onSurfaceChanged(GL10 gl, final int width, final int height) {
@@ -51,20 +67,11 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
         
     		Log.i("tilematchJava", "Start game thread");
     		// create game thread
-    		gameThread = new Thread(new Runnable() {
-				public void run() {
-					TilematchJNILib.initFromGameThread(TilematchActivity.game);
-					initDone = true;
-					while ( TilematchActivity.isRunning) {
-						TilematchJNILib.step(TilematchActivity.game);
-						// TilematchActivity.mGLView.requestRender();
-					}
-					Log.i("tilematchJava", "Activity paused - exiting game thread");
-				}
-			});
-    		gameThread.start();
+    		startGameThread();
     	} else {
     		TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
+    		if (gameThread == null)
+    			startGameThread();
     	}
     	
     	int err;
