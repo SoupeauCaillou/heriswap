@@ -86,6 +86,15 @@ class Game::Data {
 			TRANSFORM(logo)->z = DL_Logo;
 			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
 
+			logo_bg = theEntityManager.CreateEntity();
+			ADD_COMPONENT(logo_bg, Rendering);
+			ADD_COMPONENT(logo_bg, Transformation);
+			TRANSFORM(logo_bg)->position = Vector2(0,0);
+			TRANSFORM(logo_bg)->size = Vector2(10,10 * windowH / (float)windowW);
+			RENDERING(logo_bg)->hide = false;
+			RENDERING(logo_bg)->color = Color(0,0,0);
+			TRANSFORM(logo_bg)->z = DL_BehindLogo;			
+			
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
 				it->second->Setup();
 			}
@@ -124,7 +133,7 @@ class Game::Data {
 
 		GameState state, stateBeforePause;
 		bool stateBeforePauseNeedEnter;
-		Entity logo, background, sky, tree;
+		Entity logo, logo_bg, background, sky, tree;
 		Entity music[4];
 		// drag/drop
 		std::map<GameState, GameStateManager*> state2Manager;
@@ -387,6 +396,8 @@ void Game::tick(float dt) {
 			if (newState != BlackToSpawn)
 				theGridSystem.HideAll(true);
 		}
+		
+		RENDERING(datas->logo_bg)->hide = RENDERING(datas->logo)->hide;
 	}
 	//updating time
 	if (datas->state == UserInput) {
