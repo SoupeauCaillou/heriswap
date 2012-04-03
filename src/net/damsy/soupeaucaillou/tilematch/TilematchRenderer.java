@@ -28,8 +28,9 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
     		TilematchJNILib.render(TilematchActivity.game);
     		
     		frameCount++;
-    		if (frameCount == 20) {
-    			Log.w("tilematchJava", "Render thread FPS: " + 20000.0 / (System.currentTimeMillis() - time));
+    		long diff = System.currentTimeMillis() - time;
+    		if (diff >= 10000) {
+    			Log.w("tilematchJava", "Render thread FPS: " + (float)1000*frameCount / diff);
     			frameCount = 0;
     			time = System.currentTimeMillis();
     		}
@@ -47,17 +48,18 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
 			TilematchJNILib.initFromRenderThread(TilematchActivity.game, width, height, TilematchActivity.savedState);
     		// TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
     		TilematchActivity.savedState = null;
-       
+        
     		Log.i("tilematchJava", "Start game thread");
     		// create game thread
     		gameThread = new Thread(new Runnable() {
 				public void run() {
 					TilematchJNILib.initFromGameThread(TilematchActivity.game);
 					initDone = true;
-					while (true) {
+					while ( TilematchActivity.isRunning) {
 						TilematchJNILib.step(TilematchActivity.game);
 						// TilematchActivity.mGLView.requestRender();
 					}
+					Log.i("tilematchJava", "Activity paused - exiting game thread");
 				}
 			});
     		gameThread.start();

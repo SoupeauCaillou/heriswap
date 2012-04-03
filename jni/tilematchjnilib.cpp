@@ -213,8 +213,8 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_r
 	theRenderingSystem.render();  	
 	
 	frameCount++;
-	if (frameCount >= 20) {
-		LOGW("fps render: %.2f", 20.0 / (TimeUtil::getTime() - tttttt));
+	if (frameCount >= 200) {
+		LOGW("fps render: %.2f", 200.0 / (TimeUtil::getTime() - tttttt));
 		tttttt = TimeUtil::getTime();
 		frameCount = 0;
 	}

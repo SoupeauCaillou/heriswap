@@ -207,8 +207,8 @@ Game::Game(ScoreStorage* storage) {
 }
 
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
-	theRenderingSystem.init();
 	theRenderingSystem.setWindowSize(windowW, windowH);
+	theRenderingSystem.init();
 	theRenderingSystem.loadAtlas("sprites");
 	theRenderingSystem.loadAtlas("animals");
 	theRenderingSystem.loadAtlas("alphabet");
@@ -481,10 +481,10 @@ void Game::bench(bool active, float updateDuration, float dt) {
 				RENDERING(it->second)->hide = false;
 				x += width;
 
-				LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
+				// LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
 			}
 
-			LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
+			// LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
 			benchAccum = 0;
 		}
 	}

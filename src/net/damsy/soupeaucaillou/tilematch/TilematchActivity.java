@@ -26,12 +26,12 @@ public class TilematchActivity extends Activity {
 	static public SoundPool soundPool;
 	static public List<MediaPlayer> availablePlayers;
 	static public MediaPlayer[] activePlayers;
-
+	static public boolean isRunning;
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mutex = new Object();
-         
+ 
         getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN,
     			LayoutParams.FLAG_FULLSCREEN);
 
@@ -42,7 +42,7 @@ public class TilematchActivity extends Activity {
         Renderer r = new TilematchRenderer(getAssets());
         assert(r != null);
         try {
-        	if (false) throw new RuntimeException();
+        	if (true) throw new RuntimeException();
         	mGLView = new GL2JNIView(this, r, null);
         	// mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         	TilematchActivity.openGLESVersion = 2;
@@ -82,11 +82,13 @@ public class TilematchActivity extends Activity {
         mGLView.onPause();
         TilematchJNILib.pause(TilematchActivity.game);
         TilematchJNILib.pauseAllSounds();
+        isRunning = false;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        isRunning = true;
         mGLView.onResume();
         // pas bien, à faire uniquement qd on clique sur Reprendre
         TilematchJNILib.resumeAllSounds();
