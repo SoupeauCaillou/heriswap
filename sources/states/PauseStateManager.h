@@ -23,5 +23,5 @@ class PauseStateManager : public GameStateManager {
 
 	private:
 		Entity eRestart, bRestart;
-
+		Entity eAbort, bAbort;
 };

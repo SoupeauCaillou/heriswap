@@ -48,6 +48,4 @@ class GameModeManager {
 
 		float time, limit;
 		int score;
-		bool abort;
-
 };

@@ -53,34 +53,12 @@ class NormalGameModeManager::HUDManagerData {
 			TEXT_RENDERING(eFPS)->charSize /= 2;
 			TEXT_RENDERING(eFPS)->color = Color(0.1, 0.5, 0.4);
 
-
-
-			eAbort = theTextRenderingSystem.CreateLocalEntity(6);
-			TRANSFORM(eAbort)->z = DL_CombinationMark;
-			TRANSFORM(eAbort)->position = Vector2(2, -5);
-			TEXT_RENDERING(eAbort)->hide = true;
-			TEXT_RENDERING(eAbort)->alignL = false;
-			TEXT_RENDERING(eAbort)->text = "Abandonner";
-			bAbort = theEntityManager.CreateEntity();
-			TEXT_RENDERING(eAbort)->color = Color(0.f,0.f,0.f);
-			ADD_COMPONENT(bAbort, Transformation);
-			ADD_COMPONENT(bAbort, Container);
-			ADD_COMPONENT(bAbort, Button);
-			ADD_COMPONENT(bAbort, Rendering);
-			BUTTON(bAbort)->clicked = false;
-			RENDERING(bAbort)->color = Color(.0, 1.0, .0, .5);
-			TRANSFORM(bAbort)->z = DL_CombinationMark;
-			CONTAINER(bAbort)->includeChildren = true;
-			CONTAINER(bAbort)->entities.push_back(eAbort);
-
 		}
 		~HUDManagerData() {
 			theTextRenderingSystem.DestroyLocalEntity(eScore);
 			theTextRenderingSystem.DestroyLocalEntity(eTime);
 			theTextRenderingSystem.DestroyLocalEntity(eLevel);
 			theTextRenderingSystem.DestroyLocalEntity(eFPS);
-			theTextRenderingSystem.DestroyLocalEntity(eAbort);
-			theTextRenderingSystem.DestroyLocalEntity(bAbort);
 			theEntityManager.DeleteEntity(fBonus);
 			for(int i=0; i<8; i++) {
 				theTextRenderingSystem.DestroyLocalEntity(eObj[i]);
@@ -88,7 +66,6 @@ class NormalGameModeManager::HUDManagerData {
 			}
 		}
 		Entity eScore, eTime, eLevel, eFPS, eObj[8],fBonus, fObj[8];
-		Entity eAbort, bAbort;
 		int frames;
 		float nextfps, fps;
 };
@@ -97,7 +74,6 @@ NormalGameModeManager::NormalGameModeManager() {
 	limit = 45.0;
 	time = 0.;
 	datas=0;
-	abort=false;
 
 	score=0;
 	levelUp = false;
@@ -177,7 +153,6 @@ bool NormalGameModeManager::LeveledUp() {
 void NormalGameModeManager::Reset() {
 	time = 0;
 	score = 0;
-	abort = false;
 
 	isReadyToStart = false;
 	level = 1;
@@ -190,8 +165,6 @@ void NormalGameModeManager::Reset() {
 
 void NormalGameModeManager::HideUI(bool toHide) {
 	if (datas) {
-		TEXT_RENDERING(datas->eAbort)->hide = toHide;
-		RENDERING(datas->bAbort)->hide = toHide;
 		TEXT_RENDERING(datas->eScore)->hide = toHide;
 		TEXT_RENDERING(datas->eTime)->hide = toHide;
 		TEXT_RENDERING(datas->eFPS)->hide = toHide;
@@ -257,9 +230,6 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	RenderingComponent* rc = RENDERING(datas->fBonus);
 	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(type));
 	}
-
-	abort = BUTTON(datas->bAbort)->clicked;
-	BUTTON(datas->bAbort)->clicked = false;
 }
 
 std::string NormalGameModeManager::finalScore() {

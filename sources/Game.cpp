@@ -412,20 +412,11 @@ void Game::tick(float dt) {
 	//updating time
 	if (datas->state == UserInput) {
 		ended = datas->mode2Manager[datas->mode]->Update(dt);
-		//si on retourne au menu ppal
-		if (datas->mode2Manager[datas->mode]->abort) {
-			datas->state2Manager[datas->state]->Exit();
-			datas->state = EndMenu;
-			datas->state2Manager[datas->state]->Enter();
-			hideEveryThing(true, false);
-			LOGI("aborted. going to end menu");
-		}
 		//si on change de niveau
 		if (datas->mode2Manager[datas->mode]->LeveledUp()) {
 			datas->state2Manager[datas->state]->Exit();
 			datas->state = LevelChanged;
 			datas->state2Manager[datas->state]->Enter();
-			hideEveryThing(true, false);
 			LOGI("leveld up");
 		}
 	}//updating HUD
@@ -448,6 +439,14 @@ void Game::tick(float dt) {
 	theGridSystem.Update(dt);
 	theButtonSystem.Update(dt);
 
+	//si on va au menu ppal
+	if (datas->state != EndMenu && newState == EndMenu) {
+		LOGI("aborted. going to end menu");
+		hideEveryThing(true, false);
+		datas->state2Manager[datas->state]->Exit();
+		datas->state = EndMenu;
+		datas->state2Manager[datas->state]->Enter();
+	}
 
 	if (newState == EndMenu) {
 		theCombinationMarkSystem.DeleteMarks(-1);
