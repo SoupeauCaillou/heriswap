@@ -4,6 +4,7 @@
 
 #include "systems/TransformationSystem.h"
 #include "systems/TextRenderingSystem.h"
+#include "systems/ContainerSystem.h"
 #include "systems/ButtonSystem.h"
 
 #include "GameStateManager.h"
@@ -21,6 +22,6 @@ class PauseStateManager : public GameStateManager {
 	void Exit();
 
 	private:
-		Entity eRestart;
+		Entity eRestart, bRestart;
 
 };
