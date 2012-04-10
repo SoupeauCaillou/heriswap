@@ -43,10 +43,11 @@ class GameModeManager {
 		virtual void LevelUp() = 0;
 		//permet de savoir si on a change de niveau
 		virtual bool LeveledUp() = 0;
-		
+
 		virtual void Reset() = 0;
 
 		float time, limit;
 		int score;
-		
+		bool abort;
+
 };

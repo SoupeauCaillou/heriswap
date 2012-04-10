@@ -17,13 +17,14 @@ class Game {
 		static float CellSize();
 		static float CellContentScale();
 		static std::string cellTypeToTextureName(int type);
-		
+		void hideEveryThing(bool toHide, bool blacktospawn);
+
 		void setMode();
 
 		int saveState(uint8_t** out);
 	private:
 		void loadState(const uint8_t* in, int size);
-		void bench(bool active, float updateDuration, float dt); 
+		void bench(bool active, float updateDuration, float dt);
 
 	class Data;
 	Data* datas;

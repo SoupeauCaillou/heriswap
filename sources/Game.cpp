@@ -93,8 +93,8 @@ class Game::Data {
 			TRANSFORM(logo_bg)->size = Vector2(10,10 * windowH / (float)windowW);
 			RENDERING(logo_bg)->hide = false;
 			RENDERING(logo_bg)->color = Color(0,0,0);
-			TRANSFORM(logo_bg)->z = DL_BehindLogo;			
-			
+			TRANSFORM(logo_bg)->z = DL_BehindLogo;
+
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
 				it->second->Setup();
 			}
@@ -218,7 +218,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 		loadState(in, size);
 	}
 	datas->Setup(windowW, windowH);
-	
+
 	if (in && size) {
 		RENDERING(datas->logo_bg)->hide = true;
 	}
@@ -227,7 +227,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 
 	float fullscreenWidth = 10.0;
 	float fullscreenHeight = 10.0 * windowH / windowW;
-	
+
 	datas->sky = theEntityManager.CreateEntity();
 	theTransformationSystem.Add(datas->sky);
 	TRANSFORM(datas->sky)->z = DL_Sky;
@@ -329,12 +329,35 @@ void Game::togglePause(bool activate) {
 		datas->stateBeforePause = datas->state;
 		datas->stateBeforePauseNeedEnter = false;
 		datas->state = Pause;
+		hideEveryThing(true, false);
 		datas->state2Manager[datas->state]->Enter();
 	} else if (!activate) {
 		datas->state2Manager[datas->state]->Exit();
+		hideEveryThing(false, false);
 		datas->state = datas->stateBeforePause;
 		if (datas->stateBeforePauseNeedEnter)
 			datas->state2Manager[datas->state]->Enter();
+	}
+}
+
+void Game::hideEveryThing(bool toHide, bool blacktospawn) {
+	if (!toHide) {
+		RENDERING(datas->benchTotalTime)->hide = false;
+		datas->mode2Manager[datas->mode]->HideUI(false);
+		for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
+			it != datas->benchTimeSystem.end(); ++it) {
+			RENDERING(it->second)->hide = false;
+		}
+		theGridSystem.HideAll(false);
+	} else {
+		RENDERING(datas->benchTotalTime)->hide = true;
+		datas->mode2Manager[datas->mode]->HideUI(true);
+		for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
+			it != datas->benchTimeSystem.end(); ++it) {
+			RENDERING(it->second)->hide = true;
+		}
+		if (!blacktospawn)
+			theGridSystem.HideAll(true);
 	}
 }
 
@@ -382,35 +405,28 @@ void Game::tick(float dt) {
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
 
-		if (inGameState(newState)) {
-			datas->mode2Manager[datas->mode]->HideUI(false);
-			theGridSystem.HideAll(false);
-			RENDERING(datas->benchTotalTime)->hide = false;
-			for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
-				it != datas->benchTimeSystem.end(); ++it) {
-				RENDERING(it->second)->hide = false;
-			}
-		} else {
-			RENDERING(datas->benchTotalTime)->hide = true;
-			for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
-				it != datas->benchTimeSystem.end(); ++it) {
-				RENDERING(it->second)->hide = true;
-			}
-			datas->mode2Manager[datas->mode]->HideUI(true);
-			if (newState != BlackToSpawn)
-				theGridSystem.HideAll(true);
-		}
-		
+		hideEveryThing(!inGameState(newState), datas->state==BlackToSpawn);
 		RENDERING(datas->logo_bg)->hide = RENDERING(datas->logo)->hide;
+
 	}
 	//updating time
 	if (datas->state == UserInput) {
 		ended = datas->mode2Manager[datas->mode]->Update(dt);
+		//si on retourne au menu ppal
+		if (datas->mode2Manager[datas->mode]->abort) {
+			datas->state2Manager[datas->state]->Exit();
+			datas->state = EndMenu;
+			datas->state2Manager[datas->state]->Enter();
+			hideEveryThing(true, false);
+			LOGI("aborted. going to end menu");
+		}
 		//si on change de niveau
 		if (datas->mode2Manager[datas->mode]->LeveledUp()) {
 			datas->state2Manager[datas->state]->Exit();
 			datas->state = LevelChanged;
 			datas->state2Manager[datas->state]->Enter();
+			hideEveryThing(true, false);
+			LOGI("leveld up");
 		}
 	}//updating HUD
 	if (inGameState(newState)) {
@@ -449,7 +465,7 @@ void Game::tick(float dt) {
 	theContainerSystem.Update(dt);
 	theSoundSystem.Update(dt);
 	theRenderingSystem.Update(dt);
-	
+
 	//bench settings
 
 	updateDuration = TimeUtil::getTime()-updateDuration;

@@ -18,29 +18,29 @@ void EndMenuStateManager::Setup() {
 	ADD_COMPONENT(startbtn, Rendering);
 	ADD_COMPONENT(startbtn, Button);
 
-	RENDERING(startbtn)->texture =theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(4));
+	RENDERING(startbtn)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(6));
 	RENDERING(startbtn)->hide = true;
+	TRANSFORM(startbtn)->z = DL_MainMenuUI;
 	TRANSFORM(startbtn)->size = Game::CellSize() * Game::CellContentScale();
 	BUTTON(startbtn)->clicked = false;
-	TRANSFORM(startbtn)->position = Vector2(0,3);
+	TRANSFORM(startbtn)->position = Vector2(0,5);
 
 	eScore = theTextRenderingSystem.CreateLocalEntity(5);
 	TRANSFORM(eScore)->position = Vector2(1, 6);
 	TEXT_RENDERING(eScore)->hide = true;
 
-	eMsg = theTextRenderingSystem.CreateLocalEntity(28);
+	/*eMsg = theTextRenderingSystem.CreateLocalEntity(28);
 	TRANSFORM(eMsg)->position = Vector2(-4, 1);
 	TEXT_RENDERING(eMsg)->charSize = 0.3;
 	TEXT_RENDERING(eMsg)->hide = true;
 	TEXT_RENDERING(eMsg)->alignL = true;
-	TEXT_RENDERING(eMsg)->color = Color(0.f,0.f,0.f);
-
+	TEXT_RENDERING(eMsg)->color = Color(0.f,0.f,0.f);*/
 }
 
 void EndMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	RENDERING(startbtn)->hide = false;
-
+	BUTTON(startbtn)->clicked = false;
 
 	/*
 	{
@@ -61,7 +61,6 @@ void EndMenuStateManager::Enter() {
 
 GameState EndMenuStateManager::Update(float dt) {
 	if (BUTTON(startbtn)->clicked) {
-		BUTTON(startbtn)->clicked = false;
 		std::vector<ScoreStorage::ScoreEntry> entries = storage->loadFromStorage();
 		ScoreStorage::ScoreEntry entry;
 		entry.points = modeMgr->score;
@@ -81,15 +80,14 @@ GameState EndMenuStateManager::Update(float dt) {
 		TEXT_RENDERING(eScore)->text = a.str();
 		TEXT_RENDERING(eScore)->hide = false;
 		}
-	}
-	if (BUTTON(startbtn)->clicked)
 		return MainMenu;
+	}
 	return EndMenu;
 }
 
 void EndMenuStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-	TEXT_RENDERING(eMsg)->hide = true;
+	//TEXT_RENDERING(eMsg)->hide = true;
 	RENDERING(startbtn)->hide = true;
 	BUTTON(startbtn)->clicked = true;
 	TEXT_RENDERING(eScore)->hide = true;

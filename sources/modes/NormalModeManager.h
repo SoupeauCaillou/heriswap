@@ -1,5 +1,7 @@
 #pragma once
 
+#include "systems/ContainerSystem.h"
+#include "systems/ButtonSystem.h"
 #include "GameModeManager.h"
 #include "DepthLayer.h"
 
@@ -23,7 +25,7 @@ class NormalGameModeManager : public GameModeManager {
 
 	private:
 		class HUDManagerData;
-		
+
 		int level, obj[50], remain[8], bonus;
 		bool isReadyToStart, levelUp;
 		HUDManagerData* datas;
