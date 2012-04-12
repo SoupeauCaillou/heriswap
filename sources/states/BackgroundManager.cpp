@@ -252,7 +252,7 @@ void BackgroundManager::BackgroundUpdate(float dt) {
 void BackgroundManager::switchAnim(AnimatedActor* a)
 {
 	a->frames++;
-	if (a->frames>=30/(MathUtil::Abs(a->actor.speed)-CAMERASPEED)) {
+	if (a->frames>=30/(MathUtil::Abs(a->actor.speed)+MathUtil::Abs(CAMERASPEED))) {
 		RENDERING(a->actor.e)->texture = theRenderingSystem.loadTextureFile(a->anim[a->ind]);
 		a->ind++;
 		if (a->ind==a->anim.size()) a->ind = 0;
