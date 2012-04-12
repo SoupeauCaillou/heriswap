@@ -26,18 +26,25 @@ class BackgroundManager : public GameStateManager {
 	private:
 		struct Actor;
 		struct AnimatedActor;
-
-		Actor* initCloud(Actor* c);
-		AnimatedActor* initAnimal(AnimatedActor* a);
-
-		std::vector<Actor*> clouds;
-		std::vector<AnimatedActor*> animals;
-
 		void switchAnim(AnimatedActor* a);
 
+		std::vector<Actor*> clouds;
+		Actor* initCloud(Actor* c);
+
+		std::vector<AnimatedActor*> animals;
+		AnimatedActor* initAnimal(AnimatedActor* a);
+
+		std::vector<Actor*> landscapes;
+		std::vector<Actor*> trees;
+		Actor* initLandscape(Actor* c, bool isATree);
+
 	public:
+		//clouds
 		Vector2 xCloudStartRange, yCloudRange, cloudScaleRange;
+		//animals
 		Vector2 xHerissonStartRange, yHerissonRange, herissonScaleRange;
 		Vector2 xPapillonStartRange, yPapillonRange, papillonScaleRange;
+		//landscape
+
 };
 
