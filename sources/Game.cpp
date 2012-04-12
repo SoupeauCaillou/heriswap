@@ -14,6 +14,7 @@
 #include "systems/SoundSystem.h"
 #include "systems/ContainerSystem.h"
 #include "systems/PhysicsSystem.h"
+#include "systems/ParticuleSystem.h"
 
 #include "GridSystem.h"
 #include "Game.h"
@@ -127,6 +128,22 @@ class Game::Data {
 				RENDERING(b)->hide = true;
 				benchTimeSystem[allSystems[i]] = b;
 			}
+
+         cursor = theEntityManager.CreateEntity();
+         ADD_COMPONENT(cursor, Transformation);
+         TRANSFORM(cursor)->z = DL_Fading;
+         ADD_COMPONENT(cursor, Particule);
+         PARTICULE(cursor)->emissionRate = 50;
+    PARTICULE(cursor)->texture = InvalidTextureRef;
+    PARTICULE(cursor)->lifetime = Interval<float>(0.5f, 1.5f);
+    PARTICULE(cursor)->initialColor = Interval<Color> (Color(1.0, 0, 0, 0.7), Color(0.5, 0, 0, 0.7));
+    PARTICULE(cursor)->finalColor  = Interval<Color> (Color(0, 0, 1, 0.1), Color(0, 0, 0.5, 0.1));
+PARTICULE(cursor)->initialSize = Interval<float>(0.15, 0.2);
+PARTICULE(cursor)->finalSize = Interval<float>(0.01, 0.015);
+PARTICULE(cursor)->forceDirection = Interval<float>(0.1, 3);
+PARTICULE(cursor)->forceAmplitude  = Interval<float>(20, 100);
+PARTICULE(cursor)->mass = 1;
+
 		}
 		//bench data
 		std::map<std::string, Entity> benchTimeSystem;
@@ -142,6 +159,8 @@ class Game::Data {
 
 
 		GameMode mode;
+
+     Entity cursor;
 };
 
 static const float offset = 0.2;
@@ -206,6 +225,7 @@ Game::Game(ScoreStorage* storage) {
 	TextRenderingSystem::CreateInstance();
 	ContainerSystem::CreateInstance();
 	PhysicsSystem::CreateInstance();
+    ParticuleSystem::CreateInstance();
 }
 
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
@@ -432,24 +452,8 @@ void Game::tick(float dt) {
 		it->second->BackgroundUpdate(dt);
 	}
 
-/*
-	if (!theTouchInputManager.wasTouched() &&
-		theTouchInputManager.isTouched()) {
-		Entity e = theEntityManager.CreateEntity();
-		ADD_COMPONENT(e, Transformation);
-		ADD_COMPONENT(e, Rendering);
-		ADD_COMPONENT(e, Physics);
-		
-		TRANSFORM(e)->position = theTouchInputManager.getTouchLastPosition();
-		RENDERING(e)->hide = false;
-		RENDERING(e)->color = Color(1.0, 0.0, 0.5);
-		TRANSFORM(e)->z = DL_Fading;
-		TRANSFORM(e)->size = Vector2(0.2, 0.2);
-		PHYSICS(e)->mass = 1;
-		PHYSICS(e)->gravity = Vector2(0, -1);
-		PHYSICS(e)->forces.push_back(Force(MathUtil::RandomVector() * 100, MathUtil::RandomVector() * 0.1));
-	}
-*/
+TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition();
+
 	//si c'est pas à l'user de jouer, on cache de force les combi
 	if (newState != UserInput)
 		toggleShowCombi(true);
@@ -457,6 +461,7 @@ void Game::tick(float dt) {
 	theADSRSystem.Update(dt);
 	theGridSystem.Update(dt);
 	theButtonSystem.Update(dt);
+    theParticuleSystem.Update(dt);
 
 	//si on va au menu ppal
 	if (datas->state != EndMenu && newState == EndMenu) {
