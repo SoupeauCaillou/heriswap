@@ -13,6 +13,7 @@
 #include "systems/TextRenderingSystem.h"
 #include "systems/SoundSystem.h"
 #include "systems/ContainerSystem.h"
+#include "systems/PhysicsSystem.h"
 
 #include "GridSystem.h"
 #include "Game.h"
@@ -204,6 +205,7 @@ Game::Game(ScoreStorage* storage) {
 	ButtonSystem::CreateInstance();
 	TextRenderingSystem::CreateInstance();
 	ContainerSystem::CreateInstance();
+	PhysicsSystem::CreateInstance();
 }
 
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
@@ -430,7 +432,24 @@ void Game::tick(float dt) {
 		it->second->BackgroundUpdate(dt);
 	}
 
-
+/*
+	if (!theTouchInputManager.wasTouched() &&
+		theTouchInputManager.isTouched()) {
+		Entity e = theEntityManager.CreateEntity();
+		ADD_COMPONENT(e, Transformation);
+		ADD_COMPONENT(e, Rendering);
+		ADD_COMPONENT(e, Physics);
+		
+		TRANSFORM(e)->position = theTouchInputManager.getTouchLastPosition();
+		RENDERING(e)->hide = false;
+		RENDERING(e)->color = Color(1.0, 0.0, 0.5);
+		TRANSFORM(e)->z = DL_Fading;
+		TRANSFORM(e)->size = Vector2(0.2, 0.2);
+		PHYSICS(e)->mass = 1;
+		PHYSICS(e)->gravity = Vector2(0, -1);
+		PHYSICS(e)->forces.push_back(Force(MathUtil::RandomVector() * 100, MathUtil::RandomVector() * 0.1));
+	}
+*/
 	//si c'est pas à l'user de jouer, on cache de force les combi
 	if (newState != UserInput)
 		toggleShowCombi(true);
@@ -459,6 +478,7 @@ void Game::tick(float dt) {
 	updateMusic(datas->music);
 
 	theCombinationMarkSystem.Update(dt);
+	thePhysicsSystem.Update(dt);
 	theTransformationSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);
 	theContainerSystem.Update(dt);
