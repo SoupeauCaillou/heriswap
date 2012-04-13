@@ -22,7 +22,7 @@ class ScoreStorage;
 
 class EndMenuStateManager : public GameStateManager {
 	public:
-		EndMenuStateManager(ScoreStorage* str);
+		EndMenuStateManager(ScoreStorage* str, PlayerNameInputUI* inputUI);
 		~EndMenuStateManager();
 		void Setup();
 		void Enter();
@@ -31,5 +31,7 @@ class EndMenuStateManager : public GameStateManager {
 		void Exit();
 	private:
 		ScoreStorage* storage;
+		PlayerNameInputUI* inputUI;
 		Entity startbtn, eScore, eMsg;
+		std::string playerName;
 };

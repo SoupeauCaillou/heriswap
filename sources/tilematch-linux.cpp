@@ -27,6 +27,19 @@
 static char* loadPng(const char* assetName, int* width, int* height);
 static char* loadTextfile(const char* assetName);
 
+struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
+	public:
+		void show() {
+			__log_enabled = false;
+			std::cout << "Enter your name!" << std::endl;
+		}
+		bool query(std::string& result) {
+			getline(std::cin, result);
+			__log_enabled = true;
+			return true;
+		}
+};
+
 struct LinuxNativeAssetLoader: public NativeAssetLoader {
 	char* decompressPngImage(const std::string& assetName, int* width, int* height) {
 		return loadPng(assetName.c_str(), width, height);
@@ -159,7 +172,7 @@ int main(int argc, char** argv) {
 	sqliteExec->initTable();
 	//return 0;
 
-	Game game(sqliteExec);
+	Game game(sqliteExecnew TerminalPlayerNameInputUI());
 
 	theSoundSystem.init();
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());
