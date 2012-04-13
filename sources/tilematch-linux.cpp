@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <sys/time.h>
 #include <algorithm>
+#include <sqlite3.h>
 
 #include "base/Vector2.h"
 #include "base/TouchInputManager.h"
@@ -61,39 +62,86 @@ class MouseNativeTouchState: public NativeTouchState {
 		}
 };
 
-
-
-
-	class FileScoreStorage: public ScoreStorage {
-	std::vector<ScoreEntry> loadFromStorage() {
-		std::vector<ScoreEntry> result;
-		FILE* file = fopen("scores.txt", "r");
-		if (file) {
-			ScoreEntry entry;
-			char name[128];
-			int i=0;
-			while(i<10 && fscanf(file, "%d:%s\n", &entry.points, name)!=EOF) {
-				entry.name = name;
-				result.push_back(entry);
-
-				i++;
+class LinuxSqliteExec: public ScoreStorage {
+	private :
+		static int callback(void *save, int argc, char **argv, char **azColName){
+			int i;
+			// nom | mode | score | temps
+			std::vector<ScoreStorage::Score> *sav = static_cast<std::vector<ScoreStorage::Score>* >(save);
+			ScoreStorage::Score score1;
+			for(i=0; i<argc; i++){
+				std::istringstream iss(argv[i]);
+				if (azColName[i] == "nom") {
+					score1.name = argv[i];
+				} else if (azColName[i] == "mode") {
+					iss >> score1.mode;
+				} else if (azColName[i] == "points") {
+					iss >> score1.points;
+				} else if (azColName[i] == "temps") {
+					iss >> score1.time;
+				}
 			}
-			fclose(file);
-		} else {
-			std::cout << "impossible de lire les scores" << std::endl;
+			return 0;
 		}
+	public :
+		std::vector<ScoreStorage::Score> getScore(int mode) {
+			std::stringstream tmp;
+			std::vector<ScoreStorage::Score> sav;
+			return sav;
+			tmp << "select * from score where mode=" << mode;
 
-		std::sort(result.begin(), result.end(), ScoreStorage::ScoreEntryComp);
-		return result;
-	}
-
-	void saveToStorage(const std::vector<ScoreEntry>& entries) {
-		std::ofstream out("scores.txt", std::ios::out);
-		for(int i=0;i<entries.size(); i++) {
-			out << entries[i].points << ':' << entries[i].name << std::endl;
+			sqlite3 *db;
+			char *zErrMsg = 0;
+			int rc = sqlite3_open("tilematch.db", &db);
+			if( rc ){
+				LOGI("Can't open database tilematch.db: %s\n", sqlite3_errmsg(db));
+				sqlite3_close(db);
+			}
+			rc = sqlite3_exec(db, tmp.str().c_str(), callback, &sav, &zErrMsg);
+			if( rc!=SQLITE_OK ){
+				LOGI("SQL error: %s\n", zErrMsg);
+				sqlite3_free(zErrMsg);
+			}
+			sqlite3_close(db);
 		}
-		out.close();
-	}
+		void submitScore(ScoreStorage::Score scr) {
+			return;
+			std::stringstream tmp;
+			tmp << "INSERT INTO scoreTable VALUES (" << scr.name <<"," << scr.mode<<","<<scr.points<<","<<scr.time<<")";
+			sqlite3 *db;
+			char *zErrMsg = 0;
+			int rc = sqlite3_open("tilematch.db", &db);
+			if( rc ){
+				LOGI("Can't open database tilematch.db: %s\n", sqlite3_errmsg(db));
+				sqlite3_close(db);
+			}
+			rc = sqlite3_exec(db, tmp.str().c_str(), 0, 0, &zErrMsg);
+			if( rc!=SQLITE_OK ){
+				LOGI("SQL error: %s\n", zErrMsg);
+				sqlite3_free(zErrMsg);
+			}
+			sqlite3_close(db);
+		}
+		void initTable() {
+			sqlite3 *db;
+			int rc = sqlite3_open("tilematch.db", &db);
+			if (rc){
+				LOGI("Can't open database: %s", sqlite3_errmsg(db));
+				return;
+			}
+
+			char *zErrMsg = 0;
+
+			if (rc==SQLITE_OK) {
+				LOGI("initializing database...");
+				rc = sqlite3_exec(db, "create table scoreTable(nom char2(25) default 'Anonymous', mode number(1) default '0', score number(7) default '0', temps number(5) default '0')", 0, 0, &zErrMsg);
+				if( rc!=SQLITE_OK ){
+					LOGI("SQL error: %s\n", zErrMsg);
+					sqlite3_free(zErrMsg);
+				}
+			}
+			sqlite3_close(db);
+		}
 };
 
 int main(int argc, char** argv) {
@@ -119,8 +167,12 @@ int main(int argc, char** argv) {
 			fclose(file);
 		}
 	}
+	// vérification de la table des scores
+	LinuxSqliteExec* sqliteExec = new LinuxSqliteExec();
+	sqliteExec->initTable();
+	//return 0;
 
-	Game game(new FileScoreStorage(), new TerminalPlayerNameInputUI());
+	Game game(sqliteExec, new TerminalPlayerNameInputUI());
 
 	theSoundSystem.init();
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());
@@ -186,7 +238,7 @@ int main(int argc, char** argv) {
 				frames = 0;
 			}
 		}
-		
+
 		theRenderingSystem.render();
 		glfwSwapBuffers();
 	}

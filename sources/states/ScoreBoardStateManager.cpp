@@ -41,7 +41,7 @@ void ScoreBoardStateManager::Enter() {
 	RENDERING(startbtn)->hide = false;
 	BUTTON(startbtn)->clicked = false;
 
-	std::vector<ScoreStorage::ScoreEntry> entries = storage->loadFromStorage();
+	std::vector<ScoreStorage::Score> entries = storage->getScore(0);
 	for (int i=0; i<10; i++) {
 		TextRenderingComponent* trc = TEXT_RENDERING(eScore[i]);
 		if (i < entries.size()) {
