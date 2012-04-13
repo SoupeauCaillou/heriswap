@@ -3,7 +3,17 @@
 
 #define FAST 1.
 
-class ScoreStorage;
+class ScoreStorage {
+	public:
+		struct Score {
+			int mode, points;
+			float time;
+			std::string name;
+		};
+		virtual void initTable() = 0;
+		virtual void submitScore(Score scr) = 0;
+		virtual std::vector<Score> getScore(int mode) = 0;
+};
 
 class Game {
 	public:

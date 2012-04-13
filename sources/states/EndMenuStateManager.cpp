@@ -61,16 +61,11 @@ void EndMenuStateManager::Enter() {
 
 GameState EndMenuStateManager::Update(float dt) {
 	if (BUTTON(startbtn)->clicked) {
-		std::vector<ScoreStorage::ScoreEntry> entries = storage->loadFromStorage();
-		ScoreStorage::ScoreEntry entry;
+		ScoreStorage::Score entry;
 		entry.points = modeMgr->score;
 		entry.name = "plop";
-		entries.push_back(entry);
-		std::sort(entries.begin(), entries.end(), ScoreStorage::ScoreEntryComp);
-		if (entries.size() > 10) {
-			entries.resize(10);
-		}
-		storage->saveToStorage(entries);
+
+		storage->submitScore(entry);
 
 		{
 		std::stringstream a;
