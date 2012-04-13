@@ -1,7 +1,7 @@
 #include "EndMenuStateManager.h"
 
 
-EndMenuStateManager::EndMenuStateManager(ScoreStorage* str) : storage(str) {
+EndMenuStateManager::EndMenuStateManager(ScoreStorage* str, PlayerNameInputUI* ui) : storage(str), inputUI(ui) {
 	modeMgr=0;
 }
 
@@ -39,8 +39,11 @@ void EndMenuStateManager::Setup() {
 
 void EndMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-	RENDERING(startbtn)->hide = false;
+	RENDERING(startbtn)->hide = true;
 	BUTTON(startbtn)->clicked = false;
+	
+	playerName.clear();
+	inputUI->show();
 
 	/*
 	{
@@ -60,11 +63,16 @@ void EndMenuStateManager::Enter() {
 }
 
 GameState EndMenuStateManager::Update(float dt) {
+	if (playerName.length() == 0) {
+		if (inputUI->query(playerName))
+			RENDERING(startbtn)->hide = false;
+	}
+	
 	if (BUTTON(startbtn)->clicked) {
 		std::vector<ScoreStorage::ScoreEntry> entries = storage->loadFromStorage();
 		ScoreStorage::ScoreEntry entry;
 		entry.points = modeMgr->score;
-		entry.name = "plop";
+		entry.name = playerName;
 		entries.push_back(entry);
 		std::sort(entries.begin(), entries.end(), ScoreStorage::ScoreEntryComp);
 		if (entries.size() > 10) {

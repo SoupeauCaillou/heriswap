@@ -54,6 +54,7 @@ public class TilematchActivity extends Activity {
         
         mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         rl.addView(mGLView);
+        rl.bringChildToFront(findViewById(R.id.enter_name));
         
         
         TilematchActivity.soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);

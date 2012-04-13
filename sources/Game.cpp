@@ -45,7 +45,7 @@
 class Game::Data {
 	public:
 		/* can not use any system here */
-		Data(ScoreStorage* storage) {
+		Data(ScoreStorage* storage, PlayerNameInputUI* inputUI) {
 			mode = Normal;
 			mode2Manager[Normal] = new NormalGameModeManager();
 			mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager();
@@ -69,7 +69,7 @@ class Game::Data {
 			state2Manager[Fall] = new FallGameStateManager();
 			state2Manager[LevelChanged] = new LevelStateManager();
 			state2Manager[ScoreBoard] = new ScoreBoardStateManager(storage);
-			state2Manager[EndMenu] = new EndMenuStateManager(storage);
+			state2Manager[EndMenu] = new EndMenuStateManager(storage, inputUI);
 			state2Manager[Pause] = new PauseStateManager();
 
 			BackgroundManager* bg = new BackgroundManager();
@@ -207,12 +207,12 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-Game::Game(ScoreStorage* storage) {
+Game::Game(ScoreStorage* storage, PlayerNameInputUI* inputUI) {
 	/* create EntityManager */
 	EntityManager::CreateInstance();
 
 	/* create before system so it cannot use any of them (use Setup instead) */
-	datas = new Data(storage);
+	datas = new Data(storage, inputUI);
 
 	/* create systems singleton */
 	TransformationSystem::CreateInstance();

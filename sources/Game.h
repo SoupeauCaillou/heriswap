@@ -5,9 +5,15 @@
 
 class ScoreStorage;
 
+class PlayerNameInputUI {
+	public:
+		virtual void show() = 0;
+		virtual bool query(std::string& result) = 0;
+};
+
 class Game {
 	public:
-		Game(ScoreStorage* storage);
+		Game(ScoreStorage* storage, PlayerNameInputUI* inputUI);
 		void init(int windowW, int windowH, const uint8_t* in = 0, int size = 0);
 		void tick(float dt);
 		void togglePause(bool activate);
