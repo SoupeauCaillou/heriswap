@@ -172,7 +172,7 @@ int main(int argc, char** argv) {
 	sqliteExec->initTable();
 	//return 0;
 
-	Game game(sqliteExecnew TerminalPlayerNameInputUI());
+	Game game(sqliteExec, new TerminalPlayerNameInputUI());
 
 	theSoundSystem.init();
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());
