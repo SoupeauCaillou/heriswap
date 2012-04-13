@@ -32,6 +32,8 @@ void UserInputGameStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	dragged = 0;
 	ADSR(eSwapper)->active = false;
+	ADSR(eSwapper)->activationTime = 0;
+	originI = originJ = -1;
 }
 
 GameState UserInputGameStateManager::Update(float dt) {	
