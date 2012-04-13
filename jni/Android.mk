@@ -6,12 +6,10 @@ LOCAL_MODULE := tilematch
 
 LOCAL_CFLAGS := -DANDROID_NDK \
                 -DDISABLE_IMPORTGL \
-                -g -O0 \
 				-I$(LOCAL_PATH)/..
 
 LOCAL_CXXFLAGS := -DANDROID_NDK \
                 -DDISABLE_IMPORTGL \
-                -g -O0 \
             -I$(LOCAL_PATH)/../sources \
 				-I$(LOCAL_PATH)/.. \
 				-I$(LOCAL_PATH)/../sac/ \

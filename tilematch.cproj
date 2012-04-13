@@ -71,5 +71,6 @@
     <Compile Include="sources\tilematch-linux.cpp" />
     <Compile Include="tests\TestGridSystem.cpp" />
     <Compile Include="tests\tests.cpp" />
+    <Compile Include="jni\tilematchjnilib.cpp" />
   </ItemGroup>
 </Project>

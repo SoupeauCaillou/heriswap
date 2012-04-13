@@ -44,7 +44,6 @@ public class TilematchActivity extends Activity {
         try {
         	if (true) throw new RuntimeException();
         	mGLView = new GL2JNIView(this, r, null);
-        	// mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         	TilematchActivity.openGLESVersion = 2;
         } catch (Exception exc) {
         	Log.e("tilematchJava", "Failed to create OpenGL ES2 context, try ES1");
@@ -53,7 +52,7 @@ public class TilematchActivity extends Activity {
         	TilematchActivity.openGLESVersion = 1;
         }
         
-        
+        mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         rl.addView(mGLView);
         
         
