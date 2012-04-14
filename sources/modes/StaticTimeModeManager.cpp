@@ -47,7 +47,7 @@ class StaticTimeGameModeManager::HUDManagerData {
 };
 
 StaticTimeGameModeManager::StaticTimeGameModeManager() {
-	limit = 5.0;
+	limit = 45.0;
 	time = 0.;
 	datas=0;
 

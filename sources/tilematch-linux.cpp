@@ -81,7 +81,6 @@ class LinuxSqliteExec: public ScoreStorage {
 					iss >> score1.time;
 				}
 			}
-			LOGI("%d %f %s %d", score1.mode, score1.time, score1.name.c_str(), score1.points);
 			sav->push_back(score1);
 			return 0;
 		}
