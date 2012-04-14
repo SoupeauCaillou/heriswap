@@ -269,19 +269,20 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	datas->decord2nd = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->decord2nd, Transformation);
 	TRANSFORM(datas->decord2nd)->z = DL_Decor2nd;
-	TRANSFORM(datas->decord2nd)->size = Vector2(fullscreenWidth, (fullscreenWidth * 450.0) / 800.0);
-	TRANSFORM(datas->decord2nd)->position = Vector2(0, -((626+215 - 640)/1280.0)*fullscreenHeight);
+	TRANSFORM(datas->decord2nd)->size = Vector2(fullscreenWidth, (fullscreenWidth * 470.0) / 800.0);
+	TRANSFORM(datas->decord2nd)->position = Vector2(0, (640 - (610+235)) * fullscreenHeight * 0.5 / 640);
 	ADD_COMPONENT(datas->decord2nd, Scrolling);
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_0.png");
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_1.png");
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_2.png");
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_3.png");
 	SCROLLING(datas->decord2nd)->speed = Vector2(-.7, 0);
+	SCROLLING(datas->decord2nd)->displaySize = Vector2(TRANSFORM(datas->decord2nd)->size.X * 1.01, TRANSFORM(datas->decord2nd)->size.Y);
 
 	datas->decord1er = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->decord1er, Transformation);
 	TRANSFORM(datas->decord1er)->z = DL_Decor1er;
-	TRANSFORM(datas->decord1er)->size = Vector2(fullscreenWidth, (fullscreenWidth * 296.0) / 800.0);
+	TRANSFORM(datas->decord1er)->size = Vector2(fullscreenWidth, (fullscreenWidth * 300.0) / 800.0);
 	TRANSFORM(datas->decord1er)->position = Vector2(0, (-fullscreenHeight + TRANSFORM(datas->decord1er)->size.Y) * 0.5);
 	ADD_COMPONENT(datas->decord1er, Scrolling);
 	SCROLLING(datas->decord1er)->images.push_back("decor1er_0.png");
@@ -289,6 +290,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	SCROLLING(datas->decord1er)->images.push_back("decor1er_2.png");
 	SCROLLING(datas->decord1er)->images.push_back("decor1er_3.png");
 	SCROLLING(datas->decord1er)->speed = Vector2(-1.5, 0);
+	SCROLLING(datas->decord1er)->displaySize = Vector2(TRANSFORM(datas->decord1er)->size.X * 1.01, TRANSFORM(datas->decord1er)->size.Y);
 
 	datas->state2Manager[datas->state]->Enter();
 }
