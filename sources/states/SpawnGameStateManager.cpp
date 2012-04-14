@@ -83,7 +83,6 @@ GameState SpawnGameStateManager::Update(float dt) {
 		for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
 			if (it->fe == 0) {
 				it->fe = createCell(*it);
-				std::cout << "nouvelle feuille (type="<<it->type<<") en ("<<it->X<<","<<it->Y<<")\n";
 			} else if (transitionCree->value == 1){
 				TRANSFORM(it->fe)->rotation = 0;
 			} else {
@@ -205,7 +204,6 @@ static Entity createCell(Feuille& f) {
 	GRID(e)->type = f.type;
 	GRID(e)->i = f.X;
 	GRID(e)->j = f.Y;
-	
 	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(f.type, &TRANSFORM(e)->rotation));
 	return e;
 }

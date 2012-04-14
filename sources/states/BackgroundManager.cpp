@@ -15,8 +15,6 @@ struct BackgroundManager::AnimatedActor {
 	struct Actor actor;
 };
 
-
-
 BackgroundManager::BackgroundManager(float windowHeight) {
 	#define GIMP_Y_TO_GAME(x) -(windowHeight * (x - 640.0f) / 1280.0f)
 	cloudY[0] = Interval<float>(GIMP_Y_TO_GAME(96.0), GIMP_Y_TO_GAME(252));
@@ -27,11 +25,11 @@ BackgroundManager::BackgroundManager(float windowHeight) {
 	cloudSize[0] = Interval<float>(GIMP_W_TO_GAME(230), GIMP_W_TO_GAME(410));
 	cloudSize[1] = Interval<float>(GIMP_W_TO_GAME(290), GIMP_W_TO_GAME(190));
 	cloudSize[2] = Interval<float>(GIMP_W_TO_GAME(100), GIMP_W_TO_GAME(200));
-	
+
 	cloudSpeed[0] = Interval<float>(-0.5, -0.3);
 	cloudSpeed[1] = Interval<float>(-0.25, -0.13);
 	cloudSpeed[2] = Interval<float>(-0.1, -0.03);
-	
+
 	textures[0].push_back("nuages/haut_0.png");
 	textures[0].push_back("nuages/haut_1.png");
 	textures[0].push_back("nuages/haut_2.png");
@@ -69,19 +67,49 @@ void BackgroundManager::Setup() {
 
 BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c, int group) {
 	float ratio = 1.67;
-	
+
 	float width = cloudSize[group].random();
 	TRANSFORM(c->e)->position.X = cloudStartX.random();
 	TRANSFORM(c->e)->position.Y = cloudY[group].random();
 	TRANSFORM(c->e)->z = DL_Cloud;
-	
+
 	int idx = MathUtil::RandomInt(textures[group].size());
 	RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile(textures[group][idx]);
 	RENDERING(c->e)->hide = false;
 	TRANSFORM(c->e)->size = Vector2(width, width / ratio);
 	c->visible = false;
+<<<<<<< HEAD
 	c->speed = cloudSpeed[group].random();
 	c->group = group;
+=======
+	c->speed = CAMERASPEED+MathUtil::Lerp(-0.2f, -1.5f, t);
+
+	return c;
+}
+
+BackgroundManager::AnimatedActor* BackgroundManager::initAnimal(AnimatedActor* c) {
+	c->anim.clear();
+	c->frames=0;
+	float t = MathUtil::RandomFloat();
+	std::stringstream tex;
+
+	int i = MathUtil::RandomInt(8);
+	tex << "papillon0_" << i << ".png";
+	c->anim.push_back(tex.str());
+	tex.str("");
+	tex << "papillon1_" << i << ".png";
+	c->anim.push_back(tex.str());
+	TRANSFORM(c->actor.e)->position.X = MathUtil::RandomFloat() * (xPapillonStartRange.Y-xPapillonStartRange.X) + xPapillonStartRange.X;
+	TRANSFORM(c->actor.e)->position.Y = t * (yPapillonRange.Y-yPapillonRange.X) + yPapillonRange.X;
+	TRANSFORM(c->actor.e)->size = Vector2(2, 1) * MathUtil::Lerp(papillonScaleRange.X, papillonScaleRange.Y, t);
+	c->actor.speed = CAMERASPEED+MathUtil::Lerp(0.6f, 1.8f, t);
+
+	TRANSFORM(c->actor.e)->z = DL_Animal;
+	RENDERING(c->actor.e)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
+	RENDERING(c->actor.e)->hide = false;
+	c->actor.visible = false;
+
+>>>>>>> 3a03e96... le hérisson indique le temps
 	return c;
 }
 

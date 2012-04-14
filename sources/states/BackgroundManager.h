@@ -4,7 +4,6 @@
 
 #include "base/EntityManager.h"
 #include "base/Interval.h"
-
 #include "systems/TransformationSystem.h"
 #include "systems/ADSRSystem.h"
 #include "systems/RenderingSystem.h"
@@ -34,7 +33,13 @@ class BackgroundManager : public GameStateManager {
 	public:
 		float skySpeed;
 		//clouds
+<<<<<<< HEAD
 		Interval<float> cloudStartX;
+=======
+		Vector2 xCloudStartRange, yCloudRange, cloudScaleRange;
+		//animals
+		Vector2 xPapillonStartRange, yPapillonRange, papillonScaleRange;
+>>>>>>> 3a03e96... le hérisson indique le temps
 		//landscape
 		Interval<float> cloudY[3];
 		Interval<float> cloudSize[3];

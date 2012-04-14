@@ -78,7 +78,7 @@ class Game::Data {
 			BackgroundManager* bg = new BackgroundManager((10.0 * windowH) / windowW);
 			bg->cloudStartX = Interval<float>(8.0,25.0);
 			state2Manager[Background] = bg;
-			
+
 			ADD_COMPONENT(logo, Rendering);
 			ADD_COMPONENT(logo, Transformation);
 			TRANSFORM(logo)->position = Vector2(0,0);
@@ -127,12 +127,11 @@ class Game::Data {
 				RENDERING(b)->hide = true;
 				benchTimeSystem[allSystems[i]] = b;
 			}
-
-         cursor = theEntityManager.CreateEntity();
-         ADD_COMPONENT(cursor, Transformation);
-         TRANSFORM(cursor)->z = DL_Fading;
-         ADD_COMPONENT(cursor, Particule);
-         PARTICULE(cursor)->emissionRate = 50;
+		cursor = theEntityManager.CreateEntity();
+		ADD_COMPONENT(cursor, Transformation);
+		TRANSFORM(cursor)->z = DL_Fading;
+		ADD_COMPONENT(cursor, Particule);
+		PARTICULE(cursor)->emissionRate = 50;
 	    PARTICULE(cursor)->texture = InvalidTextureRef;
 	    PARTICULE(cursor)->lifetime = Interval<float>(0.5f, 1.5f);
 	    PARTICULE(cursor)->initialColor = Interval<Color> (Color(1.0, 0, 0, 0.7), Color(0.5, 0, 0, 0.7));
@@ -299,7 +298,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	ADD_COMPONENT(branch, Rendering);
 	RENDERING(branch)->hide = false;
 	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
-	
+
 	datas->state2Manager[datas->state]->Enter();
 }
 
@@ -627,7 +626,7 @@ std::string Game::cellTypeToTextureNameAndRotation(int type, float* rotation) {
 	};
 	if (rotation)
 		*rotation = rotations[type];
-		
+
 	std::stringstream s;
 	s << "feuille" << (type+1) << ".png";
 	return s.str();
