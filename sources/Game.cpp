@@ -15,6 +15,7 @@
 #include "systems/ContainerSystem.h"
 #include "systems/PhysicsSystem.h"
 #include "systems/ParticuleSystem.h"
+#include "systems/ScrollingSystem.h"
 
 #include "GridSystem.h"
 #include "Game.h"
@@ -134,15 +135,15 @@ class Game::Data {
          TRANSFORM(cursor)->z = DL_Fading;
          ADD_COMPONENT(cursor, Particule);
          PARTICULE(cursor)->emissionRate = 50;
-    PARTICULE(cursor)->texture = InvalidTextureRef;
-    PARTICULE(cursor)->lifetime = Interval<float>(0.5f, 1.5f);
-    PARTICULE(cursor)->initialColor = Interval<Color> (Color(1.0, 0, 0, 0.7), Color(0.5, 0, 0, 0.7));
-    PARTICULE(cursor)->finalColor  = Interval<Color> (Color(0, 0, 1, 0.1), Color(0, 0, 0.5, 0.1));
-PARTICULE(cursor)->initialSize = Interval<float>(0.15, 0.2);
-PARTICULE(cursor)->finalSize = Interval<float>(0.01, 0.015);
-PARTICULE(cursor)->forceDirection = Interval<float>(0.1, 3);
-PARTICULE(cursor)->forceAmplitude  = Interval<float>(20, 100);
-PARTICULE(cursor)->mass = 1;
+	    PARTICULE(cursor)->texture = InvalidTextureRef;
+	    PARTICULE(cursor)->lifetime = Interval<float>(0.5f, 1.5f);
+	    PARTICULE(cursor)->initialColor = Interval<Color> (Color(1.0, 0, 0, 0.7), Color(0.5, 0, 0, 0.7));
+	    PARTICULE(cursor)->finalColor  = Interval<Color> (Color(0, 0, 1, 0.1), Color(0, 0, 0.5, 0.1));
+		PARTICULE(cursor)->initialSize = Interval<float>(0.15, 0.2);
+		PARTICULE(cursor)->finalSize = Interval<float>(0.01, 0.015);
+		PARTICULE(cursor)->forceDirection = Interval<float>(0.1, 3);
+		PARTICULE(cursor)->forceAmplitude  = Interval<float>(20, 100);
+		PARTICULE(cursor)->mass = 1;
 
 		}
 		//bench data
@@ -151,7 +152,7 @@ PARTICULE(cursor)->mass = 1;
 
 		GameState state, stateBeforePause;
 		bool stateBeforePauseNeedEnter;
-		Entity logo, logo_bg, sky;
+		Entity logo, logo_bg, sky, decord2nd, decord1er;
 		Entity music[4];
 		// drag/drop
 		std::map<GameState, GameStateManager*> state2Manager;
@@ -226,15 +227,17 @@ Game::Game(ScoreStorage* storage, PlayerNameInputUI* inputUI) {
 	ContainerSystem::CreateInstance();
 	PhysicsSystem::CreateInstance();
     ParticuleSystem::CreateInstance();
+    ScrollingSystem::CreateInstance();
 }
 
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	theRenderingSystem.setWindowSize(windowW, windowH);
 	theRenderingSystem.init();
+	/*
 	theRenderingSystem.loadAtlas("sprites");
 	theRenderingSystem.loadAtlas("animals");
 	theRenderingSystem.loadAtlas("alphabet");
-
+	*/
 	if (in && size) {
 		datas->state = Pause;
 		loadState(in, size);
@@ -251,13 +254,41 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	float fullscreenHeight = 10.0 * windowH / windowW;
 
 	datas->sky = theEntityManager.CreateEntity();
-	theTransformationSystem.Add(datas->sky);
+	ADD_COMPONENT(datas->sky, Transformation);
 	TRANSFORM(datas->sky)->z = DL_Sky;
-	theRenderingSystem.Add(datas->sky);
-	TRANSFORM(datas->sky)->size = Vector2(fullscreenWidth, fullscreenHeight);
-	RENDERING(datas->sky)->texture = theRenderingSystem.loadTextureFile("sky.png");
-	RENDERING(datas->sky)->hide = false;
-	// RENDERING(datas->sky)->drawGroup = RenderingComponent::FrontToBack;
+	TRANSFORM(datas->sky)->size = Vector2(fullscreenWidth, (fullscreenWidth * 833.0) / 800.0);
+	TRANSFORM(datas->sky)->position = Vector2(0, (fullscreenHeight - TRANSFORM(datas->sky)->size.Y) * 0.5);
+	ADD_COMPONENT(datas->sky, Scrolling);
+	SCROLLING(datas->sky)->images.push_back("ciel0.png");
+	SCROLLING(datas->sky)->images.push_back("ciel1.png");
+	SCROLLING(datas->sky)->images.push_back("ciel2.png");
+	SCROLLING(datas->sky)->images.push_back("ciel3.png");
+	SCROLLING(datas->sky)->speed = Vector2(-0.3, 0);
+	SCROLLING(datas->sky)->displaySize = Vector2(TRANSFORM(datas->sky)->size.X * 1.01, TRANSFORM(datas->sky)->size.Y);
+
+	datas->decord2nd = theEntityManager.CreateEntity();
+	ADD_COMPONENT(datas->decord2nd, Transformation);
+	TRANSFORM(datas->decord2nd)->z = DL_Decor2nd;
+	TRANSFORM(datas->decord2nd)->size = Vector2(fullscreenWidth, (fullscreenWidth * 450.0) / 800.0);
+	TRANSFORM(datas->decord2nd)->position = Vector2(0, -((626+215 - 640)/1280.0)*fullscreenHeight);
+	ADD_COMPONENT(datas->decord2nd, Scrolling);
+	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_0.png");
+	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_1.png");
+	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_2.png");
+	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_3.png");
+	SCROLLING(datas->decord2nd)->speed = Vector2(-.7, 0);
+
+	datas->decord1er = theEntityManager.CreateEntity();
+	ADD_COMPONENT(datas->decord1er, Transformation);
+	TRANSFORM(datas->decord1er)->z = DL_Decor1er;
+	TRANSFORM(datas->decord1er)->size = Vector2(fullscreenWidth, (fullscreenWidth * 296.0) / 800.0);
+	TRANSFORM(datas->decord1er)->position = Vector2(0, (-fullscreenHeight + TRANSFORM(datas->decord1er)->size.Y) * 0.5);
+	ADD_COMPONENT(datas->decord1er, Scrolling);
+	SCROLLING(datas->decord1er)->images.push_back("decor1er_0.png");
+	SCROLLING(datas->decord1er)->images.push_back("decor1er_1.png");
+	SCROLLING(datas->decord1er)->images.push_back("decor1er_2.png");
+	SCROLLING(datas->decord1er)->images.push_back("decor1er_3.png");
+	SCROLLING(datas->decord1er)->speed = Vector2(-1.5, 0);
 
 	datas->state2Manager[datas->state]->Enter();
 }
@@ -462,6 +493,7 @@ TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition()
 
 	updateMusic(datas->music);
 
+	theScrollingSystem.Update(dt);
 	theCombinationMarkSystem.Update(dt);
 	thePhysicsSystem.Update(dt);
 	theTransformationSystem.Update(dt);

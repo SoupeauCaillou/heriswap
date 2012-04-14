@@ -1,6 +1,8 @@
 #pragma once
 
 #define DL_Sky 0.01
+#define DL_Decor2nd 0.05
+#define DL_Decor1er 0.07
 #define DL_Cloud 0.1
 
 #define DL_Background 0.15

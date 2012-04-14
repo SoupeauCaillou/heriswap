@@ -17,18 +17,6 @@ struct BackgroundManager::AnimatedActor {
 
 
 BackgroundManager::BackgroundManager() {
-	xHerissonStartRange.X = 6;
-	xHerissonStartRange.Y = 8;
-	yHerissonRange.X = -6.3;
-	yHerissonRange.Y = -8;
-	herissonScaleRange.X = 0.4;
-	herissonScaleRange.Y = 1.5;
-	xPapillonStartRange.X = -5;
-	xPapillonStartRange.Y = -8;
-	yPapillonRange.X = 0;
-	yPapillonRange.Y = 8.;
-	papillonScaleRange.X = 0.9;
-	papillonScaleRange.Y = 1.5;
 }
 
 
@@ -38,12 +26,6 @@ BackgroundManager::~BackgroundManager() {
 		delete clouds[i];
 	}
 	clouds.clear();
-
-	for(int i=0; i<animals.size(); i++) {
-		theEntityManager.DeleteEntity(animals[i]->actor.e);
-		delete animals[i];
-	}
-	animals.clear();
 
 	for(int i=0; i<landscapes.size(); i++) {
 		theEntityManager.DeleteEntity(landscapes[i]->e);
@@ -65,37 +47,6 @@ void BackgroundManager::Setup() {
 		clouds.push_back(initCloud(c));
 	}
 	xCloudStartRange = range;
-
-	for(int i=0; i<3; i++) {
-		AnimatedActor* c = new AnimatedActor();
-		Entity e = theEntityManager.CreateEntity();
-		theEntityManager.AddComponent(e, &theTransformationSystem);
-		theEntityManager.AddComponent(e, &theADSRSystem);
-		theEntityManager.AddComponent(e, &theRenderingSystem);
-		c->actor.e = e;
-		animals.push_back(initAnimal(c));
-	}
-
-
-	for(int i=0; i<2; i++) {
-		Actor* c = new Actor();
-		Entity e = theEntityManager.CreateEntity();
-		theEntityManager.AddComponent(e, &theTransformationSystem);
-		theEntityManager.AddComponent(e, &theADSRSystem);
-		theEntityManager.AddComponent(e, &theRenderingSystem);
-		c->e = e;
-		landscapes.push_back(initLandscape(c, false));
-
-
-		Actor* tree = new Actor();
-		Entity a = theEntityManager.CreateEntity();
-		theEntityManager.AddComponent(a, &theTransformationSystem);
-		theEntityManager.AddComponent(a, &theADSRSystem);
-		theEntityManager.AddComponent(a, &theRenderingSystem);
-		tree->e = a;
-		tree->visible = false; //nécessaire pour le replacement
-		trees.push_back(initLandscape(tree, true));
-	}
 }
 BackgroundManager::Actor* BackgroundManager::initLandscape(Actor* c, bool isATree) {
 	float fullscreenWidth = 10.0;
@@ -148,44 +99,6 @@ BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c) {
 	return c;
 }
 
-BackgroundManager::AnimatedActor* BackgroundManager::initAnimal(AnimatedActor* c) {
-	c->anim.clear();
-	c->frames=0;
-	float t = MathUtil::RandomFloat();
-	std::stringstream tex;
-	if (MathUtil::RandomInt(2)) {
-		int i = MathUtil::RandomInt(8);
-		tex << "herisson0_" << i << ".png";
-		c->anim.push_back(tex.str());
-		tex.str("");
-		tex << "herisson1_" << i << ".png";
-		c->anim.push_back(tex.str());
-
-		c->actor.speed = CAMERASPEED+MathUtil::Lerp(-0.2f, -1.5f, t);
-
-		TRANSFORM(c->actor.e)->position.X = MathUtil::RandomFloat() * (xHerissonStartRange.Y-xHerissonStartRange.X) + xHerissonStartRange.X;
-		TRANSFORM(c->actor.e)->position.Y = t * (yHerissonRange.Y-yHerissonRange.X) + yHerissonRange.X;
-		TRANSFORM(c->actor.e)->size = Vector2(2, 1) * MathUtil::Lerp(herissonScaleRange.X, herissonScaleRange.Y, t);
-	} else {
-		int i = MathUtil::RandomInt(8);
-		tex << "papillon0_" << i << ".png";
-		c->anim.push_back(tex.str());
-		tex.str("");
-		tex << "papillon1_" << i << ".png";
-		c->anim.push_back(tex.str());
-		TRANSFORM(c->actor.e)->position.X = MathUtil::RandomFloat() * (xPapillonStartRange.Y-xPapillonStartRange.X) + xPapillonStartRange.X;
-		TRANSFORM(c->actor.e)->position.Y = t * (yPapillonRange.Y-yPapillonRange.X) + yPapillonRange.X;
-		TRANSFORM(c->actor.e)->size = Vector2(2, 1) * MathUtil::Lerp(papillonScaleRange.X, papillonScaleRange.Y, t);
-		c->actor.speed = CAMERASPEED+MathUtil::Lerp(0.6f, 1.8f, t);
-	}
-	TRANSFORM(c->actor.e)->z = DL_Animal;
-	RENDERING(c->actor.e)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
-	RENDERING(c->actor.e)->hide = false;
-	c->actor.visible = false;
-
-	return c;
-}
-
 void BackgroundManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 }
@@ -205,20 +118,6 @@ void BackgroundManager::BackgroundUpdate(float dt) {
 				initCloud(c);
 		} else {
 			c->visible = true;
-		}
-	}
-	for (std::vector<AnimatedActor*>::iterator it=animals.begin(); it!=animals.end(); ++it) {
-		AnimatedActor* a = *it;
-
-		TransformationComponent* tc = TRANSFORM(a->actor.e);
-		tc->position.X += a->actor.speed * dt;
-
-		if (!theRenderingSystem.isEntityVisible(a->actor.e)) {
-			if (a->actor.visible)
-				initAnimal(a);
-		} else {
-			a->actor.visible = true;
-			switchAnim(a);
 		}
 	}
 	for (std::vector<Actor*>::iterator it=landscapes.begin(); it!=landscapes.end(); ++it) {

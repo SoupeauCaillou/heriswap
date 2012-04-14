@@ -31,9 +31,6 @@ class BackgroundManager : public GameStateManager {
 		std::vector<Actor*> clouds;
 		Actor* initCloud(Actor* c);
 
-		std::vector<AnimatedActor*> animals;
-		AnimatedActor* initAnimal(AnimatedActor* a);
-
 		std::vector<Actor*> landscapes;
 		std::vector<Actor*> trees;
 		Actor* initLandscape(Actor* c, bool isATree);
@@ -41,9 +38,6 @@ class BackgroundManager : public GameStateManager {
 	public:
 		//clouds
 		Vector2 xCloudStartRange, yCloudRange, cloudScaleRange;
-		//animals
-		Vector2 xHerissonStartRange, yHerissonRange, herissonScaleRange;
-		Vector2 xPapillonStartRange, yPapillonRange, papillonScaleRange;
 		//landscape
 
 };
