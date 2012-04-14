@@ -6,6 +6,7 @@ struct BackgroundManager::Actor {
 	Entity e;
 	float speed;
 	bool visible;
+	int group;
 };
 
 struct BackgroundManager::AnimatedActor {
@@ -16,7 +17,31 @@ struct BackgroundManager::AnimatedActor {
 
 
 
-BackgroundManager::BackgroundManager() {
+BackgroundManager::BackgroundManager(float windowHeight) {
+	#define GIMP_Y_TO_GAME(x) -(windowHeight * (x - 640.0f) / 1280.0f)
+	cloudY[0] = Interval<float>(GIMP_Y_TO_GAME(96.0), GIMP_Y_TO_GAME(252));
+	cloudY[1] = Interval<float>(GIMP_Y_TO_GAME(310), GIMP_Y_TO_GAME(490));
+	cloudY[2] = Interval<float>(GIMP_Y_TO_GAME(570), GIMP_Y_TO_GAME(640));
+
+	#define GIMP_W_TO_GAME(x) (10.0 * x / 800.0f)
+	cloudSize[0] = Interval<float>(GIMP_W_TO_GAME(230), GIMP_W_TO_GAME(410));
+	cloudSize[1] = Interval<float>(GIMP_W_TO_GAME(290), GIMP_W_TO_GAME(190));
+	cloudSize[2] = Interval<float>(GIMP_W_TO_GAME(100), GIMP_W_TO_GAME(200));
+	
+	cloudSpeed[0] = Interval<float>(-0.5, -0.3);
+	cloudSpeed[1] = Interval<float>(-0.25, -0.13);
+	cloudSpeed[2] = Interval<float>(-0.1, -0.03);
+	
+	textures[0].push_back("nuages/haut_0.png");
+	textures[0].push_back("nuages/haut_1.png");
+	textures[0].push_back("nuages/haut_2.png");
+	textures[1].push_back("nuages/moyen_0.png");
+	textures[1].push_back("nuages/moyen_1.png");
+	textures[2].push_back("nuages/bas_0.png");
+	textures[2].push_back("nuages/bas_1.png");
+	textures[2].push_back("nuages/bas_2.png");
+	textures[2].push_back("nuages/bas_3.png");
+	textures[2].push_back("nuages/bas_4.png");
 }
 
 
@@ -26,76 +51,37 @@ BackgroundManager::~BackgroundManager() {
 		delete clouds[i];
 	}
 	clouds.clear();
-
-	for(int i=0; i<landscapes.size(); i++) {
-		theEntityManager.DeleteEntity(landscapes[i]->e);
-		delete landscapes[i];
-	}
-	landscapes.clear();
 }
 
 void BackgroundManager::Setup() {
-	Vector2 range = xCloudStartRange;
-	xCloudStartRange.X = -5;
-	for(int i=0; i<3; i++) {
-		Actor* c = new Actor();
-		Entity e = theEntityManager.CreateEntity();
-		theEntityManager.AddComponent(e, &theTransformationSystem);
-		theEntityManager.AddComponent(e, &theADSRSystem);
-		theEntityManager.AddComponent(e, &theRenderingSystem);
-		c->e = e;
-		clouds.push_back(initCloud(c));
-	}
-	xCloudStartRange = range;
-}
-BackgroundManager::Actor* BackgroundManager::initLandscape(Actor* c, bool isATree) {
-	float fullscreenWidth = 10.0;
-	float fullscreenHeight = 10.0 * 700 / 420;
-
-
-	if (isATree) {
-		//TRANSFORM(c->e)->z = DL_Tree;
-		RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile("tree.png");
-		TRANSFORM(c->e)->size = Vector2(fullscreenHeight * 250.0 / 800, fullscreenHeight);
-		if (trees.empty()) {
-			TRANSFORM(c->e)->position = Vector2(-5 + TRANSFORM(c->e)->size.X * 0.5, 0);
-		} else {
-			if (c->visible)
-				TRANSFORM(c->e)->position = Vector2(2*fullscreenWidth -5 - TRANSFORM(c->e)->size.X*0.5, 0);
-			else
-				TRANSFORM(c->e)->position = Vector2(fullscreenWidth-5 + TRANSFORM(c->e)->size.X * 0.5, 0);
-		}
-
-	} else {
-		TRANSFORM(c->e)->z = DL_Background;
-		RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile("background.png");
-		TRANSFORM(c->e)->size = Vector2(fullscreenWidth, fullscreenWidth * 428.0/480);
-		if (landscapes.empty()) {
-			TRANSFORM(c->e)->position = Vector2(0, (-fullscreenHeight + TRANSFORM(c->e)->size.Y ) * 0.5);
-		} else {
-			TRANSFORM(c->e)->position = Vector2(fullscreenWidth, (-fullscreenHeight + TRANSFORM(c->e)->size.Y ) * 0.5);
+	for(int j=0; j<3; j++) {
+		for(int i=0; i<3; i++) {
+			Actor* c = new Actor();
+			Entity e = theEntityManager.CreateEntity();
+			theEntityManager.AddComponent(e, &theTransformationSystem);
+			theEntityManager.AddComponent(e, &theADSRSystem);
+			theEntityManager.AddComponent(e, &theRenderingSystem);
+			c->e = e;
+			clouds.push_back(initCloud(c, j));
 		}
 	}
-	RENDERING(c->e)->hide = false;
-	c->visible = false;
-	c->speed = CAMERASPEED;
-
-	return c;
 }
 
-BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c) {
-	float t = MathUtil::RandomFloat();
-	TRANSFORM(c->e)->position.X = xCloudStartRange.Length() * MathUtil::RandomFloat() + xCloudStartRange.X;
-	TRANSFORM(c->e)->position.Y =  t * (yCloudRange.Y-yCloudRange.X) + yCloudRange.X;
+BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c, int group) {
+	float ratio = 1.67;
+	
+	float width = cloudSize[group].random();
+	TRANSFORM(c->e)->position.X = cloudStartX.random();
+	TRANSFORM(c->e)->position.Y = cloudY[group].random();
 	TRANSFORM(c->e)->z = DL_Cloud;
-	std::stringstream tex;
-	tex << "cloud" << 1+MathUtil::RandomInt(3) << ".png";
-	RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile(tex.str());
+	
+	int idx = MathUtil::RandomInt(textures[group].size());
+	RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile(textures[group][idx]);
 	RENDERING(c->e)->hide = false;
-	TRANSFORM(c->e)->size = Vector2(2, 1) * MathUtil::Lerp(cloudScaleRange.X, cloudScaleRange.Y, t);
+	TRANSFORM(c->e)->size = Vector2(width, width / ratio);
 	c->visible = false;
-	c->speed = CAMERASPEED+MathUtil::Lerp(-0.2f, -1.5f, t);
-
+	c->speed = cloudSpeed[group].random();
+	c->group = group;
 	return c;
 }
 
@@ -111,37 +97,11 @@ void BackgroundManager::BackgroundUpdate(float dt) {
 		Actor* c = *it;
 
 		TransformationComponent* tc = TRANSFORM(c->e);
-		tc->position.X += c->speed * dt;
+		tc->position.X += (skySpeed + c->speed) * dt;
 
 		if (!theRenderingSystem.isEntityVisible(c->e)) {
 			if (c->visible)
-				initCloud(c);
-		} else {
-			c->visible = true;
-		}
-	}
-	for (std::vector<Actor*>::iterator it=landscapes.begin(); it!=landscapes.end(); ++it) {
-		Actor* c = *it;
-
-		TransformationComponent* tc = TRANSFORM(c->e);
-		tc->position.X += c->speed * dt;
-
-		if (!theRenderingSystem.isEntityVisible(c->e)) {
-			if (c->visible)
-				initLandscape(c, false);
-		} else {
-			c->visible = true;
-		}
-	}
-	for (std::vector<Actor*>::iterator it=trees.begin(); it!=trees.end(); ++it) {
-		Actor* c = *it;
-
-		TransformationComponent* tc = TRANSFORM(c->e);
-		tc->position.X += c->speed * dt;
-
-		if (!theRenderingSystem.isEntityVisible(c->e)) {
-			if (c->visible)
-				initLandscape(c, true);
+				initCloud(c, c->group);
 		} else {
 			c->visible = true;
 		}

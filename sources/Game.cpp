@@ -72,15 +72,13 @@ class Game::Data {
 			state2Manager[ScoreBoard] = new ScoreBoardStateManager(storage);
 			state2Manager[EndMenu] = new EndMenuStateManager(storage, inputUI);
 			state2Manager[Pause] = new PauseStateManager();
-
-			BackgroundManager* bg = new BackgroundManager();
-			bg->xCloudStartRange = Vector2(6, 8);
-			bg->yCloudRange = Vector2(-2, 9);
-			bg->cloudScaleRange = Vector2(0.4, 1.5);
-			state2Manager[Background] = bg;
 		}
 
 		void Setup(int windowW, int windowH) {
+			BackgroundManager* bg = new BackgroundManager((10.0 * windowH) / windowW);
+			bg->cloudStartX = Interval<float>(8.0,25.0);
+			state2Manager[Background] = bg;
+			
 			ADD_COMPONENT(logo, Rendering);
 			ADD_COMPONENT(logo, Transformation);
 			TRANSFORM(logo)->position = Vector2(0,0);
@@ -265,6 +263,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	SCROLLING(datas->sky)->images.push_back("ciel3.png");
 	SCROLLING(datas->sky)->speed = Vector2(-0.3, 0);
 	SCROLLING(datas->sky)->displaySize = Vector2(TRANSFORM(datas->sky)->size.X * 1.01, TRANSFORM(datas->sky)->size.Y);
+	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
 
 	datas->decord2nd = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->decord2nd, Transformation);

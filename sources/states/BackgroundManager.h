@@ -3,7 +3,7 @@
 #include <sstream>
 
 #include "base/EntityManager.h"
-#include "base/EntityManager.h"
+#include "base/Interval.h"
 
 #include "systems/TransformationSystem.h"
 #include "systems/ADSRSystem.h"
@@ -15,7 +15,7 @@
 
 class BackgroundManager : public GameStateManager {
 	public:
-		BackgroundManager();
+		BackgroundManager(float windowHeight);
 		~BackgroundManager();
 		void Setup();
 		void Enter();
@@ -29,16 +29,17 @@ class BackgroundManager : public GameStateManager {
 		void switchAnim(AnimatedActor* a);
 
 		std::vector<Actor*> clouds;
-		Actor* initCloud(Actor* c);
-
-		std::vector<Actor*> landscapes;
-		std::vector<Actor*> trees;
-		Actor* initLandscape(Actor* c, bool isATree);
+		Actor* initCloud(Actor* c, int group);
 
 	public:
+		float skySpeed;
 		//clouds
-		Vector2 xCloudStartRange, yCloudRange, cloudScaleRange;
+		Interval<float> cloudStartX;
 		//landscape
+		Interval<float> cloudY[3];
+		Interval<float> cloudSize[3];
+		Interval<float> cloudSpeed[3];
+		std::vector<std::string> textures[3];
 
 };
 
