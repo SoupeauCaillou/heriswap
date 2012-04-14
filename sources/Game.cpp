@@ -292,6 +292,15 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	SCROLLING(datas->decord1er)->speed = Vector2(-1.5, 0);
 	SCROLLING(datas->decord1er)->displaySize = Vector2(TRANSFORM(datas->decord1er)->size.X * 1.01, TRANSFORM(datas->decord1er)->size.Y);
 
+	Entity branch = theEntityManager.CreateEntity();
+	ADD_COMPONENT(branch, Transformation);
+	TRANSFORM(branch)->z = DL_Branch;
+	TRANSFORM(branch)->size = Vector2(fullscreenWidth, (fullscreenWidth * 400.0) / 800.0);
+	TRANSFORM(branch)->position = Vector2(0, (fullscreenHeight - TRANSFORM(branch)->size.Y) * 0.5);
+	ADD_COMPONENT(branch, Rendering);
+	RENDERING(branch)->hide = false;
+	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
+	
 	datas->state2Manager[datas->state]->Enter();
 }
 

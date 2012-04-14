@@ -1,13 +1,13 @@
 #pragma once
 
 #define DL_Sky 0.01
-#define DL_Decor2nd 0.05
-#define DL_Decor1er 0.07
-#define DL_Cloud 0.1
+#define DL_Cloud 0.05
+#define DL_Decor2nd 0.07
+#define DL_Decor1er 0.1
+#define DL_Branch 0.12
 
 #define DL_Background 0.15
 #define DL_Animal 0.155
-#define DL_Tree 0.16
 
 #define DL_CombinationMark 0.2
 #define DL_Cell 0.3

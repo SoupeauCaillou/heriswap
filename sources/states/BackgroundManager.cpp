@@ -54,7 +54,7 @@ BackgroundManager::Actor* BackgroundManager::initLandscape(Actor* c, bool isATre
 
 
 	if (isATree) {
-		TRANSFORM(c->e)->z = DL_Tree;
+		//TRANSFORM(c->e)->z = DL_Tree;
 		RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile("tree.png");
 		TRANSFORM(c->e)->size = Vector2(fullscreenHeight * 250.0 / 800, fullscreenHeight);
 		if (trees.empty()) {
