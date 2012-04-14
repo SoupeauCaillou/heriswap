@@ -18,7 +18,7 @@
 
 
 enum GameMode {
-	Normal,
+	Normal = 1,
 	ScoreAttack,
 	StaticTime
 };
@@ -39,6 +39,7 @@ class GameModeManager {
 		virtual void ScoreCalc(int nb, int type) = 0;
 		virtual std::string finalScore() = 0;
 
+		virtual GameMode GetMode() = 0;
 
 		virtual void LevelUp() = 0;
 		//permet de savoir si on a change de niveau

@@ -305,3 +305,6 @@ std::string NormalGameModeManager::finalScore() {
 	return a.str();
 }
 
+GameMode NormalGameModeManager::GetMode() {
+	return Normal;
+}

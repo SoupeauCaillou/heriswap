@@ -47,7 +47,7 @@ class StaticTimeGameModeManager::HUDManagerData {
 };
 
 StaticTimeGameModeManager::StaticTimeGameModeManager() {
-	limit = 45.0;
+	limit = 5.0;
 	time = 0.;
 	datas=0;
 
@@ -161,3 +161,6 @@ std::string StaticTimeGameModeManager::finalScore() {
 	return a.str();
 }
 
+GameMode StaticTimeGameModeManager::GetMode() {
+	return StaticTime;
+}

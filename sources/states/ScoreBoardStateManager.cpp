@@ -23,6 +23,7 @@ void ScoreBoardStateManager::Setup() {
 	TRANSFORM(startbtn)->size = Game::CellSize() * Game::CellContentScale();
 	BUTTON(startbtn)->clicked = false;
 	TRANSFORM(startbtn)->position = Vector2(0,5);
+	TRANSFORM(startbtn)->z = DL_Score;
 
 	for (int i=0; i<10; i++) {
 		eScore[i] = theTextRenderingSystem.CreateLocalEntity(40);
@@ -40,15 +41,18 @@ void ScoreBoardStateManager::Enter() {
 
 	RENDERING(startbtn)->hide = false;
 	BUTTON(startbtn)->clicked = false;
-
-	std::vector<ScoreStorage::Score> entries = storage->getScore(0);
+	int mode = 2;// a changer par le mode a recup
+	std::vector<ScoreStorage::Score> entries = storage->getScore(mode);
 	for (int i=0; i<10; i++) {
 		TextRenderingComponent* trc = TEXT_RENDERING(eScore[i]);
 		if (i < entries.size()) {
 			trc->hide = false;
 			std::stringstream a;
 			a.precision(0);
-			a << std::fixed << entries[i].points << ": " << entries[i].name;
+			if (mode==2)
+				a << std::fixed << entries[i].time << "s : " << entries[i].name;
+			else
+				a << std::fixed << entries[i].points << ": " << entries[i].name;
 			trc->text = a.str();
 		} else {
 			trc->hide = true;

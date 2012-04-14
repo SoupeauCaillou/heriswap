@@ -150,3 +150,6 @@ std::string ScoreAttackGameModeManager::finalScore() {
 	return a.str();
 }
 
+GameMode ScoreAttackGameModeManager::GetMode() {
+	return ScoreAttack;
+}

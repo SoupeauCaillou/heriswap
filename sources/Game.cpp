@@ -495,7 +495,6 @@ TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition()
 	if (newState == EndMenu) {
 		theCombinationMarkSystem.DeleteMarks(-1);
 		theGridSystem.DeleteAll();
-		datas->mode2Manager[datas->mode]->time = 0;
 	} else if (newState == MainMenu) {
 		datas->mode2Manager[datas->mode]->Reset();
 	}
