@@ -18,7 +18,7 @@ void ScoreBoardStateManager::Setup() {
 	ADD_COMPONENT(startbtn, Rendering);
 	ADD_COMPONENT(startbtn, Button);
 
-	RENDERING(startbtn)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(5));
+	RENDERING(startbtn)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(5, 0));
 	RENDERING(startbtn)->hide = true;
 	TRANSFORM(startbtn)->size = Game::CellSize() * Game::CellContentScale();
 	BUTTON(startbtn)->clicked = false;

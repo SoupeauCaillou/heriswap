@@ -18,7 +18,7 @@ void EndMenuStateManager::Setup() {
 	ADD_COMPONENT(startbtn, Rendering);
 	ADD_COMPONENT(startbtn, Button);
 
-	RENDERING(startbtn)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(6));
+	RENDERING(startbtn)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(6, 0));
 	RENDERING(startbtn)->hide = true;
 	TRANSFORM(startbtn)->z = DL_MainMenuUI;
 	TRANSFORM(startbtn)->size = Game::CellSize() * Game::CellContentScale();

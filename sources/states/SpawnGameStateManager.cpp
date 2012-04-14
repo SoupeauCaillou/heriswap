@@ -54,7 +54,7 @@ void SpawnGameStateManager::Enter() {
 					int type = MathUtil::RandomInt(8);
 					GRID(e)->type = type;
 					RenderingComponent* rc = RENDERING(e);
-					rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(type));
+					rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, &TRANSFORM(e)->rotation));
 				}
 			}
 		} while(!c.empty());
@@ -206,6 +206,6 @@ static Entity createCell(Feuille& f) {
 	GRID(e)->i = f.X;
 	GRID(e)->j = f.Y;
 	
-	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(f.type));
+	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(f.type, &TRANSFORM(e)->rotation));
 	return e;
 }

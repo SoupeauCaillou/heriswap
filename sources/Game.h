@@ -32,7 +32,7 @@ class Game {
 		static Vector2 GridCoordsToPosition(int i, int j);
 		static float CellSize();
 		static float CellContentScale();
-		static std::string cellTypeToTextureName(int type);
+		static std::string cellTypeToTextureNameAndRotation(int type, float* rotation);
 		void hideEveryThing(bool toHide, bool blacktospawn);
 
 		void setMode();

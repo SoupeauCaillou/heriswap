@@ -140,7 +140,7 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	{
 	int type = bonus;
 	RenderingComponent* rc = RENDERING(datas->fBonus);
-	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(type));
+	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, 0));
 	}
 }
 

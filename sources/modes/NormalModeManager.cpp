@@ -36,14 +36,14 @@ class NormalGameModeManager::HUDManagerData {
 				TRANSFORM(fObj[i])->z = DL_Hud-0.001;
 				TRANSFORM(fObj[i])->size = Vector2(1,1);
 				TRANSFORM(fObj[i])->position = TRANSFORM(eObj[i])->position+Vector2(-0.3,0);
-				RENDERING(fObj[i])->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(i));
+				RENDERING(fObj[i])->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(i, &TRANSFORM(fObj[i])->rotation));
 			}
 
 			fBonus = theEntityManager.CreateEntity();
 
 			ADD_COMPONENT(fBonus, Transformation);
 			ADD_COMPONENT(fBonus, Rendering);
-			RENDERING(fBonus)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(0));
+			RENDERING(fBonus)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(0, 0));
 
 			TRANSFORM(fBonus)->size = Vector2(2,2);
 			TRANSFORM(fBonus)->position = Vector2(2,6);
@@ -228,7 +228,7 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	{
 	int type = bonus;
 	RenderingComponent* rc = RENDERING(datas->fBonus);
-	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(type));
+	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, 0));
 	}
 }
 

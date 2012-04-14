@@ -25,7 +25,7 @@ class StaticTimeGameModeManager::HUDManagerData {
 
 			ADD_COMPONENT(fBonus, Transformation);
 			ADD_COMPONENT(fBonus, Rendering);
-			RENDERING(fBonus)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(0));
+			RENDERING(fBonus)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(0, 0));
 
 			TRANSFORM(fBonus)->size = Vector2(2,2);
 			TRANSFORM(fBonus)->position = Vector2(2,6);
@@ -151,7 +151,7 @@ void StaticTimeGameModeManager::UpdateUI(float dt) {
 	{
 	int type = bonus;
 	RenderingComponent* rc = RENDERING(datas->fBonus);
-	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(type));
+	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, 0));
 	}
 }
 
