@@ -78,38 +78,8 @@ BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c, int group) {
 	RENDERING(c->e)->hide = false;
 	TRANSFORM(c->e)->size = Vector2(width, width / ratio);
 	c->visible = false;
-<<<<<<< HEAD
 	c->speed = cloudSpeed[group].random();
 	c->group = group;
-=======
-	c->speed = CAMERASPEED+MathUtil::Lerp(-0.2f, -1.5f, t);
-
-	return c;
-}
-
-BackgroundManager::AnimatedActor* BackgroundManager::initAnimal(AnimatedActor* c) {
-	c->anim.clear();
-	c->frames=0;
-	float t = MathUtil::RandomFloat();
-	std::stringstream tex;
-
-	int i = MathUtil::RandomInt(8);
-	tex << "papillon0_" << i << ".png";
-	c->anim.push_back(tex.str());
-	tex.str("");
-	tex << "papillon1_" << i << ".png";
-	c->anim.push_back(tex.str());
-	TRANSFORM(c->actor.e)->position.X = MathUtil::RandomFloat() * (xPapillonStartRange.Y-xPapillonStartRange.X) + xPapillonStartRange.X;
-	TRANSFORM(c->actor.e)->position.Y = t * (yPapillonRange.Y-yPapillonRange.X) + yPapillonRange.X;
-	TRANSFORM(c->actor.e)->size = Vector2(2, 1) * MathUtil::Lerp(papillonScaleRange.X, papillonScaleRange.Y, t);
-	c->actor.speed = CAMERASPEED+MathUtil::Lerp(0.6f, 1.8f, t);
-
-	TRANSFORM(c->actor.e)->z = DL_Animal;
-	RENDERING(c->actor.e)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
-	RENDERING(c->actor.e)->hide = false;
-	c->actor.visible = false;
-
->>>>>>> 3a03e96... le hérisson indique le temps
 	return c;
 }
 

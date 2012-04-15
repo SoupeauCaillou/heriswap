@@ -27,7 +27,7 @@ void ScoreBoardStateManager::Setup() {
 	ADD_COMPONENT(switchMode, Transformation);
 	ADD_COMPONENT(switchMode, Rendering);
 	ADD_COMPONENT(switchMode, Button);
-	RENDERING(switchMode)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(3));
+	RENDERING(switchMode)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(3,0));
 	TRANSFORM(switchMode)->size = Game::CellSize() * Game::CellContentScale();
 	TRANSFORM(switchMode)->position = Vector2(4,5);
 	TRANSFORM(switchMode)->z = DL_Score;
@@ -78,7 +78,7 @@ GameState ScoreBoardStateManager::Update(float dt) {
 		mode++;
 		if (mode==4) mode = 1;
 		LoadScore(mode);
-		RENDERING(switchMode)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureName(mode));
+		RENDERING(switchMode)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(mode,0));
 	}
 	if (BUTTON(startbtn)->clicked)
 		return MainMenu;

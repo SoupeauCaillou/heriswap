@@ -33,14 +33,7 @@ class BackgroundManager : public GameStateManager {
 	public:
 		float skySpeed;
 		//clouds
-<<<<<<< HEAD
 		Interval<float> cloudStartX;
-=======
-		Vector2 xCloudStartRange, yCloudRange, cloudScaleRange;
-		//animals
-		Vector2 xPapillonStartRange, yPapillonRange, papillonScaleRange;
->>>>>>> 3a03e96... le hérisson indique le temps
-		//landscape
 		Interval<float> cloudY[3];
 		Interval<float> cloudSize[3];
 		Interval<float> cloudSpeed[3];

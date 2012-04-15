@@ -108,12 +108,12 @@ class NormalGameModeManager::HUDManagerData {
 			c->actor.e = herisson;
 			c->anim.clear();
 			c->frames=0;
-			c->anim.push_back("herisson0_1.png");
-			c->anim.push_back("herisson1_1.png");
+			c->anim.push_back("herisson_1_1.png");
+			c->anim.push_back("herisson_2_1.png");
+			c->anim.push_back("herisson_3_1.png");
 			c->actor.speed = CAMERASPEED+1.1;
 			RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
-
-
+			RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 		}
 		~HUDManagerData() {
 			theTextRenderingSystem.DestroyLocalEntity(eScore);
