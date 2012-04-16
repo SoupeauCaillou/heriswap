@@ -158,8 +158,13 @@ class LinuxSqliteExec: public ScoreStorage {
 int main(int argc, char** argv) {
 	if (!glfwInit())
 		return 1;
-
-	if( !glfwOpenWindow( 420,700, 8,8,8,8,8,8, GLFW_WINDOW ) )
+	
+	Vector2 reso16_9(394, 700);
+	Vector2 reso16_10(437, 700);
+	
+	Vector2* reso = (argc == 1) ? &reso16_10 : &reso16_9;
+	
+	if( !glfwOpenWindow( reso->X,reso->Y, 8,8,8,8,8,8, GLFW_WINDOW ) )
 		return 1;
 
 	// pose de l'origine du temps ici t = 0
@@ -188,7 +193,7 @@ int main(int argc, char** argv) {
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());
 	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());
 
-	game.init(420, 700, state, size);
+	game.init(reso->X,reso->Y, state, size);
 	theSoundSystem.linuxSoundAPI = new OpenAlSoundAPI();
 
 	bool running = true;
