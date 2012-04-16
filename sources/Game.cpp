@@ -152,14 +152,12 @@ class Game::Data {
 		bool stateBeforePauseNeedEnter;
 		Entity logo, logo_bg, sky, decord2nd, decord1er;
 		Entity music[4];
-		// drag/drop
 		std::map<GameState, GameStateManager*> state2Manager;
 		std::map<GameMode, GameModeManager*> mode2Manager;
 
-
 		GameMode mode;
 
-     Entity cursor;
+		Entity cursor;
 };
 
 static const float offset = 0.2;
@@ -316,7 +314,6 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 	if (forcedesactivate) activated = false;
 	if (datas->state != UserInput) activated = false;
 	if (activated) {
-		std::cout << "Affiche magique de la triche ! \n" ;
 		//j=0 : vertical
 		//j=1 : h
 		for (int j=0;j<2;j++) {
@@ -337,11 +334,8 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 			}
 		}
 	} else {
-		if (theCombinationMarkSystem.NumberOfThisType(4) || theCombinationMarkSystem.NumberOfThisType(5)) {
-			std::cout << "Destruction des marquages et de la triche !\n";
-			theCombinationMarkSystem.DeleteMarks(4);
-			theCombinationMarkSystem.DeleteMarks(5);
-		}
+		theCombinationMarkSystem.DeleteMarks(4);
+		theCombinationMarkSystem.DeleteMarks(5);
 	}
 }
 

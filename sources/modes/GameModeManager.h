@@ -10,8 +10,8 @@
 #include "systems/TransformationSystem.h"
 #include "systems/System.h"
 
-//#include "states/GameStateManager.h"
-
+#include "DepthLayer.h"
+#include "Game.h"
 
 //FCRR : FPS Calculation Refresh Rate
 #define FCRR 1.
@@ -26,11 +26,18 @@ enum GameMode {
 
 class GameModeManager {
 	public:
+		struct Actor;
+		struct AnimatedActor;
+		void SetupCore();
+		void UpdateCore(float dt);
+		void HideUICore(bool ToHide);
+		float position(float t, std::vector<Vector2> pts);
+
 		virtual ~GameModeManager() {}
 
 		/* Do some initial setup if needed */
 		virtual void Setup() = 0;
-		/* Update gamestate, and returns true if end of the mode */
+		/* Update gamemode, and returns true if end of the mode */
 		virtual bool Update(float dt) = 0;
 
 		virtual void UpdateUI(float dt) = 0;
@@ -49,4 +56,10 @@ class GameModeManager {
 
 		float time, limit;
 		int score;
+		//feuilles de l'arbre
+		std::vector<Entity> branchLeaves;
+		//hérisson
+		Entity herisson;
+		AnimatedActor* c;
+		std::vector<Vector2> pts;
 };

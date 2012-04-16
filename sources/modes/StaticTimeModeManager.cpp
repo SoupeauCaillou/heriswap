@@ -21,15 +21,13 @@ class StaticTimeGameModeManager::HUDManagerData {
 			TRANSFORM(eFPS)->z = DL_Hud;
 
 			fBonus = theEntityManager.CreateEntity();
-
-
 			ADD_COMPONENT(fBonus, Transformation);
 			ADD_COMPONENT(fBonus, Rendering);
 			RENDERING(fBonus)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(0, 0));
-
 			TRANSFORM(fBonus)->size = Vector2(2,2);
 			TRANSFORM(fBonus)->position = Vector2(2,6);
 			TRANSFORM(fBonus)->rotation = -.8;
+			TRANSFORM(fBonus)->z = DL_Hud;
 
 
 			TEXT_RENDERING(eFPS)->charSize /= 2;
@@ -50,12 +48,14 @@ StaticTimeGameModeManager::StaticTimeGameModeManager() {
 	limit = 45.0;
 	time = 0.;
 	datas=0;
-
-
 	score=0;
-	isReadyToStart = false;
 	bonus = MathUtil::RandomInt(8);
 
+	pts.push_back(Vector2(0,0));
+	pts.push_back(Vector2(15,0.125));
+	pts.push_back(Vector2(25,0.25));
+	pts.push_back(Vector2(35,0.5));
+	pts.push_back(Vector2(45,1));
 }
 
 StaticTimeGameModeManager::~StaticTimeGameModeManager() {
@@ -64,16 +64,13 @@ StaticTimeGameModeManager::~StaticTimeGameModeManager() {
 
 void StaticTimeGameModeManager::Setup() {
 	datas = new HUDManagerData();
+	SetupCore();
 	HideUI(true);
 }
 
 
 
 bool StaticTimeGameModeManager::Update(float dt) {
-	//on met à jour le temps si on est dans userinput
-	//if (game.state(UserInput)) time += dt;
-
-	//a changer
 	time+=dt;
 	return (limit - time <0);
 }
@@ -95,8 +92,6 @@ bool StaticTimeGameModeManager::LeveledUp() {
 void StaticTimeGameModeManager::Reset() {
 	time = 0;
 	score = 0;
-
-	isReadyToStart = false;
 	bonus = MathUtil::RandomInt(8);
 }
 
@@ -108,6 +103,7 @@ void StaticTimeGameModeManager::HideUI(bool toHide) {
 		TEXT_RENDERING(datas->eFPS)->hide = toHide;
 		RENDERING(datas->fBonus)->hide = toHide;
 	}
+	HideUICore(toHide);
 }
 
 void StaticTimeGameModeManager::UpdateUI(float dt) {
@@ -153,6 +149,9 @@ void StaticTimeGameModeManager::UpdateUI(float dt) {
 	RenderingComponent* rc = RENDERING(datas->fBonus);
 	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, 0));
 	}
+	//Hérisson
+	UpdateCore(dt);
+	TRANSFORM(herisson)->position.X = -5.5+11*GameModeManager::position(time, pts);
 }
 
 std::string StaticTimeGameModeManager::finalScore() {

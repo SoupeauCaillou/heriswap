@@ -30,6 +30,5 @@ class StaticTimeGameModeManager : public GameModeManager {
 		class HUDManagerData;
 
 		int bonus;
-		bool isReadyToStart;
 		HUDManagerData* datas;
 };

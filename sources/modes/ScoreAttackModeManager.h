@@ -30,6 +30,5 @@ class ScoreAttackGameModeManager : public GameModeManager {
 		class HUDManagerData;
 
 		int bonus;
-		bool isReadyToStart;
 		HUDManagerData* datas;
 };

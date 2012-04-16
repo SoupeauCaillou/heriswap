@@ -5,46 +5,6 @@
 #include <base/MathUtil.h>
 #include <vector>
 
-
-struct Actor {
-	Entity e;
-	float speed;
-	bool visible;
-};
-struct AnimatedActor {
-	int frames, ind;
-	std::vector<std::string> anim;
-	struct Actor actor;
-};
-void switchAnim(AnimatedActor* a) {
-	a->frames++;
-	if (a->frames>=30/(MathUtil::Abs(a->actor.speed)+MathUtil::Abs(CAMERASPEED))) {
-		RENDERING(a->actor.e)->texture = theRenderingSystem.loadTextureFile(a->anim[a->ind]);
-		a->ind++;
-		if (a->ind==a->anim.size()) a->ind = 0;
-		a->frames=0;
-	}
-}
-
-float position(float t) {
-	//may take std::vector<Vector2> pts, in args
-	std::vector<Vector2> pts;
-	pts.push_back(Vector2(0,0));
-	pts.push_back(Vector2(15,0.125));
-	pts.push_back(Vector2(25,0.25));
-	pts.push_back(Vector2(35,0.5));
-	pts.push_back(Vector2(45,1));
-
-	if (t<pts[0].X) return pts[0].Y;
-	for (int i = 0; i<pts.size()-1; i++) {
-		if (t>pts[i].X && t<pts[i+1].X) {
-			return MathUtil::Lerp(pts[i].Y, pts[i+1].Y, (t-pts[i].X)/(pts[i+1].X-pts[i].X));
-		}
-	}
-	return pts[pts.size()-1].Y;
-}
-
-
 class NormalGameModeManager::HUDManagerData {
 	public:
 		HUDManagerData() {
@@ -96,25 +56,6 @@ class NormalGameModeManager::HUDManagerData {
 
 			TEXT_RENDERING(eFPS)->charSize /= 2;
 			TEXT_RENDERING(eFPS)->color = Color(0.1, 0.5, 0.4);
-
-			herisson = theEntityManager.CreateEntity();
-			ADD_COMPONENT(herisson, Transformation);
-			ADD_COMPONENT(herisson, Rendering);
-			TRANSFORM(herisson)->z = DL_Animal;
-			TRANSFORM(herisson)->size = Vector2(1,1);
-			TRANSFORM(herisson)->position = Vector2(-5,-7);
-
-			c = new AnimatedActor();
-			c->actor.e = herisson;
-			c->anim.clear();
-			c->frames=0;
-			c->anim.push_back("herisson_1_1.png");
-			c->anim.push_back("herisson_2_1.png");
-			c->anim.push_back("herisson_3_1.png");
-			c->anim.push_back("herisson_2_1.png");
-			c->actor.speed = CAMERASPEED+4.1;
-			RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
-			RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 		}
 		~HUDManagerData() {
 			theTextRenderingSystem.DestroyLocalEntity(eScore);
@@ -122,14 +63,12 @@ class NormalGameModeManager::HUDManagerData {
 			theTextRenderingSystem.DestroyLocalEntity(eLevel);
 			theTextRenderingSystem.DestroyLocalEntity(eFPS);
 			theEntityManager.DeleteEntity(fBonus);
-			theEntityManager.DeleteEntity(herisson);
 			for(int i=0; i<8; i++) {
 				theTextRenderingSystem.DestroyLocalEntity(eObj[i]);
 				theEntityManager.DeleteEntity(fObj[i]);
 			}
 		}
-		AnimatedActor* c;
-		Entity eScore, eTime, eLevel, eFPS, eObj[8],fBonus, fObj[8], herisson;
+		Entity eScore, eTime, eLevel, eFPS, eObj[8],fBonus, fObj[8];
 		int frames;
 		float nextfps, fps;
 };
@@ -141,7 +80,6 @@ NormalGameModeManager::NormalGameModeManager() {
 
 	score=0;
 	levelUp = false;
-	isReadyToStart = false;
 	level = 1;
 	bonus = MathUtil::RandomInt(8);
 	for (int i=0;i<50;i++)
@@ -149,6 +87,12 @@ NormalGameModeManager::NormalGameModeManager() {
 
 	for (int i=0; i<8;i++)
 		remain[i]=obj[0];
+
+	pts.push_back(Vector2(0,0));
+	pts.push_back(Vector2(15,0.125));
+	pts.push_back(Vector2(25,0.25));
+	pts.push_back(Vector2(35,0.5));
+	pts.push_back(Vector2(45,1));
 }
 
 NormalGameModeManager::~NormalGameModeManager() {
@@ -157,6 +101,7 @@ NormalGameModeManager::~NormalGameModeManager() {
 
 void NormalGameModeManager::Setup() {
 	datas = new HUDManagerData();
+	SetupCore();
 	HideUI(true);
 }
 
@@ -217,8 +162,6 @@ bool NormalGameModeManager::LeveledUp() {
 void NormalGameModeManager::Reset() {
 	time = 0;
 	score = 0;
-
-	isReadyToStart = false;
 	level = 1;
 	bonus = MathUtil::RandomInt(8);
 
@@ -234,12 +177,12 @@ void NormalGameModeManager::HideUI(bool toHide) {
 		TEXT_RENDERING(datas->eFPS)->hide = toHide;
 		TEXT_RENDERING(datas->eLevel)->hide = toHide;
 		RENDERING(datas->fBonus)->hide = toHide;
-		RENDERING(datas->herisson)->hide = toHide;
 		for (int i=0;i<8;i++) {
 			TEXT_RENDERING(datas->eObj[i])->hide = toHide;
 			RENDERING(datas->fObj[i])->hide = toHide;
 		}
 	}
+	HideUICore(toHide);
 }
 
 void NormalGameModeManager::UpdateUI(float dt) {
@@ -296,8 +239,8 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, 0));
 	}
 	//Hérisson
-	TRANSFORM(datas->c->actor.e)->position.X = -5.5+11*position(time);
-	switchAnim(datas->c);
+	UpdateCore(dt);
+	TRANSFORM(herisson)->position.X = -5.5+11*GameModeManager::position(time, pts);
 }
 
 std::string NormalGameModeManager::finalScore() {

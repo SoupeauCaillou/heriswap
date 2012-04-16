@@ -46,10 +46,14 @@ ScoreAttackGameModeManager::ScoreAttackGameModeManager() {
 	limit = 3000;
 	time = 0.;
 	datas=0;
-
 	score=0;
-	isReadyToStart = false;
 	bonus = MathUtil::RandomInt(8);
+
+	pts.push_back(Vector2(0,0));
+	pts.push_back(Vector2(300,0.125));
+	pts.push_back(Vector2(750,0.25));
+	pts.push_back(Vector2(1500,0.5));
+	pts.push_back(Vector2(3000,1));
 }
 
 ScoreAttackGameModeManager::~ScoreAttackGameModeManager() {
@@ -58,6 +62,7 @@ ScoreAttackGameModeManager::~ScoreAttackGameModeManager() {
 
 void ScoreAttackGameModeManager::Setup() {
 	datas = new HUDManagerData();
+	SetupCore();
 	HideUI(true);
 }
 
@@ -89,8 +94,6 @@ bool ScoreAttackGameModeManager::LeveledUp() {
 void ScoreAttackGameModeManager::Reset() {
 	time = 0;
 	score = 0;
-
-	isReadyToStart = false;
 	bonus = MathUtil::RandomInt(8);
 }
 
@@ -102,6 +105,7 @@ void ScoreAttackGameModeManager::HideUI(bool toHide) {
 		TEXT_RENDERING(datas->eFPS)->hide = toHide;
 		RENDERING(datas->fBonus)->hide = toHide;
 	}
+	HideUICore(toHide);
 }
 
 void ScoreAttackGameModeManager::UpdateUI(float dt) {
@@ -142,6 +146,9 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	RenderingComponent* rc = RENDERING(datas->fBonus);
 	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, 0));
 	}
+	//Hérisson
+	UpdateCore(dt);
+	TRANSFORM(herisson)->position.X = -5.5+11*GameModeManager::position(score, pts);
 }
 
 std::string ScoreAttackGameModeManager::finalScore() {
