@@ -482,6 +482,8 @@ void Game::tick(float dt) {
 	if (datas->state != EndMenu && newState == EndMenu) {
 		LOGI("aborted. going to end menu");
 		hideEveryThing(true, false);
+		if (datas->mode == ScoreAttack)
+			datas->mode2Manager[datas->mode]->time = 1337.;
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = EndMenu;
 		datas->state2Manager[datas->state]->Enter();

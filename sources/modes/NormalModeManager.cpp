@@ -78,7 +78,7 @@ NormalGameModeManager::NormalGameModeManager() {
 	time = 0.;
 	datas=0;
 
-	score=0;
+	points=0;
 	levelUp = false;
 	level = 1;
 	bonus = MathUtil::RandomInt(8);
@@ -119,9 +119,9 @@ bool NormalGameModeManager::Update(float dt) {
 
 void NormalGameModeManager::ScoreCalc(int nb, int type) {
 	if (type == bonus)
-		score += 10*level*2*nb*nb*nb/6;
+		points += 10*level*2*nb*nb*nb/6;
 	else
-		score += 10*level*nb*nb*nb/6;
+		points += 10*level*nb*nb*nb/6;
 
 	remain[type] -= nb;
 	time -= nb/4;
@@ -161,7 +161,7 @@ bool NormalGameModeManager::LeveledUp() {
 
 void NormalGameModeManager::Reset() {
 	time = 0;
-	score = 0;
+	points = 0;
 	level = 1;
 	bonus = MathUtil::RandomInt(8);
 
@@ -190,7 +190,7 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << score;
+	a << std::fixed << points;
 	TEXT_RENDERING(datas->eScore)->text = a.str();
 	}
 	//Temps
@@ -241,12 +241,6 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	//Hérisson
 	UpdateCore(dt);
 	TRANSFORM(herisson)->position.X = -5.5+11*GameModeManager::position(time, pts);
-}
-
-std::string NormalGameModeManager::finalScore() {
-	std::stringstream a;
-	a << score;
-	return a.str();
 }
 
 GameMode NormalGameModeManager::GetMode() {

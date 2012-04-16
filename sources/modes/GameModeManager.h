@@ -44,7 +44,6 @@ class GameModeManager {
 		virtual void HideUI(bool toHide) = 0;
 
 		virtual void ScoreCalc(int nb, int type) = 0;
-		virtual std::string finalScore() = 0;
 
 		virtual GameMode GetMode() = 0;
 
@@ -55,7 +54,7 @@ class GameModeManager {
 		virtual void Reset() = 0;
 
 		float time, limit;
-		int score;
+		int points;
 		//feuilles de l'arbre
 		std::vector<Entity> branchLeaves;
 		//hérisson

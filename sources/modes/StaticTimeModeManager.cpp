@@ -48,7 +48,7 @@ StaticTimeGameModeManager::StaticTimeGameModeManager() {
 	limit = 45.0;
 	time = 0.;
 	datas=0;
-	score=0;
+	points=0;
 	bonus = MathUtil::RandomInt(8);
 
 	pts.push_back(Vector2(0,0));
@@ -77,9 +77,9 @@ bool StaticTimeGameModeManager::Update(float dt) {
 
 void StaticTimeGameModeManager::ScoreCalc(int nb, int type) {
 	if (type == bonus)
-		score += 10*2*nb*nb*nb/6;
+		points += 10*2*nb*nb*nb/6;
 	else
-		score += 10*nb*nb*nb/6;
+		points += 10*nb*nb*nb/6;
 }
 
 void StaticTimeGameModeManager::LevelUp() {
@@ -91,7 +91,7 @@ bool StaticTimeGameModeManager::LeveledUp() {
 
 void StaticTimeGameModeManager::Reset() {
 	time = 0;
-	score = 0;
+	points = 0;
 	bonus = MathUtil::RandomInt(8);
 }
 
@@ -111,7 +111,7 @@ void StaticTimeGameModeManager::UpdateUI(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << score;
+	a << std::fixed << points;
 	TEXT_RENDERING(datas->eScore)->text = a.str();
 	}
 	//Temps
@@ -152,12 +152,6 @@ void StaticTimeGameModeManager::UpdateUI(float dt) {
 	//Hérisson
 	UpdateCore(dt);
 	TRANSFORM(herisson)->position.X = -5.5+11*GameModeManager::position(time, pts);
-}
-
-std::string StaticTimeGameModeManager::finalScore() {
-	std::stringstream a;
-	a << score;
-	return a.str();
 }
 
 GameMode StaticTimeGameModeManager::GetMode() {

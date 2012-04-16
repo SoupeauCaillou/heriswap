@@ -70,7 +70,7 @@ GameState EndMenuStateManager::Update(float dt) {
 
 	if (BUTTON(startbtn)->clicked) {
 		ScoreStorage::Score entry;
-		entry.points = modeMgr->score;
+		entry.points = modeMgr->points;
 		entry.time = modeMgr->time;
 		entry.name = playerName;
 		entry.mode = (int)modeMgr->GetMode();
@@ -79,8 +79,12 @@ GameState EndMenuStateManager::Update(float dt) {
 		{
 		std::stringstream a;
 		a.precision(0);
-		a << std::fixed << modeMgr->score;
-		a << std::fixed << modeMgr->finalScore();
+		if (modeMgr->GetMode()==ScoreAttack)
+			a << std::fixed << modeMgr->time << "s";
+		else
+			a << std::fixed << modeMgr->points;
+
+
 		TEXT_RENDERING(eScore)->text = a.str();
 		TEXT_RENDERING(eScore)->hide = false;
 		}

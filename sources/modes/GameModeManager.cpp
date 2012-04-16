@@ -71,6 +71,6 @@ void GameModeManager::UpdateCore(float dt) {
 }
 
 void GameModeManager::HideUICore(bool toHide) {
-	if (herisson) RENDERING(herisson)->hide = toHide;
+	if (herisson && RENDERING(herisson)) RENDERING(herisson)->hide = toHide;
 	for (int i=0;i<branchLeaves.size();i++) RENDERING(branchLeaves[i])->hide = toHide;
 }

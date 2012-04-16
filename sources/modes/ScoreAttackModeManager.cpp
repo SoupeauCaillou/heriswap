@@ -46,7 +46,7 @@ ScoreAttackGameModeManager::ScoreAttackGameModeManager() {
 	limit = 3000;
 	time = 0.;
 	datas=0;
-	score=0;
+	points=0;
 	bonus = MathUtil::RandomInt(8);
 	distance = 0.f;
 	pts.push_back(Vector2(0,0));
@@ -74,14 +74,14 @@ bool ScoreAttackGameModeManager::Update(float dt) {
 
 	//a changer
 	time+=dt;
-	return (limit - score <0);
+	return (limit - points <0);
 }
 
 void ScoreAttackGameModeManager::ScoreCalc(int nb, int type) {
 	if (type == bonus)
-		score += 10*2*nb*nb*nb/6;
+		points += 10*2*nb*nb*nb/6;
 	else
-		score += 10*nb*nb*nb/6;
+		points += 10*nb*nb*nb/6;
 }
 
 void ScoreAttackGameModeManager::LevelUp() {
@@ -93,7 +93,7 @@ bool ScoreAttackGameModeManager::LeveledUp() {
 
 void ScoreAttackGameModeManager::Reset() {
 	time = 0;
-	score = 0;
+	points = 0;
 	distance = 0.f;
 	bonus = MathUtil::RandomInt(8);
 }
@@ -114,7 +114,7 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << limit - score;
+	a << std::fixed << limit - points;
 	TEXT_RENDERING(datas->eScore)->text = a.str();
 	}
 	//Temps
@@ -148,7 +148,7 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, 0));
 	}
 	//Hérisson
-	distance = -5.5+11*GameModeManager::position(score, pts) - TRANSFORM(herisson)->position.X;
+	distance = -5.5+11*GameModeManager::position(points, pts) - TRANSFORM(herisson)->position.X;
 	if (distance > 0) {
 		float vitesse = 0.1f;
 		UpdateCore(dt);
@@ -156,13 +156,7 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 		distance -= vitesse*dt;
 	} else distance = 0;
 	LOGI("%f", distance);
-	LOGI("%f(%f) - %f",  -5.5+11*GameModeManager::position(score, pts), GameModeManager::position(score, pts),  TRANSFORM(herisson)->position.X);
-}
-
-std::string ScoreAttackGameModeManager::finalScore() {
-	std::stringstream a;
-	a << score;
-	return a.str();
+	LOGI("%f(%f) - %f",  -5.5+11*GameModeManager::position(points, pts), GameModeManager::position(points, pts),  TRANSFORM(herisson)->position.X);
 }
 
 GameMode ScoreAttackGameModeManager::GetMode() {

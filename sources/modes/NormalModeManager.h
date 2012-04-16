@@ -22,7 +22,6 @@ class NormalGameModeManager : public GameModeManager {
 
 		void ScoreCalc(int nb, int type);
 		void Reset();
-		std::string finalScore();
 
 	private:
 		class HUDManagerData;
