@@ -75,7 +75,10 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	int timeA = time;
 	int minute = timeA/60;
 	int seconde= timeA%60;
-	a << minute << ":" << std::setw(2) << std::setfill('0') << seconde << " s";
+	int tenthsec = (time - minute * 60 - seconde) * 10;
+	if (minute)
+		a << minute << ':';
+	a << std::setw(2) << std::setfill('0') << seconde << '.' << std::setw(1) << tenthsec << " s";
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
 	//Hérisson
@@ -86,8 +89,8 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 		TRANSFORM(herisson)->position.X += vitesse*dt;
 		distance -= vitesse*dt;
 	} else distance = 0;
-	LOGI("%f", distance);
-	LOGI("%f(%f) - %f",  -5.5+11*GameModeManager::position(points, pts), GameModeManager::position(points, pts),  TRANSFORM(herisson)->position.X);
+	// LOGI("%f", distance);
+	// LOGI("%f(%f) - %f",  -5.5+11*GameModeManager::position(points, pts), GameModeManager::position(points, pts),  TRANSFORM(herisson)->position.X);
 }
 
 GameMode ScoreAttackGameModeManager::GetMode() {
