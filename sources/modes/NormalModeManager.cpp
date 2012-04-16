@@ -1,6 +1,6 @@
 #include "NormalModeManager.h"
 #include "Game.h"
-#define CAMERASPEED -1.f
+#define CAMERASPEED 0.f
 #include <base/Vector2.h>
 #include <base/MathUtil.h>
 #include <vector>
@@ -111,7 +111,8 @@ class NormalGameModeManager::HUDManagerData {
 			c->anim.push_back("herisson_1_1.png");
 			c->anim.push_back("herisson_2_1.png");
 			c->anim.push_back("herisson_3_1.png");
-			c->actor.speed = CAMERASPEED+1.1;
+			c->anim.push_back("herisson_2_1.png");
+			c->actor.speed = CAMERASPEED+4.1;
 			RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 			RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 		}
