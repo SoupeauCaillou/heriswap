@@ -16,6 +16,7 @@
 #include "systems/PhysicsSystem.h"
 #include "systems/ParticuleSystem.h"
 #include "systems/ScrollingSystem.h"
+#include "systems/MorphingSystem.h"
 
 #include "GridSystem.h"
 #include "Game.h"
@@ -225,6 +226,7 @@ Game::Game(ScoreStorage* storage, PlayerNameInputUI* inputUI) {
 	PhysicsSystem::CreateInstance();
     ParticuleSystem::CreateInstance();
     ScrollingSystem::CreateInstance();
+    MorphingSystem::CreateInstance();
 }
 
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
@@ -459,7 +461,6 @@ void Game::tick(float dt) {
 			datas->state2Manager[datas->state]->Exit();
 			datas->state = LevelChanged;
 			datas->state2Manager[datas->state]->Enter();
-			LOGI("leveld up");
 		}
 	}//updating HUD
 	if (inGameState(newState)) {
@@ -472,7 +473,7 @@ void Game::tick(float dt) {
 		it->second->BackgroundUpdate(dt);
 	}
 
-TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition();
+	TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition();
 
 	//si c'est pas à l'user de jouer, on cache de force les combi
 	if (newState != UserInput)
@@ -501,6 +502,7 @@ TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition()
 
 	updateMusic(datas->music);
 
+	theMorphingSystem.Update(dt);
 	theScrollingSystem.Update(dt);
 	theCombinationMarkSystem.Update(dt);
 	thePhysicsSystem.Update(dt);
