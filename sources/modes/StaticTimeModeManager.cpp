@@ -65,6 +65,7 @@ StaticTimeGameModeManager::~StaticTimeGameModeManager() {
 void StaticTimeGameModeManager::Setup() {
 	datas = new HUDManagerData();
 	SetupCore();
+	generateLeaves(6);
 	HideUI(true);
 }
 

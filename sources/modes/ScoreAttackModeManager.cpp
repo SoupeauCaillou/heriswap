@@ -63,6 +63,7 @@ ScoreAttackGameModeManager::~ScoreAttackGameModeManager() {
 void ScoreAttackGameModeManager::Setup() {
 	datas = new HUDManagerData();
 	SetupCore();
+	generateLeaves(6);
 	HideUI(true);
 }
 
