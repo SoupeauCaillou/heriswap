@@ -23,8 +23,6 @@ void SpawnGameStateManager::Setup() {
 	ADSR(eSpawn)->sustainValue = 1.0;
 	ADSR(eSpawn)->releaseTiming = 0;
 
-
-
 	eGrid = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eGrid, ADSR);
 

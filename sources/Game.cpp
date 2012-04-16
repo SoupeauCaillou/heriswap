@@ -161,10 +161,6 @@ class Game::Data {
 		Entity cursor;
 };
 
-static const float offset = 0.2;
-static const float scale = 0.95;
-static const float size = (10 - 2 * offset) / GRIDSIZE;
-
 static bool inGameState(GameState state) {
 	switch (state) {
 		case Spawn:
@@ -191,14 +187,23 @@ static bool pausableState(GameState state) {
 	}
 }
 
+static const float offset = 0.2;
+static const float scale = 0.95;
+static const float size = (10 - 2 * offset) / GRIDSIZE;
+
+// grid: [48, 302] -> [752, 1006]  in gimp 
 Vector2 Game::GridCoordsToPosition(int i, int j) {
+	float startX = PlacementHelper::GimpXToScreen(48);
+	float startY = PlacementHelper::GimpYToScreen(302);
+	float size = PlacementHelper::GimpWidthToScreen((752 - 48) / 8);
+
 	return Vector2(
-		-5 + (i + 0.5) * size + offset,
-		-5 + (j + 0.5)*size + offset);
+		startX + (i + 0.5) * size,
+		startY - (j + 0.5) * size);
 }
 
 float Game::CellSize() {
-	return size;
+	return PlacementHelper::GimpWidthToScreen((752 - 48) / 8);
 }
 
 float Game::CellContentScale() {
