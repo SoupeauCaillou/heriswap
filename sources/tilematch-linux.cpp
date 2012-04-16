@@ -31,12 +31,16 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 	public:
 		void show() {
 			__log_enabled = false;
-			std::cout << "Enter your name!" << std::endl;
+			std::cout << "Enter your name! (write it into player_name.txt to save it definitively)" << std::endl;
 		}
 		bool query(std::string& result) {
 			getline(std::cin, result);
 			__log_enabled = true;
 			return true;
+		}
+		bool nameNeeded() {
+			std::ifstream file ("player_name.txt");
+			return (file==0);
 		}
 };
 
