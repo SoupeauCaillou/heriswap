@@ -59,7 +59,7 @@ void InGameUiHelper::build() {
 	TEXT_RENDERING(scoreProgress)->charSize = Vector2(PlacementHelper::GimpWidthToScreen(47), PlacementHelper::GimpHeightToScreen(47));
 	TEXT_RENDERING(scoreProgress)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(scoreProgress)->isANumber = true;
-	
+
 	built = true;
 }
 
@@ -88,7 +88,7 @@ void InGameUiHelper::hide() {
 
 void InGameUiHelper::destroy() {
 	if (!built)
-		return;	
+		return;
 	theEntityManager.DeleteEntity(smallLevel);
 	theEntityManager.DeleteEntity(pauseButton);
 	theEntityManager.DeleteEntity(soundButton);

@@ -35,13 +35,7 @@ void NormalGameModeManager::Setup() {
 	HideUI(true);
 }
 
-
-
 bool NormalGameModeManager::Update(float dt) {
-	//on met à jour le temps si on est dans userinput
-	//if (game.state(UserInput)) time += dt;
-
-	//a changer
 	time+=dt;
 	LevelUp();
 	return (limit - time <0);
@@ -124,7 +118,7 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	a << std::fixed << points;
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
-	
+
 	//Level
 	{
 	std::stringstream a;
@@ -134,7 +128,8 @@ void NormalGameModeManager::UpdateUI(float dt) {
 
 	//Hérisson
 	UpdateCore(dt);
-	TRANSFORM(herisson)->position.X = -5.5+11*GameModeManager::position(time, pts);
+	TRANSFORM(herisson)->position = Vector2(MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
+	+PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, GameModeManager::position(time, pts)), PlacementHelper::GimpYToScreen(1100));
 }
 
 GameMode NormalGameModeManager::GetMode() {

@@ -83,17 +83,14 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
 	//Hérisson
-	distance = -5.5+11*GameModeManager::position(points, pts) - TRANSFORM(herisson)->position.X;
+	distance = MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
+	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, GameModeManager::position(points, pts)) - TRANSFORM(herisson)->position.X;
 	if (distance > 0) {
 		float vitesse = 0.1f;
 		UpdateCore(dt);
 		TRANSFORM(herisson)->position.X += vitesse*dt;
 		distance -= vitesse*dt;
 	} else distance = 0;
-	// LOGI("%f", distance);
-	// LOGI("%f(%f) - %f",  -5.5+11*GameModeManager::position(points, pts), GameModeManager::position(points, pts),  TRANSFORM(herisson)->position.X);
-}
-
 GameMode ScoreAttackGameModeManager::GetMode() {
 	return ScoreAttack;
 }
