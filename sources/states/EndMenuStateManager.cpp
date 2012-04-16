@@ -41,7 +41,7 @@ void EndMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	RENDERING(startbtn)->hide = true;
 	BUTTON(startbtn)->clicked = false;
-	
+
 	playerName.clear();
 	inputUI->show();
 
@@ -67,17 +67,24 @@ GameState EndMenuStateManager::Update(float dt) {
 		if (inputUI->query(playerName))
 			RENDERING(startbtn)->hide = false;
 	}
-	
+
 	if (BUTTON(startbtn)->clicked) {
 		ScoreStorage::Score entry;
-		entry.points = modeMgr->score;
+		entry.points = modeMgr->points;
+		entry.time = modeMgr->time;
 		entry.name = playerName;
+		entry.mode = (int)modeMgr->GetMode();
+
 		storage->submitScore(entry);
 		{
 		std::stringstream a;
 		a.precision(0);
-		a << std::fixed << modeMgr->score;
-		a << std::fixed << modeMgr->finalScore();
+		if (modeMgr->GetMode()==ScoreAttack)
+			a << std::fixed << modeMgr->time << "s";
+		else
+			a << std::fixed << modeMgr->points;
+
+
 		TEXT_RENDERING(eScore)->text = a.str();
 		TEXT_RENDERING(eScore)->hide = false;
 		}

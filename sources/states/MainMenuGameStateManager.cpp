@@ -51,7 +51,7 @@ void MainMenuGameStateManager::Setup() {
 	for (int i=0; i<3; i++) {
 		TRANSFORM(start[i])->z = DL_MainMenuUI;
 		TRANSFORM(start[i])->rotation = 0;
-		TRANSFORM(start[i])->position = Vector2(-2,1 + i*2);
+		TRANSFORM(start[i])->position = Vector2(-2,5 - i*2);
 		TRANSFORM(eStart[i])->z = DL_MainMenuUI;
 		TRANSFORM(eStart[i])->position = TRANSFORM(start[i])->position + Vector2(1.5, 0);
 	}

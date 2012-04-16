@@ -15,8 +15,6 @@ struct BackgroundManager::AnimatedActor {
 	struct Actor actor;
 };
 
-
-
 BackgroundManager::BackgroundManager(float windowHeight) {
 	#define GIMP_Y_TO_GAME(x) -(windowHeight * (x - 640.0f) / 1280.0f)
 	cloudY[0] = Interval<float>(GIMP_Y_TO_GAME(96.0), GIMP_Y_TO_GAME(252));
@@ -27,11 +25,11 @@ BackgroundManager::BackgroundManager(float windowHeight) {
 	cloudSize[0] = Interval<float>(GIMP_W_TO_GAME(230), GIMP_W_TO_GAME(410));
 	cloudSize[1] = Interval<float>(GIMP_W_TO_GAME(290), GIMP_W_TO_GAME(190));
 	cloudSize[2] = Interval<float>(GIMP_W_TO_GAME(100), GIMP_W_TO_GAME(200));
-	
+
 	cloudSpeed[0] = Interval<float>(-0.5, -0.3);
 	cloudSpeed[1] = Interval<float>(-0.25, -0.13);
 	cloudSpeed[2] = Interval<float>(-0.1, -0.03);
-	
+
 	textures[0].push_back("nuages/haut_0.png");
 	textures[0].push_back("nuages/haut_1.png");
 	textures[0].push_back("nuages/haut_2.png");
@@ -69,12 +67,12 @@ void BackgroundManager::Setup() {
 
 BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c, int group) {
 	float ratio = 1.67;
-	
+
 	float width = cloudSize[group].random();
 	TRANSFORM(c->e)->position.X = cloudStartX.random();
 	TRANSFORM(c->e)->position.Y = cloudY[group].random();
 	TRANSFORM(c->e)->z = DL_Cloud;
-	
+
 	int idx = MathUtil::RandomInt(textures[group].size());
 	RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile(textures[group][idx]);
 	RENDERING(c->e)->hide = false;

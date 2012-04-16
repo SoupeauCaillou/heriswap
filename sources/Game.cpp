@@ -16,6 +16,7 @@
 #include "systems/PhysicsSystem.h"
 #include "systems/ParticuleSystem.h"
 #include "systems/ScrollingSystem.h"
+#include "systems/MorphingSystem.h"
 
 #include "GridSystem.h"
 #include "Game.h"
@@ -79,7 +80,7 @@ class Game::Data {
 			BackgroundManager* bg = new BackgroundManager((10.0 * windowH) / windowW);
 			bg->cloudStartX = Interval<float>(8.0,25.0);
 			state2Manager[Background] = bg;
-			
+
 			ADD_COMPONENT(logo, Rendering);
 			ADD_COMPONENT(logo, Transformation);
 			TRANSFORM(logo)->position = Vector2(0,0);
@@ -128,12 +129,11 @@ class Game::Data {
 				RENDERING(b)->hide = true;
 				benchTimeSystem[allSystems[i]] = b;
 			}
-
-         cursor = theEntityManager.CreateEntity();
-         ADD_COMPONENT(cursor, Transformation);
-         TRANSFORM(cursor)->z = DL_Fading;
-         ADD_COMPONENT(cursor, Particule);
-         PARTICULE(cursor)->emissionRate = 50;
+		cursor = theEntityManager.CreateEntity();
+		ADD_COMPONENT(cursor, Transformation);
+		TRANSFORM(cursor)->z = DL_Fading;
+		ADD_COMPONENT(cursor, Particule);
+		PARTICULE(cursor)->emissionRate = 50;
 	    PARTICULE(cursor)->texture = InvalidTextureRef;
 	    PARTICULE(cursor)->lifetime = Interval<float>(0.5f, 1.5f);
 	    PARTICULE(cursor)->initialColor = Interval<Color> (Color(1.0, 0, 0, 0.7), Color(0.5, 0, 0, 0.7));
@@ -153,14 +153,12 @@ class Game::Data {
 		bool stateBeforePauseNeedEnter;
 		Entity logo, logo_bg, sky, decord2nd, decord1er;
 		Entity music[4];
-		// drag/drop
 		std::map<GameState, GameStateManager*> state2Manager;
 		std::map<GameMode, GameModeManager*> mode2Manager;
 
-
 		GameMode mode;
 
-     Entity cursor;
+		Entity cursor;
 };
 
 static const float offset = 0.2;
@@ -227,6 +225,7 @@ Game::Game(ScoreStorage* storage, PlayerNameInputUI* inputUI) {
 	PhysicsSystem::CreateInstance();
     ParticuleSystem::CreateInstance();
     ScrollingSystem::CreateInstance();
+    MorphingSystem::CreateInstance();
 }
 
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
@@ -305,7 +304,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	ADD_COMPONENT(branch, Rendering);
 	RENDERING(branch)->hide = false;
 	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
-	
+
 	datas->state2Manager[datas->state]->Enter();
 }
 
@@ -321,7 +320,6 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 	if (forcedesactivate) activated = false;
 	if (datas->state != UserInput) activated = false;
 	if (activated) {
-		std::cout << "Affiche magique de la triche ! \n" ;
 		//j=0 : vertical
 		//j=1 : h
 		for (int j=0;j<2;j++) {
@@ -342,11 +340,8 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 			}
 		}
 	} else {
-		if (theCombinationMarkSystem.NumberOfThisType(4) || theCombinationMarkSystem.NumberOfThisType(5)) {
-			std::cout << "Destruction des marquages et de la triche !\n";
-			theCombinationMarkSystem.DeleteMarks(4);
-			theCombinationMarkSystem.DeleteMarks(5);
-		}
+		theCombinationMarkSystem.DeleteMarks(4);
+		theCombinationMarkSystem.DeleteMarks(5);
 	}
 }
 
@@ -466,7 +461,6 @@ void Game::tick(float dt) {
 			datas->state2Manager[datas->state]->Exit();
 			datas->state = LevelChanged;
 			datas->state2Manager[datas->state]->Enter();
-			LOGI("leveld up");
 		}
 	}//updating HUD
 	if (inGameState(newState)) {
@@ -479,7 +473,7 @@ void Game::tick(float dt) {
 		it->second->BackgroundUpdate(dt);
 	}
 
-TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition();
+	TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition();
 
 	//si c'est pas à l'user de jouer, on cache de force les combi
 	if (newState != UserInput)
@@ -494,6 +488,8 @@ TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition()
 	if (datas->state != EndMenu && newState == EndMenu) {
 		LOGI("aborted. going to end menu");
 		hideEveryThing(true, false);
+		if (datas->mode == ScoreAttack)
+			datas->mode2Manager[datas->mode]->time = 1337.;
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = EndMenu;
 		datas->state2Manager[datas->state]->Enter();
@@ -502,13 +498,13 @@ TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition()
 	if (newState == EndMenu) {
 		theCombinationMarkSystem.DeleteMarks(-1);
 		theGridSystem.DeleteAll();
-		datas->mode2Manager[datas->mode]->time = 0;
 	} else if (newState == MainMenu) {
 		datas->mode2Manager[datas->mode]->Reset();
 	}
 
 	updateMusic(datas->music);
 
+	theMorphingSystem.Update(dt);
 	theCombinationMarkSystem.Update(dt);
 	thePhysicsSystem.Update(dt);
 	theTransformationSystem.Update(dt);
@@ -633,7 +629,7 @@ std::string Game::cellTypeToTextureNameAndRotation(int type, float* rotation) {
 	};
 	if (rotation)
 		*rotation = rotations[type];
-		
+
 	std::stringstream s;
 	s << "feuille" << (type+1) << ".png";
 	return s.str();

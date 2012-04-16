@@ -3,7 +3,6 @@
 #include "systems/ContainerSystem.h"
 #include "systems/ButtonSystem.h"
 #include "GameModeManager.h"
-#include "DepthLayer.h"
 
 class NormalGameModeManager : public GameModeManager {
 	public:
@@ -19,14 +18,15 @@ class NormalGameModeManager : public GameModeManager {
 		//permet de savoir si on a change de niveau
 		bool LeveledUp();
 
+		GameMode GetMode();
+
 		void ScoreCalc(int nb, int type);
 		void Reset();
-		std::string finalScore();
 
 	private:
 		class HUDManagerData;
 
 		int level, obj[50], remain[8], bonus;
-		bool isReadyToStart, levelUp;
+		bool levelUp;
 		HUDManagerData* datas;
 };

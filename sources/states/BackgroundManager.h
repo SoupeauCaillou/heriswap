@@ -4,7 +4,6 @@
 
 #include "base/EntityManager.h"
 #include "base/Interval.h"
-
 #include "systems/TransformationSystem.h"
 #include "systems/ADSRSystem.h"
 #include "systems/RenderingSystem.h"
@@ -35,7 +34,6 @@ class BackgroundManager : public GameStateManager {
 		float skySpeed;
 		//clouds
 		Interval<float> cloudStartX;
-		//landscape
 		Interval<float> cloudY[3];
 		Interval<float> cloudSize[3];
 		Interval<float> cloudSpeed[3];

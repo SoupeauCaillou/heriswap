@@ -38,7 +38,6 @@ GameState DeleteGameStateManager::Update(float dt) {
 				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
 				TRANSFORM(e)->rotation = transitionSuppr->value*7;
 				if (transitionSuppr->value == transitionSuppr->sustainValue) {
-					std::cout << "suppression en ("<<itV->X<<","<<itV->Y<<")\n";
 					if (e){
 						theEntityManager.DeleteEntity(e);
 					}

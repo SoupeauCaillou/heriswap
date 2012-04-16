@@ -46,10 +46,14 @@ ScoreAttackGameModeManager::ScoreAttackGameModeManager() {
 	limit = 3000;
 	time = 0.;
 	datas=0;
-
-	score=0;
-	isReadyToStart = false;
+	points=0;
 	bonus = MathUtil::RandomInt(8);
+	distance = 0.f;
+	pts.push_back(Vector2(0,0));
+	pts.push_back(Vector2(300,0.125));
+	pts.push_back(Vector2(750,0.25));
+	pts.push_back(Vector2(1500,0.5));
+	pts.push_back(Vector2(3000,1));
 }
 
 ScoreAttackGameModeManager::~ScoreAttackGameModeManager() {
@@ -58,6 +62,7 @@ ScoreAttackGameModeManager::~ScoreAttackGameModeManager() {
 
 void ScoreAttackGameModeManager::Setup() {
 	datas = new HUDManagerData();
+	SetupCore();
 	HideUI(true);
 }
 
@@ -69,14 +74,14 @@ bool ScoreAttackGameModeManager::Update(float dt) {
 
 	//a changer
 	time+=dt;
-	return (limit - score <0);
+	return (limit - points <0);
 }
 
 void ScoreAttackGameModeManager::ScoreCalc(int nb, int type) {
 	if (type == bonus)
-		score += 10*2*nb*nb*nb/6;
+		points += 10*2*nb*nb*nb/6;
 	else
-		score += 10*nb*nb*nb/6;
+		points += 10*nb*nb*nb/6;
 }
 
 void ScoreAttackGameModeManager::LevelUp() {
@@ -88,9 +93,8 @@ bool ScoreAttackGameModeManager::LeveledUp() {
 
 void ScoreAttackGameModeManager::Reset() {
 	time = 0;
-	score = 0;
-
-	isReadyToStart = false;
+	points = 0;
+	distance = 0.f;
 	bonus = MathUtil::RandomInt(8);
 }
 
@@ -102,6 +106,7 @@ void ScoreAttackGameModeManager::HideUI(bool toHide) {
 		TEXT_RENDERING(datas->eFPS)->hide = toHide;
 		RENDERING(datas->fBonus)->hide = toHide;
 	}
+	HideUICore(toHide);
 }
 
 void ScoreAttackGameModeManager::UpdateUI(float dt) {
@@ -109,7 +114,7 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << limit - score;
+	a << std::fixed << limit - points;
 	TEXT_RENDERING(datas->eScore)->text = a.str();
 	}
 	//Temps
@@ -142,11 +147,18 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	RenderingComponent* rc = RENDERING(datas->fBonus);
 	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, 0));
 	}
+	//Hérisson
+	distance = -5.5+11*GameModeManager::position(points, pts) - TRANSFORM(herisson)->position.X;
+	if (distance > 0) {
+		float vitesse = 0.1f;
+		UpdateCore(dt);
+		TRANSFORM(herisson)->position.X += vitesse*dt;
+		distance -= vitesse*dt;
+	} else distance = 0;
+	LOGI("%f", distance);
+	LOGI("%f(%f) - %f",  -5.5+11*GameModeManager::position(points, pts), GameModeManager::position(points, pts),  TRANSFORM(herisson)->position.X);
 }
 
-std::string ScoreAttackGameModeManager::finalScore() {
-	std::stringstream a;
-	a << score;
-	return a.str();
+GameMode ScoreAttackGameModeManager::GetMode() {
+	return ScoreAttack;
 }
-

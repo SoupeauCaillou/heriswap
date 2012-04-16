@@ -66,29 +66,33 @@ class LinuxSqliteExec: public ScoreStorage {
 	private :
 		static int callback(void *save, int argc, char **argv, char **azColName){
 			int i;
-			// nom | mode | score | temps
+			// name | mode | points | time
 			std::vector<ScoreStorage::Score> *sav = static_cast<std::vector<ScoreStorage::Score>* >(save);
 			ScoreStorage::Score score1;
 			for(i=0; i<argc; i++){
 				std::istringstream iss(argv[i]);
-				if (azColName[i] == "nom") {
+				if (!strcmp(azColName[i],"name")) {
 					score1.name = argv[i];
-				} else if (azColName[i] == "mode") {
+				} else if (!strcmp(azColName[i],"mode")) {
 					iss >> score1.mode;
-				} else if (azColName[i] == "points") {
+				} else if (!strcmp(azColName[i],"points")) {
 					iss >> score1.points;
-				} else if (azColName[i] == "temps") {
+				} else if (!strcmp(azColName[i],"time")) {
 					iss >> score1.time;
 				}
 			}
+			sav->push_back(score1);
 			return 0;
 		}
 	public :
 		std::vector<ScoreStorage::Score> getScore(int mode) {
 			std::stringstream tmp;
 			std::vector<ScoreStorage::Score> sav;
-			return sav;
-			tmp << "select * from score where mode=" << mode;
+
+			if (mode==1 || mode == 3)
+				tmp << "select * from scoretable where mode= "<< mode << " order by points desc limit 10";
+			else
+				tmp << "select * from scoretable where mode= "<< mode << " order by time asc limit 10";
 
 			sqlite3 *db;
 			char *zErrMsg = 0;
@@ -103,11 +107,12 @@ class LinuxSqliteExec: public ScoreStorage {
 				sqlite3_free(zErrMsg);
 			}
 			sqlite3_close(db);
+
+			return sav;
 		}
 		void submitScore(ScoreStorage::Score scr) {
-			return;
 			std::stringstream tmp;
-			tmp << "INSERT INTO scoreTable VALUES (" << scr.name <<"," << scr.mode<<","<<scr.points<<","<<scr.time<<")";
+			tmp << "INSERT INTO scoreTable VALUES ('" << scr.name <<"'," << scr.mode<<","<<scr.points<<","<<scr.time<<")";
 			sqlite3 *db;
 			char *zErrMsg = 0;
 			int rc = sqlite3_open("tilematch.db", &db);
@@ -119,6 +124,8 @@ class LinuxSqliteExec: public ScoreStorage {
 			if( rc!=SQLITE_OK ){
 				LOGI("SQL error: %s\n", zErrMsg);
 				sqlite3_free(zErrMsg);
+			} else {
+				LOGI("Score ajoute a la table");
 			}
 			sqlite3_close(db);
 		}
@@ -134,7 +141,7 @@ class LinuxSqliteExec: public ScoreStorage {
 
 			if (rc==SQLITE_OK) {
 				LOGI("initializing database...");
-				rc = sqlite3_exec(db, "create table scoreTable(nom char2(25) default 'Anonymous', mode number(1) default '0', score number(7) default '0', temps number(5) default '0')", 0, 0, &zErrMsg);
+				rc = sqlite3_exec(db, "create table scoreTable(name char2(25) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0')", 0, 0, &zErrMsg);
 				if( rc!=SQLITE_OK ){
 					LOGI("SQL error: %s\n", zErrMsg);
 					sqlite3_free(zErrMsg);
@@ -170,7 +177,6 @@ int main(int argc, char** argv) {
 	// vérification de la table des scores
 	LinuxSqliteExec* sqliteExec = new LinuxSqliteExec();
 	sqliteExec->initTable();
-	//return 0;
 
 	Game game(sqliteExec, new TerminalPlayerNameInputUI());
 

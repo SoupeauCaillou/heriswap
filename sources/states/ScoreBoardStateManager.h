@@ -26,8 +26,10 @@ class ScoreBoardStateManager : public GameStateManager {
 		void Enter();
 		GameState Update(float dt);
 		void Exit();
+		void LoadScore(int mode);
 
 	private:
 		ScoreStorage* storage;
-		Entity startbtn, eScore[10];
+		Entity startbtn, switchMode, eScore[10];
+		int mode;
 };

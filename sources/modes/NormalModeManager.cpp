@@ -1,5 +1,9 @@
 #include "NormalModeManager.h"
 #include "Game.h"
+#define CAMERASPEED 0.f
+#include <base/Vector2.h>
+#include <base/MathUtil.h>
+#include <vector>
 
 class NormalGameModeManager::HUDManagerData {
 	public:
@@ -52,7 +56,6 @@ class NormalGameModeManager::HUDManagerData {
 
 			TEXT_RENDERING(eFPS)->charSize /= 2;
 			TEXT_RENDERING(eFPS)->color = Color(0.1, 0.5, 0.4);
-
 		}
 		~HUDManagerData() {
 			theTextRenderingSystem.DestroyLocalEntity(eScore);
@@ -75,9 +78,8 @@ NormalGameModeManager::NormalGameModeManager() {
 	time = 0.;
 	datas=0;
 
-	score=0;
+	points=0;
 	levelUp = false;
-	isReadyToStart = false;
 	level = 1;
 	bonus = MathUtil::RandomInt(8);
 	for (int i=0;i<50;i++)
@@ -85,6 +87,12 @@ NormalGameModeManager::NormalGameModeManager() {
 
 	for (int i=0; i<8;i++)
 		remain[i]=obj[0];
+
+	pts.push_back(Vector2(0,0));
+	pts.push_back(Vector2(15,0.125));
+	pts.push_back(Vector2(25,0.25));
+	pts.push_back(Vector2(35,0.5));
+	pts.push_back(Vector2(45,1));
 }
 
 NormalGameModeManager::~NormalGameModeManager() {
@@ -93,6 +101,7 @@ NormalGameModeManager::~NormalGameModeManager() {
 
 void NormalGameModeManager::Setup() {
 	datas = new HUDManagerData();
+	SetupCore();
 	HideUI(true);
 }
 
@@ -110,9 +119,9 @@ bool NormalGameModeManager::Update(float dt) {
 
 void NormalGameModeManager::ScoreCalc(int nb, int type) {
 	if (type == bonus)
-		score += 10*level*2*nb*nb*nb/6;
+		points += 10*level*2*nb*nb*nb/6;
 	else
-		score += 10*level*nb*nb*nb/6;
+		points += 10*level*nb*nb*nb/6;
 
 	remain[type] -= nb;
 	time -= nb/4;
@@ -152,9 +161,7 @@ bool NormalGameModeManager::LeveledUp() {
 
 void NormalGameModeManager::Reset() {
 	time = 0;
-	score = 0;
-
-	isReadyToStart = false;
+	points = 0;
 	level = 1;
 	bonus = MathUtil::RandomInt(8);
 
@@ -175,6 +182,7 @@ void NormalGameModeManager::HideUI(bool toHide) {
 			RENDERING(datas->fObj[i])->hide = toHide;
 		}
 	}
+	HideUICore(toHide);
 }
 
 void NormalGameModeManager::UpdateUI(float dt) {
@@ -182,7 +190,7 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << score;
+	a << std::fixed << points;
 	TEXT_RENDERING(datas->eScore)->text = a.str();
 	}
 	//Temps
@@ -230,11 +238,11 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	RenderingComponent* rc = RENDERING(datas->fBonus);
 	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, 0));
 	}
+	//Hérisson
+	UpdateCore(dt);
+	TRANSFORM(herisson)->position.X = -5.5+11*GameModeManager::position(time, pts);
 }
 
-std::string NormalGameModeManager::finalScore() {
-	std::stringstream a;
-	a << score;
-	return a.str();
+GameMode NormalGameModeManager::GetMode() {
+	return Normal;
 }
-

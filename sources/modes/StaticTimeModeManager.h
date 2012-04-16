@@ -20,14 +20,14 @@ class StaticTimeGameModeManager : public GameModeManager {
 		//permet de savoir si on a change de niveau
 		bool LeveledUp();
 
+		GameMode GetMode();
+
 		void ScoreCalc(int nb, int type);
 		void Reset();
-		std::string finalScore();
 
 	private:
 		class HUDManagerData;
 
 		int bonus;
-		bool isReadyToStart;
 		HUDManagerData* datas;
 };
