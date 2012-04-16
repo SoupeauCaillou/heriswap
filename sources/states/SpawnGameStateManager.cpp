@@ -2,7 +2,7 @@
 #include "../DepthLayer.h"
 
 static void fillTheBlank(std::vector<Feuille>& spawning);
-static Entity createCell(Feuille& f);
+static Entity createCell(Feuille& f, bool assignGridPos);
 
 SpawnGameStateManager::SpawnGameStateManager(){
 }
@@ -41,7 +41,7 @@ void SpawnGameStateManager::Enter() {
 	fillTheBlank(spawning);
 	if (spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
 		for(int i=0; i<spawning.size(); i++) {
-			createCell(spawning[i]);
+			createCell(spawning[i], true);
 		}
 		do {
 			c = theGridSystem.LookForCombination(false,true);
@@ -80,11 +80,19 @@ GameState SpawnGameStateManager::Update(float dt) {
 		transitionCree->active = true;
 		for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
 			if (it->fe == 0) {
-				it->fe = createCell(*it);
-			} else if (transitionCree->value == 1){
-				TRANSFORM(it->fe)->rotation = 0;
+				it->fe = createCell(*it, false);
 			} else {
-				TRANSFORM(it->fe)->rotation = -transitionCree->value*7;
+				TransformationComponent* tc = TRANSFORM(it->fe);
+				float s = Game::CellSize();
+				if (transitionCree->value == 1){
+					tc->size = Vector2(s*0.1, s);
+					tc->rotation = Game::cellTypeToRotation(it->type);
+					GRID(it->fe)->i = it->X;
+					GRID(it->fe)->j = it->Y;
+				} else {
+					tc->size = Vector2(s * transitionCree->value, s * transitionCree->value);
+					tc->rotation = Game::cellTypeToRotation(it->type) + transitionCree->value * MathUtil::TwoPi;
+				}
 			}
 		}
 		if (transitionCree->value == 1) {
@@ -185,7 +193,7 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 	}
 }
 
-static Entity createCell(Feuille& f) {
+static Entity createCell(Feuille& f, bool assignGridPos) {
 	Entity e = theEntityManager.CreateEntity(EntityManager::Persistent);
 	ADD_COMPONENT(e, Transformation);
 	ADD_COMPONENT(e, Rendering);
@@ -197,11 +205,13 @@ static Entity createCell(Feuille& f) {
 	RenderingComponent* rc = RENDERING(e);
 	rc->hide = false;
 
-	TRANSFORM(e)->size = Game::CellSize() * Game::CellContentScale();
+	TRANSFORM(e)->size = 0;
 	ADSR(e)->idleValue = Game::CellSize() * Game::CellContentScale();
 	GRID(e)->type = f.type;
-	GRID(e)->i = f.X;
-	GRID(e)->j = f.Y;
+	if (assignGridPos) {
+		GRID(e)->i = f.X;
+		GRID(e)->j = f.Y;
+	}
 	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(f.type, &TRANSFORM(e)->rotation));
 	return e;
 }

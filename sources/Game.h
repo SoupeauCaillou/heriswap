@@ -34,6 +34,7 @@ class Game {
 		static float CellSize();
 		static float CellContentScale();
 		static std::string cellTypeToTextureNameAndRotation(int type, float* rotation);
+		static float cellTypeToRotation(int type);
 		void hideEveryThing(bool toHide, bool blacktospawn);
 
 		void setMode();

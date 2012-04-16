@@ -622,21 +622,26 @@ void Game::loadState(const uint8_t* in, int size) {
 	LOGW("RESTORED STATE: %d", datas->stateBeforePause);
 }
 
+static float rotations[] = {
+	MathUtil::PiOver4,
+	-MathUtil::PiOver2,
+	0,
+	-3*MathUtil::PiOver4,
+	3*MathUtil::PiOver4,
+	MathUtil::PiOver2,
+	-MathUtil::Pi,
+	-MathUtil::PiOver4
+};
+	
 std::string Game::cellTypeToTextureNameAndRotation(int type, float* rotation) {
-	static float rotations[] = {
-		MathUtil::PiOver4,
-		-MathUtil::PiOver2,
-		0,
-		-3*MathUtil::PiOver4,
-		3*MathUtil::PiOver4,
-		MathUtil::PiOver2,
-		-MathUtil::Pi,
-		-MathUtil::PiOver4
-	};
 	if (rotation)
 		*rotation = rotations[type];
 
 	std::stringstream s;
 	s << "feuille" << (type+1) << ".png";
 	return s.str();
+}
+
+float Game::cellTypeToRotation(int type) {
+	return rotations[type];
 }

@@ -36,7 +36,8 @@ GameState DeleteGameStateManager::Update(float dt) {
 				modeMgr->ScoreCalc(it->points.size(), it->type);
 			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
 				Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
-				TRANSFORM(e)->rotation = transitionSuppr->value*7;
+				TRANSFORM(e)->rotation = Game::cellTypeToRotation(it->type) + (1 - transitionSuppr->value) * MathUtil::TwoPi;
+				ADSR(e)->idleValue = Game::CellSize() * Game::CellContentScale() * (1 - transitionSuppr->value);
 				if (transitionSuppr->value == transitionSuppr->sustainValue) {
 					if (e){
 						theEntityManager.DeleteEntity(e);
