@@ -56,7 +56,7 @@ void GameModeManager::SetupCore() {
 	ADD_COMPONENT(herisson, Transformation);
 	ADD_COMPONENT(herisson, Rendering);
 	TRANSFORM(herisson)->z = DL_Animal;
-	TRANSFORM(herisson)->size = Vector2(1,1);
+	TRANSFORM(herisson)->size = Vector2(PlacementHelper::GimpWidthToScreen(142),PlacementHelper::GimpWidthToScreen(116));
 	TRANSFORM(herisson)->position = Vector2(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5, PlacementHelper::GimpYToScreen(1100));
 	c = new GameModeManager::AnimatedActor();
 	c->actor.e = herisson;
