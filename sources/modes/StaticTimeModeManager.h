@@ -26,8 +26,5 @@ class StaticTimeGameModeManager : public GameModeManager {
 		void Reset();
 
 	private:
-		class HUDManagerData;
-
 		int bonus;
-		HUDManagerData* datas;
 };
