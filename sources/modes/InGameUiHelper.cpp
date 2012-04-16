@@ -7,7 +7,14 @@
 #include "../PlacementHelper.h"
 #include "../DepthLayer.h"
 
+InGameUiHelper::InGameUiHelper() : built(false) {
+	
+}
+
 void InGameUiHelper::build() {
+	if (built)
+		return;
+
 	smallLevel = theEntityManager.CreateEntity();
 	ADD_COMPONENT(smallLevel, Transformation);
 	TRANSFORM(smallLevel)->position = Vector2(PlacementHelper::GimpXToScreen(624), PlacementHelper::GimpYToScreen(188));

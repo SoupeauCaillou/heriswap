@@ -4,6 +4,8 @@
 
 class InGameUiHelper {
 	public:
+		InGameUiHelper();
+		
 		void build();
 		void show();
 		void update(float dt);

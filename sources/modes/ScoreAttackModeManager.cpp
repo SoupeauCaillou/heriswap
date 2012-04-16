@@ -59,6 +59,7 @@ void ScoreAttackGameModeManager::Reset() {
 void ScoreAttackGameModeManager::HideUI(bool toHide) {
 	HideUICore(toHide);
 	TEXT_RENDERING(uiHelper.smallLevel)->hide = true;
+	TEXT_RENDERING(uiHelper.scoreProgress)->isANumber = false;
 }
 
 void ScoreAttackGameModeManager::UpdateUI(float dt) {

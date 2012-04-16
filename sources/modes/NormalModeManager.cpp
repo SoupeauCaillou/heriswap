@@ -59,9 +59,9 @@ void NormalGameModeManager::deleteLeaves(int type, int nb) {
 
 void NormalGameModeManager::ScoreCalc(int nb, int type) {
 	if (type == bonus)
-		points += 10*level*2*nb*nb*nb/6;
+		points += 10*level*2*nb*nb*nb/6 * 1000;
 	else
-		points += 10*level*nb*nb*nb/6;
+		points += 10*level*nb*nb*nb/6 * 1000;
 
 	remain[type] -= nb;
 	deleteLeaves(type+1, nb);
