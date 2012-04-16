@@ -29,6 +29,25 @@ float GameModeManager::position(float t, std::vector<Vector2> pts) {
 	}
 	return pts[pts.size()-1].Y;
 }
+Vector2 GameModeManager::placeOnBranch() {
+	Vector2 res = Vector2::Zero; //la premiere feuille sera TOUJOURS celle ci;
+	float minDis = 0;
+	for (int i=0; i<10; i++) {
+		Vector2 p = MathUtil::RandomVector(Vector2(-5,6),Vector2(5,8));
+		float minDisForThis = 10000;
+		for (int j=0; j<branchLeaves.size(); j++) {
+			float d = (TRANSFORM(branchLeaves[j].e)->position.X - p.X)*(TRANSFORM(branchLeaves[j].e)->position.X - p.X)+
+						(TRANSFORM(branchLeaves[j].e)->position.Y - p.Y)*(TRANSFORM(branchLeaves[j].e)->position.Y - p.Y);//norm2 x²+y²
+			if (d < minDisForThis)
+				minDisForThis = d;
+		}
+		if (minDisForThis>minDis) {
+			res = p;
+			minDis = minDisForThis;
+		}
+	}
+	return res;
+}
 
 void GameModeManager::SetupCore() {
 	herisson = theEntityManager.CreateEntity();
@@ -49,19 +68,23 @@ void GameModeManager::SetupCore() {
 	c->actor.speed = 4.1;
 	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
+}
 
-
-	for (int i=0;i<6;i++) {
+void GameModeManager::generateLeaves(int nb) {
+	for (int i=0;i<nb;i++) {
 		for (int j=0;j<8;j++) {
 			Entity e = theEntityManager.CreateEntity();
 			ADD_COMPONENT(e, Transformation);
 			ADD_COMPONENT(e, Rendering);
-			RENDERING(e)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(j, &TRANSFORM(e)->rotation));
+			RENDERING(e)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(j, 0));
+			TRANSFORM(e)->rotation = MathUtil::RandomFloat(2*MathUtil::Pi);
 			TRANSFORM(e)->size = Game::CellSize() * Game::CellContentScale();
-			TRANSFORM(e)->position = MathUtil::RandomVector(Vector2(-5,6),Vector2(5,8));
-			TRANSFORM(e)->z = DL_Hud;
-
-			branchLeaves.push_back(e);
+			TRANSFORM(e)->position = placeOnBranch();
+			TRANSFORM(e)->z = DL_Hud+(i+1)*(j+1)/100.;
+			BranchLeaf bl;
+			bl.e = e;
+			bl.type=j+1;
+			branchLeaves.push_back(bl);
 		}
 	}
 	
@@ -75,7 +98,7 @@ void GameModeManager::UpdateCore(float dt) {
 
 void GameModeManager::HideUICore(bool toHide) {
 	if (herisson && RENDERING(herisson)) RENDERING(herisson)->hide = toHide;
-	for (int i=0;i<branchLeaves.size();i++) RENDERING(branchLeaves[i])->hide = toHide;
+	for (int i=0;i<branchLeaves.size();i++) RENDERING(branchLeaves[i].e)->hide = toHide;
 	
 	if (toHide)
 		uiHelper.hide();

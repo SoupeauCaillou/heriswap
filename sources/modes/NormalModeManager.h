@@ -17,6 +17,7 @@ class NormalGameModeManager : public GameModeManager {
 		void LevelUp();
 		//permet de savoir si on a change de niveau
 		bool LeveledUp();
+		void deleteLeaves(int type, int nb);
 
 		GameMode GetMode();
 

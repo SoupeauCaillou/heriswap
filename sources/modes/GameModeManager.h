@@ -27,12 +27,19 @@ enum GameMode {
 
 class GameModeManager {
 	public:
+
+		struct BranchLeaf {
+			Entity e;
+			int type;
+		};
 		struct Actor;
 		struct AnimatedActor;
 		void SetupCore();
 		void UpdateCore(float dt);
 		void HideUICore(bool ToHide);
 		float position(float t, std::vector<Vector2> pts);
+		Vector2 placeOnBranch();
+		void generateLeaves(int nb);
 
 		virtual ~GameModeManager() {}
 
@@ -57,7 +64,7 @@ class GameModeManager {
 		float time, limit;
 		int points;
 		//feuilles de l'arbre
-		std::vector<Entity> branchLeaves;
+		std::vector<BranchLeaf> branchLeaves;
 		//hérisson
 		Entity herisson;
 		AnimatedActor* c;

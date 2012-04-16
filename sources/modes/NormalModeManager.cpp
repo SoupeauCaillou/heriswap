@@ -31,6 +31,7 @@ NormalGameModeManager::~NormalGameModeManager() {
 
 void NormalGameModeManager::Setup() {
 	SetupCore();
+	generateLeaves(3);
 	HideUI(true);
 }
 
@@ -45,6 +46,16 @@ bool NormalGameModeManager::Update(float dt) {
 	LevelUp();
 	return (limit - time <0);
 }
+void NormalGameModeManager::deleteLeaves(int type, int nb) {
+	int cpt = nb;
+	for (int i=0; cpt>0 && i<branchLeaves.size(); i++) {
+		if (type == branchLeaves[i].type) {
+			theEntityManager.DeleteEntity(branchLeaves[i].e);
+			branchLeaves.erase(branchLeaves.begin()+i);
+			cpt--;
+		}
+	}
+}
 
 void NormalGameModeManager::ScoreCalc(int nb, int type) {
 	if (type == bonus)
@@ -53,6 +64,7 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 		points += 10*level*nb*nb*nb/6;
 
 	remain[type] -= nb;
+	deleteLeaves(type+1, nb);
 	time -= nb/4;
 	if (time < 0)
 		time = 0;
@@ -72,6 +84,7 @@ void NormalGameModeManager::LevelUp() {
 	if (match) {
 		level++;
 		levelUp = true;
+		generateLeaves(MathUtil::Min(obj[level-1], 6));
 		time -= 20;
 		if (time < 0)
 			time = 0;
