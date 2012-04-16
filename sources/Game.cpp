@@ -129,6 +129,7 @@ class Game::Data {
 				RENDERING(b)->hide = true;
 				benchTimeSystem[allSystems[i]] = b;
 			}
+	#if 0
 		cursor = theEntityManager.CreateEntity();
 		ADD_COMPONENT(cursor, Transformation);
 		TRANSFORM(cursor)->z = DL_Fading;
@@ -143,7 +144,7 @@ class Game::Data {
 		PARTICULE(cursor)->forceDirection = Interval<float>(0.1, 3);
 		PARTICULE(cursor)->forceAmplitude  = Interval<float>(20, 100);
 		PARTICULE(cursor)->mass = 1;
-
+	#endif
 		}
 		//bench data
 		std::map<std::string, Entity> benchTimeSystem;
@@ -194,12 +195,12 @@ static const float size = (10 - 2 * offset) / GRIDSIZE;
 // grid: [48, 302] -> [752, 1006]  in gimp 
 Vector2 Game::GridCoordsToPosition(int i, int j) {
 	float startX = PlacementHelper::GimpXToScreen(48);
-	float startY = PlacementHelper::GimpYToScreen(302);
+	float startY = PlacementHelper::GimpYToScreen(1006);
 	float size = PlacementHelper::GimpWidthToScreen((752 - 48) / 8);
 
 	return Vector2(
 		startX + (i + 0.5) * size,
-		startY - (j + 0.5) * size);
+		startY + (j + 0.5) * size);
 }
 
 float Game::CellSize() {
@@ -478,7 +479,7 @@ void Game::tick(float dt) {
 		it->second->BackgroundUpdate(dt);
 	}
 
-	TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition();
+	// TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition();
 
 	//si c'est pas à l'user de jouer, on cache de force les combi
 	if (newState != UserInput)

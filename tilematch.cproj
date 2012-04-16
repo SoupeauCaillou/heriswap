@@ -50,6 +50,7 @@
     <None Include="sources\Game.h" />
     <None Include="sources\GridSystem.h" />
     <None Include="sources\PlacementHelper.h" />
+    <None Include="sources\modes\InGameUiHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -74,5 +75,7 @@
     <Compile Include="tests\tests.cpp" />
     <Compile Include="jni\tilematchjnilib.cpp" />
     <Compile Include="sources\PlacementHelper.cpp" />
+    <Compile Include="sources\modes\InGameUiHelper.cpp" />
+    <Compile Include="sources\modes\GameModeManager.cpp" />
   </ItemGroup>
 </Project>

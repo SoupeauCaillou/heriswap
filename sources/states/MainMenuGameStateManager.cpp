@@ -64,12 +64,16 @@ void MainMenuGameStateManager::Setup() {
 	//Text settings
 	for (int i=0; i<3; i++) {
 		TEXT_RENDERING(eStart[i])->hide = true;
-		TEXT_RENDERING(eStart[i])->alignL = true;
+		TEXT_RENDERING(eStart[i])->positioning = TextRenderingComponent::LEFT;
 		RENDERING(start[i])->color = Color(0,0,0,0);
 	}
+	TEXT_RENDERING(eStart[0])->positioning = TextRenderingComponent::LEFT;
+	TEXT_RENDERING(eStart[1])->positioning = TextRenderingComponent::RIGHT;
+	TEXT_RENDERING(eStart[2])->positioning = TextRenderingComponent::CENTER;
+	
 	TEXT_RENDERING(eScore)->hide = true;
 	RENDERING(score)->color = Color(0,0,0,0);
-	TEXT_RENDERING(eScore)->alignL = true;
+	TEXT_RENDERING(eScore)->positioning = TextRenderingComponent::LEFT;
 
 	TEXT_RENDERING(eStart[0])->text = "Normal";
 	TEXT_RENDERING(eStart[1])->text = "Score Atk";

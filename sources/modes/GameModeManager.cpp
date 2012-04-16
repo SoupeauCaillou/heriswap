@@ -87,13 +87,21 @@ void GameModeManager::generateLeaves(int nb) {
 			branchLeaves.push_back(bl);
 		}
 	}
+	
+	uiHelper.build();
 }
 
 void GameModeManager::UpdateCore(float dt) {
 	switchAnim(c);
+	uiHelper.update(dt);
 }
 
 void GameModeManager::HideUICore(bool toHide) {
 	if (herisson && RENDERING(herisson)) RENDERING(herisson)->hide = toHide;
 	for (int i=0;i<branchLeaves.size();i++) RENDERING(branchLeaves[i].e)->hide = toHide;
+	
+	if (toHide)
+		uiHelper.hide();
+	else
+		uiHelper.show();
 }
