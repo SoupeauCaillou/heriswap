@@ -1,5 +1,5 @@
 #include "EndMenuStateManager.h"
-
+#include <iostream>
 
 EndMenuStateManager::EndMenuStateManager(ScoreStorage* str, PlayerNameInputUI* ui) : storage(str), inputUI(ui) {
 	modeMgr=0;
@@ -43,8 +43,10 @@ void EndMenuStateManager::Enter() {
 	BUTTON(startbtn)->clicked = false;
 
 	playerName.clear();
-	inputUI->show();
-
+	if (!inputUI->nameNeeded()) {
+		std::ifstream file( "player_name.txt" );
+		file >> playerName;
+	}
 	/*
 	{
 	std::stringstream a;
@@ -64,6 +66,7 @@ void EndMenuStateManager::Enter() {
 
 GameState EndMenuStateManager::Update(float dt) {
 	if (playerName.length() == 0) {
+		inputUI->show();
 		if (inputUI->query(playerName))
 			RENDERING(startbtn)->hide = false;
 	}

@@ -19,6 +19,7 @@ class PlayerNameInputUI {
 	public:
 		virtual void show() = 0;
 		virtual bool query(std::string& result) = 0;
+		virtual bool nameNeeded() = 0;
 };
 
 class Game {
