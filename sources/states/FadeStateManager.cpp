@@ -19,7 +19,7 @@ void FadeGameStateManager::Setup() {
 	ADD_COMPONENT(eFading, ADSR);
 	ADSR(eFading)->idleValue = 0;
 	ADSR(eFading)->attackValue = 1.0;
-	ADSR(eFading)->attackTiming = 0.8;
+	ADSR(eFading)->attackTiming = 0.2;
 	ADSR(eFading)->decayTiming = 0;
 	ADSR(eFading)->sustainValue = 1.0;
 	ADSR(eFading)->releaseTiming = .2;
@@ -47,14 +47,15 @@ void FadeGameStateManager::Enter() {
 
 GameState FadeGameStateManager::Update(float dt) {
 	updateColor(eFading, fading);
+	if (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()) {
+		return heIs;
+	}
 	if (ADSR(eFading)->value == ADSR(eFading)->sustainValue) {
 		accum += dt;
 		if (accum >= timeout)
 			return heIs;
 		else
 			return iAm;
-	} else if (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()) {
-		return heIs;
 	}
 	return iAm;
 }
