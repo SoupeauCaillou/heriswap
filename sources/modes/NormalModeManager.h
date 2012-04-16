@@ -24,9 +24,6 @@ class NormalGameModeManager : public GameModeManager {
 		void Reset();
 
 	private:
-		class HUDManagerData;
-
 		int level, obj[50], remain[8], bonus;
 		bool levelUp;
-		HUDManagerData* datas;
 };

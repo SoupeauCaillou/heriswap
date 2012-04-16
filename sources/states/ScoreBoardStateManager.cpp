@@ -38,7 +38,6 @@ void ScoreBoardStateManager::Setup() {
 		TRANSFORM(eScore[i])->z = DL_Score;
 		TEXT_RENDERING(eScore[i])->charSize = 0.3;
 		TEXT_RENDERING(eScore[i])->hide = true;
-		TEXT_RENDERING(eScore[i])->alignL = true;
 		TEXT_RENDERING(eScore[i])->color = Color(0.f,0.f,0.f);
 	}
 	mode = 1;
