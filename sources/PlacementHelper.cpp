@@ -1,7 +1,7 @@
 #include "PlacementHelper.h"
 
-int PlacementHelper::ScreenWidth = 0;
-int PlacementHelper::ScreenHeight = 0;
+float PlacementHelper::ScreenWidth = 0;
+float PlacementHelper::ScreenHeight = 0;
 
 int PlacementHelper::WindowWidth = 0;
 int PlacementHelper::WindowHeight = 0;
@@ -25,5 +25,5 @@ float PlacementHelper::GimpYToScreen(int y) {
 }
 
 float PlacementHelper::GimpXToScreen(int x) {
-    return WIDTH_RATIO_TO_SCREEN_WIDTH(x - GIMP_WIDTH * 0.5) / GIMP_WIDTH);
+    return WIDTH_RATIO_TO_SCREEN_WIDTH((x - GIMP_WIDTH * 0.5) / GIMP_WIDTH);
 }

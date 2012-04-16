@@ -40,6 +40,7 @@
 #include "modes/ScoreAttackModeManager.h"
 
 #include "DepthLayer.h"
+#include "PlacementHelper.h"
 
 #define GRIDSIZE 8
 
@@ -235,7 +236,8 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
     PlacementHelper::WindowHeight = windowH;
 
 
-	theRenderingSystem.setWindowSize(windowW, windowH);
+	theRenderingSystem.setWindowSize(windowW, windowH, PlacementHelper::ScreenWidth, PlacementHelper::ScreenHeight);
+	theTouchInputManager.init(Vector2(PlacementHelper::ScreenWidth, PlacementHelper::ScreenHeight), Vector2(windowW, windowH));
 	theRenderingSystem.init();
 	/*
 	theRenderingSystem.loadAtlas("sprites");
@@ -254,11 +256,12 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 
 	theGridSystem.GridSize = GRIDSIZE;
 
+	float bgElementWidth = PlacementHelper::GimpWidthToScreen(800);
 	datas->sky = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->sky, Transformation);
 	TRANSFORM(datas->sky)->z = DL_Sky;
-	TRANSFORM(datas->sky)->size = Vector2(PlacementHelper::ScreenWidth, (PlacementHelper::ScreenWidth * 833.0) / 800.0);
-	TRANSFORM(datas->sky)->position = Vector2(0, (PlacementHelper::ScreenHeight - TRANSFORM(datas->sky)->size.Y) * 0.5);
+	TRANSFORM(datas->sky)->size = Vector2(bgElementWidth, (bgElementWidth * 833.0) / 808.0);
+	TransformationSystem::setPosition(TRANSFORM(datas->sky), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
 	ADD_COMPONENT(datas->sky, Scrolling);
 	SCROLLING(datas->sky)->images.push_back("ciel0.png");
 	SCROLLING(datas->sky)->images.push_back("ciel1.png");
@@ -271,8 +274,8 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	datas->decord2nd = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->decord2nd, Transformation);
 	TRANSFORM(datas->decord2nd)->z = DL_Decor2nd;
-	TRANSFORM(datas->decord2nd)->size = Vector2(PlacementHelper::ScreenWidth, (PlacementHelper::ScreenWidth * 470.0) / 800.0);
-	TRANSFORM(datas->decord2nd)->position = Vector2(0, (640 - (610+235)) * PlacementHelper::ScreenHeight * 0.5 / 640);
+	TRANSFORM(datas->decord2nd)->size = Vector2(bgElementWidth, (bgElementWidth * 470.0) / 808.0);
+	TransformationSystem::setPosition(TRANSFORM(datas->decord2nd), Vector2(0, PlacementHelper::GimpYToScreen(610)), TransformationSystem::N);
 	ADD_COMPONENT(datas->decord2nd, Scrolling);
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_0.png");
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_1.png");
@@ -284,8 +287,8 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	datas->decord1er = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->decord1er, Transformation);
 	TRANSFORM(datas->decord1er)->z = DL_Decor1er;
-	TRANSFORM(datas->decord1er)->size = Vector2(PlacementHelper::ScreenWidth, (PlacementHelper::ScreenWidth * 300.0) / 800.0);
-	TRANSFORM(datas->decord1er)->position = Vector2(0, (-PlacementHelper::ScreenHeight + TRANSFORM(datas->decord1er)->size.Y) * 0.5);
+	TRANSFORM(datas->decord1er)->size = Vector2(bgElementWidth, (bgElementWidth * 300.0) / 808.0);
+	TransformationSystem::setPosition(TRANSFORM(datas->decord1er), Vector2(0, PlacementHelper::GimpYToScreen(1280)), TransformationSystem::S);
 	ADD_COMPONENT(datas->decord1er, Scrolling);
 	SCROLLING(datas->decord1er)->images.push_back("decor1er_0.png");
 	SCROLLING(datas->decord1er)->images.push_back("decor1er_1.png");
@@ -297,8 +300,8 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	Entity branch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(branch, Transformation);
 	TRANSFORM(branch)->z = DL_Branch;
-	TRANSFORM(branch)->size = Vector2(PlacementHelper::ScreenWidth, (PlacementHelper::ScreenWidth * 400.0) / 800.0);
-	TRANSFORM(branch)->position = Vector2(0, (fullscreenHeight - TRANSFORM(branch)->size.Y) * 0.5);
+	TRANSFORM(branch)->size = Vector2(bgElementWidth, (bgElementWidth * 400.0) / 800.0);
+	TransformationSystem::setPosition(TRANSFORM(branch), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
 	ADD_COMPONENT(branch, Rendering);
 	RENDERING(branch)->hide = false;
 	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
@@ -506,10 +509,10 @@ TRANSFORM(datas->cursor)->position = theTouchInputManager.getTouchLastPosition()
 
 	updateMusic(datas->music);
 
-	theScrollingSystem.Update(dt);
 	theCombinationMarkSystem.Update(dt);
 	thePhysicsSystem.Update(dt);
 	theTransformationSystem.Update(dt);
+	theScrollingSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);
 	theContainerSystem.Update(dt);
 	theSoundSystem.Update(dt);

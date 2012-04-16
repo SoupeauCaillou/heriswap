@@ -149,7 +149,6 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	}
 
 	hld->game->init(hld->width, hld->height, state, size);
-	theTouchInputManager.init(Vector2(10, 10. * hld->height / hld->width), Vector2(hld->width, hld->height));
 
 	hld->firstCall = true;
 	hld->dtAccumuled = 0;
