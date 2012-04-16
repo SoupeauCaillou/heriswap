@@ -21,7 +21,7 @@ void switchAnim(GameModeManager::AnimatedActor* a) {
 }
 
 float GameModeManager::position(float t, std::vector<Vector2> pts) {
-	if (t<pts[0].X) return pts[0].Y;
+	if (t<=pts[0].X) return pts[0].Y;
 	for (int i = 0; i<pts.size()-1; i++) {
 		if (t>pts[i].X && t<pts[i+1].X) {
 			return MathUtil::Lerp(pts[i].Y, pts[i+1].Y, (t-pts[i].X)/(pts[i+1].X-pts[i].X));
