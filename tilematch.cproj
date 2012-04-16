@@ -49,6 +49,7 @@
     <None Include="sources\DepthLayer.h" />
     <None Include="sources\Game.h" />
     <None Include="sources\GridSystem.h" />
+    <None Include="sources\PlacementHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -72,5 +73,6 @@
     <Compile Include="tests\TestGridSystem.cpp" />
     <Compile Include="tests\tests.cpp" />
     <Compile Include="jni\tilematchjnilib.cpp" />
+    <Compile Include="sources\PlacementHelper.cpp" />
   </ItemGroup>
 </Project>
