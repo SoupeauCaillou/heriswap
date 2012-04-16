@@ -84,7 +84,7 @@ class Game::Data {
 			ADD_COMPONENT(logo, Rendering);
 			ADD_COMPONENT(logo, Transformation);
 			TRANSFORM(logo)->position = Vector2(0,0);
-			TRANSFORM(logo)->size = Vector2(10,10);
+			TRANSFORM(logo)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::ScreenWidth);
 			RENDERING(logo)->hide = true;
 			TRANSFORM(logo)->z = DL_Logo;
 			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
@@ -93,7 +93,7 @@ class Game::Data {
 			ADD_COMPONENT(logo_bg, Rendering);
 			ADD_COMPONENT(logo_bg, Transformation);
 			TRANSFORM(logo_bg)->position = Vector2(0,0);
-			TRANSFORM(logo_bg)->size = Vector2(10,10 * windowH / (float)windowW);
+			TRANSFORM(logo_bg)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::ScreenHeight);
 			RENDERING(logo_bg)->hide = false;
 			RENDERING(logo_bg)->color = Color(0,0,0);
 			TRANSFORM(logo_bg)->z = DL_BehindLogo;
