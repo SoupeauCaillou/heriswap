@@ -229,6 +229,12 @@ Game::Game(ScoreStorage* storage, PlayerNameInputUI* inputUI) {
 }
 
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
+    PlacementHelper::ScreenHeight = 10;
+    PlacementHelper::ScreenWidth = PlacementHelper::ScreenHeight * windowW / (float)windowH;
+    PlacementHelper::WindowWidth = windowW;
+    PlacementHelper::WindowHeight = windowH;
+
+
 	theRenderingSystem.setWindowSize(windowW, windowH);
 	theRenderingSystem.init();
 	/*
@@ -248,14 +254,11 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 
 	theGridSystem.GridSize = GRIDSIZE;
 
-	float fullscreenWidth = 10.0;
-	float fullscreenHeight = 10.0 * windowH / windowW;
-
 	datas->sky = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->sky, Transformation);
 	TRANSFORM(datas->sky)->z = DL_Sky;
-	TRANSFORM(datas->sky)->size = Vector2(fullscreenWidth, (fullscreenWidth * 833.0) / 800.0);
-	TRANSFORM(datas->sky)->position = Vector2(0, (fullscreenHeight - TRANSFORM(datas->sky)->size.Y) * 0.5);
+	TRANSFORM(datas->sky)->size = Vector2(PlacementHelper::ScreenWidth, (PlacementHelper::ScreenWidth * 833.0) / 800.0);
+	TRANSFORM(datas->sky)->position = Vector2(0, (PlacementHelper::ScreenHeight - TRANSFORM(datas->sky)->size.Y) * 0.5);
 	ADD_COMPONENT(datas->sky, Scrolling);
 	SCROLLING(datas->sky)->images.push_back("ciel0.png");
 	SCROLLING(datas->sky)->images.push_back("ciel1.png");
@@ -268,8 +271,8 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	datas->decord2nd = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->decord2nd, Transformation);
 	TRANSFORM(datas->decord2nd)->z = DL_Decor2nd;
-	TRANSFORM(datas->decord2nd)->size = Vector2(fullscreenWidth, (fullscreenWidth * 470.0) / 800.0);
-	TRANSFORM(datas->decord2nd)->position = Vector2(0, (640 - (610+235)) * fullscreenHeight * 0.5 / 640);
+	TRANSFORM(datas->decord2nd)->size = Vector2(PlacementHelper::ScreenWidth, (PlacementHelper::ScreenWidth * 470.0) / 800.0);
+	TRANSFORM(datas->decord2nd)->position = Vector2(0, (640 - (610+235)) * PlacementHelper::ScreenHeight * 0.5 / 640);
 	ADD_COMPONENT(datas->decord2nd, Scrolling);
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_0.png");
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_1.png");
@@ -281,8 +284,8 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	datas->decord1er = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->decord1er, Transformation);
 	TRANSFORM(datas->decord1er)->z = DL_Decor1er;
-	TRANSFORM(datas->decord1er)->size = Vector2(fullscreenWidth, (fullscreenWidth * 300.0) / 800.0);
-	TRANSFORM(datas->decord1er)->position = Vector2(0, (-fullscreenHeight + TRANSFORM(datas->decord1er)->size.Y) * 0.5);
+	TRANSFORM(datas->decord1er)->size = Vector2(PlacementHelper::ScreenWidth, (PlacementHelper::ScreenWidth * 300.0) / 800.0);
+	TRANSFORM(datas->decord1er)->position = Vector2(0, (-PlacementHelper::ScreenHeight + TRANSFORM(datas->decord1er)->size.Y) * 0.5);
 	ADD_COMPONENT(datas->decord1er, Scrolling);
 	SCROLLING(datas->decord1er)->images.push_back("decor1er_0.png");
 	SCROLLING(datas->decord1er)->images.push_back("decor1er_1.png");
@@ -294,7 +297,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	Entity branch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(branch, Transformation);
 	TRANSFORM(branch)->z = DL_Branch;
-	TRANSFORM(branch)->size = Vector2(fullscreenWidth, (fullscreenWidth * 400.0) / 800.0);
+	TRANSFORM(branch)->size = Vector2(PlacementHelper::ScreenWidth, (PlacementHelper::ScreenWidth * 400.0) / 800.0);
 	TRANSFORM(branch)->position = Vector2(0, (fullscreenHeight - TRANSFORM(branch)->size.Y) * 0.5);
 	ADD_COMPONENT(branch, Rendering);
 	RENDERING(branch)->hide = false;
