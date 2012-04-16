@@ -92,7 +92,7 @@ class LinuxSqliteExec: public ScoreStorage {
 			if (mode==1 || mode == 3)
 				tmp << "select * from scoretable where mode= "<< mode << " order by points desc limit 10";
 			else
-				tmp << "select * from scoretable where mode= "<< mode << " order by time desc limit 10";
+				tmp << "select * from scoretable where mode= "<< mode << " order by time asc limit 10";
 
 			sqlite3 *db;
 			char *zErrMsg = 0;
