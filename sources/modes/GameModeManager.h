@@ -13,6 +13,7 @@
 #include "DepthLayer.h"
 #include "Game.h"
 #include "InGameUiHelper.h"
+#include "PlacementHelper.h"
 
 //FCRR : FPS Calculation Refresh Rate
 #define FCRR 1.
@@ -69,6 +70,6 @@ class GameModeManager {
 		Entity herisson;
 		AnimatedActor* c;
 		std::vector<Vector2> pts;
-		
+
 		InGameUiHelper uiHelper;
 };

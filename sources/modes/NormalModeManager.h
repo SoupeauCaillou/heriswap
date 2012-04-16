@@ -3,6 +3,7 @@
 #include "systems/ContainerSystem.h"
 #include "systems/ButtonSystem.h"
 #include "GameModeManager.h"
+#include "PlacementHelper.h"
 
 class NormalGameModeManager : public GameModeManager {
 	public:

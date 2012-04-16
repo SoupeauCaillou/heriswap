@@ -33,7 +33,9 @@ Vector2 GameModeManager::placeOnBranch() {
 	Vector2 res = Vector2::Zero; //la premiere feuille sera TOUJOURS celle ci;
 	float minDis = 0;
 	for (int i=0; i<10; i++) {
-		Vector2 p = MathUtil::RandomVector(Vector2(-5,6),Vector2(5,8));
+		Vector2 p = MathUtil::RandomVector(
+			Vector2(PlacementHelper::GimpXToScreen(0),PlacementHelper::GimpYToScreen(225)),
+			Vector2(PlacementHelper::GimpXToScreen(800),PlacementHelper::GimpYToScreen(0)));
 		float minDisForThis = 10000;
 		for (int j=0; j<branchLeaves.size(); j++) {
 			float d = (TRANSFORM(branchLeaves[j].e)->position.X - p.X)*(TRANSFORM(branchLeaves[j].e)->position.X - p.X)+
@@ -55,8 +57,7 @@ void GameModeManager::SetupCore() {
 	ADD_COMPONENT(herisson, Rendering);
 	TRANSFORM(herisson)->z = DL_Animal;
 	TRANSFORM(herisson)->size = Vector2(1,1);
-	TRANSFORM(herisson)->position = Vector2(-5,-7);
-
+	TRANSFORM(herisson)->position = Vector2(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5, PlacementHelper::GimpYToScreen(1100));
 	c = new GameModeManager::AnimatedActor();
 	c->actor.e = herisson;
 	c->anim.clear();
@@ -87,7 +88,7 @@ void GameModeManager::generateLeaves(int nb) {
 			branchLeaves.push_back(bl);
 		}
 	}
-	
+
 	uiHelper.build();
 }
 
@@ -99,7 +100,7 @@ void GameModeManager::UpdateCore(float dt) {
 void GameModeManager::HideUICore(bool toHide) {
 	if (herisson && RENDERING(herisson)) RENDERING(herisson)->hide = toHide;
 	for (int i=0;i<branchLeaves.size();i++) RENDERING(branchLeaves[i].e)->hide = toHide;
-	
+
 	if (toHide)
 		uiHelper.hide();
 	else

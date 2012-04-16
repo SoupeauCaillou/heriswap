@@ -5,6 +5,7 @@
 
 #include "GameModeManager.h"
 #include "DepthLayer.h"
+#include "PlacementHelper.h"
 
 class ScoreAttackGameModeManager : public GameModeManager {
 	public:
