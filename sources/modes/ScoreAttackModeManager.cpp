@@ -92,6 +92,7 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 		distance -= vitesse*dt;
 	} else distance = 0;
 }
+
 GameMode ScoreAttackGameModeManager::GetMode() {
 	return ScoreAttack;
 }
