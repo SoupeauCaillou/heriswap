@@ -12,8 +12,8 @@
 #include "systems/ContainerSystem.h"
 #include "systems/SoundSystem.h"
 
-#include "Game.h"
 #include "DepthLayer.h"
+#include "PlacementHelper.h"
 #include "states/GameStateManager.h"
 #include "modes/GameModeManager.h"
 
@@ -25,10 +25,8 @@ class MainMenuGameStateManager : public GameStateManager {
 		void Enter();
 		GameState Update(float dt);
 		void Exit();
-	private:
-		Entity start[3], score, eScore, eStart[3], bStart[3], bScore;
-		float elapsedTime;
 
-	public:
 		GameMode choosenGameMode;
+	private:
+		Entity eStart[3], bStart[3];
 };
