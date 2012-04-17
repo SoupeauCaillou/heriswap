@@ -56,21 +56,16 @@ void SpawnGameStateManager::Enter() {
 				}
 			}
 		} while(!c.empty());
+		spawning.clear();
+		fillTheBlank(spawning);
 	}
-	spawning.clear();
-
-
 
 	ADSRComponent* transitionCree = ADSR(eSpawn);
 	transitionCree->activationTime = 0;
 	transitionCree->active = false;
 
-
 	ADSR(eGrid)->activationTime = 0;
 	ADSR(eGrid)->active = false;
-
-
-	fillTheBlank(spawning);
 }
 
 GameState SpawnGameStateManager::Update(float dt) {
@@ -110,14 +105,11 @@ GameState SpawnGameStateManager::NextState(bool marker) {
 	std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,marker);
 	//si on a des combinaisons dans la grille on passe direct à Delete
 	if (!combinaisons.empty()) {
-		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
-		{
-			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
-			{
+		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
+			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
 				theCombinationMarkSystem.NewMarks(3, *itV);
 			}
 		}
-
 		return Delete;
 	//sinon
 	} else {
@@ -131,9 +123,9 @@ GameState SpawnGameStateManager::NextState(bool marker) {
 				TRANSFORM(*it)->rotation = 3*ADSR(eGrid)->value;
 			}
 			if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
-				std::cout << "nouvelle grille !\n";
 				theGridSystem.DeleteAll();
 				fillTheBlank(spawning);
+				LOGI("nouvelle grille de %d elements! ", spawning.size());
 			}
 		}
 	}
