@@ -11,13 +11,14 @@ enum GameState {
 	LevelChanged,
 	Pause,
 	MainMenu,
+	ModeMenu,
 	ScoreBoard,
 	EndMenu,
 	Background,
 	BlackToLogoState,
 	LogoToBlackState,
 	BlackToMainMenu,
-	MainMenuToBlackState,
+	ModeMenuToBlackState,
 	BlackToSpawn
 };
 
@@ -38,6 +39,6 @@ class GameStateManager {
 		virtual void BackgroundUpdate(float dt) {};
 		/* Prepare to leave as the active manager */
 		virtual void Exit() = 0;
-		
+
 		GameModeManager* modeMgr;
 };
