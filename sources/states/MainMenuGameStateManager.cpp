@@ -1,9 +1,5 @@
 #include "MainMenuGameStateManager.h"
 
-MainMenuGameStateManager::MainMenuGameStateManager() {
-
-}
-
 MainMenuGameStateManager::~MainMenuGameStateManager() {
 	for (int i=0; i<3; i++) {
 		theTextRenderingSystem.DestroyLocalEntity(eStart[i]);
@@ -58,15 +54,15 @@ GameState MainMenuGameStateManager::Update(float dt) {
 	if (BUTTON(bStart[0])->clicked) {
 		choosenGameMode = Normal;
 		SOUND(bStart[0])->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
-		return MainMenuToBlackState;
+		return ModeMenu;
 	} else if (BUTTON(bStart[1])->clicked){
 		choosenGameMode = ScoreAttack;
 		SOUND(bStart[1])->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
-		return MainMenuToBlackState;
+		return ModeMenu;
 	} else if (BUTTON(bStart[2])->clicked){
 		choosenGameMode = StaticTime;
 		SOUND(bStart[2])->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
-		return MainMenuToBlackState;
+		return ModeMenu;
 	}
 	return MainMenu;
 }

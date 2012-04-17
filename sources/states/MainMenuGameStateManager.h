@@ -1,7 +1,5 @@
 #pragma once
 
-#include <sstream>
-
 #include "base/EntityManager.h"
 #include "base/TouchInputManager.h"
 
@@ -19,7 +17,7 @@
 
 class MainMenuGameStateManager : public GameStateManager {
 	public:
-		MainMenuGameStateManager();
+		MainMenuGameStateManager() { };
 		~MainMenuGameStateManager();
 		void Setup();
 		void Enter();
