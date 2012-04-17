@@ -3,6 +3,7 @@
 MainMenuGameStateManager::~MainMenuGameStateManager() {
 	for (int i=0; i<3; i++) {
 		theTextRenderingSystem.DestroyLocalEntity(eStart[i]);
+		theEntityManager.DeleteEntity(bStart[i]);
 	}
 }
 

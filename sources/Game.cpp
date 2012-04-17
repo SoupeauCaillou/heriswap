@@ -34,6 +34,7 @@
 #include "states/LevelStateManager.h"
 #include "states/PauseStateManager.h"
 #include "states/FadeStateManager.h"
+#include "states/ModeMenuStateManager.h"
 
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
@@ -62,9 +63,10 @@ class Game::Data {
 			state2Manager[BlackToLogoState] = new FadeGameStateManager(logo, FadeIn, BlackToLogoState, LogoToBlackState, 1.5);
 			state2Manager[LogoToBlackState] = new FadeGameStateManager(logo, FadeOut, LogoToBlackState, BlackToMainMenu);
 			state2Manager[BlackToMainMenu] = new FadeGameStateManager(0, FadeIn, BlackToMainMenu, MainMenu);
-			state2Manager[MainMenuToBlackState] = new FadeGameStateManager(0, FadeOut, MainMenuToBlackState, BlackToSpawn);
+			state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(0, FadeOut, ModeMenuToBlackState, BlackToSpawn);
 			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
+			state2Manager[ModeMenu] = new ModeMenuStateManager();
 
 			state2Manager[Spawn] = new SpawnGameStateManager();
 			state2Manager[UserInput] = new UserInputGameStateManager();
@@ -217,6 +219,9 @@ Game::Game(ScoreStorage* storage, PlayerNameInputUI* inputUI) {
 
 	/* create before system so it cannot use any of them (use Setup instead) */
 	datas = new Data(storage, inputUI);
+	datas->mode2Manager[Normal]->uiHelper.game = this;
+	datas->mode2Manager[ScoreAttack]->uiHelper.game = this;
+	datas->mode2Manager[StaticTime]->uiHelper.game = this;
 
 	/* create systems singleton */
 	TransformationSystem::CreateInstance();
@@ -447,7 +452,7 @@ void Game::tick(float dt) {
 	} else if (newState != datas->state) {
 		if (newState == BlackToSpawn) {
 			datas->state2Manager[Spawn]->Enter();
-		} else if (newState == MainMenuToBlackState) {
+		} else if (newState == ModeMenu) {
 			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
 			datas->mode2Manager[datas->mode]->Setup();
 			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin

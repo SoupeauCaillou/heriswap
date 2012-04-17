@@ -63,7 +63,6 @@ class GameModeManager {
 		virtual GameMode GetMode() = 0;
 
 		virtual void LevelUp() = 0;
-		//permet de savoir si on a change de niveau
 		virtual bool LeveledUp() = 0;
 
 		virtual void Reset() = 0;
@@ -76,7 +75,6 @@ class GameModeManager {
 		Entity herisson;
 		AnimatedActor* c;
 		std::vector<Vector2> pts;
-
 		InGameUiHelper uiHelper;
 
 	private :

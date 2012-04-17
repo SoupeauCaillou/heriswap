@@ -17,7 +17,7 @@ class InGameUiHelper {
 	Entity pauseButton;
 	Entity soundButton;
 	Entity scoreProgress;
-
+	Game* game;
 	private:
 		bool built;
 };
