@@ -34,7 +34,6 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(title)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(300));
 	TEXT_RENDERING(title)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(title)->hide = true;
-	TEXT_RENDERING(title)->text = "a";
 
 	back = theEntityManager.CreateEntity();
 	ADD_COMPONENT(back, Transformation);
@@ -48,6 +47,9 @@ void ModeMenuStateManager::Setup() {
 void ModeMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	BUTTON(play)->clicked = false;
+	if (mode==Normal) TEXT_RENDERING(title)->text = "Normal";
+	if (mode==ScoreAttack) TEXT_RENDERING(title)->text = "Score Attack";
+	else TEXT_RENDERING(title)->text = "Frozen time";
 	TEXT_RENDERING(title)->hide = false;
 	RENDERING(play)->hide = false;
 	RENDERING(back)->hide = false;

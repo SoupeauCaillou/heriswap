@@ -322,6 +322,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 void Game::setMode() {
 	datas->state2Manager[EndMenu]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[Delete]->modeMgr = datas->mode2Manager[datas->mode];
+	datas->state2Manager[ModeMenu]->mode = datas->mode;
 }
 
 void Game::toggleShowCombi(bool forcedesactivate) {

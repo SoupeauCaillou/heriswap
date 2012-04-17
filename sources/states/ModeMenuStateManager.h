@@ -26,6 +26,7 @@ class ModeMenuStateManager : public GameStateManager {
 		void Enter();
 		GameState Update(float dt);
 		void Exit();
+		GameMode mode;
 	private:
 		Entity title, play, scores[5], back;
 };
