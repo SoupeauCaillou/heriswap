@@ -44,7 +44,6 @@ class GameModeManager {
 		void UpdateCore(float dt);
 		void HideUICore(bool ToHide);
 		float position(float t, std::vector<Vector2> pts);
-		Vector2 placeOnBranch();
 		void generateLeaves(int nb);
 
 		virtual ~GameModeManager() {}
@@ -80,4 +79,5 @@ class GameModeManager {
 
 	private :
 		std::vector<Render> posBranch;
+		void fillVec();
 };

@@ -30,14 +30,6 @@ float GameModeManager::position(float t, std::vector<Vector2> pts) {
 	}
 	return pts[pts.size()-1].Y;
 }
-Vector2 GameModeManager::placeOnBranch() {
-	int i=0;
-	if (i<posBranch.size()) {
-		i++;
-		return posBranch[i].v;
-	}
-	return Vector2::Zero;
-}
 
 void GameModeManager::SetupCore() {
 	herisson = theEntityManager.CreateEntity();
@@ -57,15 +49,16 @@ void GameModeManager::SetupCore() {
 	c->actor.speed = 4.1;
 	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
+	fillVec();
 	generateLeaves(6);
 }
 
 void GameModeManager::generateLeaves(int nb) {
-	int k=0;
 	for (int az=0;az<branchLeaves.size();az++)
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
 	branchLeaves.clear();
-
+	fillVec();
+	//std::vector<Render> swapper;
 	for (int i=0;i<nb;i++) {
 		for (int j=0;j<8;j++) {
 			Entity e = theEntityManager.CreateEntity();
@@ -73,15 +66,14 @@ void GameModeManager::generateLeaves(int nb) {
 			ADD_COMPONENT(e, Rendering);
 			RENDERING(e)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(j, 0));
 			RENDERING(e)->hide = false;
-			TRANSFORM(e)->rotation = MathUtil::RandomFloat(2*MathUtil::Pi);
 			TRANSFORM(e)->size = Game::CellSize() * Game::CellContentScale();
-			if (k<posBranch.size()) {
-			TRANSFORM(e)->position = posBranch[k].v;
-						TRANSFORM(e)->rotation = posBranch[k].rot;
 
-			k++;
-		} else TRANSFORM(e)->position = Vector2::Zero;
-			//TRANSFORM(e)->position = placeOnBranch();
+			int rand = MathUtil::RandomInt(posBranch.size());
+			TRANSFORM(e)->position = posBranch[rand].v;
+			TRANSFORM(e)->rotation = posBranch[rand].rot;
+			//swapper.push_back(posBranch[rand]);
+			posBranch.erase(posBranch.begin()+rand);
+
 			TRANSFORM(e)->z = DL_Hud+(i+1)*(j+1)/100.;
 			BranchLeaf bl;
 			bl.e = e;
@@ -89,41 +81,36 @@ void GameModeManager::generateLeaves(int nb) {
 			branchLeaves.push_back(bl);
 		}
 	}
+	//swapper.swap(posBranch);
 	uiHelper.build();
 }
-
-void GameModeManager::UpdateCore(float dt) {
-	static int t = 0, k = 0;
-	switchAnim(c);
+void GameModeManager::fillVec() {
+	int t;
 	std::ifstream file("position_feuilles.txt");
 	int count = 0;
 	std::string line;
+	posBranch.clear(); // a la place de swapper ...
 	while ( getline( file, line ) ){
 		++count;
 		if (count>t) {
-					Vector2 v = Vector2::Zero;
-		float r = 0.f;
-		sscanf(line.c_str(), "%f %f %f", &v.X, &v.Y, &r);
-		v.X =PlacementHelper::GimpXToScreen(v.X);
-		v.Y =PlacementHelper::GimpYToScreen(v.Y);
-		r =MathUtil::ToRadians(r);
-LOGI("nouvelle feuille");
+			Vector2 v = Vector2::Zero;
+			float r = 0.f;
+			sscanf(line.c_str(), "%f %f %f", &v.X, &v.Y, &r);
+			v.X =PlacementHelper::GimpXToScreen(v.X);
+			v.Y =PlacementHelper::GimpYToScreen(v.Y);
+			r =MathUtil::ToRadians(r);
 			Render truc = {v,r};
 			posBranch.push_back(truc);
 			t++;
 		}
 	}
 	while (count < t) {
-		LOGI("%d", posBranch.size());
 		posBranch.pop_back();
-				LOGI("%d",posBranch.size());
-
 		t--;
-		LOGI("un de moins");
 	}
-	if (t!=k)
-		generateLeaves(6);
-	k=t;
+}
+void GameModeManager::UpdateCore(float dt) {
+	switchAnim(c);
 	uiHelper.update(dt);
 }
 
