@@ -33,6 +33,11 @@ class GameModeManager {
 			Entity e;
 			int type;
 		};
+		struct Render {
+			Vector2 v;
+			float rot;
+		};
+
 		struct Actor;
 		struct AnimatedActor;
 		void SetupCore();
@@ -72,4 +77,7 @@ class GameModeManager {
 		std::vector<Vector2> pts;
 
 		InGameUiHelper uiHelper;
+
+	private :
+		std::vector<Render> posBranch;
 };

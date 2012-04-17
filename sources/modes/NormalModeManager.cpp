@@ -13,11 +13,10 @@ NormalGameModeManager::NormalGameModeManager() {
 	levelUp = false;
 	level = 1;
 	bonus = MathUtil::RandomInt(8);
-	for (int i=0;i<50;i++)
-		obj[i]=3+i;
 
 	for (int i=0; i<8;i++)
-		remain[i]=obj[0];
+		remain[i]=3;
+
 
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(15,0.125));
@@ -31,7 +30,6 @@ NormalGameModeManager::~NormalGameModeManager() {
 
 void NormalGameModeManager::Setup() {
 	SetupCore();
-	generateLeaves(3);
 	HideUI(true);
 }
 
@@ -41,12 +39,12 @@ bool NormalGameModeManager::Update(float dt) {
 	return (limit - time <0);
 }
 void NormalGameModeManager::deleteLeaves(int type, int nb) {
-	int cpt = nb;
-	for (int i=0; cpt>0 && i<branchLeaves.size(); i++) {
+	for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
 		if (type == branchLeaves[i].type) {
 			theEntityManager.DeleteEntity(branchLeaves[i].e);
 			branchLeaves.erase(branchLeaves.begin()+i);
-			cpt--;
+			nb--;
+			i--;
 		}
 	}
 }
@@ -58,7 +56,7 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 		points += 10*level*nb*nb*nb/6;
 
 	remain[type] -= nb;
-	deleteLeaves(type+1, nb);
+	deleteLeaves(type+1, 6*nb/(2+level));
 	time -= nb/4;
 	if (time < 0)
 		time = 0;
@@ -78,14 +76,15 @@ void NormalGameModeManager::LevelUp() {
 	if (match) {
 		level++;
 		levelUp = true;
-		generateLeaves(MathUtil::Min(obj[level-1], 6));
+
+		generateLeaves(6);
 		time -= 20;
 		if (time < 0)
 			time = 0;
 		std::cout << "Level up to level " << level << std::endl;
 		bonus = MathUtil::RandomInt(8);
 		for (int i=0;i<8;i++)
-			remain[i] = obj[level-1];
+			remain[i] = 2+level;
 	}
 }
 
@@ -100,9 +99,8 @@ void NormalGameModeManager::Reset() {
 	points = 0;
 	level = 1;
 	bonus = MathUtil::RandomInt(8);
-
-	for (int i=0;i<8;i++) remain[i]=obj[0];
-
+	branchLeaves.clear();
+	for (int i=0;i<8;i++) remain[i]=3;
 }
 
 

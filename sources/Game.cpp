@@ -192,7 +192,7 @@ static const float offset = 0.2;
 static const float scale = 0.95;
 static const float size = (10 - 2 * offset) / GRIDSIZE;
 
-// grid: [48, 302] -> [752, 1006]  in gimp 
+// grid: [48, 302] -> [752, 1006]  in gimp
 Vector2 Game::GridCoordsToPosition(int i, int j) {
 	float startX = PlacementHelper::GimpXToScreen(48);
 	float startY = PlacementHelper::GimpYToScreen(1006);
@@ -443,6 +443,7 @@ void Game::tick(float dt) {
 	//si on est passé de pause à quelque chose different de pause, on desactive la pause
 	if (newState != datas->state && datas->state == Pause) {
 		togglePause(false);
+	//sinon si on a change d'etat
 	} else if (newState != datas->state) {
 		if (newState == BlackToSpawn) {
 			datas->state2Manager[Spawn]->Enter();
@@ -632,7 +633,7 @@ static float rotations[] = {
 	-MathUtil::Pi,
 	-MathUtil::PiOver4
 };
-	
+
 std::string Game::cellTypeToTextureNameAndRotation(int type, float* rotation) {
 	if (rotation)
 		*rotation = rotations[type];

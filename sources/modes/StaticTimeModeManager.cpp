@@ -19,7 +19,6 @@ StaticTimeGameModeManager::~StaticTimeGameModeManager() {
 
 void StaticTimeGameModeManager::Setup() {
 	SetupCore();
-	generateLeaves(6);
 	HideUI(true);
 }
 
@@ -46,6 +45,7 @@ bool StaticTimeGameModeManager::LeveledUp() {
 
 void StaticTimeGameModeManager::Reset() {
 	time = 0;
+	branchLeaves.clear();
 	points = 0;
 	bonus = MathUtil::RandomInt(8);
 }

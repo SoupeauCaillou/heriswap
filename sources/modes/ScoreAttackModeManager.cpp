@@ -19,7 +19,6 @@ ScoreAttackGameModeManager::~ScoreAttackGameModeManager() {
 
 void ScoreAttackGameModeManager::Setup() {
 	SetupCore();
-	generateLeaves(6);
 	HideUI(true);
 }
 
@@ -51,6 +50,7 @@ bool ScoreAttackGameModeManager::LeveledUp() {
 void ScoreAttackGameModeManager::Reset() {
 	time = 0;
 	points = 0;
+	branchLeaves.clear();
 	distance = 0.f;
 	bonus = MathUtil::RandomInt(8);
 }
@@ -83,6 +83,8 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
 	//Hérisson
+			UpdateCore(dt);
+
 	distance = MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
 	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, GameModeManager::position(points, pts)) - TRANSFORM(herisson)->position.X;
 	if (distance > 0) {

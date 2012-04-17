@@ -26,6 +26,6 @@ class NormalGameModeManager : public GameModeManager {
 		void Reset();
 
 	private:
-		int level, obj[50], remain[8], bonus;
+		int level, remain[8], bonus;
 		bool levelUp;
 };
