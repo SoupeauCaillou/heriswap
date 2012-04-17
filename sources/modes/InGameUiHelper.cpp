@@ -83,6 +83,7 @@ void InGameUiHelper::update(float dt) {
 		else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
 	} if (BUTTON(pauseButton)->clicked) {
 		BUTTON(pauseButton)->clicked=false;
+		//Game::togglePause(true);
 		//aller en pause state
 	}
 }

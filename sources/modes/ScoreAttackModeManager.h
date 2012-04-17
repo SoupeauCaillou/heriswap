@@ -28,7 +28,5 @@ class ScoreAttackGameModeManager : public GameModeManager {
 
 	private:
 		class HUDManagerData;
-
-		int bonus;
 		float distance;
 };

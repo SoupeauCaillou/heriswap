@@ -40,13 +40,13 @@ class GameModeManager {
 
 		struct Actor;
 		struct AnimatedActor;
-		void SetupCore();
+		void SetupCore(int bonuss);
 		void UpdateCore(float dt);
 		void HideUICore(bool ToHide);
 		float position(float t, std::vector<Vector2> pts);
 		void generateLeaves(int nb);
 		void switchAnim(AnimatedActor* a);
-
+		void LoadHerissonTexture(int type);
 
 		virtual ~GameModeManager() {}
 
@@ -69,7 +69,7 @@ class GameModeManager {
 		virtual void Reset() = 0;
 
 		float time, limit;
-		int points;
+		int points, bonus;
 		//feuilles de l'arbre
 		std::vector<BranchLeaf> branchLeaves;
 		//hérisson

@@ -30,8 +30,23 @@ float GameModeManager::position(float t, std::vector<Vector2> pts) {
 	}
 	return pts[pts.size()-1].Y;
 }
+void GameModeManager::LoadHerissonTexture(int type) {
+	std::stringstream t;
+	c->anim.clear();
+	t << "herisson_1_"<<type<<".png";
+	c->anim.push_back(t.str());
+	t.str("");
+	t << "herisson_2_"<<type<<".png";
+	c->anim.push_back(t.str());
+	t.str("");
+	t << "herisson_3_"<<type<<".png";
+	c->anim.push_back(t.str());
+	t.str("");
+	t << "herisson_2_"<<type<<".png";
+	c->anim.push_back(t.str());
+}
 
-void GameModeManager::SetupCore() {
+void GameModeManager::SetupCore(int bonus) {
 	herisson = theEntityManager.CreateEntity();
 	ADD_COMPONENT(herisson, Transformation);
 	ADD_COMPONENT(herisson, Rendering);
@@ -42,10 +57,7 @@ void GameModeManager::SetupCore() {
 	c->actor.e = herisson;
 	c->anim.clear();
 	c->frames=0;
-	c->anim.push_back("herisson_1_1.png");
-	c->anim.push_back("herisson_2_1.png");
-	c->anim.push_back("herisson_3_1.png");
-	c->anim.push_back("herisson_2_1.png");
+	LoadHerissonTexture(bonus+1);
 	c->actor.speed = 4.1;
 	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);

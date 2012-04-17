@@ -29,17 +29,16 @@ class Game {
 		void tick(float dt);
 		void togglePause(bool activate);
 		void toggleShowCombi(bool forcedesactivate);
+		void hideEveryThing(bool toHide, bool blacktospawn);
+		void setMode();
+		int saveState(uint8_t** out);
 
 		static Vector2 GridCoordsToPosition(int i, int j);
 		static float CellSize();
 		static float CellContentScale();
 		static std::string cellTypeToTextureNameAndRotation(int type, float* rotation);
 		static float cellTypeToRotation(int type);
-		void hideEveryThing(bool toHide, bool blacktospawn);
 
-		void setMode();
-
-		int saveState(uint8_t** out);
 	private:
 		void loadState(const uint8_t* in, int size);
 		void bench(bool active, float updateDuration, float dt);

@@ -18,7 +18,7 @@ ScoreAttackGameModeManager::~ScoreAttackGameModeManager() {
 }
 
 void ScoreAttackGameModeManager::Setup() {
-	SetupCore();
+	SetupCore(bonus);
 	HideUI(true);
 }
 

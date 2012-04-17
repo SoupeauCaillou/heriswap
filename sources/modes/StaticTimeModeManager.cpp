@@ -18,7 +18,7 @@ StaticTimeGameModeManager::~StaticTimeGameModeManager() {
 }
 
 void StaticTimeGameModeManager::Setup() {
-	SetupCore();
+	SetupCore(bonus);
 	HideUI(true);
 }
 
