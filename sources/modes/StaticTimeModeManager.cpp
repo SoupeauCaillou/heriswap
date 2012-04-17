@@ -68,6 +68,7 @@ void StaticTimeGameModeManager::UpdateUI(float dt) {
 	UpdateCore(dt);
 	TRANSFORM(herisson)->position = Vector2(MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
 	+PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, GameModeManager::position(time, pts)), PlacementHelper::GimpYToScreen(1100));
+	switchAnim(c);
 }
 
 GameMode StaticTimeGameModeManager::GetMode() {

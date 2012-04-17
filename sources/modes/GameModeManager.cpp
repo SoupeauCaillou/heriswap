@@ -11,7 +11,7 @@ struct GameModeManager::AnimatedActor {
 	std::vector<std::string> anim;
 	struct GameModeManager::Actor actor;
 };
-void switchAnim(GameModeManager::AnimatedActor* a) {
+void GameModeManager::switchAnim(GameModeManager::AnimatedActor* a) {
 	a->frames++;
 	if (a->frames>=30/(MathUtil::Abs(a->actor.speed))) {
 		RENDERING(a->actor.e)->texture = theRenderingSystem.loadTextureFile(a->anim[a->ind]);
@@ -110,7 +110,6 @@ void GameModeManager::fillVec() {
 	}
 }
 void GameModeManager::UpdateCore(float dt) {
-	switchAnim(c);
 	uiHelper.update(dt);
 }
 

@@ -85,9 +85,10 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	//Hérisson
 	distance = MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
 	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, GameModeManager::position(points, pts)) - TRANSFORM(herisson)->position.X;
+	UpdateCore(dt);
 	if (distance > 0) {
 		float vitesse = 0.1f;
-		UpdateCore(dt);
+		switchAnim(c);
 		TRANSFORM(herisson)->position.X += vitesse*dt;
 		distance -= vitesse*dt;
 	} else distance = 0;

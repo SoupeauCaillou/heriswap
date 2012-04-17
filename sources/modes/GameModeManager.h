@@ -45,6 +45,8 @@ class GameModeManager {
 		void HideUICore(bool ToHide);
 		float position(float t, std::vector<Vector2> pts);
 		void generateLeaves(int nb);
+		void switchAnim(AnimatedActor* a);
+
 
 		virtual ~GameModeManager() {}
 

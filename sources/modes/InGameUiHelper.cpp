@@ -3,12 +3,13 @@
 #include "systems/RenderingSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/ContainerSystem.h"
+#include "systems/SoundSystem.h"
 #include "systems/ButtonSystem.h"
 #include "../PlacementHelper.h"
 #include "../DepthLayer.h"
 
 InGameUiHelper::InGameUiHelper() : built(false) {
-	
+
 }
 
 void InGameUiHelper::build() {
@@ -75,6 +76,15 @@ void InGameUiHelper::show() {
 
 void InGameUiHelper::update(float dt) {
 	// handle buttons
+	if (BUTTON(soundButton)->clicked) {
+		BUTTON(soundButton)->clicked = false;
+		theSoundSystem.mute = !theSoundSystem.mute;
+		if (theSoundSystem.mute) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
+		else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
+	} if (BUTTON(pauseButton)->clicked) {
+		BUTTON(pauseButton)->clicked=false;
+		//aller en pause state
+	}
 }
 
 void InGameUiHelper::hide() {
