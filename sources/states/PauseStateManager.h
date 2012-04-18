@@ -6,6 +6,7 @@
 #include "systems/TextRenderingSystem.h"
 #include "systems/ContainerSystem.h"
 #include "systems/ButtonSystem.h"
+#include "systems/SoundSystem.h"
 
 #include "GameStateManager.h"
 #include "Game.h"

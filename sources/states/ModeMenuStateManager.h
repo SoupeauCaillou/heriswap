@@ -2,6 +2,8 @@
 
 //Menu 2: un titre, un bouton jouer, les 5 meilleurs scores du mode de jeu, un bouton openfeint, un bouton back, le score de la partie est affiché ici ?
 
+#include <fstream>
+
 #include "base/EntityManager.h"
 #include "base/TouchInputManager.h"
 
@@ -20,7 +22,7 @@
 
 class ModeMenuStateManager : public GameStateManager {
 	public:
-		ModeMenuStateManager(ScoreStorage* storag) : storage(storag) { };
+		ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII) : storage(storag), ended(false), inputUI(inputUII) { };
 		~ModeMenuStateManager();
 		void Setup();
 		void Enter();
@@ -29,7 +31,10 @@ class ModeMenuStateManager : public GameStateManager {
 
 		void LoadScore(int mode);
 
+		bool ended;
 	private:
 		ScoreStorage* storage;
-		Entity title, play, scoresPoints[5], scoresName[5], back;
+		PlayerNameInputUI* inputUI;
+		Entity title, play, scoresPoints[5], scoresName[5], back, yourScore;
+		std::string playerName;
 };

@@ -39,7 +39,10 @@ void InGameUiHelper::build() {
 	TEXT_RENDERING(pauseButton)->positioning = TextRenderingComponent::LEFT;
 	ADD_COMPONENT(pauseButton, Container);
 	CONTAINER(pauseButton)->includeChildren = true;
+	//CONTAINER(pauseButton)->entities.push_back(pauseButton);
 	ADD_COMPONENT(pauseButton, Button);
+	ADD_COMPONENT(pauseButton, Sound);
+	SOUND(pauseButton)->type = SoundComponent::EFFECT;
 
 	soundButton = theEntityManager.CreateEntity();
 	ADD_COMPONENT(soundButton, Transformation);
@@ -49,6 +52,8 @@ void InGameUiHelper::build() {
 	ADD_COMPONENT(soundButton, Button);
 	ADD_COMPONENT(soundButton, Rendering);
 	RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
+	ADD_COMPONENT(soundButton, Sound);
+	SOUND(soundButton)->type = SoundComponent::EFFECT;
 
 	scoreProgress = theEntityManager.CreateEntity();
 	ADD_COMPONENT(scoreProgress, Transformation);
@@ -79,10 +84,11 @@ void InGameUiHelper::update(float dt) {
 	if (BUTTON(soundButton)->clicked) {
 		BUTTON(soundButton)->clicked = false;
 		theSoundSystem.mute = !theSoundSystem.mute;
+		if (!theSoundSystem.mute) SOUND(pauseButton)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
 		if (theSoundSystem.mute) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
 		else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
-		BUTTON(pauseButton)->clicked = true;
 	} if (BUTTON(pauseButton)->clicked) {
+		SOUND(pauseButton)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
 		BUTTON(pauseButton)->clicked=false;
 		game->togglePause(true);
 	}

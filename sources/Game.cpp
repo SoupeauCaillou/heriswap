@@ -28,8 +28,6 @@
 #include "states/DeleteGameStateManager.h"
 #include "states/FallGameStateManager.h"
 #include "states/MainMenuGameStateManager.h"
-#include "states/ScoreBoardStateManager.h"
-#include "states/EndMenuStateManager.h"
 #include "states/BackgroundManager.h"
 #include "states/LevelStateManager.h"
 #include "states/PauseStateManager.h"
@@ -66,15 +64,13 @@ class Game::Data {
 			state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(0, FadeOut, ModeMenuToBlackState, BlackToSpawn);
 			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
-			state2Manager[ModeMenu] = new ModeMenuStateManager(storage);
+			state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI);
 
 			state2Manager[Spawn] = new SpawnGameStateManager();
 			state2Manager[UserInput] = new UserInputGameStateManager();
 			state2Manager[Delete] = new DeleteGameStateManager();
 			state2Manager[Fall] = new FallGameStateManager();
 			state2Manager[LevelChanged] = new LevelStateManager();
-			state2Manager[ScoreBoard] = new ScoreBoardStateManager(storage);
-			state2Manager[EndMenu] = new EndMenuStateManager(storage, inputUI);
 			state2Manager[Pause] = new PauseStateManager();
 		}
 
@@ -320,7 +316,6 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 }
 
 void Game::setMode() {
-	datas->state2Manager[EndMenu]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[Delete]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[ModeMenu]->modeMgr = datas->mode2Manager[datas->mode];
 }
@@ -440,14 +435,15 @@ void Game::tick(float dt) {
 
 	//si le chrono est fini, on passe au menu de fin
 	if (ended) {
-		newState = EndMenu;
+		newState = ModeMenu;
+//		datas->state2Manager[ModeMenu]->ended = true;
 		ended = false;
 	} else {
 	//sinon on passe a l'etat suivant
 		newState = datas->state2Manager[datas->state]->Update(dt);
 	}
 	//si on est passé de pause à quelque chose different de pause, on desactive la pause
-	if (newState != datas->state && datas->state == Pause) {
+	if (newState == Unpause) {
 		togglePause(false);
 	//sinon si on a change d'etat
 	} else if (newState != datas->state) {
@@ -457,6 +453,11 @@ void Game::tick(float dt) {
 			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
 			datas->mode2Manager[datas->mode]->Setup();
 			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
+		} else if (newState == Abort) {
+			LOGI("aborted. going to main menu");
+			hideEveryThing(true, false);
+			newState = MainMenu;
+			//datas->state2Manager[ModeMenu]->ended = true;
 		}
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
@@ -497,18 +498,7 @@ void Game::tick(float dt) {
 	theButtonSystem.Update(dt);
     theParticuleSystem.Update(dt);
 
-	//si on va au menu ppal
-	if (datas->state != EndMenu && newState == EndMenu) {
-		LOGI("aborted. going to end menu");
-		hideEveryThing(true, false);
-		if (datas->mode == ScoreAttack)
-			datas->mode2Manager[datas->mode]->time = 1337.;
-		datas->state2Manager[datas->state]->Exit();
-		datas->state = EndMenu;
-		datas->state2Manager[datas->state]->Enter();
-	}
-
-	if (newState == EndMenu) {
+	if (newState == ModeMenu) {
 		theCombinationMarkSystem.DeleteMarks(-1);
 		theGridSystem.DeleteAll();
 	} else if (newState == MainMenu) {
@@ -522,8 +512,8 @@ void Game::tick(float dt) {
 	thePhysicsSystem.Update(dt);
 	theTransformationSystem.Update(dt);
 	theScrollingSystem.Update(dt);
-	theTextRenderingSystem.Update(dt);
 	theContainerSystem.Update(dt);
+	theTextRenderingSystem.Update(dt);
 	theSoundSystem.Update(dt);
 	theRenderingSystem.Update(dt);
 

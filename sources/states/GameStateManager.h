@@ -10,6 +10,8 @@ enum GameState {
 	Fall,
 	LevelChanged,
 	Pause,
+	Unpause,
+	Abort,
 	MainMenu,
 	ModeMenu,
 	ScoreBoard,

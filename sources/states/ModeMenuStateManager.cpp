@@ -5,10 +5,12 @@
 ModeMenuStateManager::~ModeMenuStateManager() {
 	for (int i=0; i<5; i++) {
 		theEntityManager.DeleteEntity(scoresName[i]);
+		theEntityManager.DeleteEntity(scoresPoints[i]);
 	}
 	theEntityManager.DeleteEntity(title);
 	theEntityManager.DeleteEntity(play);
 	theEntityManager.DeleteEntity(back);
+	theEntityManager.DeleteEntity(yourScore);
 }
 
 void ModeMenuStateManager::Setup() {
@@ -27,15 +29,19 @@ void ModeMenuStateManager::Setup() {
 		TEXT_RENDERING(scoresPoints[i])->positioning = TextRenderingComponent::RIGHT;
 		TEXT_RENDERING(scoresName[i])->hide = true;
 		TEXT_RENDERING(scoresPoints[i])->hide = true;
+		TEXT_RENDERING(scoresName[i])->color = Color(0.f,0.f,0.f);
+		TEXT_RENDERING(scoresPoints[i])->color = Color(0.f,0.f,0.f);
 	}
 	play = theEntityManager.CreateEntity();
 	ADD_COMPONENT(play, Transformation);
 	ADD_COMPONENT(play, Rendering);
 	ADD_COMPONENT(play, Button);
+	ADD_COMPONENT(play, Sound);
 	TRANSFORM(play)->size = Vector2(1,1);
 	TRANSFORM(play)->position = Vector2(0,2);
 	TRANSFORM(play)->z = DL_MainMenuUI;
 	RENDERING(play)->color = Color(0.f,1.f,0.f);
+	SOUND(play)->type = SoundComponent::EFFECT;
 
 	title = theTextRenderingSystem.CreateLocalEntity(2);
 	TRANSFORM(title)->z = DL_MainMenuUI;
@@ -43,14 +49,28 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(title)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(title)->hide = true;
 
+	yourScore = theTextRenderingSystem.CreateLocalEntity(2);
+	TRANSFORM(yourScore)->z = DL_MainMenuUI;
+	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(800));
+	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::LEFT;
+	TEXT_RENDERING(yourScore)->hide = true;
+
 	back = theEntityManager.CreateEntity();
 	ADD_COMPONENT(back, Transformation);
 	ADD_COMPONENT(back, Rendering);
 	ADD_COMPONENT(back, Button);
+	ADD_COMPONENT(back, Sound);
 	TRANSFORM(back)->size = Vector2(1,1);
 	TRANSFORM(back)->position = Vector2(0,0);
 	TRANSFORM(back)->z = DL_MainMenuUI;
 	RENDERING(back)->color = Color(1.f,0.f,0.f);
+	SOUND(back)->type = SoundComponent::EFFECT;
+
+	playerName.clear();
+	if (!inputUI->nameNeeded()) {
+		std::ifstream file( "player_name.txt" );
+		file >> playerName;
+	}
 }
 void ModeMenuStateManager::LoadScore(int mode) {
 	std::vector<ScoreStorage::Score> entries = storage->getScore(mode);
@@ -76,9 +96,25 @@ void ModeMenuStateManager::LoadScore(int mode) {
 
 void ModeMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
+	theSoundSystem.loadSoundFile("audio/click.wav", false);
+	GameMode m = modeMgr->GetMode();
 	BUTTON(play)->clicked = false;
 	BUTTON(back)->clicked = false;
-	GameMode m = modeMgr->GetMode();
+
+	if (playerName.length() == 0) inputUI->show();
+	if (ended) {
+		ScoreStorage::Score entry;
+		entry.points = modeMgr->points;
+		entry.time = modeMgr->time;
+		entry.name = playerName;
+		entry.mode = (int)modeMgr->GetMode();
+		storage->submitScore(entry);
+		TEXT_RENDERING(yourScore)->hide = false;
+		std::stringstream a;
+		if (m==ScoreAttack) a << "Votre temps : " << entry.time;
+		else a << "Votre score : " << entry.points;
+	}
+
 	LoadScore(m);
 	switch (m) {
 	case Normal :
@@ -104,18 +140,25 @@ void ModeMenuStateManager::Enter() {
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
-	if (BUTTON(play)->clicked) return ModeMenuToBlackState;
-	if (BUTTON(back)->clicked) return MainMenu;
+	if (BUTTON(play)->clicked) {
+		SOUND(play)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
+		return ModeMenuToBlackState;
+	} if (BUTTON(back)->clicked) {
+		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
+		return MainMenu;
+	}
 	return ModeMenu;
 }
 
 void ModeMenuStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	TEXT_RENDERING(title)->hide = true;
+	TEXT_RENDERING(yourScore)->hide = true;
 	RENDERING(play)->hide = true;
 	RENDERING(back)->hide = true;
 	for (int i=0;i<5;i++) {
 		TEXT_RENDERING(scoresName[i])->hide = true;
 		TEXT_RENDERING(scoresPoints[i])->hide = true;
 	}
+	ended = false;
 }
