@@ -67,7 +67,6 @@ void ScoreBoardStateManager::Enter() {
 	BUTTON(startbtn)->clicked = false;
 	RENDERING(switchMode)->hide = false;
 	BUTTON(switchMode)->clicked = false;
-	LoadScore(mode);
 }
 
 GameState ScoreBoardStateManager::Update(float dt) {

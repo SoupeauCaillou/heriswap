@@ -8,6 +8,7 @@
 NormalGameModeManager::NormalGameModeManager() {
 	limit = 45.0;
 	time = 0.;
+	ResetCore();
 
 	points=0;
 	levelUp = false;
@@ -99,6 +100,7 @@ void NormalGameModeManager::Reset() {
 	time = 0;
 	points = 0;
 	level = 1;
+	ResetCore();
 	bonus = MathUtil::RandomInt(8);
 	branchLeaves.clear();
 	for (int i=0;i<8;i++) remain[i]=3;
@@ -124,12 +126,7 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	a << level;
 	TEXT_RENDERING(uiHelper.smallLevel)->text = a.str();
 	}
-
-	//Hérisson
-	UpdateCore(dt);
-	TRANSFORM(herisson)->position = Vector2(MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
-	+PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, GameModeManager::position(time, pts)), PlacementHelper::GimpYToScreen(1100));
-	switchAnim(c);
+	UpdateCore(dt, time);
 }
 
 GameMode NormalGameModeManager::GetMode() {

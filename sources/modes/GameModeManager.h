@@ -41,12 +41,13 @@ class GameModeManager {
 		struct Actor;
 		struct AnimatedActor;
 		void SetupCore(int bonuss);
-		void UpdateCore(float dt);
+		void UpdateCore(float dt, float obj);
 		void HideUICore(bool ToHide);
 		float position(float t, std::vector<Vector2> pts);
 		void generateLeaves(int nb);
 		void switchAnim(AnimatedActor* a);
 		void LoadHerissonTexture(int type);
+		void ResetCore();
 
 		virtual ~GameModeManager() {}
 
@@ -80,4 +81,5 @@ class GameModeManager {
 	private :
 		std::vector<Render> posBranch;
 		void fillVec();
+		float distance;
 };

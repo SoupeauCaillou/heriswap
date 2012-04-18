@@ -20,6 +20,9 @@ void GameModeManager::switchAnim(GameModeManager::AnimatedActor* a) {
 		a->frames=0;
 	}
 }
+void GameModeManager::ResetCore() {
+	distance = 0.f;
+}
 
 float GameModeManager::position(float t, std::vector<Vector2> pts) {
 	if (t<=pts[0].X) return pts[0].Y;
@@ -121,7 +124,16 @@ void GameModeManager::fillVec() {
 		t--;
 	}
 }
-void GameModeManager::UpdateCore(float dt) {
+void GameModeManager::UpdateCore(float dt, float obj) {
+	distance = MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
+	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, GameModeManager::position(obj, pts)) - TRANSFORM(herisson)->position.X;
+	if (distance > 0.1f) {
+		float vitesse = 0.1f;
+		switchAnim(c);
+		TRANSFORM(herisson)->position.X += vitesse*dt;
+		distance -= vitesse*dt;
+	} else distance = 0;
+
 	uiHelper.update(dt);
 }
 

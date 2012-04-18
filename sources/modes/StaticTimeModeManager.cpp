@@ -5,6 +5,7 @@ StaticTimeGameModeManager::StaticTimeGameModeManager() {
 	limit = 45.0;
 	time = 0.;
 	points=0;
+	ResetCore();
 	bonus = MathUtil::RandomInt(8);
 
 	pts.push_back(Vector2(0,0));
@@ -48,6 +49,7 @@ void StaticTimeGameModeManager::Reset() {
 	branchLeaves.clear();
 	points = 0;
 	bonus = MathUtil::RandomInt(8);
+	ResetCore();
 }
 
 
@@ -64,11 +66,7 @@ void StaticTimeGameModeManager::UpdateUI(float dt) {
 	a << std::fixed << points;
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
-	//Hérisson
-	UpdateCore(dt);
-	TRANSFORM(herisson)->position = Vector2(MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
-	+PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, GameModeManager::position(time, pts)), PlacementHelper::GimpYToScreen(1100));
-	switchAnim(c);
+	UpdateCore(dt, time);
 }
 
 GameMode StaticTimeGameModeManager::GetMode() {

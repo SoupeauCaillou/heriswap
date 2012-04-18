@@ -66,7 +66,7 @@ class Game::Data {
 			state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(0, FadeOut, ModeMenuToBlackState, BlackToSpawn);
 			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
-			state2Manager[ModeMenu] = new ModeMenuStateManager();
+			state2Manager[ModeMenu] = new ModeMenuStateManager(storage);
 
 			state2Manager[Spawn] = new SpawnGameStateManager();
 			state2Manager[UserInput] = new UserInputGameStateManager();
@@ -322,7 +322,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 void Game::setMode() {
 	datas->state2Manager[EndMenu]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[Delete]->modeMgr = datas->mode2Manager[datas->mode];
-	datas->state2Manager[ModeMenu]->mode = datas->mode;
+	datas->state2Manager[ModeMenu]->modeMgr = datas->mode2Manager[datas->mode];
 }
 
 void Game::toggleShowCombi(bool forcedesactivate) {

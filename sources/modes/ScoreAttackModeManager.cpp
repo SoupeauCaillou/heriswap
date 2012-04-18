@@ -6,7 +6,7 @@ ScoreAttackGameModeManager::ScoreAttackGameModeManager() {
 	time = 0.;
 	points=0;
 	bonus = MathUtil::RandomInt(8);
-	distance = 0.f;
+	ResetCore();
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(300,0.125));
 	pts.push_back(Vector2(750,0.25));
@@ -51,8 +51,8 @@ void ScoreAttackGameModeManager::Reset() {
 	time = 0;
 	points = 0;
 	branchLeaves.clear();
-	distance = 0.f;
 	bonus = MathUtil::RandomInt(8);
+	ResetCore();
 }
 
 
@@ -82,16 +82,7 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	a << std::setw(2) << std::setfill('0') << seconde << '.' << std::setw(1) << tenthsec << " s";
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
-	//Hérisson
-	distance = MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
-	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, GameModeManager::position(points, pts)) - TRANSFORM(herisson)->position.X;
-	UpdateCore(dt);
-	if (distance > 0) {
-		float vitesse = 0.1f;
-		switchAnim(c);
-		TRANSFORM(herisson)->position.X += vitesse*dt;
-		distance -= vitesse*dt;
-	} else distance = 0;
+	UpdateCore(dt, points);
 }
 
 GameMode ScoreAttackGameModeManager::GetMode() {

@@ -20,13 +20,16 @@
 
 class ModeMenuStateManager : public GameStateManager {
 	public:
-		ModeMenuStateManager() { };
+		ModeMenuStateManager(ScoreStorage* storag) : storage(storag) { };
 		~ModeMenuStateManager();
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
 		void Exit();
-		GameMode mode;
+
+		void LoadScore(int mode);
+
 	private:
-		Entity title, play, scores[5], back;
+		ScoreStorage* storage;
+		Entity title, play, scoresPoints[5], scoresName[5], back;
 };
