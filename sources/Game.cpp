@@ -158,6 +158,8 @@ class Game::Data {
 		GameMode mode;
 
 		Entity cursor;
+
+		Entity soundButton;
 };
 
 static bool inGameState(GameState state) {

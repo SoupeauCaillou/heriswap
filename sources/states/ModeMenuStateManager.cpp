@@ -60,10 +60,7 @@ void ModeMenuStateManager::Setup() {
 	SOUND(back)->type = SoundComponent::EFFECT;
 
 	playerName.clear();
-	if (!inputUI->nameNeeded()) {
-		std::ifstream file( "player_name.txt" );
-		file >> playerName;
-	}
+	inputUI->getName(playerName);
 }
 void ModeMenuStateManager::LoadScore(int mode) {
 	std::vector<ScoreStorage::Score> entries = storage->getScore(mode);
@@ -93,9 +90,11 @@ void ModeMenuStateManager::Enter() {
 	GameMode m = modeMgr->GetMode();
 	BUTTON(play)->clicked = false;
 	BUTTON(back)->clicked = false;
-
-	if (playerName.length() == 0) inputUI->show();
 	if (ended) {
+		if (playerName.length() == 0) {
+			inputUI->show();
+			inputUI->query(playerName);
+		}
 		ScoreStorage::Score entry;
 		entry.points = modeMgr->points;
 		entry.time = modeMgr->time;

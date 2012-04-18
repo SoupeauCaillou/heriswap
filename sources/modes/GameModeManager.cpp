@@ -133,7 +133,6 @@ void GameModeManager::UpdateCore(float dt, float obj) {
 		TRANSFORM(herisson)->position.X += vitesse*dt;
 		distance -= vitesse*dt;
 	} else distance = 0;
-	LOGI("%f", distance);
 	uiHelper.update(dt);
 }
 

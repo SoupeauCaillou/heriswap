@@ -18,31 +18,12 @@
 
 #include "Game.h"
 
-#include "states/ScoreBoardStateManager.h"
-
 #define DT 1/60.
 #define MAGICKEYTIME 0.3
 
 
 static char* loadPng(const char* assetName, int* width, int* height);
 static char* loadTextfile(const char* assetName);
-
-struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
-	public:
-		void show() {
-			__log_enabled = false;
-			std::cout << "Enter your name! (write it into player_name.txt to save it definitively)" << std::endl;
-		}
-		bool query(std::string& result) {
-			getline(std::cin, result);
-			__log_enabled = true;
-			return true;
-		}
-		bool nameNeeded() {
-			std::ifstream file ("player_name.txt");
-			return (file==0);
-		}
-};
 
 struct LinuxNativeAssetLoader: public NativeAssetLoader {
 	char* decompressPngImage(const std::string& assetName, int* width, int* height) {
@@ -66,9 +47,37 @@ class MouseNativeTouchState: public NativeTouchState {
 		}
 };
 
+struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
+	public:
+		void show() {
+			__log_enabled = false;
+			std::cout << "Enter your name!" << std::endl;
+		}
+		bool query(std::string& result) {
+			getline(std::cin, result);
+			std::cout << "Want to save it ? (y or *'ll be fine)" << std::endl;
+			std::string a;
+			getline(std::cin, a);
+			if (a[0] == 'y') saveOpt("name", result);
+			__log_enabled = true;
+			return true;
+		}
+		void saveOpt(std::string opt, std::string name) {
+			std::stringstream tmp;
+			tmp << "INSERT INTO info VALUES ('" << opt << "', '" << name <<"')";
+			storage->request(tmp.str(), 0);
+		}
+		bool getName(std::string& result) {
+			storage->request("select value from info where option LIKE 'name'", &result);
+			return (false);
+		}
+		ScoreStorage* storage;
+};
+
+
 class LinuxSqliteExec: public ScoreStorage {
 	private :
-		static int callback(void *save, int argc, char **argv, char **azColName){
+		static int callbackScore(void *save, int argc, char **argv, char **azColName){
 			int i;
 			// name | mode | points | time
 			std::vector<ScoreStorage::Score> *sav = static_cast<std::vector<ScoreStorage::Score>* >(save);
@@ -88,15 +97,20 @@ class LinuxSqliteExec: public ScoreStorage {
 			sav->push_back(score1);
 			return 0;
 		}
+		static int callback(void *save, int argc, char **argv, char **azColName){
+			std::string *sav = static_cast<std::string*>(save);
+			*sav = argv[0];
+			return 0;
+		}
 	public :
 		std::vector<ScoreStorage::Score> getScore(int mode) {
 			std::stringstream tmp;
 			std::vector<ScoreStorage::Score> sav;
 
 			if (mode==1 || mode == 3)
-				tmp << "select * from scoretable where mode= "<< mode << " order by points desc limit 10";
+				tmp << "select * from score where mode= "<< mode << " order by points desc limit 10";
 			else
-				tmp << "select * from scoretable where mode= "<< mode << " order by time asc limit 10";
+				tmp << "select * from score where mode= "<< mode << " order by time asc limit 10";
 
 			sqlite3 *db;
 			char *zErrMsg = 0;
@@ -105,7 +119,7 @@ class LinuxSqliteExec: public ScoreStorage {
 				LOGI("Can't open database tilematch.db: %s\n", sqlite3_errmsg(db));
 				sqlite3_close(db);
 			}
-			rc = sqlite3_exec(db, tmp.str().c_str(), callback, &sav, &zErrMsg);
+			rc = sqlite3_exec(db, tmp.str().c_str(), callbackScore, &sav, &zErrMsg);
 			if( rc!=SQLITE_OK ){
 				LOGI("SQL error: %s\n", zErrMsg);
 				sqlite3_free(zErrMsg);
@@ -114,56 +128,64 @@ class LinuxSqliteExec: public ScoreStorage {
 
 			return sav;
 		}
+
+		bool soundEnable(bool switchIt) {
+			std::string s;
+			request("select value from info where opt like 'sound'", &s);
+			if (switchIt) {
+				if (s=="on") request("UPDATE info SET value='off' where opt='sound'",0);
+				else request("UPDATE info SET value='on' where opt='sound'",0);
+			}
+			return (s == "on");
+		}
+
 		void submitScore(ScoreStorage::Score scr) {
 			std::stringstream tmp;
-			tmp << "INSERT INTO scoreTable VALUES ('" << scr.name <<"'," << scr.mode<<","<<scr.points<<","<<scr.time<<")";
+			tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << scr.mode<<","<<scr.points<<","<<scr.time<<")";
+			request(tmp.str().c_str(), 0);
+		}
+
+		bool request(std::string s, std::string* res) {
 			sqlite3 *db;
 			char *zErrMsg = 0;
 			int rc = sqlite3_open("tilematch.db", &db);
 			if( rc ){
 				LOGI("Can't open database tilematch.db: %s\n", sqlite3_errmsg(db));
 				sqlite3_close(db);
+				return false;
 			}
-			rc = sqlite3_exec(db, tmp.str().c_str(), 0, 0, &zErrMsg);
+			rc = sqlite3_exec(db, s.c_str(), callback, res, &zErrMsg);
 			if( rc!=SQLITE_OK ){
 				LOGI("SQL error: %s\n", zErrMsg);
 				sqlite3_free(zErrMsg);
-			} else {
-				LOGI("Score ajoute a la table");
 			}
 			sqlite3_close(db);
+			return true;
 		}
-		void initTable() {
-			sqlite3 *db;
-			int rc = sqlite3_open("tilematch.db", &db);
-			if (rc){
-				LOGI("Can't open database: %s", sqlite3_errmsg(db));
-				return;
-			}
 
-			char *zErrMsg = 0;
-
-			if (rc==SQLITE_OK) {
+		bool initTable() {
+			bool r = request("", 0);
+			if (r) {
 				LOGI("initializing database...");
-				rc = sqlite3_exec(db, "create table scoreTable(name char2(25) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0')", 0, 0, &zErrMsg);
-				if( rc!=SQLITE_OK ){
-					LOGI("SQL error: %s\n", zErrMsg);
-					sqlite3_free(zErrMsg);
-				}
+				request("create table score(name char2(25) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0')", 0);
+				request("create table info(opt char2(8), value char2(25))", 0);
+				std::string s;
+				request("select value from info where opt like 'sound'", &s);
+				if (s.length()==0) request("insert into info values('sound', 'on')", 0);
 			}
-			sqlite3_close(db);
+			return r;
 		}
 };
 
 int main(int argc, char** argv) {
 	if (!glfwInit())
 		return 1;
-	
+
 	Vector2 reso16_9(394, 700);
 	Vector2 reso16_10(437, 700);
-	
+
 	Vector2* reso = (argc == 1) ? &reso16_10 : &reso16_9;
-	
+
 	if( !glfwOpenWindow( reso->X,reso->Y, 8,8,8,8,8,8, GLFW_WINDOW ) )
 		return 1;
 
@@ -185,9 +207,14 @@ int main(int argc, char** argv) {
 	}
 	// vérification de la table des scores
 	LinuxSqliteExec* sqliteExec = new LinuxSqliteExec();
-	sqliteExec->initTable();
+	TerminalPlayerNameInputUI* term = new TerminalPlayerNameInputUI();
+	if (!sqliteExec->initTable()) {
+		LOGI("probleme d'initialisation sql");
+		return 0;
+	}
+	term->storage=sqliteExec;
 
-	Game game(sqliteExec, new TerminalPlayerNameInputUI());
+	Game game(sqliteExec, term);
 
 	theSoundSystem.init();
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());
