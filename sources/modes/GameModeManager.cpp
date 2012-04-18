@@ -127,13 +127,13 @@ void GameModeManager::fillVec() {
 void GameModeManager::UpdateCore(float dt, float obj) {
 	distance = MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
 	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, GameModeManager::position(obj, pts)) - TRANSFORM(herisson)->position.X;
-	if (distance > 0.1f) {
-		float vitesse = 0.1f;
+	if (distance > 0.f) {
+		float vitesse = MathUtil::Max(.1f, distance/(4*dt));
 		switchAnim(c);
 		TRANSFORM(herisson)->position.X += vitesse*dt;
 		distance -= vitesse*dt;
 	} else distance = 0;
-
+	LOGI("%f", distance);
 	uiHelper.update(dt);
 }
 
