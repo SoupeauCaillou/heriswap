@@ -7,6 +7,7 @@
 #include "base/EntityManager.h"
 #include "base/TouchInputManager.h"
 
+#include "systems/MorphingSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/TransformationSystem.h"
@@ -35,6 +36,6 @@ class ModeMenuStateManager : public GameStateManager {
 	private:
 		ScoreStorage* storage;
 		PlayerNameInputUI* inputUI;
-		Entity title, play, scoresPoints[5], scoresName[5], back, yourScore;
+		Entity play, scoresPoints[5], scoresName[5], back, yourScore;
 		std::string playerName;
 };

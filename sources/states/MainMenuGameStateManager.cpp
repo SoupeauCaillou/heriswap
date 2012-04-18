@@ -17,6 +17,12 @@ void MainMenuGameStateManager::Setup() {
 		TRANSFORM(eStart[i])->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(300))-Vector2(0,2*i);
 		TEXT_RENDERING(eStart[i])->hide = true;
 		TEXT_RENDERING(eStart[i])->positioning = TextRenderingComponent::LEFT;
+		theMorphingSystem.Add(eStart[i]);
+	    TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(50)));
+	    TypedMorphElement<Color>* colorMorph = new TypedMorphElement<Color>(&TEXT_RENDERING(eStart[i])->color, TEXT_RENDERING(eStart[i])->color, Color(1.f,0.f,0.f, 1.f));
+	    MORPHING(eStart[i])->elements.push_back(posMorph);
+	    MORPHING(eStart[i])->elements.push_back(colorMorph);
+	    MORPHING(eStart[i])->timing = 1;
 	}
 	TEXT_RENDERING(eStart[0])->text = "Normal";
 	TEXT_RENDERING(eStart[1])->text = "Score Atk";
@@ -43,6 +49,9 @@ void MainMenuGameStateManager::Enter() {
 	theSoundSystem.loadSoundFile("audio/click.wav", false);
 
 	for (int i=0; i<3; i++) {
+		MORPHING(eStart[i])->active = false;
+		TRANSFORM(eStart[i])->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(300))-Vector2(0,2*i);
+		TEXT_RENDERING(eStart[i])->color = Color(1.f,1.f,1.f);
 		RENDERING(bStart[i])->hide = false;
 		TEXT_RENDERING(eStart[i])->hide = false;
 		BUTTON(bStart[i])->clicked = false;
@@ -71,8 +80,10 @@ GameState MainMenuGameStateManager::Update(float dt) {
 void MainMenuGameStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	for (int i=0; i<3; i++) {
-		TEXT_RENDERING(eStart[i])->hide = true;
+		if (i!=choosenGameMode-1) TEXT_RENDERING(eStart[i])->hide = true;
 		RENDERING(bStart[i])->hide = true;
 		CONTAINER(bStart[i])->entities.clear();
 	}
+
+    MORPHING(eStart[choosenGameMode-1])->active = true;
 }

@@ -5,6 +5,7 @@
 
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
+#include "systems/MorphingSystem.h"
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/ContainerSystem.h"

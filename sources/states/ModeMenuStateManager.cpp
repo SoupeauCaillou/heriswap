@@ -7,7 +7,6 @@ ModeMenuStateManager::~ModeMenuStateManager() {
 		theEntityManager.DeleteEntity(scoresName[i]);
 		theEntityManager.DeleteEntity(scoresPoints[i]);
 	}
-	theEntityManager.DeleteEntity(title);
 	theEntityManager.DeleteEntity(play);
 	theEntityManager.DeleteEntity(back);
 	theEntityManager.DeleteEntity(yourScore);
@@ -42,12 +41,6 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(play)->z = DL_MainMenuUI;
 	RENDERING(play)->color = Color(0.f,1.f,0.f);
 	SOUND(play)->type = SoundComponent::EFFECT;
-
-	title = theTextRenderingSystem.CreateLocalEntity(2);
-	TRANSFORM(title)->z = DL_MainMenuUI;
-	TRANSFORM(title)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(300));
-	TEXT_RENDERING(title)->positioning = TextRenderingComponent::LEFT;
-	TEXT_RENDERING(title)->hide = true;
 
 	yourScore = theTextRenderingSystem.CreateLocalEntity(2);
 	TRANSFORM(yourScore)->z = DL_MainMenuUI;
@@ -114,23 +107,8 @@ void ModeMenuStateManager::Enter() {
 		if (m==ScoreAttack) a << "Votre temps : " << entry.time;
 		else a << "Votre score : " << entry.points;
 	}
-
 	LoadScore(m);
-	switch (m) {
-	case Normal :
-		TEXT_RENDERING(title)->text = "Normal";
-		break;
-	case ScoreAttack :
-		TEXT_RENDERING(title)->text = "Score Attack";
-		break;
-	case StaticTime :
-		TEXT_RENDERING(title)->text = "Frozen time";
-		break;
-	default :
-		LOGI("ce mode n'est pas connu");
-		break;
-	}
-	TEXT_RENDERING(title)->hide = false;
+
 	RENDERING(play)->hide = false;
 	RENDERING(back)->hide = false;
 	for (int i=0;i<5;i++) {
@@ -142,6 +120,10 @@ void ModeMenuStateManager::Enter() {
 GameState ModeMenuStateManager::Update(float dt) {
 	if (BUTTON(play)->clicked) {
 		SOUND(play)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
+		//on cache le titre
+		std::vector<Entity> v = theMorphingSystem.RetrieveAllEntityWithComponent();
+		for (int i=0; i<v.size(); i++) TEXT_RENDERING(v[i])->hide = true;
+
 		return ModeMenuToBlackState;
 	} if (BUTTON(back)->clicked) {
 		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
@@ -152,7 +134,6 @@ GameState ModeMenuStateManager::Update(float dt) {
 
 void ModeMenuStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-	TEXT_RENDERING(title)->hide = true;
 	TEXT_RENDERING(yourScore)->hide = true;
 	RENDERING(play)->hide = true;
 	RENDERING(back)->hide = true;
