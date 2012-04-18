@@ -75,7 +75,7 @@ GameState SpawnGameStateManager::Update(float dt) {
 		transitionCree->active = true;
 		for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
 			if (it->fe == 0) {
-				it->fe = createCell(*it, false);
+				it->fe = createCell(*it, spawning.size() == theGridSystem.GridSize*theGridSystem.GridSize);
 			} else {
 				TransformationComponent* tc = TRANSFORM(it->fe);
 				float s = Game::CellSize();
