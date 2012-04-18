@@ -15,7 +15,6 @@ class InGameUiHelper {
 
 	Entity smallLevel;
 	Entity pauseButton;
-	Entity soundButton;
 	Entity scoreProgress;
 	Game* game;
 	private:

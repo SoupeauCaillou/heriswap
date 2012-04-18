@@ -44,17 +44,6 @@ void InGameUiHelper::build() {
 	ADD_COMPONENT(pauseButton, Sound);
 	SOUND(pauseButton)->type = SoundComponent::EFFECT;
 
-	soundButton = theEntityManager.CreateEntity();
-	ADD_COMPONENT(soundButton, Transformation);
-	TRANSFORM(soundButton)->z = DL_Score;
-	TRANSFORM(soundButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
-	TransformationSystem::setPosition(TRANSFORM(soundButton), Vector2(PlacementHelper::GimpXToScreen(692), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
-	ADD_COMPONENT(soundButton, Button);
-	ADD_COMPONENT(soundButton, Rendering);
-	RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
-	ADD_COMPONENT(soundButton, Sound);
-	SOUND(soundButton)->type = SoundComponent::EFFECT;
-
 	scoreProgress = theEntityManager.CreateEntity();
 	ADD_COMPONENT(scoreProgress, Transformation);
 	TRANSFORM(scoreProgress)->z = DL_Score;
@@ -76,18 +65,11 @@ void InGameUiHelper::show() {
 	TEXT_RENDERING(smallLevel)->hide = false;
 	TEXT_RENDERING(pauseButton)->hide = false;
 	TEXT_RENDERING(scoreProgress)->hide = false;
-	RENDERING(soundButton)->hide = false;
 }
 
 void InGameUiHelper::update(float dt) {
-	// handle buttons
-	if (BUTTON(soundButton)->clicked) {
-		BUTTON(soundButton)->clicked = false;
-		theSoundSystem.mute = !theSoundSystem.mute;
-		if (!theSoundSystem.mute) SOUND(pauseButton)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
-		if (theSoundSystem.mute) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
-		else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
-	} if (BUTTON(pauseButton)->clicked) {
+	// handle button
+	if (BUTTON(pauseButton)->clicked) {
 		SOUND(pauseButton)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
 		BUTTON(pauseButton)->clicked=false;
 		game->togglePause(true);
@@ -100,7 +82,6 @@ void InGameUiHelper::hide() {
 	TEXT_RENDERING(smallLevel)->hide = true;
 	TEXT_RENDERING(pauseButton)->hide = true;
 	TEXT_RENDERING(scoreProgress)->hide = true;
-	RENDERING(soundButton)->hide = true;
 }
 
 void InGameUiHelper::destroy() {
@@ -108,6 +89,5 @@ void InGameUiHelper::destroy() {
 		return;
 	theEntityManager.DeleteEntity(smallLevel);
 	theEntityManager.DeleteEntity(pauseButton);
-	theEntityManager.DeleteEntity(soundButton);
 	theEntityManager.DeleteEntity(scoreProgress);
 }

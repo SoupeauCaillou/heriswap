@@ -47,14 +47,15 @@
 class Game::Data {
 	public:
 		/* can not use any system here */
-		Data(ScoreStorage* storage, PlayerNameInputUI* inputUI) {
+		Data(ScoreStorage* storagee, PlayerNameInputUI* inputUI) {
 			mode = Normal;
 			mode2Manager[Normal] = new NormalGameModeManager();
 			mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager();
 			mode2Manager[StaticTime] = new StaticTimeGameModeManager();
-
+			storage = storagee;
 
 			logo = theEntityManager.CreateEntity();
+			soundButton = theEntityManager.CreateEntity();
 
 			state = BlackToLogoState;
 
@@ -95,6 +96,18 @@ class Game::Data {
 			RENDERING(logo_bg)->hide = false;
 			RENDERING(logo_bg)->color = Color(0,0,0);
 			TRANSFORM(logo_bg)->z = DL_BehindLogo;
+
+			ADD_COMPONENT(soundButton, Transformation);
+			TRANSFORM(soundButton)->z = DL_MainMenuUI;
+			TRANSFORM(soundButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
+			TransformationSystem::setPosition(TRANSFORM(soundButton), Vector2(PlacementHelper::GimpXToScreen(692), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
+			ADD_COMPONENT(soundButton, Button);
+			ADD_COMPONENT(soundButton, Rendering);
+			if (storage->soundEnable(false)) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
+			else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
+			ADD_COMPONENT(soundButton, Sound);
+			SOUND(soundButton)->type = SoundComponent::EFFECT;
+			RENDERING(soundButton)->hide = false;
 
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
 				it->second->Setup();
@@ -154,7 +167,7 @@ class Game::Data {
 		Entity music[4];
 		std::map<GameState, GameStateManager*> state2Manager;
 		std::map<GameMode, GameModeManager*> mode2Manager;
-
+		ScoreStorage* storage;
 		GameMode mode;
 
 		Entity cursor;
@@ -263,6 +276,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	}
 
 	theGridSystem.GridSize = GRIDSIZE;
+	theSoundSystem.mute = !datas->storage->soundEnable(false);
 
 	float bgElementWidth = PlacementHelper::GimpWidthToScreen(800);
 	datas->sky = theEntityManager.CreateEntity();
@@ -469,6 +483,16 @@ void Game::tick(float dt) {
 		RENDERING(datas->logo_bg)->hide = RENDERING(datas->logo)->hide;
 
 	}
+	//si on appuye sur le bouton pause
+	if (BUTTON(datas->soundButton)->clicked) {
+		BUTTON(datas->soundButton)->clicked = false;
+		datas->storage->soundEnable(true); //on met a jour la table sql
+		theSoundSystem.mute = !theSoundSystem.mute;
+		if (!theSoundSystem.mute) SOUND(datas->soundButton)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
+		if (theSoundSystem.mute) RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
+		else RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
+	}
+
 	//updating time
 	if (datas->state == UserInput) {
 		ended = datas->mode2Manager[datas->mode]->Update(dt);
@@ -494,6 +518,7 @@ void Game::tick(float dt) {
 	//si c'est pas à l'user de jouer, on cache de force les combi
 	if (newState != UserInput)
 		toggleShowCombi(true);
+
 
 	theADSRSystem.Update(dt);
 	theGridSystem.Update(dt);

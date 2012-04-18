@@ -135,6 +135,7 @@ class LinuxSqliteExec: public ScoreStorage {
 			if (switchIt) {
 				if (s=="on") request("UPDATE info SET value='off' where opt='sound'",0);
 				else request("UPDATE info SET value='on' where opt='sound'",0);
+				LOGI("switched to !%s", s.c_str());
 			}
 			return (s == "on");
 		}
