@@ -37,12 +37,18 @@ void InGameUiHelper::build() {
 	TEXT_RENDERING(pauseButton)->fontName = "typo";
 	TEXT_RENDERING(pauseButton)->charSize = Vector2(PlacementHelper::GimpWidthToScreen(30), PlacementHelper::GimpHeightToScreen(30));
 	TEXT_RENDERING(pauseButton)->positioning = TextRenderingComponent::LEFT;
-	ADD_COMPONENT(pauseButton, Container);
-	CONTAINER(pauseButton)->includeChildren = true;
-	//CONTAINER(pauseButton)->entities.push_back(pauseButton);
-	ADD_COMPONENT(pauseButton, Button);
-	ADD_COMPONENT(pauseButton, Sound);
-	SOUND(pauseButton)->type = SoundComponent::EFFECT;
+
+	pauseContainer = theEntityManager.CreateEntity();
+	ADD_COMPONENT(pauseContainer, Transformation);
+	ADD_COMPONENT(pauseContainer, Container);
+	ADD_COMPONENT(pauseContainer, Sound);
+	SOUND(pauseContainer)->type = SoundComponent::EFFECT;
+	ADD_COMPONENT(pauseContainer, Button);
+	ADD_COMPONENT(pauseContainer, Rendering);
+	RENDERING(pauseContainer)->color = Color(0.0, .0, .0, .0);
+	TRANSFORM(pauseContainer)->z = DL_Score;
+	CONTAINER(pauseContainer)->entities.push_back(pauseButton);
+	CONTAINER(pauseContainer)->includeChildren = true;
 
 	scoreProgress = theEntityManager.CreateEntity();
 	ADD_COMPONENT(scoreProgress, Transformation);
@@ -64,14 +70,16 @@ void InGameUiHelper::show() {
 
 	TEXT_RENDERING(smallLevel)->hide = false;
 	TEXT_RENDERING(pauseButton)->hide = false;
+	RENDERING(pauseContainer)->hide = false;
 	TEXT_RENDERING(scoreProgress)->hide = false;
+	BUTTON(pauseContainer)->clicked=false;
 }
 
 void InGameUiHelper::update(float dt) {
 	// handle button
-	if (BUTTON(pauseButton)->clicked) {
-		SOUND(pauseButton)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
-		BUTTON(pauseButton)->clicked=false;
+	if (BUTTON(pauseContainer)->clicked) {
+		SOUND(pauseContainer)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
+		BUTTON(pauseContainer)->clicked=false;
 		game->togglePause(true);
 	}
 }
@@ -81,6 +89,7 @@ void InGameUiHelper::hide() {
 		return;
 	TEXT_RENDERING(smallLevel)->hide = true;
 	TEXT_RENDERING(pauseButton)->hide = true;
+	RENDERING(pauseContainer)->hide = false;
 	TEXT_RENDERING(scoreProgress)->hide = true;
 }
 
@@ -89,5 +98,6 @@ void InGameUiHelper::destroy() {
 		return;
 	theEntityManager.DeleteEntity(smallLevel);
 	theEntityManager.DeleteEntity(pauseButton);
+	theEntityManager.DeleteEntity(pauseContainer);
 	theEntityManager.DeleteEntity(scoreProgress);
 }

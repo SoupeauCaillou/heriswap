@@ -452,7 +452,8 @@ void Game::tick(float dt) {
 	//si le chrono est fini, on passe au menu de fin
 	if (ended) {
 		newState = ModeMenu;
-//		datas->state2Manager[ModeMenu]->ended = true;
+		ModeMenuStateManager* mm = static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]);
+		mm->ended = true;
 		ended = false;
 	} else {
 	//sinon on passe a l'etat suivant
@@ -473,7 +474,8 @@ void Game::tick(float dt) {
 			LOGI("aborted. going to main menu");
 			hideEveryThing(true, false);
 			newState = MainMenu;
-			//datas->state2Manager[ModeMenu]->ended = true;
+			ModeMenuStateManager* mm = static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]);
+			mm->ended = true;
 		}
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;

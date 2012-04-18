@@ -47,6 +47,8 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(800));
 	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(yourScore)->hide = true;
+	TEXT_RENDERING(yourScore)->charSize = 0.3;
+	TEXT_RENDERING(yourScore)->color = Color(0.f,0.f,0.f);
 
 	back = theEntityManager.CreateEntity();
 	ADD_COMPONENT(back, Transformation);
@@ -71,11 +73,21 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			trcN->hide = false;
 			trcP->hide = false;
 			std::stringstream a;
-			a.precision(0);
-			if (mode==ScoreAttack) a << std::fixed << entries[i].time << "s";
-			else a << std::fixed << entries[i].points;
+			a.precision(1);
+			if (mode==ScoreAttack) {
+				a << std::fixed << entries[i].time << "s";
+				TEXT_RENDERING(scoresPoints[i])->isANumber = false;
+			} else {
+				a << std::fixed << entries[i].points;
+				TEXT_RENDERING(scoresPoints[i])->isANumber = true;
+			}
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
+
+			if ((entries[i].points == modeMgr->points || (mode==ScoreAttack && entries[i].time-modeMgr->time<0.01f)) && entries[i].name == playerName) {
+				trcP->color = Color(0.f,1.f,0.f);
+				trcN->color = Color(0.f,1.f,0.f);
+			}
 		} else {
 			trcP->hide = true;
 			trcN->hide = true;
@@ -103,8 +115,10 @@ void ModeMenuStateManager::Enter() {
 		storage->submitScore(entry);
 		TEXT_RENDERING(yourScore)->hide = false;
 		std::stringstream a;
-		if (m==ScoreAttack) a << "Votre temps : " << entry.time;
+		a.precision(1);
+		if (m==ScoreAttack) a << std::fixed << "Votre temps : " << entry.time << "s";
 		else a << "Votre score : " << entry.points;
+		TEXT_RENDERING(yourScore)->text = a.str();
 	}
 	LoadScore(m);
 

@@ -68,7 +68,7 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 			storage->request(tmp.str(), 0);
 		}
 		bool getName(std::string& result) {
-			storage->request("select value from info where option LIKE 'name'", &result);
+			storage->request("select value from info where opt LIKE 'name'", &result);
 			return (false);
 		}
 		ScoreStorage* storage;
