@@ -20,7 +20,7 @@ void SpawnGameStateManager::Setup() {
 
 	ADSR(eSpawn)->idleValue = 0;
 	ADSR(eSpawn)->attackValue = 1.0;
-	ADSR(eSpawn)->attackTiming = 0.4*FAST;
+	ADSR(eSpawn)->attackTiming = 0.2*FAST;
 	ADSR(eSpawn)->decayTiming = 0;
 	ADSR(eSpawn)->sustainValue = 1.0;
 	ADSR(eSpawn)->releaseTiming = 0;
@@ -83,12 +83,10 @@ GameState SpawnGameStateManager::Update(float dt) {
 				float s = Game::CellSize();
 				if (transitionCree->value == 1){
 					tc->size = Vector2(s*0.1, s);
-					tc->rotation = Game::cellTypeToRotation(it->type);
 					GRID(it->fe)->i = it->X;
 					GRID(it->fe)->j = it->Y;
 				} else {
 					tc->size = Vector2(s * transitionCree->value, s * transitionCree->value);
-					tc->rotation = Game::cellTypeToRotation(it->type) + transitionCree->value * MathUtil::TwoPi;
 				}
 			}
 		}
