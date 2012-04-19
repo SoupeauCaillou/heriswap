@@ -4,6 +4,8 @@
 #include <base/Vector2.h>
 #include <base/MathUtil.h>
 #include <vector>
+#include "CombinationMark.h"
+
 
 NormalGameModeManager::NormalGameModeManager() {
 	limit = 45.0;
@@ -39,6 +41,11 @@ bool NormalGameModeManager::Update(float dt) {
 	LevelUp();
 	return (limit - time <0);
 }
+
+static int levelToLeaveToDelete(int nb, int level) {
+    return 6*nb/(2+level);
+}
+
 void NormalGameModeManager::deleteLeaves(int type, int nb) {
 	for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
 		if (type == branchLeaves[i].type) {
@@ -50,6 +57,17 @@ void NormalGameModeManager::deleteLeaves(int type, int nb) {
 	}
 }
 
+void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
+    int nb = levelToLeaveToDelete(count, level);
+    for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
+        if ((type+1) == branchLeaves[i].type) {
+            CombinationMark::markCellInCombination(branchLeaves[i].e);
+            out.push_back(branchLeaves[i].e);
+            nb--;
+        }
+    }
+}
+
 void NormalGameModeManager::ScoreCalc(int nb, int type) {
 	if (type == bonus)
 		points += 10*level*2*nb*nb*nb/6;
@@ -57,7 +75,7 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 		points += 10*level*nb*nb*nb/6;
 
 	remain[type] -= nb;
-	deleteLeaves(type+1, 6*nb/(2+level));
+	deleteLeaves(type+1, levelToLeaveToDelete(nb, level));
 	time -= nb/4;
 	if (time < 0)
 		time = 0;

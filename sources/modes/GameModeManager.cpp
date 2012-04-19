@@ -1,4 +1,5 @@
 #include "modes/GameModeManager.h"
+#include "TwitchSystem.h"
 #include <fstream>
 
 struct GameModeManager::Actor {
@@ -79,6 +80,7 @@ void GameModeManager::generateLeaves(int nb) {
 			Entity e = theEntityManager.CreateEntity();
 			ADD_COMPONENT(e, Transformation);
 			ADD_COMPONENT(e, Rendering);
+            ADD_COMPONENT(e, Twitch);
 			RENDERING(e)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(j, 0));
 			RENDERING(e)->hide = false;
 			TRANSFORM(e)->size = Game::CellSize() * Game::CellContentScale();
@@ -125,8 +127,10 @@ void GameModeManager::fillVec() {
 	}
 }
 void GameModeManager::UpdateCore(float dt, float obj) {
-	distance = MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
-	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, GameModeManager::position(obj, pts)) - TRANSFORM(herisson)->position.X;
+    float progress = GameModeManager::position(obj, pts); // E [0, 1]
+	float targetPosX = MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
+	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, progress);
+    float distance = targetPosX - TRANSFORM(herisson)->position.X;
 	if (distance > 0.f) {
 		float vitesse = MathUtil::Max(.1f, distance/(4*dt));
 		switchAnim(c);

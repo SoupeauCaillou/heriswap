@@ -35,22 +35,22 @@
     <None Include="sources\modes\StaticTimeModeManager.h" />
     <None Include="sources\states\BackgroundManager.h" />
     <None Include="sources\states\DeleteGameStateManager.h" />
-    <None Include="sources\states\EndMenuStateManager.h" />
     <None Include="sources\states\FadeStateManager.h" />
     <None Include="sources\states\FallGameStateManager.h" />
     <None Include="sources\states\GameStateManager.h" />
     <None Include="sources\states\LevelStateManager.h" />
     <None Include="sources\states\MainMenuGameStateManager.h" />
     <None Include="sources\states\PauseStateManager.h" />
-    <None Include="sources\states\ScoreBoardStateManager.h" />
     <None Include="sources\states\SpawnGameStateManager.h" />
     <None Include="sources\states\UserInputGameStateManager.h" />
-    <None Include="sources\CombinationMarkSystem.h" />
     <None Include="sources\DepthLayer.h" />
     <None Include="sources\Game.h" />
     <None Include="sources\GridSystem.h" />
     <None Include="sources\PlacementHelper.h" />
     <None Include="sources\modes\InGameUiHelper.h" />
+    <None Include="sources\TwitchSystem.h" />
+    <None Include="sources\CombinationMark.h" />
+    <None Include="sources\states\ModeMenuStateManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -58,16 +58,13 @@
     <Compile Include="sources\modes\StaticTimeModeManager.cpp" />
     <Compile Include="sources\states\BackgroundManager.cpp" />
     <Compile Include="sources\states\DeleteGameStateManager.cpp" />
-    <Compile Include="sources\states\EndMenuStateManager.cpp" />
     <Compile Include="sources\states\FadeStateManager.cpp" />
     <Compile Include="sources\states\FallGameStateManager.cpp" />
     <Compile Include="sources\states\LevelStateManager.cpp" />
     <Compile Include="sources\states\MainMenuGameStateManager.cpp" />
     <Compile Include="sources\states\PauseStateManager.cpp" />
-    <Compile Include="sources\states\ScoreBoardStateManager.cpp" />
     <Compile Include="sources\states\SpawnGameStateManager.cpp" />
     <Compile Include="sources\states\UserInputGameStateManager.cpp" />
-    <Compile Include="sources\CombinationMarkSystem.cpp" />
     <Compile Include="sources\Game.cpp" />
     <Compile Include="sources\GridSystem.cpp" />
     <Compile Include="sources\tilematch-linux.cpp" />
@@ -77,5 +74,8 @@
     <Compile Include="sources\PlacementHelper.cpp" />
     <Compile Include="sources\modes\InGameUiHelper.cpp" />
     <Compile Include="sources\modes\GameModeManager.cpp" />
+    <Compile Include="sources\TwitchSystem.cpp" />
+    <Compile Include="sources\CombinationMark.cpp" />
+    <Compile Include="sources\states\ModeMenuStateManager.cpp" />
   </ItemGroup>
 </Project>

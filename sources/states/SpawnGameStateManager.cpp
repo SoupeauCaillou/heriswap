@@ -1,5 +1,7 @@
 #include "SpawnGameStateManager.h"
 #include "../DepthLayer.h"
+#include "systems/ScrollingSystem.h"
+#include "TwitchSystem.h"
 
 static void fillTheBlank(std::vector<Feuille>& spawning);
 static Entity createCell(Feuille& f, bool assignGridPos);
@@ -105,11 +107,6 @@ GameState SpawnGameStateManager::NextState(bool marker) {
 	std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,marker);
 	//si on a des combinaisons dans la grille on passe direct à Delete
 	if (!combinaisons.empty()) {
-		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
-			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
-				theCombinationMarkSystem.NewMarks(3, *itV);
-			}
-		}
 		return Delete;
 	//sinon
 	} else {
@@ -191,6 +188,7 @@ static Entity createCell(Feuille& f, bool assignGridPos) {
 	ADD_COMPONENT(e, Rendering);
 	ADD_COMPONENT(e, ADSR);
 	ADD_COMPONENT(e, Grid);
+    ADD_COMPONENT(e, Twitch);
 
 	TRANSFORM(e)->position = Game::GridCoordsToPosition(f.X, f.Y);
 	TRANSFORM(e)->z = DL_Cell;

@@ -20,7 +20,7 @@
 
 #include "GridSystem.h"
 #include "Game.h"
-#include "CombinationMarkSystem.h"
+#include "TwitchSystem.h"
 
 #include "states/GameStateManager.h"
 #include "states/SpawnGameStateManager.h"
@@ -239,7 +239,6 @@ Game::Game(ScoreStorage* storage, PlayerNameInputUI* inputUI) {
 	RenderingSystem::CreateInstance();
 	SoundSystem::CreateInstance();
 	GridSystem::CreateInstance();
-	CombinationMarkSystem::CreateInstance();
 	ADSRSystem::CreateInstance();
 	ButtonSystem::CreateInstance();
 	TextRenderingSystem::CreateInstance();
@@ -248,6 +247,7 @@ Game::Game(ScoreStorage* storage, PlayerNameInputUI* inputUI) {
     ParticuleSystem::CreateInstance();
     ScrollingSystem::CreateInstance();
     MorphingSystem::CreateInstance();
+    TwitchSystem::CreateInstance();
 }
 
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
@@ -337,6 +337,7 @@ void Game::setMode() {
 }
 
 void Game::toggleShowCombi(bool forcedesactivate) {
+ #if 0
 	static bool activated;
 	//on switch le bool
 	activated = !activated;
@@ -355,7 +356,7 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 				{
 					//rajout de 2 marques sur les elements a swich
 					for (int i=0;i<2;i++) {
-						if (j) theCombinationMarkSystem.NewMarks(4, Vector2(it->X+i, it->Y));
+						if (j) CombinationMark::markCellInCombination(4, Vector2(it->X+i, it->Y));
 						else theCombinationMarkSystem.NewMarks(5, Vector2(it->X, it->Y+i));
 
 					}
@@ -366,6 +367,7 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 		theCombinationMarkSystem.DeleteMarks(4);
 		theCombinationMarkSystem.DeleteMarks(5);
 	}
+#endif
 }
 
 static void updateMusic(Entity* music) {
@@ -483,7 +485,6 @@ void Game::tick(float dt) {
 
 		hideEveryThing(!inGameState(newState), datas->state==BlackToSpawn);
 		RENDERING(datas->logo_bg)->hide = RENDERING(datas->logo)->hide;
-
 	}
 	//si on appuye sur le bouton pause
 	if (BUTTON(datas->soundButton)->clicked) {
@@ -528,7 +529,6 @@ void Game::tick(float dt) {
     theParticuleSystem.Update(dt);
 
 	if (newState == ModeMenu) {
-		theCombinationMarkSystem.DeleteMarks(-1);
 		theGridSystem.DeleteAll();
 	} else if (newState == MainMenu) {
 		datas->mode2Manager[datas->mode]->Reset();
@@ -537,7 +537,7 @@ void Game::tick(float dt) {
 	updateMusic(datas->music);
 
 	theMorphingSystem.Update(dt);
-	theCombinationMarkSystem.Update(dt);
+    theTwitchSystem.Update(dt);
 	thePhysicsSystem.Update(dt);
 	theTransformationSystem.Update(dt);
 	theScrollingSystem.Update(dt);

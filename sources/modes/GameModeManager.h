@@ -59,6 +59,7 @@ class GameModeManager {
 		virtual void UpdateUI(float dt) = 0;
 		virtual void HideUI(bool toHide) = 0;
 
+        virtual void WillScore(int nb, int type, std::vector<Entity>& out) {}
 		virtual void ScoreCalc(int nb, int type) = 0;
 
 		virtual GameMode GetMode() = 0;

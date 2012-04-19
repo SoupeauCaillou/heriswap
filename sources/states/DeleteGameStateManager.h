@@ -8,7 +8,6 @@
 
 #include "states/GameStateManager.h"
 #include "GridSystem.h"
-#include "CombinationMarkSystem.h"
 #include "Game.h"
 #include "modes/GameModeManager.h"
 
@@ -26,4 +25,5 @@ class DeleteGameStateManager : public GameStateManager {
 		// datas
 		Entity eRemove;
 		std::vector<Combinais> removing;
+        std::vector<Entity> littleLeavesDeleted;
 };

@@ -9,7 +9,6 @@
 #include "Game.h"
 #include "GameStateManager.h"
 #include "GridSystem.h"
-#include "CombinationMarkSystem.h"
 
 class FallGameStateManager : public GameStateManager {
 	public:

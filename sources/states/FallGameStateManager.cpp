@@ -1,4 +1,5 @@
 #include "FallGameStateManager.h"
+#include "CombinationMark.h"
 
 FallGameStateManager::FallGameStateManager() {
 
@@ -18,15 +19,9 @@ void FallGameStateManager::Setup() {
 	ADSR(eFall)->decayTiming = 0;
 	ADSR(eFall)->sustainValue = 1.0;
 	ADSR(eFall)->releaseTiming = 0;
-
-
-
-
 	ADSR(eFall)->attackMode = Quadratic;
 	ADSR(eFall)->decayMode = Quadratic;
 	ADSR(eFall)->releaseMode = Quadratic;
-
-
 }
 
 void FallGameStateManager::Enter() {
@@ -43,13 +38,6 @@ void FallGameStateManager::Enter() {
 	std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,false);
 	std::cout << "Possible combinations : "<< combinaisons.size()<<"\r\n" ;
 
-	// On remet la grille comme avant
-	for (std::vector<CellFall>::iterator it=falling.begin(); it!=falling.end(); ++it)
-	{
-		const CellFall& f = *it;
-		GRID(f.e)->j = f.fromY;
-	}
-
 	// gestion des combinaisons
 	if (!combinaisons.empty())
 	{
@@ -57,10 +45,18 @@ void FallGameStateManager::Enter() {
 		{
 			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
 			{
-				theCombinationMarkSystem.NewMarks(2, *itV);
+                Entity e = theGridSystem.GetOnPos(itV->X, itV->Y);
+                CombinationMark::markCellInCombination(e);
 			}
 		}
 	}
+    // On remet la grille comme avant
+     for (std::vector<CellFall>::iterator it=falling.begin(); it!=falling.end(); ++it)
+     {
+         const CellFall& f = *it;
+         GRID(f.e)->j = f.fromY;
+     }
+
 }
 
 GameState FallGameStateManager::Update(float dt) {
@@ -93,7 +89,6 @@ GameState FallGameStateManager::Update(float dt) {
 void FallGameStateManager::Exit() {
 	falling.clear();
 	ADSR(eFall)->active = false;
-	theCombinationMarkSystem.DeleteMarks(2);
 
 	LOGI("%s", __PRETTY_FUNCTION__);
 }
