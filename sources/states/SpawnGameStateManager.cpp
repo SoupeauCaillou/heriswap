@@ -2,6 +2,7 @@
 #include "../DepthLayer.h"
 #include "systems/ScrollingSystem.h"
 #include "TwitchSystem.h"
+#include "CombinationMark.h"
 
 static void fillTheBlank(std::vector<Feuille>& spawning);
 static Entity createCell(Feuille& f, bool assignGridPos);
@@ -29,10 +30,10 @@ void SpawnGameStateManager::Setup() {
 	ADD_COMPONENT(eGrid, ADSR);
 
 	ADSR(eGrid)->idleValue = 0;
-	ADSR(eGrid)->attackValue = 3.0;
-	ADSR(eGrid)->attackTiming = 1.;
+	ADSR(eGrid)->attackValue = 1.0;
+	ADSR(eGrid)->attackTiming = 0.3;
 	ADSR(eGrid)->decayTiming = 0;
-	ADSR(eGrid)->sustainValue = 3.0;
+	ADSR(eGrid)->sustainValue = 1.0;
 	ADSR(eGrid)->releaseTiming = 0;
 }
 
@@ -42,8 +43,10 @@ void SpawnGameStateManager::Enter() {
 	std::vector<Combinais> c;
 	fillTheBlank(spawning);
 	if (spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
+     std::cout << "create " << spawning.size() << " cells" << std::endl;
 		for(int i=0; i<spawning.size(); i++) {
-			createCell(spawning[i], true);
+            if (spawning[i].fe == 0)
+			    spawning[i].fe = createCell(spawning[i], true);
 		}
 		do {
 			c = theGridSystem.LookForCombination(false,true);
@@ -58,13 +61,17 @@ void SpawnGameStateManager::Enter() {
 				}
 			}
 		} while(!c.empty());
-		spawning.clear();
-		fillTheBlank(spawning);
-	}
-
-	ADSRComponent* transitionCree = ADSR(eSpawn);
-	transitionCree->activationTime = 0;
-	transitionCree->active = false;
+        /*for(int i=0; i<spawning.size(); i++) {
+            GridComponent* c = GRID(spawning[i].fe);
+            c->i = c->j = -1;
+        }*/
+		// spawning.clear();
+		// fillTheBlank(spawning);
+        ADSR(eSpawn)->active = true;
+	} else {
+	    ADSR(eSpawn)->active = false;
+    }
+    ADSR(eSpawn)->activationTime = 0;
 
 	ADSR(eGrid)->activationTime = 0;
 	ADSR(eGrid)->active = false;
@@ -74,17 +81,22 @@ GameState SpawnGameStateManager::Update(float dt) {
 	ADSRComponent* transitionCree = ADSR(eSpawn);
 	//si on doit recree des feuilles
 	if (!spawning.empty()) {
+        bool fullGridSpawn = (spawning.size() == theGridSystem.GridSize*theGridSystem.GridSize);
 		transitionCree->active = true;
 		for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
 			if (it->fe == 0) {
-				it->fe = createCell(*it, spawning.size() == theGridSystem.GridSize*theGridSystem.GridSize);
+				it->fe = createCell(*it, fullGridSpawn);
 			} else {
+                GridComponent* gc = GRID(it->fe);
+                if (fullGridSpawn) {
+                    gc->i = gc->j = -1;
+                }
 				TransformationComponent* tc = TRANSFORM(it->fe);
 				float s = Game::CellSize();
 				if (transitionCree->value == 1){
 					tc->size = Vector2(s*0.1, s);
-					GRID(it->fe)->i = it->X;
-					GRID(it->fe)->j = it->Y;
+					gc->i = it->X;
+					gc->j = it->Y;
 				} else {
 					tc->size = Vector2(s * transitionCree->value, s * transitionCree->value);
 				}
@@ -95,7 +107,18 @@ GameState SpawnGameStateManager::Update(float dt) {
 			return NextState(true);
 		}
 	//sinon on verifie qu'il reste des combi
-	} else {
+	} else if (ADSR(eGrid)->active) {
+        std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
+        for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
+            Vector2 cellSize = Game::CellSize() * Game::CellContentScale() * (1 - ADSR(eGrid)->value);
+            ADSR(*it)->idleValue = cellSize.X;
+        }
+        if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
+            theGridSystem.DeleteAll();
+            fillTheBlank(spawning);
+            LOGI("nouvelle grille de %d elements! ", spawning.size());
+        }
+    } else {
 		return NextState(false);
 	}
 	return Spawn;
@@ -115,12 +138,7 @@ GameState SpawnGameStateManager::NextState(bool marker) {
 			ADSR(eGrid)->active = true;
 			std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
 			for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
-				TRANSFORM(*it)->rotation = 3*ADSR(eGrid)->value;
-			}
-			if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
-				theGridSystem.DeleteAll();
-				fillTheBlank(spawning);
-				LOGI("nouvelle grille de %d elements! ", spawning.size());
+				CombinationMark::markCellInCombination(*it);
 			}
 		}
 	}
