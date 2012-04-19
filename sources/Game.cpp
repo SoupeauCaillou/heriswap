@@ -368,26 +368,121 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 	}
 }
 
+struct Compatible {
+	std::vector<char> fri;
+	char c;
+	bool operator== (const Compatible & comp) const {
+		return (c==comp.c);
+	}
+	bool operator>= (const Compatible & comp) const {
+		return (c >= comp.c);
+	}
+	bool operator> (const Compatible & comp) const {
+		return (c > comp.c);
+	}
+};
+
+int findCompatible(char c, std::vector<Compatible> &comp) {
+	for (int i=0;i<comp.size();i++)
+		if (comp[i].c==c) return i;
+	return comp.size();
+}
+std::vector<char> intersec(const std::vector<char>& c1, std::vector<char> c2) {
+	std::vector<char> res;
+	for (int i=0;i<c1.size();i++) {
+		for (int j=0;j<c2.size();j++) {
+			if (c1[i]==c2[j]) {
+				res.push_back(c1[i]);
+				c2.erase(c2.begin()+j);
+				j--;
+				break;
+			}
+		}
+	}
+	return res;
+}
+bool identic(const std::vector<char>& c1, std::vector<char> c2) {
+	for (int i=0;i<c1.size();i++) {
+		int j;
+		for (j=0;j<c2.size();j++) {
+			if (c1[i]==c2[j]) {
+				c2.erase(c2.begin()+j);
+				j--;
+				break;
+			}
+		}
+		if (j==c2.size()) return false;
+	}
+	return true;
+}
+
 static void updateMusic(Entity* music) {
+	//init
+	static std::vector<char> ppal;
+	if (ppal.size()==0) {
+		ppal.push_back('A');
+		ppal.push_back('C');
+		ppal.push_back('E');
+		ppal.push_back('F');
+	}
+	static std::vector<struct Compatible> compatible;
+	if (compatible.size()==0) {
+		for (int i=0;i<7;i++) {
+			Compatible a;
+			a.c = 'A'+i;
+			for (int j=0;j<3;j++) {
+				if (j!=i) a.fri.push_back('A'+j);
+			}
+			compatible.push_back(a);
+		}
+	}
+
 	/* are all started entities done yet ? */
 	for (int i=0; i<4; i++) {
-		if (SOUND(music[i])->sound != InvalidSoundRef)
+		if (SOUND(music[i])->mainMusic && SOUND(music[i])->sound != InvalidSoundRef)
 			return;
 	}
 
+
 	int count = MathUtil::RandomInt(4) + 1;
 	LOGW("starting %d music", count);
-	std::list<char> l;
-	for (int i=0; i<count; i++) {
+
+
+	std::vector<char> l; // all songs id
+	std::vector<char> canPickIn; // songs which can be picked
+
+	int cr = MathUtil::RandomInt(ppal.size());
+	char c = ppal[cr]; // letter from main music
+	int indice = findCompatible(c, compatible); // get his id
+	std::stringstream s;
+	s<<"audio/"<<c<<".ogg";
+	l.push_back(c);
+	SOUND(music[0])->sound = theSoundSystem.loadSoundFile(s.str(), true);
+	SOUND(music[0])->mainMusic = true;
+
+	for (int i=0; i<compatible[indice].fri.size(); i++)
+		canPickIn.push_back(compatible[indice].fri[i]); //copying his friends into canPickIn
+
+	for (int i=1; i<count; i++) {
+		if (identic(canPickIn,l)) {
+			LOGI("no more musics can be found; abort at %d musics inserted", i);
+			break;
+		}
 		SoundComponent* sc = SOUND(music[i]);
-		char c;
+
 		do {
-			c = MathUtil::RandomInt('G' - 'A' + 1) + 'A';
+			c = canPickIn[MathUtil::RandomInt(canPickIn.size())];
 		} while (std::find(l.begin(), l.end(), c) != l.end());
+
 		l.push_back(c);
 		std::stringstream s;
 		s << "audio/" << c << ".ogg";
 		sc->sound = theSoundSystem.loadSoundFile(s.str(), true);
+		if (std::find(ppal.begin(), ppal.end(), c) != ppal.end()) sc->mainMusic = true;
+		else sc->mainMusic = false;
+
+		indice = findCompatible(c, compatible); // get the song id
+		canPickIn = intersec(compatible[indice].fri, canPickIn); //pickIn = friends[him] U friends[old ones]
 	}
 }
 
@@ -436,7 +531,7 @@ void Game::tick(float dt) {
 		frameCount++;
 		accum += dt;
 		if (frameCount == COUNT) {
-			LOGI("%d frames: %.3f s - diff: %.3f s - ms per frame: %.3f", COUNT, accum, TimeUtil::getTime() - t, accum / COUNT);
+			//LOGI("%d frames: %.3f s - diff: %.3f s - ms per frame: %.3f", COUNT, accum, TimeUtil::getTime() - t, accum / COUNT);
 			t = TimeUtil::getTime();
 			accum = 0;
 			frameCount = 0;
