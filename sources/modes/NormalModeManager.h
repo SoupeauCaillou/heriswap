@@ -22,7 +22,9 @@ class NormalGameModeManager : public GameModeManager {
 
 		GameMode GetMode();
 
-		void ScoreCalc(int nb, int type);
+
+        void WillScore(int nb, int type, std::vector<Entity>& out);
+        void ScoreCalc(int nb, int type);
 		void Reset();
 
 	private:

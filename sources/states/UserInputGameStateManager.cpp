@@ -1,4 +1,5 @@
 #include "UserInputGameStateManager.h"
+#include "CombinationMark.h"
 
 static void activateADSR(Entity e, float a, float s);
 static void diffToGridCoords(const Vector2& c, int* i, int* j);
@@ -36,13 +37,12 @@ void UserInputGameStateManager::Enter() {
 	originI = originJ = -1;
 }
 
-GameState UserInputGameStateManager::Update(float dt) {	
+GameState UserInputGameStateManager::Update(float dt) {
 	// drag/drop of cell
 	if (!theTouchInputManager.wasTouched() &&
 		theTouchInputManager.isTouched()) {
 		// don't start new drag while the previous one isn't finished
 		if (!dragged) {
-			theCombinationMarkSystem.DeleteMarks(3);
 			// start drag: find nearest cell
 			const Vector2& pos = theTouchInputManager.getTouchLastPosition();
 			int i, j;
@@ -73,8 +73,6 @@ GameState UserInputGameStateManager::Update(float dt) {
 			}
 		}
 	} else if (theTouchInputManager.wasTouched() && dragged && ADSR(dragged)->active) {
-		//si on a bouge on supprime les marques
-		theCombinationMarkSystem.DeleteMarks(1);
 		if (theTouchInputManager.isTouched()) {
 			// continue drag
 			Vector2 diff = theTouchInputManager.getTouchLastPosition()
@@ -110,12 +108,26 @@ GameState UserInputGameStateManager::Update(float dt) {
 							for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it ) {
 								for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
 								{
-									theCombinationMarkSystem.NewMarks(1, *itV);
+                                    Entity cell;
+                                    if (itV->X == originI && itV->Y == originJ) {
+                                        cell = e;
+                                    } else if (itV->X == (originI + swapI) && itV->Y == (originJ + swapJ)) {
+                                        cell = a;
+                                    } else {
+                                        cell = theGridSystem.GetOnPos(itV->X, itV->Y);
+                                    }
+                                    if (cell) {
+                                        inCombinationCells.push_back(cell);
+                                        CombinationMark::markCellInCombination(cell);
+                                    }
 								}
 							}
-						}
-
+                        }
 					} else {
+                        for (int k=0; k<inCombinationCells.size(); k++) {
+                            CombinationMark::clearCellInCombination(inCombinationCells[k]);
+                        }
+                        inCombinationCells.clear();
 						if (ADSR(eSwapper)->activationTime > 0) {
 							ADSR(eSwapper)->active = false;
 						} else {
@@ -126,9 +138,18 @@ GameState UserInputGameStateManager::Update(float dt) {
 					}
 				} else {
 					ADSR(eSwapper)->active = false;
+                    for (int k=0; k<inCombinationCells.size(); k++) {
+                        CombinationMark::clearCellInCombination(inCombinationCells[k]);
+                    }
+                    inCombinationCells.clear();
 				}
 			} else {
 				ADSR(eSwapper)->active = false;
+                for (int k=0; k<inCombinationCells.size(); k++) {
+                    CombinationMark::clearCellInCombination(inCombinationCells[k]);
+                }
+                inCombinationCells.clear();
+
 			}
 		} else {
 			LOGI("release");
@@ -159,9 +180,6 @@ GameState UserInputGameStateManager::Update(float dt) {
 				GRID(e1)->checkedH = false;
 				GRID(e1)->checkedV = false;
 
-				theCombinationMarkSystem.DeleteMarks(1);
-
-
 				std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
 				if (
 			#ifndef ANDROID
@@ -188,7 +206,6 @@ GameState UserInputGameStateManager::Update(float dt) {
 			}
 		}
 	} else {
-		theCombinationMarkSystem.DeleteMarks(1);
 		ADSR(eSwapper)->active = false;
 		if (dragged) ADSR(dragged)->active = false;
 	}
@@ -234,6 +251,7 @@ void UserInputGameStateManager::BackgroundUpdate(float dt) {
 
 void UserInputGameStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
+    inCombinationCells.clear();
 }
 
 static void activateADSR(Entity e, float a, float s) {

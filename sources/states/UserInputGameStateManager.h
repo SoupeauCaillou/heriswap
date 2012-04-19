@@ -18,9 +18,6 @@
 #include "GameStateManager.h"
 #include "GridSystem.h"
 #include "Game.h"
-#include "CombinationMarkSystem.h"
-
-
 
 class UserInputGameStateManager : public GameStateManager {
 	public:
@@ -39,4 +36,5 @@ class UserInputGameStateManager : public GameStateManager {
 		bool dragStarted;
 		int originI, originJ;
 		int swapI, swapJ;
+        std::vector<Entity> inCombinationCells;
 };

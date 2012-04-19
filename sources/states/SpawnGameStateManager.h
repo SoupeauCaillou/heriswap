@@ -11,7 +11,6 @@
 #include "Game.h"
 #include "GameStateManager.h"
 #include "GridSystem.h"
-#include "CombinationMarkSystem.h"
 #include "DepthLayer.h"
 
 class SpawnGameStateManager : public GameStateManager {
