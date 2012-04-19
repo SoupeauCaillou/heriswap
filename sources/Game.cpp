@@ -466,9 +466,7 @@ void Game::tick(float dt) {
 		togglePause(false);
 	//sinon si on a change d'etat
 	} else if (newState != datas->state) {
-		if (newState == BlackToSpawn) {
-			datas->state2Manager[Spawn]->Enter();
-		} else if (newState == ModeMenu) {
+		if (newState == ModeMenu) {
 			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
 			datas->mode2Manager[datas->mode]->Setup();
 			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
