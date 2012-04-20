@@ -18,10 +18,6 @@
 #include "systems/ScrollingSystem.h"
 #include "systems/MorphingSystem.h"
 
-#include "GridSystem.h"
-#include "Game.h"
-#include "TwitchSystem.h"
-
 #include "states/GameStateManager.h"
 #include "states/SpawnGameStateManager.h"
 #include "states/UserInputGameStateManager.h"
@@ -41,6 +37,10 @@
 
 #include "DepthLayer.h"
 #include "PlacementHelper.h"
+#include "GridSystem.h"
+#include "Game.h"
+#include "TwitchSystem.h"
+#include "Sound.h"
 
 #define GRIDSIZE 8
 
@@ -110,19 +110,36 @@ class Game::Data {
 			RENDERING(soundButton)->hide = false;
 
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)
-				it->second->Setup();	
-				
+				it->second->Setup();
+
 			for(std::map<GameMode, GameModeManager*>::iterator it=mode2Manager.begin(); it!=mode2Manager.end(); ++it)
 				it->second->Setup();
-				
-			for (int i=0; i<8; i++) {
+
+			for (int i=0; i<2; i++) {
+				musicStress2[i] = theEntityManager.CreateEntity();
+				ADD_COMPONENT(musicStress2[i], Sound);
+				SOUND(musicStress2[i])->type = SoundComponent::MUSIC;
+				SOUND(musicStress2[i])->repeat = false;
+				musicStress1[i] = theEntityManager.CreateEntity();
+				ADD_COMPONENT(musicStress1[i], Sound);
+				SOUND(musicStress1[i])->type = SoundComponent::MUSIC;
+				SOUND(musicStress1[i])->repeat = false;
+				musicMenu[i] = theEntityManager.CreateEntity();
+				ADD_COMPONENT(musicMenu[i], Sound);
+				SOUND(musicMenu[i])->type = SoundComponent::MUSIC;
+				SOUND(musicMenu[i])->repeat = false;
+			} for (int i=0; i<8; i++) {
 				music[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(music[i], Sound);
 				SOUND(music[i])->type = SoundComponent::MUSIC;
 				SOUND(music[i])->repeat = false;
 			}
-
+			menuMusic.timeLoop=64;
+			menuMusic.indice=0;
+			menuMusic.sounds=musicMenu;
+			menuMusic.sound="audio/musique_menu.ogg";
 			float benchPos = - 4.75;
+
 			benchTotalTime = theEntityManager.CreateEntity();
 			ADD_COMPONENT(benchTotalTime, Rendering);
 			ADD_COMPONENT(benchTotalTime, Transformation);
@@ -150,7 +167,6 @@ class Game::Data {
 		GameState state, stateBeforePause;
 		bool stateBeforePauseNeedEnter;
 		Entity logo, logo_bg, sky, decord2nd, decord1er;
-		Entity music[8];
 		std::map<GameState, GameStateManager*> state2Manager;
 		std::map<GameMode, GameModeManager*> mode2Manager;
 		ScoreStorage* storage;
@@ -159,6 +175,8 @@ class Game::Data {
 		Entity cursor;
 
 		Entity soundButton;
+		Canal menuMusic;
+		Entity music[8], musicStress1[2], musicStress2[2], musicMenu[2];
 };
 
 static bool inGameState(GameState state) {
@@ -362,154 +380,6 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 #endif
 }
 
-struct Compatible {
-	std::vector<char> fri;
-	char c;
-	bool operator== (const Compatible & comp) const {
-		return (c==comp.c);
-	}
-	bool operator>= (const Compatible & comp) const {
-		return (c >= comp.c);
-	}
-	bool operator> (const Compatible & comp) const {
-		return (c > comp.c);
-	}
-};
-
-int findCompatible(char c, std::vector<Compatible> &comp) {
-	for (int i=0;i<comp.size();i++)
-		if (comp[i].c==c) return i;
-	return comp.size();
-}
-std::vector<char> intersec(const std::vector<char>& c1, std::vector<char> c2) {
-	std::vector<char> res;
-	for (int i=0;i<c1.size();i++) {
-		for (int j=0;j<c2.size();j++) {
-			if (c1[i]==c2[j]) {
-				res.push_back(c1[i]);
-				c2.erase(c2.begin()+j);
-				j--;
-				break;
-			}
-		}
-	}
-	return res;
-}
-bool identic(const std::vector<char>& c1, std::vector<char> c2) {
-	for (int i=0;i<c1.size();i++) {
-		int j;
-		for (j=0;j<c2.size();j++) {
-			if (c1[i]==c2[j]) {
-				c2.erase(c2.begin()+j);
-				j--;
-				break;
-			}
-		}
-		if (j==c2.size()) return false;
-	}
-	return true;
-}
-
-static void updateMusic(Entity* music, float percentLeft) {
-	//init
-	static std::vector<char> ppal;
-	if (ppal.size()==0) {
-		ppal.push_back('A');
-		ppal.push_back('C');
-		ppal.push_back('E');
-		ppal.push_back('F');
-	}
-	static std::vector<struct Compatible> compatible;
-	if (compatible.size()==0) {
-		for (int i=0;i<7;i++) {
-			Compatible a;
-			a.c = 'A'+i;
-			for (int j=0;j<3;j++) {
-				if (j!=i) a.fri.push_back('A'+j);
-			}
-			compatible.push_back(a);
-		}
-	}
-
-	/* are all started entities done yet ? */
-	/* (and percentLeft > 10%)*/
-	if (percentLeft <= 0 || percentLeft > .1) {
-		for (int i=4; i<8; i++) SOUND(music[i])->stop = true;
-		for (int i=0; i<4; i++) {
-			if (SOUND(music[i])->mainMusic && SOUND(music[i])->sound != InvalidSoundRef)
-				return;
-		}
-	/* or maybe some stress songs...*/
-	} else if (percentLeft != 0) {
-		for (int i=0; i<4; i++) {
-			if (SOUND(music[i])->mainMusic && SOUND(music[i])->sound != InvalidSoundRef) {
-				SOUND(music[4+i])->position = SOUND(music[i])->position;
-				SOUND(music[i])->stop = true;
-				SOUND(music[4+i])->stop = false;
-			}
-		}
-		for (int i=4; i<8; i++) {
-			if (SOUND(music[i])->mainMusic && SOUND(music[i])->sound != InvalidSoundRef) {
-				return;
-			}
-		}
-	}
-
-	int count = MathUtil::RandomInt(4) + 1;
-	LOGW("starting %d music", count);
-
-
-	std::vector<char> l; // all songs id
-	std::vector<char> canPickIn; // songs which can be picked
-
-	int cr = MathUtil::RandomInt(ppal.size());
-	char c = ppal[cr]; // letter from main music
-	int indice = findCompatible(c, compatible); // get his id
-	std::stringstream s1, s2;
-	s1<<"audio/"<<c<<".ogg";
-	s2<<"audio/"<<c<<"stress.ogg";
-	l.push_back(c);
-	SOUND(music[4])->stop = true;
-	SOUND(music[0])->stop = false;
-	SOUND(music[0])->sound = theSoundSystem.loadSoundFile(s1.str(), true);
-	SOUND(music[4])->sound = theSoundSystem.loadSoundFile(s2.str(), true);
-	SOUND(music[0])->mainMusic = true;
-	SOUND(music[4])->mainMusic = true;
-
-	for (int i=0; i<compatible[indice].fri.size(); i++)
-		canPickIn.push_back(compatible[indice].fri[i]); //copying his friends into canPickIn
-
-	for (int i=1; i<count; i++) {
-		if (identic(canPickIn,l)) {
-			LOGI("no more musics can be found; abort at %d musics inserted", i);
-			break;
-		}
-		SoundComponent* sc = SOUND(music[i]);
-
-		do {
-			c = canPickIn[MathUtil::RandomInt(canPickIn.size())];
-		} while (std::find(l.begin(), l.end(), c) != l.end());
-
-		l.push_back(c);
-		std::stringstream s;
-		s << "audio/" << c << ".ogg";
-		sc->sound = theSoundSystem.loadSoundFile(s.str(), true);
-		sc->stop = false;
-		if (std::find(ppal.begin(), ppal.end(), c) != ppal.end()) {
-			sc->mainMusic = true;
-			std::stringstream s2;
-			s2 << "audio/" << c << "stress.ogg";
-			SOUND(music[4+i])->stop = true;
-			SOUND(music[4+i])->sound = theSoundSystem.loadSoundFile(s2.str(), true);
-		} else {
-			sc->mainMusic = false;
-		}
-		
-		indice = findCompatible(c, compatible); // get the song id
-		canPickIn = intersec(compatible[indice].fri, canPickIn); //pickIn = friends[him] U friends[old ones]
-	}
-}
-
 void Game::togglePause(bool activate) {
 	if (activate && datas->state != Pause && pausableState(datas->state)) {
 		datas->stateBeforePause = datas->state;
@@ -563,7 +433,8 @@ void Game::tick(float dt) {
 	}
 	float updateDuration = TimeUtil::getTime();
 	static bool ended = false;
-	float timeLeft; //ended = (timeLeft <= 0);
+	float timeLeft; //ended = (timeLeft<=);
+	static float timeMusicLoop = 65.f; //premier lancement
 
 	GameState newState;
 
@@ -594,7 +465,7 @@ void Game::tick(float dt) {
 			static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode-1];
 			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
 		}
-		
+
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
@@ -653,7 +524,13 @@ void Game::tick(float dt) {
 		datas->mode2Manager[datas->mode]->Reset();
 	}
 
-	updateMusic(datas->music, timeLeft);
+
+	//update music
+	if (pausableState(datas->state) && datas->state != LevelChanged) { //si on joue
+		//if(updateMusic(datas->music, datas->musicStress1, datas->musicStress2, timeLeft, dt, datas->indiceMusic));
+	} else if (!pausableState(datas->state)) { //dans les menus
+		datas->menuMusic.update(dt);
+	}
 
 	theMorphingSystem.Update(dt);
     theTwitchSystem.Update(dt);
