@@ -42,7 +42,7 @@ class GameModeManager {
 		struct AnimatedActor;
 		void SetupCore(int bonus);
 		void ResetCore(int bonus);
-		void UpdateCore(float dt, float obj);
+		void UpdateCore(float dt, float obj, float herissonSpeed = 0);
 		void HideUICore(bool ToHide);
 		float position(float t, std::vector<Vector2> pts);
 		void generateLeaves(int nb);
@@ -78,6 +78,8 @@ class GameModeManager {
 		AnimatedActor* c;
 		std::vector<Vector2> pts;
 		InGameUiHelper uiHelper;
+		
+		Entity sky, decord1er, decor2nd;
 
 	private :
 		std::vector<Render> posBranch;

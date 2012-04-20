@@ -106,7 +106,6 @@ void ModeMenuStateManager::LoadScore(int mode) {
 
 void ModeMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-	theSoundSystem.loadSoundFile("audio/click.wav", false);
 	GameMode m = modeMgr->GetMode();
 	BUTTON(back)->enabled = true;
 	BUTTON(play)->enabled = true;
@@ -136,11 +135,11 @@ void ModeMenuStateManager::Enter() {
 
 GameState ModeMenuStateManager::Update(float dt) {
 	if (BUTTON(play)->clicked) {
-		SOUND(play)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
+		SOUND(play)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 		TEXT_RENDERING(title)->hide = true;
 		return ModeMenuToBlackState;
 	} if (BUTTON(back)->clicked) {
-		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
+		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 		return MainMenu;
 	}
 	return ModeMenu;

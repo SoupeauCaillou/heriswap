@@ -63,7 +63,7 @@ class Game::Data {
 			state2Manager[LogoToBlackState] = new FadeGameStateManager(logo, FadeOut, LogoToBlackState, BlackToMainMenu);
 			state2Manager[BlackToMainMenu] = new FadeGameStateManager(0, FadeIn, BlackToMainMenu, MainMenu);
 			state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(0, FadeOut, ModeMenuToBlackState, BlackToSpawn);
-			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, LevelChanged);
+			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
 			state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI);
 
@@ -159,22 +159,6 @@ class Game::Data {
 				RENDERING(b)->hide = true;
 				benchTimeSystem[allSystems[i]] = b;
 			}
-	#if 0
-		cursor = theEntityManager.CreateEntity();
-		ADD_COMPONENT(cursor, Transformation);
-		TRANSFORM(cursor)->z = DL_Fading;
-		ADD_COMPONENT(cursor, Particule);
-		PARTICULE(cursor)->emissionRate = 50;
-	    PARTICULE(cursor)->texture = InvalidTextureRef;
-	    PARTICULE(cursor)->lifetime = Interval<float>(0.5f, 1.5f);
-	    PARTICULE(cursor)->initialColor = Interval<Color> (Color(1.0, 0, 0, 0.7), Color(0.5, 0, 0, 0.7));
-	    PARTICULE(cursor)->finalColor  = Interval<Color> (Color(0, 0, 1, 0.1), Color(0, 0, 0.5, 0.1));
-		PARTICULE(cursor)->initialSize = Interval<float>(0.15, 0.2);
-		PARTICULE(cursor)->finalSize = Interval<float>(0.01, 0.015);
-		PARTICULE(cursor)->forceDirection = Interval<float>(0.1, 3);
-		PARTICULE(cursor)->forceAmplitude  = Interval<float>(20, 100);
-		PARTICULE(cursor)->mass = 1;
-	#endif
 		}
 		//bench data
 		std::map<std::string, Entity> benchTimeSystem;
@@ -309,7 +293,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	SCROLLING(datas->sky)->images.push_back("ciel1.png");
 	SCROLLING(datas->sky)->images.push_back("ciel2.png");
 	SCROLLING(datas->sky)->images.push_back("ciel3.png");
-	SCROLLING(datas->sky)->speed = Vector2(-0.3, 0);
+	SCROLLING(datas->sky)->speed = Vector2(-0.01, 0);
 	SCROLLING(datas->sky)->displaySize = Vector2(TRANSFORM(datas->sky)->size.X * 1.01, TRANSFORM(datas->sky)->size.Y);
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
 
@@ -323,7 +307,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_1.png");
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_2.png");
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_3.png");
-	SCROLLING(datas->decord2nd)->speed = Vector2(-.7, 0);
+	SCROLLING(datas->decord2nd)->speed = Vector2(-.01, 0);
 	SCROLLING(datas->decord2nd)->displaySize = Vector2(TRANSFORM(datas->decord2nd)->size.X * 1.01, TRANSFORM(datas->decord2nd)->size.Y);
 
 	datas->decord1er = theEntityManager.CreateEntity();
@@ -336,7 +320,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	SCROLLING(datas->decord1er)->images.push_back("decor1er_1.png");
 	SCROLLING(datas->decord1er)->images.push_back("decor1er_2.png");
 	SCROLLING(datas->decord1er)->images.push_back("decor1er_3.png");
-	SCROLLING(datas->decord1er)->speed = Vector2(-1.5, 0);
+	SCROLLING(datas->decord1er)->speed = Vector2(-0.01, 0);
 	SCROLLING(datas->decord1er)->displaySize = Vector2(TRANSFORM(datas->decord1er)->size.X * 1.01, TRANSFORM(datas->decord1er)->size.Y);
 
 	Entity branch = theEntityManager.CreateEntity();
@@ -348,6 +332,10 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	RENDERING(branch)->hide = false;
 	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
 
+	datas->mode2Manager[Normal]->sky = datas->sky;
+	datas->mode2Manager[Normal]->decord1er = datas->decord1er;
+	datas->mode2Manager[Normal]->decor2nd = datas->decord2nd;
+			
 	datas->state2Manager[datas->state]->Enter();
 }
 
@@ -488,7 +476,7 @@ void Game::tick(float dt) {
 		BUTTON(datas->soundButton)->clicked = false;
 		datas->storage->soundEnable(true); //on met a jour la table sql
 		theSoundSystem.mute = !theSoundSystem.mute;
-		if (!theSoundSystem.mute) SOUND(datas->soundButton)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
+		if (!theSoundSystem.mute) SOUND(datas->soundButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 		if (theSoundSystem.mute) RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
 		else RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
 	}

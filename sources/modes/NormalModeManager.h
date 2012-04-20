@@ -30,4 +30,6 @@ class NormalGameModeManager : public GameModeManager {
 	private:
 		int level, remain[8];
 		bool levelUp;
+		float nextHerissonSpeed;
+		float levelMoveDuration;
 };

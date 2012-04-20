@@ -23,13 +23,24 @@ void GameModeManager::switchAnim(GameModeManager::AnimatedActor* a) {
 }
 
 float GameModeManager::position(float t, std::vector<Vector2> pts) {
-	if (t<=pts[0].X) return pts[0].Y;
-	for (int i = 0; i<pts.size()-1; i++) {
-		if (t>pts[i].X && t<pts[i+1].X) {
-			return MathUtil::Lerp(pts[i].Y, pts[i+1].Y, (t-pts[i].X)/(pts[i+1].X-pts[i].X));
+	float p = 0;
+	
+	if (t<=pts[0].X) {
+		p = pts[0].Y;
+	} else {
+		int i;
+		for (i = 0; i<pts.size()-1; i++) {
+			if (t>pts[i].X && t<pts[i+1].X) {
+				p = MathUtil::Lerp(pts[i].Y, pts[i+1].Y, (t-pts[i].X)/(pts[i+1].X-pts[i].X));
+				break;
+			}
+		}
+		if (i == pts.size()-1) {
+			p = pts[pts.size()-1].Y;
 		}
 	}
-	return pts[pts.size()-1].Y;
+	return MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
+	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, p);
 }
 void GameModeManager::LoadHerissonTexture(int type) {
 	std::stringstream t;
@@ -125,17 +136,31 @@ void GameModeManager::fillVec() {
 		t--;
 	}
 }
-void GameModeManager::UpdateCore(float dt, float obj) {
-    float progress = GameModeManager::position(obj, pts); // E [0, 1]
-	float targetPosX = MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
-	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, progress);
-    float distance = targetPosX - TRANSFORM(herisson)->position.X;
-	if (distance > 0.f) {
-		float vitesse = MathUtil::Max(.1f, distance/(4*dt));
+void GameModeManager::UpdateCore(float dt, float obj, float herissonSpeed) {
+	// default herisson behavior: move to
+	TransformationComponent* tc = TRANSFORM(herisson);
+	float newPos = tc->position.X;
+	if (herissonSpeed == 0) {
+		float targetPosX = GameModeManager::position(obj, pts);
+    	float distance = targetPosX - tc->position.X;
+		if (distance != 0.f) {
+			herissonSpeed = (distance > 0) ? 1.0f : -1.0f;
+			if (distance < 0) {
+				newPos = MathUtil::Max(targetPosX, tc->position.X + herissonSpeed*dt);
+			} else {
+				newPos = MathUtil::Min(targetPosX, tc->position.X + herissonSpeed*dt);
+			}
+		}
+	} else {
+		newPos = tc->position.X + herissonSpeed * dt;
+	}
+	tc->position.X = newPos;
+	
+	if (herissonSpeed > 0) {
 		switchAnim(c);
-		TRANSFORM(herisson)->position.X += vitesse*dt;
-		distance -= vitesse*dt;
-	} else distance = 0;
+	} else {	
+		RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
+	}
 	uiHelper.update(dt);
 }
 
