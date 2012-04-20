@@ -29,6 +29,7 @@
 #include "states/PauseStateManager.h"
 #include "states/FadeStateManager.h"
 #include "states/ModeMenuStateManager.h"
+#include "states/LogoStateManager.h"
 
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
@@ -59,11 +60,12 @@ class Game::Data {
 
 			state = BlackToLogoState;
 
-			state2Manager[BlackToLogoState] = new FadeGameStateManager(logo, FadeIn, BlackToLogoState, LogoToBlackState, 1.5);
-			state2Manager[LogoToBlackState] = new FadeGameStateManager(logo, FadeOut, LogoToBlackState, BlackToMainMenu);
-			state2Manager[BlackToMainMenu] = new FadeGameStateManager(0, FadeIn, BlackToMainMenu, MainMenu);
-			state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(0, FadeOut, ModeMenuToBlackState, BlackToSpawn);
-			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
+			state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo);
+			state2Manager[Logo] = new LogoStateManager(LogoToBlackState, logo);
+			state2Manager[LogoToBlackState] = new FadeGameStateManager(FadeOut, LogoToBlackState, BlackToMainMenu);
+			state2Manager[BlackToMainMenu] = new FadeGameStateManager(FadeIn, BlackToMainMenu, MainMenu);
+			state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(FadeOut, ModeMenuToBlackState, BlackToSpawn);
+			state2Manager[BlackToSpawn] = new FadeGameStateManager(FadeIn, BlackToSpawn, Spawn);
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
 			state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI);
 
@@ -83,10 +85,10 @@ class Game::Data {
 			ADD_COMPONENT(logo, Rendering);
 			ADD_COMPONENT(logo, Transformation);
 			TRANSFORM(logo)->position = Vector2(0,0);
-			TRANSFORM(logo)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::ScreenWidth);
-			RENDERING(logo)->hide = true;
+			TRANSFORM(logo)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(869));
+			RENDERING(logo)->hide = false;
 			TRANSFORM(logo)->z = DL_Logo;
-			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("logo.png");
+			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("soupe_logo.png");
 
 			logo_bg = theEntityManager.CreateEntity();
 			ADD_COMPONENT(logo_bg, Rendering);
@@ -205,6 +207,18 @@ static bool pausableState(GameState state) {
 		default:
 			return false;
 	}
+}
+
+static bool fadeLogoState(GameState state) {
+	switch (state) {
+		case BlackToLogoState:
+		case LogoToBlackState:
+		case BlackToMainMenu:
+		case Logo:
+			return true;
+		default:
+			return false;
+	}	
 }
 
 static const float offset = 0.2;
@@ -466,6 +480,8 @@ void Game::tick(float dt) {
 				//reference title into mode menu from main menu
 			static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode-1];
 			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
+		} else if (newState == BlackToMainMenu) {
+			RENDERING(datas->logo)->hide = true;
 		}
 
 		datas->state2Manager[datas->state]->Exit();
@@ -530,7 +546,7 @@ void Game::tick(float dt) {
 	//update music
 	if (pausableState(datas->state) && datas->state != LevelChanged) { //si on joue
 		//if(updateMusic(datas->music, datas->musicStress1, datas->musicStress2, timeLeft, dt, datas->indiceMusic));
-	} else if (!pausableState(datas->state)) { //dans les menus
+	} else if (!pausableState(datas->state) && !fadeLogoState(datas->state)) { //dans les menus
 		datas->menuMusic.update(dt);
 	}
 

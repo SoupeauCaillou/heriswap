@@ -21,7 +21,8 @@ enum GameState {
 	LogoToBlackState,
 	BlackToMainMenu,
 	ModeMenuToBlackState,
-	BlackToSpawn
+	BlackToSpawn,
+	Logo
 };
 
 class GameModeManager;

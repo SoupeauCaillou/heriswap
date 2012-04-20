@@ -2,8 +2,8 @@
 #include "base/TouchInputManager.h"
 #include "../DepthLayer.h"
 
-FadeGameStateManager::FadeGameStateManager(Entity eFade, FadeType fade, GameState whoAmI, GameState whoIsNext, float t):
-	eThing(eFade), fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(t) {
+FadeGameStateManager::FadeGameStateManager(FadeType fade, GameState whoAmI, GameState whoIsNext, float t):
+	fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(t) {
 }
 
 void FadeGameStateManager::Setup() {
@@ -24,7 +24,6 @@ void FadeGameStateManager::Setup() {
 	ADSR(eFading)->sustainValue = 1.0;
 	ADSR(eFading)->releaseTiming = .2;
 	ADSR(eFading)->attackMode = Quadratic;
-	if (eThing) RENDERING(eThing)->hide = true;
 }
 
 static void updateColor(Entity eFading, FadeType fading) {
@@ -38,7 +37,6 @@ static void updateColor(Entity eFading, FadeType fading) {
 void FadeGameStateManager::Enter() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	RENDERING(eFading)->hide = false;
-	if (eThing) RENDERING(eThing)->hide = false;
 	ADSR(eFading)->active = true;
 
 	accum = 0;
@@ -63,6 +61,5 @@ GameState FadeGameStateManager::Update(float dt) {
 void FadeGameStateManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	RENDERING(eFading)->hide = true;
-	if (eThing) RENDERING(eThing)->hide = true;
 	ADSR(eFading)->active = false;
 }

@@ -52,6 +52,7 @@
     <None Include="sources\CombinationMark.h" />
     <None Include="sources\states\ModeMenuStateManager.h" />
     <None Include="sources\Sound.h" />
+    <None Include="sources\states\LogoStateManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -79,5 +80,6 @@
     <Compile Include="sources\CombinationMark.cpp" />
     <Compile Include="sources\states\ModeMenuStateManager.cpp" />
     <Compile Include="sources\Sound.cpp" />
+    <Compile Include="sources\states\LogoStateManager.cpp" />
   </ItemGroup>
 </Project>

@@ -20,5 +20,6 @@
 #define DL_MainMenuUI 0.5
 #define DL_BehindLogo 0.53
 #define DL_Logo 0.55
+#define DL_LogoAnim 0.56
 #define DL_Benchmark 0.6
 #define DL_Fading 0.65
