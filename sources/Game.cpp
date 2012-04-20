@@ -110,17 +110,31 @@ class Game::Data {
 			RENDERING(soundButton)->hide = false;
 
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)
-				it->second->Setup();	
-				
+				it->second->Setup();
+
 			for(std::map<GameMode, GameModeManager*>::iterator it=mode2Manager.begin(); it!=mode2Manager.end(); ++it)
 				it->second->Setup();
-				
-			for (int i=0; i<8; i++) {
+
+			for (int i=0; i<2; i++) {
+				musicStress2[i] = theEntityManager.CreateEntity();
+				ADD_COMPONENT(musicStress2[i], Sound);
+				SOUND(musicStress2[i])->type = SoundComponent::MUSIC;
+				SOUND(musicStress2[i])->repeat = false;
+				musicStress1[i] = theEntityManager.CreateEntity();
+				ADD_COMPONENT(musicStress1[i], Sound);
+				SOUND(musicStress1[i])->type = SoundComponent::MUSIC;
+				SOUND(musicStress1[i])->repeat = false;
+				musicMenu[i] = theEntityManager.CreateEntity();
+				ADD_COMPONENT(musicMenu[i], Sound);
+				SOUND(musicMenu[i])->type = SoundComponent::MUSIC;
+				SOUND(musicMenu[i])->repeat = false;
+			} for (int i=0; i<8; i++) {
 				music[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(music[i], Sound);
 				SOUND(music[i])->type = SoundComponent::MUSIC;
 				SOUND(music[i])->repeat = false;
 			}
+			indiceMusic=indiceMenuMusic=0;
 
 			float benchPos = - 5.0*windowH/windowW + 0.5;
 			benchTotalTime = theEntityManager.CreateEntity();
@@ -166,7 +180,8 @@ class Game::Data {
 		GameState state, stateBeforePause;
 		bool stateBeforePauseNeedEnter;
 		Entity logo, logo_bg, sky, decord2nd, decord1er;
-		Entity music[8];
+		Entity music[8], musicStress1[2], musicStress2[2], musicMenu[2];
+		int indiceMusic, indiceMenuMusic;
 		std::map<GameState, GameStateManager*> state2Manager;
 		std::map<GameMode, GameModeManager*> mode2Manager;
 		ScoreStorage* storage;
@@ -420,8 +435,37 @@ bool identic(const std::vector<char>& c1, std::vector<char> c2) {
 	return true;
 }
 
-static void updateMusic(Entity* music, float percentLeft) {
+static void updateMusic(Entity* music, Entity* musicStress1, Entity* musicStress2, float percentLeft, float dt) {
 	//init
+	static float time = 0.f;
+
+	time+=dt;
+	/* are all started entities done yet ? */
+	/* (and percentLeft > 45%)*/
+	if (percentLeft <= 0 || percentLeft > .2) {
+		for (int i=0; i<2; i++) SOUND(musicStress1[i])->stop = true;
+		for (int i=0; i<4; i++) {
+			if (SOUND(music[i])->mainMusic && SOUND(music[i])->sound != InvalidSoundRef)
+				return;
+		}
+	/* or maybe some stress songs... 23%*/
+	} else if (percentLeft != 0) {
+		for (int i=0; i<2; i++) {
+			if (SOUND(music[i])->mainMusic && SOUND(music[i])->sound != InvalidSoundRef) {
+				SOUND(music[4+i])->position = SOUND(music[i])->position;
+				SOUND(music[i])->stop = true;
+				SOUND(music[4+i])->stop = false;
+			}
+		}
+		for (int i=4; i<8; i++) {
+			if (SOUND(music[i])->mainMusic && SOUND(music[i])->sound != InvalidSoundRef) {
+				return;
+			}
+		}
+	}
+}
+
+static void newMusics(Entity* music) {
 	static std::vector<char> ppal;
 	if (ppal.size()==0) {
 		ppal.push_back('A');
@@ -441,34 +485,8 @@ static void updateMusic(Entity* music, float percentLeft) {
 		}
 	}
 
-	/* are all started entities done yet ? */
-	/* (and percentLeft > 10%)*/
-	if (percentLeft <= 0 || percentLeft > .1) {
-		for (int i=4; i<8; i++) SOUND(music[i])->stop = true;
-		for (int i=0; i<4; i++) {
-			if (SOUND(music[i])->mainMusic && SOUND(music[i])->sound != InvalidSoundRef)
-				return;
-		}
-	/* or maybe some stress songs...*/
-	} else if (percentLeft != 0) {
-		for (int i=0; i<4; i++) {
-			if (SOUND(music[i])->mainMusic && SOUND(music[i])->sound != InvalidSoundRef) {
-				SOUND(music[4+i])->position = SOUND(music[i])->position;
-				SOUND(music[i])->stop = true;
-				SOUND(music[4+i])->stop = false;
-			}
-		}
-		for (int i=4; i<8; i++) {
-			if (SOUND(music[i])->mainMusic && SOUND(music[i])->sound != InvalidSoundRef) {
-				return;
-			}
-		}
-	}
-
-	int count = MathUtil::RandomInt(4) + 1;
+		int count = MathUtil::RandomInt(4) + 1;
 	LOGW("starting %d music", count);
-
-
 	std::vector<char> l; // all songs id
 	std::vector<char> canPickIn; // songs which can be picked
 
@@ -514,7 +532,7 @@ static void updateMusic(Entity* music, float percentLeft) {
 		} else {
 			sc->mainMusic = false;
 		}
-		
+
 		indice = findCompatible(c, compatible); // get the song id
 		canPickIn = intersec(compatible[indice].fri, canPickIn); //pickIn = friends[him] U friends[old ones]
 	}
@@ -574,6 +592,7 @@ void Game::tick(float dt) {
 	float updateDuration = TimeUtil::getTime();
 	static bool ended = false;
 	float timeLeft; //ended = (timeLeft<=);
+	static float timeMusicLoop = 65.f; //premier lancement
 
 	GameState newState;
 
@@ -602,7 +621,7 @@ void Game::tick(float dt) {
 			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
 			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
 		}
-		
+
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
@@ -658,7 +677,16 @@ void Game::tick(float dt) {
 		datas->mode2Manager[datas->mode]->Reset();
 	}
 
-	updateMusic(datas->music, timeLeft);
+	if (pausableState(datas->state) && datas->state != LevelChanged) //si on joue
+		updateMusic(datas->music, datas->musicStress1, datas->musicStress2, timeLeft, dt);
+	else if (!pausableState(datas->state)) { //dans les menus
+		if (timeMusicLoop>=64.) {
+			timeMusicLoop=0;
+			datas->indiceMenuMusic = (datas->indiceMenuMusic+1)%2;
+			SOUND(datas->musicMenu[datas->indiceMenuMusic])->sound = theSoundSystem.loadSoundFile("musicmenu.ogg", true);
+		}
+		timeMusicLoop+=dt;
+	}
 
 	theMorphingSystem.Update(dt);
     theTwitchSystem.Update(dt);
