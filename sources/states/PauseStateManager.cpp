@@ -30,7 +30,7 @@ void PauseStateManager::Setup() {
 	ADD_COMPONENT(bRestart, Sound);
 	RENDERING(bRestart)->color = Color(.0, 1.0, .0, .5);
 	TRANSFORM(bRestart)->z = DL_PauseUI;
-	BUTTON(bRestart)->clicked = false;
+	BUTTON(bRestart)->enabled = false;
 	CONTAINER(bRestart)->includeChildren = true;
 	CONTAINER(bRestart)->entities.push_back(eRestart);
 	SOUND(bRestart)->type = SoundComponent::EFFECT;
@@ -48,7 +48,7 @@ void PauseStateManager::Setup() {
 	ADD_COMPONENT(bAbort, Button);
 	ADD_COMPONENT(bAbort, Rendering);
 	ADD_COMPONENT(bAbort, Sound);
-	BUTTON(bAbort)->clicked = false;
+	BUTTON(bAbort)->enabled = false;
 	RENDERING(bAbort)->color = Color(.0, 1.0, .0, .5);
 	TRANSFORM(bAbort)->z = DL_CombinationMark;
 	CONTAINER(bAbort)->includeChildren = true;
@@ -61,10 +61,10 @@ void PauseStateManager::Enter() {
 	theSoundSystem.loadSoundFile("audio/click.wav", false);
 	TEXT_RENDERING(eRestart)->hide = false;
 	RENDERING(bRestart)->hide = false;
-	BUTTON(bRestart)->clicked = false;
+	BUTTON(bRestart)->enabled = true;
 	TEXT_RENDERING(eAbort)->hide = false;
 	RENDERING(bAbort)->hide = false;
-	BUTTON(bAbort)->clicked = false;
+	BUTTON(bAbort)->enabled = true;
 }
 
 GameState PauseStateManager::Update(float dt) {
@@ -82,6 +82,8 @@ void PauseStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	TEXT_RENDERING(eRestart)->hide = true;
 	RENDERING(bRestart)->hide = true;
+	BUTTON(bRestart)->enabled = false;
 	TEXT_RENDERING(eAbort)->hide = true;
 	RENDERING(bAbort)->hide = true;
+	BUTTON(bAbort)->enabled = false;
 }

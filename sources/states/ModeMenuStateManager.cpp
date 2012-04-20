@@ -41,7 +41,8 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(play)->z = DL_MainMenuUI;
 	RENDERING(play)->color = Color(0.f,1.f,0.f);
 	SOUND(play)->type = SoundComponent::EFFECT;
-
+	BUTTON(play)->enabled = false;
+	
 	yourScore = theTextRenderingSystem.CreateLocalEntity(2);
 	TRANSFORM(yourScore)->z = DL_MainMenuUI;
 	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(800));
@@ -60,6 +61,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(back)->z = DL_MainMenuUI;
 	RENDERING(back)->color = Color(1.f,0.f,0.f);
 	SOUND(back)->type = SoundComponent::EFFECT;
+	BUTTON(back)->enabled = false;
 
 	playerName.clear();
 	inputUI->getName(playerName);
@@ -86,7 +88,7 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
 
-			if (!alreadyGreen && ended && ((entries[i].points == modeMgr->points || (mode==ScoreAttack && entries[i].time-modeMgr->time<0.01f)) && entries[i].name == playerName)) {
+			if (!alreadyGreen && ended && ((entries[i].points == modeMgr->points && mode!=ScoreAttack) || (mode==ScoreAttack && entries[i].time-modeMgr->time<0.01f)) && entries[i].name == playerName) {
 				trcP->color = Color(0.f,1.f,0.f);
 				trcN->color = Color(0.f,1.f,0.f);
 				alreadyGreen = true;
@@ -106,8 +108,8 @@ void ModeMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	theSoundSystem.loadSoundFile("audio/click.wav", false);
 	GameMode m = modeMgr->GetMode();
-	BUTTON(play)->clicked = false;
-	BUTTON(back)->clicked = false;
+	BUTTON(back)->enabled = true;
+	BUTTON(play)->enabled = true;
 	if (ended) {
 		if (playerName.length() == 0) {
 			inputUI->show();
@@ -135,10 +137,7 @@ void ModeMenuStateManager::Enter() {
 GameState ModeMenuStateManager::Update(float dt) {
 	if (BUTTON(play)->clicked) {
 		SOUND(play)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
-		//on cache le titre
-		std::vector<Entity> v = theMorphingSystem.RetrieveAllEntityWithComponent();
-		for (int i=0; i<v.size(); i++) TEXT_RENDERING(v[i])->hide = true;
-
+		TEXT_RENDERING(title)->hide = true;
 		return ModeMenuToBlackState;
 	} if (BUTTON(back)->clicked) {
 		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
@@ -157,5 +156,8 @@ void ModeMenuStateManager::Exit() {
 		TEXT_RENDERING(scoresPoints[i])->hide = true;
 	}
 	ended = false;
+	BUTTON(back)->enabled = false;
+	BUTTON(play)->enabled = false;
+
 	modeMgr->Reset();
 }
