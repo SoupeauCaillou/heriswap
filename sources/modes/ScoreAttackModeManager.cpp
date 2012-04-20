@@ -6,7 +6,6 @@ ScoreAttackGameModeManager::ScoreAttackGameModeManager() {
 	time = 0.;
 	points=0;
 	bonus = MathUtil::RandomInt(8);
-	ResetCore();
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(300,0.125));
 	pts.push_back(Vector2(750,0.25));
@@ -22,7 +21,14 @@ void ScoreAttackGameModeManager::Setup() {
 	HideUI(true);
 }
 
-
+void ScoreAttackGameModeManager::Reset() {
+	time = 0;
+	points = 0;
+	branchLeaves.clear();
+	bonus = MathUtil::RandomInt(8);
+	ResetCore(bonus);
+	HideUI(true);
+}
 
 float ScoreAttackGameModeManager::Update(float dt) {
 	//on met à jour le temps si on est dans userinput
@@ -46,15 +52,6 @@ void ScoreAttackGameModeManager::LevelUp() {
 bool ScoreAttackGameModeManager::LeveledUp() {
 	return false;
 }
-
-void ScoreAttackGameModeManager::Reset() {
-	time = 0;
-	points = 0;
-	branchLeaves.clear();
-	bonus = MathUtil::RandomInt(8);
-	ResetCore();
-}
-
 
 void ScoreAttackGameModeManager::HideUI(bool toHide) {
 	HideUICore(toHide);

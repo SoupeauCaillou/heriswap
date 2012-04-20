@@ -330,6 +330,13 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	RENDERING(branch)->hide = false;
 	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
 
+
+	//reference title into mode menu from main menu
+	static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = 	static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->title;
+	
+
+
+
 	datas->state2Manager[datas->state]->Enter();
 }
 
@@ -597,7 +604,7 @@ void Game::tick(float dt) {
 			LOGI("aborted. going to main menu");
 			hideEveryThing(true, false);
 			newState = MainMenu;
-			static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->ended = true;
+			static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->ended = false;
 		} else if (newState == ModeMenu) {
 			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
 			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
@@ -653,7 +660,7 @@ void Game::tick(float dt) {
 	theButtonSystem.Update(dt);
     theParticuleSystem.Update(dt);
 
-	if (newState == ModeMenu) {
+	if (datas->state != newState && newState == ModeMenu) {
 		theGridSystem.DeleteAll();
 		datas->mode2Manager[datas->mode]->Reset();
 	}
