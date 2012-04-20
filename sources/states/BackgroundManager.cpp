@@ -1,5 +1,6 @@
 #include "BackgroundManager.h"
 #include "../DepthLayer.h"
+#include "../PlacementHelper.h"
 
 #define CAMERASPEED -1.f
 struct BackgroundManager::Actor {
@@ -16,17 +17,15 @@ struct BackgroundManager::AnimatedActor {
 };
 
 BackgroundManager::BackgroundManager(float windowHeight) {
-	#define GIMP_Y_TO_GAME(x) -(windowHeight * (x - 640.0f) / 1280.0f)
-	cloudY[0] = Interval<float>(GIMP_Y_TO_GAME(96.0), GIMP_Y_TO_GAME(252));
-	cloudY[1] = Interval<float>(GIMP_Y_TO_GAME(310), GIMP_Y_TO_GAME(490));
-	cloudY[2] = Interval<float>(GIMP_Y_TO_GAME(570), GIMP_Y_TO_GAME(640));
+	cloudY[0] = Interval<float>(PlacementHelper::GimpYToScreen(70.0), PlacementHelper::GimpYToScreen(240));
+	cloudY[1] = Interval<float>(PlacementHelper::GimpYToScreen(390), PlacementHelper::GimpYToScreen(490));
+	cloudY[2] = Interval<float>(PlacementHelper::GimpYToScreen(560), PlacementHelper::GimpYToScreen(650));
 
-	#define GIMP_W_TO_GAME(x) (10.0 * x / 800.0f)
-	cloudSize[0] = Interval<float>(GIMP_W_TO_GAME(230), GIMP_W_TO_GAME(410));
-	cloudSize[1] = Interval<float>(GIMP_W_TO_GAME(290), GIMP_W_TO_GAME(190));
-	cloudSize[2] = Interval<float>(GIMP_W_TO_GAME(100), GIMP_W_TO_GAME(200));
+	cloudSize[0] = Interval<float>(PlacementHelper::GimpWidthToScreen(230), PlacementHelper::GimpWidthToScreen(380));
+	cloudSize[1] = Interval<float>(PlacementHelper::GimpWidthToScreen(190), PlacementHelper::GimpWidthToScreen(230));
+	cloudSize[2] = Interval<float>(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpWidthToScreen(180));
 
-	cloudSpeed[0] = Interval<float>(-0.5, -0.3);
+	cloudSpeed[0] = Interval<float>(-0.4, -0.25);
 	cloudSpeed[1] = Interval<float>(-0.25, -0.13);
 	cloudSpeed[2] = Interval<float>(-0.1, -0.03);
 
@@ -53,15 +52,13 @@ BackgroundManager::~BackgroundManager() {
 
 void BackgroundManager::Setup() {
 	for(int j=0; j<3; j++) {
-		for(int i=0; i<3; i++) {
-			Actor* c = new Actor();
-			Entity e = theEntityManager.CreateEntity();
-			theEntityManager.AddComponent(e, &theTransformationSystem);
-			theEntityManager.AddComponent(e, &theADSRSystem);
-			theEntityManager.AddComponent(e, &theRenderingSystem);
-			c->e = e;
-			clouds.push_back(initCloud(c, j));
-		}
+		Actor* c = new Actor();
+		Entity e = theEntityManager.CreateEntity();
+		theEntityManager.AddComponent(e, &theTransformationSystem);
+		theEntityManager.AddComponent(e, &theADSRSystem);
+		theEntityManager.AddComponent(e, &theRenderingSystem);
+		c->e = e;
+		clouds.push_back(initCloud(c, j));
 	}
 }
 

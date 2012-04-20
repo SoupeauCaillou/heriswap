@@ -77,7 +77,7 @@ class Game::Data {
 
 		void Setup(int windowW, int windowH) {
 			BackgroundManager* bg = new BackgroundManager((10.0 * windowH) / windowW);
-			bg->cloudStartX = Interval<float>(8.0,25.0);
+			bg->cloudStartX = Interval<float>(0.0,15.0);
 			state2Manager[Background] = bg;
 
 			ADD_COMPONENT(logo, Rendering);
@@ -159,6 +159,8 @@ class Game::Data {
 				RENDERING(b)->hide = true;
 				benchTimeSystem[allSystems[i]] = b;
 			}
+			
+			bg->cloudStartX = Interval<float>(8.0,15.0);
 		}
 		//bench data
 		std::map<std::string, Entity> benchTimeSystem;
