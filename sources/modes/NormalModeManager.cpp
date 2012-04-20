@@ -53,7 +53,10 @@ void NormalGameModeManager::Reset() {
 }
 
 float NormalGameModeManager::Update(float dt) {
-	RENDERING(herisson)->hide = false;
+	if (RENDERING(herisson)->hide) {
+		RENDERING(herisson)->hide = false;
+		generateLeaves(6);
+	}
 	time+=dt;
 	LevelUp();
 	return (limit - time)/limit;
@@ -130,7 +133,6 @@ void NormalGameModeManager::LevelUp() {
 		level++;
 		levelUp = true;
 
-		generateLeaves(6);
 		time -= 20;
 		if (time < 0)
 			time = 0;

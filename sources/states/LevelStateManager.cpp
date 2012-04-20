@@ -125,16 +125,18 @@ GameState LevelStateManager::Update(float dt) {
 		TRANSFORM(it->e)->position = it->pos - Vector2(0,ADSR(eGrid)->value);
 	}
 	
-	if (duration > 7) {
+	if (duration > 6) {
 		MorphingComponent* mc = MORPHING(eBigLevel);
 		for (int i=0; i<mc->elements.size(); i++) {
 			delete mc->elements[i];
 		}
 		mc->elements.clear();
 		// move big score to small score
-		MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<Vector2> (&TEXT_RENDERING(eBigLevel)->uvSize, TEXT_RENDERING(eBigLevel)->uvSize, TEXT_RENDERING(smallLevel)->uvSize));
-		MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<Vector2> (&TRANSFORM(eBigLevel)->position, TRANSFORM(eBigLevel)->position, TRANSFORM(eBigLevel)->position));
-		MORPHING(eBigLevel)->active = true;
+		mc->elements.push_back(new TypedMorphElement<Vector2> (&TEXT_RENDERING(eBigLevel)->charSize, TEXT_RENDERING(eBigLevel)->charSize, TEXT_RENDERING(smallLevel)->charSize));
+		mc->elements.push_back(new TypedMorphElement<Vector2> (&TRANSFORM(eBigLevel)->position, TRANSFORM(eBigLevel)->position, TRANSFORM(smallLevel)->position));
+		mc->active = true;
+		mc->activationTime = 0;
+		mc->timing = 0.5;
 	}
 
 	if (SOUND(eBigLevel)->sound == InvalidSoundRef || duration > 8) {
@@ -164,5 +166,5 @@ void LevelStateManager::Exit() {
 	// hide big level
 	TEXT_RENDERING(eBigLevel)->hide = true;
 	// show small level
-	TEXT_RENDERING(smallLevel)->hide = false;
+	TEXT_RENDERING(smallLevel)->color.a = 1;
 }
