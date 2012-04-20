@@ -51,7 +51,7 @@ public class TilematchActivity extends Activity {
         	mGLView.setRenderer(r);
         	TilematchActivity.openGLESVersion = 1;
         }
-         
+       
         mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         rl.addView(mGLView);
         // rl.bringChildToFront(findViewById(R.id.enter_name));
