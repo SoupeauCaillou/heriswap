@@ -122,12 +122,12 @@ class Game::Data {
 				SOUND(music[i])->repeat = false;
 			}
 
-			float benchPos = - 5.0*windowH/windowW + 0.5;
+			float benchPos = - 4.75;
 			benchTotalTime = theEntityManager.CreateEntity();
 			ADD_COMPONENT(benchTotalTime, Rendering);
 			ADD_COMPONENT(benchTotalTime, Transformation);
 			TRANSFORM(benchTotalTime)->position = Vector2(0,benchPos);
-			TRANSFORM(benchTotalTime)->size = Vector2(10,1);
+			TRANSFORM(benchTotalTime)->size = Vector2(10,0.5);
 			TRANSFORM(benchTotalTime)->z = DL_Benchmark;
 
 			std::vector<std::string> allSystems = ComponentSystem::registeredSystemNames();
@@ -136,7 +136,7 @@ class Game::Data {
 				ADD_COMPONENT(b, Rendering);
 				ADD_COMPONENT(b, Transformation);
 				TRANSFORM(b)->position = Vector2(0, benchPos);
-				TRANSFORM(b)->size = Vector2(.8,0.8);
+				TRANSFORM(b)->size = Vector2(.8,0.4);
 				TRANSFORM(b)->z = DL_Benchmark;
 				RENDERING(b)->color = (i % 2) ? Color(0.1, 0.1, 0.1,0.5):Color(0.8,0.8,0.8,0.5);
 				RENDERING(b)->hide = true;
@@ -573,7 +573,7 @@ void Game::tick(float dt) {
 	}
 	float updateDuration = TimeUtil::getTime();
 	static bool ended = false;
-	float timeLeft; //ended = (timeLeft<=);
+	float timeLeft; //ended = (timeLeft <= 0);
 
 	GameState newState;
 
@@ -705,7 +705,7 @@ void Game::bench(bool active, float updateDuration, float dt) {
 				RENDERING(it->second)->hide = false;
 				x += width;
 
-				// LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
+				LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
 			}
 
 			// LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
