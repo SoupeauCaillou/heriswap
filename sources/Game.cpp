@@ -317,7 +317,9 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	datas->mode2Manager[Normal]->sky = datas->sky;
 	datas->mode2Manager[Normal]->decord1er = datas->decord1er;
 	datas->mode2Manager[Normal]->decor2nd = datas->decord2nd;
-			
+
+	static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel = datas->mode2Manager[Normal]->uiHelper.smallLevel;
+
 	datas->state2Manager[datas->state]->Enter();
 }
 
@@ -616,6 +618,9 @@ void Game::tick(float dt) {
 		ended = timeLeft <= 0;
 		//si on change de niveau
 		if (datas->mode2Manager[datas->mode]->LeveledUp()) {
+			NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[datas->mode]);
+			static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel = m->currentLevel();
+
 			datas->state2Manager[datas->state]->Exit();
 			datas->state = LevelChanged;
 			datas->state2Manager[datas->state]->Enter();

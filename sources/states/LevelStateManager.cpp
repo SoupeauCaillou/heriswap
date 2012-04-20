@@ -3,8 +3,10 @@
 #include "systems/RenderingSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/SoundSystem.h"
+#include "systems/MorphingSystem.h"
 #include "PlacementHelper.h"
 #include "DepthLayer.h"
+#include <sstream>
 
 LevelStateManager::LevelStateManager() {
 
@@ -92,7 +94,9 @@ void LevelStateManager::Enter() {
 		feuilles.push_back(truc);
 	}
 	
-	TEXT_RENDERING(eBigLevel)->text = "14";
+	std::stringstream a;
+	a << currentLevel;
+	TEXT_RENDERING(eBigLevel)->text = a.str();
 	TEXT_RENDERING(eBigLevel)->hide = false;
 	PARTICULE(eSnowEmitter)->emissionRate = 10;
 	// RENDERING(eDesaturate)->hide = false;
@@ -100,15 +104,40 @@ void LevelStateManager::Enter() {
 	RENDERING(eSnowGround)->hide = false;
 	SOUND(eBigLevel)->sound = theSoundSystem.loadSoundFile("audio/level_up.ogg", true);
 	SOUND(eBigLevel)->stop = false;
+
+	ADD_COMPONENT(eBigLevel, Morphing);
+	MORPHING(eBigLevel)->timing = 1;
+	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->color.a, 0, 1));
+	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(smallLevel)->color.a, 1, 0));
+	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&RENDERING(eSnowGround)->color.a, 0, 1));
+	MORPHING(eBigLevel)->active = true;
+	
+	TEXT_RENDERING(eBigLevel)->charSize = Vector2(PlacementHelper::GimpWidthToScreen(200), PlacementHelper::GimpHeightToScreen(288));
+	
+	duration = 0;
 }
 
 GameState LevelStateManager::Update(float dt) {
+	duration += dt;
+
 	for ( std::vector<FeuilleOrientee>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
 		TRANSFORM(it->e)->rotation = 0.3*it->sens*ADSR(eGrid)->value;
 		TRANSFORM(it->e)->position = it->pos - Vector2(0,ADSR(eGrid)->value);
 	}
+	
+	if (duration > 7) {
+		MorphingComponent* mc = MORPHING(eBigLevel);
+		for (int i=0; i<mc->elements.size(); i++) {
+			delete mc->elements[i];
+		}
+		mc->elements.clear();
+		// move big score to small score
+		MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<Vector2> (&TEXT_RENDERING(eBigLevel)->uvSize, TEXT_RENDERING(eBigLevel)->uvSize, TEXT_RENDERING(smallLevel)->uvSize));
+		MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<Vector2> (&TRANSFORM(eBigLevel)->position, TRANSFORM(eBigLevel)->position, TRANSFORM(eBigLevel)->position));
+		MORPHING(eBigLevel)->active = true;
+	}
 
-	if (SOUND(eBigLevel)->sound == InvalidSoundRef) {
+	if (SOUND(eBigLevel)->sound == InvalidSoundRef || duration > 8) {
 		theGridSystem.DeleteAll();
 		return Spawn;
 	}
@@ -126,4 +155,14 @@ void LevelStateManager::Exit() {
 	// RENDERING(eDesaturate)->hide = false;
 	RENDERING(eSnowBranch)->hide = true;
 	RENDERING(eSnowGround)->hide = true;
+	
+	MorphingComponent* mc = MORPHING(eBigLevel);
+	for (int i=0; i<mc->elements.size(); i++) {
+		delete mc->elements[i];
+	}
+	mc->elements.clear();
+	// hide big level
+	TEXT_RENDERING(eBigLevel)->hide = true;
+	// show small level
+	TEXT_RENDERING(smallLevel)->hide = false;
 }

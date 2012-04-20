@@ -139,12 +139,11 @@ void NormalGameModeManager::LevelUp() {
 		GameModeManager::LoadHerissonTexture(bonus+1);
 		for (int i=0;i<8;i++)
 			remain[i] = 2+level;
-			
+
 		// cacher le n'herisson
 		RENDERING(herisson)->hide = true;
 		// et le positionner
 		TRANSFORM(herisson)->position.X = GameModeManager::position(time, pts);;
-		
 	}
 }
 

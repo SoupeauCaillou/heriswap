@@ -22,6 +22,9 @@ class LevelStateManager : public GameStateManager {
 	void Enter();
 	GameState Update(float dt);
 	void Exit();
+	
+	int currentLevel;
+	Entity smallLevel;
 
 	private:
 	Entity eGrid;
@@ -32,4 +35,6 @@ class LevelStateManager : public GameStateManager {
 	Entity eSnowBranch;
 	Entity eSnowGround;
 	Entity eMusic;
+	
+	float duration;
 };

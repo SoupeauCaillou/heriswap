@@ -26,6 +26,8 @@ class NormalGameModeManager : public GameModeManager {
         void WillScore(int nb, int type, std::vector<Entity>& out);
         void ScoreCalc(int nb, int type);
 		void Reset();
+		
+		int currentLevel() const { return level; }
 
 	private:
 		int level, remain[8];
