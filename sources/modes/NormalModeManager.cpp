@@ -5,7 +5,11 @@
 #include <base/MathUtil.h>
 #include <vector>
 #include "CombinationMark.h"
+#include "systems/ScrollingSystem.h"
 
+#define SKY_SPEED 0.3
+#define DECOR2_SPEED 0.6
+#define DECOR1_SPEED 1
 
 NormalGameModeManager::NormalGameModeManager() {
 	limit = 45.0;
@@ -44,9 +48,12 @@ void NormalGameModeManager::Reset() {
 	for (int i=0;i<8;i++) remain[i]=3;
 	ResetCore(bonus);
 	HideUI(true);
+	nextHerissonSpeed = 1;
+	levelMoveDuration = 0;
 }
 
 float NormalGameModeManager::Update(float dt) {
+	RENDERING(herisson)->hide = false;
 	time+=dt;
 	LevelUp();
 	return (limit - time)/limit;
@@ -54,6 +61,10 @@ float NormalGameModeManager::Update(float dt) {
 
 static int levelToLeaveToDelete(int nb, int level) {
     return 6*nb/(2+level);
+}
+
+static float timeGain(int nb, float time) {
+	return MathUtil::Min(time, nb / 4.0f);
 }
 
 void NormalGameModeManager::deleteLeaves(int type, int nb) {
@@ -76,6 +87,21 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
             nb--;
         }
     }
+    
+    // move background during delete/spawn sequence (+ fall ?)
+    float deleteDuration = 0.3*FAST;
+    float spawnDuration = 0.2*FAST;
+    // herisson distance
+    float currentPos = TRANSFORM(herisson)->position.X;
+    float newPos = GameModeManager::position(time - timeGain(count, time), pts);
+    // update herisson and decor at the same time.
+    levelMoveDuration = deleteDuration + spawnDuration;
+    nextHerissonSpeed = (newPos - currentPos) / levelMoveDuration;
+    
+    SCROLLING(decord1er)->speed.X = nextHerissonSpeed;
+    SCROLLING(decor2nd)->speed.X = nextHerissonSpeed * DECOR2_SPEED;
+    SCROLLING(sky)->speed.X = nextHerissonSpeed * SKY_SPEED;
+    
 }
 
 void NormalGameModeManager::ScoreCalc(int nb, int type) {
@@ -86,9 +112,7 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 
 	remain[type] -= nb;
 	deleteLeaves(type+1, levelToLeaveToDelete(nb, level));
-	time -= nb/4;
-	if (time < 0)
-		time = 0;
+	time -= timeGain(nb, time);
 
 	if (remain[type]<0)
 		remain[type]=0;
@@ -115,6 +139,12 @@ void NormalGameModeManager::LevelUp() {
 		GameModeManager::LoadHerissonTexture(bonus+1);
 		for (int i=0;i<8;i++)
 			remain[i] = 2+level;
+			
+		// cacher le n'herisson
+		RENDERING(herisson)->hide = true;
+		// et le positionner
+		TRANSFORM(herisson)->position.X = GameModeManager::position(time, pts);;
+		
 	}
 }
 
@@ -143,7 +173,22 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	a << level;
 	TEXT_RENDERING(uiHelper.smallLevel)->text = a.str();
 	}
-	UpdateCore(dt, time);
+	
+	if (levelMoveDuration > 0) {
+		UpdateCore(dt, time, nextHerissonSpeed);
+		levelMoveDuration -= dt;
+		
+		if (levelMoveDuration <= 0) {
+			// stop scrolling
+			float s = 0;
+			SCROLLING(decord1er)->speed.X = s;
+    		SCROLLING(decor2nd)->speed.X = s * DECOR2_SPEED;
+    		SCROLLING(sky)->speed.X = s * SKY_SPEED;
+		}
+		
+	} else {
+		UpdateCore(dt, time, 0);
+	}
 }
 
 GameMode NormalGameModeManager::GetMode() {
