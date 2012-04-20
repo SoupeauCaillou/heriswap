@@ -19,12 +19,17 @@ struct Canal {
 	Canal() {
 		timeLoop = 17.;
 		time=0;
+		indice = 0;
 	}
 
 	void update(float dt) {
-		time-=dt;
-		if (time<=0) {
-			time=timeLoop;
+		if (SOUND(sounds[indice])->sound == InvalidSoundRef) {
+			SOUND(sounds[indice])->sound = theSoundSystem.loadSoundFile(sound, true);
+		}
+		
+		// +dt is magic!
+		float t = SOUND(sounds[indice])->position * 65 + dt;
+		if (t >= timeLoop) {
 			indice = (indice+1)%2;
 			SOUND(sounds[indice])->sound = theSoundSystem.loadSoundFile(sound, true);
 		}

@@ -51,6 +51,7 @@
     <None Include="sources\TwitchSystem.h" />
     <None Include="sources\CombinationMark.h" />
     <None Include="sources\states\ModeMenuStateManager.h" />
+    <None Include="sources\Sound.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -77,5 +78,6 @@
     <Compile Include="sources\TwitchSystem.cpp" />
     <Compile Include="sources\CombinationMark.cpp" />
     <Compile Include="sources\states\ModeMenuStateManager.cpp" />
+    <Compile Include="sources\Sound.cpp" />
   </ItemGroup>
 </Project>
