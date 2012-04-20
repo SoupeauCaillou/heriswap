@@ -64,6 +64,7 @@ void ModeMenuStateManager::Setup() {
 	playerName.clear();
 	inputUI->getName(playerName);
 }
+
 void ModeMenuStateManager::LoadScore(int mode) {
 	std::vector<ScoreStorage::Score> entries = storage->getScore(mode);
 	for (int i=0; i<5; i++) {
@@ -87,6 +88,9 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			if ((entries[i].points == modeMgr->points || (mode==ScoreAttack && entries[i].time-modeMgr->time<0.01f)) && entries[i].name == playerName) {
 				trcP->color = Color(0.f,1.f,0.f);
 				trcN->color = Color(0.f,1.f,0.f);
+			} else {
+				trcP->color = Color(0.f,0.f,0.f);
+				trcN->color = Color(0.f,0.f,0.f);			
 			}
 		} else {
 			trcP->hide = true;
@@ -124,10 +128,6 @@ void ModeMenuStateManager::Enter() {
 
 	RENDERING(play)->hide = false;
 	RENDERING(back)->hide = false;
-	for (int i=0;i<5;i++) {
-		TEXT_RENDERING(scoresName[i])->hide = false;
-		TEXT_RENDERING(scoresPoints[i])->hide = false;
-	}
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
@@ -155,4 +155,5 @@ void ModeMenuStateManager::Exit() {
 		TEXT_RENDERING(scoresPoints[i])->hide = true;
 	}
 	ended = false;
+	modeMgr->Reset();
 }

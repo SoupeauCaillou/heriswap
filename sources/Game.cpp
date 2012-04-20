@@ -109,10 +109,12 @@ class Game::Data {
 			SOUND(soundButton)->type = SoundComponent::EFFECT;
 			RENDERING(soundButton)->hide = false;
 
-			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it) {
+			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)
+				it->second->Setup();	
+				
+			for(std::map<GameMode, GameModeManager*>::iterator it=mode2Manager.begin(); it!=mode2Manager.end(); ++it)
 				it->second->Setup();
-			}
-
+				
 			for (int i=0; i<4; i++) {
 				music[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(music[i], Sound);
@@ -549,8 +551,7 @@ void Game::tick(float dt) {
 	//si le chrono est fini, on passe au menu de fin
 	if (ended) {
 		newState = ModeMenu;
-		ModeMenuStateManager* mm = static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]);
-		mm->ended = true;
+		static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->ended = true;
 		ended = false;
 	} else {
 	//sinon on passe a l'etat suivant
@@ -561,17 +562,16 @@ void Game::tick(float dt) {
 		togglePause(false);
 	//sinon si on a change d'etat
 	} else if (newState != datas->state) {
-		if (newState == ModeMenu) {
-			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
-			datas->mode2Manager[datas->mode]->Setup();
-			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
-		} else if (newState == Abort) {
+		if (newState == Abort) {
 			LOGI("aborted. going to main menu");
 			hideEveryThing(true, false);
 			newState = MainMenu;
-			ModeMenuStateManager* mm = static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]);
-			mm->ended = true;
+			static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->ended = true;
+		} else if (newState == ModeMenu) {
+			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
+			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
 		}
+		
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
@@ -623,7 +623,6 @@ void Game::tick(float dt) {
 
 	if (newState == ModeMenu) {
 		theGridSystem.DeleteAll();
-	} else if (newState == MainMenu) {
 		datas->mode2Manager[datas->mode]->Reset();
 	}
 
