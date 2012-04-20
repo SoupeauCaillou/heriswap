@@ -63,7 +63,7 @@ class Game::Data {
 			state2Manager[LogoToBlackState] = new FadeGameStateManager(logo, FadeOut, LogoToBlackState, BlackToMainMenu);
 			state2Manager[BlackToMainMenu] = new FadeGameStateManager(0, FadeIn, BlackToMainMenu, MainMenu);
 			state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(0, FadeOut, ModeMenuToBlackState, BlackToSpawn);
-			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, LevelChanged);
+			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
 			state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI);
 

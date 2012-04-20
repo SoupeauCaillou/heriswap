@@ -149,7 +149,6 @@ GameState UserInputGameStateManager::Update(float dt) {
                     CombinationMark::clearCellInCombination(inCombinationCells[k]);
                 }
                 inCombinationCells.clear();
-
 			}
 		} else {
 			LOGI("release");
@@ -204,6 +203,10 @@ GameState UserInputGameStateManager::Update(float dt) {
 					return Delete;
 				}
 			}
+			for (int k=0; k<inCombinationCells.size(); k++) {
+            	CombinationMark::clearCellInCombination(inCombinationCells[k]);
+            }
+            inCombinationCells.clear();
 		}
 	} else {
 		ADSR(eSwapper)->active = false;
