@@ -330,13 +330,6 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	RENDERING(branch)->hide = false;
 	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
 
-
-	//reference title into mode menu from main menu
-	static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = 	static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->title;
-	
-
-
-
 	datas->state2Manager[datas->state]->Enter();
 }
 
@@ -607,6 +600,8 @@ void Game::tick(float dt) {
 			static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->ended = false;
 		} else if (newState == ModeMenu) {
 			datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
+				//reference title into mode menu from main menu
+			static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode-1];
 			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
 		}
 		

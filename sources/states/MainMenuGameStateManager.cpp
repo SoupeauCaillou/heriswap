@@ -86,5 +86,4 @@ void MainMenuGameStateManager::Exit() {
 	}
 
     MORPHING(eStart[choosenGameMode-1])->active = true;
-    title = eStart[choosenGameMode-1];
 }
