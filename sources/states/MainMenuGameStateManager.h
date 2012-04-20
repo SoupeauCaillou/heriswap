@@ -26,6 +26,8 @@ class MainMenuGameStateManager : public GameStateManager {
 		void Exit();
 
 		GameMode choosenGameMode;
-	private:
-		Entity eStart[3], bStart[3];
+		Entity eStart[3];
+		private:
+		Entity bStart[3];
+		
 };

@@ -21,9 +21,6 @@ void GameModeManager::switchAnim(GameModeManager::AnimatedActor* a) {
 		a->frames=0;
 	}
 }
-void GameModeManager::ResetCore() {
-	distance = 0.f;
-}
 
 float GameModeManager::position(float t, std::vector<Vector2> pts) {
 	if (t<=pts[0].X) return pts[0].Y;
@@ -56,19 +53,21 @@ void GameModeManager::SetupCore(int bonus) {
 	ADD_COMPONENT(herisson, Rendering);
 	TRANSFORM(herisson)->z = DL_Animal;
 	TRANSFORM(herisson)->size = Vector2(PlacementHelper::GimpWidthToScreen(142),PlacementHelper::GimpHeightToScreen(116));
-	TRANSFORM(herisson)->position = Vector2(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5, PlacementHelper::GimpYToScreen(1100));
 	c = new GameModeManager::AnimatedActor();
 	c->actor.e = herisson;
-	c->anim.clear();
 	c->frames=0;
-	LoadHerissonTexture(bonus+1);
 	c->actor.speed = 4.1;
-	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
-	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
+	LoadHerissonTexture(bonus+1);
+	ResetCore(bonus);
 	fillVec();
-	generateLeaves(6);
+	
 }
-
+void GameModeManager::ResetCore(int bonus) {
+	distance = 0.f;
+	generateLeaves(6);
+	TRANSFORM(herisson)->position = Vector2(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5, PlacementHelper::GimpYToScreen(1100));
+	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
+}
 void GameModeManager::generateLeaves(int nb) {
 	for (int az=0;az<branchLeaves.size();az++)
 		theEntityManager.DeleteEntity(branchLeaves[az].e);

@@ -32,13 +32,13 @@ void MainMenuGameStateManager::Setup() {
 	for (int i=0; i<3; i++) {
 		bStart[i] = theEntityManager.CreateEntity();
 		ADD_COMPONENT(bStart[i], Transformation);
-		ADD_COMPONENT(bStart[i], Container);
 		ADD_COMPONENT(bStart[i], Sound);
 		SOUND(bStart[i])->type = SoundComponent::EFFECT;
 		ADD_COMPONENT(bStart[i], Button);
 		ADD_COMPONENT(bStart[i], Rendering);
 		RENDERING(bStart[i])->color = Color(1.0, .0, .0, .5);
-		TRANSFORM(bStart[i])->z = DL_MainMenuUI;
+		TRANSFORM(bStart[i])->z = DL_MainMenuUI-.001;
+		BUTTON(bStart[i])->enabled = false;
 	}
 }
 
@@ -51,12 +51,12 @@ void MainMenuGameStateManager::Enter() {
 	for (int i=0; i<3; i++) {
 		MORPHING(eStart[i])->active = false;
 		TRANSFORM(eStart[i])->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(300))-Vector2(0,2*i);
+		TRANSFORM(bStart[i])->size = Vector2(10,1);
+		theTransformationSystem.setPosition(TRANSFORM(bStart[i]),TRANSFORM(eStart[i])->position, TransformationSystem::W);
 		TEXT_RENDERING(eStart[i])->color = Color(1.f,1.f,1.f);
 		RENDERING(bStart[i])->hide = false;
 		TEXT_RENDERING(eStart[i])->hide = false;
-		BUTTON(bStart[i])->clicked = false;
-		CONTAINER(bStart[i])->entities.push_back(eStart[i]);
-		CONTAINER(bStart[i])->includeChildren = true;
+		BUTTON(bStart[i])->enabled = true;
 	}
 }
 
@@ -82,7 +82,7 @@ void MainMenuGameStateManager::Exit() {
 	for (int i=0; i<3; i++) {
 		if (i!=choosenGameMode-1) TEXT_RENDERING(eStart[i])->hide = true;
 		RENDERING(bStart[i])->hide = true;
-		CONTAINER(bStart[i])->entities.clear();
+		BUTTON(bStart[i])->enabled = false;
 	}
 
     MORPHING(eStart[choosenGameMode-1])->active = true;

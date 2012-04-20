@@ -5,7 +5,6 @@ StaticTimeGameModeManager::StaticTimeGameModeManager() {
 	limit = 45.0;
 	time = 0.;
 	points=0;
-	ResetCore();
 	bonus = MathUtil::RandomInt(8);
 
 	pts.push_back(Vector2(0,0));
@@ -20,6 +19,15 @@ StaticTimeGameModeManager::~StaticTimeGameModeManager() {
 
 void StaticTimeGameModeManager::Setup() {
 	SetupCore(bonus);
+	HideUI(true);
+}
+
+void StaticTimeGameModeManager::Reset() {
+	time = 0;
+	branchLeaves.clear();
+	points = 0;
+	bonus = MathUtil::RandomInt(8);
+	ResetCore(bonus);
 	HideUI(true);
 }
 
@@ -43,15 +51,6 @@ void StaticTimeGameModeManager::LevelUp() {
 bool StaticTimeGameModeManager::LeveledUp() {
 	return false;
 }
-
-void StaticTimeGameModeManager::Reset() {
-	time = 0;
-	branchLeaves.clear();
-	points = 0;
-	bonus = MathUtil::RandomInt(8);
-	ResetCore();
-}
-
 
 void StaticTimeGameModeManager::HideUI(bool toHide) {
 	HideUICore(toHide);

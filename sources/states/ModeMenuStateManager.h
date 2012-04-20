@@ -33,6 +33,8 @@ class ModeMenuStateManager : public GameStateManager {
 		void LoadScore(int mode);
 
 		bool ended;
+		
+		Entity title;
 	private:
 		ScoreStorage* storage;
 		PlayerNameInputUI* inputUI;

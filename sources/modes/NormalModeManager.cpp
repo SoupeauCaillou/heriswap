@@ -10,7 +10,6 @@
 NormalGameModeManager::NormalGameModeManager() {
 	limit = 45.0;
 	time = 0.;
-	ResetCore();
 
 	points=0;
 	levelUp = false;
@@ -33,6 +32,17 @@ NormalGameModeManager::~NormalGameModeManager() {
 
 void NormalGameModeManager::Setup() {
 	SetupCore(bonus);
+	HideUI(true);
+}
+
+void NormalGameModeManager::Reset() {
+	time = 0;
+	points = 0;
+	level = 1;
+	bonus = MathUtil::RandomInt(8);
+	branchLeaves.clear();
+	for (int i=0;i<8;i++) remain[i]=3;
+	ResetCore(bonus);
 	HideUI(true);
 }
 
@@ -113,17 +123,6 @@ bool NormalGameModeManager::LeveledUp() {
 	levelUp = false;
 	return bid;
 }
-
-void NormalGameModeManager::Reset() {
-	time = 0;
-	points = 0;
-	level = 1;
-	ResetCore();
-	bonus = MathUtil::RandomInt(8);
-	branchLeaves.clear();
-	for (int i=0;i<8;i++) remain[i]=3;
-}
-
 
 void NormalGameModeManager::HideUI(bool toHide) {
 	HideUICore(toHide);
