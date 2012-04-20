@@ -12,7 +12,7 @@ class ScoreAttackGameModeManager : public GameModeManager {
 		ScoreAttackGameModeManager();
 		~ScoreAttackGameModeManager();
 		void Setup();
-		bool Update(float dt);
+		float Update(float dt);
 
 		void UpdateUI(float dt);
 		void HideUI(bool toHide);

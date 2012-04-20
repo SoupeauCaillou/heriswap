@@ -36,10 +36,10 @@ void NormalGameModeManager::Setup() {
 	HideUI(true);
 }
 
-bool NormalGameModeManager::Update(float dt) {
+float NormalGameModeManager::Update(float dt) {
 	time+=dt;
 	LevelUp();
-	return (limit - time <0);
+	return (limit - time)/limit;
 }
 
 static int levelToLeaveToDelete(int nb, int level) {

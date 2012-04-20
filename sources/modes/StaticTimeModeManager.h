@@ -12,7 +12,7 @@ class StaticTimeGameModeManager : public GameModeManager {
 		StaticTimeGameModeManager();
 		~StaticTimeGameModeManager();
 		void Setup();
-		bool Update(float dt);
+		float Update(float dt);
 
 		void UpdateUI(float dt);
 		void HideUI(bool toHide);

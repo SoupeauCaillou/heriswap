@@ -10,7 +10,7 @@ class NormalGameModeManager : public GameModeManager {
 		NormalGameModeManager();
 		~NormalGameModeManager();
 		void Setup();
-		bool Update(float dt);
+		float Update(float dt);
 
 		void UpdateUI(float dt);
 		void HideUI(bool toHide);

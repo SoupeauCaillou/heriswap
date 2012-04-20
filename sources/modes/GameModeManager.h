@@ -54,7 +54,7 @@ class GameModeManager {
 		/* Do some initial setup if needed */
 		virtual void Setup() = 0;
 		/* Update gamemode, and returns true if end of the mode */
-		virtual bool Update(float dt) = 0;
+		virtual float Update(float dt) = 0;
 
 		virtual void UpdateUI(float dt) = 0;
 		virtual void HideUI(bool toHide) = 0;

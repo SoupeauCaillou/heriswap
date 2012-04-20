@@ -85,7 +85,7 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
 
-			if ((entries[i].points == modeMgr->points || (mode==ScoreAttack && entries[i].time-modeMgr->time<0.01f)) && entries[i].name == playerName) {
+			if (ended && ((entries[i].points == modeMgr->points || (mode==ScoreAttack && entries[i].time-modeMgr->time<0.01f)) && entries[i].name == playerName)) {
 				trcP->color = Color(0.f,1.f,0.f);
 				trcN->color = Color(0.f,1.f,0.f);
 			} else {

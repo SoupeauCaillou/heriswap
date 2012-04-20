@@ -24,13 +24,13 @@ void ScoreAttackGameModeManager::Setup() {
 
 
 
-bool ScoreAttackGameModeManager::Update(float dt) {
+float ScoreAttackGameModeManager::Update(float dt) {
 	//on met à jour le temps si on est dans userinput
 	//if (game.state(UserInput)) time += dt;
 
 	//a changer
 	time+=dt;
-	return (limit - points <0);
+	return (limit - points)/limit;
 }
 
 void ScoreAttackGameModeManager::ScoreCalc(int nb, int type) {
