@@ -59,6 +59,7 @@ void GameModeManager::LoadHerissonTexture(int type) {
 }
 
 void GameModeManager::SetupCore(int bonus) {
+LOGW("%s:%d", __FUNCTION__, __LINE__);
 	herisson = theEntityManager.CreateEntity();
 	ADD_COMPONENT(herisson, Transformation);
 	ADD_COMPONENT(herisson, Rendering);
@@ -68,20 +69,27 @@ void GameModeManager::SetupCore(int bonus) {
 	c->actor.e = herisson;
 	c->frames=0;
 	c->actor.speed = 4.1;
+	LOGW("%s:%d", __FUNCTION__, __LINE__);
 	LoadHerissonTexture(bonus+1);
+	LOGW("%s:%d", __FUNCTION__, __LINE__);
 	ResetCore(bonus);
+	LOGW("%s:%d", __FUNCTION__, __LINE__);
 	fillVec();
+	LOGW("%s:%d", __FUNCTION__, __LINE__);
 	
 }
 void GameModeManager::ResetCore(int bonus) {
 	distance = 0.f;
+	LOGW("%s:%d", __FUNCTION__, __LINE__);
 	generateLeaves(6);
+	LOGW("%s:%d", __FUNCTION__, __LINE__);
 	TRANSFORM(herisson)->position = Vector2(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5, PlacementHelper::GimpYToScreen(1100));
 	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 }
 void GameModeManager::generateLeaves(int nb) {
 	for (int az=0;az<branchLeaves.size();az++)
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
+		
 	branchLeaves.clear();
 	fillVec();
 	//std::vector<Render> swapper;
@@ -112,6 +120,7 @@ void GameModeManager::generateLeaves(int nb) {
 	uiHelper.build();
 }
 void GameModeManager::fillVec() {
+#if 0
 	int t;
 	std::ifstream file("position_feuilles.txt");
 	int count = 0;
@@ -135,7 +144,17 @@ void GameModeManager::fillVec() {
 		posBranch.pop_back();
 		t--;
 	}
+#else
+	posBranch.clear();
+	#include "PositionFeuilles.h"
+	for (int i=0; i<48; i++) {
+		Vector2 v(PlacementHelper::GimpXToScreen(pos[3*i]), PlacementHelper::GimpYToScreen(pos[3*i+1]));
+		Render truc = {v, MathUtil::ToRadians(pos[3*i+2])};
+		posBranch.push_back(truc);
+	}
+#endif
 }
+
 void GameModeManager::UpdateCore(float dt, float obj, float herissonSpeed) {
 	// default herisson behavior: move to
 	TransformationComponent* tc = TRANSFORM(herisson);

@@ -14,7 +14,6 @@
 #include "sac/systems/RenderingSystem.h"
 #include "sac/systems/SoundSystem.h"
 #include "sac/base/TouchInputManager.h"
-#include "../sources/states/ScoreBoardStateManager.h"
 #include <png.h>
 #include <algorithm>
 
@@ -27,18 +26,43 @@
 extern "C" {
 #endif
 
-class SaveStateScoreStorage: public ScoreStorage {
+struct AndroidPlayerNameInputUI : public PlayerNameInputUI {
 	public:
+		void show() {
+			LOGW("TODO: JNI TextField wrapper");
+		}
+		bool query(std::string& result) {
+			result = "bobby";
+			return true;
+		}
+		void saveOpt(std::string opt, std::string name){ }
+		bool getName(std::string& result) {}
+};
 
-	std::vector<ScoreEntry> loadFromStorage() {
-		std::vector<ScoreEntry> result;
-		std::sort(result.begin(), result.end(), ScoreStorage::ScoreEntryComp);
-		return result;
-	}
 
-	void saveToStorage(const std::vector<ScoreEntry>& entries) {
+class AndroidSqliteExec: public ScoreStorage {
+	public :
+		std::vector<ScoreStorage::Score> getScore(int mode) {
+			std::vector<ScoreStorage::Score> sav;
+			LOGW("TODO JNI sqlite wrapper");
+			return sav;
+		}
 
-	}
+		bool soundEnable(bool switchIt) {
+			return true;
+		}
+
+		void submitScore(ScoreStorage::Score scr) {
+			LOGW("todo");
+		}
+
+		bool request(std::string s, std::string* res) {
+			return false;
+		}
+
+		bool initTable() {
+			return false;
+		}
 };
 
 
@@ -46,7 +70,8 @@ struct GameHolder {
 	Game* game;
 	JavaSoundAPI* api;
 	int width, height;
-	SaveStateScoreStorage storage;
+	AndroidPlayerNameInputUI inputUI;
+	AndroidSqliteExec sqlite;
 
 	struct __input {
 		 int touching;
@@ -108,7 +133,7 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
   	LOGW("%s -->", __FUNCTION__);
   	TimeUtil::init();
 	GameHolder* hld = new GameHolder();
-	hld->game = new Game(&hld->storage);
+	hld->game = new Game(&hld->sqlite, &hld->inputUI);
 	hld->renderThreadEnv = env;
 	hld->openGLESVersion = openglesVersion;
 	hld->assetManager = (jobject)env->NewGlobalRef(asset);

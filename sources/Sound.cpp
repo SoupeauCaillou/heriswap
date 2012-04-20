@@ -4,6 +4,7 @@
 
 #include "Game.h"
 #include "Sound.h"
+#include <sstream>
 
 int findCompatible(char c, std::vector<Compatible> &comp) {
 	for (int i=0;i<comp.size();i++)

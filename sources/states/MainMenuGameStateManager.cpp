@@ -46,7 +46,7 @@ void MainMenuGameStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
 	// preload sound effect
-	theSoundSystem.loadSoundFile("audio/click.wav", false);
+	theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 
 	for (int i=0; i<3; i++) {
 		MORPHING(eStart[i])->active = false;

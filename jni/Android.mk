@@ -20,18 +20,23 @@ LOCAL_SRC_FILES := \
     tilematchjnilib.cpp \
 	../sources/Game.cpp \
 	../sources/GridSystem.cpp \
-   ../sources/CombinationMarkSystem.cpp \
+   ../sources/PlacementHelper.cpp \
+   ../sources/Sound.cpp \
+   ../sources/CombinationMark.cpp \
+   ../sources/TwitchSystem.cpp \
 	../sources/states/BackgroundManager.cpp \
 	../sources/states/DeleteGameStateManager.cpp \
-	../sources/states/UserInputGameStateManager.cpp \
-	../sources/states/SpawnGameStateManager.cpp \
-	../sources/states/FallGameStateManager.cpp \
-	../sources/states/EndMenuStateManager.cpp \
-	../sources/states/MainMenuGameStateManager.cpp \
-	../sources/states/ScoreBoardStateManager.cpp \
-	../sources/states/LevelStateManager.cpp \
-	../sources/states/PauseStateManager.cpp \
 	../sources/states/FadeStateManager.cpp	\
+	../sources/states/FallGameStateManager.cpp \
+	../sources/states/LevelStateManager.cpp \
+	../sources/states/LogoStateManager.cpp \
+	../sources/states/MainMenuGameStateManager.cpp \
+	../sources/states/ModeMenuStateManager.cpp \
+	../sources/states/PauseStateManager.cpp \
+	../sources/states/SpawnGameStateManager.cpp \
+	../sources/states/UserInputGameStateManager.cpp \
+	../sources/modes/GameModeManager.cpp \
+	../sources/modes/InGameUiHelper.cpp \
 	../sources/modes/NormalModeManager.cpp \
 	../sources/modes/StaticTimeModeManager.cpp \
 	../sources/modes/ScoreAttackModeManager.cpp

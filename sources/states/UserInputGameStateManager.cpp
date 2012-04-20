@@ -13,8 +13,8 @@ UserInputGameStateManager::~UserInputGameStateManager() {
 
 void UserInputGameStateManager::Setup() {
 	// preload sound effect
-	theSoundSystem.loadSoundFile("audio/line1.wav", false);
-	theSoundSystem.loadSoundFile("audio/line2.wav", false);
+	theSoundSystem.loadSoundFile("audio/son_monte.ogg", false);
+	theSoundSystem.loadSoundFile("audio/son_descend.ogg", false);
 
 	eSwapper = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSwapper, ADSR);

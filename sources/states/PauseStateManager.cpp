@@ -69,10 +69,10 @@ void PauseStateManager::Enter() {
 
 GameState PauseStateManager::Update(float dt) {
 	if (BUTTON(bAbort)->clicked) {
-		SOUND(bAbort)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
+		SOUND(bAbort)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 		return Abort;
 	} if (BUTTON(bRestart)->clicked) {
-		SOUND(bRestart)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
+		SOUND(bRestart)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 		return Unpause;
 	}
 	return Pause;
