@@ -63,7 +63,7 @@ class Game::Data {
 			state2Manager[LogoToBlackState] = new FadeGameStateManager(logo, FadeOut, LogoToBlackState, BlackToMainMenu);
 			state2Manager[BlackToMainMenu] = new FadeGameStateManager(0, FadeIn, BlackToMainMenu, MainMenu);
 			state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(0, FadeOut, ModeMenuToBlackState, BlackToSpawn);
-			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, Spawn);
+			state2Manager[BlackToSpawn] = new FadeGameStateManager(0, FadeIn, BlackToSpawn, LevelChanged);
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
 			state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI);
 
@@ -705,7 +705,7 @@ void Game::bench(bool active, float updateDuration, float dt) {
 				RENDERING(it->second)->hide = false;
 				x += width;
 
-				LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
+				// LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
 			}
 
 			// LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);

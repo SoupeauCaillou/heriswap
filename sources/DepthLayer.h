@@ -12,7 +12,10 @@
 #define DL_CombinationMark 0.2
 #define DL_Cell 0.3
 #define DL_Hud 0.35
-#define DL_PauseUI 0.4
+#define DL_PauseUI 0.38
+#define DL_SnowDesaturate 0.4
+#define DL_SnowBackground 0.41
+#define DL_Snow 0.42
 #define DL_Score 0.45
 #define DL_MainMenuUI 0.5
 #define DL_BehindLogo 0.53
