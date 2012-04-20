@@ -67,6 +67,7 @@ void ModeMenuStateManager::Setup() {
 
 void ModeMenuStateManager::LoadScore(int mode) {
 	std::vector<ScoreStorage::Score> entries = storage->getScore(mode);
+	bool alreadyGreen = false;
 	for (int i=0; i<5; i++) {
 		TextRenderingComponent* trcN = TEXT_RENDERING(scoresName[i]);
 		TextRenderingComponent* trcP = TEXT_RENDERING(scoresPoints[i]);
@@ -85,9 +86,10 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
 
-			if (ended && ((entries[i].points == modeMgr->points || (mode==ScoreAttack && entries[i].time-modeMgr->time<0.01f)) && entries[i].name == playerName)) {
+			if (!alreadyGreen && ended && ((entries[i].points == modeMgr->points || (mode==ScoreAttack && entries[i].time-modeMgr->time<0.01f)) && entries[i].name == playerName)) {
 				trcP->color = Color(0.f,1.f,0.f);
 				trcN->color = Color(0.f,1.f,0.f);
+				alreadyGreen = true;
 			} else {
 				trcP->color = Color(0.f,0.f,0.f);
 				trcN->color = Color(0.f,0.f,0.f);			
