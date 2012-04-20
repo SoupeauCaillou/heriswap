@@ -58,7 +58,7 @@ void PauseStateManager::Setup() {
 
 void PauseStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-	theSoundSystem.loadSoundFile("audio/click.wav", false);
+	theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 	TEXT_RENDERING(eRestart)->hide = false;
 	RENDERING(bRestart)->hide = false;
 	BUTTON(bRestart)->enabled = true;

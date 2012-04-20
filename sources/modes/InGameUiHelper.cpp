@@ -78,7 +78,7 @@ void InGameUiHelper::show() {
 void InGameUiHelper::update(float dt) {
 	// handle button
 	if (BUTTON(pauseContainer)->clicked) {
-		SOUND(pauseContainer)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
+		SOUND(pauseContainer)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 		BUTTON(pauseContainer)->clicked=false;
 		game->togglePause(true);
 	}

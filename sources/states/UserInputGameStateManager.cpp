@@ -192,7 +192,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 					GRID(e2)->i = originI + swapI;
 					GRID(e2)->j = originJ + swapJ;
 
-					SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/line2.wav", false);
+					SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/son_descend.ogg", false);
 					return UserInput;
 				} else {
 					// validate position
@@ -200,7 +200,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 					TRANSFORM(e2)->position = Game::GridCoordsToPosition(GRID(e2)->i, GRID(e2)->j);
 
 					originI = originJ = -1;
-					SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/line1.wav", false);
+					SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg", false);
 					return Delete;
 				}
 			}

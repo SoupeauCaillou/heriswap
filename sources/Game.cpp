@@ -617,9 +617,9 @@ void Game::tick(float dt) {
 		BUTTON(datas->soundButton)->clicked = false;
 		datas->storage->soundEnable(true); //on met a jour la table sql
 		theSoundSystem.mute = !theSoundSystem.mute;
-		if (!theSoundSystem.mute) SOUND(datas->soundButton)->sound = theSoundSystem.loadSoundFile("audio/click.wav", false);
+		if (!theSoundSystem.mute) SOUND(datas->soundButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 		if (theSoundSystem.mute) RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
-		else RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
+		else RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("audio/sound_on.png");
 	}
 
 	//updating time
