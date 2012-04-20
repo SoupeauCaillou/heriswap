@@ -619,7 +619,7 @@ void Game::tick(float dt) {
 		theSoundSystem.mute = !theSoundSystem.mute;
 		if (!theSoundSystem.mute) SOUND(datas->soundButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 		if (theSoundSystem.mute) RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
-		else RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("audio/sound_on.png");
+		else RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
 	}
 
 	//updating time
