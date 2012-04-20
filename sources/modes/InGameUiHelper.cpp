@@ -18,13 +18,13 @@ void InGameUiHelper::build() {
 
 	smallLevel = theEntityManager.CreateEntity();
 	ADD_COMPONENT(smallLevel, Transformation);
-	TRANSFORM(smallLevel)->position = Vector2(PlacementHelper::GimpXToScreen(624), PlacementHelper::GimpYToScreen(188));
+	TRANSFORM(smallLevel)->position = Vector2(PlacementHelper::GimpXToScreen(680), PlacementHelper::GimpYToScreen(188));
 	TRANSFORM(smallLevel)->z = DL_Score;
 	ADD_COMPONENT(smallLevel, TextRendering);
 	TEXT_RENDERING(smallLevel)->color = Color(1, 1, 1);
 	TEXT_RENDERING(smallLevel)->fontName = "typo";
 	TEXT_RENDERING(smallLevel)->charSize = Vector2(PlacementHelper::GimpWidthToScreen(690-620), PlacementHelper::GimpHeightToScreen(232-150));
-	TEXT_RENDERING(smallLevel)->positioning = TextRenderingComponent::LEFT;
+	TEXT_RENDERING(smallLevel)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(smallLevel)->isANumber = true;
 
 	pauseButton = theEntityManager.CreateEntity();

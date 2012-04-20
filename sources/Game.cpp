@@ -295,7 +295,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	SCROLLING(datas->sky)->images.push_back("ciel1.png");
 	SCROLLING(datas->sky)->images.push_back("ciel2.png");
 	SCROLLING(datas->sky)->images.push_back("ciel3.png");
-	SCROLLING(datas->sky)->speed = Vector2(-0.01, 0);
+	SCROLLING(datas->sky)->speed = Vector2(-0.3, 0);
 	SCROLLING(datas->sky)->displaySize = Vector2(TRANSFORM(datas->sky)->size.X * 1.01, TRANSFORM(datas->sky)->size.Y);
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
 
@@ -309,7 +309,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_1.png");
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_2.png");
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_3.png");
-	SCROLLING(datas->decord2nd)->speed = Vector2(-.01, 0);
+	SCROLLING(datas->decord2nd)->speed = Vector2(-.1, 0);
 	SCROLLING(datas->decord2nd)->displaySize = Vector2(TRANSFORM(datas->decord2nd)->size.X * 1.01, TRANSFORM(datas->decord2nd)->size.Y);
 
 	datas->decord1er = theEntityManager.CreateEntity();

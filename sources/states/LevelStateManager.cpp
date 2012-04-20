@@ -54,8 +54,8 @@ void LevelStateManager::Setup() {
 	PARTICULE(eSnowEmitter)->lifetime = Interval<float>(5.0f, 6.5f);
 	PARTICULE(eSnowEmitter)->initialColor = Interval<Color> (Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 1.0));
 	PARTICULE(eSnowEmitter)->finalColor  = Interval<Color> (Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 1.0));
-	PARTICULE(eSnowEmitter)->initialSize = Interval<float>(PlacementHelper::GimpWidthToScreen(30), PlacementHelper::GimpWidthToScreen(30));
-	PARTICULE(eSnowEmitter)->finalSize = Interval<float>(PlacementHelper::GimpWidthToScreen(30), PlacementHelper::GimpWidthToScreen(30));
+	PARTICULE(eSnowEmitter)->initialSize = Interval<float>(PlacementHelper::GimpWidthToScreen(30), PlacementHelper::GimpWidthToScreen(40));
+	PARTICULE(eSnowEmitter)->finalSize = Interval<float>(PlacementHelper::GimpWidthToScreen(30), PlacementHelper::GimpWidthToScreen(40));
 	PARTICULE(eSnowEmitter)->forceDirection = Interval<float>(0, 0);
 	PARTICULE(eSnowEmitter)->forceAmplitude  = Interval<float>(0, 0);
 	PARTICULE(eSnowEmitter)->mass = 1;
@@ -98,7 +98,7 @@ void LevelStateManager::Enter() {
 	a << currentLevel;
 	TEXT_RENDERING(eBigLevel)->text = a.str();
 	TEXT_RENDERING(eBigLevel)->hide = false;
-	PARTICULE(eSnowEmitter)->emissionRate = 10;
+	PARTICULE(eSnowEmitter)->emissionRate = 50;
 	// RENDERING(eDesaturate)->hide = false;
 	RENDERING(eSnowBranch)->hide = false;
 	RENDERING(eSnowGround)->hide = false;
@@ -112,6 +112,7 @@ void LevelStateManager::Enter() {
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&RENDERING(eSnowGround)->color.a, 0, 1));
 	MORPHING(eBigLevel)->active = true;
 	
+	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
 	TEXT_RENDERING(eBigLevel)->charSize = Vector2(PlacementHelper::GimpWidthToScreen(200), PlacementHelper::GimpHeightToScreen(288));
 	
 	duration = 0;

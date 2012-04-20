@@ -7,8 +7,8 @@
 #include "CombinationMark.h"
 #include "systems/ScrollingSystem.h"
 
-#define SKY_SPEED 0.3
-#define DECOR2_SPEED 0.6
+#define SKY_SPEED 2.3
+#define DECOR2_SPEED 1.6
 #define DECOR1_SPEED 1
 
 NormalGameModeManager::NormalGameModeManager() {
@@ -50,12 +50,14 @@ void NormalGameModeManager::Reset() {
 	HideUI(true);
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
+	levelUpPending = false;
 }
 
 float NormalGameModeManager::Update(float dt) {
-	if (RENDERING(herisson)->hide) {
+	if (levelUpPending) {
 		RENDERING(herisson)->hide = false;
 		generateLeaves(6);
+		levelUpPending = false;
 	}
 	time+=dt;
 	LevelUp();
@@ -102,8 +104,8 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
     nextHerissonSpeed = (newPos - currentPos) / levelMoveDuration;
     
     SCROLLING(decord1er)->speed.X = nextHerissonSpeed;
-    SCROLLING(decor2nd)->speed.X = nextHerissonSpeed * DECOR2_SPEED;
-    SCROLLING(sky)->speed.X = nextHerissonSpeed * SKY_SPEED;
+    // SCROLLING(decor2nd)->speed.X = nextHerissonSpeed * DECOR2_SPEED;
+    // SCROLLING(sky)->speed.X = nextHerissonSpeed * SKY_SPEED;
     
 }
 
@@ -145,7 +147,8 @@ void NormalGameModeManager::LevelUp() {
 		// cacher le n'herisson
 		RENDERING(herisson)->hide = true;
 		// et le positionner
-		TRANSFORM(herisson)->position.X = GameModeManager::position(time, pts);;
+		TRANSFORM(herisson)->position.X = GameModeManager::position(time, pts);
+		levelUpPending = true;
 	}
 }
 
@@ -183,8 +186,8 @@ void NormalGameModeManager::UpdateUI(float dt) {
 			// stop scrolling
 			float s = 0;
 			SCROLLING(decord1er)->speed.X = s;
-    		SCROLLING(decor2nd)->speed.X = s * DECOR2_SPEED;
-    		SCROLLING(sky)->speed.X = s * SKY_SPEED;
+    		// SCROLLING(decor2nd)->speed.X = s * DECOR2_SPEED;
+    		// SCROLLING(sky)->speed.X = s * SKY_SPEED;
 		}
 		
 	} else {
