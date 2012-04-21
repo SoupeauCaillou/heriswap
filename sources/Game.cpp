@@ -162,6 +162,11 @@ class Game::Data {
 				benchTimeSystem[allSystems[i]] = b;
 			}
 			bg->cloudStartX = Interval<float>(8.0,15.0);
+			
+			MainMenuGameStateManager* mainmenu = static_cast<MainMenuGameStateManager*> (state2Manager[MainMenu]);
+			ModeMenuStateManager* modemenu = static_cast<ModeMenuStateManager*> (state2Manager[ModeMenu]);
+			modemenu->menufg = mainmenu->menufg;
+			modemenu->menubg = mainmenu->menubg;
 		}
 		//bench data
 		std::map<std::string, Entity> benchTimeSystem;

@@ -70,6 +70,16 @@ void GameModeManager::SetupCore(int bonus) {
 	c->frames=0;
 	c->actor.speed = 4.1;
 	LoadHerissonTexture(bonus+1);
+	
+	branch = theEntityManager.CreateEntity();
+	ADD_COMPONENT(branch, Transformation);
+	TRANSFORM(branch)->z = DL_Branch;
+	TRANSFORM(branch)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(400.0));
+	TransformationSystem::setPosition(TRANSFORM(branch), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
+	ADD_COMPONENT(branch, Rendering);
+	RENDERING(branch)->hide = false;
+	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
+
 	ResetCore(bonus);
 	fillVec();
 }

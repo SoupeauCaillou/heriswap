@@ -76,8 +76,8 @@ static void newMusics(Entity* music, int indiceSwitch) {
 	SOUND(music[0])->stop = false;
 	SOUND(music[0])->sound = theSoundSystem.loadSoundFile(s1.str(), true);
 	SOUND(music[4])->sound = theSoundSystem.loadSoundFile(s2.str(), true);
-	SOUND(music[0])->mainMusic = true;
-	SOUND(music[4])->mainMusic = true;
+	//SOUND(music[0])->mainMusic = true;
+	//SOUND(music[4])->mainMusic = true;
 
 	for (int i=0; i<compatible[indice].fri.size(); i++)
 		canPickIn.push_back(compatible[indice].fri[i]); //copying his friends into canPickIn
@@ -99,13 +99,13 @@ static void newMusics(Entity* music, int indiceSwitch) {
 		sc->sound = theSoundSystem.loadSoundFile(s.str(), true);
 		sc->stop = false;
 		if (std::find(ppal.begin(), ppal.end(), c) != ppal.end()) {
-			sc->mainMusic = true;
+			//sc->mainMusic = true;
 			std::stringstream s2;
 			s2 << "audio/" << c << "stress.ogg";
 			SOUND(music[4+i])->stop = true;
 			SOUND(music[4+i])->sound = theSoundSystem.loadSoundFile(s2.str(), true);
 		} else {
-			sc->mainMusic = false;
+			//sc->mainMusic = false;
 		}
 
 		indice = findCompatible(c, compatible); // get the song id

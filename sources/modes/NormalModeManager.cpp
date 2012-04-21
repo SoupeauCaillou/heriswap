@@ -50,6 +50,7 @@ void NormalGameModeManager::Setup() {
 	SCROLLING(decor2nd)->images.push_back("decor2nd_3.png");
 	SCROLLING(decor2nd)->speed = Vector2(-.1, 0);
 	SCROLLING(decor2nd)->displaySize = Vector2(TRANSFORM(decor2nd)->size.X * 1.01, TRANSFORM(decor2nd)->size.Y);
+	SCROLLING(decor2nd)->hide = true;
 
 	decor1er = theEntityManager.CreateEntity();
 	ADD_COMPONENT(decor1er, Transformation);
@@ -63,6 +64,7 @@ void NormalGameModeManager::Setup() {
 	SCROLLING(decor1er)->images.push_back("decor1er_3.png");
 	SCROLLING(decor1er)->speed = Vector2(-0.01, 0);
 	SCROLLING(decor1er)->displaySize = Vector2(TRANSFORM(decor1er)->size.X * 1.01, TRANSFORM(decor1er)->size.Y);
+	SCROLLING(decor1er)->hide = true;
 	
 	HideUI(true);
 }
@@ -79,6 +81,7 @@ void NormalGameModeManager::Reset() {
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
 	levelUpPending = false;
+	SCROLLING(decor2nd)->hide = SCROLLING(decor1er)->hide = false;
 }
 
 float NormalGameModeManager::Update(float dt) {
