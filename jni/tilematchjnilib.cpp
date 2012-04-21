@@ -26,8 +26,11 @@
 extern "C" {
 #endif
 
+struct GameHolder;
+
 struct AndroidPlayerNameInputUI : public PlayerNameInputUI {
 	public:
+		GameHolder* holder;
 		void show() {
 			LOGW("TODO: JNI TextField wrapper");
 		}
@@ -35,34 +38,23 @@ struct AndroidPlayerNameInputUI : public PlayerNameInputUI {
 			result = "bobby";
 			return true;
 		}
-		void saveOpt(std::string opt, std::string name){ }
-		bool getName(std::string& result) {}
 };
 
 
-class AndroidSqliteExec: public ScoreStorage {
+class AndroidStorage: public ScoreStorage {
 	public :
-		std::vector<ScoreStorage::Score> getScore(int mode) {
-			std::vector<ScoreStorage::Score> sav;
-			LOGW("TODO JNI sqlite wrapper");
-			return sav;
-		}
+		GameHolder* holder;
+		
+		std::vector<ScoreStorage::Score> getScore(int mode);
 
-		bool soundEnable(bool switchIt) {
-			return true;
-		}
+		bool soundEnable(bool switchIt);
 
-		void submitScore(ScoreStorage::Score scr) {
-			LOGW("todo");
-		}
+		void submitScore(ScoreStorage::Score scr);
 
-		bool request(std::string s, std::string* res) {
-			return false;
-		}
-
-		bool initTable() {
-			return false;
-		}
+		bool request(std::string s, std::string* res);
+		bool initTable();
+		void saveOpt(std::string opt, std::string name);
+		bool getName(std::string& result);
 };
 
 
@@ -71,7 +63,7 @@ struct GameHolder {
 	JavaSoundAPI* api;
 	int width, height;
 	AndroidPlayerNameInputUI inputUI;
-	AndroidSqliteExec sqlite;
+	AndroidStorage sqlite;
 
 	struct __input {
 		 int touching;
@@ -133,14 +125,14 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
   	LOGW("%s -->", __FUNCTION__);
   	TimeUtil::init();
 	GameHolder* hld = new GameHolder();
-	hld->game = new Game(&hld->sqlite, &hld->inputUI);
+	hld->game = new Game(new AndroidNativeAssetLoader(hld), &hld->sqlite, &hld->inputUI);
 	hld->renderThreadEnv = env;
 	hld->openGLESVersion = openglesVersion;
 	hld->assetManager = (jobject)env->NewGlobalRef(asset);
 	theRenderingSystem.setNativeAssetLoader(new AndroidNativeAssetLoader(hld));
 	theRenderingSystem.opengles2 = (hld->openGLESVersion == 2);
 	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
-	
+	hld->sqlite.holder = hld;
 	LOGW("Build Java sound API proxy env:%p", env);
 	theSoundSystem.androidSoundAPI = new JavaSoundAPI();
 	theSoundSystem.androidSoundAPI->assetManager = hld->assetManager;
@@ -467,6 +459,74 @@ char* AndroidNativeAssetLoader::loadShaderFile(const std::string& assetName)
 	char* result = loadAsset(holder->renderThreadEnv, holder->assetManager, assetName, &length);
 	return result;
 }
+
+std::vector<ScoreStorage::Score> AndroidStorage::getScore(int mode) {
+	std::vector<ScoreStorage::Score> sav;
+	JNIEnv* env = holder->gameThreadEnv;
+	jclass c = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
+	jmethodID mid = (env->GetStaticMethodID(c, "getScores", "(I[I[I[F[Ljava/lang/String;)I"));
+	// build arrays params
+	jintArray points = env->NewIntArray(5);
+	jintArray levels = env->NewIntArray(5);
+	jfloatArray times = env->NewFloatArray(5);
+	jobjectArray names = env->NewObjectArray(5, env->FindClass("java/lang/String"), env->NewStringUTF(""));
+	
+	jint idummy[5];
+	jfloat fdummy[5]; 
+	for (int i=0; i<5; i++) {
+		idummy[i] = i;
+		fdummy[i] = 2.0 * i;
+	}
+	env->SetIntArrayRegion(points, 0, 5, idummy);
+	env->SetIntArrayRegion(levels, 0, 5, idummy);
+	env->SetFloatArrayRegion(times, 0, 5, fdummy);
+	int count = (jint)env->CallStaticObjectMethod(c, mid, mode, points, levels, times, names);
+
+	for (int i=0; i<count; i++) {
+		ScoreStorage::Score s;
+		s.mode = mode;
+		env->GetIntArrayRegion(points, i, 1, &s.points);
+		env->GetIntArrayRegion(levels, i, 1, &s.level);
+		env->GetFloatArrayRegion(times, i, 1, &s.time);
+		jstring n = (jstring)env->GetObjectArrayElement(names, i);
+		if (n) {
+			const jchar *mfile = env->GetStringChars(n, 0);
+			s.name = (char*)mfile;
+			env->ReleaseStringChars(n, mfile);
+		} else {
+			s.name = "wtf";
+		}
+		sav.push_back(s);
+	}
+	
+	return sav;
+}
+
+bool AndroidStorage::soundEnable(bool switchIt) {
+	JNIEnv* env = holder->gameThreadEnv;
+	jclass c = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
+	jmethodID mid = (env->GetStaticMethodID(c, "soundEnable", "(Z)Z"));
+	return env->CallStaticObjectMethod(c, mid, switchIt);
+}
+
+void AndroidStorage::submitScore(ScoreStorage::Score scr) {
+	JNIEnv* env = holder->gameThreadEnv;
+	jclass c = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
+	jmethodID mid = (env->GetStaticMethodID(c, "submitScore", "(IIIFLjava/lang/String;)V"));
+	jstring name = env->NewStringUTF(scr.name.c_str());
+	env->CallStaticObjectMethod(c, mid, scr.mode, scr.points, scr.level, scr.time, name);
+}
+
+bool AndroidStorage::request(std::string s, std::string* res) {
+	return false;
+	}
+
+bool AndroidStorage::initTable() {
+	return false;
+}
+
+void AndroidStorage::saveOpt(std::string opt, std::string name){ }
+bool AndroidStorage::getName(std::string& result) {}
 
 #ifdef __cplusplus
 }

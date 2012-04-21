@@ -2,10 +2,20 @@ package net.damsy.soupeaucaillou.tilematch;
 
 import java.io.InputStream;
 
+import com.openfeint.api.resource.Leaderboard;
+import com.openfeint.api.resource.Score;
+
+import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.media.MediaPlayer;
 import android.util.Log;
+import android.widget.Toast;
  
 public class TilematchJNILib {
     static {
@@ -111,4 +121,102 @@ public class TilematchJNILib {
     			p.start(); 
     	}
     }
+    
+    static public boolean soundEnable(boolean switchIt) {
+    	Log.i("TilematchJava", "soundEnable : " + switchIt);
+    	SQLiteDatabase db = TilematchActivity.optionsOpenHelper.getWritableDatabase();
+    	Cursor cursor = db.query("info", new String[] {"value"}, "opt LIKE \"sound\"", null, null, null, null);
+    	String value = null;
+    	if (!cursor.moveToFirst()) {
+    		Log.w("TilematchJAva", "soundEnable select: no result");
+    		ContentValues v = new ContentValues(1);
+    		v.put("value", "on");
+    		v.put("opt", "sound");
+    		value = "on";
+    		long rowsAffected = db.insert("info", null , v);
+    		Log.i("tilemacthJvave", "plop, insertt: 3"+rowsAffected);
+    	} else {
+    		int idx = cursor.getColumnIndex("value");
+    		value = cursor.getString(idx);
+    	}
+    	
+    	if (switchIt) {
+    		ContentValues v = new ContentValues(1);
+    		if ("on".equals(value)) {
+    			v.put("value", "off");
+    		} else {
+    			v.put("value", "on");
+    		}
+    		long rowsAffected  = db.update("info", v, "opt='sound'", null);
+    		Log.i("tilemacthJvave", "plop, update: 3"+rowsAffected);
+    	}
+    	db.close();
+    	return "on".equals(value);
+    }
+     
+    static public void submitScore(int mode, int points, int level, float time, String name) {
+    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getWritableDatabase();
+    	ContentValues v = new ContentValues();
+    	v.put("name", name);
+    	v.put("mode", mode);
+    	v.put("points", points);
+    	v.put("time", time);
+    	v.put("level", level);
+    	db.insert("score", null, v);
+    	db.close();
+    	
+    	String[] boards = new String[] {
+    		"1141887",
+    		"1149477",
+    		"1149487",
+    	};
+    	Leaderboard l = new Leaderboard(boards[mode - 1]);
+    	Log.i("tilematchJ", "leaderboard id: " + boards[mode - 1]);
+		final Score s = new Score((long) ((mode != 2) ? points : (time * 1000)), null);
+
+		s.submitTo(l, new Score.SubmitToCB() {			
+			@Override public void onSuccess(boolean newHighScore) {
+				Log.i("tilematchJ", "score posting successfull");
+			}
+
+			@Override public void onFailure(String exceptionMessage) {
+				Log.i("tilematchJ", "score posting failure : " + exceptionMessage);
+			}
+			
+			@Override public void onBlobUploadSuccess() {
+			}
+			
+			@Override public void onBlobUploadFailure(String exceptionMessage) {
+			}
+		});
+    }
+    
+    static public int getScores(int mode,  int[] points, int[] levels, float[] times, String[] names) {
+    	for (int i=0; i<5; i++) {
+    		Log.i("tilematchJ", points[i] + ", " + levels[i] + ", " + times[i] + ", " + names[i] + ".");
+    	}
+    	
+    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getWritableDatabase();
+    	Cursor cursor = null;
+    	if (mode == 1 || mode == 3) {
+    		cursor = db.query("score", new String[] {"name", "points", "time", "level"}, "mode='" + mode + "'", null, null, null, "points desc");
+    	} else {
+    		cursor = db.query("score", new String[] {"name", "points", "time", "level"}, "mode='" + mode + "'", null, null, null, "time asc");
+    	}
+    	int maxResult = Math.min(5, cursor.getCount());
+    	cursor.moveToFirst();
+    	Log.i("tilematchJ", "Found " + maxResult + " result");
+    	for (int i=0; i<maxResult; i++) {
+    		points[i] = cursor.getInt(cursor.getColumnIndex("points"));
+    		levels[i] = cursor.getInt(cursor.getColumnIndex("level"));
+    		times[i] = cursor.getFloat(cursor.getColumnIndex("time"));
+    		names[i] = cursor.getString(cursor.getColumnIndex("name"));
+    		
+    		//Log.i("tilematchJ", points[i] + ", " + levels[i] + ", " + times[i] + ", " + names[i] + ".");
+    		cursor.moveToNext();
+    	}
+    	db.close();
+    	return maxResult;
+    }
+   
 }

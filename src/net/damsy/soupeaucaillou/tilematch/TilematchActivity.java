@@ -1,7 +1,15 @@
 package net.damsy.soupeaucaillou.tilematch;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.openfeint.api.OpenFeint;
+import com.openfeint.api.OpenFeintDelegate;
+import com.openfeint.api.OpenFeintSettings;
+import com.openfeint.api.resource.Achievement;
+import com.openfeint.api.resource.Leaderboard;
 
 import android.app.Activity;
 import android.media.AudioManager;
@@ -17,6 +25,14 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.RelativeLayout;
 
 public class TilematchActivity extends Activity {
+	static final String gameName = "Feuilles";
+	static final String gameID = "469623";
+	static final String gameKey = "yWoOQ6qClGfYZY3ggwqobQ";
+	static final String gameSecret = "iR3MB4J7ZuBr90CGrPElAC4lgD0nLkWNPdXxQ2e7Ck"; 
+	
+	public static List<Achievement> achievements = null;
+	public static List<Leaderboard> leaderboards = null;
+	
 	static final String TILEMATCH_BUNDLE_KEY = "plop";
 	static public long game = 0 	;
 	static public Object mutex;
@@ -27,9 +43,33 @@ public class TilematchActivity extends Activity {
 	static public List<MediaPlayer> availablePlayers;
 	static public MediaPlayer[] activePlayers;
 	static public boolean isRunning;
+	static public TilematchStorage.OptionsOpenHelper optionsOpenHelper;
+	static public TilematchStorage.ScoreOpenHelper scoreOpenHelper;
+	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put(OpenFeintSettings.SettingCloudStorageCompressionStrategy, OpenFeintSettings.CloudStorageCompressionStrategyDefault);
+        // use the below line to set orientation
+        // options.put(OpenFeintSettings.RequestedOrientation, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        OpenFeintSettings settings = new OpenFeintSettings(
+        	    gameName, gameKey, gameSecret, gameID, options); 
+        OpenFeint.initialize(this, settings, new OpenFeintDelegate() { });
+        
+        Achievement.list(new Achievement.ListCB() {
+			@Override public void onSuccess(List<Achievement> _achievements) {
+				achievements = _achievements;
+			}
+		});
+        
+        Leaderboard.list(new Leaderboard.ListCB() {
+			@Override public void onSuccess(List<Leaderboard> _leaderboards) {
+				leaderboards = _leaderboards;
+			}
+		});
+        
         mutex = new Object();
  
         getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN,
@@ -51,12 +91,13 @@ public class TilematchActivity extends Activity {
         	mGLView.setRenderer(r);
         	TilematchActivity.openGLESVersion = 1;
         }
-       
+        
         mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         rl.addView(mGLView);
         // rl.bringChildToFront(findViewById(R.id.enter_name));
         
-        
+        TilematchActivity.scoreOpenHelper = new TilematchStorage.ScoreOpenHelper(this);
+        TilematchActivity.optionsOpenHelper = new TilematchStorage.OptionsOpenHelper(this);
         TilematchActivity.soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
         TilematchActivity.availablePlayers = new ArrayList<MediaPlayer>(4);
         TilematchActivity.activePlayers = new MediaPlayer[4];
