@@ -300,7 +300,7 @@ void Game::loadFont(const std::string& name) {
 		sscanf(line.c_str(), "%d,%d,%d", &c, &w, &h);
 		h2wratio[c] = (float)w / h;
 	}
-	free(font);
+	delete[] font;
 	h2wratio[' '] = h2wratio['a'];
 	theTextRenderingSystem.registerFont("typo", h2wratio);
 }

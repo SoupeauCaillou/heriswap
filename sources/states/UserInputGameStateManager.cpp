@@ -27,6 +27,7 @@ void UserInputGameStateManager::Setup() {
 
 	ADD_COMPONENT(eSwapper, Sound);
 	SOUND(eSwapper)->type = SoundComponent::EFFECT;
+	originI = originJ = -1;
 }
 
 void UserInputGameStateManager::Enter() {
