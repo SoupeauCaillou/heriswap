@@ -187,6 +187,7 @@ void ModeMenuStateManager::Enter() {
 	TEXT_RENDERING(scoreTitle)->hide = false;
 	RENDERING(back)->hide = false;
 	RENDERING(openfeint)->hide = false;
+	TEXT_RENDERING(title)->hide = false;
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
