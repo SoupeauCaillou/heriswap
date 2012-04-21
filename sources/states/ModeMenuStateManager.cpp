@@ -248,5 +248,6 @@ void ModeMenuStateManager::Exit() {
 	BUTTON(back)->enabled = false;
 	BUTTON(playButton)->enabled = false;
 	TEXT_RENDERING(scoreTitle)->hide = true;
+	RENDERING(herissonActor)->hide = true;
 	modeMgr->Reset();
 }

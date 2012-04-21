@@ -178,6 +178,7 @@ class Game::Data {
 			ModeMenuStateManager* modemenu = static_cast<ModeMenuStateManager*> (state2Manager[ModeMenu]);
 			modemenu->menufg = mainmenu->menufg;
 			modemenu->menubg = mainmenu->menubg;
+			modemenu->herissonActor = mainmenu->herisson->actor.e;
 		}
 		//bench data
 		std::map<std::string, Entity> benchTimeSystem;
