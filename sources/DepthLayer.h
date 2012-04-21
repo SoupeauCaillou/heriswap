@@ -18,6 +18,7 @@
 #define DL_Snow 0.42
 #define DL_Score 0.45
 #define DL_MainMenuBg 0.47
+#define DL_MainMenuHerisson 0.48
 #define DL_MainMenuFg 0.49
 #define DL_MainMenuUIBg 0.5
 #define DL_MainMenuUITxt 0.51

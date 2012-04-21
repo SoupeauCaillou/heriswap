@@ -14,6 +14,7 @@
 #include "Game.h"
 #include "InGameUiHelper.h"
 #include "PlacementHelper.h"
+#include "AnimedEntity.h"
 
 //FCRR : FPS Calculation Refresh Rate
 #define FCRR 1.
@@ -38,15 +39,12 @@ class GameModeManager {
 			float rot;
 		};
 
-		struct Actor;
-		struct AnimatedActor;
 		void SetupCore(int bonus);
 		void ResetCore(int bonus);
 		void UpdateCore(float dt, float obj, float herissonSpeed = 0);
 		void HideUICore(bool ToHide);
 		float position(float t);
 		void generateLeaves(int nb);
-		void switchAnim(AnimatedActor* a);
 		void LoadHerissonTexture(int type);
 
 		virtual ~GameModeManager() {}
@@ -78,7 +76,7 @@ class GameModeManager {
 		AnimatedActor* c;
 		std::vector<Vector2> pts;
 		InGameUiHelper uiHelper;
-		
+
 		Entity sky, branch;
 		Entity  decor1er, decor2nd;
 	private :

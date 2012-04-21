@@ -147,7 +147,7 @@ class Game::Data {
 			canalStress2.name="audio/F.ogg";
 
 			for (int i=0;i<4;i++) {
-				canal[i].sounds=music;
+				canal[i].sounds=music+2*i;
 				canal[i].multipleStrings = true;
 			}
 
@@ -173,7 +173,7 @@ class Game::Data {
 				benchTimeSystem[allSystems[i]] = b;
 			}
 			bg->cloudStartX = Interval<float>(8.0,15.0);
-			
+
 			MainMenuGameStateManager* mainmenu = static_cast<MainMenuGameStateManager*> (state2Manager[MainMenu]);
 			ModeMenuStateManager* modemenu = static_cast<ModeMenuStateManager*> (state2Manager[ModeMenu]);
 			modemenu->menufg = mainmenu->menufg;

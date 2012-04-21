@@ -9,7 +9,7 @@ MainMenuGameStateManager::~MainMenuGameStateManager() {
 
 void MainMenuGameStateManager::Setup() {
 	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
-	
+
 	//Creating text entities
 	for (int i=0; i<3; i++)
 		eStart[i] = theTextRenderingSystem.CreateLocalEntity(7);
@@ -26,14 +26,14 @@ void MainMenuGameStateManager::Setup() {
 	    MORPHING(eStart[i])->elements.push_back(colorMorph);
 	    MORPHING(eStart[i])->timing = 0.2;
 	    TRANSFORM(eStart[i])->position.X = PlacementHelper::GimpXToScreen(82);
-	    
+
 	    bStart[i] = theEntityManager.CreateEntity();
 	    ADD_COMPONENT(bStart[i], Transformation);
 	    TRANSFORM(bStart[i])->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
 	    TRANSFORM(bStart[i])->position.X = 0;
 	    TRANSFORM(bStart[i])->z = DL_MainMenuUIBg;
 	    ADD_COMPONENT(bStart[i], Rendering);
-	    RENDERING(bStart[i])->texture = theRenderingSystem.loadTextureFile("menu/fond_bouton.png"); 
+	    RENDERING(bStart[i])->texture = theRenderingSystem.loadTextureFile("menu/fond_bouton.png");
 	    RENDERING(bStart[i])->color.a = 0.5;
 	}
 	TEXT_RENDERING(eStart[0])->text = "Classique";
@@ -52,7 +52,7 @@ void MainMenuGameStateManager::Setup() {
 		ADD_COMPONENT(bStart[i], Button);
 		BUTTON(bStart[i])->enabled = false;
 	}
-	
+
 	menubg = theEntityManager.CreateEntity();
 	ADD_COMPONENT(menubg, Transformation);
 	TRANSFORM(menubg)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(570));
@@ -61,7 +61,7 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(menubg, Rendering);
 	RENDERING(menubg)->texture = theRenderingSystem.loadTextureFile("menu/2emeplan.png");
 	RENDERING(menubg)->hide = true;
-	
+
 	menufg = theEntityManager.CreateEntity();
 	ADD_COMPONENT(menufg, Transformation);
 	TRANSFORM(menufg)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(570));
@@ -70,7 +70,29 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(menufg, Rendering);
 	RENDERING(menufg)->texture = theRenderingSystem.loadTextureFile("menu/1erplan.png");
 	RENDERING(menufg)->hide = true;
-	
+
+		herisson = new AnimatedActor();
+	herisson->frames=0;
+	herisson->actor.speed = 4.1;
+	Entity a = theEntityManager.CreateEntity();
+	ADD_COMPONENT(a, Transformation);
+	TRANSFORM(a)->size = Vector2(PlacementHelper::GimpWidthToScreen(310), PlacementHelper::GimpHeightToScreen(253));
+	TransformationSystem::setPosition(TRANSFORM(a), Vector2(0, PlacementHelper::GimpYToScreen(964)), TransformationSystem::SW);
+	TRANSFORM(a)->z = DL_MainMenuHerisson;
+	ADD_COMPONENT(a, Rendering);
+	int r = MathUtil::RandomInt(8)+1;
+	std::stringstream s;
+	s << "herisson_1_" << r << ".png";
+	herisson->anim.push_back(s.str());
+	s.str("");
+	s << "herisson_2_" << r << ".png";
+	herisson->anim.push_back(s.str());
+	RENDERING(a)->hide = true;
+	herisson->actor.e = a;
+
+
+
+
 	modeTitleToReset = 0;
 }
 
@@ -79,7 +101,8 @@ void MainMenuGameStateManager::Enter() {
 
 	// preload sound effect
 	theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
-	
+	RENDERING(herisson->actor.e)->hide = false;
+
 	for (int i=0; i<3; i++) {
 		MORPHING(eStart[i])->active = false;
 		RENDERING(bStart[i])->hide = false;
@@ -96,6 +119,7 @@ void MainMenuGameStateManager::Enter() {
 }
 
 GameState MainMenuGameStateManager::Update(float dt) {
+	switchAnim(herisson);
 	if (BUTTON(bStart[0])->clicked) {
 		choosenGameMode = Normal;
 		SOUND(bStart[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);

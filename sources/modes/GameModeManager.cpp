@@ -3,26 +3,6 @@
 #include "systems/ScrollingSystem.h"
 #include <fstream>
 
-struct GameModeManager::Actor {
-	Entity e;
-	float speed;
-	bool visible;
-};
-struct GameModeManager::AnimatedActor {
-	int frames, ind;
-	std::vector<std::string> anim;
-	struct GameModeManager::Actor actor;
-};
-void GameModeManager::switchAnim(GameModeManager::AnimatedActor* a) {
-	a->frames++;
-	if (a->frames>=30/(MathUtil::Abs(a->actor.speed))) {
-		RENDERING(a->actor.e)->texture = theRenderingSystem.loadTextureFile(a->anim[a->ind]);
-		a->ind++;
-		if (a->ind==a->anim.size()) a->ind = 0;
-		a->frames=0;
-	}
-}
-
 float GameModeManager::position(float t) {
 	float p = 0;
 
@@ -66,12 +46,12 @@ void GameModeManager::SetupCore(int bonus) {
 	ADD_COMPONENT(herisson, Rendering);
 	TRANSFORM(herisson)->z = DL_Animal;
 	TRANSFORM(herisson)->size = Vector2(PlacementHelper::GimpWidthToScreen(142),PlacementHelper::GimpHeightToScreen(116));
-	c = new GameModeManager::AnimatedActor();
+	c = new AnimatedActor();
 	c->actor.e = herisson;
 	c->frames=0;
 	c->actor.speed = 4.1;
 	LoadHerissonTexture(bonus+1);
-	
+
 	branch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(branch, Transformation);
 	TRANSFORM(branch)->z = DL_Branch;
@@ -108,7 +88,7 @@ void GameModeManager::SetupCore(int bonus) {
 	SCROLLING(decor1er)->speed = Vector2(-0.01, 0);
 	SCROLLING(decor1er)->displaySize = Vector2(TRANSFORM(decor1er)->size.X * 1.01, TRANSFORM(decor1er)->size.Y);
 	SCROLLING(decor1er)->hide = true;
-	
+
 	ResetCore(bonus);
 	fillVec();
 }
@@ -228,7 +208,7 @@ void GameModeManager::HideUICore(bool toHide) {
 		uiHelper.hide();
 	else
 		uiHelper.show();
-		
+
 	RENDERING(branch)->hide = toHide;
 	SCROLLING(decor2nd)->hide = toHide;
 	SCROLLING(decor1er)->hide = toHide;
