@@ -118,15 +118,14 @@ class Game::Data {
 				musicStress2[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(musicStress2[i], Sound);
 				SOUND(musicStress2[i])->type = SoundComponent::MUSIC;
-				SOUND(musicStress2[i])->repeat = false;
+
 				musicStress1[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(musicStress1[i], Sound);
 				SOUND(musicStress1[i])->type = SoundComponent::MUSIC;
-				SOUND(musicStress1[i])->repeat = false;
+
 				musicMenu[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(musicMenu[i], Sound);
 				SOUND(musicMenu[i])->type = SoundComponent::MUSIC;
-				SOUND(musicMenu[i])->repeat = false;
 			}
 			for (int i=0; i<8; i++) {
 				music[i] = theEntityManager.CreateEntity();
@@ -178,6 +177,7 @@ class Game::Data {
 			ModeMenuStateManager* modemenu = static_cast<ModeMenuStateManager*> (state2Manager[ModeMenu]);
 			modemenu->menufg = mainmenu->menufg;
 			modemenu->menubg = mainmenu->menubg;
+			modemenu->herissonActor = mainmenu->herisson->actor.e;
 		}
 		//bench data
 		std::map<std::string, Entity> benchTimeSystem;
@@ -557,7 +557,6 @@ void Game::tick(float dt) {
 		for (int i=0;i<4;i++) datas->canal[i].pause();
 		datas->canalStress1.pause();
 		datas->canalStress2.pause();
-		datas->canalMenu;
 		datas->canalMenu.update(dt);
 	}
 

@@ -28,9 +28,10 @@ class MainMenuGameStateManager : public GameStateManager {
 		GameMode choosenGameMode;
 		Entity eStart[3];
 		Entity menufg, menubg;
+		AnimatedActor* herisson;
+
 	private:
 		Entity bStart[3];
 		Entity modeTitleToReset;
-		AnimatedActor* herisson;
 
 };

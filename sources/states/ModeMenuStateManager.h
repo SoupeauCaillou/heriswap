@@ -35,7 +35,7 @@ class ModeMenuStateManager : public GameStateManager {
 
 		bool ended;
 
-		Entity title, menufg, menubg;
+		Entity title, menufg, menubg, herissonActor;
 	private:
 		ScoreStorage* storage;
 		PlayerNameInputUI* inputUI;

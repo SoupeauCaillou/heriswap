@@ -54,7 +54,6 @@ bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float p
 			}
 		}
 	}
-	
 	float pos = 0;
 	int count = 0;
 	for (int i=0; i<4; i++) {
@@ -63,8 +62,8 @@ bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float p
 			count++;
 		}
 	}
-		
-	if (percentDone > 2./45 && count) {
+
+	if (percentDone > 25./45 && count) {
 		pos /= count;
 		if (SOUND(canalStress1->sounds[0])->sound==InvalidSoundRef && SOUND(canalStress1->sounds[1])->sound==InvalidSoundRef) {
 			LOGI("starting clochettes n° one!");
@@ -74,7 +73,7 @@ bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float p
 		}
 		canalStress1->update(dt);
 	}
-	if (percentDone > 22.5/45 && count) {
+	if (percentDone > 35./45 && count) {
 		if (SOUND(canalStress2->sounds[0])->sound==InvalidSoundRef && SOUND(canalStress2->sounds[1])->sound==InvalidSoundRef) {
 			LOGI("starting clochettes n° two!");
 			std::cout << pos << " != " << SOUND(canal[0].sounds[canal[0].indice])->position << std::endl;
