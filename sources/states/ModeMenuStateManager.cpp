@@ -13,35 +13,60 @@ ModeMenuStateManager::~ModeMenuStateManager() {
 }
 
 void ModeMenuStateManager::Setup() {
+	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
+	
 	//Creating text entities
 	for (int i=0; i<5; i++) {
 		scoresName[i] = theTextRenderingSystem.CreateLocalEntity(2);
 		scoresPoints[i] = theTextRenderingSystem.CreateLocalEntity(2);
-		TRANSFORM(scoresName[i])->z = DL_MainMenuUITxt;
-		TRANSFORM(scoresPoints[i])->z = DL_MainMenuUITxt;
-		TRANSFORM(scoresName[i])->position = Vector2(PlacementHelper::GimpXToScreen(350),PlacementHelper::GimpYToScreen(900))-Vector2(0,i/2.);
-		TRANSFORM(scoresPoints[i])->position = Vector2(PlacementHelper::GimpXToScreen(300),PlacementHelper::GimpYToScreen(900))-Vector2(0,i/2.);
-		TEXT_RENDERING(scoresName[i])->charHeight = 0.3;
-		TEXT_RENDERING(scoresPoints[i])->charHeight = 0.3;
+		scoresLevel[i] = theTextRenderingSystem.CreateLocalEntity(2);
+		TRANSFORM(scoresName[i])->z = TRANSFORM(scoresPoints[i])->z = TRANSFORM(scoresLevel[i])->z = DL_MainMenuUITxt;
+		
+		TRANSFORM(scoresName[i])->position.Y = 
+			TRANSFORM(scoresPoints[i])->position.Y = 
+				TRANSFORM(scoresLevel[i])->position.Y = PlacementHelper::GimpYToScreen(675 + i * 95);
+		TRANSFORM(scoresName[i])->position.X = PlacementHelper::GimpXToScreen(92);
+		TRANSFORM(scoresPoints[i])->position.X = PlacementHelper::GimpXToScreen(552);
+		TRANSFORM(scoresLevel[i])->position.X = PlacementHelper::GimpXToScreen(620);
+		
+		TEXT_RENDERING(scoresName[i])->charHeight = 
+			TEXT_RENDERING(scoresPoints[i])->charHeight =
+				TEXT_RENDERING(scoresLevel[i])->charHeight = PlacementHelper::GimpHeightToScreen(34);
 		TEXT_RENDERING(scoresPoints[i])->isANumber = true;
 		TEXT_RENDERING(scoresName[i])->positioning = TextRenderingComponent::LEFT;
 		TEXT_RENDERING(scoresPoints[i])->positioning = TextRenderingComponent::RIGHT;
+		TEXT_RENDERING(scoresLevel[i])->positioning = TextRenderingComponent::RIGHT;
+		
 		TEXT_RENDERING(scoresName[i])->hide = true;
 		TEXT_RENDERING(scoresPoints[i])->hide = true;
-		TEXT_RENDERING(scoresName[i])->color = Color(0.f,0.f,0.f);
-		TEXT_RENDERING(scoresPoints[i])->color = Color(0.f,0.f,0.f);
+		TEXT_RENDERING(scoresLevel[i])->hide = true;
+		
+		TEXT_RENDERING(scoresName[i])->color = 
+			TEXT_RENDERING(scoresPoints[i])->color = 
+				TEXT_RENDERING(scoresPoints[i])->color = green;
 	}
+	
+	// play text
 	play = theEntityManager.CreateEntity();
 	ADD_COMPONENT(play, Transformation);
-	ADD_COMPONENT(play, Rendering);
-	ADD_COMPONENT(play, Button);
-	ADD_COMPONENT(play, Sound);
-	TRANSFORM(play)->size = Vector2(1,1);
-	TRANSFORM(play)->position = Vector2(0,2);
+	TRANSFORM(play)->position = Vector2(PlacementHelper::GimpXToScreen(65), PlacementHelper::GimpYToScreen(334));
 	TRANSFORM(play)->z = DL_MainMenuUITxt;
-	RENDERING(play)->color = Color(0.f,1.f,0.f);
-	SOUND(play)->type = SoundComponent::EFFECT;
-	BUTTON(play)->enabled = false;
+	ADD_COMPONENT(play, TextRendering);
+	TEXT_RENDERING(play)->text = "Jouer";
+	TEXT_RENDERING(play)->positioning = TextRenderingComponent::LEFT;
+	TEXT_RENDERING(play)->color = green;
+	TEXT_RENDERING(play)->charHeight = PlacementHelper::GimpHeightToScreen(75);
+	
+	// play button
+	playButton = theEntityManager.CreateEntity();
+	ADD_COMPONENT(playButton, Transformation);
+	ADD_COMPONENT(playButton, Container);
+	CONTAINER(playButton)->entities.push_back(play);
+	CONTAINER(playButton)->includeChildren = true;
+	ADD_COMPONENT(playButton, Button);
+	ADD_COMPONENT(playButton, Sound);
+	SOUND(playButton)->type = SoundComponent::EFFECT;
+	BUTTON(playButton)->enabled = false;
 	
 	yourScore = theTextRenderingSystem.CreateLocalEntity(2);
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
@@ -51,17 +76,31 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(yourScore)->charHeight = 0.3;
 	TEXT_RENDERING(yourScore)->color = Color(0.f,0.f,0.f);
 
+	// back button
 	back = theEntityManager.CreateEntity();
 	ADD_COMPONENT(back, Transformation);
 	ADD_COMPONENT(back, Rendering);
 	ADD_COMPONENT(back, Button);
 	ADD_COMPONENT(back, Sound);
-	TRANSFORM(back)->size = Vector2(1,1);
-	TRANSFORM(back)->position = Vector2(0,0);
+	TRANSFORM(back)->size = Vector2(PlacementHelper::GimpWidthToScreen(61), PlacementHelper::GimpHeightToScreen(37));
+	TransformationSystem::setPosition(TRANSFORM(back), Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(82)), TransformationSystem::NW);
 	TRANSFORM(back)->z = DL_MainMenuUITxt;
-	RENDERING(back)->color = Color(1.f,0.f,0.f);
+	RENDERING(back)->texture = theRenderingSystem.loadTextureFile("menu/back.png");
 	SOUND(back)->type = SoundComponent::EFFECT;
 	BUTTON(back)->enabled = false;
+	
+	// back button
+	openfeint = theEntityManager.CreateEntity();
+	ADD_COMPONENT(openfeint, Transformation);
+	ADD_COMPONENT(openfeint, Rendering);
+	ADD_COMPONENT(openfeint, Button);
+	ADD_COMPONENT(openfeint, Sound);
+	TRANSFORM(openfeint)->size = Vector2(PlacementHelper::GimpWidthToScreen(90), PlacementHelper::GimpHeightToScreen(91));
+	TransformationSystem::setPosition(TRANSFORM(openfeint), Vector2(PlacementHelper::GimpXToScreen(605), PlacementHelper::GimpYToScreen(476)), TransformationSystem::NW);
+	TRANSFORM(openfeint)->z = DL_MainMenuUITxt;
+	RENDERING(openfeint)->texture = theRenderingSystem.loadTextureFile("menu/openfeint.png");
+	SOUND(openfeint)->type = SoundComponent::EFFECT;
+	BUTTON(openfeint)->enabled = false;
 
 	playerName.clear();
 	inputUI->getName(playerName);
