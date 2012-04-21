@@ -26,6 +26,8 @@ struct Canal {
 		float t = SOUND(sounds[indice])->position * musicLength;// + dt;
 		if (t >= timeLoop) {
 			indice = (indice+1)%2;
+			if (!name.empty())
+				SOUND(sounds[indice])->sound = theSoundSystem.loadSoundFile(name, true);
 		}
 		return (SOUND(sounds[indice])->sound == InvalidSoundRef);
 	}

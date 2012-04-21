@@ -49,20 +49,37 @@ bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float p
 			if (!nouv.empty()) {
 				canal[i].name=nouv[0];
 				nouv.erase(nouv.begin());
+			} else {
+				canal[i].name="";
 			}
 		}
 	}
-	if (percentDone > 2./45) {
+	
+	float pos = 0;
+	int count = 0;
+	for (int i=0; i<4; i++) {
+		if (SOUND(canal[i].sounds[canal[i].indice])->sound != InvalidSoundRef) {
+			pos += SOUND(canal[i].sounds[canal[i].indice])->position;
+			count++;
+		}
+	}
+		
+	if (percentDone > 2./45 && count) {
+		pos /= count;
 		if (SOUND(canalStress1->sounds[0])->sound==InvalidSoundRef && SOUND(canalStress1->sounds[1])->sound==InvalidSoundRef) {
 			LOGI("starting clochettes n° one!");
-			SOUND(canalStress1->sounds[canalStress1->indice])->position=SOUND(canal[0].sounds[canal[0].indice])->position + dt / 18.;
+			std::cout << pos << " != " << SOUND(canal[0].sounds[canal[0].indice])->position << std::endl;
+			SOUND(canalStress1->sounds[canalStress1->indice])->position= pos + 2*dt / 18.;
+			SOUND(canalStress1->sounds[canalStress1->indice])->masterTrack = SOUND(canal[0].sounds[canal[0].indice]);
 		}
 		canalStress1->update(dt);
 	}
-	if (percentDone > 22.5/45) {
+	if (percentDone > 22.5/45 && count) {
 		if (SOUND(canalStress2->sounds[0])->sound==InvalidSoundRef && SOUND(canalStress2->sounds[1])->sound==InvalidSoundRef) {
 			LOGI("starting clochettes n° two!");
-			SOUND(canalStress2->sounds[canalStress2->indice])->position=SOUND(canal[0].sounds[canal[0].indice])->position + dt / 18.;
+			std::cout << pos << " != " << SOUND(canal[0].sounds[canal[0].indice])->position << std::endl;
+			SOUND(canalStress2->sounds[canalStress2->indice])->position=pos + 2*dt / 18.;
+			SOUND(canalStress2->sounds[canalStress2->indice])->masterTrack = SOUND(canal[0].sounds[canal[0].indice]);
 		}
 		canalStress2->update(dt);
 	}
