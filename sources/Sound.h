@@ -10,9 +10,7 @@ struct Canal {
 	}
 	void pause() {
 		SOUND(sounds[0])->stop = true;
-		SOUND(sounds[0])->sound = InvalidSoundRef;
 		SOUND(sounds[1])->stop = true;
-		SOUND(sounds[1])->sound = InvalidSoundRef;
 		if (multipleStrings) name = "";
 		indice=0;
 	}
@@ -25,7 +23,7 @@ struct Canal {
 			if (multipleStrings) name = "";
 		}
 		// +dt is magic!
-		float t = SOUND(sounds[indice])->position * musicLength + dt;
+		float t = SOUND(sounds[indice])->position * musicLength;// + dt;
 		if (t >= timeLoop) {
 			indice = (indice+1)%2;
 		}
