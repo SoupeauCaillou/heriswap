@@ -58,18 +58,9 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 			std::cout << "Want to save it ? (y or *'ll be fine)" << std::endl;
 			std::string a;
 			getline(std::cin, a);
-			if (a[0] == 'y') saveOpt("name", result);
+			if (a[0] == 'y') storage->saveOpt("name", result);
 			__log_enabled = true;
 			return true;
-		}
-		void saveOpt(std::string opt, std::string name) {
-			std::stringstream tmp;
-			tmp << "INSERT INTO info VALUES ('" << opt << "', '" << name <<"')";
-			storage->request(tmp.str(), 0);
-		}
-		bool getName(std::string& result) {
-			storage->request("select value from info where opt LIKE 'name'", &result);
-			return (false);
 		}
 		ScoreStorage* storage;
 };
@@ -92,6 +83,8 @@ class LinuxSqliteExec: public ScoreStorage {
 					iss >> score1.points;
 				} else if (!strcmp(azColName[i],"time")) {
 					iss >> score1.time;
+				} else if (!strcmp(azColName[i],"level")) {
+					iss >> score1.level;
 				}
 			}
 			sav->push_back(score1);
@@ -108,9 +101,9 @@ class LinuxSqliteExec: public ScoreStorage {
 			std::vector<ScoreStorage::Score> sav;
 
 			if (mode==1 || mode == 3)
-				tmp << "select * from score where mode= "<< mode << " order by points desc limit 10";
+				tmp << "select * from score where mode= "<< mode << " order by points desc limit 5";
 			else
-				tmp << "select * from score where mode= "<< mode << " order by time asc limit 10";
+				tmp << "select * from score where mode= "<< mode << " order by time asc limit 5";
 
 			sqlite3 *db;
 			char *zErrMsg = 0;
@@ -129,6 +122,17 @@ class LinuxSqliteExec: public ScoreStorage {
 			return sav;
 		}
 
+		void saveOpt(std::string opt, std::string name) {
+			std::stringstream tmp;
+			tmp << "INSERT INTO info VALUES ('" << opt << "', '" << name <<"')";
+			request(tmp.str(), 0);
+		}
+
+		bool getName(std::string& result) {
+			request("select value from info where opt LIKE 'name'", &result);
+			return (false);
+		}
+
 		bool soundEnable(bool switchIt) {
 			std::string s;
 			request("select value from info where opt like 'sound'", &s);
@@ -142,7 +146,7 @@ class LinuxSqliteExec: public ScoreStorage {
 
 		void submitScore(ScoreStorage::Score scr) {
 			std::stringstream tmp;
-			tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << scr.mode<<","<<scr.points<<","<<scr.time<<")";
+			tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << scr.mode<<","<<scr.points<<","<<scr.time<<","<<scr.level<<")";
 			request(tmp.str().c_str(), 0);
 		}
 
@@ -168,7 +172,7 @@ class LinuxSqliteExec: public ScoreStorage {
 			bool r = request("", 0);
 			if (r) {
 				LOGI("initializing database...");
-				request("create table score(name char2(25) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0')", 0);
+				request("create table score(name char2(25) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0);
 				request("create table info(opt char2(8), value char2(25))", 0);
 				std::string s;
 				request("select value from info where opt like 'sound'", &s);

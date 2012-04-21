@@ -14,38 +14,38 @@ ModeMenuStateManager::~ModeMenuStateManager() {
 
 void ModeMenuStateManager::Setup() {
 	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
-	
+
 	//Creating text entities
 	for (int i=0; i<5; i++) {
 		scoresName[i] = theTextRenderingSystem.CreateLocalEntity(2);
 		scoresPoints[i] = theTextRenderingSystem.CreateLocalEntity(2);
 		scoresLevel[i] = theTextRenderingSystem.CreateLocalEntity(2);
 		TRANSFORM(scoresName[i])->z = TRANSFORM(scoresPoints[i])->z = TRANSFORM(scoresLevel[i])->z = DL_MainMenuUITxt;
-		
-		TRANSFORM(scoresName[i])->position.Y = 
-			TRANSFORM(scoresPoints[i])->position.Y = 
+
+		TRANSFORM(scoresName[i])->position.Y =
+			TRANSFORM(scoresPoints[i])->position.Y =
 				TRANSFORM(scoresLevel[i])->position.Y = PlacementHelper::GimpYToScreen(675 + i * 95);
 		TRANSFORM(scoresName[i])->position.X = PlacementHelper::GimpXToScreen(92);
 		TRANSFORM(scoresPoints[i])->position.X = PlacementHelper::GimpXToScreen(552);
 		TRANSFORM(scoresLevel[i])->position.X = PlacementHelper::GimpXToScreen(620);
-		
-		TEXT_RENDERING(scoresName[i])->charHeight = 
+
+		TEXT_RENDERING(scoresName[i])->charHeight =
 			TEXT_RENDERING(scoresPoints[i])->charHeight =
 				TEXT_RENDERING(scoresLevel[i])->charHeight = PlacementHelper::GimpHeightToScreen(45);
 		TEXT_RENDERING(scoresPoints[i])->isANumber = true;
 		TEXT_RENDERING(scoresName[i])->positioning = TextRenderingComponent::LEFT;
 		TEXT_RENDERING(scoresPoints[i])->positioning = TextRenderingComponent::RIGHT;
 		TEXT_RENDERING(scoresLevel[i])->positioning = TextRenderingComponent::RIGHT;
-		
+
 		TEXT_RENDERING(scoresName[i])->hide = true;
 		TEXT_RENDERING(scoresPoints[i])->hide = true;
 		TEXT_RENDERING(scoresLevel[i])->hide = true;
-		
-		TEXT_RENDERING(scoresName[i])->color = 
-			TEXT_RENDERING(scoresPoints[i])->color = 
-				TEXT_RENDERING(scoresPoints[i])->color = green;
+
+		TEXT_RENDERING(scoresName[i])->color =
+			TEXT_RENDERING(scoresPoints[i])->color =
+				TEXT_RENDERING(scoresLevel[i])->color = green;
 	}
-	
+
 	// play text
 	play = theEntityManager.CreateEntity();
 	ADD_COMPONENT(play, Transformation);
@@ -58,7 +58,7 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(play)->fontName = "typo";
 	TEXT_RENDERING(play)->charHeight = PlacementHelper::GimpHeightToScreen(100);
 	TEXT_RENDERING(play)->hide = true;
-	
+
 	// score title
 	scoreTitle = theEntityManager.CreateEntity();
 	ADD_COMPONENT(scoreTitle, Transformation);
@@ -71,7 +71,7 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(scoreTitle)->color = green;
 	TEXT_RENDERING(scoreTitle)->charHeight = PlacementHelper::GimpHeightToScreen(54);
 	TEXT_RENDERING(scoreTitle)->hide = true;
-	
+
 	// play button
 	playButton = theEntityManager.CreateEntity();
 	ADD_COMPONENT(playButton, Transformation);
@@ -82,7 +82,7 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(playButton, Sound);
 	SOUND(playButton)->type = SoundComponent::EFFECT;
 	BUTTON(playButton)->enabled = false;
-	
+
 	yourScore = theTextRenderingSystem.CreateLocalEntity(2);
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
 	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(800));
@@ -103,7 +103,7 @@ void ModeMenuStateManager::Setup() {
 	RENDERING(back)->texture = theRenderingSystem.loadTextureFile("menu/back.png");
 	SOUND(back)->type = SoundComponent::EFFECT;
 	BUTTON(back)->enabled = false;
-	
+
 	// openfeint button
 	openfeint = theEntityManager.CreateEntity();
 	ADD_COMPONENT(openfeint, Transformation);
@@ -118,7 +118,7 @@ void ModeMenuStateManager::Setup() {
 	BUTTON(openfeint)->enabled = false;
 
 	playerName.clear();
-	inputUI->getName(playerName);
+	storage->getName(playerName);
 }
 
 void ModeMenuStateManager::LoadScore(int mode) {
@@ -127,6 +127,7 @@ void ModeMenuStateManager::LoadScore(int mode) {
 	for (int i=0; i<5; i++) {
 		TextRenderingComponent* trcN = TEXT_RENDERING(scoresName[i]);
 		TextRenderingComponent* trcP = TEXT_RENDERING(scoresPoints[i]);
+		TextRenderingComponent* trcL = TEXT_RENDERING(scoresLevel[i]);
 		if (i < entries.size()) {
 			trcN->hide = false;
 			trcP->hide = false;
@@ -134,13 +135,18 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			a.precision(1);
 			if (mode==ScoreAttack) {
 				a << std::fixed << entries[i].time << "s";
-				TEXT_RENDERING(scoresPoints[i])->isANumber = false;
+				trcP->isANumber = false;
 			} else {
 				a << std::fixed << entries[i].points;
-				TEXT_RENDERING(scoresPoints[i])->isANumber = true;
+				trcP->isANumber = true;
 			}
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
+			trcL->text = entries[i].level;
+			//affichage lvl
+			if (mode==Normal) {
+				trcL->hide = false;
+			}
 
 			if (!alreadyGreen && ended && ((entries[i].points == modeMgr->points && mode!=ScoreAttack) || (mode==ScoreAttack && entries[i].time-modeMgr->time<0.01f)) && entries[i].name == playerName) {
 				// trcP->color = Color(0.f,1.f,0.f);
@@ -148,11 +154,12 @@ void ModeMenuStateManager::LoadScore(int mode) {
 				alreadyGreen = true;
 			} else {
 				// trcP->color = Color(0.f,0.f,0.f);
-				// trcN->color = Color(0.f,0.f,0.f);			
+				// trcN->color = Color(0.f,0.f,0.f);
 			}
 		} else {
 			trcP->hide = true;
 			trcN->hide = true;
+			trcL->hide = true;
 		}
 	}
 }
@@ -173,6 +180,12 @@ void ModeMenuStateManager::Enter() {
 		entry.time = modeMgr->time;
 		entry.name = playerName;
 		entry.mode = (int)modeMgr->GetMode();
+		if (modeMgr->GetMode()==Normal) {
+			NormalGameModeManager* ng = static_cast<NormalGameModeManager*>(modeMgr);
+			entry.level = ng->currentLevel();
+		} else {
+			entry.level = 1;
+		}
 		storage->submitScore(entry);
 		TEXT_RENDERING(yourScore)->hide = false;
 		std::stringstream a;

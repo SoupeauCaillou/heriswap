@@ -20,6 +20,7 @@
 #include "PlacementHelper.h"
 #include "states/GameStateManager.h"
 #include "modes/GameModeManager.h"
+#include "modes/NormalModeManager.h"
 
 class ModeMenuStateManager : public GameStateManager {
 	public:
@@ -33,7 +34,7 @@ class ModeMenuStateManager : public GameStateManager {
 		void LoadScore(int mode);
 
 		bool ended;
-		
+
 		Entity title, menufg, menubg;
 	private:
 		ScoreStorage* storage;
