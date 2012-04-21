@@ -80,6 +80,7 @@ class GameModeManager {
 		InGameUiHelper uiHelper;
 		
 		Entity sky, branch;
+		Entity  decor1er, decor2nd;
 	private :
 		std::vector<Render> posBranch;
 		void fillVec();
