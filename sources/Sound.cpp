@@ -13,7 +13,6 @@ std::vector<std::string> newMusics() {
 	}
 
 	int count = MathUtil::RandomInt(4) + 1;
-	LOGW("starting %d music", count);
 	std::vector<char> l; // all songs id
 	std::vector<std::string> res;
 
@@ -34,6 +33,9 @@ std::vector<std::string> newMusics() {
 		s << "audio/" << c << ".ogg";
 		res.push_back(s.str());
 	}
+	std::cout <<"starting " << count <<" musics : ";
+	for (int i=0; i<res.size(); i++) std::cout << res[i] <<", ";
+	std::cout<<std::endl;
 	return res;
 }
 
@@ -47,18 +49,17 @@ bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float p
 			if (!nouv.empty()) {
 				canal[i].name=nouv[0];
 				nouv.erase(nouv.begin());
-				LOGI("%s", canal[i].name.c_str());
 			}
 		}
 	}
-	if (percentDone > 25./45) {
+	if (percentDone > 2./45) {
 		if (SOUND(canalStress1->sounds[0])->sound==InvalidSoundRef && SOUND(canalStress1->sounds[1])->sound==InvalidSoundRef) {
 			LOGI("starting clochettes n° one!");
-			SOUND(canalStress1->sounds[canalStress1->indice])->position=SOUND(canal[0].sounds[canal[0].indice])->position+dt;
+			SOUND(canalStress1->sounds[canalStress1->indice])->position=SOUND(canal[0].sounds[canal[0].indice])->position;
 		}
 		canalStress1->update(dt);
 	}
-	if (percentDone > 35./45) {
+	if (percentDone > 22.5/45) {
 		if (SOUND(canalStress2->sounds[0])->sound==InvalidSoundRef && SOUND(canalStress2->sounds[1])->sound==InvalidSoundRef) {
 			LOGI("starting clochettes n° two!");
 			SOUND(canalStress2->sounds[canalStress2->indice])->position=SOUND(canal[0].sounds[canal[0].indice])->position+dt;
