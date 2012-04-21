@@ -23,7 +23,7 @@ struct Canal {
 			if (multipleStrings) name = "";
 		}
 		// +dt is magic!
-		float t = SOUND(sounds[indice])->position * musicLength + dt;
+		float t = SOUND(sounds[indice])->position * musicLength;// + dt;
 		if (t >= timeLoop) {
 			indice = (indice+1)%2;
 		}
