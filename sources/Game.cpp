@@ -97,7 +97,7 @@ class Game::Data {
 			RENDERING(logo_bg)->color = Color(0,0,0);
 			TRANSFORM(logo_bg)->z = DL_BehindLogo;
 			ADD_COMPONENT(soundButton, Transformation);
-			TRANSFORM(soundButton)->z = DL_MainMenuUI;
+			TRANSFORM(soundButton)->z = DL_MainMenuUITxt;
 			TRANSFORM(soundButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
 			TransformationSystem::setPosition(TRANSFORM(soundButton), Vector2(PlacementHelper::GimpXToScreen(692), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
 			ADD_COMPONENT(soundButton, Button);
@@ -173,6 +173,11 @@ class Game::Data {
 				benchTimeSystem[allSystems[i]] = b;
 			}
 			bg->cloudStartX = Interval<float>(8.0,15.0);
+			
+			MainMenuGameStateManager* mainmenu = static_cast<MainMenuGameStateManager*> (state2Manager[MainMenu]);
+			ModeMenuStateManager* modemenu = static_cast<ModeMenuStateManager*> (state2Manager[ModeMenu]);
+			modemenu->menufg = mainmenu->menufg;
+			modemenu->menubg = mainmenu->menubg;
 		}
 		//bench data
 		std::map<std::string, Entity> benchTimeSystem;
@@ -296,6 +301,7 @@ void Game::loadFont(const std::string& name) {
 		h2wratio[c] = (float)w / h;
 	}
 	free(font);
+	h2wratio[' '] = h2wratio['a'];
 	theTextRenderingSystem.registerFont("typo", h2wratio);
 }
 
@@ -349,45 +355,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	SCROLLING(datas->sky)->displaySize = Vector2(TRANSFORM(datas->sky)->size.X * 1.01, TRANSFORM(datas->sky)->size.Y);
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
 
-	datas->decord2nd = theEntityManager.CreateEntity();
-	ADD_COMPONENT(datas->decord2nd, Transformation);
-	TRANSFORM(datas->decord2nd)->z = DL_Decor2nd;
-	TRANSFORM(datas->decord2nd)->size = Vector2(bgElementWidth, (bgElementWidth * 470.0) / 808.0);
-	TransformationSystem::setPosition(TRANSFORM(datas->decord2nd), Vector2(0, PlacementHelper::GimpYToScreen(610)), TransformationSystem::N);
-	ADD_COMPONENT(datas->decord2nd, Scrolling);
-	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_0.png");
-	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_1.png");
-	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_2.png");
-	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_3.png");
-	SCROLLING(datas->decord2nd)->speed = Vector2(-.1, 0);
-	SCROLLING(datas->decord2nd)->displaySize = Vector2(TRANSFORM(datas->decord2nd)->size.X * 1.01, TRANSFORM(datas->decord2nd)->size.Y);
-
-	datas->decord1er = theEntityManager.CreateEntity();
-	ADD_COMPONENT(datas->decord1er, Transformation);
-	TRANSFORM(datas->decord1er)->z = DL_Decor1er;
-	TRANSFORM(datas->decord1er)->size = Vector2(bgElementWidth, (bgElementWidth * 300.0) / 808.0);
-	TransformationSystem::setPosition(TRANSFORM(datas->decord1er), Vector2(0, PlacementHelper::GimpYToScreen(1280)), TransformationSystem::S);
-	ADD_COMPONENT(datas->decord1er, Scrolling);
-	SCROLLING(datas->decord1er)->images.push_back("decor1er_0.png");
-	SCROLLING(datas->decord1er)->images.push_back("decor1er_1.png");
-	SCROLLING(datas->decord1er)->images.push_back("decor1er_2.png");
-	SCROLLING(datas->decord1er)->images.push_back("decor1er_3.png");
-	SCROLLING(datas->decord1er)->speed = Vector2(-0.01, 0);
-	SCROLLING(datas->decord1er)->displaySize = Vector2(TRANSFORM(datas->decord1er)->size.X * 1.01, TRANSFORM(datas->decord1er)->size.Y);
-
-	Entity branch = theEntityManager.CreateEntity();
-	ADD_COMPONENT(branch, Transformation);
-	TRANSFORM(branch)->z = DL_Branch;
-	TRANSFORM(branch)->size = Vector2(bgElementWidth, (bgElementWidth * 400.0) / 800.0);
-	TransformationSystem::setPosition(TRANSFORM(branch), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
-	ADD_COMPONENT(branch, Rendering);
-	RENDERING(branch)->hide = false;
-	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
-
 	datas->mode2Manager[Normal]->sky = datas->sky;
-	datas->mode2Manager[Normal]->decord1er = datas->decord1er;
-	datas->mode2Manager[Normal]->decor2nd = datas->decord2nd;
-
 	static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel = datas->mode2Manager[Normal]->uiHelper.smallLevel;
 
 	datas->state2Manager[datas->state]->Enter();

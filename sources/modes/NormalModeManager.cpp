@@ -37,6 +37,7 @@ NormalGameModeManager::~NormalGameModeManager() {
 
 void NormalGameModeManager::Setup() {
 	SetupCore(bonus);
+	
 	HideUI(true);
 }
 
@@ -104,7 +105,7 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
     levelMoveDuration = deleteDuration + spawnDuration;
     nextHerissonSpeed = (newPos - currentPos) / levelMoveDuration;
 
-    SCROLLING(decord1er)->speed.X = nextHerissonSpeed;
+    SCROLLING(decor1er)->speed.X = nextHerissonSpeed;
     // SCROLLING(decor2nd)->speed.X = nextHerissonSpeed * DECOR2_SPEED;
     // SCROLLING(sky)->speed.X = nextHerissonSpeed * SKY_SPEED;
 
@@ -186,7 +187,7 @@ void NormalGameModeManager::UpdateUI(float dt) {
 		if (levelMoveDuration <= 0) {
 			// stop scrolling
 			float s = 0;
-			SCROLLING(decord1er)->speed.X = s;
+			SCROLLING(decor1er)->speed.X = s;
     		// SCROLLING(decor2nd)->speed.X = s * DECOR2_SPEED;
     		// SCROLLING(sky)->speed.X = s * SKY_SPEED;
 		}

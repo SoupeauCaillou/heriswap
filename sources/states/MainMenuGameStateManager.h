@@ -27,7 +27,10 @@ class MainMenuGameStateManager : public GameStateManager {
 
 		GameMode choosenGameMode;
 		Entity eStart[3];
-		private:
+		Entity menufg, menubg;
+	private:
 		Entity bStart[3];
+		Entity modeTitleToReset;
+
 		
 };

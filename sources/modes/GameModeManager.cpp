@@ -1,5 +1,6 @@
 #include "modes/GameModeManager.h"
 #include "TwitchSystem.h"
+#include "systems/ScrollingSystem.h"
 #include <fstream>
 
 struct GameModeManager::Actor {
@@ -70,9 +71,46 @@ void GameModeManager::SetupCore(int bonus) {
 	c->frames=0;
 	c->actor.speed = 4.1;
 	LoadHerissonTexture(bonus+1);
+	
+	branch = theEntityManager.CreateEntity();
+	ADD_COMPONENT(branch, Transformation);
+	TRANSFORM(branch)->z = DL_Branch;
+	TRANSFORM(branch)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(400.0));
+	TransformationSystem::setPosition(TRANSFORM(branch), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
+	ADD_COMPONENT(branch, Rendering);
+	RENDERING(branch)->hide = false;
+	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
+
+	decor2nd = theEntityManager.CreateEntity();
+	ADD_COMPONENT(decor2nd, Transformation);
+	TRANSFORM(decor2nd)->z = DL_Decor2nd;
+	TRANSFORM(decor2nd)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpWidthToScreen(470));
+	TransformationSystem::setPosition(TRANSFORM(decor2nd), Vector2(0, PlacementHelper::GimpYToScreen(610)), TransformationSystem::N);
+	ADD_COMPONENT(decor2nd, Scrolling);
+	SCROLLING(decor2nd)->images.push_back("decor2nd_0.png");
+	SCROLLING(decor2nd)->images.push_back("decor2nd_1.png");
+	SCROLLING(decor2nd)->images.push_back("decor2nd_2.png");
+	SCROLLING(decor2nd)->images.push_back("decor2nd_3.png");
+	SCROLLING(decor2nd)->speed = Vector2(-.1, 0);
+	SCROLLING(decor2nd)->displaySize = Vector2(TRANSFORM(decor2nd)->size.X * 1.01, TRANSFORM(decor2nd)->size.Y);
+	SCROLLING(decor2nd)->hide = true;
+
+	decor1er = theEntityManager.CreateEntity();
+	ADD_COMPONENT(decor1er, Transformation);
+	TRANSFORM(decor1er)->z = DL_Decor1er;
+	TRANSFORM(decor1er)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpWidthToScreen(300));
+	TransformationSystem::setPosition(TRANSFORM(decor1er), Vector2(0, PlacementHelper::GimpYToScreen(1280)), TransformationSystem::S);
+	ADD_COMPONENT(decor1er, Scrolling);
+	SCROLLING(decor1er)->images.push_back("decor1er_0.png");
+	SCROLLING(decor1er)->images.push_back("decor1er_1.png");
+	SCROLLING(decor1er)->images.push_back("decor1er_2.png");
+	SCROLLING(decor1er)->images.push_back("decor1er_3.png");
+	SCROLLING(decor1er)->speed = Vector2(-0.01, 0);
+	SCROLLING(decor1er)->displaySize = Vector2(TRANSFORM(decor1er)->size.X * 1.01, TRANSFORM(decor1er)->size.Y);
+	SCROLLING(decor1er)->hide = true;
+	
 	ResetCore(bonus);
 	fillVec();
-
 }
 void GameModeManager::ResetCore(int bonus) {
 	distance = 0.f;
@@ -190,4 +228,8 @@ void GameModeManager::HideUICore(bool toHide) {
 		uiHelper.hide();
 	else
 		uiHelper.show();
+		
+	RENDERING(branch)->hide = toHide;
+	SCROLLING(decor2nd)->hide = toHide;
+	SCROLLING(decor1er)->hide = toHide;
 }
