@@ -6,7 +6,7 @@
 class ScoreStorage {
 	public:
 		struct Score {
-			int mode, points;
+			int mode, points, level;
 			float time;
 			std::string name;
 		};
@@ -15,14 +15,15 @@ class ScoreStorage {
 		virtual std::vector<Score> getScore(int mode) = 0;
 		virtual bool request(std::string s, std::string* res) = 0;
 		virtual bool soundEnable(bool switchIt) = 0;
+		virtual void saveOpt(std::string opt, std::string name) = 0;
+		virtual bool getName(std::string& result) = 0;
 };
 
 class PlayerNameInputUI {
 	public:
 		virtual void show() = 0;
 		virtual bool query(std::string& result) = 0;
-		virtual void saveOpt(std::string opt, std::string name) = 0;
-		virtual bool getName(std::string& result) = 0;
+
 };
 
 class Game {
