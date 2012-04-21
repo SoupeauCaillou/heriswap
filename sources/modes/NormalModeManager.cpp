@@ -62,7 +62,7 @@ float NormalGameModeManager::Update(float dt) {
 	}
 	time+=dt;
 	LevelUp();
-	return (limit - time)/limit;
+	return time/limit;
 }
 
 static int levelToLeaveToDelete(int nb, int level) {

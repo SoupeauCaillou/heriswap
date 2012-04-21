@@ -485,7 +485,7 @@ void Game::tick(float dt) {
 	}
 	float updateDuration = TimeUtil::getTime();
 	static bool ended = false;
-	float percentDone; //ended = (percentDone>=100);
+	float percentDone=0; //ended = (percentDone>=1);
 	static float timeMusicLoop = 65.f; //premier lancement
 
 	GameState newState;
@@ -540,7 +540,7 @@ void Game::tick(float dt) {
 	//updating time
 	if (datas->state == UserInput) {
 		percentDone = datas->mode2Manager[datas->mode]->Update(dt);
-		ended = (percentDone >= 0);
+		ended = (percentDone >= 1);
 		//si on change de niveau
 		if (datas->mode2Manager[datas->mode]->LeveledUp()) {
 			NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[datas->mode]);
