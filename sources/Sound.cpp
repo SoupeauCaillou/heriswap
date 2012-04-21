@@ -27,7 +27,7 @@ std::vector<std::string> newMusics() {
 
 	for (int i=1; i<count; i++) {
 		do {
-			c = MathUtil::RandomInt(4);
+			c = MathUtil::RandomInt(4)+'A';
 		} while (std::find(l.begin(), l.end(), c) != l.end());
 		l.push_back(c);
 		std::stringstream s;
@@ -40,13 +40,14 @@ std::vector<std::string> newMusics() {
 bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float percentDone, float dt) {
 	bool end, endv[4];
 	for (int i=0; i<4; i++) endv[i] = canal[i].update(dt);
-	end=endv[0]+endv[1]+endv[2]+endv[3];
+	end=endv[0] && endv[1] && endv[2] && endv[3];
 	if (end) {
 		std::vector<std::string> nouv = newMusics();
 		for (int i=0; i<4; i++) {
 			if (!nouv.empty()) {
 				canal[i].name=nouv[0];
 				nouv.erase(nouv.begin());
+				LOGI("%s", canal[i].name.c_str());
 			}
 		}
 	}
