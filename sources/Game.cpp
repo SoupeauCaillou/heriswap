@@ -118,15 +118,14 @@ class Game::Data {
 				musicStress2[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(musicStress2[i], Sound);
 				SOUND(musicStress2[i])->type = SoundComponent::MUSIC;
-				SOUND(musicStress2[i])->repeat = false;
+
 				musicStress1[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(musicStress1[i], Sound);
 				SOUND(musicStress1[i])->type = SoundComponent::MUSIC;
-				SOUND(musicStress1[i])->repeat = false;
+
 				musicMenu[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(musicMenu[i], Sound);
 				SOUND(musicMenu[i])->type = SoundComponent::MUSIC;
-				SOUND(musicMenu[i])->repeat = false;
 			}
 			for (int i=0; i<8; i++) {
 				music[i] = theEntityManager.CreateEntity();
