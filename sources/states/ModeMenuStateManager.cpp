@@ -126,7 +126,7 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(fond, Rendering);
 	RENDERING(fond)->texture = theRenderingSystem.loadTextureFile("menu/fond_menu_mode.png");
 	RENDERING(fond)->color.a = 0.5;
-		
+
 	playerName.clear();
 	storage->getName(playerName);
 }
@@ -152,7 +152,9 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			}
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
-			trcL->text = entries[i].level;
+
+			a.str(""); a<< std::fixed <<entries[i].level;
+			trcL->text = a.str();
 			//affichage lvl
 			if (mode==Normal) {
 				trcL->hide = false;
