@@ -303,8 +303,9 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	/*
 	theRenderingSystem.loadAtlas("sprites");
 	theRenderingSystem.loadAtlas("animals");
-	theRenderingSystem.loadAtlas("alphabet");
 	*/
+	theRenderingSystem.loadAtlas("alphabet");
+
 	if (in && size) {
 		datas->state = Pause;
 		loadState(in, size);

@@ -59,7 +59,6 @@ void GameModeManager::LoadHerissonTexture(int type) {
 }
 
 void GameModeManager::SetupCore(int bonus) {
-LOGW("%s:%d", __FUNCTION__, __LINE__);
 	herisson = theEntityManager.CreateEntity();
 	ADD_COMPONENT(herisson, Transformation);
 	ADD_COMPONENT(herisson, Rendering);
@@ -69,20 +68,14 @@ LOGW("%s:%d", __FUNCTION__, __LINE__);
 	c->actor.e = herisson;
 	c->frames=0;
 	c->actor.speed = 4.1;
-	LOGW("%s:%d", __FUNCTION__, __LINE__);
 	LoadHerissonTexture(bonus+1);
-	LOGW("%s:%d", __FUNCTION__, __LINE__);
 	ResetCore(bonus);
-	LOGW("%s:%d", __FUNCTION__, __LINE__);
 	fillVec();
-	LOGW("%s:%d", __FUNCTION__, __LINE__);
 	
 }
 void GameModeManager::ResetCore(int bonus) {
 	distance = 0.f;
-	LOGW("%s:%d", __FUNCTION__, __LINE__);
 	generateLeaves(6);
-	LOGW("%s:%d", __FUNCTION__, __LINE__);
 	TRANSFORM(herisson)->position = Vector2(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5, PlacementHelper::GimpYToScreen(1100));
 	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 }

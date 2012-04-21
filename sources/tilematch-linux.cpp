@@ -294,7 +294,7 @@ int main(int argc, char** argv) {
 
 static char* loadPng(const char* assetName, int* width, int* height)
 {
-	//std::cout << __FUNCTION__ << " : " << assetName << std::endl;
+	std::cout << __FUNCTION__ << " : " << assetName << std::endl;
 	png_byte* PNG_image_buffer;
 	std::stringstream ss;
 	ss << "./assets/" << assetName;
