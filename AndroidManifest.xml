@@ -5,7 +5,7 @@
     android:versionName="1.0" 
     >
 
-    <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="4" />
     
     <!-- This .apk has no Java code itself, so set hasCode to false. -->
     <application android:label="Heriswap" android:debuggable="true" android:icon="@drawable/ic_launcher">
@@ -20,5 +20,8 @@
             </intent-filter>
         </activity>
     </application>
-
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
 </manifest>
