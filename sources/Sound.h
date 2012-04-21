@@ -10,9 +10,7 @@ struct Canal {
 	}
 	void pause() {
 		SOUND(sounds[0])->stop = true;
-		SOUND(sounds[0])->sound = InvalidSoundRef;
 		SOUND(sounds[1])->stop = true;
-		SOUND(sounds[1])->sound = InvalidSoundRef;
 		if (multipleStrings) name = "";
 		indice=0;
 	}
