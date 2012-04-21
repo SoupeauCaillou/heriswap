@@ -44,7 +44,7 @@ class GameModeManager {
 		void ResetCore(int bonus);
 		void UpdateCore(float dt, float obj, float herissonSpeed = 0);
 		void HideUICore(bool ToHide);
-		float position(float t, std::vector<Vector2> pts);
+		float position(float t);
 		void generateLeaves(int nb);
 		void switchAnim(AnimatedActor* a);
 		void LoadHerissonTexture(int type);
@@ -78,7 +78,7 @@ class GameModeManager {
 		AnimatedActor* c;
 		std::vector<Vector2> pts;
 		InGameUiHelper uiHelper;
-		
+
 		Entity sky, decord1er, decor2nd;
 
 	private :

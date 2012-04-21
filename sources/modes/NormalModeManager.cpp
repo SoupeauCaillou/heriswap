@@ -29,6 +29,7 @@ NormalGameModeManager::NormalGameModeManager() {
 	pts.push_back(Vector2(25,0.25));
 	pts.push_back(Vector2(35,0.5));
 	pts.push_back(Vector2(45,1));
+
 }
 
 NormalGameModeManager::~NormalGameModeManager() {
@@ -92,21 +93,21 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
             nb--;
         }
     }
-    
+
     // move background during delete/spawn sequence (+ fall ?)
     float deleteDuration = 0.3*FAST;
     float spawnDuration = 0.2*FAST;
     // herisson distance
     float currentPos = TRANSFORM(herisson)->position.X;
-    float newPos = GameModeManager::position(time - timeGain(count, time), pts);
+    float newPos = GameModeManager::position(time - timeGain(count, time));
     // update herisson and decor at the same time.
     levelMoveDuration = deleteDuration + spawnDuration;
     nextHerissonSpeed = (newPos - currentPos) / levelMoveDuration;
-    
+
     SCROLLING(decord1er)->speed.X = nextHerissonSpeed;
     // SCROLLING(decor2nd)->speed.X = nextHerissonSpeed * DECOR2_SPEED;
     // SCROLLING(sky)->speed.X = nextHerissonSpeed * SKY_SPEED;
-    
+
 }
 
 void NormalGameModeManager::ScoreCalc(int nb, int type) {
@@ -147,7 +148,7 @@ void NormalGameModeManager::LevelUp() {
 		// cacher le n'herisson
 		RENDERING(herisson)->hide = true;
 		// et le positionner
-		TRANSFORM(herisson)->position.X = GameModeManager::position(time, pts);
+		TRANSFORM(herisson)->position.X = GameModeManager::position(time);
 		levelUpPending = true;
 	}
 }
@@ -177,11 +178,11 @@ void NormalGameModeManager::UpdateUI(float dt) {
 	a << level;
 	TEXT_RENDERING(uiHelper.smallLevel)->text = a.str();
 	}
-	
+
 	if (levelMoveDuration > 0) {
 		UpdateCore(dt, time, nextHerissonSpeed);
 		levelMoveDuration -= dt;
-		
+
 		if (levelMoveDuration <= 0) {
 			// stop scrolling
 			float s = 0;
@@ -189,7 +190,7 @@ void NormalGameModeManager::UpdateUI(float dt) {
     		// SCROLLING(decor2nd)->speed.X = s * DECOR2_SPEED;
     		// SCROLLING(sky)->speed.X = s * SKY_SPEED;
 		}
-		
+
 	} else {
 		UpdateCore(dt, time, 0);
 	}

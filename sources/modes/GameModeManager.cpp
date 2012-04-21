@@ -22,9 +22,9 @@ void GameModeManager::switchAnim(GameModeManager::AnimatedActor* a) {
 	}
 }
 
-float GameModeManager::position(float t, std::vector<Vector2> pts) {
+float GameModeManager::position(float t) {
 	float p = 0;
-	
+
 	if (t<=pts[0].X) {
 		p = pts[0].Y;
 	} else {
@@ -42,6 +42,7 @@ float GameModeManager::position(float t, std::vector<Vector2> pts) {
 	return MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
 	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, p);
 }
+
 void GameModeManager::LoadHerissonTexture(int type) {
 	std::stringstream t;
 	c->anim.clear();
@@ -71,7 +72,7 @@ void GameModeManager::SetupCore(int bonus) {
 	LoadHerissonTexture(bonus+1);
 	ResetCore(bonus);
 	fillVec();
-	
+
 }
 void GameModeManager::ResetCore(int bonus) {
 	distance = 0.f;
@@ -82,7 +83,7 @@ void GameModeManager::ResetCore(int bonus) {
 void GameModeManager::generateLeaves(int nb) {
 	for (int az=0;az<branchLeaves.size();az++)
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
-		
+
 	branchLeaves.clear();
 	fillVec();
 	//std::vector<Render> swapper;
@@ -153,7 +154,7 @@ void GameModeManager::UpdateCore(float dt, float obj, float herissonSpeed) {
 	TransformationComponent* tc = TRANSFORM(herisson);
 	float newPos = tc->position.X;
 	if (herissonSpeed == 0) {
-		float targetPosX = GameModeManager::position(obj, pts);
+		float targetPosX = position(obj);
     	float distance = targetPosX - tc->position.X;
 		if (distance != 0.f) {
 			herissonSpeed = (distance > 0) ? 1.0f : -1.0f;
@@ -166,11 +167,16 @@ void GameModeManager::UpdateCore(float dt, float obj, float herissonSpeed) {
 	} else {
 		newPos = tc->position.X + herissonSpeed * dt;
 	}
+	//set animation speed
+	c->actor.speed = 15*(newPos - tc->position.X)/dt;
+	if (c->actor.speed < 1.4) c->actor.speed = 1.4;
+	if (c->actor.speed > 4.5) c->actor.speed = 4.5;
+
 	tc->position.X = newPos;
-	
+
 	if (herissonSpeed > 0) {
 		switchAnim(c);
-	} else {	
+	} else {
 		RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
 	}
 	uiHelper.update(dt);
