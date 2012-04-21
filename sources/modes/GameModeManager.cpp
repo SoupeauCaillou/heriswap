@@ -72,7 +72,6 @@ void GameModeManager::SetupCore(int bonus) {
 	LoadHerissonTexture(bonus+1);
 	ResetCore(bonus);
 	fillVec();
-
 }
 void GameModeManager::ResetCore(int bonus) {
 	distance = 0.f;
@@ -190,4 +189,6 @@ void GameModeManager::HideUICore(bool toHide) {
 		uiHelper.hide();
 	else
 		uiHelper.show();
+		
+	RENDERING(branch)->hide = toHide;
 }

@@ -17,8 +17,8 @@ void ModeMenuStateManager::Setup() {
 	for (int i=0; i<5; i++) {
 		scoresName[i] = theTextRenderingSystem.CreateLocalEntity(2);
 		scoresPoints[i] = theTextRenderingSystem.CreateLocalEntity(2);
-		TRANSFORM(scoresName[i])->z = DL_MainMenuUI;
-		TRANSFORM(scoresPoints[i])->z = DL_MainMenuUI;
+		TRANSFORM(scoresName[i])->z = DL_MainMenuUITxt;
+		TRANSFORM(scoresPoints[i])->z = DL_MainMenuUITxt;
 		TRANSFORM(scoresName[i])->position = Vector2(PlacementHelper::GimpXToScreen(350),PlacementHelper::GimpYToScreen(900))-Vector2(0,i/2.);
 		TRANSFORM(scoresPoints[i])->position = Vector2(PlacementHelper::GimpXToScreen(300),PlacementHelper::GimpYToScreen(900))-Vector2(0,i/2.);
 		TEXT_RENDERING(scoresName[i])->charHeight = 0.3;
@@ -38,13 +38,13 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(play, Sound);
 	TRANSFORM(play)->size = Vector2(1,1);
 	TRANSFORM(play)->position = Vector2(0,2);
-	TRANSFORM(play)->z = DL_MainMenuUI;
+	TRANSFORM(play)->z = DL_MainMenuUITxt;
 	RENDERING(play)->color = Color(0.f,1.f,0.f);
 	SOUND(play)->type = SoundComponent::EFFECT;
 	BUTTON(play)->enabled = false;
 	
 	yourScore = theTextRenderingSystem.CreateLocalEntity(2);
-	TRANSFORM(yourScore)->z = DL_MainMenuUI;
+	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
 	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(800));
 	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(yourScore)->hide = true;
@@ -58,7 +58,7 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(back, Sound);
 	TRANSFORM(back)->size = Vector2(1,1);
 	TRANSFORM(back)->position = Vector2(0,0);
-	TRANSFORM(back)->z = DL_MainMenuUI;
+	TRANSFORM(back)->z = DL_MainMenuUITxt;
 	RENDERING(back)->color = Color(1.f,0.f,0.f);
 	SOUND(back)->type = SoundComponent::EFFECT;
 	BUTTON(back)->enabled = false;

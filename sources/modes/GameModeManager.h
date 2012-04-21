@@ -78,9 +78,8 @@ class GameModeManager {
 		AnimatedActor* c;
 		std::vector<Vector2> pts;
 		InGameUiHelper uiHelper;
-
-		Entity sky, decord1er, decor2nd;
-
+		
+		Entity sky, branch;
 	private :
 		std::vector<Render> posBranch;
 		void fillVec();

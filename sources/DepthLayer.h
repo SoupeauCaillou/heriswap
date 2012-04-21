@@ -17,7 +17,10 @@
 #define DL_SnowBackground 0.41
 #define DL_Snow 0.42
 #define DL_Score 0.45
-#define DL_MainMenuUI 0.5
+#define DL_MainMenuBg 0.47
+#define DL_MainMenuFg 0.49
+#define DL_MainMenuUIBg 0.5
+#define DL_MainMenuUITxt 0.51
 #define DL_BehindLogo 0.53
 #define DL_Logo 0.55
 #define DL_LogoAnim 0.56

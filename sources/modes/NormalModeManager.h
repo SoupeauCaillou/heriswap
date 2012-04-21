@@ -35,4 +35,5 @@ class NormalGameModeManager : public GameModeManager {
 		float nextHerissonSpeed;
 		float levelMoveDuration;
 		bool levelUpPending;
+		Entity  decor1er, decor2nd;
 };
