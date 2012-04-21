@@ -53,14 +53,14 @@ bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float p
 	if (percentDone > 25./45) {
 		if (SOUND(canalStress1->sounds[0])->sound==InvalidSoundRef && SOUND(canalStress1->sounds[1])->sound==InvalidSoundRef) {
 			LOGI("starting clochettes n° one!");
-			SOUND(canalStress1->sounds[canalStress1->indice])->position=SOUND(canal[0].sounds[canal[0].indice])->position;
+			SOUND(canalStress1->sounds[canalStress1->indice])->position=SOUND(canal[0].sounds[canal[0].indice])->position+dt;
 		}
 		canalStress1->update(dt);
 	}
 	if (percentDone > 35./45) {
 		if (SOUND(canalStress2->sounds[0])->sound==InvalidSoundRef && SOUND(canalStress2->sounds[1])->sound==InvalidSoundRef) {
 			LOGI("starting clochettes n° two!");
-			SOUND(canalStress2->sounds[canalStress2->indice])->position=SOUND(canal[0].sounds[canal[0].indice])->position;
+			SOUND(canalStress2->sounds[canalStress2->indice])->position=SOUND(canal[0].sounds[canal[0].indice])->position+dt;
 		}
 		canalStress2->update(dt);
 	}
