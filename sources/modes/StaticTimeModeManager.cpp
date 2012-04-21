@@ -35,7 +35,7 @@ void StaticTimeGameModeManager::Reset() {
 
 float StaticTimeGameModeManager::Update(float dt) {
 	time+=dt;
-	return (limit - time)/limit;
+	return time/limit;
 }
 
 void StaticTimeGameModeManager::ScoreCalc(int nb, int type) {

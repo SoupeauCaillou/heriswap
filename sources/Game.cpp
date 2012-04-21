@@ -128,7 +128,6 @@ class Game::Data {
 				SOUND(musicMenu[i])->type = SoundComponent::MUSIC;
 				SOUND(musicMenu[i])->repeat = false;
 			}
-
 			for (int i=0; i<8; i++) {
 				music[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(music[i], Sound);
@@ -136,12 +135,24 @@ class Game::Data {
 				SOUND(music[i])->repeat = false;
 			}
 
-			menuMusic.timeLoop=64;
-			menuMusic.indice=0;
-			menuMusic.sounds=musicMenu;
-			menuMusic.sound="audio/musique_menu.ogg";
-			float benchPos = - 4.75;
+			canalMenu.timeLoop = 64.;
+			canalMenu.musicLength=65.;
+			canalMenu.sounds=musicMenu;
+			canalMenu.name="audio/musique_menu.ogg";
 
+			canalStress1.sounds=musicStress1;
+			canalStress1.name="audio/E.ogg";
+
+			canalStress2.sounds=musicStress2;
+			canalStress2.name="audio/F.ogg";
+
+			for (int i=0;i<4;i++) {
+				canal[i].sounds=music;
+				canal[i].multipleStrings = true;
+			}
+
+
+			float benchPos = - 4.75;
 			benchTotalTime = theEntityManager.CreateEntity();
 			ADD_COMPONENT(benchTotalTime, Rendering);
 			ADD_COMPONENT(benchTotalTime, Transformation);
@@ -183,8 +194,8 @@ class Game::Data {
 		Entity cursor;
 
 		Entity soundButton;
-		Canal menuMusic;
-		Entity music[8], musicStress1[2], musicStress2[2], musicMenu[2];
+		Canal canalMenu, canalStress1, canalStress2, canal[4];
+		Entity musicMenu[2], musicStress1[2], musicStress2[2], music[8];
 };
 
 static bool inGameState(GameState state) {
@@ -222,7 +233,7 @@ static bool fadeLogoState(GameState state) {
 			return true;
 		default:
 			return false;
-	}	
+	}
 }
 
 static const float offset = 0.2;
@@ -250,7 +261,7 @@ float Game::CellContentScale() {
 
 Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, PlayerNameInputUI* inputUI) {
 	this->loader = ploader;
-	
+
 	/* create EntityManager */
 	EntityManager::CreateInstance();
 
@@ -305,7 +316,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	theTouchInputManager.init(Vector2(PlacementHelper::ScreenWidth, PlacementHelper::ScreenHeight), Vector2(windowW, windowH));
 
 	theRenderingSystem.init();
-	
+
 	/*
 	theRenderingSystem.loadAtlas("sprites");
 	theRenderingSystem.loadAtlas("animals");
@@ -316,7 +327,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 		datas->state = Pause;
 		loadState(in, size);
 	}
-	
+
 	datas->Setup(windowW, windowH);
 
 	if (in && size) {
@@ -442,7 +453,7 @@ void Game::tick(float dt) {
 	}
 	float updateDuration = TimeUtil::getTime();
 	static bool ended = false;
-	float timeLeft; //ended = (timeLeft<=);
+	float percentDone=0; //ended = (percentDone>=1);
 	static float timeMusicLoop = 65.f; //premier lancement
 
 	GameState newState;
@@ -496,8 +507,8 @@ void Game::tick(float dt) {
 
 	//updating time
 	if (datas->state == UserInput) {
-		timeLeft = datas->mode2Manager[datas->mode]->Update(dt);
-		ended = timeLeft <= 0;
+		percentDone = datas->mode2Manager[datas->mode]->Update(dt);
+		ended = (percentDone >= 1);
 		//si on change de niveau
 		if (datas->mode2Manager[datas->mode]->LeveledUp()) {
 			NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[datas->mode]);
@@ -538,9 +549,13 @@ void Game::tick(float dt) {
 
 	//update music
 	if (pausableState(datas->state) && datas->state != LevelChanged) { //si on joue
-		//if(updateMusic(datas->music, datas->musicStress1, datas->musicStress2, timeLeft, dt, datas->indiceMusic));
+		datas->canalMenu.pause();
+		updateMusic(datas->canal, &datas->canalStress1, &datas->canalStress2, percentDone, dt);
 	} else if (!pausableState(datas->state) && !fadeLogoState(datas->state)) { //dans les menus
-		datas->menuMusic.update(dt);
+		for (int i=0;i<4;i++) datas->canal[i].pause();
+		datas->canalStress1.pause();
+		datas->canalStress2.pause();
+		datas->canalMenu.update(dt);
 	}
 
 	theMorphingSystem.Update(dt);

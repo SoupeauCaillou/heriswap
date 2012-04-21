@@ -36,7 +36,7 @@ float ScoreAttackGameModeManager::Update(float dt) {
 
 	//a changer
 	time+=dt;
-	return (limit - points)/limit;
+	return points/limit;
 }
 
 void ScoreAttackGameModeManager::ScoreCalc(int nb, int type) {
