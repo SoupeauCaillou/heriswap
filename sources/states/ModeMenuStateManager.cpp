@@ -21,8 +21,8 @@ void ModeMenuStateManager::Setup() {
 		TRANSFORM(scoresPoints[i])->z = DL_MainMenuUI;
 		TRANSFORM(scoresName[i])->position = Vector2(PlacementHelper::GimpXToScreen(350),PlacementHelper::GimpYToScreen(900))-Vector2(0,i/2.);
 		TRANSFORM(scoresPoints[i])->position = Vector2(PlacementHelper::GimpXToScreen(300),PlacementHelper::GimpYToScreen(900))-Vector2(0,i/2.);
-		TEXT_RENDERING(scoresName[i])->charSize = 0.3;
-		TEXT_RENDERING(scoresPoints[i])->charSize = 0.3;
+		TEXT_RENDERING(scoresName[i])->charHeight = 0.3;
+		TEXT_RENDERING(scoresPoints[i])->charHeight = 0.3;
 		TEXT_RENDERING(scoresPoints[i])->isANumber = true;
 		TEXT_RENDERING(scoresName[i])->positioning = TextRenderingComponent::LEFT;
 		TEXT_RENDERING(scoresPoints[i])->positioning = TextRenderingComponent::RIGHT;
@@ -48,7 +48,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(800));
 	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(yourScore)->hide = true;
-	TEXT_RENDERING(yourScore)->charSize = 0.3;
+	TEXT_RENDERING(yourScore)->charHeight = 0.3;
 	TEXT_RENDERING(yourScore)->color = Color(0.f,0.f,0.f);
 
 	back = theEntityManager.CreateEntity();

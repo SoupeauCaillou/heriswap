@@ -23,7 +23,7 @@ void InGameUiHelper::build() {
 	ADD_COMPONENT(smallLevel, TextRendering);
 	TEXT_RENDERING(smallLevel)->color = Color(1, 1, 1);
 	TEXT_RENDERING(smallLevel)->fontName = "typo";
-	TEXT_RENDERING(smallLevel)->charSize = Vector2(PlacementHelper::GimpWidthToScreen(690-620), PlacementHelper::GimpHeightToScreen(232-150));
+	TEXT_RENDERING(smallLevel)->charHeight = PlacementHelper::GimpHeightToScreen(232-150);
 	TEXT_RENDERING(smallLevel)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(smallLevel)->isANumber = true;
 
@@ -35,7 +35,7 @@ void InGameUiHelper::build() {
 	TEXT_RENDERING(pauseButton)->color = Color(3.0/255, 99.0/255, 71.0/255);
 	TEXT_RENDERING(pauseButton)->text = "Pause";
 	TEXT_RENDERING(pauseButton)->fontName = "typo";
-	TEXT_RENDERING(pauseButton)->charSize = Vector2(PlacementHelper::GimpWidthToScreen(30), PlacementHelper::GimpHeightToScreen(30));
+	TEXT_RENDERING(pauseButton)->charHeight = PlacementHelper::GimpHeightToScreen(30);
 	TEXT_RENDERING(pauseButton)->positioning = TextRenderingComponent::LEFT;
 
 	pauseContainer = theEntityManager.CreateEntity();
@@ -57,7 +57,7 @@ void InGameUiHelper::build() {
 	ADD_COMPONENT(scoreProgress, TextRendering);
 	TEXT_RENDERING(scoreProgress)->color = Color(3.0/255, 99.0/255, 71.0/255);
 	TEXT_RENDERING(scoreProgress)->fontName = "typo";
-	TEXT_RENDERING(scoreProgress)->charSize = Vector2(PlacementHelper::GimpWidthToScreen(47), PlacementHelper::GimpHeightToScreen(47));
+	TEXT_RENDERING(scoreProgress)->charHeight = PlacementHelper::GimpHeightToScreen(47);
 	TEXT_RENDERING(scoreProgress)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(scoreProgress)->isANumber = true;
 

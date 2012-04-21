@@ -35,7 +35,7 @@ void LevelStateManager::Setup() {
 	ADD_COMPONENT(eBigLevel, TextRendering);
 	TEXT_RENDERING(eBigLevel)->color = Color(1, 1, 1);
 	TEXT_RENDERING(eBigLevel)->fontName = "typo";
-	TEXT_RENDERING(eBigLevel)->charSize = Vector2(PlacementHelper::GimpWidthToScreen(200), PlacementHelper::GimpHeightToScreen(288));
+	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(288);
 	TEXT_RENDERING(eBigLevel)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(eBigLevel)->isANumber = true;
 	ADD_COMPONENT(eBigLevel, Sound);
@@ -113,7 +113,7 @@ void LevelStateManager::Enter() {
 	MORPHING(eBigLevel)->active = true;
 	
 	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
-	TEXT_RENDERING(eBigLevel)->charSize = Vector2(PlacementHelper::GimpWidthToScreen(200), PlacementHelper::GimpHeightToScreen(288));
+	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(288);
 	
 	duration = 0;
 }
@@ -133,7 +133,7 @@ GameState LevelStateManager::Update(float dt) {
 		}
 		mc->elements.clear();
 		// move big score to small score
-		mc->elements.push_back(new TypedMorphElement<Vector2> (&TEXT_RENDERING(eBigLevel)->charSize, TEXT_RENDERING(eBigLevel)->charSize, TEXT_RENDERING(smallLevel)->charSize));
+		mc->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->charHeight, TEXT_RENDERING(eBigLevel)->charHeight, TEXT_RENDERING(smallLevel)->charHeight));
 		mc->elements.push_back(new TypedMorphElement<Vector2> (&TRANSFORM(eBigLevel)->position, TRANSFORM(eBigLevel)->position, TRANSFORM(smallLevel)->position));
 		mc->active = true;
 		mc->activationTime = 0;

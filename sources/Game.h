@@ -27,7 +27,7 @@ class PlayerNameInputUI {
 
 class Game {
 	public:
-		Game(ScoreStorage* storage, PlayerNameInputUI* inputUI);
+		Game(NativeAssetLoader* loader, ScoreStorage* storage, PlayerNameInputUI* inputUI);
 		void init(int windowW, int windowH, const uint8_t* in = 0, int size = 0);
 		void tick(float dt);
 		void togglePause(bool activate);
@@ -43,9 +43,11 @@ class Game {
 		static float cellTypeToRotation(int type);
 
 	private:
+		void loadFont(const std::string& name);
 		void loadState(const uint8_t* in, int size);
 		void bench(bool active, float updateDuration, float dt);
 
 	class Data;
 	Data* datas;
+	NativeAssetLoader* loader;
 };

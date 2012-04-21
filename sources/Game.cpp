@@ -78,11 +78,9 @@ class Game::Data {
 		}
 
 		void Setup(int windowW, int windowH) {
-		LOGW("%s:%d", __FUNCTION__, __LINE__);
 			BackgroundManager* bg = new BackgroundManager((10.0 * windowH) / windowW);
 			bg->cloudStartX = Interval<float>(0.0,15.0);
 			state2Manager[Background] = bg;
-LOGW("%s:%d", __FUNCTION__, __LINE__);
 			ADD_COMPONENT(logo, Rendering);
 			ADD_COMPONENT(logo, Transformation);
 			TRANSFORM(logo)->position = Vector2(0,0);
@@ -90,7 +88,6 @@ LOGW("%s:%d", __FUNCTION__, __LINE__);
 			RENDERING(logo)->hide = false;
 			TRANSFORM(logo)->z = DL_Logo;
 			RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("soupe_logo.png");
-LOGW("%s:%d", __FUNCTION__, __LINE__);
 			logo_bg = theEntityManager.CreateEntity();
 			ADD_COMPONENT(logo_bg, Rendering);
 			ADD_COMPONENT(logo_bg, Transformation);
@@ -99,7 +96,6 @@ LOGW("%s:%d", __FUNCTION__, __LINE__);
 			RENDERING(logo_bg)->hide = false;
 			RENDERING(logo_bg)->color = Color(0,0,0);
 			TRANSFORM(logo_bg)->z = DL_BehindLogo;
-LOGW("%s:%d", __FUNCTION__, __LINE__);
 			ADD_COMPONENT(soundButton, Transformation);
 			TRANSFORM(soundButton)->z = DL_MainMenuUI;
 			TRANSFORM(soundButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
@@ -111,13 +107,13 @@ LOGW("%s:%d", __FUNCTION__, __LINE__);
 			ADD_COMPONENT(soundButton, Sound);
 			SOUND(soundButton)->type = SoundComponent::EFFECT;
 			RENDERING(soundButton)->hide = false;
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 			for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)
 				it->second->Setup();
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 			for(std::map<GameMode, GameModeManager*>::iterator it=mode2Manager.begin(); it!=mode2Manager.end(); ++it)
 				it->second->Setup();
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 			for (int i=0; i<2; i++) {
 				musicStress2[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(musicStress2[i], Sound);
@@ -132,27 +128,27 @@ LOGW("%s:%d", __FUNCTION__, __LINE__);
 				SOUND(musicMenu[i])->type = SoundComponent::MUSIC;
 				SOUND(musicMenu[i])->repeat = false;
 			}
-			LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 			for (int i=0; i<8; i++) {
 				music[i] = theEntityManager.CreateEntity();
 				ADD_COMPONENT(music[i], Sound);
 				SOUND(music[i])->type = SoundComponent::MUSIC;
 				SOUND(music[i])->repeat = false;
 			}
-			LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 			menuMusic.timeLoop=64;
 			menuMusic.indice=0;
 			menuMusic.sounds=musicMenu;
 			menuMusic.sound="audio/musique_menu.ogg";
 			float benchPos = - 4.75;
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 			benchTotalTime = theEntityManager.CreateEntity();
 			ADD_COMPONENT(benchTotalTime, Rendering);
 			ADD_COMPONENT(benchTotalTime, Transformation);
 			TRANSFORM(benchTotalTime)->position = Vector2(0,benchPos);
 			TRANSFORM(benchTotalTime)->size = Vector2(10,0.5);
 			TRANSFORM(benchTotalTime)->z = DL_Benchmark;
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 			std::vector<std::string> allSystems = ComponentSystem::registeredSystemNames();
 			for (int i = 0; i < allSystems.size() ; i ++) {
 				Entity b = theEntityManager.CreateEntity();
@@ -165,7 +161,6 @@ LOGW("%s:%d", __FUNCTION__, __LINE__);
 				RENDERING(b)->hide = true;
 				benchTimeSystem[allSystems[i]] = b;
 			}
-			LOGW("%s:%d", __FUNCTION__, __LINE__);
 			bg->cloudStartX = Interval<float>(8.0,15.0);
 		}
 		//bench data
@@ -248,7 +243,9 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-Game::Game(ScoreStorage* storage, PlayerNameInputUI* inputUI) {
+Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, PlayerNameInputUI* inputUI) {
+	this->loader = ploader;
+	
 	/* create EntityManager */
 	EntityManager::CreateInstance();
 
@@ -274,18 +271,35 @@ Game::Game(ScoreStorage* storage, PlayerNameInputUI* inputUI) {
     TwitchSystem::CreateInstance();
 }
 
+void Game::loadFont(const std::string& name) {
+	char* font = loader->loadShaderFile(name);
+	std::stringstream sfont;
+	sfont << font;
+	std::string line;
+	std::map<unsigned char, float> h2wratio;
+	while (getline(sfont, line)) {
+		if (line[0] == '#')
+			continue;
+		int c, w, h;
+		sscanf(line.c_str(), "%d,%d,%d", &c, &w, &h);
+		h2wratio[c] = (float)w / h;
+	}
+	free(font);
+	theTextRenderingSystem.registerFont("typo", h2wratio);
+}
+
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
     PlacementHelper::ScreenHeight = 10;
     PlacementHelper::ScreenWidth = PlacementHelper::ScreenHeight * windowW / (float)windowH;
     PlacementHelper::WindowWidth = windowW;
     PlacementHelper::WindowHeight = windowH;
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 
 	theRenderingSystem.setWindowSize(windowW, windowH, PlacementHelper::ScreenWidth, PlacementHelper::ScreenHeight);
 	theTouchInputManager.init(Vector2(PlacementHelper::ScreenWidth, PlacementHelper::ScreenHeight), Vector2(windowW, windowH));
-	LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 	theRenderingSystem.init();
-	LOGW("%s:%d", __FUNCTION__, __LINE__);
+	
 	/*
 	theRenderingSystem.loadAtlas("sprites");
 	theRenderingSystem.loadAtlas("animals");
@@ -295,16 +309,19 @@ LOGW("%s:%d", __FUNCTION__, __LINE__);
 		datas->state = Pause;
 		loadState(in, size);
 	}
-	LOGW("%s:%d", __FUNCTION__, __LINE__);
+	
 	datas->Setup(windowW, windowH);
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 	if (in && size) {
 		RENDERING(datas->logo_bg)->hide = true;
 	}
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
+	// init font
+	loadFont("typo.desc");
+
 	theGridSystem.GridSize = GRIDSIZE;
 	theSoundSystem.mute = !datas->storage->soundEnable(false);
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 	float bgElementWidth = PlacementHelper::GimpWidthToScreen(800);
 	datas->sky = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->sky, Transformation);
@@ -319,7 +336,7 @@ LOGW("%s:%d", __FUNCTION__, __LINE__);
 	SCROLLING(datas->sky)->speed = Vector2(-0.3, 0);
 	SCROLLING(datas->sky)->displaySize = Vector2(TRANSFORM(datas->sky)->size.X * 1.01, TRANSFORM(datas->sky)->size.Y);
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 	datas->decord2nd = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->decord2nd, Transformation);
 	TRANSFORM(datas->decord2nd)->z = DL_Decor2nd;
@@ -332,7 +349,7 @@ LOGW("%s:%d", __FUNCTION__, __LINE__);
 	SCROLLING(datas->decord2nd)->images.push_back("decor2nd_3.png");
 	SCROLLING(datas->decord2nd)->speed = Vector2(-.1, 0);
 	SCROLLING(datas->decord2nd)->displaySize = Vector2(TRANSFORM(datas->decord2nd)->size.X * 1.01, TRANSFORM(datas->decord2nd)->size.Y);
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 	datas->decord1er = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->decord1er, Transformation);
 	TRANSFORM(datas->decord1er)->z = DL_Decor1er;
@@ -345,7 +362,7 @@ LOGW("%s:%d", __FUNCTION__, __LINE__);
 	SCROLLING(datas->decord1er)->images.push_back("decor1er_3.png");
 	SCROLLING(datas->decord1er)->speed = Vector2(-0.01, 0);
 	SCROLLING(datas->decord1er)->displaySize = Vector2(TRANSFORM(datas->decord1er)->size.X * 1.01, TRANSFORM(datas->decord1er)->size.Y);
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 	Entity branch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(branch, Transformation);
 	TRANSFORM(branch)->z = DL_Branch;
@@ -354,7 +371,7 @@ LOGW("%s:%d", __FUNCTION__, __LINE__);
 	ADD_COMPONENT(branch, Rendering);
 	RENDERING(branch)->hide = false;
 	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
-LOGW("%s:%d", __FUNCTION__, __LINE__);
+
 	datas->mode2Manager[Normal]->sky = datas->sky;
 	datas->mode2Manager[Normal]->decord1er = datas->decord1er;
 	datas->mode2Manager[Normal]->decor2nd = datas->decord2nd;
