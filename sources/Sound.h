@@ -1,49 +1,38 @@
 #include "base/Log.h"
 #include <vector>
 
-struct Compatible {
-	std::vector<char> fri;
-	char c;
-	bool operator== (const Compatible & comp) const {
-		return (c==comp.c);
-	}
-	bool operator>= (const Compatible & comp) const {
-		return (c >= comp.c);
-	}
-	bool operator> (const Compatible & comp) const {
-		return (c > comp.c);
-	}
-};
-
 struct Canal {
 	Canal() {
 		timeLoop = 17.;
-		time=0;
+		musicLength=18.;
 		indice = 0;
+		multipleStrings=false;
+	}
+	void pause() {
+		SOUND(sounds[0])->stop = true;
+		SOUND(sounds[1])->stop = true;
 	}
 
-	void update(float dt) {
-		if (SOUND(sounds[indice])->sound == InvalidSoundRef) {
-			SOUND(sounds[indice])->sound = theSoundSystem.loadSoundFile(sound, true);
+	bool update(float dt) {
+		SOUND(sounds[0])->stop = false;
+		SOUND(sounds[1])->stop = false;
+		if (SOUND(sounds[indice])->sound == InvalidSoundRef && !name.empty()) {
+			SOUND(sounds[indice])->sound = theSoundSystem.loadSoundFile(name, true);
+			if (multipleStrings) name.clear();
 		}
-		
 		// +dt is magic!
-		float t = SOUND(sounds[indice])->position * 65 + dt;
+		float t = SOUND(sounds[indice])->position * musicLength + dt;
 		if (t >= timeLoop) {
 			indice = (indice+1)%2;
-			SOUND(sounds[indice])->sound = theSoundSystem.loadSoundFile(sound, true);
 		}
+		return (SOUND(sounds[indice])->sound == InvalidSoundRef);
 	}
-
-	float timeLoop, time;
+	bool multipleStrings;
+	float timeLoop, musicLength;
 	int indice;
 	Entity* sounds;
-	std::string sound;
+	std::string name;
 };
 
-
-int findCompatible(char c, std::vector<Compatible> &comp);
-std::vector<char> intersec(const std::vector<char>& c1, std::vector<char> c2);
-bool identic(const std::vector<char>& c1, std::vector<char> c2);
-static void newMusics(Entity* music, int indiceSwitch);
-static bool updateMusic(Entity* music, Entity* musicStress1, Entity* musicStress2, float percentLeft, float dt, int indiceMusic);
+std::vector<std::string> newMusics();
+bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float percentDone, float dt);
