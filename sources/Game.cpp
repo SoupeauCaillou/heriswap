@@ -60,21 +60,21 @@ class Game::Data {
 
 			state = BlackToLogoState;
 
-			state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo);
-			state2Manager[Logo] = new LogoStateManager(LogoToBlackState, logo);
-			state2Manager[LogoToBlackState] = new FadeGameStateManager(FadeOut, LogoToBlackState, BlackToMainMenu);
-			state2Manager[BlackToMainMenu] = new FadeGameStateManager(FadeIn, BlackToMainMenu, MainMenu);
-			state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(FadeOut, ModeMenuToBlackState, BlackToSpawn);
-			state2Manager[BlackToSpawn] = new FadeGameStateManager(FadeIn, BlackToSpawn, Spawn);
-			state2Manager[MainMenu] = new MainMenuGameStateManager();
-			state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI);
-
 			state2Manager[Spawn] = new SpawnGameStateManager();
 			state2Manager[UserInput] = new UserInputGameStateManager();
 			state2Manager[Delete] = new DeleteGameStateManager();
 			state2Manager[Fall] = new FallGameStateManager();
 			state2Manager[LevelChanged] = new LevelStateManager();
 			state2Manager[Pause] = new PauseStateManager();
+			state2Manager[Logo] = new LogoStateManager(LogoToBlackState, logo);
+			state2Manager[MainMenu] = new MainMenuGameStateManager();
+			state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI);
+			
+			state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo, state2Manager[Logo]);
+			state2Manager[LogoToBlackState] = new FadeGameStateManager(FadeOut, LogoToBlackState, BlackToMainMenu, 0);
+			state2Manager[BlackToMainMenu] = new FadeGameStateManager(FadeIn, BlackToMainMenu, MainMenu, state2Manager[MainMenu]);
+			state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(FadeOut, ModeMenuToBlackState, BlackToSpawn, 0);
+			state2Manager[BlackToSpawn] = new FadeGameStateManager(FadeIn, BlackToSpawn, Spawn, 0);
 		}
 
 		void Setup(int windowW, int windowH) {
@@ -486,13 +486,15 @@ void Game::tick(float dt) {
 			setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
 		} else if (newState == BlackToMainMenu) {
 			RENDERING(datas->logo)->hide = true;
+		} else if (newState == ModeMenuToBlackState) {
+			datas->mode2Manager[datas->mode]->HideUI(false);
 		}
 
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
 
-		hideEveryThing(!inGameState(newState), datas->state==BlackToSpawn);
+		hideEveryThing(!inGameState(newState) && newState != ModeMenuToBlackState , datas->state==BlackToSpawn);
 		RENDERING(datas->logo_bg)->hide = RENDERING(datas->logo)->hide;
 	}
 	//si on appuye sur le bouton pause
