@@ -39,6 +39,6 @@ class ModeMenuStateManager : public GameStateManager {
 		ScoreStorage* storage;
 		PlayerNameInputUI* inputUI;
 		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, openfeint, scoreTitle;
-		Entity yourScore;
+		Entity yourScore, fond;
 		std::string playerName;
 };

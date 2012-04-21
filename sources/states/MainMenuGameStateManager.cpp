@@ -34,7 +34,7 @@ void MainMenuGameStateManager::Setup() {
 	    TRANSFORM(bStart[i])->z = DL_MainMenuUIBg;
 	    ADD_COMPONENT(bStart[i], Rendering);
 	    RENDERING(bStart[i])->texture = theRenderingSystem.loadTextureFile("menu/fond_bouton.png"); 
-	    RENDERING(bStart[i])->color.a = 0.3;
+	    RENDERING(bStart[i])->color.a = 0.5;
 	}
 	TEXT_RENDERING(eStart[0])->text = "Classique";
 	TRANSFORM(eStart[0])->position.Y = TRANSFORM(bStart[0])->position.Y = PlacementHelper::GimpYToScreen(156);

@@ -117,6 +117,16 @@ void ModeMenuStateManager::Setup() {
 	SOUND(openfeint)->type = SoundComponent::EFFECT;
 	BUTTON(openfeint)->enabled = false;
 
+	// fond
+	fond = theEntityManager.CreateEntity();
+	ADD_COMPONENT(fond, Transformation);
+	TRANSFORM(fond)->size = Vector2(PlacementHelper::GimpWidthToScreen(712), PlacementHelper::GimpHeightToScreen(1124));
+	TRANSFORM(fond)->z = DL_MainMenuUIBg;
+	TransformationSystem::setPosition(TRANSFORM(fond), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(24)), TransformationSystem::NW);
+	ADD_COMPONENT(fond, Rendering);
+	RENDERING(fond)->texture = theRenderingSystem.loadTextureFile("menu/fond_menu_mode.png");
+	RENDERING(fond)->color.a = 0.5;
+		
 	playerName.clear();
 	inputUI->getName(playerName);
 }
@@ -190,6 +200,7 @@ void ModeMenuStateManager::Enter() {
 	TEXT_RENDERING(title)->hide = false;
 	RENDERING(menubg)->hide = false;
 	RENDERING(menufg)->hide = false;
+	RENDERING(fond)->hide = false;
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
@@ -217,6 +228,7 @@ void ModeMenuStateManager::Exit() {
 	}
 	RENDERING(menubg)->hide = true;
 	RENDERING(menufg)->hide = true;
+	RENDERING(fond)->hide = true;
 	ended = false;
 	BUTTON(back)->enabled = false;
 	BUTTON(playButton)->enabled = false;
