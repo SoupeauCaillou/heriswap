@@ -3,6 +3,15 @@
 #include "systems/ScrollingSystem.h"
 #include <fstream>
 
+static float initialHerissonPosition(Entity herisson) {
+    return -PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5;
+}
+
+static float finalHerissonPosition(Entity herisson) {
+    return PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5;
+}
+
+
 float GameModeManager::position(float t) {
 	float p = 0;
 
@@ -20,8 +29,7 @@ float GameModeManager::position(float t) {
 			p = pts[pts.size()-1].Y;
 		}
 	}
-	return MathUtil::Lerp(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5,
-	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, p);
+	return MathUtil::Lerp(initialHerissonPosition(herisson), finalHerissonPosition(herisson), p);
 }
 
 void GameModeManager::LoadHerissonTexture(int type) {
@@ -104,6 +112,7 @@ void GameModeManager::Enter() {
 	generateLeaves(6);
 	uiHelper.show();
     theGridSystem.HideAll(false);
+    TRANSFORM(herisson)->position = initialHerissonPosition(herisson);
 }
 
 void GameModeManager::Exit() {
@@ -149,7 +158,7 @@ void GameModeManager::generateLeaves(int nb) {
 			//swapper.push_back(posBranch[rand]);
 			posBranch.erase(posBranch.begin()+rand);
 
-			TRANSFORM(e)->z = DL_Hud+(i+1)*(j+1)/100.;
+			TRANSFORM(e)->z = MathUtil::Lerp(DL_LeafMin, DL_LeafMax, MathUtil::RandomFloat());
 			BranchLeaf bl;
 			bl.e = e;
 			bl.type=j+1;

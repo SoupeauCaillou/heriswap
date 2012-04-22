@@ -28,6 +28,7 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
          storage = storagee;
 
          logo = theEntityManager.CreateEntity();
+         logo_bg = theEntityManager.CreateEntity();
          soundButton = theEntityManager.CreateEntity();
 
          state = BlackToLogoState;
@@ -38,15 +39,15 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
          state2Manager[Fall] = new FallGameStateManager();
          state2Manager[LevelChanged] = new LevelStateManager();
          state2Manager[Pause] = new PauseStateManager();
-         state2Manager[Logo] = new LogoStateManager(LogoToBlackState, logo);
+         state2Manager[Logo] = new LogoStateManager(LogoToBlackState, logo, logo_bg);
          state2Manager[MainMenu] = new MainMenuGameStateManager();
          state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI);
          
-         state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo, state2Manager[Logo]);
-         state2Manager[LogoToBlackState] = new FadeGameStateManager(FadeOut, LogoToBlackState, BlackToMainMenu, 0);
-         state2Manager[BlackToMainMenu] = new FadeGameStateManager(FadeIn, BlackToMainMenu, MainMenu, state2Manager[MainMenu]);
-         state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(FadeOut, ModeMenuToBlackState, BlackToSpawn, 0);
-         state2Manager[BlackToSpawn] = new FadeGameStateManager(FadeIn, BlackToSpawn, Spawn, 0);
+         state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
+         state2Manager[LogoToBlackState] = new FadeGameStateManager(FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);
+         state2Manager[BlackToMainMenu] = new FadeGameStateManager(FadeIn, BlackToMainMenu, MainMenu, state2Manager[MainMenu], 0);
+         state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(FadeOut, ModeMenuToBlackState, BlackToSpawn, 0, state2Manager[ModeMenu]);
+         state2Manager[BlackToSpawn] = new FadeGameStateManager(FadeIn, BlackToSpawn, Spawn, 0, 0);
      }
 
      void PrivateData::Setup(int windowW, int windowH) {
@@ -60,7 +61,7 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
          RENDERING(logo)->hide = false;
          TRANSFORM(logo)->z = DL_Logo;
          RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("soupe_logo.png");
-         logo_bg = theEntityManager.CreateEntity();
+
          ADD_COMPONENT(logo_bg, Rendering);
          ADD_COMPONENT(logo_bg, Transformation);
          TRANSFORM(logo_bg)->position = Vector2(0,0);

@@ -21,6 +21,7 @@ class GameStateManager {
 		virtual void BackgroundUpdate(float dt) {};
 		/* Prepare to leave as the active manager */
 		virtual void Exit() = 0;
+        virtual void LateExit() {}
 
 		GameModeManager* modeMgr;
 };

@@ -265,8 +265,6 @@ void Game::tick(float dt) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
-
-		RENDERING(datas->logo_bg)->hide = RENDERING(datas->logo)->hide;
 	}
 
     // background (unconditionnal) update of state managers

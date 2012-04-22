@@ -6,7 +6,7 @@
 #include "PlacementHelper.h"
 #include "systems/SoundSystem.h"
 
-LogoStateManager::LogoStateManager(GameState _following, Entity _logo) : following(_following), logo(_logo) {}
+LogoStateManager::LogoStateManager(GameState _following, Entity _logo, Entity _logobg) : following(_following), logo(_logo), logobg(_logobg) {}
 
 void LogoStateManager::Setup() {
 
@@ -27,6 +27,7 @@ void LogoStateManager::Enter() {
 	duration = 0;
 	ADD_COMPONENT(animLogo, Sound);
 	SOUND(animLogo)->type = SoundComponent::EFFECT;
+    RENDERING(logo)->hide = RENDERING(logobg)->hide = false;
 }
 
 GameState LogoStateManager::Update(float dt) {
@@ -48,5 +49,11 @@ GameState LogoStateManager::Update(float dt) {
 }
 
 void LogoStateManager::Exit() {
+
+}
+
+void LogoStateManager::LateExit() {
+    theEntityManager.DeleteEntity(logo);
+    theEntityManager.DeleteEntity(logobg);
 	theEntityManager.DeleteEntity(animLogo);
 }

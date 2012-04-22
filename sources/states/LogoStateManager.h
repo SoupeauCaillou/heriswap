@@ -8,14 +8,15 @@
 
 class LogoStateManager : public GameStateManager {
 	public:
-		LogoStateManager(GameState following, Entity logo);
+		LogoStateManager(GameState following, Entity logo, Entity logobg);
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
 		void Exit();
+        void LateExit();
 	private:
 		GameState following;
-		Entity logo, animLogo;
+		Entity logo, animLogo, logobg;
 		float duration;
 };
 
