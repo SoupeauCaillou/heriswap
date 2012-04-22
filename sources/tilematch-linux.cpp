@@ -55,7 +55,7 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 		}
 		bool query(std::string& result) {
 			getline(std::cin, result);
-			result.erase(result.begin()+10,result.end());
+			if (result.size()>10) result.resize(10);
 			std::cout << "Want to save it ? (y or *'ll be fine)" << std::endl;
 			std::string a;
 			getline(std::cin, a);
@@ -125,7 +125,7 @@ class LinuxSqliteExec: public ScoreStorage {
 
 		void saveOpt(std::string opt, std::string name) {
 			std::stringstream tmp;
-			tmp << "INSERT INTO info VALUES ('" << opt << "', '" << name <<"')";
+			tmp << "INSERT INTO info VALUES ('" << opt << "', '" << name << "')";
 			request(tmp.str(), 0);
 		}
 

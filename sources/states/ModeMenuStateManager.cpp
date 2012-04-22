@@ -83,12 +83,13 @@ void ModeMenuStateManager::Setup() {
 	SOUND(playButton)->type = SoundComponent::EFFECT;
 	BUTTON(playButton)->enabled = false;
 
+	// your score
 	yourScore = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
-	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(800));
+	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(1242));
 	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(yourScore)->hide = true;
-	TEXT_RENDERING(yourScore)->charHeight = 0.3;
+	TEXT_RENDERING(yourScore)->charHeight = PlacementHelper::GimpHeightToScreen(56);
 	TEXT_RENDERING(yourScore)->color = Color(0.f,0.f,0.f);
 
 	// back button
@@ -202,8 +203,8 @@ void ModeMenuStateManager::Enter() {
 		TEXT_RENDERING(yourScore)->hide = false;
 		std::stringstream a;
 		a.precision(1);
-		if (m==ScoreAttack) a << std::fixed << "Votre temps : " << entry.time << "s";
-		else a << "Votre score : " << entry.points;
+		if (m==ScoreAttack) a << entry.time << "s";
+		else a << entry.points << "... niv " << entry.level;
 		TEXT_RENDERING(yourScore)->text = a.str();
 	}
 	LoadScore(m);
@@ -243,7 +244,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 
 void ModeMenuStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-	// TEXT_RENDERING(yourScore)->hide = true;
+	TEXT_RENDERING(yourScore)->hide = true;
 	TEXT_RENDERING(play)->hide = true;
 	RENDERING(back)->hide = true;
 	RENDERING(openfeint)->hide = true;
