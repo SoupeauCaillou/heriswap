@@ -121,7 +121,7 @@ void GameModeManager::Exit() {
 }
 
 void GameModeManager::TogglePauseDisplay(bool paused) {
-	
+	theGridSystem.HideAll(paused);
 }
 
 void GameModeManager::generateLeaves(int nb) {
