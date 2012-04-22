@@ -107,7 +107,7 @@ public class TilematchJNILib {
     }
     
     static public void pauseAllSounds() {
-    	TilematchActivity.soundPool.autoPause();
+    	// TilematchActivity.soundPool. .autoPause();
     	for(MediaPlayer p : TilematchActivity.activePlayers) {
     		if (p!=null)
     			p.pause();
@@ -115,7 +115,6 @@ public class TilematchJNILib {
     }
     
     static public void resumeAllSounds() {
-    	TilematchActivity.soundPool.autoResume();
     	for(MediaPlayer p : TilematchActivity.activePlayers) {
     		if (p!=null)
     			p.start(); 

@@ -24,6 +24,7 @@ LOCAL_SRC_FILES := \
    ../sources/Sound.cpp \
    ../sources/CombinationMark.cpp \
    ../sources/TwitchSystem.cpp \
+	../sources/AnimedEntity.cpp \
 	../sources/states/BackgroundManager.cpp \
 	../sources/states/DeleteGameStateManager.cpp \
 	../sources/states/FadeStateManager.cpp	\
