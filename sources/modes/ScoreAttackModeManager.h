@@ -9,22 +9,21 @@
 
 class ScoreAttackGameModeManager : public GameModeManager {
 	public:
-		ScoreAttackGameModeManager();
+		ScoreAttackGameModeManager(Game* game);
 		~ScoreAttackGameModeManager();
 		void Setup();
-		float Update(float dt);
-
-		void UpdateUI(float dt);
-		void HideUI(bool toHide);
+		void Enter();
+		float GameUpdate(float dt);
+		void UiUpdate(float dt);
+		void Exit();
+		void TogglePauseDisplay(bool paused);
 
 		void LevelUp();
-		//permet de savoir si on a change de niveau
 		bool LeveledUp();
 
 		GameMode GetMode();
 
 		void ScoreCalc(int nb, int type);
-		void Reset();
 
 	private:
 		class HUDManagerData;

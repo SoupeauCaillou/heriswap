@@ -2,28 +2,7 @@
 
 #include <map>
 #include "Game.h"
-
-enum GameState {
-	Spawn,
-	UserInput,
-	Delete,
-	Fall,
-	LevelChanged,
-	Pause,
-	Unpause,
-	Abort,
-	MainMenu,
-	ModeMenu,
-	ScoreBoard,
-	EndMenu,
-	Background,
-	BlackToLogoState,
-	LogoToBlackState,
-	BlackToMainMenu,
-	ModeMenuToBlackState,
-	BlackToSpawn,
-	Logo
-};
+#include "GameState.h"
 
 class GameModeManager;
 
@@ -42,6 +21,7 @@ class GameStateManager {
 		virtual void BackgroundUpdate(float dt) {};
 		/* Prepare to leave as the active manager */
 		virtual void Exit() = 0;
+        virtual void LateExit() {}
 
 		GameModeManager* modeMgr;
 };

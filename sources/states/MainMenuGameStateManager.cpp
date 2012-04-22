@@ -82,7 +82,7 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(a, Rendering);
 	herisson->actor.e = a;
 	herisson->anim.clear();
-	LoadHerissonTexture(MathUtil::RandomInt(8)+1, herisson);
+	loadHerissonTexture(MathUtil::RandomInt(8)+1, herisson);
 	herisson->actor.speed = MathUtil::RandomFloatInRange(2.0f,4.0f);
 	TRANSFORM(a)->size = Vector2(PlacementHelper::GimpWidthToScreen(310), PlacementHelper::GimpHeightToScreen(253))*MathUtil::RandomFloatInRange(.3f,1.f);
 	TransformationSystem::setPosition(TRANSFORM(a), Vector2(PlacementHelper::GimpXToScreen(-MathUtil::RandomInt(300))-TRANSFORM(a)->size.X, PlacementHelper::GimpYToScreen(MathUtil::RandomIntInRange(830,1150))), TransformationSystem::SW);
@@ -120,7 +120,7 @@ GameState MainMenuGameStateManager::Update(float dt) {
 		TRANSFORM(a)->position.X += herisson->actor.speed/8.*dt;
 	} else {
 		herisson->anim.clear();
-		LoadHerissonTexture(MathUtil::RandomInt(8)+1, herisson);
+		loadHerissonTexture(MathUtil::RandomInt(8)+1, herisson);
 		herisson->actor.speed = MathUtil::RandomFloatInRange(2.0f,4.0f);
 		TRANSFORM(a)->size = Vector2(PlacementHelper::GimpWidthToScreen(310), PlacementHelper::GimpHeightToScreen(253))*MathUtil::RandomFloatInRange(.3f,1.f);
 		TransformationSystem::setPosition(TRANSFORM(a), Vector2(PlacementHelper::GimpXToScreen(-MathUtil::RandomInt(300))-TRANSFORM(a)->size.X, PlacementHelper::GimpYToScreen(MathUtil::RandomIntInRange(830,1150))), TransformationSystem::SW);

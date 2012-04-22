@@ -2,8 +2,8 @@
 #include "base/TouchInputManager.h"
 #include "../DepthLayer.h"
 
-FadeGameStateManager::FadeGameStateManager(FadeType fade, GameState whoAmI, GameState whoIsNext, GameStateManager* delegate):
-	fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(0), enterDelegate(delegate) {
+FadeGameStateManager::FadeGameStateManager(FadeType fade, GameState whoAmI, GameState whoIsNext, GameStateManager* enter, GameStateManager* exitD):
+	fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(0), enterDelegate(enter), exitDelegate(exitD) {
 }
 
 void FadeGameStateManager::Setup() {
@@ -65,4 +65,7 @@ void FadeGameStateManager::Exit() {
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
 	RENDERING(eFading)->hide = true;
 	ADSR(eFading)->active = false;
+
+    if (exitDelegate)
+        exitDelegate->LateExit();
 }

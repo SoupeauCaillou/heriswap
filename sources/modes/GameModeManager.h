@@ -29,7 +29,6 @@ enum GameMode {
 
 class GameModeManager {
 	public:
-
 		struct BranchLeaf {
 			Entity e;
 			int type;
@@ -39,45 +38,56 @@ class GameModeManager {
 			float rot;
 		};
 
-		void SetupCore(int bonus);
-		void ResetCore(int bonus);
-		void UpdateCore(float dt, float obj, float herissonSpeed = 0);
-		void HideUICore(bool ToHide);
-		float position(float t);
-		void generateLeaves(int nb);
-
+		GameModeManager(Game* game) { uiHelper.game = game; }
+		
 		virtual ~GameModeManager() {}
-
-		/* Do some initial setup if needed */
-		virtual void Setup() = 0;
-		/* Update gamemode, and returns true if end of the mode */
-		virtual float Update(float dt) = 0;
-
-		virtual void UpdateUI(float dt) = 0;
-		virtual void HideUI(bool toHide) = 0;
-
-        virtual void WillScore(int nb, int type, std::vector<Entity>& out) {}
+		
+		// to be called once: create long standing entities
+		virtual void Setup();
+		// to be called at the beginning of each game: setup entites, scoring, etc..
+		virtual void Enter();
+		// to be called during the game (only in UserInput GameState) - return game completion percentage
+		virtual float GameUpdate(float dt) = 0;
+		// to be called once per frame during game
+		virtual void UiUpdate(float dt) = 0;
+		// to be called after game-over occured
+		virtual void Exit();
+		// to be called to toggle pause mode display
+		virtual void TogglePauseDisplay(bool paused);
+		
+		// scoring interface
+		virtual void WillScore(int nb, int type, std::vector<Entity>& out) {}
 		virtual void ScoreCalc(int nb, int type) = 0;
-
 		virtual GameMode GetMode() = 0;
-
 		virtual void LevelUp() = 0;
 		virtual bool LeveledUp() = 0;
-
-		virtual void Reset() = 0;
-
+		
+	protected:
+		float position(float t);
+		void generateLeaves(int nb);
+		void LoadHerissonTexture(int type);
+		void updateHerisson(float dt, float obj, float herissonSpeed);
+		void deleteLeaves(int type, int nb);
+		
+	public:
+		// game params
 		float time, limit;
 		int points, bonus;
+        Entity sky;
+	
+	protected:
+		// display elements
+		InGameUiHelper uiHelper;
+		Entity branch;
+		Entity decor1er, decor2nd;
+		std::vector<Vector2> pts;
+		Entity herisson;
 		//feuilles de l'arbre
 		std::vector<BranchLeaf> branchLeaves;
+	private:		
 		//hérisson
-		Entity herisson;
 		AnimatedActor* c;
-		std::vector<Vector2> pts;
-		InGameUiHelper uiHelper;
 
-		Entity sky, branch;
-		Entity  decor1er, decor2nd;
 	private :
 		std::vector<Render> posBranch;
 		void fillVec();

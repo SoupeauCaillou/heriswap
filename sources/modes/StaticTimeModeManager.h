@@ -9,13 +9,14 @@
 
 class StaticTimeGameModeManager : public GameModeManager {
 	public:
-		StaticTimeGameModeManager();
+		StaticTimeGameModeManager(Game* game);
 		~StaticTimeGameModeManager();
 		void Setup();
-		float Update(float dt);
-
-		void UpdateUI(float dt);
-		void HideUI(bool toHide);
+		void Enter();
+		void Exit();
+		float GameUpdate(float dt);
+		void UiUpdate(float dt);
+		void TogglePauseDisplay(bool paused);
 
 		void LevelUp();
 		//permet de savoir si on a change de niveau
@@ -24,6 +25,4 @@ class StaticTimeGameModeManager : public GameModeManager {
 		GameMode GetMode();
 
 		void ScoreCalc(int nb, int type);
-		void Reset();
-
 };

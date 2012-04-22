@@ -243,6 +243,10 @@ GameState ModeMenuStateManager::Update(float dt) {
 }
 
 void ModeMenuStateManager::Exit() {
+    // nothing to do here: will be done in LateExit after Fading
+}
+
+void ModeMenuStateManager::LateExit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	TEXT_RENDERING(yourScore)->hide = true;
 	TEXT_RENDERING(play)->hide = true;
@@ -260,5 +264,5 @@ void ModeMenuStateManager::Exit() {
 	BUTTON(back)->enabled = false;
 	BUTTON(playButton)->enabled = false;
 	TEXT_RENDERING(scoreTitle)->hide = true;
-	modeMgr->Reset();
+	RENDERING(herisson->actor.e)->hide = true;
 }

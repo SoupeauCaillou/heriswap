@@ -5,6 +5,8 @@
 #define DL_Decor2nd 0.07
 #define DL_Decor1er 0.1
 #define DL_Branch 0.12
+#define DL_LeafMin 0.13f
+#define DL_LeafMax 0.14f
 
 #define DL_Background 0.15
 #define DL_Animal 0.155
