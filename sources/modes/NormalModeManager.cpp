@@ -59,7 +59,6 @@ float NormalGameModeManager::GameUpdate(float dt) {
 	}
 	time += dt;
 	LevelUp();
- LOGW("%.2f / %.2f", time, limit);
 	return time/limit;
 }
 
