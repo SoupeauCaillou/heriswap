@@ -2,20 +2,16 @@ package net.damsy.soupeaucaillou.tilematch;
 
 import java.io.InputStream;
 
-import com.openfeint.api.resource.Leaderboard;
-import com.openfeint.api.resource.Score;
-
-import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.media.MediaPlayer;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.openfeint.api.resource.Leaderboard;
+import com.openfeint.api.resource.Score;
  
 public class TilematchJNILib {
     static {
@@ -85,6 +81,20 @@ public class TilematchJNILib {
     		return soundID;
     	} else { 
     		return TilematchActivity.soundPool.play(soundID, 1.0f, 1.0f, 0, 0, 1.0f);
+    	}
+    }
+    
+    static public void stopSound(int soundID, boolean music) {
+    	if (soundID < 0)
+    		return ;
+    	if (music) {
+    		Log.i("tilematchJava", "stop: " + soundID);
+    		TilematchActivity.activePlayers[soundID].stop();
+    		TilematchActivity.activePlayers[soundID].reset();
+			TilematchActivity.availablePlayers.add(TilematchActivity.activePlayers[soundID]);
+			TilematchActivity.activePlayers[soundID] = null;
+		} else { 
+    		TilematchActivity.soundPool.stop(soundID);
     	}
     }
      

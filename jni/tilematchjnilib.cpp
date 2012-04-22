@@ -114,6 +114,7 @@ static void initJavaSoundApi(JavaSoundAPI* api, JNIEnv* env) {
 	api->jpauseSounds = (env->GetStaticMethodID(api->javaSoundApi, "pauseAllSounds", "()V"));
 	api->jresumeSounds = (env->GetStaticMethodID(api->javaSoundApi, "resumeAllSounds", "()V"));	
 	api->jmusicPos = (env->GetStaticMethodID(api->javaSoundApi, "musicPosition", "(I)F"));
+    api->jstopSound = (env->GetStaticMethodID(api->javaSoundApi, "stopSound", "(IZ)V"));
 }
 /*
  * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
