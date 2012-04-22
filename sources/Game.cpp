@@ -551,12 +551,12 @@ void Game::tick(float dt) {
 
 	//update music
 	if (pausableState(datas->state) && datas->state != LevelChanged) { //si on joue
-		datas->canalMenu.pause();
+		datas->canalMenu.stop();
 		updateMusic(datas->canal, &datas->canalStress1, &datas->canalStress2, percentDone, dt);
 	} else if (!pausableState(datas->state) && !fadeLogoState(datas->state)) { //dans les menus
-		for (int i=0;i<4;i++) datas->canal[i].pause();
-		datas->canalStress1.pause();
-		datas->canalStress2.pause();
+		for (int i=0;i<4;i++) datas->canal[i].stop();
+		datas->canalStress1.stop();
+		datas->canalStress2.stop();
 		datas->canalMenu.update(dt);
 	}
 

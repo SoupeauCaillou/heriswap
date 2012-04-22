@@ -8,7 +8,7 @@ struct Canal {
 		indice = 0;
 		multipleStrings=false;
 	}
-	void pause() {
+	void stop() {
 		SOUND(sounds[0])->stop = true;
 		SOUND(sounds[1])->stop = true;
 		if (multipleStrings) name = "";
