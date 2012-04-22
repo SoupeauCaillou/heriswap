@@ -194,9 +194,6 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
 
 	datas->mode2Manager[Normal]->sky = datas->sky;
-	static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel =
-        static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->getSmallLevelEntity();
-
 	datas->state2Manager[datas->state]->Enter();
 }
 

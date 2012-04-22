@@ -2,6 +2,7 @@
 #include "Game_Private.h"
 #include "states/ModeMenuStateManager.h"
 #include "states/MainMenuGameStateManager.h"
+#include "states/LevelStateManager.h"
 
 void Game::stateChanged(GameState oldState, GameState newState) {
     if (newState == Unpause) {
@@ -21,5 +22,8 @@ void Game::stateChanged(GameState oldState, GameState newState) {
      } else if (newState == BlackToSpawn) {
             // call Enter before starting fade-in
          datas->mode2Manager[datas->mode]->Enter();
+     } else if (newState == LevelChanged) {
+        static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel =
+        static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->getSmallLevelEntity();
      }
 }

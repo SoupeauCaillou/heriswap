@@ -178,5 +178,5 @@ GameMode NormalGameModeManager::GetMode() {
 }
 
 Entity NormalGameModeManager::getSmallLevelEntity() {
-
+    return uiHelper.smallLevel;
 }
