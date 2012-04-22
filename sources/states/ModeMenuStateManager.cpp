@@ -145,7 +145,7 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			std::stringstream a;
 			a.precision(1);
 			if (mode==ScoreAttack) {
-				a << std::fixed << entries[i].time << "s";
+				a << std::fixed << entries[i].time << " s";
 				trcP->isANumber = false;
 			} else {
 				a << std::fixed << entries[i].points;
@@ -202,8 +202,9 @@ void ModeMenuStateManager::Enter() {
 		storage->submitScore(entry);
 		TEXT_RENDERING(yourScore)->hide = false;
 		std::stringstream a;
+        a << playerName << " ... ";
 		a.precision(1);
-		if (m==ScoreAttack) a << entry.time << "s";
+		if (m==ScoreAttack) a << std::fixed << entry.time << " s";
 		else a << entry.points << "... niv " << entry.level;
 		TEXT_RENDERING(yourScore)->text = a.str();
 	}

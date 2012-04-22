@@ -2,7 +2,6 @@
 #include "Game.h"
 
 ScoreAttackGameModeManager::ScoreAttackGameModeManager(Game* game) : GameModeManager(game) {
-	limit = 3000;
 	time = 0.;
 	points=0;
 	bonus = MathUtil::RandomInt(8);
