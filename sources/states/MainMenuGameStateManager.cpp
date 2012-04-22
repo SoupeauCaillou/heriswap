@@ -125,19 +125,20 @@ GameState MainMenuGameStateManager::Update(float dt) {
 		TRANSFORM(a)->size = Vector2(PlacementHelper::GimpWidthToScreen(310), PlacementHelper::GimpHeightToScreen(253))*MathUtil::RandomFloatInRange(.3f,1.f);
 		TransformationSystem::setPosition(TRANSFORM(a), Vector2(PlacementHelper::GimpXToScreen(-MathUtil::RandomInt(300))-TRANSFORM(a)->size.X, PlacementHelper::GimpYToScreen(MathUtil::RandomIntInRange(830,1150))), TransformationSystem::SW);
 	}
-
-	if (BUTTON(bStart[0])->clicked) {
-		choosenGameMode = Normal;
-		SOUND(bStart[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
-		return ModeMenu;
-	} else if (BUTTON(bStart[1])->clicked){
-		choosenGameMode = ScoreAttack;
-		SOUND(bStart[1])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
-		return ModeMenu;
-	} else if (BUTTON(bStart[2])->clicked){
-		choosenGameMode = StaticTime;
-		SOUND(bStart[2])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
-		return ModeMenu;
+	if (!modeTitleToReset || modeTitleToReset && !MORPHING(modeTitleToReset)->active) {
+		if (BUTTON(bStart[0])->clicked) {
+			choosenGameMode = Normal;
+			SOUND(bStart[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+			return ModeMenu;
+		} else if (BUTTON(bStart[1])->clicked){
+			choosenGameMode = ScoreAttack;
+			SOUND(bStart[1])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+			return ModeMenu;
+		} else if (BUTTON(bStart[2])->clicked){
+			choosenGameMode = StaticTime;
+			SOUND(bStart[2])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+			return ModeMenu;
+		}
 	}
 	return MainMenu;
 }
