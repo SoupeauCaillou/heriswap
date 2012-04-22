@@ -37,7 +37,7 @@ void NormalGameModeManager::Enter() {
 	}
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
-	levelUpPending = false;
+	levelUpl = levelUpPending = false;
 	
 	GameModeManager::Enter();
 }
@@ -59,6 +59,7 @@ float NormalGameModeManager::GameUpdate(float dt) {
 	}
 	time += dt;
 	LevelUp();
+ LOGW("%.2f / %.2f", time, limit);
 	return time/limit;
 }
 
