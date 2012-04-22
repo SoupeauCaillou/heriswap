@@ -12,7 +12,7 @@ void MainMenuGameStateManager::Setup() {
 
 	//Creating text entities
 	for (int i=0; i<3; i++)
-		eStart[i] = theTextRenderingSystem.CreateLocalEntity(7);
+		eStart[i] = theTextRenderingSystem.CreateEntity();
 	//Settings
 	for (int i=0; i<3; i++) {
 		TRANSFORM(eStart[i])->z = DL_MainMenuUITxt;

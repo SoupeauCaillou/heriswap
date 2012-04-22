@@ -17,9 +17,9 @@ void ModeMenuStateManager::Setup() {
 
 	//Creating text entities
 	for (int i=0; i<5; i++) {
-		scoresName[i] = theTextRenderingSystem.CreateLocalEntity(2);
-		scoresPoints[i] = theTextRenderingSystem.CreateLocalEntity(2);
-		scoresLevel[i] = theTextRenderingSystem.CreateLocalEntity(2);
+		scoresName[i] = theTextRenderingSystem.CreateEntity();
+		scoresPoints[i] = theTextRenderingSystem.CreateEntity();
+		scoresLevel[i] = theTextRenderingSystem.CreateEntity();
 		TRANSFORM(scoresName[i])->z = TRANSFORM(scoresPoints[i])->z = TRANSFORM(scoresLevel[i])->z = DL_MainMenuUITxt;
 
 		TRANSFORM(scoresName[i])->position.Y =
@@ -83,7 +83,7 @@ void ModeMenuStateManager::Setup() {
 	SOUND(playButton)->type = SoundComponent::EFFECT;
 	BUTTON(playButton)->enabled = false;
 
-	yourScore = theTextRenderingSystem.CreateLocalEntity(2);
+	yourScore = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
 	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(800));
 	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::LEFT;

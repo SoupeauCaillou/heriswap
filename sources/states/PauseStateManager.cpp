@@ -14,7 +14,7 @@ PauseStateManager::~PauseStateManager() {
 }
 
 void PauseStateManager::Setup() {
-	eRestart = theTextRenderingSystem.CreateLocalEntity(10);
+	eRestart = theTextRenderingSystem.CreateEntity();
 	ADD_COMPONENT(eRestart, Rendering);
 	TRANSFORM(eRestart)->z = DL_PauseUI;
 	TEXT_RENDERING(eRestart)->text = "Reprendre";
@@ -35,7 +35,7 @@ void PauseStateManager::Setup() {
 	CONTAINER(bRestart)->entities.push_back(eRestart);
 	SOUND(bRestart)->type = SoundComponent::EFFECT;
 
-	eAbort = theTextRenderingSystem.CreateLocalEntity(6);
+	eAbort = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(eAbort)->z = DL_CombinationMark;
 	TEXT_RENDERING(eAbort)->hide = true;
 	TEXT_RENDERING(eAbort)->text = "Abandonner";
