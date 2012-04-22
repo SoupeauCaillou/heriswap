@@ -47,7 +47,6 @@ void GameModeManager::Setup() {
 	c->actor.e = herisson;
 	c->frames=0;
 	c->actor.speed = 4.1;
-	LoadHerissonTexture(bonus+1);
 	RENDERING(herisson)->hide = true;
 
 	branch = theEntityManager.CreateEntity();
@@ -97,7 +96,8 @@ void GameModeManager::Enter() {
 	RENDERING(branch)->hide = false;
 	SCROLLING(decor2nd)->hide = false;
 	SCROLLING(decor1er)->hide = false;
-	
+    LoadHerissonTexture(bonus+1);
+
 	generateLeaves(6);
 	uiHelper.show();
     theGridSystem.HideAll(false);

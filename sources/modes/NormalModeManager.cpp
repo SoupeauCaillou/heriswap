@@ -53,6 +53,7 @@ void NormalGameModeManager::TogglePauseDisplay(bool paused) {
 float NormalGameModeManager::GameUpdate(float dt) {
 	if (levelUpPending) {
 		RENDERING(herisson)->hide = false;
+        LoadHerissonTexture(bonus+1);
 		generateLeaves(6);
 		levelUpPending = false;
 	}
