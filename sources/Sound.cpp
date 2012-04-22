@@ -62,7 +62,7 @@ bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float p
 			count++;
 		}
 	}
-
+	//LOGI("%f", percentDone);
 	if (percentDone > 30./45 && count) {
 		pos /= count;
 		if (SOUND(canalStress1->sounds[0])->sound==InvalidSoundRef && SOUND(canalStress1->sounds[1])->sound==InvalidSoundRef) {

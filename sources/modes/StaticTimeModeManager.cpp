@@ -28,8 +28,11 @@ void StaticTimeGameModeManager::Exit() {
 	GameModeManager::Exit();
 }
 
-float StaticTimeGameModeManager::GameUpdate(float dt) {
+void StaticTimeGameModeManager::GameUpdate(float dt) {
 	time+=dt;
+}
+
+float StaticTimeGameModeManager::GameProgressPercent() {
 	return time/limit;
 }
 

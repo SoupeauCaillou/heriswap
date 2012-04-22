@@ -224,8 +224,6 @@ void Game::togglePause(bool activate) {
 
 void Game::tick(float dt) {
 	float updateDuration = TimeUtil::getTime();
-	float percentDone=0; //ended = (percentDone>=1);
-	static float timeMusicLoop = 65.f; //premier lancement
 	GameState newState;
 
     updateFps(dt);
@@ -235,14 +233,17 @@ void Game::tick(float dt) {
     // update state
     newState = datas->state2Manager[datas->state]->Update(dt);
 
+	//get the game progress
+	float percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent(); 
+	LOGI("%f", percentDone);
+	
     //updating game if needed
     if (datas->state == UserInput) {
-        percentDone = datas->mode2Manager[datas->mode]->GameUpdate(dt);
+			datas->mode2Manager[datas->mode]->GameUpdate(dt);
         // si on change de niveau
         if (datas->mode2Manager[datas->mode]->LeveledUp()) {
             NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[datas->mode]);
             static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel = m->currentLevel();
-
             newState = LevelChanged;
         } else if (percentDone >= 1) {
             newState = ModeMenu;

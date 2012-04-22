@@ -31,12 +31,10 @@ void ScoreAttackGameModeManager::Exit() {
 	GameModeManager::Exit();
 }
 
-float ScoreAttackGameModeManager::GameUpdate(float dt) {
-	//on met à jour le temps si on est dans userinput
-	//if (game.state(UserInput)) time += dt;
-
-	//a changer
+void ScoreAttackGameModeManager::GameUpdate(float dt) {
 	time+=dt;
+}
+float ScoreAttackGameModeManager::GameProgressPercent() {
 	return points/limit;
 }
 

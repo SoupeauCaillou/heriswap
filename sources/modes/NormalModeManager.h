@@ -12,7 +12,8 @@ class NormalGameModeManager : public GameModeManager {
 		
 		void Setup();
 		void Enter();
-		 float GameUpdate(float dt);
+		void GameUpdate(float dt);
+		float GameProgressPercent();
 		void UiUpdate(float dt);
 		void Exit();		
 		void TogglePauseDisplay(bool paused);

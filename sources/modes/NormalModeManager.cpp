@@ -50,7 +50,7 @@ void NormalGameModeManager::TogglePauseDisplay(bool paused) {
 	GameModeManager::TogglePauseDisplay(paused);
 }
 
-float NormalGameModeManager::GameUpdate(float dt) {
+void NormalGameModeManager::GameUpdate(float dt) {
 	if (levelUpPending) {
 		RENDERING(herisson)->hide = false;
         LoadHerissonTexture(bonus+1);
@@ -59,7 +59,10 @@ float NormalGameModeManager::GameUpdate(float dt) {
 	}
 	time += dt;
 	LevelUp();
-	return time/limit;
+}
+
+float NormalGameModeManager::GameProgressPercent() {
+	return (float)time/limit;
 }
 
 

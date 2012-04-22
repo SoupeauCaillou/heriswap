@@ -14,7 +14,8 @@ class StaticTimeGameModeManager : public GameModeManager {
 		void Setup();
 		void Enter();
 		void Exit();
-		float GameUpdate(float dt);
+		void GameUpdate(float dt);
+		float GameProgressPercent();
 		void UiUpdate(float dt);
 		void TogglePauseDisplay(bool paused);
 
