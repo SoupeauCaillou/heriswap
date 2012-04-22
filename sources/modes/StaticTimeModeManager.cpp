@@ -1,12 +1,7 @@
 #include "StaticTimeModeManager.h"
 #include "Game.h"
 
-StaticTimeGameModeManager::StaticTimeGameModeManager() {
-	limit = 45.0;
-	time = 0.;
-	points=0;
-	bonus = MathUtil::RandomInt(8);
-
+StaticTimeGameModeManager::StaticTimeGameModeManager(Game* game) : GameModeManager(game) {
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(15,0.125));
 	pts.push_back(Vector2(25,0.25));
@@ -18,22 +13,22 @@ StaticTimeGameModeManager::~StaticTimeGameModeManager() {
 }
 
 void StaticTimeGameModeManager::Setup() {
-	SetupCore(bonus);
-	HideUI(true);
+	GameModeManager::Setup();
 }
 
-void StaticTimeGameModeManager::Reset() {
+void StaticTimeGameModeManager::Enter() {
+	limit = 45;
 	time = 0;
-	branchLeaves.clear();
 	points = 0;
 	bonus = MathUtil::RandomInt(8);
-	ResetCore(bonus);
-	HideUI(true);
+	GameModeManager::Enter();
 }
 
+void StaticTimeGameModeManager::Exit() {
+	GameModeManager::Exit();
+}
 
-
-float StaticTimeGameModeManager::Update(float dt) {
+float StaticTimeGameModeManager::GameUpdate(float dt) {
 	time+=dt;
 	return time/limit;
 }
@@ -52,12 +47,7 @@ bool StaticTimeGameModeManager::LeveledUp() {
 	return false;
 }
 
-void StaticTimeGameModeManager::HideUI(bool toHide) {
-	HideUICore(toHide);
-	TEXT_RENDERING(uiHelper.smallLevel)->hide = true;
-}
-
-void StaticTimeGameModeManager::UpdateUI(float dt) {
+void StaticTimeGameModeManager::UiUpdate(float dt) {
 	//Score
 	{
 	std::stringstream a;
@@ -65,7 +55,8 @@ void StaticTimeGameModeManager::UpdateUI(float dt) {
 	a << std::fixed << points;
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
-	UpdateCore(dt, time);
+	updateHerisson(dt, time, 0);
+	GameModeManager::UiUpdate(dt);
 }
 
 GameMode StaticTimeGameModeManager::GetMode() {

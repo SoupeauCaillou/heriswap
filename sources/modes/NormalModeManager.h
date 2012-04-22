@@ -7,24 +7,32 @@
 
 class NormalGameModeManager : public GameModeManager {
 	public:
-		NormalGameModeManager();
+		NormalGameModeManager(Game* game);
 		~NormalGameModeManager();
+		
 		void Setup();
-		float Update(float dt);
-
-		void UpdateUI(float dt);
-		void HideUI(bool toHide);
-
-		void LevelUp();
-		//permet de savoir si on a change de niveau
-		bool LeveledUp();
-		void deleteLeaves(int type, int nb);
-
-		GameMode GetMode();
-
-
-        void WillScore(int nb, int type, std::vector<Entity>& out);
+		void Enter();
+		 float GameUpdate(float dt);
+		void UiUpdate(float dt);
+		void Exit();		
+		void TogglePauseDisplay(bool paused);
+		
+		// scoring implementation
+		void WillScore(int nb, int type, std::vector<Entity>& out);
         void ScoreCalc(int nb, int type);
+		GameMode GetMode();
+		void LevelUp();
+		bool LeveledUp();
+
+		
+		//permet de savoir si on a change de niveau
+		
+		
+
+		
+
+
+        
 		void Reset();
 		
 		int currentLevel() const { return level; }

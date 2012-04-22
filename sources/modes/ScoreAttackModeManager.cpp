@@ -1,7 +1,7 @@
 #include "ScoreAttackModeManager.h"
 #include "Game.h"
 
-ScoreAttackGameModeManager::ScoreAttackGameModeManager() {
+ScoreAttackGameModeManager::ScoreAttackGameModeManager(Game* game) : GameModeManager(game) {
 	limit = 3000;
 	time = 0.;
 	points=0;
@@ -17,20 +17,22 @@ ScoreAttackGameModeManager::~ScoreAttackGameModeManager() {
 }
 
 void ScoreAttackGameModeManager::Setup() {
-	SetupCore(bonus);
-	HideUI(true);
+	GameModeManager::Setup();
 }
 
-void ScoreAttackGameModeManager::Reset() {
+void ScoreAttackGameModeManager::Enter() {
+	limit = 3000;
 	time = 0;
 	points = 0;
-	branchLeaves.clear();
 	bonus = MathUtil::RandomInt(8);
-	ResetCore(bonus);
-	HideUI(true);
+	GameModeManager::Enter();
 }
 
-float ScoreAttackGameModeManager::Update(float dt) {
+void ScoreAttackGameModeManager::Exit() {
+	GameModeManager::Exit();
+}
+
+float ScoreAttackGameModeManager::GameUpdate(float dt) {
 	//on met à jour le temps si on est dans userinput
 	//if (game.state(UserInput)) time += dt;
 
@@ -39,27 +41,7 @@ float ScoreAttackGameModeManager::Update(float dt) {
 	return points/limit;
 }
 
-void ScoreAttackGameModeManager::ScoreCalc(int nb, int type) {
-	if (type == bonus)
-		points += 10*2*nb*nb*nb/6;
-	else
-		points += 10*nb*nb*nb/6;
-}
-
-void ScoreAttackGameModeManager::LevelUp() {
-}
-
-bool ScoreAttackGameModeManager::LeveledUp() {
-	return false;
-}
-
-void ScoreAttackGameModeManager::HideUI(bool toHide) {
-	HideUICore(toHide);
-	TEXT_RENDERING(uiHelper.smallLevel)->hide = true;
-	TEXT_RENDERING(uiHelper.scoreProgress)->isANumber = false;
-}
-
-void ScoreAttackGameModeManager::UpdateUI(float dt) {
+void ScoreAttackGameModeManager::UiUpdate(float dt) {
 	//Score
 	{
 	std::stringstream a;
@@ -79,7 +61,24 @@ void ScoreAttackGameModeManager::UpdateUI(float dt) {
 	a << std::setw(2) << std::setfill('0') << seconde << '.' << std::setw(1) << tenthsec << " s";
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
-	UpdateCore(dt, points);
+	
+	updateHerisson(dt, points, 0);
+	
+	GameModeManager::UiUpdate(dt);
+}
+
+void ScoreAttackGameModeManager::ScoreCalc(int nb, int type) {
+	if (type == bonus)
+		points += 10*2*nb*nb*nb/6;
+	else
+		points += 10*nb*nb*nb/6;
+}
+
+void ScoreAttackGameModeManager::LevelUp() {
+}
+
+bool ScoreAttackGameModeManager::LeveledUp() {
+	return false;
 }
 
 GameMode ScoreAttackGameModeManager::GetMode() {

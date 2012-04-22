@@ -40,7 +40,7 @@ void GameModeManager::LoadHerissonTexture(int type) {
 	c->anim.push_back(t.str());
 }
 
-void GameModeManager::SetupCore(int bonus) {
+void GameModeManager::Setup() {
 	herisson = theEntityManager.CreateEntity();
 	ADD_COMPONENT(herisson, Transformation);
 	ADD_COMPONENT(herisson, Rendering);
@@ -51,6 +51,7 @@ void GameModeManager::SetupCore(int bonus) {
 	c->frames=0;
 	c->actor.speed = 4.1;
 	LoadHerissonTexture(bonus+1);
+	RENDERING(herisson)->hide = true;
 
 	branch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(branch, Transformation);
@@ -58,7 +59,7 @@ void GameModeManager::SetupCore(int bonus) {
 	TRANSFORM(branch)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(400.0));
 	TransformationSystem::setPosition(TRANSFORM(branch), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
 	ADD_COMPONENT(branch, Rendering);
-	RENDERING(branch)->hide = false;
+	RENDERING(branch)->hide = true;
 	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
 
 	decor2nd = theEntityManager.CreateEntity();
@@ -89,15 +90,40 @@ void GameModeManager::SetupCore(int bonus) {
 	SCROLLING(decor1er)->displaySize = Vector2(TRANSFORM(decor1er)->size.X * 1.01, TRANSFORM(decor1er)->size.Y);
 	SCROLLING(decor1er)->hide = true;
 
-	ResetCore(bonus);
 	fillVec();
+	
+	uiHelper.build();
 }
-void GameModeManager::ResetCore(int bonus) {
-	distance = 0.f;
+
+void GameModeManager::Enter() {
+	RENDERING(herisson)->hide = false;
+	RENDERING(branch)->hide = false;
+	SCROLLING(decor2nd)->hide = false;
+	SCROLLING(decor1er)->hide = false;
+	
 	generateLeaves(6);
-	TRANSFORM(herisson)->position = Vector2(-PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5, PlacementHelper::GimpYToScreen(1100));
-	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
+	uiHelper.show();
 }
+
+void GameModeManager::Exit() {
+	RENDERING(herisson)->hide = true;
+	RENDERING(branch)->hide = true;
+	SCROLLING(decor2nd)->hide = true;
+	SCROLLING(decor1er)->hide = true;
+	
+	uiHelper.hide();
+	
+	// delete leaves
+	for (int az=0;az<branchLeaves.size();az++) {
+		theEntityManager.DeleteEntity(branchLeaves[az].e);
+	}
+	branchLeaves.clear();
+}
+
+void GameModeManager::TogglePauseDisplay(bool paused) {
+	
+}
+
 void GameModeManager::generateLeaves(int nb) {
 	for (int az=0;az<branchLeaves.size();az++)
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
@@ -129,8 +155,19 @@ void GameModeManager::generateLeaves(int nb) {
 		}
 	}
 	//swapper.swap(posBranch);
-	uiHelper.build();
 }
+
+void GameModeManager::deleteLeaves(int type, int nb) {
+	for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
+		if (type == branchLeaves[i].type) {
+			theEntityManager.DeleteEntity(branchLeaves[i].e);
+			branchLeaves.erase(branchLeaves.begin()+i);
+			nb--;
+			i--;
+		}
+	}
+}
+
 void GameModeManager::fillVec() {
 #if 0
 	int t;
@@ -167,7 +204,7 @@ void GameModeManager::fillVec() {
 #endif
 }
 
-void GameModeManager::UpdateCore(float dt, float obj, float herissonSpeed) {
+void GameModeManager::updateHerisson(float dt, float obj, float herissonSpeed) {
 	// default herisson behavior: move to
 	TransformationComponent* tc = TRANSFORM(herisson);
 	float newPos = tc->position.X;
@@ -200,16 +237,3 @@ void GameModeManager::UpdateCore(float dt, float obj, float herissonSpeed) {
 	uiHelper.update(dt);
 }
 
-void GameModeManager::HideUICore(bool toHide) {
-	if (herisson && RENDERING(herisson)) RENDERING(herisson)->hide = toHide;
-	for (int i=0;i<branchLeaves.size();i++) RENDERING(branchLeaves[i].e)->hide = toHide;
-
-	if (toHide)
-		uiHelper.hide();
-	else
-		uiHelper.show();
-
-	RENDERING(branch)->hide = toHide;
-	SCROLLING(decor2nd)->hide = toHide;
-	SCROLLING(decor1er)->hide = toHide;
-}
