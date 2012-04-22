@@ -37,7 +37,7 @@ void NormalGameModeManager::Enter() {
 	}
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
-	levelUpl = levelUpPending = false;
+	levelUp = levelUpPending = false;
 	
 	GameModeManager::Enter();
 }
