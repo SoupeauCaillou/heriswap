@@ -176,3 +176,7 @@ bool NormalGameModeManager::LeveledUp() {
 GameMode NormalGameModeManager::GetMode() {
 	return Normal;
 }
+
+Entity NormalGameModeManager::getSmallLevelEntity() {
+
+}

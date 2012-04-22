@@ -53,6 +53,10 @@
     <None Include="sources\states\ModeMenuStateManager.h" />
     <None Include="sources\Sound.h" />
     <None Include="sources\states\LogoStateManager.h" />
+    <None Include="sources\GameState.h" />
+    <None Include="sources\modes\PositionFeuilles.h" />
+    <None Include="sources\AnimedEntity.h" />
+    <None Include="sources\Game_Private.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -81,5 +85,8 @@
     <Compile Include="sources\states\ModeMenuStateManager.cpp" />
     <Compile Include="sources\Sound.cpp" />
     <Compile Include="sources\states\LogoStateManager.cpp" />
+    <Compile Include="sources\Game_State.cpp" />
+    <Compile Include="sources\AnimedEntity.cpp" />
+    <Compile Include="sources\Game_Private.cpp" />
   </ItemGroup>
 </Project>

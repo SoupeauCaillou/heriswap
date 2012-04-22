@@ -23,16 +23,9 @@ class NormalGameModeManager : public GameModeManager {
 		GameMode GetMode();
 		void LevelUp();
 		bool LeveledUp();
-
 		
-		//permet de savoir si on a change de niveau
-		
-		
+		Entity getSmallLevelEntity();
 
-		
-
-
-        
 		void Reset();
 		
 		int currentLevel() const { return level; }

@@ -73,11 +73,12 @@ class GameModeManager {
 		// game params
 		float time, limit;
 		int points, bonus;
+        Entity sky;
 	
 	protected:
 		// display elements
 		InGameUiHelper uiHelper;
-		Entity sky, branch;
+		Entity branch;
 		Entity decor1er, decor2nd;
 		std::vector<Vector2> pts;
 		Entity herisson;

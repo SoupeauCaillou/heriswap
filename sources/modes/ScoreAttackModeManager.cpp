@@ -63,8 +63,6 @@ void ScoreAttackGameModeManager::UiUpdate(float dt) {
 	}
 	
 	updateHerisson(dt, points, 0);
-	
-	GameModeManager::UiUpdate(dt);
 }
 
 void ScoreAttackGameModeManager::ScoreCalc(int nb, int type) {
@@ -83,4 +81,8 @@ bool ScoreAttackGameModeManager::LeveledUp() {
 
 GameMode ScoreAttackGameModeManager::GetMode() {
 	return ScoreAttack;
+}
+
+void ScoreAttackGameModeManager::TogglePauseDisplay(bool paused) {
+ GameModeManager::TogglePauseDisplay(paused);
 }

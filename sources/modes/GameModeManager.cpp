@@ -103,6 +103,7 @@ void GameModeManager::Enter() {
 	
 	generateLeaves(6);
 	uiHelper.show();
+    theGridSystem.HideAll(false);
 }
 
 void GameModeManager::Exit() {
@@ -118,6 +119,7 @@ void GameModeManager::Exit() {
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
 	}
 	branchLeaves.clear();
+    theGridSystem.HideAll(true);
 }
 
 void GameModeManager::TogglePauseDisplay(bool paused) {

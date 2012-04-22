@@ -56,9 +56,12 @@ void StaticTimeGameModeManager::UiUpdate(float dt) {
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
 	updateHerisson(dt, time, 0);
-	GameModeManager::UiUpdate(dt);
 }
 
 GameMode StaticTimeGameModeManager::GetMode() {
 	return StaticTime;
+}
+
+void StaticTimeGameModeManager::TogglePauseDisplay(bool paused) {
+ GameModeManager::TogglePauseDisplay(paused);
 }

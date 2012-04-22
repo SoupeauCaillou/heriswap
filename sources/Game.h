@@ -1,5 +1,6 @@
 #pragma once
 #include "GridSystem.h"
+#include "GameState.h"
 
 #define FAST 1.
 
@@ -26,6 +27,7 @@ class PlayerNameInputUI {
 
 };
 
+class PrivateData;
 class Game {
 	public:
 		Game(NativeAssetLoader* loader, ScoreStorage* storage, PlayerNameInputUI* inputUI);
@@ -33,9 +35,10 @@ class Game {
 		void tick(float dt);
 		void togglePause(bool activate);
 		void toggleShowCombi(bool forcedesactivate);
-		void hideEveryThing(bool toHide, bool blacktospawn);
 		void setMode();
 		int saveState(uint8_t** out);
+
+        void stateChanged(GameState from, GameState to);
 
 		static Vector2 GridCoordsToPosition(int i, int j);
 		static float CellSize();
@@ -48,7 +51,6 @@ class Game {
 		void loadState(const uint8_t* in, int size);
 		void bench(bool active, float updateDuration, float dt);
 
-	class Data;
-	Data* datas;
+	PrivateData* datas;
 	NativeAssetLoader* loader;
 };
