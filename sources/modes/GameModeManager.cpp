@@ -118,7 +118,7 @@ void GameModeManager::Exit() {
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
 	}
 	branchLeaves.clear();
-    theGridSystem.HideAll(true);
+    theGridSystem.DeleteAll();
 }
 
 void GameModeManager::TogglePauseDisplay(bool paused) {
