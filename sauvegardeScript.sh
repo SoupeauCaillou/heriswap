@@ -1,11 +1,11 @@
 #!/bin/bash
 
 if [ -z $@ ]; then
-	echo "No args. Aborting"
+	echo "No args. Usage: ${0} component_definition_file"
 else
 	FICHIER=`cat $@`
 	ECRITURE="/tmp/test"
-	NOM=`echo "$FICHIER" | grep "Component {" | cut -d" " -f3` #nom du systeme avec Component
+	NOM=`echo "$FICHIER" | grep "Component {" | cut -d" " -f2` #nom du systeme avec Component
 	DIMINUTIF=`echo ${NOM:0:1}c |tr 'A-Z' 'a-z'`
 
 	##pour virer le morceau component :

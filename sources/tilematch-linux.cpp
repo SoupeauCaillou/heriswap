@@ -189,15 +189,15 @@ int main(int argc, char** argv) {
 	if (!glfwInit())
 		return 1;
 
-     glewInit();
-
 	Vector2 reso16_9(394, 700);
 	Vector2 reso16_10(437, 700);
 
 	Vector2* reso = (argc == 1) ? &reso16_10 : &reso16_9;
-
 	if( !glfwOpenWindow( reso->X,reso->Y, 8,8,8,8,8,8, GLFW_WINDOW ) )
 		return 1;
+		
+	glewInit();
+
 
 	// pose de l'origine du temps ici t = 0
 	TimeUtil::init();

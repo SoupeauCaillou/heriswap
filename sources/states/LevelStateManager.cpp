@@ -60,14 +60,6 @@ void LevelStateManager::Setup() {
 	PARTICULE(eSnowEmitter)->forceAmplitude  = Interval<float>(0, 0);
 	PARTICULE(eSnowEmitter)->mass = 1;
 	
-	/*eDesaturate = theEntityManager.CreateEntity();
-	ADD_COMPONENT(eDesaturate, Transformation);
-	TRANSFORM(eDesaturate)->position = Vector2(0, 0);
-	TRANSFORM(eDesaturate)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(1280));
-	TRANSFORM(eDesaturate)->z = DL_SnowDesaturate;
-	ADD_COMPONENT(eDesaturate, Rendering);
-	RENDERING(eDesaturate)->color = Color(178.0/255, 203.0/255, 205.0/255, 1);*/
-	
 	eSnowBranch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSnowBranch, Transformation);
 	TRANSFORM(eSnowBranch)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(218));
@@ -99,7 +91,6 @@ void LevelStateManager::Enter() {
 	TEXT_RENDERING(eBigLevel)->text = a.str();
 	TEXT_RENDERING(eBigLevel)->hide = false;
 	PARTICULE(eSnowEmitter)->emissionRate = 50;
-	// RENDERING(eDesaturate)->hide = false;
 	RENDERING(eSnowBranch)->hide = false;
 	RENDERING(eSnowGround)->hide = false;
 	SOUND(eBigLevel)->sound = theSoundSystem.loadSoundFile("audio/level_up.ogg", true);
@@ -116,6 +107,14 @@ void LevelStateManager::Enter() {
 	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(288);
 	
 	duration = 0;
+	
+	// desaturate everyone except the branch
+	TextureRef branchTexture = theRenderingSystem.loadTextureFile("branche.png");
+	std::vector<Entity> entities = theRenderingSystem.RetrieveAllEntityWithComponent();
+	for (int i=0; i<entities.size(); i++) {
+		RenderingComponent* rc = RENDERING(entities[i]);
+		rc->desaturate = (rc->texture != branchTexture);
+	}
 }
 
 GameState LevelStateManager::Update(float dt) {
@@ -138,6 +137,10 @@ GameState LevelStateManager::Update(float dt) {
 		mc->active = true;
 		mc->activationTime = 0;
 		mc->timing = 0.5;
+		
+		if (duration > 6) {
+			PARTICULE(eSnowEmitter)->emissionRate = 0;
+		}
 	}
 
 	if (SOUND(eBigLevel)->sound == InvalidSoundRef || duration > 8) {
@@ -168,4 +171,9 @@ void LevelStateManager::Exit() {
 	TEXT_RENDERING(eBigLevel)->hide = true;
 	// show small level
 	TEXT_RENDERING(smallLevel)->color.a = 1;
+	
+	std::vector<Entity> ent = theRenderingSystem.RetrieveAllEntityWithComponent();
+	for (int i=0; i<ent.size(); i++) {
+		RENDERING(ent[i])->desaturate = false;
+	}
 }

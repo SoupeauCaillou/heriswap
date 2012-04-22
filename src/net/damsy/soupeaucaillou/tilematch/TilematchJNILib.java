@@ -161,7 +161,7 @@ public class TilematchJNILib {
     	}
     	db.close();
     	return "on".equals(value);
-    }
+    } 
      
     static public void submitScore(int mode, int points, int level, float time, String name) {
     	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getWritableDatabase();

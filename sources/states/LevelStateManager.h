@@ -31,7 +31,6 @@ class LevelStateManager : public GameStateManager {
 	std::vector<FeuilleOrientee> feuilles;
 	Entity eBigLevel;
 	Entity eSnowEmitter;
-	Entity eDesaturate;
 	Entity eSnowBranch;
 	Entity eSnowGround;
 	Entity eMusic;
