@@ -6,7 +6,7 @@
 void Game::stateChanged(GameState oldState, GameState newState) {
     if (newState == Unpause) {
         togglePause(false);
-    } else if (newState == Abort) {
+    } else if (oldState == Pause && newState == MainMenu) {
          LOGI("aborted. going to main menu");
          datas->mode2Manager[datas->mode]->Exit();
          newState = MainMenu;
