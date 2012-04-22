@@ -18,7 +18,9 @@ LOCAL_CXXFLAGS := -DANDROID_NDK \
 LOCAL_SRC_FILES := \
     importgl.c \
     tilematchjnilib.cpp \
-	../sources/Game.cpp \
+    ../sources/Game.cpp \
+    ../sources/Game_State.cpp \
+    ../sources/Game_Private.cpp \
 	../sources/GridSystem.cpp \
    ../sources/PlacementHelper.cpp \
    ../sources/Sound.cpp \

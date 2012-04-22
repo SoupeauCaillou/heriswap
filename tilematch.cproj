@@ -57,6 +57,7 @@
     <None Include="sources\modes\PositionFeuilles.h" />
     <None Include="sources\AnimedEntity.h" />
     <None Include="sources\Game_Private.h" />
+    <None Include="jni\Android.mk" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
