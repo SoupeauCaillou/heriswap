@@ -60,6 +60,7 @@ void InGameUiHelper::show() {
 	TEXT_RENDERING(smallLevel)->hide = false;
 	RENDERING(pauseButton)->hide = false;
 	TEXT_RENDERING(scoreProgress)->hide = false;
+	BUTTON(pauseButton)->enabled=true;
 	BUTTON(pauseButton)->clicked=false;
 }
 

@@ -1,7 +1,5 @@
 #include "ModeMenuStateManager.h"
 
-//Menu 2: un titre, un bouton jouer, les 5 meilleurs scoresName du mode de jeu, un bouton openfeint, un bouton back, le score de la partie est affiché ici ?
-
 ModeMenuStateManager::~ModeMenuStateManager() {
 	for (int i=0; i<5; i++) {
 		theEntityManager.DeleteEntity(scoresName[i]);
@@ -223,7 +221,7 @@ void ModeMenuStateManager::Enter() {
 GameState ModeMenuStateManager::Update(float dt) {
 	//herisson
 	Entity herissonActor=  herisson->actor.e;
-	if (TRANSFORM(herissonActor)->position.X < PlacementHelper::GimpXToScreen(800)+TRANSFORM(herissonActor)->size.X) {
+	if (TRANSFORM(herissonActor)->position.X < PlacementHelper::ScreenWidth+TRANSFORM(herissonActor)->size.X) {
 		TRANSFORM(herissonActor)->position.X += herisson->actor.speed*dt;
 		switchAnim(herisson);
 	} else {

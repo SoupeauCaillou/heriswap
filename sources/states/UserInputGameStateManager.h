@@ -15,7 +15,6 @@
 #include "systems/ButtonSystem.h"
 #include "systems/SoundSystem.h"
 
-
 #include "GameStateManager.h"
 #include "GridSystem.h"
 #include "Game.h"

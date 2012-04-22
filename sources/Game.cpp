@@ -235,7 +235,6 @@ void Game::tick(float dt) {
 
 	//get the game progress
 	float percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent(); 
-	LOGI("%f", percentDone);
 	
     //updating game if needed
     if (datas->state == UserInput) {

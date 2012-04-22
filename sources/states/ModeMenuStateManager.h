@@ -1,7 +1,5 @@
 #pragma once
 
-//Menu 2: un titre, un bouton jouer, les 5 meilleurs scores du mode de jeu, un bouton openfeint, un bouton back, le score de la partie est affiché ici ?
-
 #include <fstream>
 
 #include "base/EntityManager.h"

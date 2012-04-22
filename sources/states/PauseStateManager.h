@@ -23,6 +23,6 @@ class PauseStateManager : public GameStateManager {
 	void Exit();
 
 	private:
-		Entity eRestart, bRestart;
-		Entity eAbort, bAbort;
+		Entity eRestart, eAbort;
+		Entity bRestart, bAbort;
 };

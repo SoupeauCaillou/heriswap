@@ -1,5 +1,19 @@
 #include "MainMenuGameStateManager.h"
 
+#include "base/EntityManager.h"
+#include "base/TouchInputManager.h"
+
+#include "systems/ButtonSystem.h"
+#include "systems/TextRenderingSystem.h"
+#include "systems/MorphingSystem.h"
+#include "systems/TransformationSystem.h"
+#include "systems/RenderingSystem.h"
+#include "systems/ContainerSystem.h"
+#include "systems/SoundSystem.h"
+
+#include "DepthLayer.h"
+#include "PlacementHelper.h"
+
 MainMenuGameStateManager::~MainMenuGameStateManager() {
 	for (int i=0; i<3; i++) {
 		theTextRenderingSystem.DestroyLocalEntity(eStart[i]);
@@ -57,7 +71,7 @@ void MainMenuGameStateManager::Setup() {
 
 	menubg = theEntityManager.CreateEntity();
 	ADD_COMPONENT(menubg, Transformation);
-	TRANSFORM(menubg)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(570));
+	TRANSFORM(menubg)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(570));
 	TransformationSystem::setPosition(TRANSFORM(menubg), Vector2(0, PlacementHelper::GimpYToScreen(542)), TransformationSystem::N);
 	TRANSFORM(menubg)->z = DL_MainMenuBg;
 	ADD_COMPONENT(menubg, Rendering);
@@ -66,7 +80,7 @@ void MainMenuGameStateManager::Setup() {
 
 	menufg = theEntityManager.CreateEntity();
 	ADD_COMPONENT(menufg, Transformation);
-	TRANSFORM(menufg)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(570));
+	TRANSFORM(menufg)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(570));
 	TransformationSystem::setPosition(TRANSFORM(menufg), Vector2(0, PlacementHelper::GimpYToScreen(1280)), TransformationSystem::S);
 	TRANSFORM(menufg)->z = DL_MainMenuFg;
 	ADD_COMPONENT(menufg, Rendering);

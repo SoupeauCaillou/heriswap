@@ -2,8 +2,6 @@
 #include "GridSystem.h"
 #include "GameState.h"
 
-#define FAST 1.
-
 class ScoreStorage {
 	public:
 		struct Score {

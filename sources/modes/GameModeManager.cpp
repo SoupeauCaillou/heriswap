@@ -6,7 +6,7 @@
 #include "AnimedEntity.h"
 
 static float initialHerissonPosition(Entity herisson) {
-    return -PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.5;
+    return -PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.;
 }
 
 static float finalHerissonPosition(Entity herisson) {

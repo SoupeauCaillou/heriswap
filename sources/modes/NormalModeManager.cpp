@@ -113,8 +113,8 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
     }
 
     // move background during delete/spawn sequence (+ fall ?)
-    float deleteDuration = 0.3*FAST;
-    float spawnDuration = 0.2*FAST;
+    float deleteDuration = 0.3;
+    float spawnDuration = 0.2;
     // herisson distance
     float currentPos = TRANSFORM(herisson)->position.X;
     float newPos = GameModeManager::position(time - timeGain(count, time));

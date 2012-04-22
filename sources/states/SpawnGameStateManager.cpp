@@ -21,7 +21,7 @@ void SpawnGameStateManager::Setup() {
 
 	ADSR(eSpawn)->idleValue = 0;
 	ADSR(eSpawn)->attackValue = 1.0;
-	ADSR(eSpawn)->attackTiming = 0.2*FAST;
+	ADSR(eSpawn)->attackTiming = 0.2;
 	ADSR(eSpawn)->decayTiming = 0;
 	ADSR(eSpawn)->sustainValue = 1.0;
 	ADSR(eSpawn)->releaseTiming = 0;
