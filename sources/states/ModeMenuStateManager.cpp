@@ -98,7 +98,7 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(back, Rendering);
 	ADD_COMPONENT(back, Button);
 	ADD_COMPONENT(back, Sound);
-	TRANSFORM(back)->size = Vector2(PlacementHelper::GimpWidthToScreen(61), PlacementHelper::GimpHeightToScreen(37));
+	TRANSFORM(back)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(75));
 	TransformationSystem::setPosition(TRANSFORM(back), Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(82)), TransformationSystem::NW);
 	TRANSFORM(back)->z = DL_MainMenuUITxt;
 	RENDERING(back)->texture = theRenderingSystem.loadTextureFile("menu/back.png");
