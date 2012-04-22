@@ -1,6 +1,7 @@
 #include "modes/GameModeManager.h"
 #include "TwitchSystem.h"
 #include "systems/ScrollingSystem.h"
+#include "systems/ButtonSystem.h"
 #include <fstream>
 #include "AnimedEntity.h"
 
@@ -122,6 +123,10 @@ void GameModeManager::Exit() {
 
 void GameModeManager::TogglePauseDisplay(bool paused) {
 	theGridSystem.HideAll(paused);
+
+    BUTTON(uiHelper.pauseButton)->enabled=!paused;;
+    RENDERING(uiHelper.pauseButton)->hide = paused;
+
 }
 
 void GameModeManager::generateLeaves(int nb) {
