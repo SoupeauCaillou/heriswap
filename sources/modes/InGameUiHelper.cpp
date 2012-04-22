@@ -61,7 +61,6 @@ void InGameUiHelper::show() {
 	RENDERING(pauseButton)->hide = false;
 	TEXT_RENDERING(scoreProgress)->hide = false;
 	BUTTON(pauseButton)->enabled=true;
-	BUTTON(pauseButton)->clicked=false;
 }
 
 void InGameUiHelper::update(float dt) {

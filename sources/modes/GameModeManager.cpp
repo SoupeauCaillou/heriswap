@@ -126,7 +126,6 @@ void GameModeManager::TogglePauseDisplay(bool paused) {
 
     BUTTON(uiHelper.pauseButton)->enabled=!paused;;
     RENDERING(uiHelper.pauseButton)->hide = paused;
-
 }
 
 void GameModeManager::generateLeaves(int nb) {
