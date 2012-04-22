@@ -13,7 +13,7 @@
         <!-- Our activity is the built-in NativeActivity framework class.
              This will take care of integrating with our NDK code. -->
         <activity android:name="net.damsy.soupeaucaillou.tilematch.TilematchActivity"
-                android:label="Heriswap" android:theme="@android:style/Theme.NoTitleBar">
+                android:label="Heriswap" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

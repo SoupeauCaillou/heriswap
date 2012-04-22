@@ -29,26 +29,15 @@ void InGameUiHelper::build() {
 
 	pauseButton = theEntityManager.CreateEntity();
 	ADD_COMPONENT(pauseButton, Transformation);
-	TRANSFORM(pauseButton)->position = Vector2(PlacementHelper::GimpXToScreen(23), PlacementHelper::GimpYToScreen(1215));
-	TRANSFORM(pauseButton)->z = DL_Score;
-	ADD_COMPONENT(pauseButton, TextRendering);
-	TEXT_RENDERING(pauseButton)->color = Color(3.0/255, 99.0/255, 71.0/255);
-	TEXT_RENDERING(pauseButton)->text = "Pause";
-	TEXT_RENDERING(pauseButton)->fontName = "typo";
-	TEXT_RENDERING(pauseButton)->charHeight = PlacementHelper::GimpHeightToScreen(30);
-	TEXT_RENDERING(pauseButton)->positioning = TextRenderingComponent::LEFT;
-
-	pauseContainer = theEntityManager.CreateEntity();
-	ADD_COMPONENT(pauseContainer, Transformation);
-	ADD_COMPONENT(pauseContainer, Container);
-	ADD_COMPONENT(pauseContainer, Sound);
-	SOUND(pauseContainer)->type = SoundComponent::EFFECT;
-	ADD_COMPONENT(pauseContainer, Button);
-	ADD_COMPONENT(pauseContainer, Rendering);
-	RENDERING(pauseContainer)->color = Color(0.0, .0, .0, .0);
-	TRANSFORM(pauseContainer)->z = DL_Score;
-	CONTAINER(pauseContainer)->entities.push_back(pauseButton);
-	CONTAINER(pauseContainer)->includeChildren = true;
+    TRANSFORM(pauseButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
+    TransformationSystem::setPosition(TRANSFORM(pauseButton), Vector2(PlacementHelper::GimpXToScreen(108), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::E);
+    TRANSFORM(pauseButton)->z = DL_Score;
+	ADD_COMPONENT(pauseButton, Rendering);
+	RENDERING(pauseButton)->color = Color(3.0/255, 99.0/255, 71.0/255);
+	RENDERING(pauseButton)->texture = theRenderingSystem.loadTextureFile("pause.png");
+    ADD_COMPONENT(pauseButton, Sound);
+	SOUND(pauseButton)->type = SoundComponent::EFFECT;
+	ADD_COMPONENT(pauseButton, Button);
 
 	scoreProgress = theEntityManager.CreateEntity();
 	ADD_COMPONENT(scoreProgress, Transformation);
@@ -69,17 +58,16 @@ void InGameUiHelper::show() {
 		return;
 
 	TEXT_RENDERING(smallLevel)->hide = false;
-	TEXT_RENDERING(pauseButton)->hide = false;
-	RENDERING(pauseContainer)->hide = false;
+	RENDERING(pauseButton)->hide = false;
 	TEXT_RENDERING(scoreProgress)->hide = false;
-	BUTTON(pauseContainer)->clicked=false;
+	BUTTON(pauseButton)->clicked=false;
 }
 
 void InGameUiHelper::update(float dt) {
 	// handle button
-	if (BUTTON(pauseContainer)->clicked) {
-		SOUND(pauseContainer)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
-		BUTTON(pauseContainer)->clicked=false;
+	if (BUTTON(pauseButton)->clicked) {
+		SOUND(pauseButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+		BUTTON(pauseButton)->clicked=false;
 		game->togglePause(true);
 	}
 }
@@ -88,8 +76,7 @@ void InGameUiHelper::hide() {
 	if (!built)
 		return;
 	TEXT_RENDERING(smallLevel)->hide = true;
-	TEXT_RENDERING(pauseButton)->hide = true;
-	RENDERING(pauseContainer)->hide = false;
+	RENDERING(pauseButton)->hide = false;
 	TEXT_RENDERING(scoreProgress)->hide = true;
 }
 
@@ -98,6 +85,5 @@ void InGameUiHelper::destroy() {
 		return;
 	theEntityManager.DeleteEntity(smallLevel);
 	theEntityManager.DeleteEntity(pauseButton);
-	theEntityManager.DeleteEntity(pauseContainer);
 	theEntityManager.DeleteEntity(scoreProgress);
 }

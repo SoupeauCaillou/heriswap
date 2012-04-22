@@ -75,6 +75,7 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
          TransformationSystem::setPosition(TRANSFORM(soundButton), Vector2(PlacementHelper::GimpXToScreen(692), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
          ADD_COMPONENT(soundButton, Button);
          ADD_COMPONENT(soundButton, Rendering);
+         RENDERING(soundButton)->color = Color(3.0/255.0, 99.0/255, 71.0/255);
          if (storage->soundEnable(false)) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
          else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
          ADD_COMPONENT(soundButton, Sound);

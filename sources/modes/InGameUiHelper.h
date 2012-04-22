@@ -14,7 +14,7 @@ class InGameUiHelper {
 		void destroy();
 
 	Entity smallLevel;
-	Entity pauseButton, pauseContainer;
+	Entity pauseButton;
 	Entity scoreProgress;
 	Game* game;
 	private:
