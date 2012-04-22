@@ -1,4 +1,6 @@
+#define GLEW_STATIC
 
+#include <GL/glew.h>
 #include <GL/glfw.h>
 #include <png.h>
 #include <sstream>
@@ -186,6 +188,8 @@ class LinuxSqliteExec: public ScoreStorage {
 int main(int argc, char** argv) {
 	if (!glfwInit())
 		return 1;
+
+     glewInit();
 
 	Vector2 reso16_9(394, 700);
 	Vector2 reso16_10(437, 700);

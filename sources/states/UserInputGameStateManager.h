@@ -1,6 +1,7 @@
 #pragma once
 
 #ifndef ANDROID
+#include <GL/glew.h>
 #include <GL/glfw.h>
 #endif
 
