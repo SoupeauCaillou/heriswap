@@ -27,7 +27,7 @@ void ModeMenuStateManager::Setup() {
 				TRANSFORM(scoresLevel[i])->position.Y = PlacementHelper::GimpYToScreen(675 + i * 95);
 		TRANSFORM(scoresName[i])->position.X = PlacementHelper::GimpXToScreen(92);
 		TRANSFORM(scoresPoints[i])->position.X = PlacementHelper::GimpXToScreen(552);
-		TRANSFORM(scoresLevel[i])->position.X = PlacementHelper::GimpXToScreen(620);
+		TRANSFORM(scoresLevel[i])->position.X = PlacementHelper::GimpXToScreen(590);
 
 		TEXT_RENDERING(scoresName[i])->charHeight =
 			TEXT_RENDERING(scoresPoints[i])->charHeight =
@@ -35,7 +35,7 @@ void ModeMenuStateManager::Setup() {
 		TEXT_RENDERING(scoresPoints[i])->isANumber = true;
 		TEXT_RENDERING(scoresName[i])->positioning = TextRenderingComponent::LEFT;
 		TEXT_RENDERING(scoresPoints[i])->positioning = TextRenderingComponent::RIGHT;
-		TEXT_RENDERING(scoresLevel[i])->positioning = TextRenderingComponent::RIGHT;
+		TEXT_RENDERING(scoresLevel[i])->positioning = TextRenderingComponent::LEFT;
 
 		TEXT_RENDERING(scoresName[i])->hide = true;
 		TEXT_RENDERING(scoresPoints[i])->hide = true;
@@ -153,7 +153,7 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
 
-			a.str(""); a<< std::fixed <<entries[i].level;
+			a.str(""); a<< std::fixed <<"niv " <<entries[i].level;
 			trcL->text = a.str();
 			//affichage lvl
 			if (mode==Normal) {
@@ -219,6 +219,15 @@ void ModeMenuStateManager::Enter() {
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
+	//herisson
+	Entity herissonActor=  herisson->actor.e;
+	if (TRANSFORM(herissonActor)->position.X < PlacementHelper::GimpXToScreen(800)+TRANSFORM(herissonActor)->size.X) {
+		TRANSFORM(herissonActor)->position.X += herisson->actor.speed*dt;
+		switchAnim(herisson);
+	} else {
+		RENDERING(herissonActor)->hide = true;
+	}
+
 	if (BUTTON(playButton)->clicked) {
 		SOUND(playButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 		TEXT_RENDERING(title)->hide = true;
@@ -248,6 +257,5 @@ void ModeMenuStateManager::Exit() {
 	BUTTON(back)->enabled = false;
 	BUTTON(playButton)->enabled = false;
 	TEXT_RENDERING(scoreTitle)->hide = true;
-	RENDERING(herissonActor)->hide = true;
 	modeMgr->Reset();
 }

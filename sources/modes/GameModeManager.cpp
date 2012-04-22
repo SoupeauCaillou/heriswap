@@ -24,22 +24,6 @@ float GameModeManager::position(float t) {
 	PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5, p);
 }
 
-void GameModeManager::LoadHerissonTexture(int type) {
-	std::stringstream t;
-	c->anim.clear();
-	t << "herisson_1_"<<type<<".png";
-	c->anim.push_back(t.str());
-	t.str("");
-	t << "herisson_2_"<<type<<".png";
-	c->anim.push_back(t.str());
-	t.str("");
-	t << "herisson_3_"<<type<<".png";
-	c->anim.push_back(t.str());
-	t.str("");
-	t << "herisson_2_"<<type<<".png";
-	c->anim.push_back(t.str());
-}
-
 void GameModeManager::SetupCore(int bonus) {
 	herisson = theEntityManager.CreateEntity();
 	ADD_COMPONENT(herisson, Transformation);
@@ -50,7 +34,7 @@ void GameModeManager::SetupCore(int bonus) {
 	c->actor.e = herisson;
 	c->frames=0;
 	c->actor.speed = 4.1;
-	LoadHerissonTexture(bonus+1);
+	LoadHerissonTexture(bonus+1, c);
 
 	branch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(branch, Transformation);

@@ -55,6 +55,7 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 		}
 		bool query(std::string& result) {
 			getline(std::cin, result);
+			result.erase(result.begin()+10,result.end());
 			std::cout << "Want to save it ? (y or *'ll be fine)" << std::endl;
 			std::string a;
 			getline(std::cin, a);
@@ -172,8 +173,8 @@ class LinuxSqliteExec: public ScoreStorage {
 			bool r = request("", 0);
 			if (r) {
 				LOGI("initializing database...");
-				request("create table score(name char2(25) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0);
-				request("create table info(opt char2(8), value char2(25))", 0);
+				request("create table score(name char2(11) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0);
+				request("create table info(opt char2(8), value char2(11))", 0);
 				std::string s;
 				request("select value from info where opt like 'sound'", &s);
 				if (s.length()==0) request("insert into info values('sound', 'on')", 0);

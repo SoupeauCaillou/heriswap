@@ -69,7 +69,7 @@ class Game::Data {
 			state2Manager[Logo] = new LogoStateManager(LogoToBlackState, logo);
 			state2Manager[MainMenu] = new MainMenuGameStateManager();
 			state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI);
-			
+
 			state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo, state2Manager[Logo]);
 			state2Manager[LogoToBlackState] = new FadeGameStateManager(FadeOut, LogoToBlackState, BlackToMainMenu, 0);
 			state2Manager[BlackToMainMenu] = new FadeGameStateManager(FadeIn, BlackToMainMenu, MainMenu, state2Manager[MainMenu]);
@@ -177,7 +177,7 @@ class Game::Data {
 			ModeMenuStateManager* modemenu = static_cast<ModeMenuStateManager*> (state2Manager[ModeMenu]);
 			modemenu->menufg = mainmenu->menufg;
 			modemenu->menubg = mainmenu->menubg;
-			modemenu->herissonActor = mainmenu->herisson->actor.e;
+			modemenu->herisson = mainmenu->herisson;
 		}
 		//bench data
 		std::map<std::string, Entity> benchTimeSystem;

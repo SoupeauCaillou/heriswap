@@ -6,6 +6,7 @@
 #include <vector>
 #include "CombinationMark.h"
 #include "systems/ScrollingSystem.h"
+#include "AnimedEntity.h"
 
 #define SKY_SPEED 2.3
 #define DECOR2_SPEED 1.6
@@ -37,7 +38,7 @@ NormalGameModeManager::~NormalGameModeManager() {
 
 void NormalGameModeManager::Setup() {
 	SetupCore(bonus);
-	
+
 	HideUI(true);
 }
 
@@ -142,7 +143,7 @@ void NormalGameModeManager::LevelUp() {
 			time = 0;
 		std::cout << "Level up to level " << level << std::endl;
 		bonus = MathUtil::RandomInt(8);
-		GameModeManager::LoadHerissonTexture(bonus+1);
+		LoadHerissonTexture(bonus+1, c);
 		for (int i=0;i<8;i++)
 			remain[i] = 2+level;
 

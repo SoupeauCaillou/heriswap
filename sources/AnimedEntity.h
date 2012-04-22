@@ -11,3 +11,4 @@ struct AnimatedActor {
 	struct Actor actor;
 };
 void switchAnim(AnimatedActor* a);
+void LoadHerissonTexture(int type, AnimatedActor* c);

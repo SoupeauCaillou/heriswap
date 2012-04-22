@@ -33,5 +33,4 @@ class MainMenuGameStateManager : public GameStateManager {
 	private:
 		Entity bStart[3];
 		Entity modeTitleToReset;
-
 };

@@ -17,15 +17,14 @@ void MainMenuGameStateManager::Setup() {
 	for (int i=0; i<3; i++) {
 		TRANSFORM(eStart[i])->z = DL_MainMenuUITxt;
 		TEXT_RENDERING(eStart[i])->hide = true;
-		TEXT_RENDERING(eStart[i])->positioning = TextRenderingComponent::LEFT;
+		TEXT_RENDERING(eStart[i])->positioning = TextRenderingComponent::RIGHT;
 		TEXT_RENDERING(eStart[i])->color = green;
 		TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
 		theMorphingSystem.Add(eStart[i]);
-	    TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, Vector2(PlacementHelper::GimpXToScreen(444),PlacementHelper::GimpYToScreen(100)));
-	    TypedMorphElement<float>* colorMorph = new TypedMorphElement<float>(&TEXT_RENDERING(eStart[i])->charHeight, TEXT_RENDERING(eStart[i])->charHeight, PlacementHelper::GimpHeightToScreen(54));
-	    MORPHING(eStart[i])->elements.push_back(colorMorph);
+	    TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, Vector2(PlacementHelper::GimpXToScreen(700),PlacementHelper::GimpYToScreen(100)));
+	    TypedMorphElement<float>* sizeMorph = new TypedMorphElement<float>(&TEXT_RENDERING(eStart[i])->charHeight, TEXT_RENDERING(eStart[i])->charHeight, PlacementHelper::GimpHeightToScreen(54));
+	    MORPHING(eStart[i])->elements.push_back(sizeMorph);
 	    MORPHING(eStart[i])->timing = 0.2;
-	    TRANSFORM(eStart[i])->position.X = PlacementHelper::GimpXToScreen(82);
 
 	    bStart[i] = theEntityManager.CreateEntity();
 	    ADD_COMPONENT(bStart[i], Transformation);
@@ -37,15 +36,18 @@ void MainMenuGameStateManager::Setup() {
 	    RENDERING(bStart[i])->color.a = 0.5;
 	}
 	TEXT_RENDERING(eStart[0])->text = "Classique";
+	TRANSFORM(eStart[0])->position.X = PlacementHelper::GimpXToScreen(394);
 	TRANSFORM(eStart[0])->position.Y = TRANSFORM(bStart[0])->position.Y = PlacementHelper::GimpYToScreen(156);
 	TEXT_RENDERING(eStart[1])->text = "Contre le temps";
+	TRANSFORM(eStart[1])->position.X = PlacementHelper::GimpXToScreen(648);
 	TRANSFORM(eStart[1])->position.Y = TRANSFORM(bStart[1])->position.Y = PlacementHelper::GimpYToScreen(339);
 	TEXT_RENDERING(eStart[2])->text = "Contre le score";
+	TRANSFORM(eStart[2])->position.X = PlacementHelper::GimpXToScreen(634);
 	TRANSFORM(eStart[2])->position.Y = TRANSFORM(bStart[2])->position.Y = PlacementHelper::GimpYToScreen(522);
 
 	//Adding containers
 	for (int i=0; i<3; i++) {
-		TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, Vector2(PlacementHelper::GimpXToScreen(444),PlacementHelper::GimpYToScreen(100)));
+		TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, Vector2(PlacementHelper::GimpXToScreen(700),PlacementHelper::GimpYToScreen(100)));
 		MORPHING(eStart[i])->elements.push_back(posMorph);
 		ADD_COMPONENT(bStart[i], Sound);
 		SOUND(bStart[i])->type = SoundComponent::EFFECT;
@@ -71,27 +73,19 @@ void MainMenuGameStateManager::Setup() {
 	RENDERING(menufg)->texture = theRenderingSystem.loadTextureFile("menu/1erplan.png");
 	RENDERING(menufg)->hide = true;
 
-		herisson = new AnimatedActor();
+	herisson = new AnimatedActor();
 	herisson->frames=0;
 	herisson->actor.speed = 4.1;
 	Entity a = theEntityManager.CreateEntity();
 	ADD_COMPONENT(a, Transformation);
-	TRANSFORM(a)->size = Vector2(PlacementHelper::GimpWidthToScreen(310), PlacementHelper::GimpHeightToScreen(253));
-	TransformationSystem::setPosition(TRANSFORM(a), Vector2(0, PlacementHelper::GimpYToScreen(964)), TransformationSystem::SW);
 	TRANSFORM(a)->z = DL_MainMenuHerisson;
 	ADD_COMPONENT(a, Rendering);
-	int r = MathUtil::RandomInt(8)+1;
-	std::stringstream s;
-	s << "herisson_1_" << r << ".png";
-	herisson->anim.push_back(s.str());
-	s.str("");
-	s << "herisson_2_" << r << ".png";
-	herisson->anim.push_back(s.str());
-	RENDERING(a)->hide = true;
 	herisson->actor.e = a;
-
-
-
+	herisson->anim.clear();
+	LoadHerissonTexture(MathUtil::RandomInt(8)+1, herisson);
+	herisson->actor.speed = MathUtil::RandomFloatInRange(2.0f,4.0f);
+	TRANSFORM(a)->size = Vector2(PlacementHelper::GimpWidthToScreen(310), PlacementHelper::GimpHeightToScreen(253))*MathUtil::RandomFloatInRange(.3f,1.f);
+	TransformationSystem::setPosition(TRANSFORM(a), Vector2(PlacementHelper::GimpXToScreen(-MathUtil::RandomInt(300))-TRANSFORM(a)->size.X, PlacementHelper::GimpYToScreen(MathUtil::RandomIntInRange(830,1150))), TransformationSystem::SW);
 
 	modeTitleToReset = 0;
 }
@@ -101,6 +95,7 @@ void MainMenuGameStateManager::Enter() {
 
 	// preload sound effect
 	theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+
 	RENDERING(herisson->actor.e)->hide = false;
 
 	for (int i=0; i<3; i++) {
@@ -119,7 +114,18 @@ void MainMenuGameStateManager::Enter() {
 }
 
 GameState MainMenuGameStateManager::Update(float dt) {
+	Entity a = herisson->actor.e;//random vitesse size position decallage
 	switchAnim(herisson);
+	if (TRANSFORM(a)->position.X < PlacementHelper::GimpXToScreen(800)+TRANSFORM(a)->size.X) {
+		TRANSFORM(a)->position.X += herisson->actor.speed/8.*dt;
+	} else {
+		herisson->anim.clear();
+		LoadHerissonTexture(MathUtil::RandomInt(8)+1, herisson);
+		herisson->actor.speed = MathUtil::RandomFloatInRange(2.0f,4.0f);
+		TRANSFORM(a)->size = Vector2(PlacementHelper::GimpWidthToScreen(310), PlacementHelper::GimpHeightToScreen(253))*MathUtil::RandomFloatInRange(.3f,1.f);
+		TransformationSystem::setPosition(TRANSFORM(a), Vector2(PlacementHelper::GimpXToScreen(-MathUtil::RandomInt(300))-TRANSFORM(a)->size.X, PlacementHelper::GimpYToScreen(MathUtil::RandomIntInRange(830,1150))), TransformationSystem::SW);
+	}
+
 	if (BUTTON(bStart[0])->clicked) {
 		choosenGameMode = Normal;
 		SOUND(bStart[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
@@ -138,6 +144,7 @@ GameState MainMenuGameStateManager::Update(float dt) {
 
 void MainMenuGameStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
+
 	for (int i=0; i<3; i++) {
 		if (i!=choosenGameMode-1) TEXT_RENDERING(eStart[i])->hide = true;
 		RENDERING(bStart[i])->hide = true;
@@ -149,4 +156,6 @@ void MainMenuGameStateManager::Exit() {
 	}
     MORPHING(eStart[choosenGameMode-1])->active = true;
     modeTitleToReset = eStart[choosenGameMode-1];
+
+    herisson->actor.speed = 4.5f;
 }

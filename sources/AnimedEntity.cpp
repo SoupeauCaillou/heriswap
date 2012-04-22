@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include "base/EntityManager.h"
 #include "base/MathUtil.h"
 
@@ -13,4 +15,20 @@ void switchAnim(AnimatedActor* a) {
 		if (a->ind==a->anim.size()) a->ind = 0;
 		a->frames=0;
 	}
+}
+
+void LoadHerissonTexture(int type, AnimatedActor* c) {
+	std::stringstream t;
+	c->anim.clear();
+	t << "herisson_1_"<<type<<".png";
+	c->anim.push_back(t.str());
+	t.str("");
+	t << "herisson_2_"<<type<<".png";
+	c->anim.push_back(t.str());
+	t.str("");
+	t << "herisson_3_"<<type<<".png";
+	c->anim.push_back(t.str());
+	t.str("");
+	t << "herisson_2_"<<type<<".png";
+	c->anim.push_back(t.str());
 }

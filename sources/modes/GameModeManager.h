@@ -45,7 +45,6 @@ class GameModeManager {
 		void HideUICore(bool ToHide);
 		float position(float t);
 		void generateLeaves(int nb);
-		void LoadHerissonTexture(int type);
 
 		virtual ~GameModeManager() {}
 
