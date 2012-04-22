@@ -230,6 +230,8 @@ GameState ModeMenuStateManager::Update(float dt) {
 
 	if (BUTTON(playButton)->clicked) {
 		SOUND(playButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+		RENDERING(herisson->actor.e)->hide = true;
+		TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
 		TEXT_RENDERING(title)->hide = true;
 		return ModeMenuToBlackState;
 	} if (BUTTON(back)->clicked) {
