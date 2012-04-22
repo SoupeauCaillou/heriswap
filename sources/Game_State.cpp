@@ -25,5 +25,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
      } else if (newState == LevelChanged) {
         static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel =
         static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->getSmallLevelEntity();
+     } else if( newState == MainMenu && oldState == ModeMenu) {
+        datas->state2Manager[oldState]->LateExit();
      }
 }
