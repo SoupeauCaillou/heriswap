@@ -4,8 +4,10 @@
 #include "systems/TextRenderingSystem.h"
 #include "systems/SoundSystem.h"
 #include "systems/MorphingSystem.h"
+#include "TwitchSystem.h"
 #include "PlacementHelper.h"
 #include "DepthLayer.h"
+#include "CombinationMark.h"
 #include <sstream>
 
 LevelStateManager::LevelStateManager() {
@@ -21,10 +23,10 @@ void LevelStateManager::Setup() {
 	ADD_COMPONENT(eGrid, ADSR);
 
 	ADSR(eGrid)->idleValue = 0;
-	ADSR(eGrid)->attackValue = Game::GridCoordsToPosition(0,theGridSystem.GridSize).Y+8;
-	ADSR(eGrid)->attackTiming = 8;
+	ADSR(eGrid)->attackValue = 1;
+	ADSR(eGrid)->attackTiming = 3;
 	ADSR(eGrid)->decayTiming = 0.;
-	ADSR(eGrid)->sustainValue = ADSR(eGrid)->attackValue;
+	ADSR(eGrid)->sustainValue = 1;
 	ADSR(eGrid)->releaseTiming = 0;
 	ADSR(eGrid)->active = false;
 
@@ -79,13 +81,6 @@ void LevelStateManager::Setup() {
 
 void LevelStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-	ADSR(eGrid)->active = true;
-	std::vector<Entity> ent = theGridSystem.RetrieveAllEntityWithComponent();
-	for (int i=0; i<ent.size(); i++) {
-		FeuilleOrientee truc = {ent[i], Game::GridCoordsToPosition(GRID(ent[i])->i, GRID(ent[i])->j), MathUtil::RandomIntInRange(-1,2)};
-		feuilles.push_back(truc);
-	}
-	
 	std::stringstream a;
 	a << currentLevel;
 	TEXT_RENDERING(eBigLevel)->text = a.str();
@@ -115,14 +110,24 @@ void LevelStateManager::Enter() {
 		RenderingComponent* rc = RENDERING(entities[i]);
 		rc->desaturate = (rc->texture != branchTexture);
 	}
+	
+	entities = theGridSystem.RetrieveAllEntityWithComponent();
+	for (int i=0; i<entities.size(); i++) {
+		CombinationMark::markCellInCombination(entities[i]);
+	}
 }
 
 GameState LevelStateManager::Update(float dt) {
 	duration += dt;
 
-	for ( std::vector<FeuilleOrientee>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
-		TRANSFORM(it->e)->rotation = 0.3*it->sens*ADSR(eGrid)->value;
-		TRANSFORM(it->e)->position = it->pos - Vector2(0,ADSR(eGrid)->value);
+	if (duration > 0.15) {
+		ADSR(eGrid)->active = true;
+		float alpha = 1 - ADSR(eGrid)->value;
+		std::vector<Entity> entities = theGridSystem.RetrieveAllEntityWithComponent();
+		for (std::vector<Entity>::iterator it = entities.begin(); it != entities.end(); ++it ) {
+			RENDERING(*it)->color.a = alpha;
+			TWITCH(*it)->speed = alpha * 9;
+		}
 	}
 	
 	if (duration > 6) {
