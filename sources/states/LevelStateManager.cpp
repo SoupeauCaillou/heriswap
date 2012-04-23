@@ -103,12 +103,22 @@ void LevelStateManager::Enter() {
 	
 	duration = 0;
 	
-	// desaturate everyone except the branch
-	TextureRef branchTexture = theRenderingSystem.loadTextureFile("branche.png");
+	// desaturate everyone except the branch, mute, pause and text elements
+	TextureRef branch = theRenderingSystem.loadTextureFile("branche.png");
+	TextureRef pause = theRenderingSystem.loadTextureFile("pause.png");
+	TextureRef sound1 = theRenderingSystem.loadTextureFile("sound_on.png");
+	TextureRef sound2 = theRenderingSystem.loadTextureFile("sound_off.png");
+	std::vector<Entity> text = theTextRenderingSystem.RetrieveAllEntityWithComponent();
 	std::vector<Entity> entities = theRenderingSystem.RetrieveAllEntityWithComponent();
 	for (int i=0; i<entities.size(); i++) {
-		RenderingComponent* rc = RENDERING(entities[i]);
-		rc->desaturate = (rc->texture != branchTexture);
+		TransformationComponent* tc = TRANSFORM(entities[i]);
+		if (tc->parent <= 0 || std::find(text.begin(), text.end(), tc->parent) == text.end()) {
+			RenderingComponent* rc = RENDERING(entities[i]);
+			if (rc->texture == branch || rc->texture == pause || rc->texture == sound1 || rc->texture == sound2) {
+				continue;
+			}
+			rc->desaturate = true;
+		}
 	}
 	
 	entities = theGridSystem.RetrieveAllEntityWithComponent();

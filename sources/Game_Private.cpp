@@ -71,7 +71,7 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
          TRANSFORM(logo_bg)->z = DL_BehindLogo;
          ADD_COMPONENT(soundButton, Transformation);
          TRANSFORM(soundButton)->z = DL_MainMenuUITxt;
-         TRANSFORM(soundButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
+         TRANSFORM(soundButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(67), PlacementHelper::GimpHeightToScreen(80));
          TransformationSystem::setPosition(TRANSFORM(soundButton), Vector2(PlacementHelper::GimpXToScreen(692), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
          ADD_COMPONENT(soundButton, Button);
          ADD_COMPONENT(soundButton, Rendering);

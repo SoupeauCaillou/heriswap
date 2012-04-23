@@ -10,6 +10,8 @@
 #include <sys/time.h>
 #include <algorithm>
 #include <sqlite3.h>
+#include <sstream>
+#include <cassert>
 
 #include "base/Vector2.h"
 #include "base/TouchInputManager.h"
