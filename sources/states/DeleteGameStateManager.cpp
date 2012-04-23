@@ -1,6 +1,7 @@
 #include "DeleteGameStateManager.h"
 #include "TwitchSystem.h"
 #include "CombinationMark.h"
+#include "systems/SoundSystem.h"
 
 DeleteGameStateManager::DeleteGameStateManager() {
 	modeMgr=0;
@@ -14,28 +15,32 @@ void DeleteGameStateManager::Setup() {
 	eRemove = theEntityManager.CreateEntity();
 
 	ADD_COMPONENT(eRemove, ADSR);
-
 	ADSR(eRemove)->idleValue = 0;
 	ADSR(eRemove)->attackValue = 1.0;
 	ADSR(eRemove)->attackTiming = 0.3;
 	ADSR(eRemove)->decayTiming = 0.;
 	ADSR(eRemove)->sustainValue = 1.0;
 	ADSR(eRemove)->releaseTiming = 0;
+	ADD_COMPONENT(eRemove, Sound);
+	SOUND(eRemove)->type = SoundComponent::EFFECT;
 }
 
 void DeleteGameStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	removing = theGridSystem.LookForCombination(true,true);
-    for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
-        for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
-            Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
-            TwitchComponent* tc = TWITCH(e);
-            if (tc->speed == 0) {
-                CombinationMark::markCellInCombination(e);
-            }
-        }
-        modeMgr->WillScore(it->points.size(), it->type, littleLeavesDeleted);
-    }
+	if (!removing.empty()) {
+	    for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
+	        for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
+	            Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
+	            TwitchComponent* tc = TWITCH(e);
+	            if (tc->speed == 0) {
+	                CombinationMark::markCellInCombination(e);
+	            }
+	        }
+	        modeMgr->WillScore(it->points.size(), it->type, littleLeavesDeleted);
+	    }
+    	SOUND(eRemove)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg", false);
+	}
 }
 
 GameState DeleteGameStateManager::Update(float dt) {

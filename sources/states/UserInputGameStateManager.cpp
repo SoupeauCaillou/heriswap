@@ -200,7 +200,6 @@ GameState UserInputGameStateManager::Update(float dt) {
 					TRANSFORM(e2)->position = Game::GridCoordsToPosition(GRID(e2)->i, GRID(e2)->j);
 
 					originI = originJ = -1;
-					SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg", false);
 					return Delete;
 				}
 			}
