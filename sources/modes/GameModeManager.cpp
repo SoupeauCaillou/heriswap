@@ -44,6 +44,7 @@ void GameModeManager::Setup() {
 	ADD_COMPONENT(herisson, Rendering);
 	TRANSFORM(herisson)->z = DL_Animal;
 	TRANSFORM(herisson)->size = Vector2(PlacementHelper::GimpWidthToScreen(142),PlacementHelper::GimpHeightToScreen(116));
+	TransformationSystem::setPosition(TRANSFORM(herisson), Vector2(0, PlacementHelper::GimpYToScreen(1058)), TransformationSystem::N);
 	c = new AnimatedActor();
 	c->actor.e = herisson;
 	c->frames=0;
@@ -102,7 +103,7 @@ void GameModeManager::Enter() {
 	generateLeaves(6);
 	uiHelper.show();
     theGridSystem.HideAll(false);
-    TRANSFORM(herisson)->position = initialHerissonPosition(herisson);
+    TRANSFORM(herisson)->position.X = initialHerissonPosition(herisson);
 }
 
 void GameModeManager::Exit() {
