@@ -88,7 +88,7 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(yourScore)->hide = true;
 	TEXT_RENDERING(yourScore)->charHeight = PlacementHelper::GimpHeightToScreen(56);
-	TEXT_RENDERING(yourScore)->color = Color(0.f,0.f,0.f);
+	TEXT_RENDERING(yourScore)->color = green;
 
 	// back button
 	back = theEntityManager.CreateEntity();
@@ -160,12 +160,8 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			}
 
 			if (!alreadyGreen && ended && ((entries[i].points == modeMgr->points && mode!=ScoreAttack) || (mode==ScoreAttack && entries[i].time-modeMgr->time<0.01f)) && entries[i].name == playerName) {
-				// trcP->color = Color(0.f,1.f,0.f);
-				// trcN->color = Color(0.f,1.f,0.f);
 				alreadyGreen = true;
 			} else {
-				// trcP->color = Color(0.f,0.f,0.f);
-				// trcN->color = Color(0.f,0.f,0.f);
 			}
 		} else {
 			trcP->hide = true;
