@@ -197,6 +197,7 @@ void ModeMenuStateManager::Enter() {
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
 	BUTTON(openfeint)->enabled = true;
+	TEXT_RENDERING(play)->text = ended ? "Rejouer" : "Jouer";
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
