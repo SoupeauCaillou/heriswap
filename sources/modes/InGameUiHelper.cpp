@@ -38,6 +38,7 @@ void InGameUiHelper::build() {
     ADD_COMPONENT(pauseButton, Sound);
 	SOUND(pauseButton)->type = SoundComponent::EFFECT;
 	ADD_COMPONENT(pauseButton, Button);
+	BUTTON(pauseButton)->enabled = false;
 
 	scoreProgress = theEntityManager.CreateEntity();
 	ADD_COMPONENT(scoreProgress, Transformation);
@@ -75,7 +76,8 @@ void InGameUiHelper::hide() {
 	if (!built)
 		return;
 	TEXT_RENDERING(smallLevel)->hide = true;
-	RENDERING(pauseButton)->hide = false;
+	RENDERING(pauseButton)->hide = true;
+	BUTTON(pauseButton)->enabled = false;
 	TEXT_RENDERING(scoreProgress)->hide = true;
 }
 

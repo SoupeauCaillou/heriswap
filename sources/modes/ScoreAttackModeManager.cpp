@@ -20,7 +20,7 @@ void ScoreAttackGameModeManager::Setup() {
 }
 
 void ScoreAttackGameModeManager::Enter() {
-	limit = 100;
+	limit = 3000;
 	time = 0;
 	points = 0;
 	bonus = MathUtil::RandomInt(8);
