@@ -69,6 +69,7 @@ bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float p
 			std::cout << pos << " != " << SOUND(canal[0].sounds[canal[0].indice])->position << std::endl;
 			SOUND(canalStress1->sounds[canalStress1->indice])->position= pos + 2*dt / 18.;
 			SOUND(canalStress1->sounds[canalStress1->indice])->masterTrack = SOUND(canal[0].sounds[canal[0].indice]);
+			SOUND(canalStress1->sounds[canalStress1->indice])->masterTrackOffsetMs = 0;
 		}
 		canalStress1->update(dt);
 	}
@@ -78,6 +79,7 @@ bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float p
 			std::cout << pos << " != " << SOUND(canal[0].sounds[canal[0].indice])->position << std::endl;
 			SOUND(canalStress2->sounds[canalStress2->indice])->position=pos + 2*dt / 18.;
 			SOUND(canalStress2->sounds[canalStress2->indice])->masterTrack = SOUND(canal[0].sounds[canal[0].indice]);
+			SOUND(canalStress2->sounds[canalStress2->indice])->masterTrackOffsetMs = 0;
 		}
 		canalStress2->update(dt);
 	}
