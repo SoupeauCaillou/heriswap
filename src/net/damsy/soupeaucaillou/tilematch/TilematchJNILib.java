@@ -7,8 +7,11 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.util.Log;
+import android.view.View;
 
 import com.openfeint.api.resource.Leaderboard;
 import com.openfeint.api.resource.Score;
@@ -49,11 +52,12 @@ public class TilematchJNILib {
 	    		// find available MediaPlayer
 	    		for(MediaPlayer p : TilematchActivity.availablePlayers) {
 	    			p.reset();
+	    			p.setAudioStreamType(AudioManager.STREAM_MUSIC);
 	    			p.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
-	    			p.setVolume(0.8f, 0.8f);
+	    			p.setVolume(1.0f, 1.0f);
 	    			p.prepare();
 	    			TilematchActivity.availablePlayers.remove(p);
-	    			for (int i=0; i<4; i++) {
+	    			for (int i=0; i<8; i++) {
 	    				if (TilematchActivity.activePlayers[i] == null) {
 	    					TilematchActivity.activePlayers[i] = p;
 	    					return i;
@@ -72,12 +76,35 @@ public class TilematchJNILib {
     	}
     }
  
-    static public int playSound(int soundID, boolean music) {
+    static public int playSound(int soundID, boolean music, int soundRef, int offsetms) {
     	if (soundID < 0)
     		return soundID;
     	if (music) {
-    		Log.i("tilematchJava", "play: " + soundID);
+    		Log.i("tilematchJava", "play: " + soundID + "(ref: " + soundRef + ", offset: " + offsetms);
     		TilematchActivity.activePlayers[soundID].start();
+    		
+    		if (soundRef >= 0) {
+    			int pos = TilematchActivity.activePlayers[soundRef].getCurrentPosition() + offsetms;
+    			MediaPlayer m = TilematchActivity.activePlayers[soundID];
+    			final Object o = new Object();
+    			m.setOnSeekCompleteListener(new OnSeekCompleteListener() {
+					public void onSeekComplete(MediaPlayer mp) {
+						synchronized (o) {
+							o.notifyAll();
+						}
+					}
+				});
+    			TilematchActivity.activePlayers[soundID].seekTo(pos);
+    			synchronized (o) {
+    				try {
+    					o.wait();
+    				} catch (InterruptedException exc) {
+    					// oh.. well
+    				}
+				}
+    			Log.i("tilematchJava", "seekpos: " + pos);
+    		}
+    		
     		return soundID;
     	} else { 
     		return TilematchActivity.soundPool.play(soundID, 1.0f, 1.0f, 0, 0, 1.0f);
@@ -117,12 +144,13 @@ public class TilematchJNILib {
     }
     
     static public void pauseAllSounds() {
+    	Log.i("ti", "debug test");
     	// TilematchActivity.soundPool. .autoPause();
     	for(MediaPlayer p : TilematchActivity.activePlayers) {
     		if (p!=null)
     			p.pause();
     	}    	
-    }
+    } 
     
     static public void resumeAllSounds() {
     	for(MediaPlayer p : TilematchActivity.activePlayers) {
@@ -204,7 +232,7 @@ public class TilematchJNILib {
     	for (int i=0; i<5; i++) {
     		Log.i("tilematchJ", points[i] + ", " + levels[i] + ", " + times[i] + ", " + names[i] + ".");
     	}
-    	
+    	 
     	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getWritableDatabase();
     	Cursor cursor = null;
     	if (mode == 1 || mode == 3) {
@@ -223,9 +251,34 @@ public class TilematchJNILib {
     		
     		//Log.i("tilematchJ", points[i] + ", " + levels[i] + ", " + times[i] + ", " + names[i] + ".");
     		cursor.moveToNext();
-    	}
+    	}   
     	db.close();
     	return maxResult;
+    }
+      
+    static public void showPlayerNameUi() { 
+    	TilematchActivity.nameReady = false;
+    	TilematchActivity.playerNameInputView.post(new Runnable() {
+			public void run() {
+				Log.i("tilematchJ", "requesting user input visibility");
+				TilematchActivity.playerNameInputView.setVisibility(View.VISIBLE);
+				TilematchActivity.playerNameInputView.requestFocus();
+				TilematchActivity.playerNameInputView.invalidate();
+				TilematchActivity.playerNameInputView.forceLayout();
+				TilematchActivity.playerNameInputView.bringToFront();
+		    	TilematchActivity.nameEdit.setText(TilematchActivity.playerName);	
+			}
+		});
+    	Log.i("tilematchJ", "showPlayerNameUI");
+    }
+    
+    static public String queryPlayerName() {
+    	if (TilematchActivity.nameReady) {
+    		Log.i("tilematchJ", "queryPlayerName done");
+    		return TilematchActivity.playerName;
+    	} else {
+    		return null;
+    	}
     }
    
 }

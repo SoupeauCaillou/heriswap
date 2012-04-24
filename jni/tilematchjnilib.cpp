@@ -31,15 +31,9 @@ struct GameHolder;
 struct AndroidPlayerNameInputUI : public PlayerNameInputUI {
 	public:
 		GameHolder* holder;
-		void show() {
-			LOGW("TODO: JNI TextField wrapper");
-		}
-		bool query(std::string& result) {
-			result = "bobby";
-			return true;
-		}
+		void show();
+		bool query(std::string& result);
 };
-
 
 class AndroidStorage: public ScoreStorage {
 	public :
@@ -110,7 +104,7 @@ static void initJavaSoundApi(JavaSoundAPI* api, JNIEnv* env) {
 	api->env = env;
 	api->javaSoundApi = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
 	api->jloadSound = (env->GetStaticMethodID(api->javaSoundApi, "loadSound", "(Landroid/content/res/AssetManager;Ljava/lang/String;Z)I"));
-	api->jplaySound = (env->GetStaticMethodID(api->javaSoundApi, "playSound", "(IZ)I"));
+	api->jplaySound = (env->GetStaticMethodID(api->javaSoundApi, "playSound", "(IZII)I"));
 	api->jpauseSounds = (env->GetStaticMethodID(api->javaSoundApi, "pauseAllSounds", "()V"));
 	api->jresumeSounds = (env->GetStaticMethodID(api->javaSoundApi, "resumeAllSounds", "()V"));	
 	api->jmusicPos = (env->GetStaticMethodID(api->javaSoundApi, "musicPosition", "(I)F"));
@@ -127,6 +121,7 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
   	TimeUtil::init();
 	GameHolder* hld = new GameHolder();
 	hld->game = new Game(new AndroidNativeAssetLoader(hld), &hld->sqlite, &hld->inputUI);
+	hld->inputUI.holder = hld;
 	hld->renderThreadEnv = env;
 	hld->openGLESVersion = openglesVersion;
 	hld->assetManager = (jobject)env->NewGlobalRef(asset);
@@ -464,7 +459,7 @@ char* AndroidNativeAssetLoader::loadShaderFile(const std::string& assetName)
 std::vector<ScoreStorage::Score> AndroidStorage::getScore(int mode) {
 	std::vector<ScoreStorage::Score> sav;
 	JNIEnv* env = holder->gameThreadEnv;
-	jclass c = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
+	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
 	jmethodID mid = (env->GetStaticMethodID(c, "getScores", "(I[I[I[F[Ljava/lang/String;)I"));
 	// build arrays params
 	jintArray points = env->NewIntArray(5);
@@ -481,7 +476,7 @@ std::vector<ScoreStorage::Score> AndroidStorage::getScore(int mode) {
 	env->SetIntArrayRegion(points, 0, 5, idummy);
 	env->SetIntArrayRegion(levels, 0, 5, idummy);
 	env->SetFloatArrayRegion(times, 0, 5, fdummy);
-	int count = (jint)env->CallStaticObjectMethod(c, mid, mode, points, levels, times, names);
+	int count = env->CallStaticIntMethod(c, mid, mode, points, levels, times, names);
 
 	for (int i=0; i<count; i++) {
 		ScoreStorage::Score s;
@@ -491,9 +486,9 @@ std::vector<ScoreStorage::Score> AndroidStorage::getScore(int mode) {
 		env->GetFloatArrayRegion(times, i, 1, &s.time);
 		jstring n = (jstring)env->GetObjectArrayElement(names, i);
 		if (n) {
-			const jchar *mfile = env->GetStringChars(n, 0);
+			const char *mfile = env->GetStringUTFChars(n, 0);
 			s.name = (char*)mfile;
-			env->ReleaseStringChars(n, mfile);
+			env->ReleaseStringUTFChars(n, mfile);
 		} else {
 			s.name = "wtf";
 		}
@@ -505,17 +500,17 @@ std::vector<ScoreStorage::Score> AndroidStorage::getScore(int mode) {
 
 bool AndroidStorage::soundEnable(bool switchIt) {
 	JNIEnv* env = holder->gameThreadEnv;
-	jclass c = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
+	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
 	jmethodID mid = (env->GetStaticMethodID(c, "soundEnable", "(Z)Z"));
-	return env->CallStaticObjectMethod(c, mid, switchIt);
+	return env->CallStaticBooleanMethod(c, mid, switchIt);
 }
 
 void AndroidStorage::submitScore(ScoreStorage::Score scr) {
 	JNIEnv* env = holder->gameThreadEnv;
-	jclass c = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
+	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
 	jmethodID mid = (env->GetStaticMethodID(c, "submitScore", "(IIIFLjava/lang/String;)V"));
 	jstring name = env->NewStringUTF(scr.name.c_str());
-	env->CallStaticObjectMethod(c, mid, scr.mode, scr.points, scr.level, scr.time, name);
+	env->CallStaticVoidMethod(c, mid, scr.mode, scr.points, scr.level, scr.time, name);
 }
 
 bool AndroidStorage::request(std::string s, std::string* res) {
@@ -528,6 +523,32 @@ bool AndroidStorage::initTable() {
 
 void AndroidStorage::saveOpt(std::string opt, std::string name){ }
 bool AndroidStorage::getName(std::string& result) {}
+
+void AndroidPlayerNameInputUI::show() {
+	JNIEnv* env = holder->gameThreadEnv;
+	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
+	jmethodID mid = env->GetStaticMethodID(c, "showPlayerNameUi", "()V");
+	LOGI("method");
+	env->CallStaticVoidMethod(c, mid);
+	LOGI("done");
+}
+bool AndroidPlayerNameInputUI::query(std::string& result) {
+	JNIEnv* env = holder->gameThreadEnv;
+	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
+	jmethodID mid = (env->GetStaticMethodID(c, "queryPlayerName", "()Ljava/lang/String;"));
+	jobject nnn = env->CallStaticObjectMethod(c, mid);
+	if (nnn && env->GetStringLength((jstring)nnn) > 0) {
+		const char *mfile = env->GetStringUTFChars((jstring)nnn, 0);
+		LOGW("name choosen: %s", mfile);
+		result = mfile;
+		env->ReleaseStringUTFChars((jstring)nnn, mfile);
+		return true;	
+	} else {
+		LOGW("name not choosen yet");
+		return false;
+	}
+}
+
 
 #ifdef __cplusplus
 }

@@ -20,7 +20,7 @@ void ScoreAttackGameModeManager::Setup() {
 }
 
 void ScoreAttackGameModeManager::Enter() {
-	limit = 3000;
+	limit = 100;
 	time = 0;
 	points = 0;
 	bonus = MathUtil::RandomInt(8);
@@ -43,7 +43,7 @@ void ScoreAttackGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << limit - points;
+	a << std::fixed << MathUtil::Max(0.0f, limit - points);
 	TEXT_RENDERING(uiHelper.smallLevel)->text = a.str();
 	}
 	//Temps

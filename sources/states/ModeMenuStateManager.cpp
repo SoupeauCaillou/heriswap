@@ -184,8 +184,23 @@ void ModeMenuStateManager::Enter() {
 	if (ended) {
 		if (playerName.length() == 0) {
 			inputUI->show();
-			inputUI->query(playerName);
 		}
+	}
+	LoadScore(m);
+
+	TEXT_RENDERING(play)->hide = false;
+	TEXT_RENDERING(scoreTitle)->hide = false;
+	RENDERING(back)->hide = false;
+	RENDERING(openfeint)->hide = false;
+	TEXT_RENDERING(title)->hide = false;
+	RENDERING(menubg)->hide = false;
+	RENDERING(menufg)->hide = false;
+	RENDERING(fond)->hide = false;
+}
+
+GameState ModeMenuStateManager::Update(float dt) {
+	if (ended && (playerName.length() > 0 || inputUI->query(playerName))) {
+		GameMode m = modeMgr->GetMode();
 		ScoreStorage::Score entry;
 		entry.points = modeMgr->points;
 		entry.time = modeMgr->time;
@@ -205,20 +220,10 @@ void ModeMenuStateManager::Enter() {
 		if (m==ScoreAttack) a << std::fixed << entry.time << " s";
 		else a << entry.points << "... niv " << entry.level;
 		TEXT_RENDERING(yourScore)->text = a.str();
+		LoadScore(m);
+		ended = false;
 	}
-	LoadScore(m);
-
-	TEXT_RENDERING(play)->hide = false;
-	TEXT_RENDERING(scoreTitle)->hide = false;
-	RENDERING(back)->hide = false;
-	RENDERING(openfeint)->hide = false;
-	TEXT_RENDERING(title)->hide = false;
-	RENDERING(menubg)->hide = false;
-	RENDERING(menufg)->hide = false;
-	RENDERING(fond)->hide = false;
-}
-
-GameState ModeMenuStateManager::Update(float dt) {
+	
 	//herisson
 	Entity herissonActor=  herisson->actor.e;
 	if (TRANSFORM(herissonActor)->position.X < PlacementHelper::ScreenWidth+TRANSFORM(herissonActor)->size.X) {

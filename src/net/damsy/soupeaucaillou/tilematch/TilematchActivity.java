@@ -21,7 +21,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 public class TilematchActivity extends Activity {
@@ -45,6 +48,10 @@ public class TilematchActivity extends Activity {
 	static public boolean isRunning;
 	static public TilematchStorage.OptionsOpenHelper optionsOpenHelper;
 	static public TilematchStorage.ScoreOpenHelper scoreOpenHelper;
+	static public View playerNameInputView;
+	static public EditText nameEdit;
+	static public String playerName;
+	static public boolean nameReady;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,17 +98,33 @@ public class TilematchActivity extends Activity {
         	mGLView.setRenderer(r);
         	TilematchActivity.openGLESVersion = 1;
         }
-        
+         
         mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         rl.addView(mGLView);
-        // rl.bringChildToFront(findViewById(R.id.enter_name));
+        playerNameInputView = findViewById(R.id.enter_name);
+        nameEdit = (EditText) findViewById(R.id.player_name_input);
+        rl.bringChildToFront(playerNameInputView);
+        playerNameInputView.setVisibility(View.GONE);
+        
+        Button b = (Button) findViewById(R.id.name_save);
+        b.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				playerName = nameEdit.getText().toString();
+				Log.i("tilematchJ", "Player name: '" + playerName + "'");
+				if (playerName != null && playerName.length() > 0) {
+					playerNameInputView.setVisibility(View.GONE);
+					TilematchActivity.nameReady = true;
+				}
+			}
+		}); 
         
         TilematchActivity.scoreOpenHelper = new TilematchStorage.ScoreOpenHelper(this);
         TilematchActivity.optionsOpenHelper = new TilematchStorage.OptionsOpenHelper(this);
-        TilematchActivity.soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
-        TilematchActivity.availablePlayers = new ArrayList<MediaPlayer>(4);
-        TilematchActivity.activePlayers = new MediaPlayer[4];
-        for(int i=0; i<4; i++) {
+        TilematchActivity.soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
+        TilematchActivity.availablePlayers = new ArrayList<MediaPlayer>(8);
+        TilematchActivity.activePlayers = new MediaPlayer[8];
+        for(int i=0; i<8; i++) {
         	TilematchActivity.availablePlayers.add(new MediaPlayer());
         } 
         
