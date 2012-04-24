@@ -3,6 +3,7 @@ package net.damsy.soupeaucaillou.tilematch;
 import java.io.InputStream;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -15,6 +16,7 @@ import android.view.View;
 
 import com.openfeint.api.resource.Leaderboard;
 import com.openfeint.api.resource.Score;
+import com.openfeint.api.ui.Dashboard;
  
 public class TilematchJNILib {
     static {
@@ -190,6 +192,13 @@ public class TilematchJNILib {
     	db.close();
     	return "on".equals(value);
     } 
+    
+	
+	static final String[] boards = new String[] {
+		"1141887",
+		"1149477",
+		"1149487",
+	};
      
     static public void submitScore(int mode, int points, int level, float time, String name) {
     	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getWritableDatabase();
@@ -201,12 +210,7 @@ public class TilematchJNILib {
     	v.put("level", level);
     	db.insert("score", null, v);
     	db.close();
-    	
-    	String[] boards = new String[] {
-    		"1141887",
-    		"1149477",
-    		"1149487",
-    	};
+
     	Leaderboard l = new Leaderboard(boards[mode - 1]);
     	Log.i("tilematchJ", "leaderboard id: " + boards[mode - 1]);
 		final Score s = new Score((long) ((mode != 2) ? points : (time * 1000)), null);
@@ -278,6 +282,12 @@ public class TilematchJNILib {
     		return TilematchActivity.playerName;
     	} else {
     		return null;
+    	}
+    }
+    
+    static public void openfeintLeaderboard(int mode) {
+    	if (mode >= 1 && mode <= 3) {
+    		Dashboard.openLeaderboard(boards[mode - 1]);
     	}
     }
    

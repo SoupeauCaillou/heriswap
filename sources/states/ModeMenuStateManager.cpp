@@ -196,6 +196,7 @@ void ModeMenuStateManager::Enter() {
 	RENDERING(menubg)->hide = false;
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
+	BUTTON(openfeint)->enabled = true;
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
@@ -243,6 +244,13 @@ GameState ModeMenuStateManager::Update(float dt) {
 		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 		return MainMenu;
 	}
+	if (BUTTON(openfeint)->clicked) {
+		#ifdef ANDROID
+		storage->openfeintLB(modeMgr->GetMode());
+		#else
+		LOGW("Openfeint clicked");
+		#endif
+	}
 	return ModeMenu;
 }
 
@@ -269,4 +277,5 @@ void ModeMenuStateManager::LateExit() {
 	BUTTON(playButton)->enabled = false;
 	TEXT_RENDERING(scoreTitle)->hide = true;
 	RENDERING(herisson->actor.e)->hide = true;
+	BUTTON(openfeint)->enabled = false;
 }

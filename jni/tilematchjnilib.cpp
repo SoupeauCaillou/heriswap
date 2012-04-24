@@ -49,6 +49,8 @@ class AndroidStorage: public ScoreStorage {
 		bool initTable();
 		void saveOpt(std::string opt, std::string name);
 		bool getName(std::string& result);
+		
+		void openfeintLB(int mode);
 };
 
 
@@ -523,6 +525,13 @@ bool AndroidStorage::initTable() {
 
 void AndroidStorage::saveOpt(std::string opt, std::string name){ }
 bool AndroidStorage::getName(std::string& result) {}
+
+void AndroidStorage::openfeintLB(int mode) {
+	JNIEnv* env = holder->gameThreadEnv;
+	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
+	jmethodID mid = env->GetStaticMethodID(c, "openfeintLeaderboard", "(I)V");
+	env->CallStaticVoidMethod(c, mid, mode);
+}
 
 void AndroidPlayerNameInputUI::show() {
 	JNIEnv* env = holder->gameThreadEnv;

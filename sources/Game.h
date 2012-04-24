@@ -16,6 +16,10 @@ class ScoreStorage {
 		virtual bool soundEnable(bool switchIt) = 0;
 		virtual void saveOpt(std::string opt, std::string name) = 0;
 		virtual bool getName(std::string& result) = 0;
+		
+		#ifdef ANDROID
+		virtual void openfeintLB(int mode) = 0;
+		#endif
 };
 
 class PlayerNameInputUI {
