@@ -58,9 +58,6 @@ else
 	done
 	FINAL=$FINAL$IFS"}"
 
-
-
-
 	#on ecrit maintenant dans le fichier
 	echo "$FINAL" > $ECRITURE
 
