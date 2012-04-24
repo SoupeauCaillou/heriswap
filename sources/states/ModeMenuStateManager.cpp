@@ -220,7 +220,8 @@ GameState ModeMenuStateManager::Update(float dt) {
         a << playerName << " ... ";
 		a.precision(1);
 		if (m==ScoreAttack) a << std::fixed << entry.time << " s";
-		else a << entry.points << "... niv " << entry.level;
+		else a << entry.points;
+		if (m==Normal) a << "... niv " << entry.level;
 		TEXT_RENDERING(yourScore)->text = a.str();
 		LoadScore(m);
 		ended = false;
