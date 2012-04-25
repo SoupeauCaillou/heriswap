@@ -5,7 +5,7 @@
 
 #include "GameModeManager.h"
 #include "DepthLayer.h"
-#include "PlacementHelper.h"
+#include "base/PlacementHelper.h"
 
 class StaticTimeGameModeManager : public GameModeManager {
 	public:

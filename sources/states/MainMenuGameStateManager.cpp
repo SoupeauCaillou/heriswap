@@ -12,7 +12,7 @@
 #include "systems/SoundSystem.h"
 
 #include "DepthLayer.h"
-#include "PlacementHelper.h"
+#include "base/PlacementHelper.h"
 
 MainMenuGameStateManager::~MainMenuGameStateManager() {
 	for (int i=0; i<3; i++) {

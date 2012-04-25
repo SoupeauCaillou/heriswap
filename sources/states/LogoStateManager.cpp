@@ -3,7 +3,7 @@
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "DepthLayer.h"
-#include "PlacementHelper.h"
+#include "base/PlacementHelper.h"
 #include "systems/SoundSystem.h"
 
 LogoStateManager::LogoStateManager(GameState _following, Entity _logo, Entity _logobg) : following(_following), logo(_logo), logobg(_logobg) {}

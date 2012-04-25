@@ -15,7 +15,7 @@
 
 #include "Game.h"
 #include "DepthLayer.h"
-#include "PlacementHelper.h"
+#include "base/PlacementHelper.h"
 #include "states/GameStateManager.h"
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"

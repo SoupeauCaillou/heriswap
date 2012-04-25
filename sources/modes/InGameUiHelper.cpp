@@ -5,7 +5,7 @@
 #include "systems/ContainerSystem.h"
 #include "systems/SoundSystem.h"
 #include "systems/ButtonSystem.h"
-#include "../PlacementHelper.h"
+#include "base/PlacementHelper.h"
 #include "../DepthLayer.h"
 
 InGameUiHelper::InGameUiHelper() : built(false) {

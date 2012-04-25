@@ -229,7 +229,7 @@ void GameModeManager::updateHerisson(float dt, float obj, float herissonSpeed) {
 	}
 	//set animation speed
 	c->actor.speed = 15*(newPos - tc->position.X)/dt;
-	if (c->actor.speed < 1.4) c->actor.speed = 1.4;
+	if (c->actor.speed < 1.4) c->actor.speed = 2.5;
 	if (c->actor.speed > 4.5) c->actor.speed = 4.5;
 
 	tc->position.X = newPos;

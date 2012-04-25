@@ -1,6 +1,6 @@
 #include "BackgroundManager.h"
 #include "../DepthLayer.h"
-#include "../PlacementHelper.h"
+#include "base/PlacementHelper.h"
 
 #define CAMERASPEED -1.f
 struct BackgroundManager::Actor {

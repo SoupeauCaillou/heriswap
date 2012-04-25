@@ -5,7 +5,7 @@
 #include "systems/SoundSystem.h"
 #include "systems/MorphingSystem.h"
 #include "TwitchSystem.h"
-#include "PlacementHelper.h"
+#include "base/PlacementHelper.h"
 #include "DepthLayer.h"
 #include "CombinationMark.h"
 #include <sstream>

@@ -28,7 +28,7 @@
 #include "modes/ScoreAttackModeManager.h"
 
 #include "DepthLayer.h"
-#include "PlacementHelper.h"
+#include "base/PlacementHelper.h"
 #include "GridSystem.h"
 #include "Game.h"
 #include "TwitchSystem.h"
@@ -148,7 +148,8 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
     PlacementHelper::ScreenWidth = PlacementHelper::ScreenHeight * windowW / (float)windowH;
     PlacementHelper::WindowWidth = windowW;
     PlacementHelper::WindowHeight = windowH;
-
+    PlacementHelper::GimpWidth = 800.0f;
+    PlacementHelper::GimpHeight = 1280.0f;
 
 	theRenderingSystem.setWindowSize(windowW, windowH, PlacementHelper::ScreenWidth, PlacementHelper::ScreenHeight);
 	theTouchInputManager.init(Vector2(PlacementHelper::ScreenWidth, PlacementHelper::ScreenHeight), Vector2(windowW, windowH));

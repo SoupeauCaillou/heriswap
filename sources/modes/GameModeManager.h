@@ -13,7 +13,7 @@
 #include "DepthLayer.h"
 #include "Game.h"
 #include "InGameUiHelper.h"
-#include "PlacementHelper.h"
+#include "base/PlacementHelper.h"
 #include "AnimedEntity.h"
 
 //FCRR : FPS Calculation Refresh Rate
