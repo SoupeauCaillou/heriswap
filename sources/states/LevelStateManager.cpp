@@ -36,7 +36,7 @@ void LevelStateManager::Setup() {
 	TRANSFORM(eBigLevel)->z = DL_Score;
 	ADD_COMPONENT(eBigLevel, TextRendering);
 	TEXT_RENDERING(eBigLevel)->color = Color(1, 1, 1);
-	TEXT_RENDERING(eBigLevel)->fontName = "typo";
+	TEXT_RENDERING(eBigLevel)->fontName = "gdtypo";
 	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(288);
 	TEXT_RENDERING(eBigLevel)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(eBigLevel)->isANumber = true;
@@ -100,6 +100,7 @@ void LevelStateManager::Enter() {
 	
 	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
 	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(288);
+	TEXT_RENDERING(eBigLevel)->hide = false;
 	
 	duration = 0;
 	

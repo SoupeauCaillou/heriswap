@@ -126,7 +126,7 @@ Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, PlayerNameInputUI*
 }
 
 void Game::loadFont(const std::string& name) {
-	char* font = loader->loadShaderFile(name);
+	char* font = loader->loadShaderFile(name + ".desc");
 	std::stringstream sfont;
 	sfont << font;
 	std::string line;
@@ -140,7 +140,7 @@ void Game::loadFont(const std::string& name) {
 	}
 	delete[] font;
 	h2wratio[' '] = h2wratio['a'];
-	theTextRenderingSystem.registerFont("typo", h2wratio);
+	theTextRenderingSystem.registerFont(name, h2wratio);
 }
 
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
@@ -174,7 +174,8 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	}
 
 	// init font
-	loadFont("typo.desc");
+	loadFont("typo");
+	loadFont("gdtypo");
 
 	theGridSystem.GridSize = GRIDSIZE;
 	theSoundSystem.mute = !datas->storage->soundEnable(false);
