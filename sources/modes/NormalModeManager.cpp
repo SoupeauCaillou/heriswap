@@ -54,7 +54,7 @@ void NormalGameModeManager::GameUpdate(float dt) {
 	if (levelUpPending) {
 		RENDERING(herisson)->hide = false;
         LoadHerissonTexture(bonus+1);
-		generateLeaves(6);
+		generateLeaves(0);
 		levelUpPending = false;
 	}
 	time += dt;
@@ -183,4 +183,24 @@ GameMode NormalGameModeManager::GetMode() {
 
 Entity NormalGameModeManager::getSmallLevelEntity() {
     return uiHelper.smallLevel;
+}
+
+int NormalGameModeManager::saveInternalState(uint8_t** out) {
+    uint8_t* tmp;
+    int parent = GameModeManager::saveInternalState(&tmp);
+    int s = sizeof(level) + sizeof(remain);
+    uint8_t* ptr = *out = new uint8_t[parent + s];
+    ptr = (uint8_t*) mempcpy(ptr, tmp, parent);
+    ptr = (uint8_t*) mempcpy(ptr, &level, sizeof(level));
+    ptr = (uint8_t*) mempcpy(ptr, &remain[0], sizeof(remain));
+
+    delete[] tmp;
+    return (parent + s);
+}
+
+const uint8_t* NormalGameModeManager::restoreInternalState(const uint8_t* in, int size) {
+    in = GameModeManager::restoreInternalState(in, size);
+    memcpy(&level, in, sizeof(level)); in += sizeof(level);
+    memcpy(&remain[0], in, sizeof(remain)); in += sizeof(remain);
+    return in;
 }

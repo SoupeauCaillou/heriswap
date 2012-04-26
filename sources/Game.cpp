@@ -164,7 +164,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	theRenderingSystem.loadAtlas("alphabet");
 
     if (in && size) {
-        loadEntitySystemState(in, size);
+        in = loadEntitySystemState(in, size);
     }
 
 	datas->Setup(windowW, windowH);
@@ -420,30 +420,36 @@ int Game::saveState(uint8_t** out) {
 	uint8_t* systems = 0;
 	int sSize = theRenderingSystem.saveInternalState(&systems);
 
-	/* save Game fields */
-	int finalSize = sizeof(datas->stateBeforePause) + sizeof(eSize) + sizeof(sSize) + eSize + sSize;
+    /* save Game mode */
+    uint8_t* gamemode = 0;
+    int gSize = datas->mode2Manager[datas->mode]->saveInternalState(&gamemode);
+
+    int finalSize = sizeof(datas->stateBeforePause) + sizeof(eSize) + sizeof(sSize) + eSize + sSize + gSize;
 	*out = new uint8_t[finalSize];
-	uint8_t* ptr = *out;
-	if (datas->state == Pause)
+    uint8_t* ptr = *out;
+
+    /* save entity/system thingie */
+    ptr = (uint8_t*)mempcpy(ptr, &eSize, sizeof(eSize));
+    ptr = (uint8_t*)mempcpy(ptr, &sSize, sizeof(sSize));
+    ptr = (uint8_t*)mempcpy(ptr, entities, eSize);
+    ptr = (uint8_t*)mempcpy(ptr, systems, sSize);
+
+    /* save Game fields */
+    if (datas->state == Pause)
 		ptr = (uint8_t*)mempcpy(ptr, &datas->stateBeforePause, sizeof(datas->state));
 	else
 		ptr = (uint8_t*)mempcpy(ptr, &datas->state, sizeof(datas->state));
-	ptr = (uint8_t*)mempcpy(ptr, &datas->mode, sizeof(datas->mode));
-	ptr = (uint8_t*)mempcpy(ptr, &eSize, sizeof(eSize));
-	ptr = (uint8_t*)mempcpy(ptr, &sSize, sizeof(sSize));
-	ptr = (uint8_t*)mempcpy(ptr, entities, eSize);
-	ptr = (uint8_t*)mempcpy(ptr, systems, sSize);
+    ptr = (uint8_t*)mempcpy(ptr, &datas->mode, sizeof(datas->mode));
+    ptr = (uint8_t*)mempcpy(ptr, gamemode, gSize);
 
-	LOGI("%d + %d + %d + %d + %d -> %d",
-		sizeof(datas->stateBeforePause), sizeof(eSize), sizeof(sSize), eSize, sSize, finalSize);
+	LOGI("%d + %d + %d + %d + %d + %d -> %d",
+		sizeof(datas->stateBeforePause), sizeof(eSize), sizeof(sSize), eSize, sSize, gSize, finalSize);
 	return finalSize;
 }
 
-void Game::loadEntitySystemState(const uint8_t* in, int size) {
+const uint8_t* Game::loadEntitySystemState(const uint8_t* in, int size) {
 	/* restore Game fields */
-	int index = sizeof(datas->stateBeforePause)
-        + sizeof(datas->mode);
-	int eSize, sSize;
+	int eSize, sSize, index=0;
 	memcpy(&eSize, &in[index], sizeof(eSize));
 	index += sizeof(eSize);
 	memcpy(&sSize, &in[index], sizeof(sSize));
@@ -453,19 +459,23 @@ void Game::loadEntitySystemState(const uint8_t* in, int size) {
 	index += eSize;
 	/* restore systems */
 	theRenderingSystem.restoreInternalState(&in[index], sSize);
+    index += sSize;
+    return &in[index];
 }
 
 void Game::loadGameState(const uint8_t* in, int size) {
     /* restore Game fields */
-    int index = 0;
-    memcpy(&datas->stateBeforePause, &in[index], sizeof(datas->stateBeforePause));
+    memcpy(&datas->stateBeforePause, in, sizeof(datas->stateBeforePause));
     datas->state = datas->stateBeforePause;
     datas->stateBeforePauseNeedEnter = true;
     in += sizeof(datas->stateBeforePause);
-    memcpy(&datas->mode, &in[index], sizeof(datas->mode));
+    memcpy(&datas->mode, in, sizeof(datas->mode));
     in += sizeof(datas->mode);
 
     datas->mode2Manager[datas->mode]->Enter();
+    datas->mode2Manager[datas->mode]->restoreInternalState(in, size);
+    datas->mode2Manager[datas->mode]->UiUpdate(0);
+
     setMode();
     togglePause(true);
     LOGW("RESTORED STATE: %d", datas->stateBeforePause);

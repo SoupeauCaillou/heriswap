@@ -25,7 +25,4 @@ class ScoreAttackGameModeManager : public GameModeManager {
 		GameMode GetMode();
 
 		void ScoreCalc(int nb, int type);
-
-	private:
-		class HUDManagerData;
 };

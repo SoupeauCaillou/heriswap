@@ -64,10 +64,14 @@ class GameModeManager {
 		virtual GameMode GetMode() = 0;
 		virtual void LevelUp() = 0;
 		virtual bool LeveledUp() = 0;
+
+        // state save/restore
+        virtual int saveInternalState(uint8_t** out);
+        virtual const uint8_t* restoreInternalState(const uint8_t* in, int size);
 		
 	protected:
 		float position(float t);
-		void generateLeaves(int nb);
+		void generateLeaves(int* nb);
 		void LoadHerissonTexture(int type);
 		void updateHerisson(float dt, float obj, float herissonSpeed);
 		void deleteLeaves(int type, int nb);
