@@ -16,5 +16,5 @@ void CombinationMark::markCellInCombination(Entity e){
 }
 
 void CombinationMark::clearCellInCombination(Entity e) {
-    TWITCH(e)->speed = 0;
+    if (e) TWITCH(e)->speed = 0;
 }

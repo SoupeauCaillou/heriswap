@@ -32,6 +32,7 @@
 #include "GridSystem.h"
 #include "Game.h"
 #include "TwitchSystem.h"
+#include "CombinationMark.h"
 #include "Sound.h"
 
 #define GRIDSIZE 8
@@ -204,7 +205,52 @@ void Game::setMode() {
 	datas->state2Manager[ModeMenu]->modeMgr = datas->mode2Manager[datas->mode];
 }
 
-void Game::toggleShowCombi(bool forcedesactivate) { }
+void Game::toggleShowCombi(bool forcedesactivate) {
+	static bool activated;
+	static std::vector<Entity> marks;
+	//on switch le bool
+	activated = !activated;
+	if (forcedesactivate) activated = false;
+	if (datas->state != UserInput) activated = false;
+	if (activated) {
+		std::cout << "Affiche magique de la triche ! \n" ;
+		//j=0 : vertical
+		//j=1 : h
+		for (int j=0;j<2;j++) {
+			std::vector<Vector2> combinaisons;
+			if (j) combinaisons = theGridSystem.LookForCombinationsOnSwitchHorizontal();
+			else combinaisons = theGridSystem.LookForCombinationsOnSwitchVertical();
+			if (!combinaisons.empty())
+			{
+				for ( std::vector<Vector2>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
+				{
+					//rajout de 2 marques sur les elements a swich
+					for (int i=0;i<2;i++) {
+						if (j) {
+							CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->X, it->Y));
+							CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->X+i, it->Y));
+							marks.push_back(theGridSystem.GetOnPos(it->X, it->Y));
+							marks.push_back(theGridSystem.GetOnPos(it->X+1, it->Y));
+						} else {
+							CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->X, it->Y));
+							CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->X, it->Y+1));						}
+							marks.push_back(theGridSystem.GetOnPos(it->X, it->Y));
+							marks.push_back(theGridSystem.GetOnPos(it->X, it->Y+1));
+					}
+				}
+			}
+		}
+	} else {
+		if (marks.size()>0) {
+			for (int i=0; i<marks.size(); i++) {
+				CombinationMark::clearCellInCombination(marks[i]);
+			}
+			marks.clear();
+			LOGI("Destruction des marquages et de la triche (%d)!\n", marks.size());
+		}
+	}	
+	
+}
 
 void Game::togglePause(bool activate) {
 	if (activate && datas->state != Pause && pausableState(datas->state)) {
@@ -250,8 +296,9 @@ void Game::tick(float dt) {
             newState = ModeMenu;
             static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->ended = true;
         }
-     }
-
+     } else {
+		 toggleShowCombi(true);
+	 }
 	//si on est passé de pause à quelque chose different de pause, on desactive la pause
 	if (datas->state == Pause && newState == Unpause) {
 		togglePause(false);
