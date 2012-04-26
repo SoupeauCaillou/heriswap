@@ -160,7 +160,6 @@ GameState LevelStateManager::Update(float dt) {
 	}
 
 	if (SOUND(eBigLevel)->sound == InvalidSoundRef || duration > 8) {
-		theGridSystem.DeleteAll();
 		return Spawn;
 	}
 
@@ -168,6 +167,7 @@ GameState LevelStateManager::Update(float dt) {
 }
 
 void LevelStateManager::Exit() {
+	theGridSystem.DeleteAll();
 	ADSR(eGrid)->active = false;
 	feuilles.clear();
 	LOGI("%s", __PRETTY_FUNCTION__);

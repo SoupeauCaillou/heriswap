@@ -411,6 +411,12 @@ int Game::saveState(uint8_t** out) {
 		LOGI("Current state is '%d' -> nothing to save", datas->state);
 		return 0;
 	}
+	
+	if (datas->state == LevelChanged) {
+		datas->state2Manager[datas->state]->Exit();
+		datas->state = Spawn;
+		datas->mode2Manager[datas->mode]->generateLeaves(0);
+	}
 
 	/* save all entities/components */
 	uint8_t* entities = 0;
@@ -435,10 +441,12 @@ int Game::saveState(uint8_t** out) {
     ptr = (uint8_t*)mempcpy(ptr, systems, sSize);
 
     /* save Game fields */
-    if (datas->state == Pause)
+    if (datas->state == Pause) {
 		ptr = (uint8_t*)mempcpy(ptr, &datas->stateBeforePause, sizeof(datas->state));
-	else
+	} else {
 		ptr = (uint8_t*)mempcpy(ptr, &datas->state, sizeof(datas->state));
+	}
+
     ptr = (uint8_t*)mempcpy(ptr, &datas->mode, sizeof(datas->mode));
     ptr = (uint8_t*)mempcpy(ptr, gamemode, gSize);
 

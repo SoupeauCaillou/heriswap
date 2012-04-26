@@ -68,10 +68,10 @@ class GameModeManager {
         // state save/restore
         virtual int saveInternalState(uint8_t** out);
         virtual const uint8_t* restoreInternalState(const uint8_t* in, int size);
+		void generateLeaves(int* nb);
 		
 	protected:
 		float position(float t);
-		void generateLeaves(int* nb);
 		void LoadHerissonTexture(int type);
 		void updateHerisson(float dt, float obj, float herissonSpeed);
 		void deleteLeaves(int type, int nb);
