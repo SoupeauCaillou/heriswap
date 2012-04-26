@@ -6,10 +6,25 @@
 #include "base/PlacementHelper.h"
 #include "systems/SoundSystem.h"
 
-LogoStateManager::LogoStateManager(GameState _following, Entity _logo, Entity _logobg) : following(_following), logo(_logo), logobg(_logobg) {}
+LogoStateManager::LogoStateManager(GameState _following) : following(_following) {}
 
 void LogoStateManager::Setup() {
+     logo = theEntityManager.CreateEntity();
+     logobg = theEntityManager.CreateEntity();
 
+    ADD_COMPONENT(logo, Rendering);
+     ADD_COMPONENT(logo, Transformation);
+     TRANSFORM(logo)->position = Vector2(0,0);
+     TRANSFORM(logo)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(869));
+     TRANSFORM(logo)->z = DL_Logo;
+     RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("soupe_logo.png");
+
+     ADD_COMPONENT(logobg, Rendering);
+     ADD_COMPONENT(logobg, Transformation);
+     TRANSFORM(logobg)->position = Vector2(0,0);
+     TRANSFORM(logobg)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::ScreenHeight);
+     RENDERING(logobg)->color = Color(0,0,0);
+     TRANSFORM(logobg)->z = DL_BehindLogo;
 }
 
 void LogoStateManager::Enter() {

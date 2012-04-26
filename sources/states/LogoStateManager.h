@@ -8,7 +8,7 @@
 
 class LogoStateManager : public GameStateManager {
 	public:
-		LogoStateManager(GameState following, Entity logo, Entity logobg);
+		LogoStateManager(GameState following);
 		void Setup();
 		void Enter();
 		GameState Update(float dt);

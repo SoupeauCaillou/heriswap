@@ -22,7 +22,7 @@ class PrivateData {
 
      GameState state, stateBeforePause;
      bool stateBeforePauseNeedEnter;
-     Entity logo, logo_bg, sky, decord2nd, decord1er;
+     Entity sky, decord2nd, decord1er;
      std::map<GameState, GameStateManager*> state2Manager;
      std::map<GameMode, GameModeManager*> mode2Manager;
      ScoreStorage* storage;

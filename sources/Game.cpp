@@ -162,16 +162,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	*/
 	theRenderingSystem.loadAtlas("alphabet");
 
-	if (in && size) {
-		datas->state = Pause;
-		loadState(in, size);
-	}
-
 	datas->Setup(windowW, windowH);
-
-	if (in && size) {
-		RENDERING(datas->logo_bg)->hide = true;
-	}
 
 	// init font
 	loadFont("typo");
@@ -197,6 +188,11 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 
 	datas->mode2Manager[Normal]->sky = datas->sky;
 	datas->state2Manager[datas->state]->Enter();
+
+    if (in && size) {
+        datas->state = Pause;
+        loadState(in, size);
+    }
 }
 
 void Game::setMode() {
@@ -401,7 +397,7 @@ void Game::loadState(const uint8_t* in, int size) {
 	in += sizeof(datas->stateBeforePause);
 	memcpy(&datas->mode, &in[index], sizeof(datas->mode));
 	in += sizeof(datas->mode);
-	datas->mode2Manager[datas->mode]->Setup();
+	datas->mode2Manager[datas->mode]->Enter();
 	setMode();
 	int eSize, sSize;
 	memcpy(&eSize, &in[index], sizeof(eSize));
