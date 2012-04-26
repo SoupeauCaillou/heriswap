@@ -22,7 +22,7 @@ void InGameUiHelper::build() {
 	TRANSFORM(smallLevel)->z = DL_Score;
 	ADD_COMPONENT(smallLevel, TextRendering);
 	TEXT_RENDERING(smallLevel)->color = Color(1, 1, 1);
-	TEXT_RENDERING(smallLevel)->fontName = "typo";
+	TEXT_RENDERING(smallLevel)->fontName = "gdtypo";
 	TEXT_RENDERING(smallLevel)->charHeight = PlacementHelper::GimpHeightToScreen(232-150);
 	TEXT_RENDERING(smallLevel)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(smallLevel)->isANumber = true;

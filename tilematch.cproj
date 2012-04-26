@@ -46,7 +46,6 @@
     <None Include="sources\DepthLayer.h" />
     <None Include="sources\Game.h" />
     <None Include="sources\GridSystem.h" />
-    <None Include="sources\PlacementHelper.h" />
     <None Include="sources\modes\InGameUiHelper.h" />
     <None Include="sources\TwitchSystem.h" />
     <None Include="sources\CombinationMark.h" />
@@ -78,7 +77,6 @@
     <Compile Include="tests\TestGridSystem.cpp" />
     <Compile Include="tests\tests.cpp" />
     <Compile Include="jni\tilematchjnilib.cpp" />
-    <Compile Include="sources\PlacementHelper.cpp" />
     <Compile Include="sources\modes\InGameUiHelper.cpp" />
     <Compile Include="sources\modes\GameModeManager.cpp" />
     <Compile Include="sources\TwitchSystem.cpp" />

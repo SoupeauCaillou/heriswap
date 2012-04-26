@@ -50,7 +50,8 @@ class Game {
 
 	private:
 		void loadFont(const std::string& name);
-		void loadState(const uint8_t* in, int size);
+        void loadEntitySystemState(const uint8_t* in, int size);
+        void loadGameState(const uint8_t* in, int size);
 		void bench(bool active, float updateDuration, float dt);
 
 	PrivateData* datas;

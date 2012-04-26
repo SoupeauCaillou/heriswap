@@ -126,7 +126,7 @@ Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, PlayerNameInputUI*
 }
 
 void Game::loadFont(const std::string& name) {
-	char* font = loader->loadShaderFile(name);
+	char* font = loader->loadShaderFile(name + ".desc");
 	std::stringstream sfont;
 	sfont << font;
 	std::string line;
@@ -140,7 +140,7 @@ void Game::loadFont(const std::string& name) {
 	}
 	delete[] font;
 	h2wratio[' '] = h2wratio['a'];
-	theTextRenderingSystem.registerFont("typo", h2wratio);
+	theTextRenderingSystem.registerFont(name, h2wratio);
 }
 
 void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
@@ -162,19 +162,15 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	*/
 	theRenderingSystem.loadAtlas("alphabet");
 
-	if (in && size) {
-		datas->state = Pause;
-		loadState(in, size);
-	}
+    if (in && size) {
+        loadEntitySystemState(in, size);
+    }
 
 	datas->Setup(windowW, windowH);
 
-	if (in && size) {
-		RENDERING(datas->logo_bg)->hide = true;
-	}
-
 	// init font
-	loadFont("typo.desc");
+	loadFont("typo");
+	loadFont("gdtypo");
 
 	theGridSystem.GridSize = GRIDSIZE;
 	theSoundSystem.mute = !datas->storage->soundEnable(false);
@@ -195,7 +191,12 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
 
 	datas->mode2Manager[Normal]->sky = datas->sky;
-	datas->state2Manager[datas->state]->Enter();
+
+    if (in && size) {
+        datas->state = Pause;
+        loadGameState(in, size);
+    }
+    datas->state2Manager[datas->state]->Enter();
 }
 
 void Game::setMode() {
@@ -391,17 +392,10 @@ int Game::saveState(uint8_t** out) {
 	return finalSize;
 }
 
-void Game::loadState(const uint8_t* in, int size) {
+void Game::loadEntitySystemState(const uint8_t* in, int size) {
 	/* restore Game fields */
-	int index = 0;
-	memcpy(&datas->stateBeforePause, &in[index], sizeof(datas->stateBeforePause));
-	datas->state = Pause;
-	datas->stateBeforePauseNeedEnter = true;
-	in += sizeof(datas->stateBeforePause);
-	memcpy(&datas->mode, &in[index], sizeof(datas->mode));
-	in += sizeof(datas->mode);
-	datas->mode2Manager[datas->mode]->Setup();
-	setMode();
+	int index = sizeof(datas->stateBeforePause)
+        + sizeof(datas->mode);
 	int eSize, sSize;
 	memcpy(&eSize, &in[index], sizeof(eSize));
 	index += sizeof(eSize);
@@ -412,8 +406,22 @@ void Game::loadState(const uint8_t* in, int size) {
 	index += eSize;
 	/* restore systems */
 	theRenderingSystem.restoreInternalState(&in[index], sSize);
+}
 
-	LOGW("RESTORED STATE: %d", datas->stateBeforePause);
+void Game::loadGameState(const uint8_t* in, int size) {
+    /* restore Game fields */
+    int index = 0;
+    memcpy(&datas->stateBeforePause, &in[index], sizeof(datas->stateBeforePause));
+    datas->state = datas->stateBeforePause;
+    datas->stateBeforePauseNeedEnter = true;
+    in += sizeof(datas->stateBeforePause);
+    memcpy(&datas->mode, &in[index], sizeof(datas->mode));
+    in += sizeof(datas->mode);
+
+    datas->mode2Manager[datas->mode]->Enter();
+    setMode();
+    togglePause(true);
+    LOGW("RESTORED STATE: %d", datas->stateBeforePause);
 }
 
 static float rotations[] = {
