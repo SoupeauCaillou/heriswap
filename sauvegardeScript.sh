@@ -8,12 +8,6 @@ else
 	NOM=`echo "$FICHIER" | grep "Component {" | cut -d" " -f2` #nom du systeme avec Component
 	DIMINUTIF=`echo ${NOM:0:1}c |tr 'A-Z' 'a-z'`
 
-	##pour virer le morceau component :
-	#tot=`echo "$NOM"|wc -c`
-	#total=`expr $tot - 10`
-	#NOM=${NOM:0:$total}
-
-	old_IFS=$IFS
 	IFS=$'\n'
 
 	for i in $FICHIER; do
@@ -61,7 +55,6 @@ else
 	#on ecrit maintenant dans le fichier
 	echo "$FINAL" > $ECRITURE
 
-	IFS=$old_IFS
 fi
 
 

@@ -95,6 +95,7 @@ class LinuxSqliteExec: public ScoreStorage {
 			sav->push_back(score1);
 			return 0;
 		}
+		
 		static int callback(void *save, int argc, char **argv, char **azColName){
 			std::string *sav = static_cast<std::string*>(save);
 			*sav = argv[0];
@@ -130,20 +131,20 @@ class LinuxSqliteExec: public ScoreStorage {
 		void saveOpt(std::string opt, std::string name) {
 			std::stringstream tmp;
 			tmp << "INSERT INTO info VALUES ('" << opt << "', '" << name << "')";
-			request(tmp.str(), 0);
+			request(tmp.str(), 0, 0);
 		}
 
 		bool getName(std::string& result) {
-			request("select value from info where opt LIKE 'name'", &result);
+			request("select value from info where opt LIKE 'name'", &result, 0);
 			return (false);
 		}
 
 		bool soundEnable(bool switchIt) {
 			std::string s;
-			request("select value from info where opt like 'sound'", &s);
+			request("select value from info where opt like 'sound'", &s, 0);
 			if (switchIt) {
-				if (s=="on") request("UPDATE info SET value='off' where opt='sound'",0);
-				else request("UPDATE info SET value='on' where opt='sound'",0);
+				if (s=="on") request("UPDATE info SET value='off' where opt='sound'",0, 0);
+				else request("UPDATE info SET value='on' where opt='sound'",0, 0);
 				LOGI("switched to !%s", s.c_str());
 			}
 			return (s == "on");
@@ -152,10 +153,10 @@ class LinuxSqliteExec: public ScoreStorage {
 		void submitScore(ScoreStorage::Score scr) {
 			std::stringstream tmp;
 			tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << scr.mode<<","<<scr.points<<","<<scr.time<<","<<scr.level<<")";
-			request(tmp.str().c_str(), 0);
+			request(tmp.str().c_str(), 0, 0);
 		}
 
-		bool request(std::string s, std::string* res) {
+		bool request(std::string s, void* res, int (*callbackP)(void*,int,char**,char**)) {
 			sqlite3 *db;
 			char *zErrMsg = 0;
 			int rc = sqlite3_open("tilematch.db", &db);
@@ -164,7 +165,11 @@ class LinuxSqliteExec: public ScoreStorage {
 				sqlite3_close(db);
 				return false;
 			}
-			rc = sqlite3_exec(db, s.c_str(), callback, res, &zErrMsg);
+			//si on veut notre callback personnel(script component)
+			if (callbackP && res) rc = sqlite3_exec(db, s.c_str(), callbackP, res, &zErrMsg);
+			//sinon on prend celui par défaut
+			else rc = sqlite3_exec(db, s.c_str(), callback, res, &zErrMsg);
+			
 			if( rc!=SQLITE_OK ){
 				LOGI("SQL error: %s\n", zErrMsg);
 				sqlite3_free(zErrMsg);
@@ -174,14 +179,14 @@ class LinuxSqliteExec: public ScoreStorage {
 		}
 
 		bool initTable() {
-			bool r = request("", 0);
+			bool r = request("", 0, 0);
 			if (r) {
 				LOGI("initializing database...");
-				request("create table score(name char2(11) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0);
-				request("create table info(opt char2(8), value char2(11))", 0);
+				request("create table score(name char2(11) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0, 0);
+				request("create table info(opt char2(8), value char2(11))", 0, 0);
 				std::string s;
-				request("select value from info where opt like 'sound'", &s);
-				if (s.length()==0) request("insert into info values('sound', 'on')", 0);
+				request("select value from info where opt like 'sound'", &s, 0);
+				if (s.length()==0) request("insert into info values('sound', 'on')", 0, 0);
 			}
 			return r;
 		}

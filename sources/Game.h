@@ -12,7 +12,7 @@ class ScoreStorage {
 		virtual bool initTable() = 0;
 		virtual void submitScore(Score scr) = 0;
 		virtual std::vector<Score> getScore(int mode) = 0;
-		virtual bool request(std::string s, std::string* res) = 0;
+		virtual	bool request(std::string s, void* res, int (*callbackP)(void*,int,char**,char**)) = 0;
 		virtual bool soundEnable(bool switchIt) = 0;
 		virtual void saveOpt(std::string opt, std::string name) = 0;
 		virtual bool getName(std::string& result) = 0;
