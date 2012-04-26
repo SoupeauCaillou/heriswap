@@ -53,6 +53,11 @@ void LogoStateManager::Exit() {
 }
 
 void LogoStateManager::LateExit() {
+    // ou unloadLogo
+    theRenderingSystem.unloadTexture(RENDERING(logo)->texture);
+    theRenderingSystem.unloadTexture(theRenderingSystem.loadTextureFile("soupe_logo2_365_331.png"));
+    theRenderingSystem.unloadTexture(theRenderingSystem.loadTextureFile("soupe_logo3_365_331.png"));
+
     theEntityManager.DeleteEntity(logo);
     theEntityManager.DeleteEntity(logobg);
 	theEntityManager.DeleteEntity(animLogo);
