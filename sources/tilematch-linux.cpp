@@ -12,10 +12,12 @@
 #include <sqlite3.h>
 #include <sstream>
 #include <cassert>
+#include <vector>
 
 #include "base/Vector2.h"
 #include "base/TouchInputManager.h"
 #include "base/TimeUtil.h"
+#include "base/MathUtil.h"
 
 #include "systems/RenderingSystem.h"
 #include "systems/SoundSystem.h"
@@ -53,19 +55,36 @@ class MouseNativeTouchState: public NativeTouchState {
 
 struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 	public:
-		void show() {
+		std::string show(std::vector<std::string> names) {
 			__log_enabled = false;
-			std::cout << "Enter your name!" << std::endl;
+			std::cout << "Choose your name!" << std::endl;
+			int size = MathUtil::Min((int)names.size(), 10);
+			
+			for (int i=0; i<size; i++) {
+				std::cout << i <<". "<<names[i] << std::endl;
+			}
+			std::cout << size <<". New Name" << std::endl;
+			int in = 0;
+			std::cin >> in;
+			if (in<size) return names[in];
+			else {
+				std::string res;
+				std::cin.ignore(100, '\n');//vide le retour a la ligne d'avant
+				getline(std::cin, res);
+				return res;
+			}
 		}
-		bool query(std::string& result) {
-			getline(std::cin, result);
-			if (result.size()>10) result.resize(10);
-			std::cout << "Want to save it ? (y or *'ll be fine)" << std::endl;
-			std::string a;
-			getline(std::cin, a);
-			if (a[0] == 'y') storage->saveOpt("name", result);
-			__log_enabled = true;
-			return true;
+		void query(std::string& result) {
+			storage->getName(result);
+			if (result.size()==0) {
+				result = show(storage->getName(result));
+				if (result.size()>10) result.resize(10);
+				std::cout << "Want to save it ? (yes or no(=everything else))" << std::endl;
+				std::string a;
+				getline(std::cin, a);
+				if (!strcmp(a.c_str(), "yes")) storage->saveOpt("name", result);
+				__log_enabled = true;
+			}	
 		}
 		ScoreStorage* storage;
 };
@@ -96,6 +115,14 @@ class LinuxSqliteExec: public ScoreStorage {
 			return 0;
 		}
 		
+		static int callbackNames(void *save, int argc, char **argv, char **azColName){
+			std::vector<std::string> *sav = static_cast<std::vector<std::string>*>(save);
+			for (int i=0; i<argc; i++) {
+				sav->push_back(argv[i]);
+			}
+			return 0;
+		}
+				
 		static int callback(void *save, int argc, char **argv, char **azColName){
 			std::string *sav = static_cast<std::string*>(save);
 			*sav = argv[0];
@@ -110,21 +137,8 @@ class LinuxSqliteExec: public ScoreStorage {
 				tmp << "select * from score where mode= "<< mode << " order by points desc limit 5";
 			else
 				tmp << "select * from score where mode= "<< mode << " order by time asc limit 5";
-
-			sqlite3 *db;
-			char *zErrMsg = 0;
-			int rc = sqlite3_open("tilematch.db", &db);
-			if( rc ){
-				LOGI("Can't open database tilematch.db: %s\n", sqlite3_errmsg(db));
-				sqlite3_close(db);
-			}
-			rc = sqlite3_exec(db, tmp.str().c_str(), callbackScore, &sav, &zErrMsg);
-			if( rc!=SQLITE_OK ){
-				LOGI("SQL error: %s\n", zErrMsg);
-				sqlite3_free(zErrMsg);
-			}
-			sqlite3_close(db);
-
+			
+			request(tmp.str().c_str(), &sav, callbackScore);
 			return sav;
 		}
 
@@ -134,9 +148,11 @@ class LinuxSqliteExec: public ScoreStorage {
 			request(tmp.str(), 0, 0);
 		}
 
-		bool getName(std::string& result) {
-			request("select value from info where opt LIKE 'name'", &result, 0);
-			return (false);
+		std::vector<std::string> getName(std::string& result) {
+			std::vector<std::string> res;
+			std::cout << "no default name - choose in the list\n";
+			request("select value from info where opt LIKE 'name' ", &res, callbackNames);
+			return res;
 		}
 
 		bool soundEnable(bool switchIt) {

@@ -15,7 +15,7 @@ class ScoreStorage {
 		virtual	bool request(std::string s, void* res, int (*callbackP)(void*,int,char**,char**)) = 0;
 		virtual bool soundEnable(bool switchIt) = 0;
 		virtual void saveOpt(std::string opt, std::string name) = 0;
-		virtual bool getName(std::string& result) = 0;
+		virtual std::vector<std::string> getName(std::string& result) = 0;
 		
 		#ifdef ANDROID
 		virtual void openfeintLB(int mode) = 0;
@@ -24,8 +24,8 @@ class ScoreStorage {
 
 class PlayerNameInputUI {
 	public:
-		virtual void show() = 0;
-		virtual bool query(std::string& result) = 0;
+		virtual void query(std::string& result) = 0;
+		virtual std::string show(std::vector<std::string> names) = 0;
 
 };
 
