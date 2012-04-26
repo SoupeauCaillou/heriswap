@@ -31,6 +31,9 @@ class NormalGameModeManager : public GameModeManager {
 		
 		int currentLevel() const { return level; }
 
+        int saveInternalState(uint8_t** out);
+        const uint8_t* restoreInternalState(const uint8_t* in, int size);
+
 	private:
 		int level, remain[8];
 		bool levelUp;

@@ -100,10 +100,11 @@ void GameModeManager::Enter() {
 	SCROLLING(decor1er)->hide = false;
     LoadHerissonTexture(bonus+1);
 
-	generateLeaves(6);
+	generateLeaves(0);
 	uiHelper.show();
     theGridSystem.HideAll(false);
     TRANSFORM(herisson)->position.X = initialHerissonPosition(herisson);
+    RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 }
 
 void GameModeManager::Exit() {
@@ -129,15 +130,15 @@ void GameModeManager::TogglePauseDisplay(bool paused) {
     RENDERING(uiHelper.pauseButton)->hide = paused;
 }
 
-void GameModeManager::generateLeaves(int nb) {
+void GameModeManager::generateLeaves(int* nb) {
 	for (int az=0;az<branchLeaves.size();az++)
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
 
 	branchLeaves.clear();
 	fillVec();
 	//std::vector<Render> swapper;
-	for (int i=0;i<nb;i++) {
-		for (int j=0;j<8;j++) {
+    for (int j=0;j<8;j++) {
+	    for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
 			Entity e = theEntityManager.CreateEntity();
 			ADD_COMPONENT(e, Transformation);
 			ADD_COMPONENT(e, Rendering);
@@ -242,3 +243,37 @@ void GameModeManager::updateHerisson(float dt, float obj, float herissonSpeed) {
 	uiHelper.update(dt);
 }
 
+int GameModeManager::saveInternalState(uint8_t** out) {
+    int s = sizeof(time) + sizeof(limit) + sizeof(points) + sizeof(bonus) + 8 * sizeof(uint8_t);
+    uint8_t* ptr = *out = new uint8_t[s];
+    ptr = (uint8_t*) mempcpy(ptr, &time, sizeof(time));
+    ptr = (uint8_t*) mempcpy(ptr, &limit, sizeof(limit));
+    ptr = (uint8_t*) mempcpy(ptr, &points, sizeof(points));
+    ptr = (uint8_t*) mempcpy(ptr, &bonus, sizeof(bonus));
+    for (int i=1; i<=8; i++) {
+        uint8_t count = 0;
+        for (int j=0; j<branchLeaves.size(); j++) {
+            if (branchLeaves[j].type == i)
+                count++;
+        }
+        ptr = (uint8_t*) mempcpy(ptr, &count, sizeof(count));
+    }
+    return s;
+}
+
+const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int size) {
+    int index = 0;
+    memcpy(&time, &in[index], sizeof(time)); index += sizeof(time);
+    memcpy(&limit, &in[index], sizeof(limit)); index += sizeof(limit);
+    memcpy(&points, &in[index], sizeof(points)); index += sizeof(points);
+    memcpy(&bonus, &in[index], sizeof(bonus)); index += sizeof(bonus);
+    int nb[8];
+    for (int i=0; i<8; i++) {
+        uint8_t c;
+        memcpy(&c, &in[index], sizeof(uint8_t)); index += sizeof(uint8_t);
+        nb[i] = c;
+    }
+    generateLeaves(nb);
+
+    return &in[index];
+}
