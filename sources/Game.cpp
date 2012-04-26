@@ -424,7 +424,7 @@ int Game::saveState(uint8_t** out) {
     uint8_t* gamemode = 0;
     int gSize = datas->mode2Manager[datas->mode]->saveInternalState(&gamemode);
 
-    int finalSize = sizeof(datas->stateBeforePause) + sizeof(eSize) + sizeof(sSize) + eSize + sSize + gSize;
+    int finalSize = sizeof(datas->state) + sizeof(datas->mode) + sizeof(eSize) + sizeof(sSize) + eSize + sSize + gSize;
 	*out = new uint8_t[finalSize];
     uint8_t* ptr = *out;
 
@@ -442,8 +442,8 @@ int Game::saveState(uint8_t** out) {
     ptr = (uint8_t*)mempcpy(ptr, &datas->mode, sizeof(datas->mode));
     ptr = (uint8_t*)mempcpy(ptr, gamemode, gSize);
 
-	LOGI("%d + %d + %d + %d + %d + %d -> %d",
-		sizeof(datas->stateBeforePause), sizeof(eSize), sizeof(sSize), eSize, sSize, gSize, finalSize);
+	LOGI("%d + %d + %d + %d + %d + %d + %d -> %d (%p)",
+		sizeof(datas->stateBeforePause), sizeof(datas->mode), sizeof(eSize), sizeof(sSize), eSize, sSize, gSize, finalSize, *out);
 	return finalSize;
 }
 
@@ -467,7 +467,6 @@ void Game::loadGameState(const uint8_t* in, int size) {
     /* restore Game fields */
     memcpy(&datas->stateBeforePause, in, sizeof(datas->stateBeforePause));
     datas->state = datas->stateBeforePause;
-    datas->stateBeforePauseNeedEnter = true;
     in += sizeof(datas->stateBeforePause);
     memcpy(&datas->mode, in, sizeof(datas->mode));
     in += sizeof(datas->mode);
@@ -478,6 +477,7 @@ void Game::loadGameState(const uint8_t* in, int size) {
 
     setMode();
     togglePause(true);
+    datas->stateBeforePauseNeedEnter = true;
     LOGW("RESTORED STATE: %d", datas->stateBeforePause);
 }
 

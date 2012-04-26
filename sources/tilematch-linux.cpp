@@ -294,9 +294,10 @@ int main(int argc, char** argv) {
 				timer = MAGICKEYTIME;
 			}
 			if (glfwGetKey( GLFW_KEY_LSHIFT)) {
-				uint8_t* state;
+				uint8_t* state = 0;
 				int size = game.saveState(&state);
 				if (size) {
+					LOGI("ptr: %p %d", state, size);
 					FILE* file = fopen("dump.bin", "w+b");
 					fwrite(state, size, 1, file);
 					fclose(file);
