@@ -175,7 +175,7 @@ void ModeMenuStateManager::Enter() {
 	GameMode m = modeMgr->GetMode();
 	BUTTON(back)->enabled = true;
 	BUTTON(playButton)->enabled = true;
-	if (!ended) {
+	if (ended) {
 		if (playerName.length() == 0) {
 			inputUI->query(playerName);
 		}
@@ -195,8 +195,6 @@ void ModeMenuStateManager::Enter() {
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
-	if (playerName.length() ==0) LOGI("pas de nom !!!!!!!!!!!!!!!!!!!");
-	else LOGI("%s", playerName.c_str());
 	if (ended) {
 		GameMode m = modeMgr->GetMode();
 		ScoreStorage::Score entry;
