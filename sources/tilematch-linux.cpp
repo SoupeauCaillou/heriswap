@@ -57,32 +57,36 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 	public:
 		std::string show(std::vector<std::string> names) {
 			__log_enabled = false;
-			std::cout << "Choose your name!" << std::endl;
+			std::cout << "Choose your name !" << std::endl;
 			int size = MathUtil::Min((int)names.size(), 10);
 			
 			for (int i=0; i<size; i++) {
 				std::cout << i <<". "<<names[i] << std::endl;
 			}
-			std::cout << size <<". New Name" << std::endl;
-			int in = 0;
-			std::cin >> in;
-			if (in<size) return names[in];
-			else {
-				std::string res;
-				std::cin.ignore(100, '\n');//vide le retour a la ligne d'avant
-				getline(std::cin, res);
-				return res;
+			std::cout << "Or enter a new name : "  << std::endl;
+			std::string res;
+			std::cin >> res;
+			std::cin.ignore(100, '\n');
+			std::istringstream iss(res);
+			int value;
+			iss >> value;
+			//if its a valid number pick names[number]
+			if (res.size()<size/10+2 && value>0 && value<size || res[0]=='0') {
+				return names[value];
+			//else its not a number or number>size : its the new name
+			} else { 
+				if (res.size()>10) res.resize(10);
+				std::cout << "Want to save it ? (yes or no(=everything else))" << std::endl;
+				std::string a;
+				getline(std::cin, a);
+				if (!strcmp(a.c_str(), "yes")) storage->saveOpt("name", res);
+				return res;		
 			}
 		}
 		void query(std::string& result) {
 			storage->getName(result);
 			if (result.size()==0) {
 				result = show(storage->getName(result));
-				if (result.size()>10) result.resize(10);
-				std::cout << "Want to save it ? (yes or no(=everything else))" << std::endl;
-				std::string a;
-				getline(std::cin, a);
-				if (!strcmp(a.c_str(), "yes")) storage->saveOpt("name", result);
 				__log_enabled = true;
 			}	
 		}
@@ -198,8 +202,8 @@ class LinuxSqliteExec: public ScoreStorage {
 			bool r = request("", 0, 0);
 			if (r) {
 				LOGI("initializing database...");
-				request("create table score(name char2(11) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0, 0);
-				request("create table info(opt char2(8), value char2(11))", 0, 0);
+				request("create table score(name varchar2(11) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0, 0);
+				request("create table info(opt varchar2(8), value varchar2(11), constraint f1 primary key(opt,value))", 0, 0);
 				std::string s;
 				request("select value from info where opt like 'sound'", &s, 0);
 				if (s.length()==0) request("insert into info values('sound', 'on')", 0, 0);

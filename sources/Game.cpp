@@ -22,10 +22,6 @@
 #include "states/BackgroundManager.h"
 #include "states/LevelStateManager.h"
 #include "states/ModeMenuStateManager.h"
-#include "modes/GameModeManager.h"
-#include "modes/NormalModeManager.h"
-#include "modes/StaticTimeModeManager.h"
-#include "modes/ScoreAttackModeManager.h"
 
 #include "DepthLayer.h"
 #include "base/PlacementHelper.h"

@@ -23,7 +23,8 @@
 enum GameMode {
 	Normal = 1,
 	ScoreAttack,
-	StaticTime
+	StaticTime,
+	TilesAttack
 };
 
 

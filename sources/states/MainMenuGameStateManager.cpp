@@ -15,7 +15,7 @@
 #include "base/PlacementHelper.h"
 
 MainMenuGameStateManager::~MainMenuGameStateManager() {
-	for (int i=0; i<3; i++) {
+	for (int i=0; i<4; i++) {
 		theTextRenderingSystem.DestroyLocalEntity(eStart[i]);
 		theEntityManager.DeleteEntity(bStart[i]);
 	}
@@ -25,10 +25,10 @@ void MainMenuGameStateManager::Setup() {
 	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
 
 	//Creating text entities
-	for (int i=0; i<3; i++)
+	for (int i=0; i<4; i++)
 		eStart[i] = theTextRenderingSystem.CreateEntity();
 	//Settings
-	for (int i=0; i<3; i++) {
+	for (int i=0; i<4; i++) {
 		TRANSFORM(eStart[i])->z = DL_MainMenuUITxt;
 		TEXT_RENDERING(eStart[i])->hide = true;
 		TEXT_RENDERING(eStart[i])->positioning = TextRenderingComponent::RIGHT;
@@ -58,9 +58,12 @@ void MainMenuGameStateManager::Setup() {
 	TEXT_RENDERING(eStart[2])->text = "Contre le score";
 	TRANSFORM(eStart[2])->position.X = PlacementHelper::GimpXToScreen(634);
 	TRANSFORM(eStart[2])->position.Y = TRANSFORM(bStart[2])->position.Y = PlacementHelper::GimpYToScreen(522);
+	TEXT_RENDERING(eStart[3])->text = "Mange tes feuilles";
+	TRANSFORM(eStart[3])->position.X = PlacementHelper::GimpXToScreen(725);
+	TRANSFORM(eStart[3])->position.Y = TRANSFORM(bStart[3])->position.Y = PlacementHelper::GimpYToScreen(705);
 
 	//Adding containers
-	for (int i=0; i<3; i++) {
+	for (int i=0; i<4; i++) {
 		TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, Vector2(PlacementHelper::GimpXToScreen(700),PlacementHelper::GimpYToScreen(100)));
 		MORPHING(eStart[i])->elements.push_back(posMorph);
 		ADD_COMPONENT(bStart[i], Sound);
@@ -112,7 +115,7 @@ void MainMenuGameStateManager::Enter() {
 
 	RENDERING(herisson->actor.e)->hide = false;
 
-	for (int i=0; i<3; i++) {
+	for (int i=0; i<4; i++) {
 		MORPHING(eStart[i])->active = false;
 		RENDERING(bStart[i])->hide = false;
 		TEXT_RENDERING(eStart[i])->hide = false;
@@ -152,6 +155,10 @@ GameState MainMenuGameStateManager::Update(float dt) {
 			choosenGameMode = StaticTime;
 			SOUND(bStart[2])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 			return ModeMenu;
+		} else if (BUTTON(bStart[3])->clicked){
+			choosenGameMode = TilesAttack;
+			SOUND(bStart[3])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+			return ModeMenu;
 		}
 	}
 	return MainMenu;
@@ -160,7 +167,7 @@ GameState MainMenuGameStateManager::Update(float dt) {
 void MainMenuGameStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
-	for (int i=0; i<3; i++) {
+	for (int i=0; i<4; i++) {
 		if (i!=choosenGameMode-1) TEXT_RENDERING(eStart[i])->hide = true;
 		RENDERING(bStart[i])->hide = true;
 		BUTTON(bStart[i])->enabled = false;

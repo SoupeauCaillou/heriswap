@@ -2,9 +2,6 @@
 #include "Game.h"
 
 ScoreAttackGameModeManager::ScoreAttackGameModeManager(Game* game) : GameModeManager(game) {
-	time = 0.;
-	points=0;
-	bonus = MathUtil::RandomInt(8);
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(300,0.125));
 	pts.push_back(Vector2(750,0.25));

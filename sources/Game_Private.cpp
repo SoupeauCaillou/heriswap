@@ -5,6 +5,7 @@
 #include "modes/NormalModeManager.h"
 #include "modes/StaticTimeModeManager.h"
 #include "modes/ScoreAttackModeManager.h"
+#include "modes/TilesAttackModeManager.h"
 #include "GameState.h"
 #include "states/GameStateManager.h"
 #include "states/SpawnGameStateManager.h"
@@ -25,6 +26,7 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      mode2Manager[Normal] = new NormalGameModeManager(game);
      mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager(game);
      mode2Manager[StaticTime] = new StaticTimeGameModeManager(game);
+     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game);
      storage = storagee;
 
      soundButton = theEntityManager.CreateEntity();
