@@ -31,8 +31,8 @@ struct GameHolder;
 struct AndroidPlayerNameInputUI : public PlayerNameInputUI {
 	public:
 		GameHolder* holder;
-		void show();
-		bool query(std::string& result);
+		std::string show(std::vector<std::string> names);
+		void query(std::string& result);
 };
 
 class AndroidStorage: public ScoreStorage {
@@ -48,7 +48,7 @@ class AndroidStorage: public ScoreStorage {
 		bool request(std::string s, std::string* res);
 		bool initTable();
 		void saveOpt(std::string opt, std::string name);
-		bool getName(std::string& result);
+        std::vector<std::string> getName(std::string& result);
 		
 		void openfeintLB(int mode);
 
@@ -526,7 +526,7 @@ bool AndroidStorage::initTable() {
 }
 
 void AndroidStorage::saveOpt(std::string opt, std::string name){ }
-bool AndroidStorage::getName(std::string& result) {}
+std::vector<std::string> AndroidStorage::getName(std::string& result)  {}
 
 void AndroidStorage::openfeintLB(int mode) {
 	JNIEnv* env = holder->gameThreadEnv;
@@ -535,15 +535,16 @@ void AndroidStorage::openfeintLB(int mode) {
 	env->CallStaticVoidMethod(c, mid, mode);
 }
 
-void AndroidPlayerNameInputUI::show() {
+std::string AndroidPlayerNameInputUI::show(std::vector<std::string> names) {
 	JNIEnv* env = holder->gameThreadEnv;
 	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
 	jmethodID mid = env->GetStaticMethodID(c, "showPlayerNameUi", "()V");
 	LOGI("method");
 	env->CallStaticVoidMethod(c, mid);
 	LOGI("done");
+    return "plop";
 }
-bool AndroidPlayerNameInputUI::query(std::string& result) {
+void AndroidPlayerNameInputUI::query(std::string& result) {
 	JNIEnv* env = holder->gameThreadEnv;
 	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
 	jmethodID mid = (env->GetStaticMethodID(c, "queryPlayerName", "()Ljava/lang/String;"));
@@ -553,10 +554,10 @@ bool AndroidPlayerNameInputUI::query(std::string& result) {
 		LOGW("name choosen: %s", mfile);
 		result = mfile;
 		env->ReleaseStringUTFChars((jstring)nnn, mfile);
-		return true;	
+		return;
 	} else {
 		LOGW("name not choosen yet");
-		return false;
+		return;
 	}
 }
 
