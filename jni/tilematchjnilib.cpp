@@ -312,10 +312,8 @@ static char* loadAsset(JNIEnv *env, jobject assetManager, const std::string& ass
 		LOGW("ERROR - cannot find class (%p)", env);
 	}
 	jmethodID mid = env->GetStaticMethodID(util, "assetToByteArray", "(Landroid/content/res/AssetManager;Ljava/lang/String;)[B");
-
-	jstring asset = env->NewStringUTF(assetName.c_str());
-
-	jobject _a = env->CallStaticObjectMethod(util, mid, assetManager, asset);
+    jstring asset = env->NewStringUTF(assetName.c_str());
+    jobject _a = env->CallStaticObjectMethod(util, mid, assetManager, asset);
 
 	if (_a) {
 		jbyteArray a = (jbyteArray)_a;
