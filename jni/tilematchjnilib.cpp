@@ -51,6 +51,8 @@ class AndroidStorage: public ScoreStorage {
 		bool getName(std::string& result);
 		
 		void openfeintLB(int mode);
+
+     bool request(std::string s, void* res, int (*callbackP)(void*,int,char**,char**)) {}
 };
 
 

@@ -2,6 +2,8 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+APP_DIR := $(LOCAL_PATH)
+
 LOCAL_MODULE := tilematch
 
 LOCAL_CFLAGS := -DANDROID_NDK \
@@ -13,7 +15,7 @@ LOCAL_CXXFLAGS := -DANDROID_NDK \
             -I$(LOCAL_PATH)/../sources \
 				-I$(LOCAL_PATH)/.. \
 				-I$(LOCAL_PATH)/../sac/ \
-				-I$(LOCAL_PATH)/../libpng-android/jni/
+				-I$(LOCAL_PATH)/../sac/libs/libpng/jni/
 
 LOCAL_SRC_FILES := \
     importgl.c \
@@ -22,7 +24,6 @@ LOCAL_SRC_FILES := \
     ../sources/Game_State.cpp \
     ../sources/Game_Private.cpp \
 	../sources/GridSystem.cpp \
-   ../sources/PlacementHelper.cpp \
    ../sources/Sound.cpp \
    ../sources/CombinationMark.cpp \
    ../sources/TwitchSystem.cpp \
@@ -44,12 +45,13 @@ LOCAL_SRC_FILES := \
 	../sources/modes/StaticTimeModeManager.cpp \
 	../sources/modes/ScoreAttackModeManager.cpp
 
-LOCAL_STATIC_LIBRARIES := sac png
+LOCAL_STATIC_LIBRARIES := sac png tremor
 LOCAL_LDLIBS := -lGLESv2 -lGLESv1_CM -lEGL -llog -lz
 
 include $(BUILD_SHARED_LIBRARY)
 
-include $(LOCAL_PATH)/../sac/build/android/Android.mk
-include $(LOCAL_PATH)/../libpng-android/jni/Android.mk
+include $(APP_DIR)/../sac/build/android/Android.mk
+include $(APP_DIR)/../sac/libs/build/android/tremor/Android.mk
+include $(APP_DIR)/../sac/libs/build/android/libpng/Android.mk
 
 $(call import-module,android/native_app_glue)
