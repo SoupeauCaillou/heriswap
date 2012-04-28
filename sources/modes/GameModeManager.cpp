@@ -165,7 +165,7 @@ void GameModeManager::generateLeaves(int* nb) {
 
 void GameModeManager::deleteLeaves(int type, int nb) {
 	for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
-		if (type == branchLeaves[i].type) {
+		if (type == -1 || type == branchLeaves[i].type) {
 			theEntityManager.DeleteEntity(branchLeaves[i].e);
 			branchLeaves.erase(branchLeaves.begin()+i);
 			nb--;

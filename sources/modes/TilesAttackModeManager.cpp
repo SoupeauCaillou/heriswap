@@ -48,8 +48,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	int minute = timeA/60;
 	int seconde= timeA%60;
 	int tenthsec = (time - minute * 60 - seconde) * 10;
-	if (minute)
-		a << minute << ':';
+	if (minute) a << minute << ':';
 	a << std::setw(2) << std::setfill('0') << seconde << '.' << std::setw(1) << tenthsec << " s";
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
@@ -63,6 +62,8 @@ void TilesAttackGameModeManager::ScoreCalc(int nb, int type) {
 	else
 		points += 10*nb*nb*nb/6;
 	leavesDone+=nb;
+	if (leavesDone<80) deleteLeaves(-1, nb/4);
+	else deleteLeaves(-1, nb);
 }
 
 void TilesAttackGameModeManager::LevelUp() {
