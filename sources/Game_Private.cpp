@@ -142,7 +142,6 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      menu = theEntityManager.CreateEntity();
      ADD_COMPONENT(menu, Music);
      MUSIC(menu)->music = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");
-     MUSIC(menu)->loopNext = theMusicSystem.loadMusicFile("audio/musique_menu8000.ogg");
      MUSIC(menu)->control = MusicComponent::Start;
      MUSIC(menu)->loopAt = 64.0f;
  }

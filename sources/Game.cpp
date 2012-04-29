@@ -341,6 +341,10 @@ void Game::tick(float dt) {
         datas->canalMenu.stop();
         updateMusic(datas->canal, &datas->canalStress1, &datas->canalStress2, percentDone, dt);
     } else if (!pausableState(datas->state) && !fadeLogoState(datas->state)) { //dans les menus
+        if (MUSIC(datas->menu)->loopNext == InvalidMusicRef) {
+            MUSIC(datas->menu)->loopNext = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");
+        }
+
        for (int i=0;i<4;i++) datas->canal[i].stop();
         datas->canalStress1.stop();
         datas->canalStress2.stop();
