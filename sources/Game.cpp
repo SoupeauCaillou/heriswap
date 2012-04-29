@@ -12,6 +12,7 @@
 #include "systems/ADSRSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/SoundSystem.h"
+#include "systems/MusicSystem.h"
 #include "systems/ContainerSystem.h"
 #include "systems/PhysicsSystem.h"
 #include "systems/ParticuleSystem.h"
@@ -110,6 +111,7 @@ Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, PlayerNameInputUI*
 	TransformationSystem::CreateInstance();
 	RenderingSystem::CreateInstance();
 	SoundSystem::CreateInstance();
+    MusicSystem::CreateInstance();
 	GridSystem::CreateInstance();
 	ADSRSystem::CreateInstance();
 	ButtonSystem::CreateInstance();
@@ -358,6 +360,7 @@ void Game::tick(float dt) {
 	theContainerSystem.Update(dt);
 	theTextRenderingSystem.Update(dt);
 	theSoundSystem.Update(dt);
+    theMusicSystem.Update(dt);
 	theRenderingSystem.Update(dt);
 
 	//bench settings

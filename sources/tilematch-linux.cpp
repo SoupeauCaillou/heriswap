@@ -21,6 +21,10 @@
 
 #include "systems/RenderingSystem.h"
 #include "systems/SoundSystem.h"
+#include "systems/MusicSystem.h"
+
+#include "api/linux/MusicAPILinuxOpenALImpl.h"
+#include "api/linux/AssetAPILinuxImpl.h"
 
 #include "Game.h"
 
@@ -253,9 +257,12 @@ int main(int argc, char** argv) {
 
 	Game game(new LinuxNativeAssetLoader(), sqliteExec, term);
 
-	theSoundSystem.init();
+	//theSoundSystem.init();
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());
 	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());
+    theMusicSystem.musicAPI = new MusicAPILinuxOpenALImpl();
+    theMusicSystem.assetAPI = new AssetAPILinuxImpl();
+    theMusicSystem.init();
 
 	game.init(reso->X,reso->Y, state, size);
 	theSoundSystem.linuxSoundAPI = new OpenAlSoundAPI();
