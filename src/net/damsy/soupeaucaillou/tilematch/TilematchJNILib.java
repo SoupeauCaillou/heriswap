@@ -1,14 +1,19 @@
 package net.damsy.soupeaucaillou.tilematch;
 
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioFormat;
 import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.util.Log;
@@ -34,8 +39,8 @@ public class TilematchJNILib {
     public static native void handleInputEvent(long game, int event, float x, float y);
     public static native byte[] serialiazeState(long game);
     public static native void initAndReloadTextures(long game);
-
-    static public byte[] assetToByteArray(AssetManager mgr, String assetName) {
+   
+    static public  byte[] assetToByteArray(AssetManager mgr, String assetName) {
     	try {
     		InputStream stream = mgr.open(assetName);
 	    	byte[] data = new byte[stream.available()];
@@ -44,7 +49,7 @@ public class TilematchJNILib {
     	} catch (Exception exc) {
     		Log.e("plop", exc.toString());
     		return null;
-    	}
+    	} 
     }
      
     static public int loadSound(AssetManager mgr, String assetPath, boolean music) {
@@ -290,5 +295,128 @@ public class TilematchJNILib {
     		Dashboard.openLeaderboard(boards[mode - 1]);
     	}
     }
-   
+    
+    static class DumbAndroid {
+    	AudioTrack track;
+    	Thread writeThread;
+    	Queue<byte[]> writePendings;
+    	boolean running;
+    	 
+    	DumbAndroid(int rate) {
+        	int minBufferSize = 3*48000;//AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        	writePendings = new LinkedList<byte[]>();
+        	track = new AudioTrack(AudioManager.STREAM_MUSIC, rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, minBufferSize, AudioTrack.MODE_STREAM);
+    		running = true;
+    		writeThread = new Thread(new Runnable() {
+				public void run() {
+					while (running) {
+						byte[] data = null;
+						synchronized (track) {
+							if (!writePendings.isEmpty()) {
+								data = writePendings.poll();
+							} else {
+								try {
+									track.wait(100);
+								} catch (InterruptedException exc) {
+									
+								}
+								data = writePendings.poll();
+							}
+						}
+						if (data != null) {
+							if (data.length == 4) {
+								int pos = 0;
+								pos |= data[0];
+								pos |= data[1] << 8;
+								pos |= data[2] << 16;
+								pos |= data[3] << 24;
+								checkReturnCode("setPosition(" + pos + ")", track.setPlaybackHeadPosition(pos));
+							} else if (data.length == 1) {
+								track.play();
+							} else {
+								int result = track.write(data, 0, data.length);
+								if (result != data.length) {
+									Log.e("tilematchJ", "Error writing data to AudioTrack: " + result);
+									checkReturnCode("write,", result);
+								} else {
+									// Log.e("tilematchJ", "Successful write of " + data.length);
+								}
+							}
+						}
+					}
+				}
+			});
+    	}
+    }   
+      
+    static void checkReturnCode(String ctx, int result) {
+    	switch (result) {
+    	case AudioTrack.SUCCESS: Log.i("tilematchJ", ctx + " : success"); break;
+    	case AudioTrack.ERROR_BAD_VALUE: Log.i("tilematchJ", ctx + " : bad value"); break;
+    	case AudioTrack.ERROR_INVALID_OPERATION: Log.i("tilematchJ", ctx + " : invalid op"); break;
+    	}
+    }
+    static public Object createPlayer(int rate) {
+    	return new DumbAndroid(rate);
+    } 
+       
+    static public void queueMusicData(Object o, byte[] audioData, int size, int sampleRate) {
+    	DumbAndroid dumb = (DumbAndroid) o;
+    	// Log.i("tilematchJ", "queueMusicData" + o);
+    	synchronized (dumb.track) {
+			dumb.writePendings.add(audioData);
+			dumb.track.notify();
+		}
+    } 
+    
+    static public void startPlaying(Object o) {
+    	DumbAndroid dumb = (DumbAndroid) o;
+    	dumb.writeThread.start();
+    	Log.i("tilematchJ", "startPlaying!" + o);
+    	synchronized (dumb.track) {
+    		dumb.writePendings.add(new byte[] { 0 });
+			dumb.track.notify();
+    	}
+    }
+     
+    static public void stopPlayer(Object o) {
+    	DumbAndroid dumb = (DumbAndroid) o;
+    	dumb.track.stop();
+    }
+    
+    static public int getPosition(Object o) {
+    	DumbAndroid dumb = (DumbAndroid) o;
+    	return dumb.track.getPlaybackHeadPosition();
+    }
+    
+    static public void setPosition(Object o, int pos) {
+    	DumbAndroid dumb = (DumbAndroid) o;
+    	synchronized (dumb.track) {
+    		byte b1 = (byte) (pos & 0xFF);
+    		byte b2 = (byte) ((pos >> 8) & 0xFF);
+    		byte b3 = (byte) ((pos >> 16)& 0xFF);
+    		byte b4 = (byte) ((pos >> 24) & 0xFF);
+    		dumb.writePendings.add(new byte[] { b1, b2, b3, b4 });
+			dumb.track.notify();
+    	}
+    }
+    
+    static public void setVolume(Object o, float v) {
+    	DumbAndroid dumb = (DumbAndroid) o;
+    	checkReturnCode("setVolume", dumb.track.setStereoVolume(v, v));
+    }
+    
+    static public boolean isPlaying(Object o) {
+    	DumbAndroid dumb = (DumbAndroid) o;
+    	synchronized (dumb.track) {
+    		return !dumb.writePendings.isEmpty() || dumb.track.getPlayState() == AudioTrack.PLAYSTATE_PLAYING;
+    	}
+    }
+    
+    static public void deletePlayer(Object o) {
+    	DumbAndroid dumb = (DumbAndroid) o;
+    	dumb.running = false;
+    	dumb.track.flush();
+    	dumb.track.release();
+    }
 }

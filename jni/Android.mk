@@ -15,7 +15,8 @@ LOCAL_CXXFLAGS := -DANDROID_NDK \
             -I$(LOCAL_PATH)/../sources \
 				-I$(LOCAL_PATH)/.. \
 				-I$(LOCAL_PATH)/../sac/ \
-				-I$(LOCAL_PATH)/../sac/libs/libpng/jni/
+				-I$(LOCAL_PATH)/../sac/libs/libpng/jni/ \
+				-I$(LOCAL_PATH)/../sac/libs/
 
 LOCAL_SRC_FILES := \
     importgl.c \

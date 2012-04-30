@@ -13,7 +13,12 @@
 #include "../sources/Game.h"
 #include "sac/systems/RenderingSystem.h"
 #include "sac/systems/SoundSystem.h"
+#include "sac/systems/MusicSystem.h"
 #include "sac/base/TouchInputManager.h"
+
+#include "sac/api/android/AssetAPIAndroidImpl.h"
+#include "sac/api/android/MusicAPIAndroidImpl.h"
+
 #include <png.h>
 #include <algorithm>
 
@@ -174,7 +179,12 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_initFromGameThread
   (JNIEnv *env, jclass, jlong g) {
+  	GameHolder* hld = (GameHolder*) g;
 	initJavaSoundApi(theSoundSystem.androidSoundAPI, env);
+	
+	theMusicSystem.musicAPI = new MusicAPIAndroidImpl(env);
+	theMusicSystem.assetAPI = new AssetAPIAndroidImpl(env, hld->assetManager);	
+	theMusicSystem.init();
 }
 
 /*
