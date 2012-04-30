@@ -6,41 +6,32 @@
 #include <sstream>
 
 std::vector<std::string> newMusics() {
-	static std::vector<char> ppal;
-	if (ppal.size()==0) {
-		ppal.push_back('A');
-		ppal.push_back('B');
-	}
-
-	int count = MathUtil::RandomInt(4) + 1;
-	assert (count >= 1 && count <= 4);
-
-	std::vector<char> l; // all songs id
-	std::vector<std::string> res;
-
-	char c = ppal[MathUtil::RandomInt(ppal.size())]; // letter from main music
-	if (count==1) c='A';
-
-	std::stringstream s;
-	s<<"audio/"<<c<<".ogg";
-	l.push_back(c);
-	res.push_back(s.str());
-
-	for (int i=1; i<count; i++) {
-		do {
-			c = MathUtil::RandomInt(4)+'A';
-		} while (std::find(l.begin(), l.end(), c) != l.end());
-		l.push_back(c);
-		std::stringstream s;
-		s << "audio/" << c << ".ogg";
-		res.push_back(s.str());
-	}
-	std::cout <<"starting " << count <<" musics : ";
-	for (int i=0; i<res.size(); i++) std::cout << res[i] <<", ";
-	std::cout<<std::endl;
+	#define STR(tok) "audio/"#tok".ogg"
+	#define L2T(a) STR(a)
 	
-	assert (res.size() >=1 && res.size() <= 4);
-	return res;
+	static std::string combis[][4] = { 
+		{L2T(A)},
+		{L2T(A), L2T(C)},
+		{L2T(A), L2T(D)},
+		{L2T(A), L2T(C), L2T(D)},
+		{L2T(B), L2T(C)},
+		{L2T(B), L2T(D)},
+		{L2T(B), L2T(C), L2T(D)},
+		{L2T(A), L2T(B), L2T(C)},
+		{L2T(A), L2T(B), L2T(D)},
+		{L2T(A), L2T(B), L2T(C), L2T(D)},
+	};
+
+	int selected = MathUtil::RandomInt(10);
+	std::vector<std::string> result;
+	for (int i=0; i<4; i++) {
+		const std::string& s = combis[selected][i];
+		if (!s.empty()) {
+			result.push_back(s);
+		}
+	}
+	return result;
+
 }
 
 bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float percentDone, float dt) {
