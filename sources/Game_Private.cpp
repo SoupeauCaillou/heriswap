@@ -144,4 +144,22 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      MUSIC(menu)->music = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");
      MUSIC(menu)->control = MusicComponent::Start;
      MUSIC(menu)->loopAt = 64.0f;
+     
+     inGameMusic.masterTrack = theEntityManager.CreateEntity();
+     ADD_COMPONENT(inGameMusic.masterTrack, Music);
+     MUSIC(inGameMusic.masterTrack)->loopAt = 17.0f;
+     for (int i=0; i<3; i++) {
+     	inGameMusic.secondaryTracks[i] = theEntityManager.CreateEntity();
+     	ADD_COMPONENT(inGameMusic.secondaryTracks[i], Music);
+     	MUSIC(inGameMusic.secondaryTracks[i])->loopAt = 17.0f;
+     	MUSIC(inGameMusic.secondaryTracks[i])->master = MUSIC(inGameMusic.masterTrack);
+     }
+     /*
+     for (int i=0; i<2; i++) {
+     	inGameMusic.stressTracks[i] = theEntityManager.CreateEntity();
+     	ADD_COMPONENT(inGameMusic.stressTracks[i], Music);
+     	MUSIC(inGameMusic.stressTracks[i])->loopAt = 17.0f;
+     	MUSIC(inGameMusic.stressTracks[i])->master = MUSIC(inGameMusic.masterTrack);
+     }
+     */
  }

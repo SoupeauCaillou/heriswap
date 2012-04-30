@@ -13,6 +13,8 @@ std::vector<std::string> newMusics() {
 	}
 
 	int count = MathUtil::RandomInt(4) + 1;
+	assert (count >= 1 && count <= 4);
+
 	std::vector<char> l; // all songs id
 	std::vector<std::string> res;
 
@@ -36,6 +38,8 @@ std::vector<std::string> newMusics() {
 	std::cout <<"starting " << count <<" musics : ";
 	for (int i=0; i<res.size(); i++) std::cout << res[i] <<", ";
 	std::cout<<std::endl;
+	
+	assert (res.size() >=1 && res.size() <= 4);
 	return res;
 }
 

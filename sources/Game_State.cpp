@@ -22,6 +22,16 @@ void Game::stateChanged(GameState oldState, GameState newState) {
      } else if (newState == BlackToSpawn) {
             // call Enter before starting fade-in
          datas->mode2Manager[datas->mode]->Enter();
+         
+         MUSIC(datas->menu)->control = MusicComponent::Stop;
+         // start ingame music
+	     std::vector<std::string> musics = newMusics();
+	     MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
+	     MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Start;
+	     for (int i=0; i<musics.size()-1; i++) {
+		 	MUSIC(datas->inGameMusic.secondaryTracks[i])->music = theMusicSystem.loadMusicFile(musics[i+1]);
+		 	MUSIC(datas->inGameMusic.secondaryTracks[i])->control = MusicComponent::Start;
+	     }
      } else if (newState == LevelChanged) {
         static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel =
         static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->getSmallLevelEntity();
