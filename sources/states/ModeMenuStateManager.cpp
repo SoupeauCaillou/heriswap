@@ -140,7 +140,7 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			trcP->hide = false;
 			std::stringstream a;
 			a.precision(1);
-			if (mode==ScoreAttack) {
+			if (mode==ScoreAttack || mode==TilesAttack) {
 				a << std::fixed << entries[i].time << " s";
 				trcP->isANumber = false;
 			} else {
@@ -157,7 +157,10 @@ void ModeMenuStateManager::LoadScore(int mode) {
 				trcL->hide = false;
 			}
 
-			if (!alreadyGreen && ended && ((entries[i].points == modeMgr->points && mode!=ScoreAttack) || (mode==ScoreAttack && entries[i].time-modeMgr->time<0.01f)) && entries[i].name == playerName) {
+			if (!alreadyGreen && ended &&
+			 ((entries[i].points == modeMgr->points && mode!=ScoreAttack && mode!=TilesAttack)
+			  || ((mode==TilesAttack || mode==ScoreAttack) && entries[i].time-modeMgr->time<0.01f))
+			   && entries[i].name == playerName) {
 				alreadyGreen = true;
 			} else {
 			}
@@ -213,7 +216,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 		std::stringstream a;
         a << playerName << " ... ";
 		a.precision(1);
-		if (m==ScoreAttack) a << std::fixed << entry.time << " s";
+		if (m==ScoreAttack || m==TilesAttack) a << std::fixed << entry.time << " s";
 		else a << entry.points;
 		if (m==Normal) a << "... niv " << entry.level;
 		TEXT_RENDERING(yourScore)->text = a.str();

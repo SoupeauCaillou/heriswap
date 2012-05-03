@@ -61,9 +61,25 @@ void TilesAttackGameModeManager::ScoreCalc(int nb, int type) {
 		points += 10*2*nb*nb*nb/6;
 	else
 		points += 10*nb*nb*nb/6;
+		
+	int number=-1;
+	//si il en reste plus de 20
+	if (leavesDone<80 && leavesDone+nb<=80) {
+		//on en supprime de tel sorte à tomber à 20 arbres / 20 combi left
+		number = (7*(leavesDone+nb))/20 - (7*leavesDone)/20;
+		GameModeManager::deleteLeaves(-1, number);
+	//si on vient de passer de + de 20 à - de 20
+	} else if (leavesDone<80 && leavesDone+nb>80) {
+		//on supprime pour avoir 20 arbres/ 20 combi left + 1 arbre pour chaque combi en +
+		number = (7*80)/20 - (7*leavesDone)/20;
+		number+= leavesDone+nb-80;
+		deleteLeaves(-1, number);
+	} else {
+		//on en supprime 1 de l'arbre pour 1 de la grille
+		number=nb;
+		deleteLeaves(-1, nb);
+	}
 	leavesDone+=nb;
-	if (leavesDone<80) deleteLeaves(-1, nb/4);
-	else deleteLeaves(-1, nb);
 }
 
 void TilesAttackGameModeManager::LevelUp() {
