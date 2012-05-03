@@ -251,7 +251,7 @@ int main(int argc, char** argv) {
 	}
 	term->storage=sqliteExec;
 
-	Game game(new LinuxNativeAssetLoader(), sqliteExec, term);
+	Game game(new LinuxNativeAssetLoader(), sqliteExec, term, new SuccessAPI());
 
 	theSoundSystem.init();
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());

@@ -26,13 +26,19 @@ class PlayerNameInputUI {
 	public:
 		virtual void query(std::string& result) = 0;
 		virtual std::string show(std::vector<std::string> names) = 0;
+};
 
+class SuccessAPI {
+	public:
+		virtual void successCompleted(const char* description, unsigned long successId) {
+			LOGI("Success completed '%s': %d", description, successId);
+		}
 };
 
 class PrivateData;
 class Game {
 	public:
-		Game(NativeAssetLoader* loader, ScoreStorage* storage, PlayerNameInputUI* inputUI);
+		Game(NativeAssetLoader* loader, ScoreStorage* storage, PlayerNameInputUI* inputUI, SuccessAPI* successAPI);
 		void init(int windowW, int windowH, const uint8_t* in = 0, int size = 0);
 		void tick(float dt);
 		void togglePause(bool activate);

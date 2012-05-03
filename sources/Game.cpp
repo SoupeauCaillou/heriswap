@@ -97,14 +97,14 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, PlayerNameInputUI* inputUI) {
+Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, PlayerNameInputUI* inputUI, SuccessAPI* sAPI) {
 	this->loader = ploader;
 
 	/* create EntityManager */
 	EntityManager::CreateInstance();
 
 	/* create before system so it cannot use any of them (use Setup instead) */
-	datas = new PrivateData(this, storage, inputUI);
+	datas = new PrivateData(this, storage, inputUI, sAPI);
  
 	/* create systems singleton */
 	TransformationSystem::CreateInstance();

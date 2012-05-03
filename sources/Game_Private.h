@@ -7,12 +7,13 @@ class Game;
 class ScoreStorage;
 class PlayerNameInputUI;
 class GameStateManager;
+class SuccessAPI;
 #include "modes/GameModeManager.h"
 
 #include <map>
 class PrivateData {
     public:
-        PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI);
+        PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessAPI* successAPI);
 
         void Setup(int windowW, int windowH);
 

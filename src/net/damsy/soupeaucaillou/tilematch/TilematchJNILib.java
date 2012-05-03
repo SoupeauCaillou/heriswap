@@ -14,6 +14,7 @@ import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.util.Log;
 import android.view.View;
 
+import com.openfeint.api.resource.Achievement;
 import com.openfeint.api.resource.Leaderboard;
 import com.openfeint.api.resource.Score;
 import com.openfeint.api.ui.Dashboard;
@@ -223,7 +224,7 @@ public class TilematchJNILib {
 			@Override public void onFailure(String exceptionMessage) {
 				Log.i("tilematchJ", "score posting failure : " + exceptionMessage);
 			}
-			
+	 		
 			@Override public void onBlobUploadSuccess() {
 			}
 			
@@ -232,6 +233,17 @@ public class TilematchJNILib {
 		});
     }
     
+    static public void unlockAchievement(int id) {
+    	Achievement achv = new Achievement(Integer.toString(id));
+    	achv.unlock(new Achievement.UnlockCB() {
+			
+			@Override
+			public void onSuccess(boolean newUnlock) {
+				Log.i("tilematchJ", "Achievement unlock successful");
+			}
+		});
+    } 
+     
     static public int getScores(int mode,  int[] points, int[] levels, float[] times, String[] names) {
     	for (int i=0; i<5; i++) {
     		Log.i("tilematchJ", points[i] + ", " + levels[i] + ", " + times[i] + ", " + names[i] + ".");

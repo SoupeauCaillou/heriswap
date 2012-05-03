@@ -21,7 +21,7 @@
 #include "states/LogoStateManager.h"
 
 
-PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI) {
+PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessAPI* successAPI) {
      mode = Normal;
      mode2Manager[Normal] = new NormalGameModeManager(game);
      mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager(game);
@@ -35,7 +35,7 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
 
      state2Manager[Spawn] = new SpawnGameStateManager();
      state2Manager[UserInput] = new UserInputGameStateManager();
-     state2Manager[Delete] = new DeleteGameStateManager();
+     state2Manager[Delete] = new DeleteGameStateManager(successAPI);
      state2Manager[Fall] = new FallGameStateManager();
      state2Manager[LevelChanged] = new LevelStateManager();
      state2Manager[Pause] = new PauseStateManager();

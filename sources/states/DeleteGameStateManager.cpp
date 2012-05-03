@@ -3,7 +3,7 @@
 #include "CombinationMark.h"
 #include "systems/SoundSystem.h"
 
-DeleteGameStateManager::DeleteGameStateManager() {
+DeleteGameStateManager::DeleteGameStateManager(SuccessAPI* pSuccessAPI) : successAPI(pSuccessAPI) {
 	modeMgr=0;
 }
 
@@ -38,6 +38,10 @@ void DeleteGameStateManager::Enter() {
 	            }
 	        }
 	        modeMgr->WillScore(it->points.size(), it->type, littleLeavesDeleted);
+	        
+	        if (it->points.size() >= 6) {
+		        successAPI->successCompleted("6 in a row", 1652152);
+	        }
 	    }
     	SOUND(eRemove)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg", false);
 	}

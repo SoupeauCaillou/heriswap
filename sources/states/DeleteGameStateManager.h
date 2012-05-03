@@ -14,7 +14,7 @@
 class DeleteGameStateManager : public GameStateManager {
 	public:
 
-		DeleteGameStateManager();
+		DeleteGameStateManager(SuccessAPI* successAPI);
 		~DeleteGameStateManager();
 		void Setup();
 		void Enter();
@@ -26,4 +26,5 @@ class DeleteGameStateManager : public GameStateManager {
 		Entity eRemove;
 		std::vector<Combinais> removing;
         std::vector<Entity> littleLeavesDeleted;
+        SuccessAPI* successAPI;
 };
