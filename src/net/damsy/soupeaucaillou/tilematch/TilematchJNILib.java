@@ -317,7 +317,7 @@ public class TilematchJNILib {
     	boolean running;
     	 
     	DumbAndroid(int rate) {
-    		bufferSize = 10 * AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
+    		bufferSize = 96000;//10 * AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
         	writePendings = new LinkedList<Command>();
         	track = new AudioTrack(AudioManager.STREAM_MUSIC, rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
     		running = true;
@@ -337,10 +337,10 @@ public class TilematchJNILib {
 								cmd = writePendings.poll();
 							}
 					 	}
-						if (cmd != null) {
+						if (cmd != null) { 
 							switch (cmd.type) {
 								case Buffer: {
-									Log.i("tilematchJ", "queue " + cmd.buffer.length + "'" + bufferSize);
+									// Log.i("tilematchJ", "queue " + cmd.buffer.length + "'" + bufferSize);
 									int result = track.write(cmd.buffer, 0, cmd.buffer.length);
 									if (result != cmd.buffer.length) {
 										Log.e("tilematchJ", "Error writing data to AudioTrack: " + result);
@@ -349,9 +349,9 @@ public class TilematchJNILib {
 										// Log.e("tilematchJ", "Successful write of " + data.length);
 									}
 									break;
-								}
+								} 
 								case Play: {
-									int offset = cmd.offset;
+				 					int offset = cmd.offset;
 									if (cmd.master != null) {
 										offset += cmd.master.getPlaybackHeadPosition();
 									}
@@ -360,7 +360,7 @@ public class TilematchJNILib {
 										checkReturnCode("setPosition", track.setPlaybackHeadPosition(offset));
 									}
 									Log.i("tilematchJ", "start track");
-									track.setStereoVolume(1, 1);
+									// track.setStereoVolume(1, 1);
 									track.play();
 									break;
 								}
@@ -370,11 +370,11 @@ public class TilematchJNILib {
 									break;
 								}
 							}
-						}
+		 				}
 					}
 				}
-    		});
-    	}
+    		});   
+    	} 
     }   
       
     static void checkReturnCode(String ctx, int result) {
@@ -390,7 +390,7 @@ public class TilematchJNILib {
        
     static public void queueMusicData(Object o, byte[] audioData, int size, int sampleRate) {
     	DumbAndroid dumb = (DumbAndroid) o;
-    	// Log.i("tilematchJ", "queueMusicData" + o);
+
     	synchronized (dumb.track) {
     		// split buffer 
     		int start = 0;
@@ -404,8 +404,8 @@ public class TilematchJNILib {
     			start += (end - start + 1);
     		} while (start < size);
 			dumb.track.notify();
-		}
-    } 
+		} 
+    }  
     
     static public void startPlaying(Object o, Object master, int offset) {
     	DumbAndroid dumb = (DumbAndroid) o;
@@ -454,6 +454,7 @@ public class TilematchJNILib {
     static public void deletePlayer(Object o) {
     	DumbAndroid dumb = (DumbAndroid) o;
     	dumb.running = false;
+    	dumb.track.stop();
     	dumb.track.flush();
     	dumb.track.release();
     }
