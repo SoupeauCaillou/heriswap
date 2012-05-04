@@ -27,7 +27,6 @@ enum GameMode {
 	TilesAttack
 };
 
-
 class GameModeManager {
 	public:
 		struct BranchLeaf {
@@ -40,9 +39,9 @@ class GameModeManager {
 		};
 
 		GameModeManager(Game* game) { uiHelper.game = game;}
-		
+
 		virtual ~GameModeManager() {}
-		
+
 		// to be called once: create long standing entities
 		virtual void Setup();
 		// to be called at the beginning of each game: setup entites, scoring, etc..
@@ -58,7 +57,7 @@ class GameModeManager {
 		// to be called to toggle pause mode display
 		virtual void TogglePauseDisplay(bool paused);
 
-		
+
 		// scoring interface
 		virtual void WillScore(int nb, int type, std::vector<Entity>& out) {}
 		virtual void ScoreCalc(int nb, int type) = 0;
@@ -70,19 +69,20 @@ class GameModeManager {
         virtual int saveInternalState(uint8_t** out);
         virtual const uint8_t* restoreInternalState(const uint8_t* in, int size);
 		void generateLeaves(int* nb);
-		
+
 	protected:
 		float position(float t);
 		void LoadHerissonTexture(int type);
 		void updateHerisson(float dt, float obj, float herissonSpeed);
 		void deleteLeaves(int type, int nb);
-		
+		bool successDone(int* successType);
+
 	public:
 		// game params
 		float time, limit;
 		int points, bonus;
         Entity sky;
-	
+
 	protected:
 		// display elements
 		InGameUiHelper uiHelper;
@@ -92,9 +92,9 @@ class GameModeManager {
 		Entity herisson;
 		//feuilles de l'arbre
 		std::vector<BranchLeaf> branchLeaves;
-		
+        int successType[8];
 		SuccessAPI* successAPI;
-	private:		
+	private:
 		//hérisson
 		AnimatedActor* c;
 

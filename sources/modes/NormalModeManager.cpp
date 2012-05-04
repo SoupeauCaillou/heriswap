@@ -34,6 +34,7 @@ void NormalGameModeManager::Enter() {
 	bonus = MathUtil::RandomInt(8);
 	for (int i=0;i<8;i++) {
 		remain[i]=3;
+		successType[i] = 0;
 	}
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
@@ -148,6 +149,16 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 
 	if (remain[type]<0)
 		remain[type]=0;
+
+	// test succes
+	if (successType[type]) {
+		for (int i=0; i<8; i++) successType[i] = 0;
+	} else {
+		 successType[type] = 1;
+	}
+	if (successDone(successType)) {
+		successAPI->successCompleted("Rainbow combination ", 1653132);
+	}
 }
 
 void NormalGameModeManager::LevelUp() {

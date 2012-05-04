@@ -89,7 +89,7 @@ void GameModeManager::Setup() {
 	SCROLLING(decor1er)->hide = true;
 
 	fillVec();
-	
+
 	uiHelper.build();
 }
 
@@ -112,9 +112,9 @@ void GameModeManager::Exit() {
 	RENDERING(branch)->hide = true;
 	SCROLLING(decor2nd)->hide = true;
 	SCROLLING(decor1er)->hide = true;
-	
+
 	uiHelper.hide();
-	
+
 	// delete leaves
 	for (int az=0;az<branchLeaves.size();az++) {
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
@@ -276,4 +276,12 @@ const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int size
     generateLeaves(nb);
 
     return &in[index];
+}
+
+bool GameModeManager::successDone(int* successType) {
+	LOGI("%d%d%d%d%d%d%d%d\n",successType[0],successType[1],successType[2],successType[3],successType[4],successType[5],successType[6],successType[7]);
+	for (int i=0; i<8; i++) {
+		if (successType[i]==0) return false;
+	}
+	return true;
 }

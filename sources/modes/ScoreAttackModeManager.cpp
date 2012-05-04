@@ -18,6 +18,7 @@ void ScoreAttackGameModeManager::Setup() {
 
 void ScoreAttackGameModeManager::Enter() {
 	limit = 3000;
+	for (int i=0; i<8; i++) successType[i] = 0;
 	time = 0;
 	points = 0;
 	bonus = MathUtil::RandomInt(8);
@@ -55,7 +56,7 @@ void ScoreAttackGameModeManager::UiUpdate(float dt) {
 	a << std::setw(2) << std::setfill('0') << seconde << '.' << std::setw(1) << tenthsec << " s";
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
-	
+
 	updateHerisson(dt, points, 0);
 }
 
@@ -64,6 +65,16 @@ void ScoreAttackGameModeManager::ScoreCalc(int nb, int type) {
 		points += 10*2*nb*nb*nb/6;
 	else
 		points += 10*nb*nb*nb/6;
+
+	// test succes
+	if (successType[type]) {
+		for (int i=0; i<8; i++) successType[i] = 0;
+	} else {
+		 successType[type] = 1;
+	}
+	if (successDone(successType)) {
+		successAPI->successCompleted("Rainbow combination ", 1653132);
+	}
 }
 
 void ScoreAttackGameModeManager::LevelUp() {
