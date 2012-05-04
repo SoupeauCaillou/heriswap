@@ -32,10 +32,7 @@ void NormalGameModeManager::Enter() {
 	points = 0;
 	level = 1;
 	bonus = MathUtil::RandomInt(8);
-	for (int i=0;i<8;i++) {
-		remain[i]=3;
-		successType[i] = 0;
-	}
+	for (int i=0;i<8;i++) remain[i]=3;
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
 	levelUp = levelUpPending = false;
@@ -64,9 +61,12 @@ void NormalGameModeManager::GameUpdate(float dt) {
 	time += dt;
 	LevelUp();
 
-	//success test
+	//level success test
 	if (level == 10) {
 		successAPI->successCompleted("Level 10", 1653112);
+	} 
+	if (score > 100000) {
+		successAPI->successCompleted("Exterminascore", 1653192);
 	}
 }
 
@@ -149,27 +149,23 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 
 	if (remain[type]<0)
 		remain[type]=0;
-
-	// test succes
-	if (successType[type]) {
-		for (int i=0; i<8; i++) successType[i] = 0;
-	} else {
-		 successType[type] = 1;
-	}
-	if (successDone(successType)) {
-		successAPI->successCompleted("Rainbow combination ", 1653132);
-	}
+	
+	GameModeManager::scoreCalcForSuccessETIAR(nb, type);
 }
 
 void NormalGameModeManager::LevelUp() {
 	int match = 1, i=0;
 	while (match && i<8) {
-		if (remain[i] != 0)
-			match=0;
+		if (remain[i] != 0)	match=0;
 		i++;
 	}
 	//si on a tous les objectifs
 	if (match) {
+		
+		//test success
+		if (level==1 && points>=1000)
+			successAPI->successCompleted("1k points for level 1", 1653122);
+		
 		level++;
 		levelUp = true;
 

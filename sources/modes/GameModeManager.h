@@ -38,7 +38,7 @@ class GameModeManager {
 			float rot;
 		};
 
-		GameModeManager(Game* game) { uiHelper.game = game;}
+		GameModeManager(Game* game);
 
 		virtual ~GameModeManager() {}
 
@@ -75,8 +75,7 @@ class GameModeManager {
 		void LoadHerissonTexture(int type);
 		void updateHerisson(float dt, float obj, float herissonSpeed);
 		void deleteLeaves(int type, int nb);
-		bool successDone(int* successType);
-
+		void scoreCalcForSuccessETIAR(int nb, int type);
 	public:
 		// game params
 		float time, limit;
@@ -92,8 +91,10 @@ class GameModeManager {
 		Entity herisson;
 		//feuilles de l'arbre
 		std::vector<BranchLeaf> branchLeaves;
-        int successType[8];
+		
 		SuccessAPI* successAPI;
+		int succEveryTypeInARow[8];
+		int succBonusPoints;
 	private:
 		//hérisson
 		AnimatedActor* c;

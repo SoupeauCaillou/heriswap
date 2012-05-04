@@ -138,8 +138,8 @@ void ModeMenuStateManager::Setup() {
 
 	//success test 
 	int sav=0;
-	storage->request("select points from score where mode != 2", &sav, callbackSc);
-	if (sav > 100000) {
+	storage->request("select points from score", &sav, callbackSc);
+	if (sav > 1000000) {
 		successAPI->successCompleted("Hardscore gamer", 1653102);
 	}
 }

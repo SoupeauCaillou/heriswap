@@ -18,7 +18,6 @@ void StaticTimeGameModeManager::Setup() {
 
 void StaticTimeGameModeManager::Enter() {
 	limit = 45;
-	for (int i=0; i<8; i++) successType[i] = 0;
 	time = 0;
 	points = 0;
 	bonus = MathUtil::RandomInt(8);
@@ -43,15 +42,8 @@ void StaticTimeGameModeManager::ScoreCalc(int nb, int type) {
 	else
 		points += 10*nb*nb*nb/6;
 
-	// test succes
-	if (successType[type]) {
-		for (int i=0; i<8; i++) successType[i] = 0;
-	} else {
-		 successType[type] = 1;
-	}
-	if (successDone(successType)) {
-		successAPI->successCompleted("Rainbow combination ", 1653132);
-	}
+	GameModeManager::scoreCalcForSuccessETIAR(nb, type);
+
 }
 
 void StaticTimeGameModeManager::LevelUp() {

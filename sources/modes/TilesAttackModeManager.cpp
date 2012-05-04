@@ -15,7 +15,6 @@ void TilesAttackGameModeManager::Setup() {
 
 void TilesAttackGameModeManager::Enter() {
 	limit = 100;
-	for (int i=0; i<8; i++) successType[i] = 0;
 	time = 0;
 	leavesDone = 0;
 	points = 0;
@@ -82,15 +81,7 @@ void TilesAttackGameModeManager::ScoreCalc(int nb, int type) {
 	}
 	leavesDone+=nb;
 
-	// test succes
-	if (successType[type]) {
-		for (int i=0; i<8; i++) successType[i] = 0;
-	} else {
-		 successType[type] = 1;
-	}
-	if (successDone(successType)) {
-		successAPI->successCompleted("Rainbow combination ", 1653132);
-	}
+	GameModeManager::scoreCalcForSuccessETIAR(nb, type);
 }
 
 void TilesAttackGameModeManager::LevelUp() {
