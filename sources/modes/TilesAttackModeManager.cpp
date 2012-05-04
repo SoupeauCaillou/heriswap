@@ -1,7 +1,7 @@
 #include "TilesAttackModeManager.h"
 #include "Game.h"
 
-TilesAttackGameModeManager::TilesAttackGameModeManager(Game* game) : GameModeManager(game) {
+TilesAttackGameModeManager::TilesAttackGameModeManager(Game* game,SuccessAPI* successAP) : GameModeManager(game), successAPI(successAP) {
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(100,1));
 }

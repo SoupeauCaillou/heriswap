@@ -23,10 +23,10 @@
 
 PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessAPI* successAPI) {
      mode = Normal;
-     mode2Manager[Normal] = new NormalGameModeManager(game);
-     mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager(game);
-     mode2Manager[StaticTime] = new StaticTimeGameModeManager(game);
-     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game);
+     mode2Manager[Normal] = new NormalGameModeManager(game,successAPI);
+     mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager(game,successAPI);
+     mode2Manager[StaticTime] = new StaticTimeGameModeManager(game,successAPI);
+     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game,successAPI);
      storage = storagee;
 
      soundButton = theEntityManager.CreateEntity();
@@ -41,7 +41,7 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      state2Manager[Pause] = new PauseStateManager();
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
      state2Manager[MainMenu] = new MainMenuGameStateManager();
-     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI);
+     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successAPI);
      
      state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
      state2Manager[LogoToBlackState] = new FadeGameStateManager(FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);

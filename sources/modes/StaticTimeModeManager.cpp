@@ -1,7 +1,7 @@
 #include "StaticTimeModeManager.h"
 #include "Game.h"
 
-StaticTimeGameModeManager::StaticTimeGameModeManager(Game* game) : GameModeManager(game) {
+StaticTimeGameModeManager::StaticTimeGameModeManager(Game* game,SuccessAPI* successAP) : GameModeManager(game), successAPI(successAP) {
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(15,0.125));
 	pts.push_back(Vector2(25,0.25));

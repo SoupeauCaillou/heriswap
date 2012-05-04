@@ -11,7 +11,7 @@
 #define DECOR2_SPEED 1.6
 #define DECOR1_SPEED 1
 
-NormalGameModeManager::NormalGameModeManager(Game* game) : GameModeManager(game) {
+NormalGameModeManager::NormalGameModeManager(Game* game,SuccessAPI* successAP) : GameModeManager(game), successAPI(successAP) {
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(15,0.125));
 	pts.push_back(Vector2(25,0.25));
@@ -43,6 +43,9 @@ void NormalGameModeManager::Enter() {
 }
 
 void NormalGameModeManager::Exit() {
+	if (time*60 > 15) {
+		successAPI->successCompleted("Take your time", 1652152);
+	}
 	GameModeManager::Exit();
 }
 
@@ -59,6 +62,11 @@ void NormalGameModeManager::GameUpdate(float dt) {
 	}
 	time += dt;
 	LevelUp();
+	
+	//success test 
+	if (lvl == 10) {
+		successAPI->successCompleted("Level 10", 1653112);
+	}
 }
 
 float NormalGameModeManager::GameProgressPercent() {

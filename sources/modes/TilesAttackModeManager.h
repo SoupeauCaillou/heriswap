@@ -9,7 +9,7 @@
 
 class TilesAttackGameModeManager : public GameModeManager {
 	public:
-		TilesAttackGameModeManager(Game* game);
+		TilesAttackGameModeManager(Game* game,SuccessAPI* successAPI);
 		~TilesAttackGameModeManager();
 		void Setup();
 		void Enter();
@@ -27,5 +27,6 @@ class TilesAttackGameModeManager : public GameModeManager {
 		void ScoreCalc(int nb, int type);
 	private:
 		int leavesDone;
+		SuccessAPI* successAPI;
 };
 

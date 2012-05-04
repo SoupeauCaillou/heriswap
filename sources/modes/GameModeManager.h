@@ -39,7 +39,7 @@ class GameModeManager {
 			float rot;
 		};
 
-		GameModeManager(Game* game) { uiHelper.game = game; }
+		GameModeManager(Game* game) { uiHelper.game = game;}
 		
 		virtual ~GameModeManager() {}
 		
@@ -92,11 +92,12 @@ class GameModeManager {
 		Entity herisson;
 		//feuilles de l'arbre
 		std::vector<BranchLeaf> branchLeaves;
+		
+		SuccessAPI* successAPI;
 	private:		
 		//hérisson
 		AnimatedActor* c;
 
-	private :
 		std::vector<Render> posBranch;
 		void fillVec();
 		float distance;

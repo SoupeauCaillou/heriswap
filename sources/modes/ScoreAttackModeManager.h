@@ -9,7 +9,7 @@
 
 class ScoreAttackGameModeManager : public GameModeManager {
 	public:
-		ScoreAttackGameModeManager(Game* game);
+		ScoreAttackGameModeManager(Game* game,SuccessAPI* successAPI);
 		~ScoreAttackGameModeManager();
 		void Setup();
 		void Enter();
@@ -25,4 +25,6 @@ class ScoreAttackGameModeManager : public GameModeManager {
 		GameMode GetMode();
 
 		void ScoreCalc(int nb, int type);
+	private:
+		SuccessAPI* successAPI;
 };

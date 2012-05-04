@@ -9,7 +9,7 @@
 
 class StaticTimeGameModeManager : public GameModeManager {
 	public:
-		StaticTimeGameModeManager(Game* game);
+		StaticTimeGameModeManager(Game* game,SuccessAPI* successAPI);
 		~StaticTimeGameModeManager();
 		void Setup();
 		void Enter();
@@ -26,4 +26,6 @@ class StaticTimeGameModeManager : public GameModeManager {
 		GameMode GetMode();
 
 		void ScoreCalc(int nb, int type);
+	private:
+		SuccessAPI* successAPI;
 };

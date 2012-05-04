@@ -9,6 +9,16 @@ ModeMenuStateManager::~ModeMenuStateManager() {
 	theEntityManager.DeleteEntity(back);
 	theEntityManager.DeleteEntity(yourScore);
 }
+static int callbackSc(void *save, int argc, char **argv, char **azColName){
+	int *sav = static_cast<int*>(save);
+	for (int i=0; i<argc; i++) {
+		if (!strcmp(azColName[i],"points")) {
+			*sav += atoi(argv[i]);
+			return 0;
+		}
+	}
+	return 0;
+}
 
 void ModeMenuStateManager::Setup() {
 	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
@@ -126,8 +136,14 @@ void ModeMenuStateManager::Setup() {
 	RENDERING(fond)->texture = theRenderingSystem.loadTextureFile("menu/fond_menu_mode.png");
 	RENDERING(fond)->color.a = 0.5;
 
+	//success test 
+	int sav=0;
+	storage->request("select points from score where mode != 2", &sav, callbackSc);
+	if (sav > 100000) {
+		successAPI->successCompleted("Hardscore gamer", 1653102);
+	}
 }
-
+			
 void ModeMenuStateManager::LoadScore(int mode) {
 	std::vector<ScoreStorage::Score> entries = storage->getScore(mode);
 	bool alreadyGreen = false;

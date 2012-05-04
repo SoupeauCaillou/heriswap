@@ -7,7 +7,7 @@
 
 class NormalGameModeManager : public GameModeManager {
 	public:
-		NormalGameModeManager(Game* game);
+		NormalGameModeManager(Game* game,SuccessAPI* successAPI);
 		~NormalGameModeManager();
 		
 		void Setup();
@@ -40,4 +40,5 @@ class NormalGameModeManager : public GameModeManager {
 		float nextHerissonSpeed;
 		float levelMoveDuration;
 		bool levelUpPending;
+		SuccessAPI* successAPI;
 };
