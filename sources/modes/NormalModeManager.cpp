@@ -38,7 +38,7 @@ void NormalGameModeManager::Enter() {
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
 	levelUp = levelUpPending = false;
-	
+
 	GameModeManager::Enter();
 }
 
@@ -62,9 +62,9 @@ void NormalGameModeManager::GameUpdate(float dt) {
 	}
 	time += dt;
 	LevelUp();
-	
-	//success test 
-	if (lvl == 10) {
+
+	//success test
+	if (level == 10) {
 		successAPI->successCompleted("Level 10", 1653112);
 	}
 }
