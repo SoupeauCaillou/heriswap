@@ -164,12 +164,21 @@ void GameModeManager::generateLeaves(int* nb) {
 }
 
 void GameModeManager::deleteLeaves(int type, int nb) {
-	for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
-		if (type == -1 || type == branchLeaves[i].type) {
-			theEntityManager.DeleteEntity(branchLeaves[i].e);
-			branchLeaves.erase(branchLeaves.begin()+i);
+	if (type == -1) {
+		while (nb) {
+			int r = MathUtil::RandomInt(branchLeaves.size());
+			theEntityManager.DeleteEntity(branchLeaves[r].e);
+			branchLeaves.erase(branchLeaves.begin()+r);
 			nb--;
-			i--;
+		}
+	} else {
+		for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
+			if (type == branchLeaves[i].type) {
+				theEntityManager.DeleteEntity(branchLeaves[i].e);
+				branchLeaves.erase(branchLeaves.begin()+i);
+				nb--;
+				i--;
+			}
 		}
 	}
 }
@@ -279,7 +288,6 @@ const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int size
 }
 
 bool GameModeManager::successDone(int* successType) {
-	LOGI("%d%d%d%d%d%d%d%d\n",successType[0],successType[1],successType[2],successType[3],successType[4],successType[5],successType[6],successType[7]);
 	for (int i=0; i<8; i++) {
 		if (successType[i]==0) return false;
 	}

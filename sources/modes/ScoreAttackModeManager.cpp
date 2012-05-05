@@ -3,10 +3,7 @@
 
 ScoreAttackGameModeManager::ScoreAttackGameModeManager(Game* game,SuccessAPI* successAP) : GameModeManager(game), successAPI(successAP) {
 	pts.push_back(Vector2(0,0));
-	pts.push_back(Vector2(300,0.125));
-	pts.push_back(Vector2(750,0.25));
-	pts.push_back(Vector2(1500,0.5));
-	pts.push_back(Vector2(3000,1));
+	pts.push_back(Vector2(100,1));
 }
 
 ScoreAttackGameModeManager::~ScoreAttackGameModeManager() {
