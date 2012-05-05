@@ -15,7 +15,6 @@ void ScoreAttackGameModeManager::Setup() {
 
 void ScoreAttackGameModeManager::Enter() {
 	limit = 3000;
-	for (int i=0; i<8; i++) successType[i] = 0;
 	time = 0;
 	points = 0;
 	bonus = MathUtil::RandomInt(8);
@@ -63,15 +62,7 @@ void ScoreAttackGameModeManager::ScoreCalc(int nb, int type) {
 	else
 		points += 10*nb*nb*nb/6;
 
-	// test succes
-	if (successType[type]) {
-		for (int i=0; i<8; i++) successType[i] = 0;
-	} else {
-		 successType[type] = 1;
-	}
-	if (successDone(successType)) {
-		successAPI->successCompleted("Rainbow combination ", 1653132);
-	}
+	GameModeManager::scoreCalcForSuccessETIAR(nb, type);
 }
 
 void ScoreAttackGameModeManager::LevelUp() {

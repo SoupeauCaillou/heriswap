@@ -13,6 +13,12 @@ static float finalHerissonPosition(Entity herisson) {
     return PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5;
 }
 
+GameModeManager::GameModeManager(Game* game) {
+	uiHelper.game = game;
+	for (int i=0;i<8;i++) succEveryTypeInARow[i] = 0;
+	succBonusPoints = 0;
+}
+
 
 float GameModeManager::position(float t) {
 	float p = 0;
@@ -121,6 +127,9 @@ void GameModeManager::Exit() {
 	}
 	branchLeaves.clear();
     theGridSystem.DeleteAll();
+
+    succBonusPoints = 0;
+   	for (int i=0;i<8;i++) succEveryTypeInARow[i] = 0;
 }
 
 void GameModeManager::TogglePauseDisplay(bool paused) {
@@ -287,9 +296,26 @@ const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int size
     return &in[index];
 }
 
-bool GameModeManager::successDone(int* successType) {
+bool successDone(int* successType) {
 	for (int i=0; i<8; i++) {
 		if (successType[i]==0) return false;
 	}
 	return true;
+}
+
+void GameModeManager::scoreCalcForSuccessETIAR(int nb, int type) {
+	// test succes
+	if (succEveryTypeInARow[type]) {
+		for (int i=0; i<8; i++) succEveryTypeInARow[i] = 0;
+	} else {
+		 succEveryTypeInARow[type] = 1;
+	}
+	if (successDone(succEveryTypeInARow)) {
+		successAPI->successCompleted("Rainbow combination", 1653132);
+	}
+
+	if (type == bonus) succBonusPoints+=nb;
+	if (succBonusPoints>100) successAPI->successCompleted("Bonus to excess", 1653182);
+
+
 }
