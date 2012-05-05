@@ -18,5 +18,6 @@ enum GameState {
      BlackToMainMenu,
      ModeMenuToBlackState,
      BlackToSpawn,
-     Logo
+     Logo,
+     Help
 };

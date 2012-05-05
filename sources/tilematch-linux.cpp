@@ -213,6 +213,8 @@ class LinuxSqliteExec: public ScoreStorage {
 				std::string s;
 				request("select value from info where opt like 'sound'", &s, 0);
 				if (s.length()==0) request("insert into info values('sound', 'on')", 0, 0);
+				request("select value from info where opt like 'helpActive'", &s, 0);
+				if (s.length()==0) request("insert into info values('helpActive', '1111')", 0, 0);
 			}
 			return r;
 		}
