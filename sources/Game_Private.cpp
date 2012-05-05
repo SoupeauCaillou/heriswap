@@ -21,7 +21,7 @@
 #include "states/LogoStateManager.h"
 
 
-PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessAPI* successAPI) {
+PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessAPI* successAPI, LocalizeAPI* lAPI) {
      mode = Normal;
      mode2Manager[Normal] = new NormalGameModeManager(game,successAPI);
      mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager(game,successAPI);
@@ -38,11 +38,11 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      state2Manager[Delete] = new DeleteGameStateManager(successAPI);
      state2Manager[Fall] = new FallGameStateManager();
      state2Manager[LevelChanged] = new LevelStateManager();
-     state2Manager[Pause] = new PauseStateManager();
+     state2Manager[Pause] = new PauseStateManager(lAPI);
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
-     state2Manager[MainMenu] = new MainMenuGameStateManager();
-     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successAPI);
-     
+     state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI);
+     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successAPI,lAPI);
+
      state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
      state2Manager[LogoToBlackState] = new FadeGameStateManager(FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);
      state2Manager[BlackToMainMenu] = new FadeGameStateManager(FadeIn, BlackToMainMenu, MainMenu, state2Manager[MainMenu], 0);

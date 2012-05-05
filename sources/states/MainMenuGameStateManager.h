@@ -7,7 +7,7 @@
 
 class MainMenuGameStateManager : public GameStateManager {
 	public:
-		MainMenuGameStateManager() { };
+		MainMenuGameStateManager(LocalizeAPI* lAPI) : localizeAPI(lAPI) { };
 		~MainMenuGameStateManager();
 		void Setup();
 		void Enter();
@@ -22,4 +22,5 @@ class MainMenuGameStateManager : public GameStateManager {
 	private:
 		Entity bStart[4];
 		Entity modeTitleToReset;
+		LocalizeAPI* localizeAPI;
 };

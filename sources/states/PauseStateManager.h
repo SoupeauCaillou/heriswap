@@ -15,7 +15,7 @@
 class PauseStateManager : public GameStateManager {
 	public:
 
-	PauseStateManager();
+	PauseStateManager(LocalizeAPI* lAPI) : localizeAPI(lAPI) { };
 	~PauseStateManager();
 	void Setup();
 	void Enter();
@@ -25,4 +25,5 @@ class PauseStateManager : public GameStateManager {
 	private:
 		Entity eRestart, eAbort;
 		Entity bRestart, bAbort;
+		LocalizeAPI* localizeAPI;
 };

@@ -2,10 +2,6 @@
 #include "DepthLayer.h"
 #include "base/PlacementHelper.h"
 
-PauseStateManager::PauseStateManager() {
-
-}
-
 PauseStateManager::~PauseStateManager() {
 	theTextRenderingSystem.DestroyLocalEntity(eRestart);
 	theTextRenderingSystem.DestroyLocalEntity(eAbort);
@@ -21,7 +17,7 @@ void PauseStateManager::Setup() {
 	TRANSFORM(eRestart)->z = DL_PauseUIFg;
 	TEXT_RENDERING(eRestart)->color = green;
 	TEXT_RENDERING(eRestart)->charHeight = PlacementHelper::GimpHeightToScreen(75);
-	TEXT_RENDERING(eRestart)->text = "Reprendre";
+	TEXT_RENDERING(eRestart)->text = localizeAPI->text("Reprendre");
 	TEXT_RENDERING(eRestart)->hide = true;
 	TEXT_RENDERING(eRestart)->positioning = TextRenderingComponent::LEFT;
 	TRANSFORM(eRestart)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(300));
@@ -30,7 +26,7 @@ void PauseStateManager::Setup() {
 	TRANSFORM(eAbort)->z = DL_PauseUIFg;
 	TEXT_RENDERING(eAbort)->color = green;
 	TEXT_RENDERING(eAbort)->charHeight = PlacementHelper::GimpHeightToScreen(75);
-	TEXT_RENDERING(eAbort)->text = "Abandonner";
+	TEXT_RENDERING(eAbort)->text = localizeAPI->text("Abandonner");
 	TEXT_RENDERING(eAbort)->hide = true;
 	TEXT_RENDERING(eAbort)->positioning = TextRenderingComponent::LEFT;
 	TRANSFORM(eAbort)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(500));

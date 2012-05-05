@@ -97,15 +97,14 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, PlayerNameInputUI* inputUI, SuccessAPI* sAPI) {
+Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, PlayerNameInputUI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI) {
 	this->loader = ploader;
-
 	/* create EntityManager */
 	EntityManager::CreateInstance();
 
 	/* create before system so it cannot use any of them (use Setup instead) */
-	datas = new PrivateData(this, storage, inputUI, sAPI);
- 
+	datas = new PrivateData(this, storage, inputUI, sAPI, lAPI);
+
 	/* create systems singleton */
 	TransformationSystem::CreateInstance();
 	RenderingSystem::CreateInstance();
@@ -244,8 +243,8 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 			marks.clear();
 			LOGI("Destruction des marquages et de la triche (%d)!\n", marks.size());
 		}
-	}	
-	
+	}
+
 }
 
 void Game::togglePause(bool activate) {
@@ -278,8 +277,8 @@ void Game::tick(float dt) {
     newState = datas->state2Manager[datas->state]->Update(dt);
 
 	//get the game progress
-	float percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent(); 
-	
+	float percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent();
+
     //updating game if needed
     if (datas->state == UserInput) {
 			datas->mode2Manager[datas->mode]->GameUpdate(dt);
@@ -407,7 +406,7 @@ int Game::saveState(uint8_t** out) {
 		LOGI("Current state is '%d' -> nothing to save", datas->state);
 		return 0;
 	}
-	
+
 	if (datas->state == LevelChanged) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = Spawn;

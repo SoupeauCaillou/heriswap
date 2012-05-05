@@ -1,5 +1,13 @@
 #include "ModeMenuStateManager.h"
 
+ModeMenuStateManager::ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII, SuccessAPI* successAP, LocalizeAPI* lAPI) {
+	storage = storag;
+	ended = false;
+	inputUI = inputUII;
+	successAPI = successAP;
+	localizeAPI = lAPI;
+}
+
 ModeMenuStateManager::~ModeMenuStateManager() {
 	for (int i=0; i<5; i++) {
 		theEntityManager.DeleteEntity(scoresName[i]);
@@ -60,7 +68,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(play)->position = Vector2(PlacementHelper::GimpXToScreen(65), PlacementHelper::GimpYToScreen(300));
 	TRANSFORM(play)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(play, TextRendering);
-	TEXT_RENDERING(play)->text = "Jouer";
+	TEXT_RENDERING(play)->text = localizeAPI->text("Jouer");
 	TEXT_RENDERING(play)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(play)->color = green;
 	TEXT_RENDERING(play)->fontName = "typo";
@@ -73,7 +81,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(scoreTitle)->position = Vector2(PlacementHelper::GimpXToScreen(65), PlacementHelper::GimpYToScreen(476));
 	TRANSFORM(scoreTitle)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(scoreTitle, TextRendering);
-	TEXT_RENDERING(scoreTitle)->text = "Score";
+	TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("Score");
 	TEXT_RENDERING(scoreTitle)->fontName = "typo";
 	TEXT_RENDERING(scoreTitle)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(scoreTitle)->color = green;
@@ -136,14 +144,14 @@ void ModeMenuStateManager::Setup() {
 	RENDERING(fond)->texture = theRenderingSystem.loadTextureFile("menu/fond_menu_mode.png");
 	RENDERING(fond)->color.a = 0.5;
 
-	//success test 
+	//success test
 	int sav=0;
 	storage->request("select points from score", &sav, callbackSc);
 	if (sav > 1000000) {
 		successAPI->successCompleted("Hardscore gamer", 1653102);
 	}
 }
-			
+
 void ModeMenuStateManager::LoadScore(int mode) {
 	std::vector<ScoreStorage::Score> entries = storage->getScore(mode);
 	bool alreadyGreen = false;
@@ -166,7 +174,7 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
 
-			a.str(""); a<< std::fixed <<"niv " <<entries[i].level;
+			a.str(""); a<< std::fixed <<localizeAPI->text("niv") << " " <<entries[i].level;
 			trcL->text = a.str();
 			//affichage lvl
 			if (mode==Normal) {
@@ -210,7 +218,7 @@ void ModeMenuStateManager::Enter() {
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
 	BUTTON(openfeint)->enabled = true;
-	TEXT_RENDERING(play)->text = ended ? "Rejouer" : "Jouer";
+	TEXT_RENDERING(play)->text = ended ? localizeAPI->text("Rejouer") : localizeAPI->text("Jouer");
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
@@ -234,12 +242,12 @@ GameState ModeMenuStateManager::Update(float dt) {
 		a.precision(1);
 		if (m==ScoreAttack || m==TilesAttack) a << std::fixed << entry.time << " s";
 		else a << entry.points;
-		if (m==Normal) a << "... niv " << entry.level;
+		if (m==Normal) a << "... "<< localizeAPI->text("niv") << " " << entry.level;
 		TEXT_RENDERING(yourScore)->text = a.str();
 		LoadScore(m);
 		ended = false;
 	}
-	
+
 	//herisson
 	Entity herissonActor=  herisson->actor.e;
 	if (TRANSFORM(herissonActor)->position.X < PlacementHelper::ScreenWidth+TRANSFORM(herissonActor)->size.X) {

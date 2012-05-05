@@ -49,16 +49,16 @@ void MainMenuGameStateManager::Setup() {
 	    RENDERING(bStart[i])->texture = theRenderingSystem.loadTextureFile("menu/fond_bouton.png");
 	    RENDERING(bStart[i])->color.a = 0.5;
 	}
-	TEXT_RENDERING(eStart[0])->text = "Classique";
+	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("Classique");
 	TRANSFORM(eStart[0])->position.X = PlacementHelper::GimpXToScreen(394);
 	TRANSFORM(eStart[0])->position.Y = TRANSFORM(bStart[0])->position.Y = PlacementHelper::GimpYToScreen(156);
-	TEXT_RENDERING(eStart[1])->text = "Contre le temps";
+	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("Contre le temps");
 	TRANSFORM(eStart[1])->position.X = PlacementHelper::GimpXToScreen(648);
 	TRANSFORM(eStart[1])->position.Y = TRANSFORM(bStart[1])->position.Y = PlacementHelper::GimpYToScreen(339);
-	TEXT_RENDERING(eStart[2])->text = "Contre le score";
+	TEXT_RENDERING(eStart[2])->text = localizeAPI->text("Contre le score");
 	TRANSFORM(eStart[2])->position.X = PlacementHelper::GimpXToScreen(634);
 	TRANSFORM(eStart[2])->position.Y = TRANSFORM(bStart[2])->position.Y = PlacementHelper::GimpYToScreen(522);
-	TEXT_RENDERING(eStart[3])->text = "Mange tes feuilles";
+	TEXT_RENDERING(eStart[3])->text = localizeAPI->text("Mange tes feuilles");
 	TRANSFORM(eStart[3])->position.X = PlacementHelper::GimpXToScreen(725);
 	TRANSFORM(eStart[3])->position.Y = TRANSFORM(bStart[3])->position.Y = PlacementHelper::GimpYToScreen(705);
 

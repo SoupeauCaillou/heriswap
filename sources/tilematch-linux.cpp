@@ -31,6 +31,12 @@
 static char* loadPng(const char* assetName, int* width, int* height);
 static char* loadTextfile(const char* assetName);
 
+struct LinuxLocalizeAPI: public LocalizeAPI {
+	std::string text(const std::string& t) {
+		return t;
+	}
+};
+
 struct LinuxNativeAssetLoader: public NativeAssetLoader {
 	char* decompressPngImage(const std::string& assetName, int* width, int* height) {
 		return loadPng(assetName.c_str(), width, height);
@@ -59,7 +65,7 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 			__log_enabled = false;
 			std::cout << "Choose your name !" << std::endl;
 			int size = MathUtil::Min((int)names.size(), 10);
-			
+
 			for (int i=0; i<size; i++) {
 				std::cout << i <<". "<<names[i] << std::endl;
 			}
@@ -74,13 +80,13 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 			if (res.size()<size/10+2 && value>0 && value<size || res[0]=='0') {
 				return names[value];
 			//else its not a number or number>size : its the new name
-			} else { 
+			} else {
 				if (res.size()>10) res.resize(10);
 				std::cout << "Want to save it ? (yes or no(=everything else))" << std::endl;
 				std::string a;
 				getline(std::cin, a);
 				if (!strcmp(a.c_str(), "yes")) storage->saveOpt("name", res);
-				return res;		
+				return res;
 			}
 		}
 		void query(std::string& result) {
@@ -88,7 +94,7 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 			if (result.size()==0) {
 				result = show(storage->getName(result));
 				__log_enabled = true;
-			}	
+			}
 		}
 		ScoreStorage* storage;
 };
@@ -118,7 +124,7 @@ class LinuxSqliteExec: public ScoreStorage {
 			sav->push_back(score1);
 			return 0;
 		}
-		
+
 		static int callbackNames(void *save, int argc, char **argv, char **azColName){
 			std::vector<std::string> *sav = static_cast<std::vector<std::string>*>(save);
 			for (int i=0; i<argc; i++) {
@@ -126,7 +132,7 @@ class LinuxSqliteExec: public ScoreStorage {
 			}
 			return 0;
 		}
-				
+
 		static int callback(void *save, int argc, char **argv, char **azColName){
 			std::string *sav = static_cast<std::string*>(save);
 			*sav = argv[0];
@@ -141,7 +147,7 @@ class LinuxSqliteExec: public ScoreStorage {
 				tmp << "select * from score where mode= "<< mode << " order by points desc limit 5";
 			else
 				tmp << "select * from score where mode= "<< mode << " order by time asc limit 5";
-			
+
 			request(tmp.str().c_str(), &sav, callbackScore);
 			return sav;
 		}
@@ -189,7 +195,7 @@ class LinuxSqliteExec: public ScoreStorage {
 			if (callbackP && res) rc = sqlite3_exec(db, s.c_str(), callbackP, res, &zErrMsg);
 			//sinon on prend celui par défaut
 			else rc = sqlite3_exec(db, s.c_str(), callback, res, &zErrMsg);
-			
+
 			if( rc!=SQLITE_OK ){
 				LOGI("SQL error: %s\n", zErrMsg);
 				sqlite3_free(zErrMsg);
@@ -222,7 +228,7 @@ int main(int argc, char** argv) {
 	Vector2* reso = (argc == 1) ? &reso16_10 : &reso16_9;
 	if( !glfwOpenWindow( reso->X,reso->Y, 8,8,8,8,8,8, GLFW_WINDOW ) )
 		return 1;
-		
+
 	glewInit();
 
 
@@ -251,7 +257,7 @@ int main(int argc, char** argv) {
 	}
 	term->storage=sqliteExec;
 
-	Game game(new LinuxNativeAssetLoader(), sqliteExec, term, new SuccessAPI());
+	Game game(new LinuxNativeAssetLoader(), sqliteExec, term, new SuccessAPI(), new LinuxLocalizeAPI());
 
 	theSoundSystem.init();
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());

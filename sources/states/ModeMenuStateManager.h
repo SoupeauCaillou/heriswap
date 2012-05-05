@@ -22,7 +22,7 @@
 
 class ModeMenuStateManager : public GameStateManager {
 	public:
-		ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII, SuccessAPI* successAP) : storage(storag), ended(false), inputUI(inputUII), successAPI(successAP) { };
+		ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII, SuccessAPI* successAP, LocalizeAPI* lAPI);
 		~ModeMenuStateManager();
 		void Setup();
 		void Enter();
@@ -43,4 +43,5 @@ class ModeMenuStateManager : public GameStateManager {
 		Entity yourScore, fond;
 		std::string playerName;
 		SuccessAPI* successAPI;
+		LocalizeAPI* localizeAPI;
 };

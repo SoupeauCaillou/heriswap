@@ -13,7 +13,7 @@ class SuccessAPI;
 #include <map>
 class PrivateData {
     public:
-        PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessAPI* successAPI);
+        PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessAPI* successAPI, LocalizeAPI* lAPI);
 
         void Setup(int windowW, int windowH);
 

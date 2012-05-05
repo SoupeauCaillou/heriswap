@@ -2,6 +2,11 @@
 #include "GridSystem.h"
 #include "GameState.h"
 
+struct LocalizeAPI {
+	public :
+		virtual std::string text(const std::string& s) = 0;
+};
+
 class ScoreStorage {
 	public:
 		struct Score {
@@ -16,7 +21,7 @@ class ScoreStorage {
 		virtual bool soundEnable(bool switchIt) = 0;
 		virtual void saveOpt(std::string opt, std::string name) = 0;
 		virtual std::vector<std::string> getName(std::string& result) = 0;
-		
+
 		#ifdef ANDROID
 		virtual void openfeintLB(int mode) = 0;
 		#endif
@@ -38,7 +43,7 @@ class SuccessAPI {
 class PrivateData;
 class Game {
 	public:
-		Game(NativeAssetLoader* loader, ScoreStorage* storage, PlayerNameInputUI* inputUI, SuccessAPI* successAPI);
+		Game(NativeAssetLoader* loader, ScoreStorage* storage, PlayerNameInputUI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI);
 		void init(int windowW, int windowH, const uint8_t* in = 0, int size = 0);
 		void tick(float dt);
 		void togglePause(bool activate);
