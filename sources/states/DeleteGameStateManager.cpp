@@ -52,7 +52,7 @@ GameState DeleteGameStateManager::Update(float dt) {
 	ADSRComponent* transitionSuppr = ADSR(eRemove);
 	if (!removing.empty()) {
 		transitionSuppr->active = true;
-        Vector2 cellSize = Game::CellSize() * Game::CellContentScale() * (1 - transitionSuppr->value);
+        Vector2 cellSize = Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale() * (1 - transitionSuppr->value);
     	for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
     		if (transitionSuppr->value == transitionSuppr->sustainValue) {
     			modeMgr->ScoreCalc(it->points.size(), it->type);

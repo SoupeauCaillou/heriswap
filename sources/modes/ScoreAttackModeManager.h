@@ -9,7 +9,7 @@
 
 class ScoreAttackGameModeManager : public GameModeManager {
 	public:
-		ScoreAttackGameModeManager(Game* game,SuccessAPI* successAPI);
+		ScoreAttackGameModeManager(Game* game, SuccessAPI* successAP);
 		~ScoreAttackGameModeManager();
 		void Setup();
 		void Enter();

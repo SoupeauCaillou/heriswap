@@ -5,6 +5,7 @@ INSTANCE_IMPL(GridSystem);
 
 GridSystem::GridSystem() : ComponentSystemImpl<GridComponent>("Grid") {
 	GridSize=8;
+	Types=8;
 	nbmin=3;
 }
 
@@ -43,8 +44,6 @@ Entity GridSystem::GetOnPos(int i, int j) {
 		if (bc->i == i && bc->j == j)
 			return a;
 	}
-
-	//std::cout << "Aucun element en position (" << i << ","<<j<<")\n";
 	return 0;
 }
 
@@ -291,7 +290,7 @@ bool GridSystem::StillCombinations() {
 		return true;
 	}
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-		if (NewCombiOnSwitch(it->first,it->second->i,it->second->j)) { 
+		if (NewCombiOnSwitch(it->first,it->second->i,it->second->j)) {
 			SetCheckInCombi(combin);
 			return true;
 		}
@@ -318,7 +317,7 @@ std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchVertical() {
 				|| (i>1 && GetOnPos(i-1,j+1) && GetOnPos(i-2,j+1) && GRID(a)->type == GRID(GetOnPos(i-1,j+1))->type &&  GRID(a)->type == GRID(GetOnPos(i-2,j+1))->type)
 				|| (i>0 && GetOnPos(i+1,j+1) && GetOnPos(i-1,j+1) &&     GRID(a)->type == GRID(GetOnPos(i-1,j+1))->type && GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type)
 				|| (i<GridSize-2 && GetOnPos(i+1,j+1) && GetOnPos(i+2,j+1) && GRID(a)->type == GRID(GetOnPos(i+2,j+1))->type &&  GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type))
-					combin.push_back(Vector2(i, j));				
+					combin.push_back(Vector2(i, j));
 			}
 
 		}
@@ -341,7 +340,7 @@ std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchHorizontal() {
 				|| (j>1 && GetOnPos(i+1,j-1) && GetOnPos(i+1,j-2) && GRID(a)->type == GRID(GetOnPos(i+1,j-1))->type &&  GRID(a)->type == GRID(GetOnPos(i+1,j-2))->type)
 				|| (j>0 && GetOnPos(i+1,j+1) && GetOnPos(i+1,j-1) &&     GRID(a)->type == GRID(GetOnPos(i+1,j-1))->type && GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type)
 				|| (j<GridSize-2 && GetOnPos(i+1,j+1) && GetOnPos(i+1,j+2) && GRID(a)->type == GRID(GetOnPos(i+1,j+2))->type &&  GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type))
-					combin.push_back(Vector2(i, j));				
+					combin.push_back(Vector2(i, j));
 			}
 
 		}

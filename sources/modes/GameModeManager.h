@@ -24,7 +24,8 @@ enum GameMode {
 	Normal = 1,
 	ScoreAttack,
 	StaticTime,
-	TilesAttack
+	TilesAttack,
+	Perso
 };
 
 class GameModeManager {
@@ -38,7 +39,7 @@ class GameModeManager {
 			float rot;
 		};
 
-		GameModeManager(Game* game);
+		GameModeManager(Game* game, SuccessAPI* successAP);
 
 		virtual ~GameModeManager() {}
 

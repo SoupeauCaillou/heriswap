@@ -32,7 +32,7 @@ class ModeMenuStateManager : public GameStateManager {
 
 		void LoadScore(int mode);
 
-		bool ended;
+		bool ended, perso;
 
 		Entity title, menufg, menubg;
 		AnimatedActor* herisson;

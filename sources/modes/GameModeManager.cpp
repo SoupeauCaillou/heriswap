@@ -13,8 +13,9 @@ static float finalHerissonPosition(Entity herisson) {
     return PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5;
 }
 
-GameModeManager::GameModeManager(Game* game) {
+GameModeManager::GameModeManager(Game* game, SuccessAPI* sAPI) {
 	uiHelper.game = game;
+	successAPI = sAPI;
 	for (int i=0;i<8;i++) succEveryTypeInARow[i] = 0;
 	succBonusPoints = 0;
 }
@@ -146,7 +147,8 @@ void GameModeManager::generateLeaves(int* nb) {
 	branchLeaves.clear();
 	fillVec();
 	//std::vector<Render> swapper;
-    for (int j=0;j<8;j++) {
+
+    for (int j=0;j<theGridSystem.Types;j++) {
 	    for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
 			Entity e = theEntityManager.CreateEntity();
 			ADD_COMPONENT(e, Transformation);
@@ -154,7 +156,7 @@ void GameModeManager::generateLeaves(int* nb) {
             ADD_COMPONENT(e, Twitch);
 			RENDERING(e)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(j, 0));
 			RENDERING(e)->hide = false;
-			TRANSFORM(e)->size = Game::CellSize() * Game::CellContentScale();
+			TRANSFORM(e)->size = Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale();
 
 			int rand = MathUtil::RandomInt(posBranch.size());
 			TRANSFORM(e)->position = posBranch[rand].v;
@@ -174,7 +176,7 @@ void GameModeManager::generateLeaves(int* nb) {
 
 void GameModeManager::deleteLeaves(int type, int nb) {
 	if (type == -1) {
-		while (nb) {
+		while (branchLeaves.size()>0 && nb) {
 			int r = MathUtil::RandomInt(branchLeaves.size());
 			theEntityManager.DeleteEntity(branchLeaves[r].e);
 			branchLeaves.erase(branchLeaves.begin()+r);
@@ -220,7 +222,7 @@ void GameModeManager::fillVec() {
 #else
 	posBranch.clear();
 	#include "PositionFeuilles.h"
-	for (int i=0; i<48; i++) {
+	for (int i=0; i<theGridSystem.Types*6; i++) {
 		Vector2 v(PlacementHelper::GimpXToScreen(pos[3*i]), PlacementHelper::GimpYToScreen(pos[3*i+1]));
 		Render truc = {v, MathUtil::ToRadians(pos[3*i+2])};
 		posBranch.push_back(truc);
@@ -305,6 +307,7 @@ bool successDone(int* successType) {
 
 void GameModeManager::scoreCalcForSuccessETIAR(int nb, int type) {
 	// test succes
+	if (!successAPI) LOGI("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 	if (succEveryTypeInARow[type]) {
 		for (int i=0; i<8; i++) succEveryTypeInARow[i] = 0;
 	} else {
@@ -316,6 +319,4 @@ void GameModeManager::scoreCalcForSuccessETIAR(int nb, int type) {
 
 	if (type == bonus) succBonusPoints+=nb;
 	if (succBonusPoints>100) successAPI->successCompleted("Bonus to excess", 1653182);
-
-
 }

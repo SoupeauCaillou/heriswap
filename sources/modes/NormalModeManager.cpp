@@ -11,7 +11,7 @@
 #define DECOR2_SPEED 1.6
 #define DECOR1_SPEED 1
 
-NormalGameModeManager::NormalGameModeManager(Game* game,SuccessAPI* successAP) : GameModeManager(game), successAPI(successAP) {
+NormalGameModeManager::NormalGameModeManager(Game* game, SuccessAPI* successAP) : GameModeManager(game,successAP) {
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(15,0.125));
 	pts.push_back(Vector2(25,0.25));
@@ -31,8 +31,8 @@ void NormalGameModeManager::Enter() {
 	time = 0;
 	points = 0;
 	level = 1;
-	bonus = MathUtil::RandomInt(8);
-	for (int i=0;i<8;i++) remain[i]=3;
+	bonus = MathUtil::RandomInt(theGridSystem.Types);
+	for (int i=0;i<theGridSystem.Types;i++) remain[i]=3;
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
 	levelUp = levelUpPending = false;
@@ -155,7 +155,7 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 
 void NormalGameModeManager::LevelUp() {
 	int match = 1, i=0;
-	while (match && i<8) {
+	while (match && i<theGridSystem.Types) {
 		if (remain[i] != 0)	match=0;
 		i++;
 	}
@@ -173,9 +173,9 @@ void NormalGameModeManager::LevelUp() {
 		if (time < 0)
 			time = 0;
 		std::cout << "Level up to level " << level << std::endl;
-		bonus = MathUtil::RandomInt(8);
+		bonus = MathUtil::RandomInt(theGridSystem.Types);
 		LoadHerissonTexture(bonus+1);
-		for (int i=0;i<8;i++)
+		for (int i=0;i<theGridSystem.Types;i++)
 			remain[i] = 2+level;
 
 		// cacher le n'herisson

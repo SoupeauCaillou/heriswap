@@ -33,9 +33,7 @@ std::vector<std::string> newMusics() {
 		s << "audio/" << c << ".ogg";
 		res.push_back(s.str());
 	}
-	std::cout <<"starting " << count <<" musics : ";
-	for (int i=0; i<res.size(); i++) std::cout << res[i] <<", ";
-	std::cout<<std::endl;
+	//std::cout <<"starting " << count <<" musics : ";
 	return res;
 }
 

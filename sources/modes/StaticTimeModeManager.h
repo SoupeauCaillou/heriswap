@@ -9,7 +9,7 @@
 
 class StaticTimeGameModeManager : public GameModeManager {
 	public:
-		StaticTimeGameModeManager(Game* game,SuccessAPI* successAPI);
+		StaticTimeGameModeManager(Game* game, SuccessAPI* successAP);
 		~StaticTimeGameModeManager();
 		void Setup();
 		void Enter();

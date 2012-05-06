@@ -79,18 +79,18 @@ static const float size = (10 - 2 * offset) / GRIDSIZE;
 static void updateFps(float dt);
 
 // grid: [48, 302] -> [752, 1006]  in gimp
-Vector2 Game::GridCoordsToPosition(int i, int j) {
+Vector2 Game::GridCoordsToPosition(int i, int j, int gridSize) {
 	float startX = PlacementHelper::GimpXToScreen(48);
 	float startY = PlacementHelper::GimpYToScreen(1006);
-	float size = PlacementHelper::GimpWidthToScreen((752 - 48) / 8);
+	float size = PlacementHelper::GimpWidthToScreen((752 - 48) / gridSize);
 
 	return Vector2(
 		startX + (i + 0.5) * size,
 		startY + (j + 0.5) * size);
 }
 
-float Game::CellSize() {
-	return PlacementHelper::GimpWidthToScreen((752 - 48) / 8);
+float Game::CellSize(int gridSize) {
+	return PlacementHelper::GimpWidthToScreen((752 - 48) / gridSize);
 }
 
 float Game::CellContentScale() {
@@ -187,13 +187,13 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
 
 	datas->mode2Manager[Normal]->sky = datas->sky;
-	
+
     if (in && size) {
         datas->state = Pause;
         loadGameState(in, size);
     }
     datas->state2Manager[datas->state]->Enter();
-    
+
 }
 
 void Game::setMode() {

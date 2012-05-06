@@ -53,7 +53,7 @@ public:
 /* Return the Entity in pos (i,j)*/
 Entity GetOnPos(int i, int j);
 
-/* Return the finale list  of combinaisons*/ 
+/* Return the finale list  of combinaisons*/
 std::vector<Combinais> LookForCombination(bool markAsChecked, bool useChecked);
 
 /* Set Back all entity at "not checked"*/
@@ -111,6 +111,6 @@ void DeleteAll();
 
 void print();
 
-int GridSize;
+int GridSize, Types;
 int nbmin;
 };

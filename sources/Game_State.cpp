@@ -1,10 +1,9 @@
 #include "Game.h"
 #include "Game_Private.h"
 #include "states/ModeMenuStateManager.h"
-#include "states/ModeMenuPersoStateManager.h"
 #include "states/MainMenuGameStateManager.h"
 #include "states/LevelStateManager.h"
-
+#include "modes/TilesAttackModeManager.h"
 void Game::stateChanged(GameState oldState, GameState newState) {
     if (newState == Unpause) {
         togglePause(false);
@@ -15,12 +14,16 @@ void Game::stateChanged(GameState oldState, GameState newState) {
          static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->ended = false;
      } else if (oldState == MainMenu && newState == ModeMenu) {
          datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
+         if (datas->mode == Perso) {
+			 datas->mode = TilesAttack;
+			 static_cast<TilesAttackGameModeManager*> (datas->mode2Manager[TilesAttack])->limit = 30;
+			 static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->perso = true;
+		 } else {
+			  static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->perso = false;
+		 }
          //reference title into mode menu from main menu
          static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode-1];
          setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
-     } else if (oldState == MainMenu && newState == PersoModeMenu) {
-         //reference title into perso mode menu from main menu
-         static_cast<ModeMenuPersoStateManager*> (datas->state2Manager[PersoModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode-1];
      } else if (newState == ModeMenu) {
         datas->mode2Manager[datas->mode]->Exit();
      } else if (newState == BlackToSpawn) {

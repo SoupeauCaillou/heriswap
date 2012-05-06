@@ -78,7 +78,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 		if (theTouchInputManager.isTouched()) {
 			// continue drag
 			Vector2 diff = theTouchInputManager.getTouchLastPosition()
-				- Game::GridCoordsToPosition(originI, originJ);
+				- Game::GridCoordsToPosition(originI, originJ, theGridSystem.GridSize);
 
 			if (diff.Length() > 1) {
 				int i,j;
@@ -197,8 +197,8 @@ GameState UserInputGameStateManager::Update(float dt) {
 					return UserInput;
 				} else {
 					// validate position
-					TRANSFORM(e1)->position = Game::GridCoordsToPosition(GRID(e1)->i, GRID(e1)->j);
-					TRANSFORM(e2)->position = Game::GridCoordsToPosition(GRID(e2)->i, GRID(e2)->j);
+					TRANSFORM(e1)->position = Game::GridCoordsToPosition(GRID(e1)->i, GRID(e1)->j,theGridSystem.GridSize);
+					TRANSFORM(e2)->position = Game::GridCoordsToPosition(GRID(e2)->i, GRID(e2)->j,theGridSystem.GridSize);
 
 					originI = originJ = -1;
 					return Delete;
@@ -237,8 +237,8 @@ void UserInputGameStateManager::BackgroundUpdate(float dt) {
 
 	if (ADSR(eSwapper)->activationTime >= 0 && originI >= 0 && originJ >= 0) {
 
-		Vector2 pos1 = Game::GridCoordsToPosition(originI, originJ);
-		Vector2 pos2 = Game::GridCoordsToPosition(originI + swapI, originJ + swapJ);
+		Vector2 pos1 = Game::GridCoordsToPosition(originI, originJ, theGridSystem.GridSize);
+		Vector2 pos2 = Game::GridCoordsToPosition(originI + swapI, originJ + swapJ, theGridSystem.GridSize);
 
 		Vector2 interp1 = MathUtil::Lerp(pos1, pos2, ADSR(eSwapper)->value);
 		Vector2 interp2 = MathUtil::Lerp(pos2, pos1, ADSR(eSwapper)->value);

@@ -14,7 +14,7 @@ class ScoreStorage {
 			float time;
 			std::string name;
 		};
-					
+
 		virtual bool initTable() = 0;
 		virtual void submitScore(Score scr) = 0;
 		virtual std::vector<Score> getScore(int mode) = 0;
@@ -54,8 +54,8 @@ class Game {
 
         void stateChanged(GameState from, GameState to);
 
-		static Vector2 GridCoordsToPosition(int i, int j);
-		static float CellSize();
+		static Vector2 GridCoordsToPosition(int i, int j, int s);
+		static float CellSize(int s);
 		static float CellContentScale();
 		static std::string cellTypeToTextureNameAndRotation(int type, float* rotation);
 		static float cellTypeToRotation(int type);

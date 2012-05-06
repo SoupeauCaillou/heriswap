@@ -54,7 +54,7 @@ void SpawnGameStateManager::Enter() {
 			for(int i=0; i<c.size(); i++) {
 				for(int j=0; j<c[i].points.size(); j++) {
 					Entity e = theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y);
-					int type = MathUtil::RandomInt(8);
+					int type = MathUtil::RandomInt(theGridSystem.Types);
 					GRID(e)->type = type;
 					RenderingComponent* rc = RENDERING(e);
 					rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, &TRANSFORM(e)->rotation));
@@ -92,7 +92,7 @@ GameState SpawnGameStateManager::Update(float dt) {
                     gc->i = gc->j = -1;
                 }
 				TransformationComponent* tc = TRANSFORM(it->fe);
-				float s = Game::CellSize();
+				float s = Game::CellSize(theGridSystem.GridSize);
 				if (transitionCree->value == 1){
 					tc->size = Vector2(s*0.1, s);
 					gc->i = it->X;
@@ -110,7 +110,7 @@ GameState SpawnGameStateManager::Update(float dt) {
 	} else if (ADSR(eGrid)->active) {
         std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
         for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
-            Vector2 cellSize = Game::CellSize() * Game::CellContentScale() * (1 - ADSR(eGrid)->value);
+            Vector2 cellSize = Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale() * (1 - ADSR(eGrid)->value);
             ADSR(*it)->idleValue = cellSize.X;
         }
         if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
@@ -158,7 +158,7 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 				int pb=0;
 				/*ne pas generer de combinaison (fonctionne seulement avec les cellules deja dans la grille)*/
 				do {
-					r = MathUtil::RandomInt(8);
+					r = MathUtil::RandomInt(theGridSystem.Types);
 					Entity l[5],c[5];
 					for (int k=0;k<5;k++){
 						 l[k] = theGridSystem.GetOnPos(i+2-k,j);
@@ -206,13 +206,13 @@ static Entity createCell(Feuille& f, bool assignGridPos) {
 	ADD_COMPONENT(e, Grid);
     ADD_COMPONENT(e, Twitch);
 
-	TRANSFORM(e)->position = Game::GridCoordsToPosition(f.X, f.Y);
+	TRANSFORM(e)->position = Game::GridCoordsToPosition(f.X, f.Y, theGridSystem.GridSize);
 	TRANSFORM(e)->z = DL_Cell;
 	RenderingComponent* rc = RENDERING(e);
 	rc->hide = false;
 
 	TRANSFORM(e)->size = 0;
-	ADSR(e)->idleValue = Game::CellSize() * Game::CellContentScale();
+	ADSR(e)->idleValue = Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale();
 	GRID(e)->type = f.type;
 	if (assignGridPos) {
 		GRID(e)->i = f.X;

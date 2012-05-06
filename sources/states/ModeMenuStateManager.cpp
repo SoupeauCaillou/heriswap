@@ -7,6 +7,7 @@ ModeMenuStateManager::ModeMenuStateManager(ScoreStorage* storag, PlayerNameInput
 	inputUI = inputUII;
 	successAPI = successAP;
 	localizeAPI = lAPI;
+	perso = false;
 }
 
 ModeMenuStateManager::~ModeMenuStateManager() {
@@ -141,7 +142,7 @@ void ModeMenuStateManager::Setup() {
 	if (sav > 1000000) {
 		successAPI->successCompleted("Hardscore gamer", 1653102);
 	}
-	
+
 }
 
 void ModeMenuStateManager::LoadScore(int mode) {
@@ -192,6 +193,9 @@ void ModeMenuStateManager::LoadScore(int mode) {
 void ModeMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	GameMode m = modeMgr->GetMode();
+
+
+
 	BUTTON(back)->enabled = true;
 	BUTTON(playButton)->enabled = true;
 	if (ended) {
@@ -199,7 +203,15 @@ void ModeMenuStateManager::Enter() {
 			inputUI->query(playerName);
 		}
 	}
-	LoadScore(m);
+
+	if (perso) {
+		theGridSystem.GridSize=6;
+		theGridSystem.Types=3;
+	} else {
+		theGridSystem.GridSize=8;
+		theGridSystem.Types=8;
+		LoadScore(m);
+	}
 
 	TEXT_RENDERING(play)->hide = false;
 	TEXT_RENDERING(scoreTitle)->hide = false;
@@ -211,10 +223,12 @@ void ModeMenuStateManager::Enter() {
 	RENDERING(fond)->hide = false;
 	BUTTON(openfeint)->enabled = true;
 	TEXT_RENDERING(play)->text = ended ? localizeAPI->text("Rejouer") : localizeAPI->text("Jouer");
+
+
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
-	if (ended) {
+	if (ended && !perso) {
 		GameMode m = modeMgr->GetMode();
 		ScoreStorage::Score entry;
 		entry.points = modeMgr->points;

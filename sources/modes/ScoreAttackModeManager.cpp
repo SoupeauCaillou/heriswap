@@ -1,7 +1,7 @@
 #include "ScoreAttackModeManager.h"
 #include "Game.h"
 
-ScoreAttackGameModeManager::ScoreAttackGameModeManager(Game* game,SuccessAPI* successAP) : GameModeManager(game), successAPI(successAP) {
+ScoreAttackGameModeManager::ScoreAttackGameModeManager(Game* game, SuccessAPI* successAP) : GameModeManager(game, successAP) {
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(100,1));
 }
@@ -17,7 +17,7 @@ void ScoreAttackGameModeManager::Enter() {
 	limit = 3000;
 	time = 0;
 	points = 0;
-	bonus = MathUtil::RandomInt(8);
+	bonus = MathUtil::RandomInt(theGridSystem.Types);
 	GameModeManager::Enter();
 }
 

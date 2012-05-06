@@ -162,9 +162,9 @@ GameState MainMenuGameStateManager::Update(float dt) {
 			SOUND(bStart[3])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 			return ModeMenu;
 		} else if (BUTTON(bStart[4])->clicked){
-			choosenGameMode = TilesAttack;
+			choosenGameMode = Perso;
 			SOUND(bStart[4])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
-			return PersoModeMenu;
+			return ModeMenu;
 		}
 	}
 	return MainMenu;
