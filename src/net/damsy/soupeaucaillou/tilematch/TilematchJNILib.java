@@ -304,7 +304,7 @@ public class TilematchJNILib {
     	
     	static class Command {
     		static enum Type {
-    			Buffer,
+    			Buffer, 
     			Play,
     			Stop
     		};
@@ -317,7 +317,8 @@ public class TilematchJNILib {
     	boolean running;
     	 
     	DumbAndroid(int rate) {
-    		bufferSize = 96000;//10 * AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
+    		// 1 sec
+    		bufferSize = 2 * rate;//10 * AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
         	writePendings = new LinkedList<Command>();
         	track = new AudioTrack(AudioManager.STREAM_MUSIC, rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
     		running = true;
@@ -410,7 +411,7 @@ public class TilematchJNILib {
     static public void startPlaying(Object o, Object master, int offset) {
     	DumbAndroid dumb = (DumbAndroid) o;
     	dumb.writeThread.start();
-    	Log.i("tilematchJ", "startPlaying!" + o);
+    	Log.i("tilematchJ", "startPlaying! " + o + ", master:" + master + ", " + offset);
     	synchronized (dumb.track) {
     		Command cmd = new Command();
     		cmd.type = Type.Play;
@@ -443,19 +444,22 @@ public class TilematchJNILib {
     	DumbAndroid dumb = (DumbAndroid) o;
     	checkReturnCode("setVolume", dumb.track.setStereoVolume(v, v));
     }
-    
-    static public boolean isPlaying(Object o) {
+      
+    static public boolean isPlaying(Object o) { 
     	DumbAndroid dumb = (DumbAndroid) o; 
     	synchronized (dumb.track) {
     		return !dumb.writePendings.isEmpty() || dumb.track.getPlayState() == AudioTrack.PLAYSTATE_PLAYING;
-    	}
+    	} 
     }
     
     static public void deletePlayer(Object o) {
     	DumbAndroid dumb = (DumbAndroid) o;
-    	dumb.running = false;
-    	dumb.track.stop();
-    	dumb.track.flush();
-    	dumb.track.release();
+    	synchronized (dumb.track) {
+			dumb.writePendings.clear();
+			dumb.running = false;
+			dumb.track.stop();
+			dumb.track.flush();
+			dumb.track.release();
+    	}
     }
 }
