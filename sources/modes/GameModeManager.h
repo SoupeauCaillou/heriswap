@@ -91,7 +91,7 @@ class GameModeManager {
 		Entity herisson;
 		//feuilles de l'arbre
 		std::vector<BranchLeaf> branchLeaves;
-		
+
 		SuccessAPI* successAPI;
 		int succEveryTypeInARow[8];
 		int succBonusPoints;
