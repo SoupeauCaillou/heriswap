@@ -23,6 +23,7 @@
 #include "systems/SoundSystem.h"
 
 #include "Game.h"
+#include "CallBack.cpp"
 
 #define DT 1/60.
 #define MAGICKEYTIME 0.3
@@ -101,43 +102,6 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 
 
 class LinuxSqliteExec: public ScoreStorage {
-	private :
-		static int callbackScore(void *save, int argc, char **argv, char **azColName){
-			int i;
-			// name | mode | points | time
-			std::vector<ScoreStorage::Score> *sav = static_cast<std::vector<ScoreStorage::Score>* >(save);
-			ScoreStorage::Score score1;
-			for(i=0; i<argc; i++){
-				std::istringstream iss(argv[i]);
-				if (!strcmp(azColName[i],"name")) {
-					score1.name = argv[i];
-				} else if (!strcmp(azColName[i],"mode")) {
-					iss >> score1.mode;
-				} else if (!strcmp(azColName[i],"points")) {
-					iss >> score1.points;
-				} else if (!strcmp(azColName[i],"time")) {
-					iss >> score1.time;
-				} else if (!strcmp(azColName[i],"level")) {
-					iss >> score1.level;
-				}
-			}
-			sav->push_back(score1);
-			return 0;
-		}
-
-		static int callbackNames(void *save, int argc, char **argv, char **azColName){
-			std::vector<std::string> *sav = static_cast<std::vector<std::string>*>(save);
-			for (int i=0; i<argc; i++) {
-				sav->push_back(argv[i]);
-			}
-			return 0;
-		}
-
-		static int callback(void *save, int argc, char **argv, char **azColName){
-			std::string *sav = static_cast<std::string*>(save);
-			*sav = argv[0];
-			return 0;
-		}
 	public :
 		std::vector<ScoreStorage::Score> getScore(int mode) {
 			std::stringstream tmp;
@@ -213,8 +177,9 @@ class LinuxSqliteExec: public ScoreStorage {
 				std::string s;
 				request("select value from info where opt like 'sound'", &s, 0);
 				if (s.length()==0) request("insert into info values('sound', 'on')", 0, 0);
+				s = "";
 				request("select value from info where opt like 'helpActive'", &s, 0);
-				if (s.length()==0) request("insert into info values('helpActive', '1111')", 0, 0);
+				if (s.length()==0) request("insert into info values('helpActive', '1')", 0, 0);
 			}
 			return r;
 		}

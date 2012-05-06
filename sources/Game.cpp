@@ -187,12 +187,13 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
 
 	datas->mode2Manager[Normal]->sky = datas->sky;
-
+	
     if (in && size) {
         datas->state = Pause;
         loadGameState(in, size);
     }
     datas->state2Manager[datas->state]->Enter();
+    
 }
 
 void Game::setMode() {

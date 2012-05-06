@@ -18,6 +18,7 @@
 #include "states/PauseStateManager.h"
 #include "states/FadeStateManager.h"
 #include "states/ModeMenuStateManager.h"
+#include "states/ModeMenuPersoStateManager.h"
 #include "states/LogoStateManager.h"
 #include "states/HelpStateManager.h"
 
@@ -43,6 +44,7 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
      state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI);
      state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successAPI,lAPI);
+     state2Manager[PersoModeMenu] = new ModeMenuPersoStateManager(lAPI);
      state2Manager[Help] = new HelpStateManager();
 
      state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);

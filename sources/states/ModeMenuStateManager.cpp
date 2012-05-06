@@ -1,4 +1,5 @@
 #include "ModeMenuStateManager.h"
+#include "CallBack.cpp"
 
 ModeMenuStateManager::ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII, SuccessAPI* successAP, LocalizeAPI* lAPI) {
 	storage = storag;
@@ -16,16 +17,6 @@ ModeMenuStateManager::~ModeMenuStateManager() {
 	theEntityManager.DeleteEntity(play);
 	theEntityManager.DeleteEntity(back);
 	theEntityManager.DeleteEntity(yourScore);
-}
-static int callbackSc(void *save, int argc, char **argv, char **azColName){
-	int *sav = static_cast<int*>(save);
-	for (int i=0; i<argc; i++) {
-		if (!strcmp(azColName[i],"points")) {
-			*sav += atoi(argv[i]);
-			return 0;
-		}
-	}
-	return 0;
 }
 
 void ModeMenuStateManager::Setup() {
@@ -150,6 +141,7 @@ void ModeMenuStateManager::Setup() {
 	if (sav > 1000000) {
 		successAPI->successCompleted("Hardscore gamer", 1653102);
 	}
+	
 }
 
 void ModeMenuStateManager::LoadScore(int mode) {

@@ -20,5 +20,5 @@ enum GameState {
      BlackToSpawn,
      Logo,
      Help,
-     Perso
+     PersoModeMenu
 };

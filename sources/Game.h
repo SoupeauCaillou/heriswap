@@ -14,6 +14,7 @@ class ScoreStorage {
 			float time;
 			std::string name;
 		};
+					
 		virtual bool initTable() = 0;
 		virtual void submitScore(Score scr) = 0;
 		virtual std::vector<Score> getScore(int mode) = 0;
