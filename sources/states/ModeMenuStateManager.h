@@ -44,4 +44,9 @@ class ModeMenuStateManager : public GameStateManager {
 		std::string playerName;
 		SuccessAPI* successAPI;
 		LocalizeAPI* localizeAPI;
+		
+		//variables for perso mode
+		int gridSize, numberTiles;
+		Entity persoTweakText[2], persoTweakCont[2];
+
 };

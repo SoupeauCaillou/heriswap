@@ -48,6 +48,7 @@ void SpawnGameStateManager::Enter() {
             if (spawning[i].fe == 0)
 			    spawning[i].fe = createCell(spawning[i], true);
 		}
+		int ite=0; //give up if no solutions
 		do {
 			c = theGridSystem.LookForCombination(false,true);
 			// change type from cells in combi
@@ -60,7 +61,8 @@ void SpawnGameStateManager::Enter() {
 					rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, &TRANSFORM(e)->rotation));
 				}
 			}
-		} while(!c.empty());
+			ite++;
+		} while(!c.empty() && ite<100);
         /*for(int i=0; i<spawning.size(); i++) {
             GridComponent* c = GRID(spawning[i].fe);
             c->i = c->j = -1;

@@ -19,6 +19,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
 			 static_cast<TilesAttackGameModeManager*> (datas->mode2Manager[TilesAttack])->limit = 30;
 			 static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->perso = true;
 		 } else {
+			  static_cast<TilesAttackGameModeManager*> (datas->mode2Manager[TilesAttack])->limit = 100;
 			  static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->perso = false;
 		 }
          //reference title into mode menu from main menu

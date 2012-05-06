@@ -8,6 +8,8 @@ ModeMenuStateManager::ModeMenuStateManager(ScoreStorage* storag, PlayerNameInput
 	successAPI = successAP;
 	localizeAPI = lAPI;
 	perso = false;
+	numberTiles = 2;
+	gridSize = 3;
 }
 
 ModeMenuStateManager::~ModeMenuStateManager() {
@@ -143,6 +145,32 @@ void ModeMenuStateManager::Setup() {
 		successAPI->successCompleted("Hardscore gamer", 1653102);
 	}
 
+
+	//perso game buttons
+	for (int i=0; i<2; i++) {
+		persoTweakCont[i] = theEntityManager.CreateEntity();
+		ADD_COMPONENT(persoTweakCont[i], Transformation);
+		ADD_COMPONENT(persoTweakCont[i], Button);
+		ADD_COMPONENT(persoTweakCont[i], Rendering);
+		ADD_COMPONENT(persoTweakCont[i], Sound);
+		SOUND(persoTweakCont[i])->type = SoundComponent::EFFECT;
+		BUTTON(persoTweakCont[i])->enabled = false;
+		TRANSFORM(persoTweakCont[i])->z = DL_MainMenuUITxt;
+		TRANSFORM(persoTweakCont[i])->size = Vector2(2,.5);
+		RENDERING(persoTweakCont[i])->color= Color(1.0f,0.f,0.f);
+		persoTweakText[i] = theTextRenderingSystem.CreateEntity();
+		TRANSFORM(persoTweakText[i])->z = DL_MainMenuUITxt;
+
+		TRANSFORM(persoTweakText[i])->position.X = PlacementHelper::GimpXToScreen(350);
+		TRANSFORM(persoTweakCont[i])->position.X = PlacementHelper::GimpXToScreen(200);
+		TRANSFORM(persoTweakText[i])->position.Y = PlacementHelper::GimpYToScreen(675 + i * 95);
+		TRANSFORM(persoTweakCont[i])->position.Y = PlacementHelper::GimpYToScreen(675 + i * 95);
+
+		TEXT_RENDERING(persoTweakText[i])->charHeight = PlacementHelper::GimpHeightToScreen(45);
+		TEXT_RENDERING(persoTweakText[i])->positioning = TextRenderingComponent::LEFT;
+		TEXT_RENDERING(persoTweakText[i])->hide = true;
+		TEXT_RENDERING(persoTweakText[i])->color = green;
+	}
 }
 
 void ModeMenuStateManager::LoadScore(int mode) {
@@ -204,27 +232,37 @@ void ModeMenuStateManager::Enter() {
 		}
 	}
 
-	if (perso) {
-		theGridSystem.GridSize=6;
-		theGridSystem.Types=3;
-	} else {
-		theGridSystem.GridSize=8;
-		theGridSystem.Types=8;
+	if (!perso) {
+		numberTiles = gridSize =8;
 		LoadScore(m);
 	}
 
 	TEXT_RENDERING(play)->hide = false;
-	TEXT_RENDERING(scoreTitle)->hide = false;
 	RENDERING(back)->hide = false;
-	RENDERING(openfeint)->hide = false;
-	TEXT_RENDERING(title)->hide = false;
 	RENDERING(menubg)->hide = false;
+	//~ TEXT_RENDERING(title)->hide = false;
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
-	BUTTON(openfeint)->enabled = true;
 	TEXT_RENDERING(play)->text = ended ? localizeAPI->text("Rejouer") : localizeAPI->text("Jouer");
-
-
+	if (!perso) {
+		RENDERING(openfeint)->hide = false;
+		BUTTON(openfeint)->enabled = true;
+		TEXT_RENDERING(scoreTitle)->hide = false;
+	} else {
+		TEXT_RENDERING(persoTweakText[0])->hide=false;
+		TEXT_RENDERING(persoTweakText[1])->hide=false;
+		RENDERING(persoTweakCont[0])->hide=false;
+		RENDERING(persoTweakCont[1])->hide=false;
+		BUTTON(persoTweakCont[0])->enabled = true;
+		BUTTON(persoTweakCont[1])->enabled = true;
+		
+		std::stringstream s;
+		s << "Grid size : " << gridSize;
+		TEXT_RENDERING(persoTweakText[0])->text = localizeAPI->text(s.str().c_str());
+		s.str("");
+		s << "Number of tiles : " << numberTiles;
+		TEXT_RENDERING(persoTweakText[1])->text = localizeAPI->text(s.str().c_str());
+	}
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
@@ -262,12 +300,27 @@ GameState ModeMenuStateManager::Update(float dt) {
 	} else {
 		RENDERING(herissonActor)->hide = true;
 	}
+	
+	//perso buttons
+	if (BUTTON(persoTweakCont[0])->clicked) {
+		gridSize++;
+		if (gridSize>12) gridSize=3;
+		std::stringstream s;
+		s << "Grid size : " << gridSize;
+		TEXT_RENDERING(persoTweakText[0])->text = localizeAPI->text(s.str().c_str());
+	} if (BUTTON(persoTweakCont[1])->clicked) {
+		numberTiles++;
+		if (numberTiles>8) numberTiles=2;
+		std::stringstream s;
+		s << "Number of tiles : " << numberTiles;
+		TEXT_RENDERING(persoTweakText[1])->text = localizeAPI->text(s.str().c_str());
+	} 
 
 	if (BUTTON(playButton)->clicked) {
 		SOUND(playButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 		RENDERING(herisson->actor.e)->hide = true;
 		TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
-		TEXT_RENDERING(title)->hide = true;
+		if (!perso) TEXT_RENDERING(title)->hide = true;
 		return ModeMenuToBlackState;
 	} if (BUTTON(back)->clicked) {
 		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
@@ -284,6 +337,8 @@ GameState ModeMenuStateManager::Update(float dt) {
 }
 
 void ModeMenuStateManager::Exit() {
+	theGridSystem.GridSize = gridSize;
+	theGridSystem.Types = numberTiles;
     // nothing to do here: will be done in LateExit after Fading
 }
 
@@ -307,4 +362,11 @@ void ModeMenuStateManager::LateExit() {
 	TEXT_RENDERING(scoreTitle)->hide = true;
 	RENDERING(herisson->actor.e)->hide = true;
 	BUTTON(openfeint)->enabled = false;
+	
+	TEXT_RENDERING(persoTweakText[0])->hide=true;
+	TEXT_RENDERING(persoTweakText[1])->hide=true;
+	RENDERING(persoTweakCont[0])->hide=true;
+	RENDERING(persoTweakCont[1])->hide=true;
+	BUTTON(persoTweakCont[0])->enabled = false;
+	BUTTON(persoTweakCont[1])->enabled = false;
 }
