@@ -1,8 +1,10 @@
 package net.damsy.soupeaucaillou.tilematch;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import net.damsy.soupeaucaillou.tilematch.TilematchJNILib.DumbAndroid.Command;
@@ -47,7 +49,7 @@ public class TilematchJNILib {
 	    	byte[] data = new byte[stream.available()];
 	    	stream.read(data);
 	    	return data;	
-    	} catch (Exception exc) {
+    	} catch (Exception exc) { 
     		Log.e("plop", exc.toString());
     		return null;
     	} 
@@ -301,6 +303,7 @@ public class TilematchJNILib {
     	AudioTrack track;
     	int bufferSize;
     	Thread writeThread;
+    	List<byte[]> bufferPool;
     	
     	static class Command {
     		static enum Type {
@@ -310,6 +313,7 @@ public class TilematchJNILib {
     		};
     		Type type;
     		byte[] buffer;
+    		int bufferSize;
     		AudioTrack master;
     		int offset;
     	}
@@ -322,6 +326,7 @@ public class TilematchJNILib {
         	writePendings = new LinkedList<Command>();
         	track = new AudioTrack(AudioManager.STREAM_MUSIC, rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
     		running = true;
+    		bufferPool = new ArrayList<byte[]>();
     		writeThread = new Thread(new Runnable() {
 				public void run() {
 					while (running) {
@@ -333,7 +338,7 @@ public class TilematchJNILib {
 								try {
 									track.wait(100);
 								} catch (InterruptedException exc) {
-									
+									   
 								}
 								cmd = writePendings.poll();
 							}
@@ -342,12 +347,15 @@ public class TilematchJNILib {
 							switch (cmd.type) {
 								case Buffer: {
 									// Log.i("tilematchJ", "queue " + cmd.buffer.length + "'" + bufferSize);
-									int result = track.write(cmd.buffer, 0, cmd.buffer.length);
-									if (result != cmd.buffer.length) {
+									int result = track.write(cmd.buffer, 0, cmd.bufferSize);
+									if (result != cmd.bufferSize) {
 										Log.e("tilematchJ", "Error writing data to AudioTrack: " + result);
 										checkReturnCode("write,", result);
 									} else {
 										// Log.e("tilematchJ", "Successful write of " + data.length);
+									}
+									synchronized (track) {
+										bufferPool.add(cmd.buffer);
 									}
 									break;
 								} 
@@ -388,31 +396,55 @@ public class TilematchJNILib {
     static public Object createPlayer(int rate) {
     	return new DumbAndroid(rate);
     } 
+    
+    static public byte[] allocate(Object o, int size) {
+    	DumbAndroid dumb = (DumbAndroid) o;
+    	synchronized (dumb.track) {
+    		int s = dumb.bufferPool.size();
+			if (s > 0) {
+				// Log.i("tilematchJ", "Reuse old buffer (count: " + s + ")");
+				return dumb.bufferPool.remove(s - 1);
+			} else {
+				// Log.i("tilematchJ", "Create new buffer: " + size + ", rate:" + dumb.track.getSampleRate());
+				assert(size <= dumb.track.getSampleRate() * 2);
+				return new byte[dumb.track.getSampleRate() * 2];
+			}
+		}
+    }
        
     static public void queueMusicData(Object o, byte[] audioData, int size, int sampleRate) {
     	DumbAndroid dumb = (DumbAndroid) o;
 
     	synchronized (dumb.track) {
-    		// split buffer 
-    		int start = 0;
-    		do {
-    			int end = Math.min(start + dumb.bufferSize, size);
-    			byte[] data = Arrays.copyOfRange(audioData, start, end);
+    		if (size > dumb.bufferSize) {
+	    		// split buffer 
+	    		int start = 0;
+	    		do {
+	    			int end = Math.min(start + dumb.bufferSize, size);
+	    			byte[] data = Arrays.copyOfRange(audioData, start, end);
+	    			Command cmd = new Command();
+	    			cmd.type = Type.Buffer;
+	    			cmd.buffer = data;
+	    			dumb.writePendings.add(cmd); 
+	    			start += (end - start + 1);
+	    		} while (start < size);
+	    		dumb.bufferPool.add(audioData);
+    		} else {
     			Command cmd = new Command();
     			cmd.type = Type.Buffer;
-    			cmd.buffer = data;
-    			dumb.writePendings.add(cmd);
-    			start += (end - start + 1);
-    		} while (start < size);
+    			cmd.buffer = audioData;
+    			cmd.bufferSize = size;
+    			dumb.writePendings.add(cmd); 
+    		}
 			dumb.track.notify();
 		} 
-    }  
+    } 
     
     static public void startPlaying(Object o, Object master, int offset) {
     	DumbAndroid dumb = (DumbAndroid) o;
     	dumb.writeThread.start();
     	Log.i("tilematchJ", "startPlaying! " + o + ", master:" + master + ", " + offset);
-    	synchronized (dumb.track) {
+    	synchronized (dumb.track) { 
     		Command cmd = new Command();
     		cmd.type = Type.Play;
      		if (master != null) {
