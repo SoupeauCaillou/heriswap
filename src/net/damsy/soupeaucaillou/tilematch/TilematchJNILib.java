@@ -342,7 +342,7 @@ public class TilematchJNILib {
 								}
 								cmd = writePendings.poll();
 							}
-					 	}
+					 	} 
 						if (cmd != null) { 
 							switch (cmd.type) {
 								case Buffer: {
