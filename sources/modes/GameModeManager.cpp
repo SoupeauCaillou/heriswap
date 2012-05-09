@@ -307,16 +307,17 @@ bool successDone(int* successType) {
 
 void GameModeManager::scoreCalcForSuccessETIAR(int nb, int type) {
 	// test succes
-	if (!successAPI) LOGI("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-	if (succEveryTypeInARow[type]) {
-		for (int i=0; i<8; i++) succEveryTypeInARow[i] = 0;
-	} else {
-		 succEveryTypeInARow[type] = 1;
+	if (theGridSystem.GridSize == 8) {
+		if (succEveryTypeInARow[type]) {
+			for (int i=0; i<8; i++) succEveryTypeInARow[i] = 0;
+		} else {
+			 succEveryTypeInARow[type] = 1;
+		}
+		if (successDone(succEveryTypeInARow)) {
+			successAPI->successCompleted("Rainbow combination", 1653132);
+			for (int i=0; i<8; i++) succEveryTypeInARow[i] = 0;
+		}
+		if (type == bonus) succBonusPoints+=nb;
+		if (succBonusPoints>100 && succBonusPoints<120) successAPI->successCompleted("Bonus to excess", 1653182);
 	}
-	if (successDone(succEveryTypeInARow)) {
-		successAPI->successCompleted("Rainbow combination", 1653132);
-	}
-
-	if (type == bonus) succBonusPoints+=nb;
-	if (succBonusPoints>100) successAPI->successCompleted("Bonus to excess", 1653182);
 }

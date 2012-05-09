@@ -1,11 +1,6 @@
 #include "ModeMenuStateManager.h"
 #include "CallBack.cpp"
 
-/*Todo :
- * modifier objectifs fonction difficulté
- * modif gain de temps combi
- * succès only en medium ?
-*/
 std::string diffic(int difficulty) {
 	std::stringstream s;
 	s << "Difficulty : ";

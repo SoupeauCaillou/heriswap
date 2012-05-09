@@ -2,9 +2,7 @@
 #include "Game.h"
 
 TilesAttackGameModeManager::TilesAttackGameModeManager(Game* game, SuccessAPI* successAP) : GameModeManager(game, successAP) {
-	pts.push_back(Vector2(0,0));
-	pts.push_back(Vector2(100,1));
-	limit = 100;
+
 }
 
 TilesAttackGameModeManager::~TilesAttackGameModeManager() {
@@ -22,8 +20,12 @@ void TilesAttackGameModeManager::Enter() {
 
 	pts.clear();
 	pts.push_back(Vector2(0,0));
-	pts.push_back(Vector2(limit,1));
-
+	if (theGridSystem.GridSize>=8)
+		limit = 100;
+	else
+		limit = 30;
+	pts.push_back(Vector2(limit,1));//need limit leaves to end game
+	
 	GameModeManager::Enter();
 }
 
@@ -43,15 +45,14 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << MathUtil::Max(0.0f, limit - points);
+	a << std::fixed << MathUtil::Max(0.0f, limit - leavesDone);
 	TEXT_RENDERING(uiHelper.smallLevel)->text = a.str();
 	}
 	//Temps
 	{
 	std::stringstream a;
-	int timeA = time;
-	int minute = timeA/60;
-	int seconde= timeA%60;
+	int minute = ((int)time)/60;
+	int seconde= ((int)time)%60;
 	int tenthsec = (time - minute * 60 - seconde) * 10;
 	if (minute) a << minute << ':';
 	a << std::setw(2) << std::setfill('0') << seconde << '.' << std::setw(1) << tenthsec << " s";

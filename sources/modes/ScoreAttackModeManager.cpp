@@ -3,7 +3,7 @@
 
 ScoreAttackGameModeManager::ScoreAttackGameModeManager(Game* game, SuccessAPI* successAP) : GameModeManager(game, successAP) {
 	pts.push_back(Vector2(0,0));
-	pts.push_back(Vector2(3000,1));
+
 }
 
 ScoreAttackGameModeManager::~ScoreAttackGameModeManager() {
@@ -14,7 +14,15 @@ void ScoreAttackGameModeManager::Setup() {
 }
 
 void ScoreAttackGameModeManager::Enter() {
-	limit = 3000;
+	pts.clear();
+	pts.push_back(Vector2(0,0));
+	if (theGridSystem.GridSize>=8) {
+		pts.push_back(Vector2(3000,1));
+		limit = 3000;
+	} else {
+		pts.push_back(Vector2(1000,1));
+		limit = 1000;
+	}
 	time = 0;
 	points = 0;
 	bonus = MathUtil::RandomInt(theGridSystem.Types);

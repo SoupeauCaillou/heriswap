@@ -41,7 +41,7 @@ void NormalGameModeManager::Enter() {
 }
 
 void NormalGameModeManager::Exit() {
-	if (time*60 > 15) {
+	if (time*60 > 15 && theGridSystem.GridSize == 8) {
 		successAPI->successCompleted("Take your time", 1652152);
 	}
 	GameModeManager::Exit();
@@ -60,14 +60,6 @@ void NormalGameModeManager::GameUpdate(float dt) {
 	}
 	time += dt;
 	LevelUp();
-
-	//level success test
-	if (level == 10) {
-		successAPI->successCompleted("Level 10", 1653112);
-	}
-	if (points > 100000) {
-		successAPI->successCompleted("Exterminascore", 1653192);
-	}
 }
 
 float NormalGameModeManager::GameProgressPercent() {
@@ -108,7 +100,7 @@ static int levelToLeaveToDelete(int nb, int level) {
 }
 
 static float timeGain(int nb, float time) {
-	return MathUtil::Min(time, nb / 4.0f);
+	return MathUtil::Min(time, 2.f*nb/theGridSystem.GridSize);
 }
 
 void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
@@ -151,6 +143,10 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 		remain[type]=0;
 
 	GameModeManager::scoreCalcForSuccessETIAR(nb, type);
+
+	if (points > 100000 && points<100500 && theGridSystem.GridSize == 8) {
+		successAPI->successCompleted("Exterminascore", 1653192);
+	}
 }
 
 void NormalGameModeManager::LevelUp() {
@@ -163,15 +159,17 @@ void NormalGameModeManager::LevelUp() {
 	if (match) {
 
 		//test success
-		if (level==1 && points>=1000)
+		if (level==1 && points>=1000 && points <= 1200 && theGridSystem.GridSize == 8)
 			successAPI->successCompleted("1k points for level 1", 1653122);
 
 		level++;
 		levelUp = true;
+	
+		//level success test
+		if (level == 10 && theGridSystem.GridSize == 8) successAPI->successCompleted("Level 10", 1653112);
+		
+		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
 
-		time -= 20;
-		if (time < 0)
-			time = 0;
 		std::cout << "Level up to level " << level << std::endl;
 		bonus = MathUtil::RandomInt(theGridSystem.Types);
 		LoadHerissonTexture(bonus+1);
