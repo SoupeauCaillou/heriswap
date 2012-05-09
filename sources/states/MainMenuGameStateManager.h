@@ -15,12 +15,12 @@ class MainMenuGameStateManager : public GameStateManager {
 		void Exit();
 
 		GameMode choosenGameMode;
-		Entity eStart[5];
+		Entity eStart[4];
 		Entity menufg, menubg;
 		AnimatedActor* herisson;
 
 	private:
-		Entity bStart[5];
+		Entity bStart[4];
 		Entity modeTitleToReset;
 		LocalizeAPI* localizeAPI;
 };

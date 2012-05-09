@@ -30,9 +30,9 @@ class ModeMenuStateManager : public GameStateManager {
 		void Exit();
         void LateExit();
 
-		void LoadScore(int mode);
+		void LoadScore(int mode, int dif);
 
-		bool ended, perso;
+		bool ended;
 
 		Entity title, menufg, menubg;
 		AnimatedActor* herisson;
@@ -44,9 +44,9 @@ class ModeMenuStateManager : public GameStateManager {
 		std::string playerName;
 		SuccessAPI* successAPI;
 		LocalizeAPI* localizeAPI;
-		
+
 		//variables for perso mode
-		int gridSize, numberTiles;
-		Entity persoTweakText[2], persoTweakCont[2];
+		int difficulty;
+		Entity eDifficulty, bDifficulty;
 
 };

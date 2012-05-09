@@ -24,8 +24,7 @@ enum GameMode {
 	Normal = 1,
 	ScoreAttack,
 	StaticTime,
-	TilesAttack,
-	Perso
+	TilesAttack
 };
 
 class GameModeManager {

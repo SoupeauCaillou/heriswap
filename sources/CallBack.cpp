@@ -17,15 +17,13 @@ static int callbackSc(void *save, int argc, char **argv, char **azColName){
 
 static int callbackScore(void *save, int argc, char **argv, char **azColName){
 	int i;
-	// name | mode | points | time
+	// name | mode | difficulty | points | time
 	std::vector<ScoreStorage::Score> *sav = static_cast<std::vector<ScoreStorage::Score>* >(save);
 	ScoreStorage::Score score1;
 	for(i=0; i<argc; i++){
 		std::istringstream iss(argv[i]);
 		if (!strcmp(azColName[i],"name")) {
 			score1.name = argv[i];
-		} else if (!strcmp(azColName[i],"mode")) {
-			iss >> score1.mode;
 		} else if (!strcmp(azColName[i],"points")) {
 			iss >> score1.points;
 		} else if (!strcmp(azColName[i],"time")) {

@@ -25,7 +25,7 @@ void MainMenuGameStateManager::Setup() {
 	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
 
 	//Creating text entities
-	for (int i=0; i<5; i++) {
+	for (int i=0; i<4; i++) {
 		eStart[i] = theTextRenderingSystem.CreateEntity();
 
 		TRANSFORM(eStart[i])->z = DL_MainMenuUITxt;
@@ -60,12 +60,9 @@ void MainMenuGameStateManager::Setup() {
 	TEXT_RENDERING(eStart[3])->text = localizeAPI->text("Mange tes feuilles");
 	TRANSFORM(eStart[3])->position.X = PlacementHelper::GimpXToScreen(700);
 	TRANSFORM(eStart[3])->position.Y = TRANSFORM(bStart[3])->position.Y = PlacementHelper::GimpYToScreen(156+3*183);
-	TEXT_RENDERING(eStart[4])->text = localizeAPI->text("Partie personnalisee");
-	TRANSFORM(eStart[4])->position.X = PlacementHelper::GimpXToScreen(745);
-	TRANSFORM(eStart[4])->position.Y = TRANSFORM(bStart[4])->position.Y = PlacementHelper::GimpYToScreen(156+4*183);
 
 	//Adding containers
-	for (int i=0; i<5; i++) {
+	for (int i=0; i<4; i++) {
 		TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, Vector2(PlacementHelper::GimpXToScreen(700),PlacementHelper::GimpYToScreen(100)));
 		MORPHING(eStart[i])->elements.push_back(posMorph);
 		ADD_COMPONENT(bStart[i], Sound);
@@ -117,7 +114,7 @@ void MainMenuGameStateManager::Enter() {
 
 	RENDERING(herisson->actor.e)->hide = false;
 
-	for (int i=0; i<5; i++) {
+	for (int i=0; i<4; i++) {
 		MORPHING(eStart[i])->active = false;
 		RENDERING(bStart[i])->hide = false;
 		TEXT_RENDERING(eStart[i])->hide = false;
@@ -161,10 +158,6 @@ GameState MainMenuGameStateManager::Update(float dt) {
 			choosenGameMode = TilesAttack;
 			SOUND(bStart[3])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 			return ModeMenu;
-		} else if (BUTTON(bStart[4])->clicked){
-			choosenGameMode = Perso;
-			SOUND(bStart[4])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
-			return ModeMenu;
 		}
 	}
 	return MainMenu;
@@ -173,7 +166,7 @@ GameState MainMenuGameStateManager::Update(float dt) {
 void MainMenuGameStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
-	for (int i=0; i<5; i++) {
+	for (int i=0; i<4; i++) {
 		if (i!=choosenGameMode-1) TEXT_RENDERING(eStart[i])->hide = true;
 		RENDERING(bStart[i])->hide = true;
 		BUTTON(bStart[i])->enabled = false;

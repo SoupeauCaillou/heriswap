@@ -103,19 +103,6 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 
 class LinuxSqliteExec: public ScoreStorage {
 	public :
-		std::vector<ScoreStorage::Score> getScore(int mode) {
-			std::stringstream tmp;
-			std::vector<ScoreStorage::Score> sav;
-
-			if (mode==1 || mode == 3)
-				tmp << "select * from score where mode= "<< mode << " order by points desc limit 5";
-			else
-				tmp << "select * from score where mode= "<< mode << " order by time asc limit 5";
-
-			request(tmp.str().c_str(), &sav, callbackScore);
-			return sav;
-		}
-
 		void saveOpt(std::string opt, std::string name) {
 			std::stringstream tmp;
 			tmp << "INSERT INTO info VALUES ('" << opt << "', '" << name << "')";
@@ -140,9 +127,9 @@ class LinuxSqliteExec: public ScoreStorage {
 			return (s == "on");
 		}
 
-		void submitScore(ScoreStorage::Score scr) {
+		void submitScore(ScoreStorage::Score scr, int mode, int diff) {
 			std::stringstream tmp;
-			tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << scr.mode<<","<<scr.points<<","<<scr.time<<","<<scr.level<<")";
+			tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << mode<<","<<diff<<","<<scr.points<<","<<scr.time<<","<<scr.level<<")";
 			request(tmp.str().c_str(), 0, 0);
 		}
 
@@ -172,7 +159,7 @@ class LinuxSqliteExec: public ScoreStorage {
 			bool r = request("", 0, 0);
 			if (r) {
 				LOGI("initializing database...");
-				request("create table score(name varchar2(11) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0, 0);
+				request("create table score(name varchar2(11) default 'Anonymous', mode number(1) default '0', difficulty number(1) default '1', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0, 0);
 				request("create table info(opt varchar2(8), value varchar2(11), constraint f1 primary key(opt,value))", 0, 0);
 				std::string s;
 				request("select value from info where opt like 'sound'", &s, 0);
