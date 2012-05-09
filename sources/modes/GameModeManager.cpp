@@ -98,6 +98,9 @@ void GameModeManager::Setup() {
 	fillVec();
 
 	uiHelper.build();
+
+	succBonus = false;
+	succRainbow = false;
 }
 
 void GameModeManager::Enter() {
@@ -313,11 +316,18 @@ void GameModeManager::scoreCalcForSuccessETIAR(int nb, int type) {
 		} else {
 			 succEveryTypeInARow[type] = 1;
 		}
-		if (successDone(succEveryTypeInARow)) {
+		if (!succRainbow && successDone(succEveryTypeInARow)) {
 			successAPI->successCompleted("Rainbow combination", 1653132);
-			for (int i=0; i<8; i++) succEveryTypeInARow[i] = 0;
+			succRainbow = true;
 		}
-		if (type == bonus) succBonusPoints+=nb;
-		if (succBonusPoints>100 && succBonusPoints<120) successAPI->successCompleted("Bonus to excess", 1653182);
+
+		if (!succBonus) {
+			if (type == bonus)
+				succBonusPoints+=nb;
+			if (succBonusPoints>100 && succBonusPoints<120) {
+				successAPI->successCompleted("Bonus to excess", 1653182);
+				succBonus = true;
+			}
+		}
 	}
 }

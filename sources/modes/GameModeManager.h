@@ -93,6 +93,7 @@ class GameModeManager {
 		std::vector<BranchLeaf> branchLeaves;
 
 		SuccessAPI* successAPI;
+		bool succBonus,succRainbow;
 		int succEveryTypeInARow[8];
 		int succBonusPoints;
 	private:

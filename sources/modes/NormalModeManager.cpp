@@ -17,12 +17,16 @@ NormalGameModeManager::NormalGameModeManager(Game* game, SuccessAPI* successAP) 
 	pts.push_back(Vector2(25,0.25));
 	pts.push_back(Vector2(35,0.5));
 	pts.push_back(Vector2(45,1));
+	succTakeTime = false;
+	succ1kpoints = false;
+	succ100kpoints = false;
 }
 
 NormalGameModeManager::~NormalGameModeManager() {
 }
 
 void NormalGameModeManager::Setup() {
+
 	GameModeManager::Setup();
 }
 
@@ -41,8 +45,9 @@ void NormalGameModeManager::Enter() {
 }
 
 void NormalGameModeManager::Exit() {
-	if (time*60 > 15 && theGridSystem.GridSize == 8) {
+	if (!succTakeTime && time*60 > 15 && theGridSystem.GridSize == 8) {
 		successAPI->successCompleted("Take your time", 1652152);
+		succTakeTime = true;
 	}
 	GameModeManager::Exit();
 }
@@ -144,8 +149,9 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 
 	GameModeManager::scoreCalcForSuccessETIAR(nb, type);
 
-	if (points > 100000 && points<100500 && theGridSystem.GridSize == 8) {
+	if (!succ100kpoints && points > 100000 && theGridSystem.GridSize == 8) {
 		successAPI->successCompleted("Exterminascore", 1653192);
+		succ100kpoints = true;
 	}
 }
 
@@ -159,15 +165,17 @@ void NormalGameModeManager::LevelUp() {
 	if (match) {
 
 		//test success
-		if (level==1 && points>=1000 && points <= 1200 && theGridSystem.GridSize == 8)
+		if (!succ1kpoints && level==1 && points>=1000 && theGridSystem.GridSize == 8) {
 			successAPI->successCompleted("1k points for level 1", 1653122);
+			succ1kpoints = true;
+		}
 
 		level++;
 		levelUp = true;
-	
+
 		//level success test
 		if (level == 10 && theGridSystem.GridSize == 8) successAPI->successCompleted("Level 10", 1653112);
-		
+
 		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
 
 		std::cout << "Level up to level " << level << std::endl;
