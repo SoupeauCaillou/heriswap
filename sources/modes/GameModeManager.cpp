@@ -324,7 +324,7 @@ void GameModeManager::scoreCalcForSuccessETIAR(int nb, int type) {
 		if (!succBonus) {
 			if (type == bonus)
 				succBonusPoints+=nb;
-			if (succBonusPoints>100 && succBonusPoints<120) {
+			if (succBonusPoints>100) {
 				successAPI->successCompleted("Bonus to excess", 1653182);
 				succBonus = true;
 			}

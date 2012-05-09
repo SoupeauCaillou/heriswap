@@ -174,7 +174,8 @@ void NormalGameModeManager::LevelUp() {
 		levelUp = true;
 
 		//level success test
-		if (level == 10 && theGridSystem.GridSize == 8) successAPI->successCompleted("Level 10", 1653112);
+		if (level == 10 && theGridSystem.GridSize == 8)
+			successAPI->successCompleted("Level 10", 1653112);
 
 		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
 
