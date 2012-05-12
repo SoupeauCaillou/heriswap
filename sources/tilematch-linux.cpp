@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <GL/glfw.h>
+//liste des keys dans /usr/include/GL/glfw.h 
 #include <png.h>
 #include <sstream>
 #include <iostream>
@@ -253,7 +254,7 @@ int main(int argc, char** argv) {
 			if (glfwGetKey( GLFW_KEY_SPACE ))
 				game.togglePause(true);
 			//magic key?
-			if (glfwGetKey( GLFW_KEY_ENTER ) && timer<=0) {
+			if ((glfwGetKey( GLFW_KEY_ENTER ) || glfwGetKey( GLFW_KEY_KP_ENTER) ) && timer<=0) {
 				game.toggleShowCombi(false);
 				timer = MAGICKEYTIME;
 			}
