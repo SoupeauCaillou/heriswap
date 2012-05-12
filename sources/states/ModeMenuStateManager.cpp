@@ -183,7 +183,7 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 	std::vector<ScoreStorage::Score> entries;
 	std::stringstream tmp;
 	tmp << "select * from score where mode= "<< mode << " and difficulty=" << dif;
-	if (mode==Normal || mode ==StaticTime)
+	if (mode==Normal)
 		 tmp << " order by points desc limit 5";
 	else
 		tmp << " order by time asc limit 5";
@@ -201,12 +201,12 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 			trcP->hide = false;
 			std::stringstream a;
 			a.precision(1);
-			if (mode==ScoreAttack || mode==TilesAttack) {
-				a << std::fixed << entries[i].time << " s";
-				trcP->isANumber = false;
-			} else {
+			if (mode==Normal) {
 				a << std::fixed << entries[i].points;
 				trcP->isANumber = true;
+			} else {
+				a << std::fixed << entries[i].time << " s";
+				trcP->isANumber = false;
 			}
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
@@ -219,9 +219,10 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 			}
 
 			if (!alreadyGreen && ended &&
-			 ((entries[i].points == modeMgr->points && mode!=ScoreAttack && mode!=TilesAttack)
-			  || ((mode==TilesAttack || mode==ScoreAttack) && entries[i].time-modeMgr->time<0.01f))
+			 ((entries[i].points == modeMgr->points && mode!=TilesAttack)
+			  || (mode==TilesAttack && entries[i].time-modeMgr->time<0.01f))
 			   && entries[i].name == playerName) {
+				   trcN->color = Color(1.0f,0.f,0.f);
 				alreadyGreen = true;
 			} else {
 			}
@@ -289,9 +290,11 @@ GameState ModeMenuStateManager::Update(float dt) {
 		std::stringstream a;
         a << playerName << " ... ";
 		a.precision(1);
-		if (m==ScoreAttack || m==TilesAttack) a << std::fixed << entry.time << " s";
-		else a << entry.points;
-		if (m==Normal) a << "... "<< localizeAPI->text("niv") << " " << entry.level;
+		if (m==Normal) 
+			a << entry.points << "... "<< localizeAPI->text("niv") << " " << entry.level;
+		else 
+			a << std::fixed << entry.time << " s";
+			
 		TEXT_RENDERING(yourScore)->text = a.str();
 		LoadScore(m, difficulty);
 		ended = false;

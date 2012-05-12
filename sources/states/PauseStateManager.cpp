@@ -38,29 +38,6 @@ void PauseStateManager::Setup() {
 	BUTTON(bRestart)->enabled = false;
 	SOUND(bRestart)->type = SoundComponent::EFFECT;
 
-	//Abort text
-	eAbort = theTextRenderingSystem.CreateEntity();
-	TRANSFORM(eAbort)->z = DL_PauseUIFg;
-	TEXT_RENDERING(eAbort)->color = green;
-	TEXT_RENDERING(eAbort)->charHeight = PlacementHelper::GimpHeightToScreen(75);
-	TEXT_RENDERING(eAbort)->text = localizeAPI->text("Abandonner");
-	TEXT_RENDERING(eAbort)->hide = true;
-	TEXT_RENDERING(eAbort)->positioning = TextRenderingComponent::LEFT;
-	TRANSFORM(eAbort)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(500));
-	//Abort button
-	bAbort = theEntityManager.CreateEntity();
-	ADD_COMPONENT(bAbort, Transformation);
-	ADD_COMPONENT(bAbort, Button);
-	ADD_COMPONENT(bAbort, Rendering);
-	ADD_COMPONENT(bAbort, Sound);
-	RENDERING(bAbort)->color.a = .5;
-	RENDERING(bAbort)->texture = theRenderingSystem.loadTextureFile("menu/fond_bouton.png");
-	TRANSFORM(bAbort)->z = DL_PauseUIBg;
-	TRANSFORM(bAbort)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
-	TRANSFORM(bAbort)->position = Vector2(0, PlacementHelper::GimpYToScreen(500));
-	BUTTON(bAbort)->enabled = false;
-	SOUND(bAbort)->type = SoundComponent::EFFECT;
-	
 	//Help Text
 	eHelp = theTextRenderingSystem.CreateEntity();
 	ADD_COMPONENT(eHelp, Rendering);
@@ -70,7 +47,7 @@ void PauseStateManager::Setup() {
 	TEXT_RENDERING(eHelp)->text = localizeAPI->text("Aide");
 	TEXT_RENDERING(eHelp)->hide = true;
 	TEXT_RENDERING(eHelp)->positioning = TextRenderingComponent::LEFT;
-	TRANSFORM(eHelp)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(700));
+	TRANSFORM(eHelp)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(500));
 	//Help button
 	bHelp = theEntityManager.CreateEntity();
 	ADD_COMPONENT(bHelp, Transformation);
@@ -81,9 +58,33 @@ void PauseStateManager::Setup() {
 	RENDERING(bHelp)->texture = theRenderingSystem.loadTextureFile("menu/fond_bouton.png");
 	TRANSFORM(bHelp)->z = DL_PauseUIBg;
 	TRANSFORM(bHelp)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
-	TRANSFORM(bHelp)->position = Vector2(0, PlacementHelper::GimpYToScreen(700));
+	TRANSFORM(bHelp)->position = Vector2(0, PlacementHelper::GimpYToScreen(500));
 	BUTTON(bHelp)->enabled = false;
-	SOUND(bHelp)->type = SoundComponent::EFFECT;
+	SOUND(bHelp)->type = SoundComponent::EFFECT;	
+	
+	//Abort text
+	eAbort = theTextRenderingSystem.CreateEntity();
+	TRANSFORM(eAbort)->z = DL_PauseUIFg;
+	TEXT_RENDERING(eAbort)->color = green;
+	TEXT_RENDERING(eAbort)->charHeight = PlacementHelper::GimpHeightToScreen(75);
+	TEXT_RENDERING(eAbort)->text = localizeAPI->text("Abandonner");
+	TEXT_RENDERING(eAbort)->hide = true;
+	TEXT_RENDERING(eAbort)->positioning = TextRenderingComponent::LEFT;
+	TRANSFORM(eAbort)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(900));
+	//Abort button
+	bAbort = theEntityManager.CreateEntity();
+	ADD_COMPONENT(bAbort, Transformation);
+	ADD_COMPONENT(bAbort, Button);
+	ADD_COMPONENT(bAbort, Rendering);
+	ADD_COMPONENT(bAbort, Sound);
+	RENDERING(bAbort)->color.a = .5;
+	RENDERING(bAbort)->texture = theRenderingSystem.loadTextureFile("menu/fond_bouton.png");
+	TRANSFORM(bAbort)->z = DL_PauseUIBg;
+	TRANSFORM(bAbort)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
+	TRANSFORM(bAbort)->position = Vector2(0, PlacementHelper::GimpYToScreen(900));
+	BUTTON(bAbort)->enabled = false;
+	SOUND(bAbort)->type = SoundComponent::EFFECT;
+
 }
 
 void PauseStateManager::Enter() {

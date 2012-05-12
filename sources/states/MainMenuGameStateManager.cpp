@@ -51,15 +51,9 @@ void MainMenuGameStateManager::Setup() {
 	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("Classique");
 	TRANSFORM(eStart[0])->position.X = PlacementHelper::GimpXToScreen(394);
 	TRANSFORM(eStart[0])->position.Y = TRANSFORM(bStart[0])->position.Y = PlacementHelper::GimpYToScreen(156);
-	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("Contre le temps");
-	TRANSFORM(eStart[1])->position.X = PlacementHelper::GimpXToScreen(634);
+	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("Mange tes feuilles");
+	TRANSFORM(eStart[1])->position.X = PlacementHelper::GimpXToScreen(700);
 	TRANSFORM(eStart[1])->position.Y = TRANSFORM(bStart[1])->position.Y = PlacementHelper::GimpYToScreen(156+183);
-	TEXT_RENDERING(eStart[2])->text = localizeAPI->text("Contre le score");
-	TRANSFORM(eStart[2])->position.X = PlacementHelper::GimpXToScreen(620);
-	TRANSFORM(eStart[2])->position.Y = TRANSFORM(bStart[2])->position.Y = PlacementHelper::GimpYToScreen(156+2*183);
-	TEXT_RENDERING(eStart[3])->text = localizeAPI->text("Mange tes feuilles");
-	TRANSFORM(eStart[3])->position.X = PlacementHelper::GimpXToScreen(700);
-	TRANSFORM(eStart[3])->position.Y = TRANSFORM(bStart[3])->position.Y = PlacementHelper::GimpYToScreen(156+3*183);
 
 	//Adding containers
 	for (int i=0; i<2; i++) {
