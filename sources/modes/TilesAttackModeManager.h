@@ -18,6 +18,8 @@ class TilesAttackGameModeManager : public GameModeManager {
 		void LevelUp();
 		bool LeveledUp();
 
+		void WillScore(int count, int type, std::vector<Entity>& out);
+
 		GameMode GetMode();
 
 		void ScoreCalc(int nb, int type);

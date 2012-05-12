@@ -200,9 +200,8 @@ void GameModeManager::generateLeaves(int* nb) {
 void GameModeManager::deleteLeaves(int type, int nb) {
 	if (type == -1) {
 		while (branchLeaves.size()>0 && nb) {
-			int r = MathUtil::RandomInt(branchLeaves.size());
-			theEntityManager.DeleteEntity(branchLeaves[r].e);
-			branchLeaves.erase(branchLeaves.begin()+r);
+			theEntityManager.DeleteEntity(branchLeaves[0].e);
+			branchLeaves.erase(branchLeaves.begin());
 			nb--;
 		}
 	} else {
