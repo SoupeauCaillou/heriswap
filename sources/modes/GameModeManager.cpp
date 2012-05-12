@@ -169,7 +169,6 @@ void GameModeManager::generateLeaves(int* nb) {
 
 	branchLeaves.clear();
 	fillVec();
-	//std::vector<Render> swapper;
 
     for (int j=0;j<theGridSystem.Types;j++) {
 	    for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
@@ -184,7 +183,7 @@ void GameModeManager::generateLeaves(int* nb) {
 			int rand = MathUtil::RandomInt(posBranch.size());
 			TRANSFORM(e)->position = posBranch[rand].v;
 			TRANSFORM(e)->rotation = posBranch[rand].rot;
-			//swapper.push_back(posBranch[rand]);
+
 			posBranch.erase(posBranch.begin()+rand);
 
 			TRANSFORM(e)->z = MathUtil::Lerp(DL_LeafMin, DL_LeafMax, MathUtil::RandomFloat());
@@ -194,7 +193,8 @@ void GameModeManager::generateLeaves(int* nb) {
 			branchLeaves.push_back(bl);
 		}
 	}
-	//swapper.swap(posBranch);
+	//shuffle pour éviter que les mêmes couleurs soient à coté dans la liste
+	random_shuffle(branchLeaves.begin(), branchLeaves.end());
 }
 
 void GameModeManager::deleteLeaves(int type, int nb) {
