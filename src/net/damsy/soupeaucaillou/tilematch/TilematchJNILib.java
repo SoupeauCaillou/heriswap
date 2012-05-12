@@ -411,7 +411,13 @@ public class TilematchJNILib {
 				return new byte[size];
 			}
 		}
-    } 
+    }
+    
+    static public void deallocate(byte[] b) {
+    	synchronized (DumbAndroid.bufferPool) {
+    		DumbAndroid.bufferPool.add(b);
+    	}
+    }
        
     static public void queueMusicData(Object o, byte[] audioData, int size, int sampleRate) {
     	DumbAndroid dumb = (DumbAndroid) o;
