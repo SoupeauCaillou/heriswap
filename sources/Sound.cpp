@@ -34,6 +34,7 @@ std::vector<std::string> newMusics() {
 }
 
 bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float percentDone, float dt) {
+ #if 0
 	//conserve olds musics
 	static std::vector<std::string> current;
 	bool end, endv[4];
@@ -83,4 +84,5 @@ bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float p
 		}
 		canalStress2->update(dt);
 	}
+ #endif
 }

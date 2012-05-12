@@ -173,7 +173,8 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 
 	theGridSystem.GridSize = GRIDSIZE;
 	theSoundSystem.mute = !datas->storage->soundEnable(false);
-
+    theMusicSystem.toggleMute(theSoundSystem.mute);
+    
 	float bgElementWidth = PlacementHelper::GimpWidthToScreen(800);
 	datas->sky = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->sky, Transformation);

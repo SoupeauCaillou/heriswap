@@ -43,5 +43,5 @@ struct Canal {
 	std::string name;
 };
 
-std::vector<std::string> newMusics(std::vector<std::string> &old);
+std::vector<std::string> newMusics();
 bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float percentDone, float dt);
