@@ -323,6 +323,7 @@ void Game::tick(float dt) {
 		BUTTON(datas->soundButton)->clicked = false;
 		datas->storage->soundEnable(true); //on met a jour la table sql
 		theSoundSystem.mute = !theSoundSystem.mute;
+        theMusicSystem.toggleMute(theSoundSystem.mute);
 		if (!theSoundSystem.mute) {
             SOUND(datas->soundButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
             RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
@@ -340,7 +341,17 @@ void Game::tick(float dt) {
     if (pausableState(datas->state) && datas->state != LevelChanged) { //si on joue
         datas->canalMenu.stop();
         // updateMusic(datas->canal, &datas->canalStress1, &datas->canalStress2, percentDone, dt);
-        
+        if (MUSIC(datas->inGameMusic.masterTrack)->music == InvalidMusicRef) {
+            std::vector<std::string> musics = newMusics();
+            MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
+            int i;
+            for (i=0; i<musics.size() - 1; i++) {
+                 MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
+                 mc->music = theMusicSystem.loadMusicFile(musics[i+1]);
+                 mc->control = MusicComponent::Start;
+            }
+        }
+
         // if master track has looped, choose next songs to play
         if (MUSIC(datas->inGameMusic.masterTrack)->loopNext == InvalidMusicRef) {
 	        std::vector<std::string> musics = newMusics();
@@ -352,9 +363,15 @@ void Game::tick(float dt) {
 		        mc->control = MusicComponent::Start;
 	        }
         }
-        
+        MUSIC(datas->menu)->control = MusicComponent::Stop;
         
     } else if (!pausableState(datas->state) && !fadeLogoState(datas->state)) { //dans les menus
+        if (MUSIC(datas->menu)->music == InvalidMusicRef) {
+         LOGW("Start Menu music");
+            MUSIC(datas->menu)->music = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");
+            MUSIC(datas->menu)->control = MusicComponent::Start;
+        }
+
         if (MUSIC(datas->menu)->loopNext == InvalidMusicRef) {
             MUSIC(datas->menu)->loopNext = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");
         }

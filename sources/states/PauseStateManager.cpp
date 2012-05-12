@@ -1,6 +1,7 @@
 #include "PauseStateManager.h"
 #include "DepthLayer.h"
 #include "base/PlacementHelper.h"
+#include "systems/MusicSystem.h"
 
 PauseStateManager::PauseStateManager() {
 
@@ -72,6 +73,8 @@ void PauseStateManager::Enter() {
 	RENDERING(bAbort)->hide = false;
 	BUTTON(bRestart)->enabled = true;
 	BUTTON(bAbort)->enabled = true;
+
+    theMusicSystem.toggleMute(true);
 }
 
 GameState PauseStateManager::Update(float dt) {
@@ -93,4 +96,6 @@ void PauseStateManager::Exit() {
 	RENDERING(bAbort)->hide = true;
 	BUTTON(bRestart)->enabled = false;
 	BUTTON(bAbort)->enabled = false;
+
+    theMusicSystem.toggleMute(theSoundSystem.mute);
 }

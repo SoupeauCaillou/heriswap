@@ -154,7 +154,6 @@ public class TilematchJNILib {
     }
     
     static public void pauseAllSounds() {
-    	Log.i("ti", "debug test");
     	// TilematchActivity.soundPool. .autoPause();
     	for(MediaPlayer p : TilematchActivity.activePlayers) {
     		if (p!=null)
@@ -303,7 +302,6 @@ public class TilematchJNILib {
     	AudioTrack track;
     	int bufferSize;
     	Thread writeThread;
-    	List<byte[]> bufferPool;
     	
     	static class Command {
     		static enum Type {
@@ -326,7 +324,6 @@ public class TilematchJNILib {
         	writePendings = new LinkedList<Command>();
         	track = new AudioTrack(AudioManager.STREAM_MUSIC, rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
     		running = true;
-    		bufferPool = new ArrayList<byte[]>();
     		writeThread = new Thread(new Runnable() {
 				public void run() {
 					while (running) {
@@ -354,7 +351,7 @@ public class TilematchJNILib {
 									} else {
 										// Log.e("tilematchJ", "Successful write of " + data.length);
 									}
-									synchronized (track) {
+									synchronized (bufferPool) {
 										bufferPool.add(cmd.buffer);
 									}
 									break;
@@ -384,6 +381,8 @@ public class TilematchJNILib {
 				}
     		});   
     	} 
+    	// buffer pool shared accross all instances
+    	static List<byte[]> bufferPool = new ArrayList<byte[]>();
     }   
       
     static void checkReturnCode(String ctx, int result) {
@@ -395,22 +394,24 @@ public class TilematchJNILib {
     }
     static public Object createPlayer(int rate) {
     	return new DumbAndroid(rate);
-    } 
+    }
     
-    static public byte[] allocate(Object o, int size) {
-    	DumbAndroid dumb = (DumbAndroid) o;
-    	synchronized (dumb.track) {
-    		int s = dumb.bufferPool.size();
+    static public int pcmBufferSize(int sampleRate) {
+    	return sampleRate; // * 2;
+    }
+    static public byte[] allocate(int size) {
+    	synchronized (DumbAndroid.bufferPool) {
+    		int s = DumbAndroid.bufferPool.size();
 			if (s > 0) {
 				// Log.i("tilematchJ", "Reuse old buffer (count: " + s + ")");
-				return dumb.bufferPool.remove(s - 1);
+				return DumbAndroid.bufferPool.remove(s - 1);
 			} else {
 				// Log.i("tilematchJ", "Create new buffer: " + size + ", rate:" + dumb.track.getSampleRate());
-				assert(size <= dumb.track.getSampleRate() * 2);
-				return new byte[dumb.track.getSampleRate() * 2];
+				// assert(size <= dumb.track.getSampleRate() * 2);  
+				return new byte[size];
 			}
 		}
-    }
+    } 
        
     static public void queueMusicData(Object o, byte[] audioData, int size, int sampleRate) {
     	DumbAndroid dumb = (DumbAndroid) o;
