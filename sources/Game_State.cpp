@@ -4,6 +4,7 @@
 #include "states/MainMenuGameStateManager.h"
 #include "states/LevelStateManager.h"
 #include "modes/TilesAttackModeManager.h"
+
 void Game::stateChanged(GameState oldState, GameState newState) {
     if (newState == Unpause) {
         togglePause(false);

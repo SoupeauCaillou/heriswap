@@ -3,15 +3,18 @@
 #include "base/PlacementHelper.h"
 
 PauseStateManager::~PauseStateManager() {
-	theTextRenderingSystem.DestroyLocalEntity(eRestart);
-	theTextRenderingSystem.DestroyLocalEntity(eAbort);
-	theTextRenderingSystem.DestroyLocalEntity(bRestart);
-	theTextRenderingSystem.DestroyLocalEntity(bAbort);
+	theTextRenderingSystem.DeleteEntity(eRestart);
+	theEntityManager.DeleteEntity(eAbort);
+	theTextRenderingSystem.DeleteEntity(bRestart);
+	theEntityManager.DeleteEntity(bAbort);
+	theTextRenderingSystem.DeleteEntity(eHelp);
+	theEntityManager.DeleteEntity(bHelp);
 }
 
 void PauseStateManager::Setup() {
 	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
 
+	//Restart Text
 	eRestart = theTextRenderingSystem.CreateEntity();
 	ADD_COMPONENT(eRestart, Rendering);
 	TRANSFORM(eRestart)->z = DL_PauseUIFg;
@@ -21,17 +24,7 @@ void PauseStateManager::Setup() {
 	TEXT_RENDERING(eRestart)->hide = true;
 	TEXT_RENDERING(eRestart)->positioning = TextRenderingComponent::LEFT;
 	TRANSFORM(eRestart)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(300));
-
-	eAbort = theTextRenderingSystem.CreateEntity();
-	TRANSFORM(eAbort)->z = DL_PauseUIFg;
-	TEXT_RENDERING(eAbort)->color = green;
-	TEXT_RENDERING(eAbort)->charHeight = PlacementHelper::GimpHeightToScreen(75);
-	TEXT_RENDERING(eAbort)->text = localizeAPI->text("Abandonner");
-	TEXT_RENDERING(eAbort)->hide = true;
-	TEXT_RENDERING(eAbort)->positioning = TextRenderingComponent::LEFT;
-	TRANSFORM(eAbort)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(500));
-
-
+	//Restart button
 	bRestart = theEntityManager.CreateEntity();
 	ADD_COMPONENT(bRestart, Transformation);
 	ADD_COMPONENT(bRestart, Button);
@@ -45,6 +38,16 @@ void PauseStateManager::Setup() {
 	BUTTON(bRestart)->enabled = false;
 	SOUND(bRestart)->type = SoundComponent::EFFECT;
 
+	//Abort text
+	eAbort = theTextRenderingSystem.CreateEntity();
+	TRANSFORM(eAbort)->z = DL_PauseUIFg;
+	TEXT_RENDERING(eAbort)->color = green;
+	TEXT_RENDERING(eAbort)->charHeight = PlacementHelper::GimpHeightToScreen(75);
+	TEXT_RENDERING(eAbort)->text = localizeAPI->text("Abandonner");
+	TEXT_RENDERING(eAbort)->hide = true;
+	TEXT_RENDERING(eAbort)->positioning = TextRenderingComponent::LEFT;
+	TRANSFORM(eAbort)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(500));
+	//Abort button
 	bAbort = theEntityManager.CreateEntity();
 	ADD_COMPONENT(bAbort, Transformation);
 	ADD_COMPONENT(bAbort, Button);
@@ -57,6 +60,30 @@ void PauseStateManager::Setup() {
 	TRANSFORM(bAbort)->position = Vector2(0, PlacementHelper::GimpYToScreen(500));
 	BUTTON(bAbort)->enabled = false;
 	SOUND(bAbort)->type = SoundComponent::EFFECT;
+	
+	//Help Text
+	eHelp = theTextRenderingSystem.CreateEntity();
+	ADD_COMPONENT(eHelp, Rendering);
+	TRANSFORM(eHelp)->z = DL_PauseUIFg;
+	TEXT_RENDERING(eHelp)->color = green;
+	TEXT_RENDERING(eHelp)->charHeight = PlacementHelper::GimpHeightToScreen(75);
+	TEXT_RENDERING(eHelp)->text = localizeAPI->text("Aide");
+	TEXT_RENDERING(eHelp)->hide = true;
+	TEXT_RENDERING(eHelp)->positioning = TextRenderingComponent::LEFT;
+	TRANSFORM(eHelp)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(700));
+	//Help button
+	bHelp = theEntityManager.CreateEntity();
+	ADD_COMPONENT(bHelp, Transformation);
+	ADD_COMPONENT(bHelp, Button);
+	ADD_COMPONENT(bHelp, Rendering);
+	ADD_COMPONENT(bHelp, Sound);
+	RENDERING(bHelp)->color.a = .5;
+	RENDERING(bHelp)->texture = theRenderingSystem.loadTextureFile("menu/fond_bouton.png");
+	TRANSFORM(bHelp)->z = DL_PauseUIBg;
+	TRANSFORM(bHelp)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
+	TRANSFORM(bHelp)->position = Vector2(0, PlacementHelper::GimpYToScreen(700));
+	BUTTON(bHelp)->enabled = false;
+	SOUND(bHelp)->type = SoundComponent::EFFECT;
 }
 
 void PauseStateManager::Enter() {
@@ -66,8 +93,14 @@ void PauseStateManager::Enter() {
 	RENDERING(bRestart)->hide = false;
 	TEXT_RENDERING(eAbort)->hide = false;
 	RENDERING(bAbort)->hide = false;
+	TEXT_RENDERING(eHelp)->hide = false;
+	RENDERING(bHelp)->hide = false;
 	BUTTON(bRestart)->enabled = true;
 	BUTTON(bAbort)->enabled = true;
+	BUTTON(bHelp)->enabled = true;
+	
+	helpMgr->oldState = Pause;
+	helpMgr->mode = mode;
 }
 
 GameState PauseStateManager::Update(float dt) {
@@ -77,6 +110,9 @@ GameState PauseStateManager::Update(float dt) {
 	} if (BUTTON(bRestart)->clicked) {
 		SOUND(bRestart)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
 		return Unpause;
+	} if (BUTTON(bHelp)->clicked) {
+		SOUND(bHelp)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+		return Help;
 	}
 	return Pause;
 }
@@ -87,6 +123,9 @@ void PauseStateManager::Exit() {
 	RENDERING(bRestart)->hide = true;
 	TEXT_RENDERING(eAbort)->hide = true;
 	RENDERING(bAbort)->hide = true;
+	TEXT_RENDERING(eHelp)->hide = true;
+	RENDERING(bHelp)->hide = true;
 	BUTTON(bRestart)->enabled = false;
 	BUTTON(bAbort)->enabled = false;
+	BUTTON(bHelp)->enabled = false;
 }

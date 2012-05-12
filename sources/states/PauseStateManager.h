@@ -8,7 +8,10 @@
 #include "systems/ButtonSystem.h"
 #include "systems/SoundSystem.h"
 
-#include "GameStateManager.h"
+#include "modes/GameModeManager.h"
+#include "states/GameStateManager.h"
+#include "states/HelpStateManager.h"
+
 #include "Game.h"
 #include "DepthLayer.h"
 
@@ -22,8 +25,11 @@ class PauseStateManager : public GameStateManager {
 	GameState Update(float dt);
 	void Exit();
 
+	GameMode mode;
+	HelpStateManager* helpMgr;
 	private:
-		Entity eRestart, eAbort;
-		Entity bRestart, bAbort;
+		Entity eRestart, bRestart;
+		Entity eAbort, bAbort;
+		Entity eHelp, bHelp;
 		LocalizeAPI* localizeAPI;
 };

@@ -8,7 +8,8 @@
 #include "systems/ButtonSystem.h"
 #include "systems/SoundSystem.h"
 
-#include "GameStateManager.h"
+#include "modes/GameModeManager.h"
+#include "states/GameStateManager.h"
 #include "Game.h"
 #include "DepthLayer.h"
 
@@ -23,7 +24,7 @@ class HelpStateManager : public GameStateManager {
 	void Exit();
 
 	GameState oldState;
-
+	GameMode mode;
 	private:
 		Entity eHelp;
 };

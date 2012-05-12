@@ -22,6 +22,7 @@
 #include "states/BackgroundManager.h"
 #include "states/LevelStateManager.h"
 #include "states/ModeMenuStateManager.h"
+#include "states/PauseStateManager.h"
 
 #include "DepthLayer.h"
 #include "base/PlacementHelper.h"
@@ -254,6 +255,7 @@ void Game::togglePause(bool activate) {
 		datas->stateBeforePause = datas->state;
 		datas->stateBeforePauseNeedEnter = false;
 		datas->state = Pause;
+		static_cast<PauseStateManager*> (datas->state2Manager[Pause])->mode = datas->mode;
         datas->mode2Manager[datas->mode]->TogglePauseDisplay(true);
 		datas->state2Manager[datas->state]->Enter();
 	} else if (!activate) {

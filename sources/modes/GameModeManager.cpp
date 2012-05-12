@@ -193,7 +193,9 @@ void GameModeManager::generateLeaves(int* nb) {
 			branchLeaves.push_back(bl);
 		}
 	}
-	//shuffle pour éviter que les mêmes couleurs soient à coté dans la liste
+	//shuffle pour éviter que les mêmes couleurs soient à coté dans la liste :
+	//ça sert en 100 tiles, pour que les feuilles supprimées soient d'abord ttes les
+	//rouges, ensuites les jaunes etc..
 	random_shuffle(branchLeaves.begin(), branchLeaves.end());
 }
 

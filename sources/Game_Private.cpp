@@ -3,8 +3,6 @@
 
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
-#include "modes/StaticTimeModeManager.h"
-#include "modes/ScoreAttackModeManager.h"
 #include "modes/TilesAttackModeManager.h"
 #include "GameState.h"
 #include "states/GameStateManager.h"
@@ -25,8 +23,6 @@
 PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessAPI* successAPI, LocalizeAPI* lAPI) {
      mode = Normal;
      mode2Manager[Normal] = new NormalGameModeManager(game,successAPI);
-     mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager(game,successAPI);
-     mode2Manager[StaticTime] = new StaticTimeGameModeManager(game,successAPI);
      mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game,successAPI);
      storage = storagee;
 
@@ -141,4 +137,6 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      modemenu->menubg = mainmenu->menubg;
      modemenu->herisson = mainmenu->herisson;
 
+	PauseStateManager* pause = static_cast<PauseStateManager*> (state2Manager[Pause]);
+	pause->helpMgr = static_cast<HelpStateManager*> (state2Manager[Help]);
  }
