@@ -1,11 +1,7 @@
 #pragma once
 
-#include "systems/ContainerSystem.h"
-#include "systems/ButtonSystem.h"
-
 #include "GameModeManager.h"
-#include "DepthLayer.h"
-#include "base/PlacementHelper.h"
+
 
 class StaticTimeGameModeManager : public GameModeManager {
 	public:

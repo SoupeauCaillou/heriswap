@@ -1,11 +1,17 @@
 #include "NormalModeManager.h"
-#include "Game.h"
-#define CAMERASPEED 0.f
+
 #include <base/Vector2.h>
 #include <base/MathUtil.h>
-#include <vector>
-#include "CombinationMark.h"
+#include <base/PlacementHelper.h>
+
 #include "systems/ScrollingSystem.h"
+#include "systems/ContainerSystem.h"
+#include "systems/ButtonSystem.h"
+#include "systems/TextRenderingSystem.h"
+
+#include "CombinationMark.h"
+#include "Game.h"
+
 
 #define SKY_SPEED 2.3
 #define DECOR2_SPEED 1.6

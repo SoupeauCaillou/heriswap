@@ -1,24 +1,10 @@
 #pragma once
 
-#include <map>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
+#include <base/EntityManager.h>
 
-#include "systems/TextRenderingSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/TransformationSystem.h"
-#include "systems/System.h"
-
-#include "DepthLayer.h"
 #include "Game.h"
 #include "InGameUiHelper.h"
-#include "base/PlacementHelper.h"
 #include "AnimedEntity.h"
-
-//FCRR : FPS Calculation Refresh Rate
-#define FCRR 1.
-
 
 enum GameMode {
 	Normal = 1,

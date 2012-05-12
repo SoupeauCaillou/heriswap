@@ -1,4 +1,14 @@
 #include "StaticTimeModeManager.h"
+
+#include <iomanip>
+#include <sstream>
+
+#include "systems/ContainerSystem.h"
+#include "systems/ButtonSystem.h"
+#include "systems/TextRenderingSystem.h"
+
+#include "DepthLayer.h"
+#include "base/PlacementHelper.h"
 #include "Game.h"
 
 StaticTimeGameModeManager::StaticTimeGameModeManager(Game* game, SuccessAPI* successAP) : GameModeManager(game, successAP) {

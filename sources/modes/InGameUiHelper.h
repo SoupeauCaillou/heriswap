@@ -1,6 +1,7 @@
 #pragma once
 
-#include "base/EntityManager.h"
+#include <base/EntityManager.h>
+
 #include "Game.h"
 
 class InGameUiHelper {

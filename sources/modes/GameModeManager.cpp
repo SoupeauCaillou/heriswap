@@ -1,9 +1,29 @@
-#include "modes/GameModeManager.h"
-#include "TwitchSystem.h"
+#include "GameModeManager.h"
+
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+
+#include "base/PlacementHelper.h"
+
+#include "systems/TextRenderingSystem.h"
+#include "systems/RenderingSystem.h"
+#include "systems/TransformationSystem.h"
+#include "systems/System.h"
 #include "systems/ScrollingSystem.h"
 #include "systems/ButtonSystem.h"
-#include <fstream>
+
+
+#include "DepthLayer.h"
+#include "Game.h"
+#include "InGameUiHelper.h"
 #include "AnimedEntity.h"
+#include "TwitchSystem.h"
+
+//FCRR : FPS Calculation Refresh Rate
+#define FCRR 1.
+
 
 static float initialHerissonPosition(Entity herisson) {
     return -PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.;

@@ -86,7 +86,7 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 				std::cout << "Want to save it ? (yes or no(=everything else))" << std::endl;
 				std::string a;
 				getline(std::cin, a);
-				if (!strcmp(a.c_str(), "yes")) storage->saveOpt("name", res);
+				if (a.c_str()[0] == 'y') storage->saveOpt("name", res);
 				return res;
 			}
 		}
