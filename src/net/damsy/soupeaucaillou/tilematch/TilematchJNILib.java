@@ -320,7 +320,7 @@ public class TilematchJNILib {
     	 
     	DumbAndroid(int rate) {
     		// 1 sec
-    		bufferSize = 2 * rate;//10 * AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
+    		bufferSize = 2 * pcmBufferSize(rate);//10 * AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
         	writePendings = new LinkedList<Command>();
         	track = new AudioTrack(AudioManager.STREAM_MUSIC, rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
     		running = true;
@@ -397,7 +397,7 @@ public class TilematchJNILib {
     }
     
     static public int pcmBufferSize(int sampleRate) {
-    	return sampleRate; // * 2;
+    	return sampleRate / 2; // * 2;
     }
     static public byte[] allocate(int size) {
     	synchronized (DumbAndroid.bufferPool) {
