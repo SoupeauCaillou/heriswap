@@ -1,28 +1,38 @@
 #include "NormalModeManager.h"
-#include "Game.h"
-#define CAMERASPEED 0.f
+
 #include <base/Vector2.h>
 #include <base/MathUtil.h>
-#include <vector>
-#include "CombinationMark.h"
+#include <base/PlacementHelper.h>
+
 #include "systems/ScrollingSystem.h"
+#include "systems/ContainerSystem.h"
+#include "systems/ButtonSystem.h"
+#include "systems/TextRenderingSystem.h"
+
+#include "CombinationMark.h"
+#include "Game.h"
+
 
 #define SKY_SPEED 2.3
 #define DECOR2_SPEED 1.6
 #define DECOR1_SPEED 1
 
-NormalGameModeManager::NormalGameModeManager(Game* game) : GameModeManager(game) {
+NormalGameModeManager::NormalGameModeManager(Game* game, SuccessAPI* successAP) : GameModeManager(game,successAP) {
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(15,0.125));
 	pts.push_back(Vector2(25,0.25));
 	pts.push_back(Vector2(35,0.5));
 	pts.push_back(Vector2(45,1));
+	succTakeTime = false;
+	succ1kpoints = false;
+	succ100kpoints = false;
 }
 
 NormalGameModeManager::~NormalGameModeManager() {
 }
 
 void NormalGameModeManager::Setup() {
+
 	GameModeManager::Setup();
 }
 
@@ -31,18 +41,20 @@ void NormalGameModeManager::Enter() {
 	time = 0;
 	points = 0;
 	level = 1;
-	bonus = MathUtil::RandomInt(8);
-	for (int i=0;i<8;i++) {
-		remain[i]=3;
-	}
+	bonus = MathUtil::RandomInt(theGridSystem.Types);
+	for (int i=0;i<theGridSystem.Types;i++) remain[i]=3;
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
 	levelUp = levelUpPending = false;
-	
+
 	GameModeManager::Enter();
 }
 
 void NormalGameModeManager::Exit() {
+	if (!succTakeTime && time*60 > 15 && theGridSystem.GridSize == 8) {
+		successAPI->successCompleted("Take your time", 1652152);
+		succTakeTime = true;
+	}
 	GameModeManager::Exit();
 }
 
@@ -99,7 +111,7 @@ static int levelToLeaveToDelete(int nb, int level) {
 }
 
 static float timeGain(int nb, float time) {
-	return MathUtil::Min(time, nb / 4.0f);
+	return MathUtil::Min(time, 2.f*nb/theGridSystem.GridSize);
 }
 
 void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
@@ -140,27 +152,43 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 
 	if (remain[type]<0)
 		remain[type]=0;
+
+	GameModeManager::scoreCalcForSuccessETIAR(nb, type);
+
+	if (!succ100kpoints && points > 100000 && theGridSystem.GridSize == 8) {
+		successAPI->successCompleted("Exterminascore", 1653192);
+		succ100kpoints = true;
+	}
 }
 
 void NormalGameModeManager::LevelUp() {
 	int match = 1, i=0;
-	while (match && i<8) {
-		if (remain[i] != 0)
-			match=0;
+	while (match && i<theGridSystem.Types) {
+		if (remain[i] != 0)	match=0;
 		i++;
 	}
 	//si on a tous les objectifs
 	if (match) {
+
+		//test success
+		if (!succ1kpoints && level==1 && points>=1000 && theGridSystem.GridSize == 8) {
+			successAPI->successCompleted("1k points for level 1", 1653122);
+			succ1kpoints = true;
+		}
+
 		level++;
 		levelUp = true;
 
-		time -= 20;
-		if (time < 0)
-			time = 0;
+		//level success test
+		if (level == 10 && theGridSystem.GridSize == 8)
+			successAPI->successCompleted("Level 10", 1653112);
+
+		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
+
 		std::cout << "Level up to level " << level << std::endl;
-		bonus = MathUtil::RandomInt(8);
+		bonus = MathUtil::RandomInt(theGridSystem.Types);
 		LoadHerissonTexture(bonus+1);
-		for (int i=0;i<8;i++)
+		for (int i=0;i<theGridSystem.Types;i++)
 			remain[i] = 2+level;
 
 		// cacher le n'herisson

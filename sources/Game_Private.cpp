@@ -3,8 +3,6 @@
 
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
-#include "modes/StaticTimeModeManager.h"
-#include "modes/ScoreAttackModeManager.h"
 #include "modes/TilesAttackModeManager.h"
 #include "GameState.h"
 #include "states/GameStateManager.h"
@@ -19,14 +17,13 @@
 #include "states/FadeStateManager.h"
 #include "states/ModeMenuStateManager.h"
 #include "states/LogoStateManager.h"
+#include "states/HelpStateManager.h"
 
 
-PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI) {
+PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessAPI* successAPI, LocalizeAPI* lAPI) {
      mode = Normal;
-     mode2Manager[Normal] = new NormalGameModeManager(game);
-     mode2Manager[ScoreAttack] = new ScoreAttackGameModeManager(game);
-     mode2Manager[StaticTime] = new StaticTimeGameModeManager(game);
-     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game);
+     mode2Manager[Normal] = new NormalGameModeManager(game,successAPI);
+     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game,successAPI);
      storage = storagee;
 
      soundButton = theEntityManager.CreateEntity();
@@ -35,14 +32,15 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
 
      state2Manager[Spawn] = new SpawnGameStateManager();
      state2Manager[UserInput] = new UserInputGameStateManager();
-     state2Manager[Delete] = new DeleteGameStateManager();
+     state2Manager[Delete] = new DeleteGameStateManager(successAPI);
      state2Manager[Fall] = new FallGameStateManager();
      state2Manager[LevelChanged] = new LevelStateManager();
-     state2Manager[Pause] = new PauseStateManager();
+     state2Manager[Pause] = new PauseStateManager(lAPI);
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
-     state2Manager[MainMenu] = new MainMenuGameStateManager();
-     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI);
-     
+     state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI);
+     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successAPI,lAPI);
+     state2Manager[Help] = new HelpStateManager();
+
      state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
      state2Manager[LogoToBlackState] = new FadeGameStateManager(FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);
      state2Manager[BlackToMainMenu] = new FadeGameStateManager(FadeIn, BlackToMainMenu, MainMenu, state2Manager[MainMenu], 0);
@@ -162,4 +160,6 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      	MUSIC(inGameMusic.stressTracks[i])->master = MUSIC(inGameMusic.masterTrack);
      }
      */
- }
+	PauseStateManager* pause = static_cast<PauseStateManager*> (state2Manager[Pause]);
+	pause->helpMgr = static_cast<HelpStateManager*> (state2Manager[Help]);
+}

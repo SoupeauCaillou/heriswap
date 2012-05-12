@@ -8,12 +8,13 @@ class Game;
 class ScoreStorage;
 class PlayerNameInputUI;
 class GameStateManager;
+class SuccessAPI;
 #include "modes/GameModeManager.h"
 
 #include <map>
 class PrivateData {
     public:
-        PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI);
+        PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessAPI* successAPI, LocalizeAPI* lAPI);
 
         void Setup(int windowW, int windowH);
 
@@ -34,7 +35,7 @@ class PrivateData {
      Entity soundButton;
      Canal canalMenu, canalStress1, canalStress2, canal[4];
      Entity musicMenu[2], musicStress1[2], musicStress2[2], music[8];
-     
+
      Entity menu;
      struct {
 	     Entity masterTrack;

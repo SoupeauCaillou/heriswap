@@ -1,9 +1,29 @@
-#include "modes/GameModeManager.h"
-#include "TwitchSystem.h"
+#include "GameModeManager.h"
+
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+
+#include "base/PlacementHelper.h"
+
+#include "systems/TextRenderingSystem.h"
+#include "systems/RenderingSystem.h"
+#include "systems/TransformationSystem.h"
+#include "systems/System.h"
 #include "systems/ScrollingSystem.h"
 #include "systems/ButtonSystem.h"
-#include <fstream>
+
+
+#include "DepthLayer.h"
+#include "Game.h"
+#include "InGameUiHelper.h"
 #include "AnimedEntity.h"
+#include "TwitchSystem.h"
+
+//FCRR : FPS Calculation Refresh Rate
+#define FCRR 1.
+
 
 static float initialHerissonPosition(Entity herisson) {
     return -PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.;
@@ -11,6 +31,13 @@ static float initialHerissonPosition(Entity herisson) {
 
 static float finalHerissonPosition(Entity herisson) {
     return PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5;
+}
+
+GameModeManager::GameModeManager(Game* game, SuccessAPI* sAPI) {
+	uiHelper.game = game;
+	successAPI = sAPI;
+	for (int i=0;i<8;i++) succEveryTypeInARow[i] = 0;
+	succBonusPoints = 0;
 }
 
 
@@ -89,8 +116,11 @@ void GameModeManager::Setup() {
 	SCROLLING(decor1er)->hide = true;
 
 	fillVec();
-	
+
 	uiHelper.build();
+
+	succBonus = false;
+	succRainbow = false;
 }
 
 void GameModeManager::Enter() {
@@ -112,15 +142,18 @@ void GameModeManager::Exit() {
 	RENDERING(branch)->hide = true;
 	SCROLLING(decor2nd)->hide = true;
 	SCROLLING(decor1er)->hide = true;
-	
+
 	uiHelper.hide();
-	
+
 	// delete leaves
 	for (int az=0;az<branchLeaves.size();az++) {
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
 	}
 	branchLeaves.clear();
     theGridSystem.DeleteAll();
+
+    succBonusPoints = 0;
+   	for (int i=0;i<8;i++) succEveryTypeInARow[i] = 0;
 }
 
 void GameModeManager::TogglePauseDisplay(bool paused) {
@@ -136,8 +169,8 @@ void GameModeManager::generateLeaves(int* nb) {
 
 	branchLeaves.clear();
 	fillVec();
-	//std::vector<Render> swapper;
-    for (int j=0;j<8;j++) {
+
+    for (int j=0;j<theGridSystem.Types;j++) {
 	    for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
 			Entity e = theEntityManager.CreateEntity();
 			ADD_COMPONENT(e, Transformation);
@@ -145,12 +178,12 @@ void GameModeManager::generateLeaves(int* nb) {
             ADD_COMPONENT(e, Twitch);
 			RENDERING(e)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(j, 0));
 			RENDERING(e)->hide = false;
-			TRANSFORM(e)->size = Game::CellSize() * Game::CellContentScale();
+			TRANSFORM(e)->size = Game::CellSize(8) * Game::CellContentScale();
 
 			int rand = MathUtil::RandomInt(posBranch.size());
 			TRANSFORM(e)->position = posBranch[rand].v;
 			TRANSFORM(e)->rotation = posBranch[rand].rot;
-			//swapper.push_back(posBranch[rand]);
+
 			posBranch.erase(posBranch.begin()+rand);
 
 			TRANSFORM(e)->z = MathUtil::Lerp(DL_LeafMin, DL_LeafMax, MathUtil::RandomFloat());
@@ -160,16 +193,27 @@ void GameModeManager::generateLeaves(int* nb) {
 			branchLeaves.push_back(bl);
 		}
 	}
-	//swapper.swap(posBranch);
+	//shuffle pour éviter que les mêmes couleurs soient à coté dans la liste :
+	//ça sert en 100 tiles, pour que les feuilles supprimées soient d'abord ttes les
+	//rouges, ensuites les jaunes etc..
+	random_shuffle(branchLeaves.begin(), branchLeaves.end());
 }
 
 void GameModeManager::deleteLeaves(int type, int nb) {
-	for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
-		if (type == branchLeaves[i].type) {
-			theEntityManager.DeleteEntity(branchLeaves[i].e);
-			branchLeaves.erase(branchLeaves.begin()+i);
+	if (type == -1) {
+		while (branchLeaves.size()>0 && nb) {
+			theEntityManager.DeleteEntity(branchLeaves[0].e);
+			branchLeaves.erase(branchLeaves.begin());
 			nb--;
-			i--;
+		}
+	} else {
+		for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
+			if (type == branchLeaves[i].type) {
+				theEntityManager.DeleteEntity(branchLeaves[i].e);
+				branchLeaves.erase(branchLeaves.begin()+i);
+				nb--;
+				i--;
+			}
 		}
 	}
 }
@@ -202,7 +246,7 @@ void GameModeManager::fillVec() {
 #else
 	posBranch.clear();
 	#include "PositionFeuilles.h"
-	for (int i=0; i<48; i++) {
+	for (int i=0; i<theGridSystem.Types*6; i++) {
 		Vector2 v(PlacementHelper::GimpXToScreen(pos[3*i]), PlacementHelper::GimpYToScreen(pos[3*i+1]));
 		Render truc = {v, MathUtil::ToRadians(pos[3*i+2])};
 		posBranch.push_back(truc);
@@ -276,4 +320,35 @@ const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int size
     generateLeaves(nb);
 
     return &in[index];
+}
+
+bool successDone(int* successType) {
+	for (int i=0; i<8; i++) {
+		if (successType[i]==0) return false;
+	}
+	return true;
+}
+
+void GameModeManager::scoreCalcForSuccessETIAR(int nb, int type) {
+	// test succes
+	if (theGridSystem.GridSize == 8) {
+		if (succEveryTypeInARow[type]) {
+			for (int i=0; i<8; i++) succEveryTypeInARow[i] = 0;
+		} else {
+			 succEveryTypeInARow[type] = 1;
+		}
+		if (!succRainbow && successDone(succEveryTypeInARow)) {
+			successAPI->successCompleted("Rainbow combination", 1653132);
+			succRainbow = true;
+		}
+
+		if (!succBonus) {
+			if (type == bonus)
+				succBonusPoints+=nb;
+			if (succBonusPoints>100) {
+				successAPI->successCompleted("Bonus to excess", 1653182);
+				succBonus = true;
+			}
+		}
+	}
 }

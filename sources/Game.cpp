@@ -23,6 +23,7 @@
 #include "states/BackgroundManager.h"
 #include "states/LevelStateManager.h"
 #include "states/ModeMenuStateManager.h"
+#include "states/PauseStateManager.h"
 
 #include "DepthLayer.h"
 #include "base/PlacementHelper.h"
@@ -80,33 +81,32 @@ static const float size = (10 - 2 * offset) / GRIDSIZE;
 static void updateFps(float dt);
 
 // grid: [48, 302] -> [752, 1006]  in gimp
-Vector2 Game::GridCoordsToPosition(int i, int j) {
+Vector2 Game::GridCoordsToPosition(int i, int j, int gridSize) {
 	float startX = PlacementHelper::GimpXToScreen(48);
 	float startY = PlacementHelper::GimpYToScreen(1006);
-	float size = PlacementHelper::GimpWidthToScreen((752 - 48) / 8);
+	float size = PlacementHelper::GimpWidthToScreen((752 - 48) / gridSize);
 
 	return Vector2(
 		startX + (i + 0.5) * size,
 		startY + (j + 0.5) * size);
 }
 
-float Game::CellSize() {
-	return PlacementHelper::GimpWidthToScreen((752 - 48) / 8);
+float Game::CellSize(int gridSize) {
+	return PlacementHelper::GimpWidthToScreen((752 - 48) / gridSize);
 }
 
 float Game::CellContentScale() {
 	return scale;
 }
 
-Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, PlayerNameInputUI* inputUI) {
+Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, PlayerNameInputUI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI) {
 	this->loader = ploader;
-
 	/* create EntityManager */
 	EntityManager::CreateInstance();
 
 	/* create before system so it cannot use any of them (use Setup instead) */
-	datas = new PrivateData(this, storage, inputUI);
- 
+	datas = new PrivateData(this, storage, inputUI, sAPI, lAPI);
+
 	/* create systems singleton */
 	TransformationSystem::CreateInstance();
 	RenderingSystem::CreateInstance();
@@ -196,6 +196,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
         loadGameState(in, size);
     }
     datas->state2Manager[datas->state]->Enter();
+
 }
 
 void Game::setMode() {
@@ -246,8 +247,8 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 			marks.clear();
 			LOGI("Destruction des marquages et de la triche (%d)!\n", marks.size());
 		}
-	}	
-	
+	}
+
 }
 
 void Game::togglePause(bool activate) {
@@ -256,6 +257,7 @@ void Game::togglePause(bool activate) {
 		datas->stateBeforePause = datas->state;
 		datas->stateBeforePauseNeedEnter = false;
 		datas->state = Pause;
+		static_cast<PauseStateManager*> (datas->state2Manager[Pause])->mode = datas->mode;
         datas->mode2Manager[datas->mode]->TogglePauseDisplay(true);
 		datas->state2Manager[datas->state]->Enter();
 	} else if (!activate) {
@@ -280,8 +282,8 @@ void Game::tick(float dt) {
     newState = datas->state2Manager[datas->state]->Update(dt);
 
 	//get the game progress
-	float percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent(); 
-	
+	float percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent();
+
     //updating game if needed
     if (datas->state == UserInput) {
 			datas->mode2Manager[datas->mode]->GameUpdate(dt);
@@ -445,7 +447,7 @@ int Game::saveState(uint8_t** out) {
 		LOGI("Current state is '%d' -> nothing to save", datas->state);
 		return 0;
 	}
-	
+
 	if (datas->state == LevelChanged) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = Spawn;

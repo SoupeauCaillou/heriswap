@@ -33,6 +33,12 @@ extern "C" {
 
 struct GameHolder;
 
+class AndroidSuccessAPI : public SuccessAPI {
+	public:
+		GameHolder* holder;
+		void successCompleted(const char* description, unsigned long successId);
+};
+
 struct AndroidPlayerNameInputUI : public PlayerNameInputUI {
 	public:
 		GameHolder* holder;
@@ -67,6 +73,7 @@ struct GameHolder {
 	int width, height;
 	AndroidPlayerNameInputUI inputUI;
 	AndroidStorage sqlite;
+	AndroidSuccessAPI success;
 
 	struct __input {
 		 int touching;
@@ -129,7 +136,7 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
   	LOGW("%s -->", __FUNCTION__);
   	TimeUtil::init();
 	GameHolder* hld = new GameHolder();
-	hld->game = new Game(new AndroidNativeAssetLoader(hld), &hld->sqlite, &hld->inputUI);
+	hld->game = new Game(new AndroidNativeAssetLoader(hld), &hld->sqlite, &hld->inputUI, &hld->success);
 	hld->inputUI.holder = hld;
 	hld->renderThreadEnv = env;
 	hld->openGLESVersion = openglesVersion;
@@ -138,6 +145,7 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
 	theRenderingSystem.opengles2 = (hld->openGLESVersion == 2);
 	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
 	hld->sqlite.holder = hld;
+	hld->success.holder = hld;
 	LOGW("Build Java sound API proxy env:%p", env);
 	theSoundSystem.androidSoundAPI = new JavaSoundAPI();
 	theSoundSystem.androidSoundAPI->assetManager = hld->assetManager;
@@ -523,6 +531,16 @@ void AndroidStorage::submitScore(ScoreStorage::Score scr) {
 	jmethodID mid = (env->GetStaticMethodID(c, "submitScore", "(IIIFLjava/lang/String;)V"));
 	jstring name = env->NewStringUTF(scr.name.c_str());
 	env->CallStaticVoidMethod(c, mid, scr.mode, scr.points, scr.level, scr.time, name);
+}
+
+void AndroidSuccessAPI::successCompleted(const char* description, unsigned long successId) {
+	SuccessAPI::successCompleted(description, successId);
+	// android spec stuff			
+	JNIEnv* env = holder->gameThreadEnv;
+	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
+	jmethodID mid = (env->GetStaticMethodID(c, "unlockAchievement", "(I)V"));
+	int sid = (int) successId;
+	env->CallStaticVoidMethod(c, mid, sid);
 }
 
 bool AndroidStorage::request(std::string s, std::string* res) {

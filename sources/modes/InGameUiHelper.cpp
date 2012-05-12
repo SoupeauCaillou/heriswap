@@ -1,12 +1,17 @@
 #include "InGameUiHelper.h"
+
+#include <base/PlacementHelper.h>
+#include <base/EntityManager.h>
+
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/ContainerSystem.h"
 #include "systems/SoundSystem.h"
 #include "systems/ButtonSystem.h"
-#include "base/PlacementHelper.h"
-#include "../DepthLayer.h"
+
+#include "DepthLayer.h"
+#include "Game.h"
 
 InGameUiHelper::InGameUiHelper() : built(false) {
 

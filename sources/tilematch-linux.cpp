@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <GL/glfw.h>
+//liste des keys dans /usr/include/GL/glfw.h 
 #include <png.h>
 #include <sstream>
 #include <iostream>
@@ -27,6 +28,7 @@
 #include "api/linux/AssetAPILinuxImpl.h"
 
 #include "Game.h"
+#include "CallBack.cpp"
 
 #define DT 1/60.
 #define MAGICKEYTIME 0.3
@@ -34,6 +36,12 @@
 
 static char* loadPng(const char* assetName, int* width, int* height);
 static char* loadTextfile(const char* assetName);
+
+struct LinuxLocalizeAPI: public LocalizeAPI {
+	std::string text(const std::string& t) {
+		return t;
+	}
+};
 
 struct LinuxNativeAssetLoader: public NativeAssetLoader {
 	char* decompressPngImage(const std::string& assetName, int* width, int* height) {
@@ -63,7 +71,7 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 			__log_enabled = false;
 			std::cout << "Choose your name !" << std::endl;
 			int size = MathUtil::Min((int)names.size(), 10);
-			
+
 			for (int i=0; i<size; i++) {
 				std::cout << i <<". "<<names[i] << std::endl;
 			}
@@ -78,13 +86,13 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 			if (res.size()<size/10+2 && value>0 && value<size || res[0]=='0') {
 				return names[value];
 			//else its not a number or number>size : its the new name
-			} else { 
+			} else {
 				if (res.size()>10) res.resize(10);
 				std::cout << "Want to save it ? (yes or no(=everything else))" << std::endl;
 				std::string a;
 				getline(std::cin, a);
-				if (!strcmp(a.c_str(), "yes")) storage->saveOpt("name", res);
-				return res;		
+				if (a.c_str()[0] == 'y') storage->saveOpt("name", res);
+				return res;
 			}
 		}
 		void query(std::string& result) {
@@ -92,64 +100,14 @@ struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
 			if (result.size()==0) {
 				result = show(storage->getName(result));
 				__log_enabled = true;
-			}	
+			}
 		}
 		ScoreStorage* storage;
 };
 
 
 class LinuxSqliteExec: public ScoreStorage {
-	private :
-		static int callbackScore(void *save, int argc, char **argv, char **azColName){
-			int i;
-			// name | mode | points | time
-			std::vector<ScoreStorage::Score> *sav = static_cast<std::vector<ScoreStorage::Score>* >(save);
-			ScoreStorage::Score score1;
-			for(i=0; i<argc; i++){
-				std::istringstream iss(argv[i]);
-				if (!strcmp(azColName[i],"name")) {
-					score1.name = argv[i];
-				} else if (!strcmp(azColName[i],"mode")) {
-					iss >> score1.mode;
-				} else if (!strcmp(azColName[i],"points")) {
-					iss >> score1.points;
-				} else if (!strcmp(azColName[i],"time")) {
-					iss >> score1.time;
-				} else if (!strcmp(azColName[i],"level")) {
-					iss >> score1.level;
-				}
-			}
-			sav->push_back(score1);
-			return 0;
-		}
-		
-		static int callbackNames(void *save, int argc, char **argv, char **azColName){
-			std::vector<std::string> *sav = static_cast<std::vector<std::string>*>(save);
-			for (int i=0; i<argc; i++) {
-				sav->push_back(argv[i]);
-			}
-			return 0;
-		}
-				
-		static int callback(void *save, int argc, char **argv, char **azColName){
-			std::string *sav = static_cast<std::string*>(save);
-			*sav = argv[0];
-			return 0;
-		}
 	public :
-		std::vector<ScoreStorage::Score> getScore(int mode) {
-			std::stringstream tmp;
-			std::vector<ScoreStorage::Score> sav;
-
-			if (mode==1 || mode == 3)
-				tmp << "select * from score where mode= "<< mode << " order by points desc limit 5";
-			else
-				tmp << "select * from score where mode= "<< mode << " order by time asc limit 5";
-			
-			request(tmp.str().c_str(), &sav, callbackScore);
-			return sav;
-		}
-
 		void saveOpt(std::string opt, std::string name) {
 			std::stringstream tmp;
 			tmp << "INSERT INTO info VALUES ('" << opt << "', '" << name << "')";
@@ -174,9 +132,9 @@ class LinuxSqliteExec: public ScoreStorage {
 			return (s == "on");
 		}
 
-		void submitScore(ScoreStorage::Score scr) {
+		void submitScore(ScoreStorage::Score scr, int mode, int diff) {
 			std::stringstream tmp;
-			tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << scr.mode<<","<<scr.points<<","<<scr.time<<","<<scr.level<<")";
+			tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << mode<<","<<diff<<","<<scr.points<<","<<scr.time<<","<<scr.level<<")";
 			request(tmp.str().c_str(), 0, 0);
 		}
 
@@ -193,7 +151,7 @@ class LinuxSqliteExec: public ScoreStorage {
 			if (callbackP && res) rc = sqlite3_exec(db, s.c_str(), callbackP, res, &zErrMsg);
 			//sinon on prend celui par défaut
 			else rc = sqlite3_exec(db, s.c_str(), callback, res, &zErrMsg);
-			
+
 			if( rc!=SQLITE_OK ){
 				LOGI("SQL error: %s\n", zErrMsg);
 				sqlite3_free(zErrMsg);
@@ -206,11 +164,14 @@ class LinuxSqliteExec: public ScoreStorage {
 			bool r = request("", 0, 0);
 			if (r) {
 				LOGI("initializing database...");
-				request("create table score(name varchar2(11) default 'Anonymous', mode number(1) default '0', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0, 0);
+				request("create table score(name varchar2(11) default 'Anonymous', mode number(1) default '0', difficulty number(1) default '1', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0, 0);
 				request("create table info(opt varchar2(8), value varchar2(11), constraint f1 primary key(opt,value))", 0, 0);
 				std::string s;
 				request("select value from info where opt like 'sound'", &s, 0);
 				if (s.length()==0) request("insert into info values('sound', 'on')", 0, 0);
+				s = "";
+				request("select value from info where opt like 'helpActive'", &s, 0);
+				if (s.length()==0) request("insert into info values('helpActive', '1')", 0, 0);
 			}
 			return r;
 		}
@@ -226,7 +187,7 @@ int main(int argc, char** argv) {
 	Vector2* reso = (argc == 1) ? &reso16_10 : &reso16_9;
 	if( !glfwOpenWindow( reso->X,reso->Y, 8,8,8,8,8,8, GLFW_WINDOW ) )
 		return 1;
-		
+
 	glewInit();
 
 
@@ -255,7 +216,7 @@ int main(int argc, char** argv) {
 	}
 	term->storage=sqliteExec;
 
-	Game game(new LinuxNativeAssetLoader(), sqliteExec, term);
+	Game game(new LinuxNativeAssetLoader(), sqliteExec, term, new SuccessAPI(), new LinuxLocalizeAPI());
 
 	//theSoundSystem.init();
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());
@@ -300,7 +261,7 @@ int main(int argc, char** argv) {
 			if (glfwGetKey( GLFW_KEY_SPACE ))
 				game.togglePause(true);
 			//magic key?
-			if (glfwGetKey( GLFW_KEY_ENTER ) && timer<=0) {
+			if ((glfwGetKey( GLFW_KEY_ENTER ) || glfwGetKey( GLFW_KEY_KP_ENTER) ) && timer<=0) {
 				game.toggleShowCombi(false);
 				timer = MAGICKEYTIME;
 			}

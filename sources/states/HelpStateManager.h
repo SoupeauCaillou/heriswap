@@ -10,26 +10,21 @@
 
 #include "modes/GameModeManager.h"
 #include "states/GameStateManager.h"
-#include "states/HelpStateManager.h"
-
 #include "Game.h"
 #include "DepthLayer.h"
 
-class PauseStateManager : public GameStateManager {
+class HelpStateManager : public GameStateManager {
 	public:
 
-	PauseStateManager(LocalizeAPI* lAPI) : localizeAPI(lAPI) { };
-	~PauseStateManager();
+	HelpStateManager() { };
+	~HelpStateManager();
 	void Setup();
 	void Enter();
 	GameState Update(float dt);
 	void Exit();
 
+	GameState oldState;
 	GameMode mode;
-	HelpStateManager* helpMgr;
 	private:
-		Entity eRestart, bRestart;
-		Entity eAbort, bAbort;
-		Entity eHelp, bHelp;
-		LocalizeAPI* localizeAPI;
+		Entity eHelp;
 };

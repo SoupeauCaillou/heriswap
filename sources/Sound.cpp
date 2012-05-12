@@ -31,15 +31,19 @@ std::vector<std::string> newMusics() {
 		}
 	}
 	return result;
-
 }
 
 bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float percentDone, float dt) {
+	//conserve olds musics
+	static std::vector<std::string> current;
 	bool end, endv[4];
-	for (int i=0; i<4; i++) endv[i] = canal[i].update(dt);
+	for (int i=0; i<4; i++)
+		endv[i] = canal[i].update(dt);
 	end=endv[0] && endv[1] && endv[2] && endv[3];
+	//if all musics ended, generate new ones
 	if (end) {
-		std::vector<std::string> nouv = newMusics();
+		std::vector<std::string> nouv = newMusics(current);
+		current = nouv;
 		for (int i=0; i<4; i++) {
 			if (!nouv.empty()) {
 				canal[i].name=nouv[0];
@@ -49,6 +53,7 @@ bool updateMusic(Canal* canal, Canal* canalStress1, Canal* canalStress2, float p
 			}
 		}
 	}
+	
 	float pos = 0;
 	int count = 0;
 	for (int i=0; i<4; i++) {

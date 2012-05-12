@@ -1,15 +1,11 @@
 #pragma once
 
-#include "systems/ContainerSystem.h"
-#include "systems/ButtonSystem.h"
-
 #include "GameModeManager.h"
-#include "DepthLayer.h"
-#include "base/PlacementHelper.h"
+
 
 class TilesAttackGameModeManager : public GameModeManager {
 	public:
-		TilesAttackGameModeManager(Game* game);
+		TilesAttackGameModeManager(Game* game, SuccessAPI* successAP);
 		~TilesAttackGameModeManager();
 		void Setup();
 		void Enter();
@@ -22,10 +18,13 @@ class TilesAttackGameModeManager : public GameModeManager {
 		void LevelUp();
 		bool LeveledUp();
 
+		void WillScore(int count, int type, std::vector<Entity>& out);
+
 		GameMode GetMode();
 
 		void ScoreCalc(int nb, int type);
 	private:
 		int leavesDone;
+		SuccessAPI* successAPI;
 };
 

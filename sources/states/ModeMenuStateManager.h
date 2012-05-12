@@ -22,7 +22,7 @@
 
 class ModeMenuStateManager : public GameStateManager {
 	public:
-		ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII) : storage(storag), ended(false), inputUI(inputUII) { };
+		ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII, SuccessAPI* successAP, LocalizeAPI* lAPI);
 		~ModeMenuStateManager();
 		void Setup();
 		void Enter();
@@ -30,7 +30,7 @@ class ModeMenuStateManager : public GameStateManager {
 		void Exit();
         void LateExit();
 
-		void LoadScore(int mode);
+		void LoadScore(int mode, int dif);
 
 		bool ended;
 
@@ -42,4 +42,11 @@ class ModeMenuStateManager : public GameStateManager {
 		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, openfeint, scoreTitle;
 		Entity yourScore, fond;
 		std::string playerName;
+		SuccessAPI* successAPI;
+		LocalizeAPI* localizeAPI;
+
+		//variables for perso mode
+		int difficulty;
+		Entity eDifficulty, bDifficulty;
+
 };

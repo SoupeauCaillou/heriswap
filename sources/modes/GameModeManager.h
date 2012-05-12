@@ -1,32 +1,15 @@
 #pragma once
 
-#include <map>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
+#include <base/EntityManager.h>
 
-#include "systems/TextRenderingSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/TransformationSystem.h"
-#include "systems/System.h"
-
-#include "DepthLayer.h"
 #include "Game.h"
 #include "InGameUiHelper.h"
-#include "base/PlacementHelper.h"
 #include "AnimedEntity.h"
-
-//FCRR : FPS Calculation Refresh Rate
-#define FCRR 1.
-
 
 enum GameMode {
 	Normal = 1,
-	ScoreAttack,
-	StaticTime,
 	TilesAttack
 };
-
 
 class GameModeManager {
 	public:
@@ -39,10 +22,10 @@ class GameModeManager {
 			float rot;
 		};
 
-		GameModeManager(Game* game) { uiHelper.game = game; }
-		
+		GameModeManager(Game* game, SuccessAPI* successAP);
+
 		virtual ~GameModeManager() {}
-		
+
 		// to be called once: create long standing entities
 		virtual void Setup();
 		// to be called at the beginning of each game: setup entites, scoring, etc..
@@ -58,7 +41,7 @@ class GameModeManager {
 		// to be called to toggle pause mode display
 		virtual void TogglePauseDisplay(bool paused);
 
-		
+
 		// scoring interface
 		virtual void WillScore(int nb, int type, std::vector<Entity>& out) {}
 		virtual void ScoreCalc(int nb, int type) = 0;
@@ -70,19 +53,19 @@ class GameModeManager {
         virtual int saveInternalState(uint8_t** out);
         virtual const uint8_t* restoreInternalState(const uint8_t* in, int size);
 		void generateLeaves(int* nb);
-		
+
 	protected:
 		float position(float t);
 		void LoadHerissonTexture(int type);
 		void updateHerisson(float dt, float obj, float herissonSpeed);
 		void deleteLeaves(int type, int nb);
-		
+		void scoreCalcForSuccessETIAR(int nb, int type);
 	public:
 		// game params
 		float time, limit;
 		int points, bonus;
         Entity sky;
-	
+
 	protected:
 		// display elements
 		InGameUiHelper uiHelper;
@@ -92,11 +75,15 @@ class GameModeManager {
 		Entity herisson;
 		//feuilles de l'arbre
 		std::vector<BranchLeaf> branchLeaves;
-	private:		
+
+		SuccessAPI* successAPI;
+		bool succBonus,succRainbow;
+		int succEveryTypeInARow[8];
+		int succBonusPoints;
+	private:
 		//hérisson
 		AnimatedActor* c;
 
-	private :
 		std::vector<Render> posBranch;
 		void fillVec();
 		float distance;

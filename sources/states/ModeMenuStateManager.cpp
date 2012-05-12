@@ -1,13 +1,43 @@
 #include "ModeMenuStateManager.h"
+#include "CallBack.cpp"
+
+std::string diffic(int difficulty) {
+	std::stringstream s;
+	s << "Difficulty : ";
+	switch (difficulty) {
+		case 0:
+			s << "easy (5x5)";
+			break;
+		case 1:
+			s << "medium (8x8)";
+			break;
+		case 2:
+			s << "hardcore (12x8)";
+			break;
+	}
+	return s.str().c_str();
+}
+
+ModeMenuStateManager::ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII, SuccessAPI* successAP, LocalizeAPI* lAPI) {
+	storage = storag;
+	ended = false;
+	inputUI = inputUII;
+	successAPI = successAP;
+	localizeAPI = lAPI;
+	difficulty = 1;
+}
 
 ModeMenuStateManager::~ModeMenuStateManager() {
 	for (int i=0; i<5; i++) {
 		theEntityManager.DeleteEntity(scoresName[i]);
 		theEntityManager.DeleteEntity(scoresPoints[i]);
+		theEntityManager.DeleteEntity(scoresLevel[i]);
 	}
 	theEntityManager.DeleteEntity(play);
 	theEntityManager.DeleteEntity(back);
 	theEntityManager.DeleteEntity(yourScore);
+	theEntityManager.DeleteEntity(eDifficulty);
+	theEntityManager.DeleteEntity(bDifficulty);
 }
 
 void ModeMenuStateManager::Setup() {
@@ -43,53 +73,6 @@ void ModeMenuStateManager::Setup() {
 			TEXT_RENDERING(scoresPoints[i])->color =
 				TEXT_RENDERING(scoresLevel[i])->color = green;
 	}
-
-	// play text
-	play = theEntityManager.CreateEntity();
-	ADD_COMPONENT(play, Transformation);
-	TRANSFORM(play)->position = Vector2(PlacementHelper::GimpXToScreen(65), PlacementHelper::GimpYToScreen(300));
-	TRANSFORM(play)->z = DL_MainMenuUITxt;
-	ADD_COMPONENT(play, TextRendering);
-	TEXT_RENDERING(play)->text = "Jouer";
-	TEXT_RENDERING(play)->positioning = TextRenderingComponent::LEFT;
-	TEXT_RENDERING(play)->color = green;
-	TEXT_RENDERING(play)->fontName = "typo";
-	TEXT_RENDERING(play)->charHeight = PlacementHelper::GimpHeightToScreen(100);
-	TEXT_RENDERING(play)->hide = true;
-
-	// score title
-	scoreTitle = theEntityManager.CreateEntity();
-	ADD_COMPONENT(scoreTitle, Transformation);
-	TRANSFORM(scoreTitle)->position = Vector2(PlacementHelper::GimpXToScreen(65), PlacementHelper::GimpYToScreen(476));
-	TRANSFORM(scoreTitle)->z = DL_MainMenuUITxt;
-	ADD_COMPONENT(scoreTitle, TextRendering);
-	TEXT_RENDERING(scoreTitle)->text = "Score";
-	TEXT_RENDERING(scoreTitle)->fontName = "typo";
-	TEXT_RENDERING(scoreTitle)->positioning = TextRenderingComponent::LEFT;
-	TEXT_RENDERING(scoreTitle)->color = green;
-	TEXT_RENDERING(scoreTitle)->charHeight = PlacementHelper::GimpHeightToScreen(54);
-	TEXT_RENDERING(scoreTitle)->hide = true;
-
-	// play button
-	playButton = theEntityManager.CreateEntity();
-	ADD_COMPONENT(playButton, Transformation);
-	ADD_COMPONENT(playButton, Container);
-	CONTAINER(playButton)->entities.push_back(play);
-	CONTAINER(playButton)->includeChildren = true;
-	ADD_COMPONENT(playButton, Button);
-	ADD_COMPONENT(playButton, Sound);
-	SOUND(playButton)->type = SoundComponent::EFFECT;
-	BUTTON(playButton)->enabled = false;
-
-	// your score
-	yourScore = theTextRenderingSystem.CreateEntity();
-	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
-	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(1242));
-	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::LEFT;
-	TEXT_RENDERING(yourScore)->hide = true;
-	TEXT_RENDERING(yourScore)->charHeight = PlacementHelper::GimpHeightToScreen(56);
-	TEXT_RENDERING(yourScore)->color = green;
-
 	// back button
 	back = theEntityManager.CreateEntity();
 	ADD_COMPONENT(back, Transformation);
@@ -102,6 +85,62 @@ void ModeMenuStateManager::Setup() {
 	RENDERING(back)->texture = theRenderingSystem.loadTextureFile("menu/back.png");
 	SOUND(back)->type = SoundComponent::EFFECT;
 	BUTTON(back)->enabled = false;
+
+	// score title
+	scoreTitle = theEntityManager.CreateEntity();
+	ADD_COMPONENT(scoreTitle, Transformation);
+	TRANSFORM(scoreTitle)->position = Vector2(PlacementHelper::GimpXToScreen(65), PlacementHelper::GimpYToScreen(476));
+	TRANSFORM(scoreTitle)->z = DL_MainMenuUITxt;
+	ADD_COMPONENT(scoreTitle, TextRendering);
+	TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("Score :");
+	TEXT_RENDERING(scoreTitle)->fontName = "typo";
+	TEXT_RENDERING(scoreTitle)->positioning = TextRenderingComponent::LEFT;
+	TEXT_RENDERING(scoreTitle)->color = green;
+	TEXT_RENDERING(scoreTitle)->charHeight = PlacementHelper::GimpHeightToScreen(54);
+	TEXT_RENDERING(scoreTitle)->hide = true;
+
+	// play text
+	play = theEntityManager.CreateEntity();
+	ADD_COMPONENT(play, Transformation);
+	TRANSFORM(play)->position = Vector2(PlacementHelper::GimpXToScreen(65), PlacementHelper::GimpYToScreen(300));
+	TRANSFORM(play)->z = DL_MainMenuUITxt;
+	ADD_COMPONENT(play, TextRendering);
+	TEXT_RENDERING(play)->text = localizeAPI->text("Jouer");
+	TEXT_RENDERING(play)->positioning = TextRenderingComponent::LEFT;
+	TEXT_RENDERING(play)->color = green;
+	TEXT_RENDERING(play)->fontName = "typo";
+	TEXT_RENDERING(play)->charHeight = PlacementHelper::GimpHeightToScreen(100);
+	TEXT_RENDERING(play)->hide = true;
+	// play button
+	playButton = theEntityManager.CreateEntity();
+	ADD_COMPONENT(playButton, Transformation);
+	ADD_COMPONENT(playButton, Container);
+	CONTAINER(playButton)->entities.push_back(play);
+	CONTAINER(playButton)->includeChildren = true;
+	ADD_COMPONENT(playButton, Button);
+	ADD_COMPONENT(playButton, Sound);
+	SOUND(playButton)->type = SoundComponent::EFFECT;
+	BUTTON(playButton)->enabled = false;
+
+	//difficulty text
+	eDifficulty = theTextRenderingSystem.CreateEntity();
+	TRANSFORM(eDifficulty)->z = DL_MainMenuUITxt;
+	TRANSFORM(eDifficulty)->position = Vector2(PlacementHelper::GimpXToScreen(85),PlacementHelper::GimpYToScreen(400));
+	TEXT_RENDERING(eDifficulty)->positioning = TextRenderingComponent::LEFT;
+	TEXT_RENDERING(eDifficulty)->hide = true;
+	TEXT_RENDERING(eDifficulty)->charHeight = PlacementHelper::GimpHeightToScreen(45);
+	TEXT_RENDERING(eDifficulty)->color = green;
+	TEXT_RENDERING(eDifficulty)->text = localizeAPI->text(diffic(difficulty));
+	//difficulty container
+	bDifficulty = theEntityManager.CreateEntity();
+	ADD_COMPONENT(bDifficulty, Transformation);
+	ADD_COMPONENT(bDifficulty, Container);
+	CONTAINER(bDifficulty)->entities.push_back(eDifficulty);
+	CONTAINER(bDifficulty)->includeChildren = true;
+	ADD_COMPONENT(bDifficulty, Button);
+	ADD_COMPONENT(bDifficulty, Sound);
+	SOUND(bDifficulty)->type = SoundComponent::EFFECT;
+	BUTTON(bDifficulty)->enabled = false;
 
 	// openfeint button
 	openfeint = theEntityManager.CreateEntity();
@@ -116,6 +155,15 @@ void ModeMenuStateManager::Setup() {
 	SOUND(openfeint)->type = SoundComponent::EFFECT;
 	BUTTON(openfeint)->enabled = false;
 
+	// your score
+	yourScore = theTextRenderingSystem.CreateEntity();
+	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
+	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(1242));
+	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::LEFT;
+	TEXT_RENDERING(yourScore)->hide = true;
+	TEXT_RENDERING(yourScore)->charHeight = PlacementHelper::GimpHeightToScreen(56);
+	TEXT_RENDERING(yourScore)->color = green;
+
 	// fond
 	fond = theEntityManager.CreateEntity();
 	ADD_COMPONENT(fond, Transformation);
@@ -125,11 +173,24 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(fond, Rendering);
 	RENDERING(fond)->texture = theRenderingSystem.loadTextureFile("menu/fond_menu_mode.png");
 	RENDERING(fond)->color.a = 0.5;
-
 }
 
-void ModeMenuStateManager::LoadScore(int mode) {
-	std::vector<ScoreStorage::Score> entries = storage->getScore(mode);
+
+
+
+void ModeMenuStateManager::LoadScore(int mode, int dif) {
+	/*getting scores*/
+	std::vector<ScoreStorage::Score> entries;
+	std::stringstream tmp;
+	tmp << "select * from score where mode= "<< mode << " and difficulty=" << dif;
+	if (mode==Normal)
+		 tmp << " order by points desc limit 5";
+	else
+		tmp << " order by time asc limit 5";
+
+	storage->request(tmp.str().c_str(), &entries, callbackScore);
+
+	/* treatment*/
 	bool alreadyGreen = false;
 	for (int i=0; i<5; i++) {
 		TextRenderingComponent* trcN = TEXT_RENDERING(scoresName[i]);
@@ -140,24 +201,28 @@ void ModeMenuStateManager::LoadScore(int mode) {
 			trcP->hide = false;
 			std::stringstream a;
 			a.precision(1);
-			if (mode==ScoreAttack) {
-				a << std::fixed << entries[i].time << " s";
-				trcP->isANumber = false;
-			} else {
+			if (mode==Normal) {
 				a << std::fixed << entries[i].points;
 				trcP->isANumber = true;
+			} else {
+				a << std::fixed << entries[i].time << " s";
+				trcP->isANumber = false;
 			}
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
 
-			a.str(""); a<< std::fixed <<"niv " <<entries[i].level;
+			a.str(""); a<< std::fixed <<localizeAPI->text("niv") << " " <<entries[i].level;
 			trcL->text = a.str();
 			//affichage lvl
 			if (mode==Normal) {
 				trcL->hide = false;
 			}
 
-			if (!alreadyGreen && ended && ((entries[i].points == modeMgr->points && mode!=ScoreAttack) || (mode==ScoreAttack && entries[i].time-modeMgr->time<0.01f)) && entries[i].name == playerName) {
+			if (!alreadyGreen && ended &&
+			 ((entries[i].points == modeMgr->points && mode!=TilesAttack)
+			  || (mode==TilesAttack && entries[i].time-modeMgr->time<0.01f))
+			   && entries[i].name == playerName) {
+				   trcN->color = Color(1.0f,0.f,0.f);
 				alreadyGreen = true;
 			} else {
 			}
@@ -172,7 +237,14 @@ void ModeMenuStateManager::LoadScore(int mode) {
 
 void ModeMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-	GameMode m = modeMgr->GetMode();
+
+	//success test
+	int sav=0;
+	storage->request("select points from score", &sav, callbackSc);
+	if (sav > 1000000) {
+		successAPI->successCompleted("Hardscore gamer", 1653102);
+	}
+
 	BUTTON(back)->enabled = true;
 	BUTTON(playButton)->enabled = true;
 	if (ended) {
@@ -180,18 +252,24 @@ void ModeMenuStateManager::Enter() {
 			inputUI->query(playerName);
 		}
 	}
-	LoadScore(m);
+
+	LoadScore(modeMgr->GetMode(), difficulty);
+
 
 	TEXT_RENDERING(play)->hide = false;
-	TEXT_RENDERING(scoreTitle)->hide = false;
 	RENDERING(back)->hide = false;
-	RENDERING(openfeint)->hide = false;
-	TEXT_RENDERING(title)->hide = false;
 	RENDERING(menubg)->hide = false;
+	//~ TEXT_RENDERING(title)->hide = false;
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
+	TEXT_RENDERING(play)->text = ended ? localizeAPI->text("Rejouer") : localizeAPI->text("Jouer");
+	RENDERING(openfeint)->hide = false;
 	BUTTON(openfeint)->enabled = true;
-	TEXT_RENDERING(play)->text = ended ? "Rejouer" : "Jouer";
+	TEXT_RENDERING(scoreTitle)->hide = false;
+	TEXT_RENDERING(eDifficulty)->hide=false;
+	BUTTON(bDifficulty)->enabled = true;
+
+	std::stringstream s;
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
@@ -201,26 +279,27 @@ GameState ModeMenuStateManager::Update(float dt) {
 		entry.points = modeMgr->points;
 		entry.time = modeMgr->time;
 		entry.name = playerName;
-		entry.mode = (int)modeMgr->GetMode();
-		if (modeMgr->GetMode()==Normal) {
+		if (m==Normal) {
 			NormalGameModeManager* ng = static_cast<NormalGameModeManager*>(modeMgr);
 			entry.level = ng->currentLevel();
 		} else {
 			entry.level = 1;
 		}
-		storage->submitScore(entry);
+		storage->submitScore(entry, m, difficulty);
 		TEXT_RENDERING(yourScore)->hide = false;
 		std::stringstream a;
         a << playerName << " ... ";
 		a.precision(1);
-		if (m==ScoreAttack) a << std::fixed << entry.time << " s";
-		else a << entry.points;
-		if (m==Normal) a << "... niv " << entry.level;
+		if (m==Normal) 
+			a << entry.points << "... "<< localizeAPI->text("niv") << " " << entry.level;
+		else 
+			a << std::fixed << entry.time << " s";
+			
 		TEXT_RENDERING(yourScore)->text = a.str();
-		LoadScore(m);
+		LoadScore(m, difficulty);
 		ended = false;
 	}
-	
+
 	//herisson
 	Entity herissonActor=  herisson->actor.e;
 	if (TRANSFORM(herissonActor)->position.X < PlacementHelper::ScreenWidth+TRANSFORM(herissonActor)->size.X) {
@@ -228,6 +307,14 @@ GameState ModeMenuStateManager::Update(float dt) {
 		switchAnim(herisson);
 	} else {
 		RENDERING(herissonActor)->hide = true;
+	}
+
+	//difficulty button
+	if (BUTTON(bDifficulty)->clicked) {
+		difficulty++;
+		if (difficulty==3) difficulty=0;
+		LoadScore(modeMgr->GetMode(), difficulty);
+		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text(diffic(difficulty));
 	}
 
 	if (BUTTON(playButton)->clicked) {
@@ -251,6 +338,21 @@ GameState ModeMenuStateManager::Update(float dt) {
 }
 
 void ModeMenuStateManager::Exit() {
+	switch (difficulty) {
+		case 0:
+			theGridSystem.GridSize = 5;
+			theGridSystem.Types = 5;
+			break;
+		case 1:
+			theGridSystem.GridSize = 8;
+			theGridSystem.Types = 8;
+			break;
+		case 2:
+			theGridSystem.GridSize = 12;
+			theGridSystem.Types = 8;
+			break;
+		}
+
     // nothing to do here: will be done in LateExit after Fading
 }
 
@@ -274,4 +376,7 @@ void ModeMenuStateManager::LateExit() {
 	TEXT_RENDERING(scoreTitle)->hide = true;
 	RENDERING(herisson->actor.e)->hide = true;
 	BUTTON(openfeint)->enabled = false;
+
+	TEXT_RENDERING(eDifficulty)->hide=true;
+	BUTTON(bDifficulty)->enabled = false;
 }
