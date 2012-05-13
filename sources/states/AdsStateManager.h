@@ -2,12 +2,13 @@
 
 #include <base/EntityManager.h>
 
+#include "Game.h"
 #include "GameStateManager.h"
 
 class AdsStateManager : public GameStateManager {
 	public:
 
-	AdsStateManager() { };
+	AdsStateManager(ScoreStorage* str) : storage(str) { };
 	~AdsStateManager();
 	void Setup();
 	void Enter();
@@ -16,4 +17,6 @@ class AdsStateManager : public GameStateManager {
 
 	private:
 		Entity eAds;
+		ScoreStorage* storage;
+		int gameb4Ads;
 };

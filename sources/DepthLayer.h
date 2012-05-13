@@ -29,4 +29,5 @@
 #define DL_Logo 0.55
 #define DL_LogoAnim 0.56
 #define DL_Benchmark 0.6
+#define DL_Ads 0.61
 #define DL_Fading 0.65

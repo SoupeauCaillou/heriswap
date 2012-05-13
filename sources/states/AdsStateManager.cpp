@@ -1,5 +1,7 @@
 #include "AdsStateManager.h"
 
+#include <sstream>
+
 #include "base/PlacementHelper.h"
 
 #include "systems/TransformationSystem.h"
@@ -23,7 +25,7 @@ void AdsStateManager::Setup() {
 	ADD_COMPONENT(eAds, Transformation);
 	ADD_COMPONENT(eAds, Rendering);
 	ADD_COMPONENT(eAds, Button);
-	TRANSFORM(eAds)->z = DL_MainMenuFg;
+	TRANSFORM(eAds)->z = DL_Ads;
 	TRANSFORM(eAds)->size = Vector2(PlacementHelper::WindowWidth, PlacementHelper::WindowHeight);
 	TRANSFORM(eAds)->position = Vector2(PlacementHelper::GimpXToScreen(0),PlacementHelper::GimpYToScreen(0));
 	BUTTON(eAds)->enabled = false;
@@ -32,12 +34,21 @@ void AdsStateManager::Setup() {
 void AdsStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
+	std::string s;
+	storage->request("select value from info where opt='gameb4Ads'", &s, 0);
+	gameb4Ads = std::atoi(s.c_str());
+	
+	if (!gameb4Ads) {
+		BUTTON(eAds)->enabled = true;
+		RENDERING(eAds)->color = Color(1.f,1.f,1.f);
+	} else {
+		RENDERING(eAds)->color = Color(0.f,0.f,0.f);
+	}
 	RENDERING(eAds)->hide = false;
-	BUTTON(eAds)->enabled = true;
 }
 
 GameState AdsStateManager::Update(float dt) {
-	if (BUTTON(eAds)->clicked) {
+	if (gameb4Ads>0 || BUTTON(eAds)->clicked) {
 		return AdsToBlackState;
 	}
 	return Ads;
@@ -47,4 +58,10 @@ void AdsStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	RENDERING(eAds)->hide = true;
 	BUTTON(eAds)->enabled = false;
+	
+	if (gameb4Ads==0)
+		gameb4Ads=3;
+	std::stringstream s;
+	s << "update info set value='" << gameb4Ads-1 << "' where opt='gameb4Ads'";
+	storage->request(s.str(),0, 0);
 }

@@ -173,6 +173,11 @@ class LinuxSqliteExec: public ScoreStorage {
 				s = "";
 				request("select value from info where opt like 'helpActive'", &s, 0);
 				if (s.length()==0) request("insert into info values('helpActive', '1')", 0, 0);
+				s = "";
+				request("select value from info where opt like 'gameb4Ads'", &s, 0);
+				if (s.length()==0) request("insert into info values('gameb4Ads', '2')", 0, 0);
+				else request("UPDATE info SET value='2' where opt='gameb4Ads'",0, 0);
+				
 			}
 			return r;
 		}

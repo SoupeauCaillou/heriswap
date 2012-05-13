@@ -41,7 +41,7 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI);
      state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successAPI,lAPI);
      state2Manager[Help] = new HelpStateManager();
-     state2Manager[Ads] = new AdsStateManager();
+     state2Manager[Ads] = new AdsStateManager(storage);
 
      state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
      state2Manager[LogoToBlackState] = new FadeGameStateManager(FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);
