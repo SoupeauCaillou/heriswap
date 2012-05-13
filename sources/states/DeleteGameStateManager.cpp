@@ -22,7 +22,6 @@ void DeleteGameStateManager::Setup() {
 	ADSR(eRemove)->sustainValue = 1.0;
 	ADSR(eRemove)->releaseTiming = 0;
 	ADD_COMPONENT(eRemove, Sound);
-	SOUND(eRemove)->type = SoundComponent::EFFECT;
 }
 
 void DeleteGameStateManager::Enter() {
@@ -44,7 +43,7 @@ void DeleteGameStateManager::Enter() {
 		        successAPI->successCompleted("6 in a row", 1652152);
 	        }
 	    }
-    	SOUND(eRemove)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg", false);
+    	SOUND(eRemove)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg");
 	}
 }
 

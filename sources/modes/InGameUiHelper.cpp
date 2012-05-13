@@ -41,7 +41,6 @@ void InGameUiHelper::build() {
 	RENDERING(pauseButton)->color = Color(3.0/255, 99.0/255, 71.0/255);
 	RENDERING(pauseButton)->texture = theRenderingSystem.loadTextureFile("pause.png");
     ADD_COMPONENT(pauseButton, Sound);
-	SOUND(pauseButton)->type = SoundComponent::EFFECT;
 	ADD_COMPONENT(pauseButton, Button);
 	BUTTON(pauseButton)->enabled = false;
 
@@ -72,7 +71,7 @@ void InGameUiHelper::show() {
 void InGameUiHelper::update(float dt) {
 	// handle button
 	if (BUTTON(pauseButton)->clicked) {
-		SOUND(pauseButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+		SOUND(pauseButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		game->togglePause(true);
 	}
 }

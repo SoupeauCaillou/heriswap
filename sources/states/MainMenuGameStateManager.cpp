@@ -60,7 +60,6 @@ void MainMenuGameStateManager::Setup() {
 		TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, Vector2(PlacementHelper::GimpXToScreen(700),PlacementHelper::GimpYToScreen(100)));
 		MORPHING(eStart[i])->elements.push_back(posMorph);
 		ADD_COMPONENT(bStart[i], Sound);
-		SOUND(bStart[i])->type = SoundComponent::EFFECT;
 		ADD_COMPONENT(bStart[i], Button);
 		BUTTON(bStart[i])->enabled = false;
 	}
@@ -104,7 +103,7 @@ void MainMenuGameStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
 	// preload sound effect
-	theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+	theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 
 	RENDERING(herisson->actor.e)->hide = false;
 
@@ -138,11 +137,11 @@ GameState MainMenuGameStateManager::Update(float dt) {
 	if (!modeTitleToReset || modeTitleToReset && !MORPHING(modeTitleToReset)->active) {
 		if (BUTTON(bStart[0])->clicked) {
 			choosenGameMode = Normal;
-			SOUND(bStart[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+			SOUND(bStart[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 			return ModeMenu;
 		} else if (BUTTON(bStart[1])->clicked){
 			choosenGameMode = TilesAttack;
-			SOUND(bStart[1])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+			SOUND(bStart[1])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 			return ModeMenu;
 		}
 	}

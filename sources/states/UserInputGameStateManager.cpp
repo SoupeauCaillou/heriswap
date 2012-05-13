@@ -13,8 +13,8 @@ UserInputGameStateManager::~UserInputGameStateManager() {
 
 void UserInputGameStateManager::Setup() {
 	// preload sound effect
-	theSoundSystem.loadSoundFile("audio/son_monte.ogg", false);
-	theSoundSystem.loadSoundFile("audio/son_descend.ogg", false);
+	theSoundSystem.loadSoundFile("audio/son_monte.ogg");
+	theSoundSystem.loadSoundFile("audio/son_descend.ogg");
 
 	eSwapper = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSwapper, ADSR);
@@ -26,7 +26,6 @@ void UserInputGameStateManager::Setup() {
 	ADSR(eSwapper)->releaseTiming = 0.1;
 
 	ADD_COMPONENT(eSwapper, Sound);
-	SOUND(eSwapper)->type = SoundComponent::EFFECT;
 	originI = originJ = -1;
 }
 
@@ -193,7 +192,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 					GRID(e2)->i = originI + swapI;
 					GRID(e2)->j = originJ + swapJ;
 
-					SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/son_descend.ogg", false);
+					SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/son_descend.ogg");
 					return UserInput;
 				} else {
 					// validate position

@@ -36,11 +36,10 @@ void Game::stateChanged(GameState oldState, GameState newState) {
      } else if (newState == LevelChanged) {
         static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel =
         static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->getSmallLevelEntity();
-        // stop music
-        datas->canalStress1.stop();
-        datas->canalStress2.stop();
-        for(int i=0; i<4; i++) {
-            datas->canal[i].stop();
+
+        MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Stop;
+        for(int i=0; i<3; i++) {
+            MUSIC(datas->inGameMusic.secondaryTracks[i])->control = MusicComponent::Stop;
         }
      } else if( newState == MainMenu && oldState == ModeMenu) {
         datas->state2Manager[oldState]->LateExit();

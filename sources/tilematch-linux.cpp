@@ -26,6 +26,7 @@
 
 #include "api/linux/MusicAPILinuxOpenALImpl.h"
 #include "api/linux/AssetAPILinuxImpl.h"
+#include "api/linux/SoundAPILinuxOpenALImpl.h"
 
 #include "Game.h"
 #include "CallBack.cpp"
@@ -223,10 +224,11 @@ int main(int argc, char** argv) {
 	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());
     theMusicSystem.musicAPI = new MusicAPILinuxOpenALImpl();
     theMusicSystem.assetAPI = new AssetAPILinuxImpl();
+    theSoundSystem.soundAPI = new SoundAPILinuxOpenALImpl();
     theMusicSystem.init();
-
+    theSoundSystem.init();
+    
 	game.init(reso->X,reso->Y, state, size);
-	theSoundSystem.linuxSoundAPI = new OpenAlSoundAPI();
 
 	bool running = true;
 	float timer = 0;

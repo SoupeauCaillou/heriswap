@@ -2,7 +2,7 @@
 #include "systems/ParticuleSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/TextRenderingSystem.h"
-#include "systems/SoundSystem.h"
+#include "systems/MusicSystem.h"
 #include "systems/MorphingSystem.h"
 #include "TwitchSystem.h"
 #include "base/PlacementHelper.h"
@@ -40,10 +40,8 @@ void LevelStateManager::Setup() {
 	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(288);
 	TEXT_RENDERING(eBigLevel)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(eBigLevel)->isANumber = true;
-	ADD_COMPONENT(eBigLevel, Sound);
-	SOUND(eBigLevel)->type = SoundComponent::MUSIC;
-	SOUND(eBigLevel)->repeat = false;
-	SOUND(eBigLevel)->stop = true;
+	ADD_COMPONENT(eBigLevel, Music);
+	MUSIC(eBigLevel)->control = MusicComponent::Stop;
 
 	eSnowEmitter = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSnowEmitter, Transformation);
@@ -88,8 +86,8 @@ void LevelStateManager::Enter() {
 	PARTICULE(eSnowEmitter)->emissionRate = 50;
 	RENDERING(eSnowBranch)->hide = false;
 	RENDERING(eSnowGround)->hide = false;
-	SOUND(eBigLevel)->sound = theSoundSystem.loadSoundFile("audio/level_up.ogg", true);
-	SOUND(eBigLevel)->stop = false;
+	MUSIC(eBigLevel)->music = theMusicSystem.loadMusicFile("audio/level_up.ogg");
+	MUSIC(eBigLevel)->control = MusicComponent::Start;
 
 	ADD_COMPONENT(eBigLevel, Morphing);
 	MORPHING(eBigLevel)->timing = 1;
@@ -159,7 +157,7 @@ GameState LevelStateManager::Update(float dt) {
 		}
 	}
 
-	if (SOUND(eBigLevel)->sound == InvalidSoundRef || duration > 8) {
+	if (MUSIC(eBigLevel)->music == InvalidMusicRef || duration > 8) {
 		return Spawn;
 	}
 

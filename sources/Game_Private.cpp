@@ -63,7 +63,6 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      if (storage->soundEnable(false)) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
      else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
      ADD_COMPONENT(soundButton, Sound);
-     SOUND(soundButton)->type = SoundComponent::EFFECT;
      RENDERING(soundButton)->hide = false;
 
      for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)
@@ -71,43 +70,6 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
 
      for(std::map<GameMode, GameModeManager*>::iterator it=mode2Manager.begin(); it!=mode2Manager.end(); ++it)
          it->second->Setup();
-
-     for (int i=0; i<2; i++) {
-         musicStress2[i] = theEntityManager.CreateEntity();
-         ADD_COMPONENT(musicStress2[i], Sound);
-         SOUND(musicStress2[i])->type = SoundComponent::MUSIC;
-
-         musicStress1[i] = theEntityManager.CreateEntity();
-         ADD_COMPONENT(musicStress1[i], Sound);
-         SOUND(musicStress1[i])->type = SoundComponent::MUSIC;
-
-         musicMenu[i] = theEntityManager.CreateEntity();
-         ADD_COMPONENT(musicMenu[i], Sound);
-         SOUND(musicMenu[i])->type = SoundComponent::MUSIC;
-     }
-     for (int i=0; i<8; i++) {
-         music[i] = theEntityManager.CreateEntity();
-         ADD_COMPONENT(music[i], Sound);
-         SOUND(music[i])->type = SoundComponent::MUSIC;
-         SOUND(music[i])->repeat = false;
-     }
-
-     canalMenu.timeLoop = 64.;
-     canalMenu.musicLength=65.;
-     canalMenu.sounds=musicMenu;
-     canalMenu.name="audio/musique_menu.ogg";
-
-     canalStress1.sounds=musicStress1;
-     canalStress1.name="audio/E.ogg";
-
-     canalStress2.sounds=musicStress2;
-     canalStress2.name="audio/F.ogg";
-
-     for (int i=0;i<4;i++) {
-         canal[i].sounds=music+2*i;
-         canal[i].multipleStrings = true;
-     }
-
 
      float benchPos = - 4.75;
      benchTotalTime = theEntityManager.CreateEntity();
@@ -152,14 +114,6 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      	MUSIC(inGameMusic.secondaryTracks[i])->loopAt = 17.0f;
      	MUSIC(inGameMusic.secondaryTracks[i])->master = MUSIC(inGameMusic.masterTrack);
      }
-     /*
-     for (int i=0; i<2; i++) {
-     	inGameMusic.stressTracks[i] = theEntityManager.CreateEntity();
-     	ADD_COMPONENT(inGameMusic.stressTracks[i], Music);
-     	MUSIC(inGameMusic.stressTracks[i])->loopAt = 17.0f;
-     	MUSIC(inGameMusic.stressTracks[i])->master = MUSIC(inGameMusic.masterTrack);
-     }
-     */
 	PauseStateManager* pause = static_cast<PauseStateManager*> (state2Manager[Pause]);
 	pause->helpMgr = static_cast<HelpStateManager*> (state2Manager[Help]);
 }

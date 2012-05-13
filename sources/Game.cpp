@@ -328,7 +328,7 @@ void Game::tick(float dt) {
 		theSoundSystem.mute = !theSoundSystem.mute;
         theMusicSystem.toggleMute(theSoundSystem.mute);
 		if (!theSoundSystem.mute) {
-            SOUND(datas->soundButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+            SOUND(datas->soundButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
             RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
         } else {
             RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
@@ -342,8 +342,6 @@ void Game::tick(float dt) {
 
     //update music
     if (pausableState(datas->state) && datas->state != LevelChanged) { //si on joue
-        datas->canalMenu.stop();
-        // updateMusic(datas->canal, &datas->canalStress1, &datas->canalStress2, percentDone, dt);
         if (MUSIC(datas->inGameMusic.masterTrack)->music == InvalidMusicRef) {
             std::vector<std::string> musics = newMusics();
             MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
@@ -378,11 +376,6 @@ void Game::tick(float dt) {
         if (MUSIC(datas->menu)->loopNext == InvalidMusicRef) {
             MUSIC(datas->menu)->loopNext = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");
         }
-
-       for (int i=0;i<4;i++) datas->canal[i].stop();
-        datas->canalStress1.stop();
-        datas->canalStress2.stop();
-        datas->canalMenu.update(dt);
     }
 
     // systems update

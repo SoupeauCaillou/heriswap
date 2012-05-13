@@ -83,7 +83,6 @@ void ModeMenuStateManager::Setup() {
 	TransformationSystem::setPosition(TRANSFORM(back), Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(82)), TransformationSystem::NW);
 	TRANSFORM(back)->z = DL_MainMenuUITxt;
 	RENDERING(back)->texture = theRenderingSystem.loadTextureFile("menu/back.png");
-	SOUND(back)->type = SoundComponent::EFFECT;
 	BUTTON(back)->enabled = false;
 
 	// score title
@@ -119,7 +118,6 @@ void ModeMenuStateManager::Setup() {
 	CONTAINER(playButton)->includeChildren = true;
 	ADD_COMPONENT(playButton, Button);
 	ADD_COMPONENT(playButton, Sound);
-	SOUND(playButton)->type = SoundComponent::EFFECT;
 	BUTTON(playButton)->enabled = false;
 
 	//difficulty text
@@ -139,7 +137,6 @@ void ModeMenuStateManager::Setup() {
 	CONTAINER(bDifficulty)->includeChildren = true;
 	ADD_COMPONENT(bDifficulty, Button);
 	ADD_COMPONENT(bDifficulty, Sound);
-	SOUND(bDifficulty)->type = SoundComponent::EFFECT;
 	BUTTON(bDifficulty)->enabled = false;
 
 	// openfeint button
@@ -152,7 +149,6 @@ void ModeMenuStateManager::Setup() {
 	TransformationSystem::setPosition(TRANSFORM(openfeint), Vector2(PlacementHelper::GimpXToScreen(605), PlacementHelper::GimpYToScreen(476)), TransformationSystem::NW);
 	TRANSFORM(openfeint)->z = DL_MainMenuUITxt;
 	RENDERING(openfeint)->texture = theRenderingSystem.loadTextureFile("menu/openfeint.png");
-	SOUND(openfeint)->type = SoundComponent::EFFECT;
 	BUTTON(openfeint)->enabled = false;
 
 	// your score
@@ -318,13 +314,13 @@ GameState ModeMenuStateManager::Update(float dt) {
 	}
 
 	if (BUTTON(playButton)->clicked) {
-		SOUND(playButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+		SOUND(playButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		RENDERING(herisson->actor.e)->hide = true;
 		TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
 		TEXT_RENDERING(title)->hide = true;
 		return ModeMenuToBlackState;
 	} if (BUTTON(back)->clicked) {
-		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		return MainMenu;
 	}
 	if (BUTTON(openfeint)->clicked) {

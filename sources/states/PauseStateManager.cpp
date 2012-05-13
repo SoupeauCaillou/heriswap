@@ -37,7 +37,6 @@ void PauseStateManager::Setup() {
 	TRANSFORM(bRestart)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
 	TRANSFORM(bRestart)->position = Vector2(0, PlacementHelper::GimpYToScreen(300));
 	BUTTON(bRestart)->enabled = false;
-	SOUND(bRestart)->type = SoundComponent::EFFECT;
 
 	//Help Text
 	eHelp = theTextRenderingSystem.CreateEntity();
@@ -61,8 +60,7 @@ void PauseStateManager::Setup() {
 	TRANSFORM(bHelp)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
 	TRANSFORM(bHelp)->position = Vector2(0, PlacementHelper::GimpYToScreen(500));
 	BUTTON(bHelp)->enabled = false;
-	SOUND(bHelp)->type = SoundComponent::EFFECT;	
-	
+
 	//Abort text
 	eAbort = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(eAbort)->z = DL_PauseUIFg;
@@ -84,13 +82,12 @@ void PauseStateManager::Setup() {
 	TRANSFORM(bAbort)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
 	TRANSFORM(bAbort)->position = Vector2(0, PlacementHelper::GimpYToScreen(900));
 	BUTTON(bAbort)->enabled = false;
-	SOUND(bAbort)->type = SoundComponent::EFFECT;
 
 }
 
 void PauseStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-	theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+	theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 	TEXT_RENDERING(eRestart)->hide = false;
 	RENDERING(bRestart)->hide = false;
 	TEXT_RENDERING(eAbort)->hide = false;
@@ -109,13 +106,13 @@ void PauseStateManager::Enter() {
 
 GameState PauseStateManager::Update(float dt) {
 	if (BUTTON(bAbort)->clicked) {
-		SOUND(bAbort)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+		SOUND(bAbort)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		return MainMenu;
 	} if (BUTTON(bRestart)->clicked) {
-		SOUND(bRestart)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+		SOUND(bRestart)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		return Unpause;
 	} if (BUTTON(bHelp)->clicked) {
-		SOUND(bHelp)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg", false);
+		SOUND(bHelp)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		return Help;
 	}
 	return Pause;

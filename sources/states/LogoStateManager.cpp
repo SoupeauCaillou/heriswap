@@ -41,7 +41,6 @@ void LogoStateManager::Enter() {
 	RENDERING(animLogo)->hide = true;
 	duration = 0;
 	ADD_COMPONENT(animLogo, Sound);
-	SOUND(animLogo)->type = SoundComponent::EFFECT;
     RENDERING(logo)->hide = RENDERING(logobg)->hide = false;
 }
 
@@ -58,7 +57,7 @@ GameState LogoStateManager::Update(float dt) {
 		RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo3_365_331.png");
 	} else if (duration > 0.8) {
 		RENDERING(animLogo)->hide = false;
-		SOUND(animLogo)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg", false);
+		SOUND(animLogo)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg");
 	}
 	return Logo;
 }
