@@ -219,6 +219,8 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 			  || (mode==TilesAttack && entries[i].time-modeMgr->time<0.01f))
 			   && entries[i].name == playerName) {
 				   trcN->color = Color(1.0f,0.f,0.f);
+				   trcP->color = Color(1.0f,0.f,0.f);
+				   trcL->color = Color(1.0f,0.f,0.f);
 				alreadyGreen = true;
 			} else {
 			}
@@ -286,11 +288,11 @@ GameState ModeMenuStateManager::Update(float dt) {
 		std::stringstream a;
         a << playerName << " ... ";
 		a.precision(1);
-		if (m==Normal) 
+		if (m==Normal)
 			a << entry.points << "... "<< localizeAPI->text("niv") << " " << entry.level;
-		else 
+		else
 			a << std::fixed << entry.time << " s";
-			
+
 		TEXT_RENDERING(yourScore)->text = a.str();
 		LoadScore(m, difficulty);
 		ended = false;
