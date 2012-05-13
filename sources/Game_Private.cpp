@@ -18,6 +18,7 @@
 #include "states/ModeMenuStateManager.h"
 #include "states/LogoStateManager.h"
 #include "states/HelpStateManager.h"
+#include "states/AdsStateManager.h"
 
 
 PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessAPI* successAPI, LocalizeAPI* lAPI) {
@@ -40,11 +41,14 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI);
      state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successAPI,lAPI);
      state2Manager[Help] = new HelpStateManager();
+     state2Manager[Ads] = new AdsStateManager();
 
      state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
      state2Manager[LogoToBlackState] = new FadeGameStateManager(FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);
      state2Manager[BlackToMainMenu] = new FadeGameStateManager(FadeIn, BlackToMainMenu, MainMenu, state2Manager[MainMenu], 0);
-     state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(FadeOut, ModeMenuToBlackState, BlackToSpawn, 0, state2Manager[ModeMenu]);
+     state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(FadeOut, ModeMenuToBlackState, BlackToAds, 0, state2Manager[ModeMenu]);
+     state2Manager[BlackToAds] = new FadeGameStateManager(FadeIn, BlackToAds, Ads, state2Manager[Ads], 0);
+     state2Manager[AdsToBlackState] = new FadeGameStateManager(FadeOut, AdsToBlackState, BlackToSpawn, 0, state2Manager[Ads]);
      state2Manager[BlackToSpawn] = new FadeGameStateManager(FadeIn, BlackToSpawn, Spawn, 0, 0);
  }
 
@@ -104,7 +108,7 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      MUSIC(menu)->music = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");
      MUSIC(menu)->control = MusicComponent::Start;
      MUSIC(menu)->loopAt = 64.0f;
-     
+
      inGameMusic.masterTrack = theEntityManager.CreateEntity();
      ADD_COMPONENT(inGameMusic.masterTrack, Music);
      MUSIC(inGameMusic.masterTrack)->loopAt = 17.0f;

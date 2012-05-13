@@ -13,11 +13,14 @@ enum GameState {
      ScoreBoard,
      EndMenu,
      Background,
-     BlackToLogoState,
      LogoToBlackState,
-     BlackToMainMenu,
      ModeMenuToBlackState,
+     AdsToBlackState,
+     BlackToAds,
+     BlackToLogoState,
+     BlackToMainMenu,
      BlackToSpawn,
      Logo,
-     Help
+     Help,
+     Ads
 };

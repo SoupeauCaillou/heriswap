@@ -67,6 +67,8 @@ static bool fadeLogoState(GameState state) {
 		case BlackToLogoState:
 		case LogoToBlackState:
 		case BlackToMainMenu:
+		case BlackToAds:
+		case AdsToBlackState:
 		case Logo:
 			return true;
 		default:
@@ -174,7 +176,7 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	theGridSystem.GridSize = GRIDSIZE;
 	theSoundSystem.mute = !datas->storage->soundEnable(false);
     theMusicSystem.toggleMute(theSoundSystem.mute);
-    
+
 	float bgElementWidth = PlacementHelper::GimpWidthToScreen(800);
 	datas->sky = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->sky, Transformation);
@@ -365,7 +367,7 @@ void Game::tick(float dt) {
 	        }
         }
         MUSIC(datas->menu)->control = MusicComponent::Stop;
-        
+
     } else if (!pausableState(datas->state) && !fadeLogoState(datas->state)) { //dans les menus
         if (MUSIC(datas->menu)->music == InvalidMusicRef) {
          LOGW("Start Menu music");
