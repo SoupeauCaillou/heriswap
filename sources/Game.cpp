@@ -345,7 +345,7 @@ void Game::tick(float dt) {
 	}
 
     //update music
-    if (pausableState(datas->state) && datas->state != LevelChanged) { //si on joue
+    if (pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause) { //si on joue
         if (MUSIC(datas->inGameMusic.masterTrack)->music == InvalidMusicRef) {
             std::vector<std::string> musics = newMusics();
             MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
