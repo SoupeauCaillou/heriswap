@@ -9,10 +9,10 @@ file(
         tilematch_files
         ../sources/*.cpp
 )
-message(STATUS "fcu " ${tilematch_tests_files})
-message(STATUS "fcu " ${tilematch_files}) 
+#message(STATUS "fcu " ${tilematch_tests_files})
+#message(STATUS "fcu " ${tilematch_files}) 
 list(REMOVE_ITEM tilematch_files ${PROJECT_SOURCE_DIR}/tests/../sources/tilematch-linux.cpp) 
-message(STATUS "fcu " ${tilematch_files}) 
+#message(STATUS "fcu " ${tilematch_files}) 
 include_directories(${PROJECT_SOURCE_DIR}/sources)
 include_directories(${PROJECT_SOURCE_DIR}/sac)
 include_directories("/usr/include/unittest++/")
