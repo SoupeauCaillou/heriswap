@@ -35,7 +35,8 @@ static void updateColor(Entity eFading, FadeType fading) {
 }
 
 void FadeGameStateManager::Enter() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	stateActiveDuration = 0;
+	LOGW("Fade type: %d", fading);
 	RENDERING(eFading)->hide = false;
 	ADSR(eFading)->active = true;
 
@@ -47,6 +48,7 @@ void FadeGameStateManager::Enter() {
 }
 
 GameState FadeGameStateManager::Update(float dt) {
+	stateActiveDuration += dt;
 	updateColor(eFading, fading);
 	if (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()) {
 		return heIs;
@@ -62,7 +64,7 @@ GameState FadeGameStateManager::Update(float dt) {
 }
 
 void FadeGameStateManager::Exit() {
-	std::cout << __PRETTY_FUNCTION__ << std::endl;
+	LOGW("Duration : %.3f", stateActiveDuration);
 	RENDERING(eFading)->hide = true;
 	ADSR(eFading)->active = false;
 

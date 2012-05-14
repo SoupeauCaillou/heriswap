@@ -32,6 +32,7 @@ void AdsStateManager::Setup() {
 }
 
 void AdsStateManager::Enter() {
+	stateActiveDuration = 0;
 	LOGI("%s", __PRETTY_FUNCTION__);
 
 	std::string s;
@@ -48,6 +49,7 @@ void AdsStateManager::Enter() {
 }
 
 GameState AdsStateManager::Update(float dt) {
+	stateActiveDuration += dt;
 	if (gameb4Ads>0 || BUTTON(eAds)->clicked) {
 		return AdsToBlackState;
 	}
@@ -55,13 +57,15 @@ GameState AdsStateManager::Update(float dt) {
 }
 
 void AdsStateManager::Exit() {
-	LOGI("%s", __PRETTY_FUNCTION__);
-	RENDERING(eAds)->hide = true;
+	LOGI("%s : %.3f", __PRETTY_FUNCTION__, stateActiveDuration);
 	BUTTON(eAds)->enabled = false;
-	
 	if (gameb4Ads==0)
 		gameb4Ads=3;
 	std::stringstream s;
 	s << "update info set value='" << gameb4Ads-1 << "' where opt='gameb4Ads'";
 	storage->request(s.str(),0, 0);
+}
+
+void AdsStateManager::LateExit() {
+	RENDERING(eAds)->hide = true;
 }
