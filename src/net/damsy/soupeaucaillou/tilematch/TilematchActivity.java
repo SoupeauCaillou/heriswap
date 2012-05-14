@@ -43,8 +43,6 @@ public class TilematchActivity extends Activity {
 	static public int openGLESVersion = 2;
 	byte[] renderingSystemState;
 	static public SoundPool soundPool;
-	static public List<MediaPlayer> availablePlayers;
-	static public MediaPlayer[] activePlayers;
 	static public boolean isRunning;
 	static public TilematchStorage.OptionsOpenHelper optionsOpenHelper;
 	static public TilematchStorage.ScoreOpenHelper scoreOpenHelper;
@@ -122,11 +120,6 @@ public class TilematchActivity extends Activity {
         TilematchActivity.scoreOpenHelper = new TilematchStorage.ScoreOpenHelper(this);
         TilematchActivity.optionsOpenHelper = new TilematchStorage.OptionsOpenHelper(this);
         TilematchActivity.soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
-        TilematchActivity.availablePlayers = new ArrayList<MediaPlayer>(8);
-        TilematchActivity.activePlayers = new MediaPlayer[8];
-        for(int i=0; i<8; i++) {
-        	TilematchActivity.availablePlayers.add(new MediaPlayer());
-        } 
         
         if (savedInstanceState != null) {
 	        TilematchActivity.savedState = savedInstanceState.getByteArray(TILEMATCH_BUNDLE_KEY);
@@ -145,7 +138,6 @@ public class TilematchActivity extends Activity {
         super.onPause();
         mGLView.onPause();
         TilematchJNILib.pause(TilematchActivity.game);
-        TilematchJNILib.pauseAllSounds();
         isRunning = false;
     }
 
@@ -154,8 +146,6 @@ public class TilematchActivity extends Activity {
         super.onResume();
         isRunning = true;
         mGLView.onResume();
-        // pas bien, à faire uniquement qd on clique sur Reprendre
-        TilematchJNILib.resumeAllSounds();
     }
     
     @Override

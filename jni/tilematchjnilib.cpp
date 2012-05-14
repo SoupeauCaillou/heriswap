@@ -151,13 +151,28 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
  * Signature: (JII)V
  */
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_initFromRenderThread
-  (JNIEnv *env, jclass, jlong g, jint w, jint h, jbyteArray jstate) {
+  (JNIEnv *env, jclass, jlong g, jint w, jint h) {
   LOGW("%s -->", __FUNCTION__);
 	GameHolder* hld = (GameHolder*) g;
-	UPDATE_ENV_PTR(hld->gameThreadEnv, env);
+	UPDATE_ENV_PTR(hld->renderThreadEnv, env);
 	hld->width = w;
 	hld->height = h;
+	
+	hld->game->sacInit(hld->width, hld->height);
+	LOGW("%s <--", __FUNCTION__);
+}
 
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_initFromGameThread
+  (JNIEnv *env, jclass, jlong g, jbyteArray jstate) {
+  	GameHolder* hld = (GameHolder*) g;
+	UPDATE_ENV_PTR(hld->gameThreadEnv, env);
+	theMusicSystem.musicAPI = new MusicAPIAndroidImpl(env);
+	theMusicSystem.assetAPI = new AssetAPIAndroidImpl(env, hld->assetManager);
+	theSoundSystem.soundAPI = new SoundAPIAndroidImpl(env, hld->assetManager);
+	
+	theMusicSystem.init();
+	theSoundSystem.init();
+	
 	uint8_t* state = 0;
 	int size = 0;
 	if (jstate) {
@@ -168,23 +183,10 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 		LOGW("No saved state: creating a new Game instance from scratch");
 	}
 
-	hld->game->init(hld->width, hld->height, state, size);
+	hld->game->init(state, size);
 
 	hld->firstCall = true;
 	hld->dtAccumuled = 0;
-	LOGW("%s <--", __FUNCTION__);
-}
-
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_initFromGameThread
-  (JNIEnv *env, jclass, jlong g) {
-  	GameHolder* hld = (GameHolder*) g;
-
-	theMusicSystem.musicAPI = new MusicAPIAndroidImpl(env);
-	theMusicSystem.assetAPI = new AssetAPIAndroidImpl(env, hld->assetManager);
-	theSoundSystem.soundAPI = new SoundAPIAndroidImpl(env, hld->assetManager);
-	
-	theMusicSystem.init();
-	theSoundSystem.init();
 }
 
 /*

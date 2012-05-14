@@ -42,6 +42,8 @@ void LogoStateManager::Enter() {
 	duration = 0;
 	ADD_COMPONENT(animLogo, Sound);
     RENDERING(logo)->hide = RENDERING(logobg)->hide = false;
+    // preload sound
+    theSoundSystem.loadSoundFile("audio/son_monte.ogg");
 }
 
 GameState LogoStateManager::Update(float dt) {

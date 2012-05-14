@@ -144,8 +144,8 @@ void Game::loadFont(const std::string& name) {
 	theTextRenderingSystem.registerFont(name, h2wratio);
 }
 
-void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
-    PlacementHelper::ScreenHeight = 10;
+void Game::sacInit(int windowW, int windowH) {
+	PlacementHelper::ScreenHeight = 10;
     PlacementHelper::ScreenWidth = PlacementHelper::ScreenHeight * windowW / (float)windowH;
     PlacementHelper::WindowWidth = windowW;
     PlacementHelper::WindowHeight = windowH;
@@ -162,16 +162,18 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	theRenderingSystem.loadAtlas("animals");
 	*/
 	theRenderingSystem.loadAtlas("alphabet");
+	
+	// init font
+	loadFont("typo");
+	loadFont("gdtypo");
+}
 
+void Game::init(const uint8_t* in, int size) {
     if (in && size) {
         in = loadEntitySystemState(in, size);
     }
 
-	datas->Setup(windowW, windowH);
-
-	// init font
-	loadFont("typo");
-	loadFont("gdtypo");
+	datas->Setup(PlacementHelper::WindowWidth, PlacementHelper::WindowHeight);
 
 	theGridSystem.GridSize = GRIDSIZE;
 	theSoundSystem.mute = !datas->storage->soundEnable(false);
@@ -368,7 +370,7 @@ void Game::tick(float dt) {
         }
         MUSIC(datas->menu)->control = MusicComponent::Stop;
 
-    } else if (!pausableState(datas->state) && !fadeLogoState(datas->state)) { //dans les menus
+    } else if (datas->state == MainMenu || datas->state == ModeMenu) { //dans les menus
         if (MUSIC(datas->menu)->music == InvalidMusicRef) {
          LOGW("Start Menu music");
             MUSIC(datas->menu)->music = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");

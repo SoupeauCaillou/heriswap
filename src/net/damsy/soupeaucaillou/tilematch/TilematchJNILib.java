@@ -35,15 +35,15 @@ public class TilematchJNILib {
     /* Create native game instance */
     public static native long createGame(AssetManager mgr, int openGLESVersion);
     /* Initialize game, reset graphics assets, etc... */
-    public static native void initFromRenderThread(long game, int width, int height, byte[] state);
-    public static native void initFromGameThread(long game);
+    public static native void initFromRenderThread(long game, int width, int height);
+    public static native void initFromGameThread(long game, byte[] state);
     public static native void step(long game);
     public static native void render(long game);
     public static native void pause(long game);
     public static native void handleInputEvent(long game, int event, float x, float y);
     public static native byte[] serialiazeState(long game);
     public static native void initAndReloadTextures(long game);
-   
+    
     static public  byte[] assetToByteArray(AssetManager mgr, String assetName) {
     	try {
     		InputStream stream = mgr.open(assetName);
@@ -56,119 +56,21 @@ public class TilematchJNILib {
     	} 
     }
      
-    static public int loadSound(AssetManager mgr, String assetPath, boolean music) {
+    static public int loadSound(AssetManager mgr, String assetPath) {
     	try {
-	    	if (music) {
-	    		AssetFileDescriptor fd = mgr.openFd(assetPath);
-	    		// find available MediaPlayer
-	    		for(MediaPlayer p : TilematchActivity.availablePlayers) {
-	    			p.reset();
-	    			p.setAudioStreamType(AudioManager.STREAM_MUSIC);
-	    			p.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
-	    			p.setVolume(1.0f, 1.0f);
-	    			p.prepare();
-	    			TilematchActivity.availablePlayers.remove(p);
-	    			for (int i=0; i<8; i++) {
-	    				if (TilematchActivity.activePlayers[i] == null) {
-	    					TilematchActivity.activePlayers[i] = p;
-	    					return i;
-	    				}
-	    			}
-	    			throw new RuntimeException("Mouarf buggy code");
-	    		}
-	    		Log.w("tilematchJava", "No available MediaPlayer for playing: " + assetPath);
-	    		return -1;
-	    	} else {
-		    	return TilematchActivity.soundPool.load(mgr.openFd(assetPath), 1);
-	    	}
+		    return TilematchActivity.soundPool.load(mgr.openFd(assetPath), 1);
     	} catch (Exception exc) {
     		Log.e("tilematchJava", "Unable to load sound: " + assetPath);
     		return -1;
     	}
     }
- 
-    static public int playSound(int soundID, boolean music, int soundRef, int offsetms) {
+   
+    static public void playSound(int soundID, float volume) {
     	if (soundID < 0)
-    		return soundID;
-    	if (music) {
-    		Log.i("tilematchJava", "play: " + soundID + "(ref: " + soundRef + ", offset: " + offsetms);
-    		TilematchActivity.activePlayers[soundID].start();
-    		
-    		if (soundRef >= 0) {
-    			int pos = TilematchActivity.activePlayers[soundRef].getCurrentPosition() + offsetms;
-    			MediaPlayer m = TilematchActivity.activePlayers[soundID];
-    			final Object o = new Object();
-    			m.setOnSeekCompleteListener(new OnSeekCompleteListener() {
-					public void onSeekComplete(MediaPlayer mp) {
-						synchronized (o) {
-							o.notifyAll();
-						}
-					}
-				});
-    			TilematchActivity.activePlayers[soundID].seekTo(pos);
-    			synchronized (o) {
-    				try {
-    					o.wait();
-    				} catch (InterruptedException exc) {
-    					// oh.. well
-    				}
-				}
-    			Log.i("tilematchJava", "seekpos: " + pos);
-    		}
-    		
-    		return soundID;
-    	} else { 
-    		return TilematchActivity.soundPool.play(soundID, 1.0f, 1.0f, 0, 0, 1.0f);
-    	}
-    }
-    
-    static public void stopSound(int soundID, boolean music) {
-    	if (soundID < 0)
-    		return ;
-    	if (music) {
-    		Log.i("tilematchJava", "stop: " + soundID);
-    		TilematchActivity.activePlayers[soundID].stop();
-    		TilematchActivity.activePlayers[soundID].reset();
-			TilematchActivity.availablePlayers.add(TilematchActivity.activePlayers[soundID]);
-			TilematchActivity.activePlayers[soundID] = null;
-		} else { 
-    		TilematchActivity.soundPool.stop(soundID);
-    	}
+    		return;
+    	TilematchActivity.soundPool.play(soundID, volume, volume, 0, 0, 1.0f);
     }
      
-    static public float musicPosition(int soundID) {
-    	if (soundID >= 0) {
-    		MediaPlayer p = TilematchActivity.activePlayers[soundID];
-    		float result = p.getCurrentPosition() / (float) p.getDuration();
-    		if (result >= 0.99) {
-    			Log.i("tilematchJava", "done: " + soundID);
-    			p.stop();
-    			p.reset();
-    			TilematchActivity.activePlayers[soundID] = null;
-    			TilematchActivity.availablePlayers.add(p);
-    			return 1;
-    		}
-    		return result;
-    	} else {
-    		return 0;
-    	}
-    }
-    
-    static public void pauseAllSounds() {
-    	// TilematchActivity.soundPool. .autoPause();
-    	for(MediaPlayer p : TilematchActivity.activePlayers) {
-    		if (p!=null)
-    			p.pause();
-    	}    	
-    } 
-    
-    static public void resumeAllSounds() {
-    	for(MediaPlayer p : TilematchActivity.activePlayers) {
-    		if (p!=null)
-    			p.start(); 
-    	}
-    }
-    
     static public boolean soundEnable(boolean switchIt) {
     	Log.i("TilematchJava", "soundEnable : " + switchIt);
     	SQLiteDatabase db = TilematchActivity.optionsOpenHelper.getWritableDatabase();

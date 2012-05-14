@@ -44,7 +44,8 @@ class PrivateData;
 class Game {
 	public:
 		Game(NativeAssetLoader* loader, ScoreStorage* storage, PlayerNameInputUI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI);
-		void init(int windowW, int windowH, const uint8_t* in = 0, int size = 0);
+		void sacInit(int windowW, int windowH);
+		void init(const uint8_t* in = 0, int size = 0);
 		void tick(float dt);
 		void togglePause(bool activate);
 		void toggleShowCombi(bool forcedesactivate);
