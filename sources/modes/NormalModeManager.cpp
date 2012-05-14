@@ -79,6 +79,8 @@ float NormalGameModeManager::GameProgressPercent() {
 
 
 void NormalGameModeManager::UiUpdate(float dt) {
+	ADSR(stressTrack)->active = (time > 37.5);
+
 	//Score
 	{
 	std::stringstream a;
