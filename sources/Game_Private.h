@@ -38,6 +38,7 @@ class PrivateData {
      struct {
 	     Entity masterTrack;
 	     Entity secondaryTracks[3];
+	     Entity accessoryTrack;
 	     Entity stressTrack;
      } inGameMusic;
 };

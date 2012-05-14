@@ -372,6 +372,10 @@ void Game::tick(float dt) {
 		        mc->control = MusicComponent::Start;
 	        }
 	        MUSIC(datas->inGameMusic.stressTrack)->loopNext = theMusicSystem.loadMusicFile("audio/F.ogg");
+	        if (MathUtil::RandomInt(2)) {
+	            MUSIC(datas->inGameMusic.accessoryTrack)->loopNext = theMusicSystem.loadMusicFile("audio/E.ogg");
+	            MUSIC(datas->inGameMusic.accessoryTrack)->control = MusicComponent::Start;
+            }
         }
         MUSIC(datas->inGameMusic.stressTrack)->volume = ADSR(datas->inGameMusic.stressTrack)->value;
         MUSIC(datas->menu)->control = MusicComponent::Stop;

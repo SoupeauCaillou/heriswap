@@ -117,6 +117,12 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      	MUSIC(inGameMusic.secondaryTracks[i])->loopAt = 17.0f;
      	MUSIC(inGameMusic.secondaryTracks[i])->master = MUSIC(inGameMusic.masterTrack);
      }
+     inGameMusic.accessoryTrack = theEntityManager.CreateEntity();
+     ADD_COMPONENT(inGameMusic.accessoryTrack, Music);
+     MUSIC(inGameMusic.accessoryTrack)->loopAt = 17.0f;
+     MUSIC(inGameMusic.accessoryTrack)->master = MUSIC(inGameMusic.masterTrack);
+     MUSIC(inGameMusic.accessoryTrack)->volume = 0.75;
+     
      inGameMusic.stressTrack = theEntityManager.CreateEntity();
      ADD_COMPONENT(inGameMusic.stressTrack, Music);
      MUSIC(inGameMusic.stressTrack)->loopAt = 17.0f;

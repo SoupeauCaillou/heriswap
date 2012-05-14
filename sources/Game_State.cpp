@@ -7,6 +7,7 @@
 
 void Game::stopInGameMusics() {
 	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Stop;
+	MUSIC(datas->inGameMusic.accessoryTrack)->control = MusicComponent::Stop;
 	MUSIC(datas->inGameMusic.stressTrack)->control = MusicComponent::Stop;
     for(int i=0; i<3; i++) {
  	   MUSIC(datas->inGameMusic.secondaryTracks[i])->control = MusicComponent::Stop;
