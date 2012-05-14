@@ -10,15 +10,12 @@ import java.util.Queue;
 import net.damsy.soupeaucaillou.tilematch.TilematchJNILib.DumbAndroid.Command;
 import net.damsy.soupeaucaillou.tilematch.TilematchJNILib.DumbAndroid.Command.Type;
 import android.content.ContentValues;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.util.Log;
 import android.view.View;
 
@@ -379,7 +376,7 @@ public class TilematchJNILib {
       
     static public void stopPlayer(Object o) {
     	DumbAndroid dumb = (DumbAndroid) o;
-    	Log.i("tilematchJ", "stop not implemented");
+    	Log.i("tilematchJ", "stop not fully  implemented");
     	dumb.track.stop();
     }
     
