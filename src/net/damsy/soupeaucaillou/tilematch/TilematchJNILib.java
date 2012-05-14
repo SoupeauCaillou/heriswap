@@ -65,7 +65,7 @@ public class TilematchJNILib {
     static public void playSound(int soundID, float volume) {
     	if (soundID < 0)
     		return;
-    	TilematchActivity.soundPool.play(soundID, volume, volume, 0, 0, 1.0f);
+    	TilematchActivity.soundPool.play(soundID, 0.25f*volume, 0.25f*volume, 0, 0, 1.0f);
     }
      
     static public boolean soundEnable(boolean switchIt) {
@@ -308,7 +308,7 @@ public class TilematchJNILib {
     }
     
     static public int pcmBufferSize(int sampleRate) {
-    	return sampleRate / 2; // * 2;
+    	return sampleRate; // * 2;
     }
     static public byte[] allocate(int size) {
     	synchronized (DumbAndroid.bufferPool) {
@@ -346,7 +346,7 @@ public class TilematchJNILib {
 	    			dumb.writePendings.add(cmd); 
 	    			start += (end - start + 1);
 	    		} while (start < size);
-	    		dumb.bufferPool.add(audioData);
+	    		DumbAndroid.bufferPool.add(audioData);
     		} else {
     			Command cmd = new Command();
     			cmd.type = Type.Buffer;
@@ -376,8 +376,16 @@ public class TilematchJNILib {
       
     static public void stopPlayer(Object o) {
     	DumbAndroid dumb = (DumbAndroid) o;
-    	Log.i("tilematchJ", "stop not fully  implemented");
-    	dumb.track.stop();
+    	Log.i("tilematchJ", "stop not fully implemented");
+    	synchronized (dumb.track) {
+    		dumb.track.stop();
+    		// flush queue
+    		for (Command cmd: dumb.writePendings) {
+    			if (cmd.type == Type.Buffer)
+    				DumbAndroid.bufferPool.add(cmd.buffer);
+			}
+    		dumb.writePendings.clear();
+    	}
     }
     
     static public int getPosition(Object o) {
@@ -392,7 +400,7 @@ public class TilematchJNILib {
     
     static public void setVolume(Object o, float v) {
     	DumbAndroid dumb = (DumbAndroid) o;
-    	checkReturnCode("setVolume", dumb.track.setStereoVolume(v, v));
+    	checkReturnCode("setVolume", dumb.track.setStereoVolume(v * 0.25f, v *0.25f));
     }
       
     static public boolean isPlaying(Object o) { 

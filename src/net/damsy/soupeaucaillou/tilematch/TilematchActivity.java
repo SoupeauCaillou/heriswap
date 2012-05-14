@@ -44,6 +44,7 @@ public class TilematchActivity extends Activity {
 	byte[] renderingSystemState;
 	static public SoundPool soundPool;
 	static public boolean isRunning;
+	static public boolean isPaused;
 	static public TilematchStorage.OptionsOpenHelper optionsOpenHelper;
 	static public TilematchStorage.ScoreOpenHelper scoreOpenHelper;
 	static public View playerNameInputView;
@@ -137,13 +138,15 @@ public class TilematchActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mGLView.onPause();
-        TilematchJNILib.pause(TilematchActivity.game);
-        isRunning = false;
+        
+        TilematchActivity.isPaused = true;
+        TilematchActivity.isRunning = false;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        TilematchActivity.isPaused = false;
         isRunning = true;
         mGLView.onResume();
     }
