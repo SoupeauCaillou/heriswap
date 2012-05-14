@@ -30,6 +30,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
          setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
      } else if (newState == ModeMenu) {
         datas->mode2Manager[datas->mode]->Exit();
+        stopInGameMusics();
      } else if (newState == BlackToSpawn) {
             // call Enter before starting fade-in
          datas->mode2Manager[datas->mode]->Enter();
