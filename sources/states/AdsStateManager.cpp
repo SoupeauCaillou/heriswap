@@ -67,5 +67,6 @@ void AdsStateManager::Exit() {
 }
 
 void AdsStateManager::LateExit() {
+	LOGW("ici on cache pour de vrai");
 	RENDERING(eAds)->hide = true;
 }
