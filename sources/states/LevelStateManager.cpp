@@ -157,7 +157,7 @@ GameState LevelStateManager::Update(float dt) {
 		}
 	}
 
-	if (MUSIC(eBigLevel)->music == InvalidMusicRef || duration > 8) {
+	if (MUSIC(eBigLevel)->music == InvalidMusicRef || duration > 10) {
 		return Spawn;
 	}
 
