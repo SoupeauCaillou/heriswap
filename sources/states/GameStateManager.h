@@ -24,4 +24,5 @@ class GameStateManager {
         virtual void LateExit() {}
 
 		GameModeManager* modeMgr;
+		float stateActiveDuration;
 };

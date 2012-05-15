@@ -29,10 +29,12 @@ LOCAL_SRC_FILES := \
    ../sources/CombinationMark.cpp \
    ../sources/TwitchSystem.cpp \
 	../sources/AnimedEntity.cpp \
+	../sources/states/AdsStateManager.cpp \
 	../sources/states/BackgroundManager.cpp \
 	../sources/states/DeleteGameStateManager.cpp \
 	../sources/states/FadeStateManager.cpp	\
 	../sources/states/FallGameStateManager.cpp \
+	../sources/states/HelpStateManager.cpp \
 	../sources/states/LevelStateManager.cpp \
 	../sources/states/LogoStateManager.cpp \
 	../sources/states/MainMenuGameStateManager.cpp \
@@ -43,9 +45,7 @@ LOCAL_SRC_FILES := \
 	../sources/modes/GameModeManager.cpp \
 	../sources/modes/TilesAttackModeManager.cpp \
 	../sources/modes/InGameUiHelper.cpp \
-	../sources/modes/NormalModeManager.cpp \
-	../sources/modes/StaticTimeModeManager.cpp \
-	../sources/modes/ScoreAttackModeManager.cpp
+	../sources/modes/NormalModeManager.cpp
 
 LOCAL_STATIC_LIBRARIES := sac png tremor
 LOCAL_LDLIBS := -lGLESv2 -lGLESv1_CM -lEGL -llog -lz

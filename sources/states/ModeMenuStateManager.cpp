@@ -6,13 +6,13 @@ std::string diffic(int difficulty) {
 	s << "Difficulty : ";
 	switch (difficulty) {
 		case 0:
-			s << "easy (5x5)";
+			s << "easy 5x5";
 			break;
 		case 1:
-			s << "medium (8x8)";
+			s << "medium 8x8";
 			break;
 		case 2:
-			s << "hardcore (12x8)";
+			s << "hardcore 12x8";
 			break;
 	}
 	return s.str().c_str();

@@ -144,8 +144,8 @@ void Game::loadFont(const std::string& name) {
 	theTextRenderingSystem.registerFont(name, h2wratio);
 }
 
-void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
-    PlacementHelper::ScreenHeight = 10;
+void Game::sacInit(int windowW, int windowH) {
+	PlacementHelper::ScreenHeight = 10;
     PlacementHelper::ScreenWidth = PlacementHelper::ScreenHeight * windowW / (float)windowH;
     PlacementHelper::WindowWidth = windowW;
     PlacementHelper::WindowHeight = windowH;
@@ -162,16 +162,18 @@ void Game::init(int windowW, int windowH, const uint8_t* in, int size) {
 	theRenderingSystem.loadAtlas("animals");
 	*/
 	theRenderingSystem.loadAtlas("alphabet");
+	
+	// init font
+	loadFont("typo");
+	loadFont("gdtypo");
+}
 
+void Game::init(const uint8_t* in, int size) {
     if (in && size) {
         in = loadEntitySystemState(in, size);
     }
 
-	datas->Setup(windowW, windowH);
-
-	// init font
-	loadFont("typo");
-	loadFont("gdtypo");
+	datas->Setup(PlacementHelper::WindowWidth, PlacementHelper::WindowHeight);
 
 	theGridSystem.GridSize = GRIDSIZE;
 	theSoundSystem.mute = !datas->storage->soundEnable(false);
@@ -343,10 +345,14 @@ void Game::tick(float dt) {
 	}
 
     //update music
-    if (pausableState(datas->state) && datas->state != LevelChanged) { //si on joue
+    if (pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause) { //si on joue
+    	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Start;
+    	MUSIC(datas->inGameMusic.stressTrack)->control = MusicComponent::Start;
         if (MUSIC(datas->inGameMusic.masterTrack)->music == InvalidMusicRef) {
             std::vector<std::string> musics = newMusics();
             MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
+            MUSIC(datas->inGameMusic.stressTrack)->music = theMusicSystem.loadMusicFile("audio/F.ogg");
+            MUSIC(datas->inGameMusic.stressTrack)->loopNext = theMusicSystem.loadMusicFile("audio/F.ogg");
             int i;
             for (i=0; i<musics.size() - 1; i++) {
                  MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
@@ -365,10 +371,16 @@ void Game::tick(float dt) {
 		        mc->loopNext = theMusicSystem.loadMusicFile(musics[i+1]);
 		        mc->control = MusicComponent::Start;
 	        }
+	        MUSIC(datas->inGameMusic.stressTrack)->loopNext = theMusicSystem.loadMusicFile("audio/F.ogg");
+	        if (MathUtil::RandomInt(2)) {
+	            MUSIC(datas->inGameMusic.accessoryTrack)->loopNext = theMusicSystem.loadMusicFile("audio/E.ogg");
+	            MUSIC(datas->inGameMusic.accessoryTrack)->control = MusicComponent::Start;
+            }
         }
+        MUSIC(datas->inGameMusic.stressTrack)->volume = ADSR(datas->inGameMusic.stressTrack)->value;
         MUSIC(datas->menu)->control = MusicComponent::Stop;
 
-    } else if (!pausableState(datas->state) && !fadeLogoState(datas->state)) { //dans les menus
+    } else if (datas->state == MainMenu || datas->state == ModeMenu) { //dans les menus
         if (MUSIC(datas->menu)->music == InvalidMusicRef) {
          LOGW("Start Menu music");
             MUSIC(datas->menu)->music = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");

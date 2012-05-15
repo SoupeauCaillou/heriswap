@@ -32,12 +32,14 @@ class NormalGameModeManager : public GameModeManager {
         int saveInternalState(uint8_t** out);
         const uint8_t* restoreInternalState(const uint8_t* in, int size);
 
+		Entity stressTrack;
 	private:
 		int level, remain[8];
 		bool levelUp;
 		float nextHerissonSpeed;
 		float levelMoveDuration;
 		bool levelUpPending;
+		
 
 		bool succTakeTime, succ1kpoints, succ100kpoints;
 };

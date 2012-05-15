@@ -233,7 +233,8 @@ int main(int argc, char** argv) {
     theMusicSystem.init();
     theSoundSystem.init();
     
-	game.init(reso->X,reso->Y, state, size);
+    game.sacInit(reso->X,reso->Y);
+	game.init(state, size);
 
 	bool running = true;
 	float timer = 0;

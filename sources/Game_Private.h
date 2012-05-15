@@ -34,11 +34,11 @@ class PrivateData {
 
      Entity soundButton;
      Entity musicMenu[2], musicStress1[2], musicStress2[2], music[8];
-
      Entity menu;
      struct {
 	     Entity masterTrack;
 	     Entity secondaryTracks[3];
-	     Entity stressTracks[2];
+	     Entity accessoryTrack;
+	     Entity stressTrack;
      } inGameMusic;
 };

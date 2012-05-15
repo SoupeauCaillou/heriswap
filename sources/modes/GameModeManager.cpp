@@ -21,6 +21,9 @@
 #include "AnimedEntity.h"
 #include "TwitchSystem.h"
 
+#include <algorithm>
+#include <functional>
+
 //FCRR : FPS Calculation Refresh Rate
 #define FCRR 1.
 
@@ -196,7 +199,7 @@ void GameModeManager::generateLeaves(int* nb) {
 	//shuffle pour éviter que les mêmes couleurs soient à coté dans la liste :
 	//ça sert en 100 tiles, pour que les feuilles supprimées soient d'abord ttes les
 	//rouges, ensuites les jaunes etc..
-	random_shuffle(branchLeaves.begin(), branchLeaves.end());
+	std::random_shuffle(branchLeaves.begin(), branchLeaves.end());
 }
 
 void GameModeManager::deleteLeaves(int type, int nb) {

@@ -73,6 +73,7 @@ BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c, int group) {
 	int idx = MathUtil::RandomInt(textures[group].size());
 	RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile(textures[group][idx]);
 	RENDERING(c->e)->hide = false;
+	RENDERING(c->e)->color = Color(1, 1, 1, MathUtil::RandomFloatInRange(0.6, 0.9));
 	TRANSFORM(c->e)->size = Vector2(width, width / ratio);
 	c->visible = false;
 	c->speed = cloudSpeed[group].random();

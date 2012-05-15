@@ -44,27 +44,30 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
     void startGameThread() {
     	gameThread = new Thread(new Runnable() {
 			public void run() {
-				TilematchJNILib.initFromGameThread(TilematchActivity.game);
+				TilematchJNILib.initFromGameThread(TilematchActivity.game, TilematchActivity.savedState);
+				TilematchActivity.savedState = null;
 				initDone = true;
 				while ( TilematchActivity.isRunning) {
 					TilematchJNILib.step(TilematchActivity.game);
 					TilematchActivity.mGLView.requestRender();
+					
+					if (TilematchActivity.isPaused) {
+						TilematchJNILib.pause(TilematchActivity.game);
+					}
 				}  
 				Log.i("tilematchJava", "Activity paused - exiting game thread");
 				gameThread = null;
 			}
-		});
-		gameThread.start();
+		}); 
+		gameThread.start(); 
     }
-
+ 
     boolean initDone = false;
     public void onSurfaceChanged(GL10 gl, final int width, final int height) {
     	Log.i("tilematchJava", "surface changed-> width: " + width + ", height: " + height + ", " + initDone);
     	if (!initDone) {
-			TilematchJNILib.initFromRenderThread(TilematchActivity.game, width, height, TilematchActivity.savedState);
+			TilematchJNILib.initFromRenderThread(TilematchActivity.game, width, height);
     		// TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
-    		TilematchActivity.savedState = null;
-        
     		Log.i("tilematchJava", "Start game thread");
     		// create game thread
     		startGameThread();

@@ -58,6 +58,8 @@
     <None Include="sources\Game_Private.h" />
     <None Include="jni\Android.mk" />
     <None Include="jni\Application.mk" />
+    <None Include="sources\states\AdsStateManager.h" />
+    <None Include="sources\states\HelpStateManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -88,5 +90,7 @@
     <Compile Include="sources\Game_State.cpp" />
     <Compile Include="sources\AnimedEntity.cpp" />
     <Compile Include="sources\Game_Private.cpp" />
+    <Compile Include="sources\states\AdsStateManager.cpp" />
+    <Compile Include="sources\states\HelpStateManager.cpp" />
   </ItemGroup>
 </Project>

@@ -14,6 +14,7 @@ class AdsStateManager : public GameStateManager {
 	void Enter();
 	GameState Update(float dt);
 	void Exit();
+	void LateExit();
 
 	private:
 		Entity eAds;

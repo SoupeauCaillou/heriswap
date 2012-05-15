@@ -105,7 +105,6 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
 
      menu = theEntityManager.CreateEntity();
      ADD_COMPONENT(menu, Music);
-     MUSIC(menu)->music = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");
      MUSIC(menu)->control = MusicComponent::Start;
      MUSIC(menu)->loopAt = 64.0f;
 
@@ -118,6 +117,26 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      	MUSIC(inGameMusic.secondaryTracks[i])->loopAt = 17.0f;
      	MUSIC(inGameMusic.secondaryTracks[i])->master = MUSIC(inGameMusic.masterTrack);
      }
+     inGameMusic.accessoryTrack = theEntityManager.CreateEntity();
+     ADD_COMPONENT(inGameMusic.accessoryTrack, Music);
+     MUSIC(inGameMusic.accessoryTrack)->loopAt = 17.0f;
+     MUSIC(inGameMusic.accessoryTrack)->master = MUSIC(inGameMusic.masterTrack);
+     MUSIC(inGameMusic.accessoryTrack)->volume = 0.75;
+     
+     inGameMusic.stressTrack = theEntityManager.CreateEntity();
+     ADD_COMPONENT(inGameMusic.stressTrack, Music);
+     MUSIC(inGameMusic.stressTrack)->loopAt = 17.0f;
+     MUSIC(inGameMusic.stressTrack)->master = MUSIC(inGameMusic.masterTrack);
+     ADD_COMPONENT(inGameMusic.stressTrack, ADSR);
+    ADSR(inGameMusic.stressTrack)->idleValue = 0;
+	ADSR(inGameMusic.stressTrack)->attackValue = 1.0;
+	ADSR(inGameMusic.stressTrack)->attackTiming = 1;
+	ADSR(inGameMusic.stressTrack)->decayTiming = 0;
+	ADSR(inGameMusic.stressTrack)->sustainValue = 1.0;
+	ADSR(inGameMusic.stressTrack)->releaseTiming = 0.5;
+	ADSR(inGameMusic.stressTrack)->attackMode = Quadratic;
+     
+     (static_cast<NormalGameModeManager*> (mode2Manager[Normal]))->stressTrack = inGameMusic.stressTrack;
 	PauseStateManager* pause = static_cast<PauseStateManager*> (state2Manager[Pause]);
 	pause->helpMgr = static_cast<HelpStateManager*> (state2Manager[Help]);
 }
