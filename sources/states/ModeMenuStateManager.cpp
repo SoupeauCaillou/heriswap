@@ -213,16 +213,16 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 			if (mode==Normal) {
 				trcL->hide = false;
 			}
-
 			if (!alreadyGreen && ended &&
-			 ((entries[i].points == modeMgr->points && mode!=TilesAttack)
-			  || (mode==TilesAttack && entries[i].time-modeMgr->time<0.01f))
+			 ((mode==Normal && entries[i].points == modeMgr->points)
+			  || (mode==TilesAttack && MathUtil::Abs(entries[i].time-modeMgr->time)<0.01f))
 			   && entries[i].name == playerName) {
-				   trcN->color = Color(1.0f,0.f,0.f);
-				   trcP->color = Color(1.0f,0.f,0.f);
-				   trcL->color = Color(1.0f,0.f,0.f);
+				trcN->color = Color(1.0f,0.f,0.f);
+				trcP->color = Color(1.0f,0.f,0.f);
+				trcL->color = Color(1.0f,0.f,0.f);
 				alreadyGreen = true;
 			} else {
+				trcN->color = trcP->color = trcL->color = Color(3.0/255.0, 99.0/255, 71.0/255);
 			}
 		} else {
 			trcP->hide = true;

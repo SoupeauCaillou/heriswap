@@ -13,7 +13,7 @@
 #include "CombinationMark.h"
 
 TilesAttackGameModeManager::TilesAttackGameModeManager(Game* game, SuccessAPI* successAP) : GameModeManager(game, successAP) {
-
+	successAPI = successAP;
 }
 
 TilesAttackGameModeManager::~TilesAttackGameModeManager() {
@@ -43,6 +43,13 @@ void TilesAttackGameModeManager::Enter() {
 }
 
 void TilesAttackGameModeManager::Exit() {
+	//test succès si fini en -90 sec
+	if (theGridSystem.GridSize == 8 && leavesDone >= limit && time<=35.f)
+		successAPI->successCompleted("Fast and finish", 1666602);
+	//test succès no grid reset
+	if (theGridSystem.GridSize == 8 && leavesDone >= limit && succNoGridReset)
+		successAPI->successCompleted("Don't reset the grid !", 1666632);	
+		
 	GameModeManager::Exit();
 }
 
