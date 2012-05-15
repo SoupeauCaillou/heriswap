@@ -11,17 +11,23 @@ DeleteGameStateManager::~DeleteGameStateManager() {
 	theEntityManager.DeleteEntity(eRemove);
 }
 
-void DeleteGameStateManager::Setup() {
-	eRemove = theEntityManager.CreateEntity();
-
+void DeleteGameStateManager::setAnimSpeed() {
+	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
+	
 	ADD_COMPONENT(eRemove, ADSR);
 	ADSR(eRemove)->idleValue = 0;
 	ADSR(eRemove)->attackValue = 1.0;
-	ADSR(eRemove)->attackTiming = 0.3;
+	ADSR(eRemove)->attackTiming = difficulty*0.3;
 	ADSR(eRemove)->decayTiming = 0.;
 	ADSR(eRemove)->sustainValue = 1.0;
 	ADSR(eRemove)->releaseTiming = 0;
 	ADD_COMPONENT(eRemove, Sound);
+}
+
+void DeleteGameStateManager::Setup() {
+	eRemove = theEntityManager.CreateEntity();
+	
+	setAnimSpeed();
 }
 
 void DeleteGameStateManager::Enter() {

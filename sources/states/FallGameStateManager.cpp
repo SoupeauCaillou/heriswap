@@ -8,20 +8,24 @@ FallGameStateManager::FallGameStateManager() {
 FallGameStateManager::~FallGameStateManager() {
 	theEntityManager.DeleteEntity(eFall);
 }
-
-void FallGameStateManager::Setup() {
-	eFall = theEntityManager.CreateEntity();
-	ADD_COMPONENT(eFall, ADSR);
-
+void FallGameStateManager::setAnimSpeed() {
+	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
+	
 	ADSR(eFall)->idleValue = 0;
 	ADSR(eFall)->attackValue = 1.0;
-	ADSR(eFall)->attackTiming = .3;
+	ADSR(eFall)->attackTiming = difficulty*.3;
 	ADSR(eFall)->decayTiming = 0;
 	ADSR(eFall)->sustainValue = 1.0;
 	ADSR(eFall)->releaseTiming = 0;
 	ADSR(eFall)->attackMode = Quadratic;
 	ADSR(eFall)->decayMode = Quadratic;
 	ADSR(eFall)->releaseMode = Quadratic;
+}
+
+void FallGameStateManager::Setup() {
+	eFall = theEntityManager.CreateEntity();
+	ADD_COMPONENT(eFall, ADSR);
+	setAnimSpeed();
 }
 
 void FallGameStateManager::Enter() {

@@ -22,7 +22,8 @@ class SpawnGameStateManager : public GameStateManager {
 		GameState Update(float dt);
 		GameState NextState(bool marker);
 		void Exit();
-
+		void setAnimSpeed();
+		
 	private:
 		// datas
 		Entity eSpawn, eGrid;

@@ -15,26 +15,33 @@ SpawnGameStateManager::~SpawnGameStateManager() {
 	theEntityManager.DeleteEntity(eGrid);
 }
 
-void SpawnGameStateManager::Setup() {
-	eSpawn = theEntityManager.CreateEntity();
-	ADD_COMPONENT(eSpawn, ADSR);
-
+void SpawnGameStateManager::setAnimSpeed() {
+	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
+	
 	ADSR(eSpawn)->idleValue = 0;
 	ADSR(eSpawn)->attackValue = 1.0;
-	ADSR(eSpawn)->attackTiming = 0.2;
+	ADSR(eSpawn)->attackTiming = difficulty*0.2;
 	ADSR(eSpawn)->decayTiming = 0;
 	ADSR(eSpawn)->sustainValue = 1.0;
 	ADSR(eSpawn)->releaseTiming = 0;
 
-	eGrid = theEntityManager.CreateEntity();
-	ADD_COMPONENT(eGrid, ADSR);
-
 	ADSR(eGrid)->idleValue = 0;
 	ADSR(eGrid)->attackValue = 1.0;
-	ADSR(eGrid)->attackTiming = 0.3;
+	ADSR(eGrid)->attackTiming = difficulty*0.3;
 	ADSR(eGrid)->decayTiming = 0;
 	ADSR(eGrid)->sustainValue = 1.0;
 	ADSR(eGrid)->releaseTiming = 0;
+}
+
+void SpawnGameStateManager::Setup() {
+	eSpawn = theEntityManager.CreateEntity();
+	ADD_COMPONENT(eSpawn, ADSR);
+
+
+	eGrid = theEntityManager.CreateEntity();
+	ADD_COMPONENT(eGrid, ADSR);
+
+	setAnimSpeed();
 }
 
 void SpawnGameStateManager::Enter() {

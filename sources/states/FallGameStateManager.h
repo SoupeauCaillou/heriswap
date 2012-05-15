@@ -20,6 +20,8 @@ class FallGameStateManager : public GameStateManager {
 	GameState Update(float dt);
 	void Exit();
 
+	void setAnimSpeed();
+
 	private:
 		// datas
 		Entity eFall;

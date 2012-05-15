@@ -11,18 +11,25 @@ UserInputGameStateManager::~UserInputGameStateManager() {
 	theEntityManager.DeleteEntity(eSwapper);
 }
 
+void UserInputGameStateManager::setAnimSpeed() {
+	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
+	
+	ADSR(eSwapper)->idleValue = 0;
+	ADSR(eSwapper)->attackValue = 1.0;
+	ADSR(eSwapper)->attackTiming = difficulty*0.1;
+	ADSR(eSwapper)->decayTiming = 0;
+	ADSR(eSwapper)->sustainValue = 1.0;
+	ADSR(eSwapper)->releaseTiming = difficulty*0.1;
+}
+
 void UserInputGameStateManager::Setup() {
 	eSwapper = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSwapper, ADSR);
-	ADSR(eSwapper)->idleValue = 0;
-	ADSR(eSwapper)->attackValue = 1.0;
-	ADSR(eSwapper)->attackTiming = 0.1;
-	ADSR(eSwapper)->decayTiming = 0;
-	ADSR(eSwapper)->sustainValue = 1.0;
-	ADSR(eSwapper)->releaseTiming = 0.1;
 
 	ADD_COMPONENT(eSwapper, Sound);
 	originI = originJ = -1;
+	
+	setAnimSpeed();
 }
 
 void UserInputGameStateManager::Enter() {

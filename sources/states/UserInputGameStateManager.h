@@ -29,7 +29,8 @@ class UserInputGameStateManager : public GameStateManager {
 		GameState Update(float dt);
 		void BackgroundUpdate(float dt);
 		void Exit();
-
+		
+		void setAnimSpeed();
 	private:
 		// datas
 		Entity eSwapper, dragged;

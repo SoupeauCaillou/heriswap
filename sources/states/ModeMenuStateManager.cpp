@@ -11,9 +11,6 @@ std::string diffic(int difficulty) {
 		case 1:
 			s << "medium 8x8";
 			break;
-		case 2:
-			s << "hardcore 12x8";
-			break;
 	}
 	return s.str().c_str();
 }
@@ -310,7 +307,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 	//difficulty button
 	if (BUTTON(bDifficulty)->clicked) {
 		difficulty++;
-		if (difficulty==3) difficulty=0;
+		if (difficulty==2) difficulty=0;
 		LoadScore(modeMgr->GetMode(), difficulty);
 		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text(diffic(difficulty));
 	}
@@ -345,13 +342,7 @@ void ModeMenuStateManager::Exit() {
 			theGridSystem.GridSize = 8;
 			theGridSystem.Types = 8;
 			break;
-		case 2:
-			theGridSystem.GridSize = 12;
-			theGridSystem.Types = 8;
-			break;
 		}
-
-    // nothing to do here: will be done in LateExit after Fading
 }
 
 void ModeMenuStateManager::LateExit() {
