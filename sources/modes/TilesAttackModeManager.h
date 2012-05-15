@@ -26,5 +26,6 @@ class TilesAttackGameModeManager : public GameModeManager {
 	private:
 		int leavesDone;
 		SuccessAPI* successAPI;
+		bool succNoGridReset;
 };
 

@@ -28,7 +28,7 @@ void TilesAttackGameModeManager::Enter() {
 	leavesDone = 0;
 	points = 0;
 	bonus = MathUtil::RandomInt(theGridSystem.Types);
-
+	succNoGridReset=false;
 	pts.clear();
 	pts.push_back(Vector2(0,0));
 	if (theGridSystem.GridSize>8)
