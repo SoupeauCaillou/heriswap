@@ -173,7 +173,7 @@ void GameModeManager::generateLeaves(int* nb) {
 	branchLeaves.clear();
 	fillVec();
 
-    for (int j=0;j<theGridSystem.Types;j++) {
+    for (int j=0;j<8;j++) {
 	    for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
 			Entity e = theEntityManager.CreateEntity();
 			ADD_COMPONENT(e, Transformation);
@@ -249,7 +249,7 @@ void GameModeManager::fillVec() {
 #else
 	posBranch.clear();
 	#include "PositionFeuilles.h"
-	for (int i=0; i<theGridSystem.Types*6; i++) {
+	for (int i=0; i<8*6; i++) {
 		Vector2 v(PlacementHelper::GimpXToScreen(pos[3*i]), PlacementHelper::GimpYToScreen(pos[3*i+1]));
 		Render truc = {v, MathUtil::ToRadians(pos[3*i+2])};
 		posBranch.push_back(truc);

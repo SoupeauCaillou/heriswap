@@ -62,8 +62,8 @@ class GameModeManager {
 		void scoreCalcForSuccessETIAR(int nb, int type);
 	public:
 		// game params
-		float time, limit;
-		int points, bonus;
+		float time;
+		int points, bonus, limit;
         Entity sky;
 
 	protected:

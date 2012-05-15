@@ -31,9 +31,7 @@ void TilesAttackGameModeManager::Enter() {
 	succNoGridReset=false;
 	pts.clear();
 	pts.push_back(Vector2(0,0));
-	if (theGridSystem.GridSize>8)
-		limit = 250;
-	else if (theGridSystem.GridSize == 8)
+	if (theGridSystem.GridSize == 8)
 		limit = 100;
 	else
 		limit = 30;
@@ -57,7 +55,7 @@ void TilesAttackGameModeManager::GameUpdate(float dt) {
 	time+=dt;
 }
 float TilesAttackGameModeManager::GameProgressPercent() {
-	return leavesDone/limit;
+	return 1.0f*leavesDone/limit;
 }
 
 void TilesAttackGameModeManager::UiUpdate(float dt) {
@@ -65,7 +63,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << MathUtil::Max(0.0f, limit - leavesDone);
+	a << std::fixed << MathUtil::Max(0, limit - leavesDone);
 	TEXT_RENDERING(uiHelper.smallLevel)->text = a.str();
 	}
 	//Temps
@@ -82,9 +80,9 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	updateHerisson(dt, leavesDone, 0);
 }
 
-static int levelToLeaveToDelete(int gridType, int leavesMaxSize, int limit, int nb, int leavesDone) {
-	int totalBranch = gridType*6;
-	int breakBranch = leavesMaxSize-20;
+static int levelToLeaveToDelete(int leavesMaxSize, int limit, int nb, int leavesDone) {
+	int totalBranch = leavesMaxSize; // nb de feuilles total
+	int breakBranch = totalBranch-20;
 	int breakComb = limit-20;
 	int toDelete=0;
 	//si on a pas assez de feuilles sur l'arbre pour faire 20/20, on fait lineaire
@@ -113,7 +111,9 @@ void TilesAttackGameModeManager::ScoreCalc(int nb, int type) {
 	else
 		points += 10*nb*nb*nb/6;
 
-	deleteLeaves(-1, levelToLeaveToDelete(theGridSystem.Types, 48, limit, nb, leavesDone));
+	LOGI("%d (%d--%d left)", levelToLeaveToDelete(6*8, limit, nb, leavesDone), limit-leavesDone, branchLeaves.size());
+	deleteLeaves(-1, levelToLeaveToDelete(6*8, limit, nb, leavesDone));
+	LOGI("%d (%d--%d left)\n\n", levelToLeaveToDelete(6*8, limit, nb, leavesDone), limit-leavesDone, branchLeaves.size());
 
 	leavesDone+=nb;
 	GameModeManager::scoreCalcForSuccessETIAR(nb, type);
@@ -135,7 +135,7 @@ void TilesAttackGameModeManager::TogglePauseDisplay(bool paused) {
 }
 
 void TilesAttackGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
-    int nb = levelToLeaveToDelete(theGridSystem.Types, 48, limit, 3, leavesDone);
+    int nb = levelToLeaveToDelete(48, limit, 3, leavesDone);
     for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
 		CombinationMark::markCellInCombination(branchLeaves[i].e);
         out.push_back(branchLeaves[i].e);
