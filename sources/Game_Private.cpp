@@ -21,10 +21,10 @@
 #include "states/AdsStateManager.h"
 
 
-PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessAPI* successAPI, LocalizeAPI* lAPI) {
+PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI) {
      mode = Normal;
-     mode2Manager[Normal] = new NormalGameModeManager(game,successAPI);
-     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game,successAPI);
+     mode2Manager[Normal] = new NormalGameModeManager(game,successMgr);
+     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game,successMgr);
      storage = storagee;
 
      soundButton = theEntityManager.CreateEntity();
@@ -33,13 +33,13 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
 
      state2Manager[Spawn] = new SpawnGameStateManager();
      state2Manager[UserInput] = new UserInputGameStateManager();
-     state2Manager[Delete] = new DeleteGameStateManager(successAPI);
+     state2Manager[Delete] = new DeleteGameStateManager(successMgr);
      state2Manager[Fall] = new FallGameStateManager();
      state2Manager[LevelChanged] = new LevelStateManager();
      state2Manager[Pause] = new PauseStateManager(lAPI);
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
      state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI);
-     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successAPI,lAPI);
+     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successMgr,lAPI);
      state2Manager[Help] = new HelpStateManager();
      state2Manager[Ads] = new AdsStateManager(storage);
 

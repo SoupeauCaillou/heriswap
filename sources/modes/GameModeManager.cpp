@@ -36,11 +36,9 @@ static float finalHerissonPosition(Entity herisson) {
     return PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5;
 }
 
-GameModeManager::GameModeManager(Game* game, SuccessAPI* sAPI) {
+GameModeManager::GameModeManager(Game* game, SuccessManager* sMgr) {
 	uiHelper.game = game;
-	successAPI = sAPI;
-	for (int i=0;i<8;i++) succEveryTypeInARow[i] = 0;
-	succBonusPoints = 0;
+	successMgr = sMgr;
 }
 
 
@@ -121,9 +119,6 @@ void GameModeManager::Setup() {
 	fillVec();
 
 	uiHelper.build();
-
-	succBonus = false;
-	succRainbow = false;
 }
 
 void GameModeManager::Enter() {
@@ -154,9 +149,6 @@ void GameModeManager::Exit() {
 	}
 	branchLeaves.clear();
     theGridSystem.DeleteAll();
-
-    succBonusPoints = 0;
-   	for (int i=0;i<8;i++) succEveryTypeInARow[i] = 0;
 }
 
 void GameModeManager::TogglePauseDisplay(bool paused) {
@@ -323,35 +315,4 @@ const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int size
     generateLeaves(nb);
 
     return &in[index];
-}
-
-bool successDone(int* successType) {
-	for (int i=0; i<8; i++) {
-		if (successType[i]==0) return false;
-	}
-	return true;
-}
-
-void GameModeManager::scoreCalcForSuccessETIAR(int nb, int type) {
-	// test succes
-	if (theGridSystem.GridSize == 8) {
-		if (succEveryTypeInARow[type]) {
-			for (int i=0; i<8; i++) succEveryTypeInARow[i] = 0;
-		} else {
-			 succEveryTypeInARow[type] = 1;
-		}
-		if (!succRainbow && successDone(succEveryTypeInARow)) {
-			successAPI->successCompleted("Rainbow combination", 1653132);
-			succRainbow = true;
-		}
-
-		if (!succBonus) {
-			if (type == bonus)
-				succBonusPoints+=nb;
-			if (succBonusPoints>100) {
-				successAPI->successCompleted("Bonus to excess", 1653182);
-				succBonus = true;
-			}
-		}
-	}
 }

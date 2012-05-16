@@ -19,10 +19,11 @@
 #include "states/GameStateManager.h"
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
+#include "SuccessManager.h"
 
 class ModeMenuStateManager : public GameStateManager {
 	public:
-		ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII, SuccessAPI* successAP, LocalizeAPI* lAPI);
+		ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII, SuccessManager* successMgr, LocalizeAPI* lAPI);
 		~ModeMenuStateManager();
 		void Setup();
 		void Enter();
@@ -42,7 +43,7 @@ class ModeMenuStateManager : public GameStateManager {
 		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, openfeint, scoreTitle;
 		Entity yourScore, fond;
 		std::string playerName;
-		SuccessAPI* successAPI;
+		SuccessManager* successMgr;
 		LocalizeAPI* localizeAPI;
 
 		//variables for perso mode

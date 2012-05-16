@@ -5,7 +5,7 @@
 
 class TilesAttackGameModeManager : public GameModeManager {
 	public:
-		TilesAttackGameModeManager(Game* game, SuccessAPI* successAP);
+		TilesAttackGameModeManager(Game* game, SuccessManager* successMgr);
 		~TilesAttackGameModeManager();
 		void Setup();
 		void Enter();
@@ -25,7 +25,6 @@ class TilesAttackGameModeManager : public GameModeManager {
 		void ScoreCalc(int nb, int type);
 	private:
 		int leavesDone;
-		SuccessAPI* successAPI;
 		bool succNoGridReset;
 };
 

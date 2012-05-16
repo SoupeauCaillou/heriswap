@@ -12,8 +12,7 @@
 #include "Game.h"
 #include "CombinationMark.h"
 
-TilesAttackGameModeManager::TilesAttackGameModeManager(Game* game, SuccessAPI* successAP) : GameModeManager(game, successAP) {
-	successAPI = successAP;
+TilesAttackGameModeManager::TilesAttackGameModeManager(Game* game, SuccessManager* successMgr) : GameModeManager(game, successMgr) {
 }
 
 TilesAttackGameModeManager::~TilesAttackGameModeManager() {
@@ -41,12 +40,12 @@ void TilesAttackGameModeManager::Enter() {
 }
 
 void TilesAttackGameModeManager::Exit() {
-	//test succès si fini en -90 sec
-	if (theGridSystem.GridSize == 8 && leavesDone >= limit && time<=35.f)
-		successAPI->successCompleted("Fast and finish", 1666602);
-	//test succès no grid reset
-	if (theGridSystem.GridSize == 8 && leavesDone >= limit && succNoGridReset)
-		successAPI->successCompleted("Don't reset the grid !", 1666632);	
+	if (!successMgr->bFastAndFinish) {
+		successMgr->sFastAndFinish(leavesDone, limit, time);
+	}
+	if (!successMgr->bResetGrid) {
+		successMgr->sResetGrid(leavesDone, limit);
+	}
 		
 	GameModeManager::Exit();
 }
@@ -111,12 +110,15 @@ void TilesAttackGameModeManager::ScoreCalc(int nb, int type) {
 	else
 		points += 10*nb*nb*nb/6;
 
-	LOGI("%d (%d--%d left)", levelToLeaveToDelete(6*8, limit, nb, leavesDone), limit-leavesDone, branchLeaves.size());
 	deleteLeaves(-1, levelToLeaveToDelete(6*8, limit, nb, leavesDone));
-	LOGI("%d (%d--%d left)\n\n", levelToLeaveToDelete(6*8, limit, nb, leavesDone), limit-leavesDone, branchLeaves.size());
 
 	leavesDone+=nb;
-	GameModeManager::scoreCalcForSuccessETIAR(nb, type);
+	
+	if (!successMgr->bRainbow)
+		successMgr->sRainbow(type);
+
+	if (!successMgr->bBonusToExcess)
+		successMgr->sBonusToExcess(type, bonus, nb);
 }
 
 void TilesAttackGameModeManager::LevelUp() {
@@ -142,5 +144,3 @@ void TilesAttackGameModeManager::WillScore(int count, int type, std::vector<Enti
         nb--;
     }
 }
-
-

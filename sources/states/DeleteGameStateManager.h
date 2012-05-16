@@ -10,11 +10,12 @@
 #include "GridSystem.h"
 #include "Game.h"
 #include "modes/GameModeManager.h"
+#include "SuccessManager.h"
 
 class DeleteGameStateManager : public GameStateManager {
 	public:
 
-		DeleteGameStateManager(SuccessAPI* successAPI);
+		DeleteGameStateManager(SuccessManager* successMgr);
 		~DeleteGameStateManager();
 		void Setup();
 		void Enter();
@@ -28,5 +29,5 @@ class DeleteGameStateManager : public GameStateManager {
 		Entity eRemove;
 		std::vector<Combinais> removing;
         std::vector<Entity> littleLeavesDeleted;
-        SuccessAPI* successAPI;
+		SuccessManager* successMgr;
 };

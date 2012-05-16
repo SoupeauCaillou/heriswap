@@ -29,7 +29,7 @@
 #include "api/linux/SoundAPILinuxOpenALImpl.h"
 
 #include "Game.h"
-#include "CallBack.cpp"
+#include "Callback.cpp"
 
 #define DT 1/60.
 #define MAGICKEYTIME 0.3

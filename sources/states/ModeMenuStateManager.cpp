@@ -1,5 +1,6 @@
 #include "ModeMenuStateManager.h"
-#include "CallBack.cpp"
+#include "Callback.cpp"
+#include <sstream>
 
 std::string diffic(int difficulty) {
 	std::stringstream s;
@@ -15,11 +16,11 @@ std::string diffic(int difficulty) {
 	return s.str().c_str();
 }
 
-ModeMenuStateManager::ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII, SuccessAPI* successAP, LocalizeAPI* lAPI) {
+ModeMenuStateManager::ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII, SuccessManager* sMgr, LocalizeAPI* lAPI) {
 	storage = storag;
+	successMgr = sMgr;
 	ended = false;
 	inputUI = inputUII;
-	successAPI = successAP;
 	localizeAPI = lAPI;
 	difficulty = 1;
 }
@@ -233,12 +234,8 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 void ModeMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
-	//success test
-	int sav=0;
-	storage->request("select points from score", &sav, callbackSc);
-	if (sav > 1000000) {
-		successAPI->successCompleted("Hardscore gamer", 1653102);
-	}
+	if (!successMgr->bHardScore)
+		successMgr->sHardScore(storage);
 
 	BUTTON(back)->enabled = true;
 	BUTTON(playButton)->enabled = true;

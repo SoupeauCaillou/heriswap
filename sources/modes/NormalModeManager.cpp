@@ -17,22 +17,18 @@
 #define DECOR2_SPEED 1.6
 #define DECOR1_SPEED 1
 
-NormalGameModeManager::NormalGameModeManager(Game* game, SuccessAPI* successAP) : GameModeManager(game,successAP) {
+NormalGameModeManager::NormalGameModeManager(Game* game, SuccessManager* SuccessMgr) : GameModeManager(game,SuccessMgr) {
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(15,0.125));
 	pts.push_back(Vector2(25,0.25));
 	pts.push_back(Vector2(35,0.5));
 	pts.push_back(Vector2(45,1));
-	succTakeTime = false;
-	succ1kpoints = false;
-	succ100kpoints = false;
 }
 
 NormalGameModeManager::~NormalGameModeManager() {
 }
 
 void NormalGameModeManager::Setup() {
-
 	GameModeManager::Setup();
 }
 
@@ -51,10 +47,9 @@ void NormalGameModeManager::Enter() {
 }
 
 void NormalGameModeManager::Exit() {
-	if (!succTakeTime && time*60 > 15 && theGridSystem.GridSize == 8) {
-		successAPI->successCompleted("Take your time", 1652152);
-		succTakeTime = true;
-	}
+	if (!successMgr->bTakeYourTime)
+		successMgr->sTakeYourTime(time);
+		
 	GameModeManager::Exit();
 }
 
@@ -155,12 +150,15 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 	if (remain[type]<0)
 		remain[type]=0;
 
-	GameModeManager::scoreCalcForSuccessETIAR(nb, type);
+	if (!successMgr->bRainbow)
+		successMgr->sRainbow(type);
 
-	if (!succ100kpoints && points > 100000 && theGridSystem.GridSize == 8) {
-		successAPI->successCompleted("Exterminascore", 1653192);
-		succ100kpoints = true;
-	}
+	if (!successMgr->bBonusToExcess)
+		successMgr->sBonusToExcess(type, bonus, nb);
+	
+	if (!successMgr->bExterminaScore)
+		successMgr->sExterminaScore(points);
+
 }
 
 void NormalGameModeManager::LevelUp() {
@@ -172,18 +170,15 @@ void NormalGameModeManager::LevelUp() {
 	//si on a tous les objectifs
 	if (match) {
 
-		//test success
-		if (!succ1kpoints && level==1 && points>=1000 && theGridSystem.GridSize == 8) {
-			successAPI->successCompleted("1k points for level 1", 1653122);
-			succ1kpoints = true;
-		}
+		if (!successMgr->bLevel1For1K)
+			successMgr->sLevel1For1K(level, points);
+
 
 		level++;
 		levelUp = true;
 
-		//level success test
-		if (level == 10 && theGridSystem.GridSize == 8)
-			successAPI->successCompleted("Level 10", 1653112);
+		if (!successMgr->bLevel10)
+			successMgr->sLevel10(level);
 
 		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
 

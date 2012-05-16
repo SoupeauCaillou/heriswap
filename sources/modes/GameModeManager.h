@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "InGameUiHelper.h"
 #include "AnimedEntity.h"
+#include "SuccessManager.h"
 
 enum GameMode {
 	Normal = 1,
@@ -22,7 +23,7 @@ class GameModeManager {
 			float rot;
 		};
 
-		GameModeManager(Game* game, SuccessAPI* successAP);
+		GameModeManager(Game* game, SuccessManager* successMgr);
 
 		virtual ~GameModeManager() {}
 
@@ -59,7 +60,7 @@ class GameModeManager {
 		void LoadHerissonTexture(int type);
 		void updateHerisson(float dt, float obj, float herissonSpeed);
 		void deleteLeaves(int type, int nb);
-		void scoreCalcForSuccessETIAR(int nb, int type);
+
 	public:
 		// game params
 		float time;
@@ -76,10 +77,7 @@ class GameModeManager {
 		//feuilles de l'arbre
 		std::vector<BranchLeaf> branchLeaves;
 
-		SuccessAPI* successAPI;
-		bool succBonus,succRainbow;
-		int succEveryTypeInARow[8];
-		int succBonusPoints;
+		SuccessManager* successMgr;
 	private:
 		//hérisson
 		AnimatedActor* c;
