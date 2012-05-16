@@ -339,7 +339,8 @@ void ModeMenuStateManager::Exit() {
 			theGridSystem.GridSize = 8;
 			theGridSystem.Types = 8;
 			break;
-		}
+	}
+	successMgr->NewGame(difficulty);
 }
 
 void ModeMenuStateManager::LateExit() {

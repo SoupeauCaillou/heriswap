@@ -8,49 +8,49 @@ class SuccessManager {
 		SuccessManager(SuccessAPI* sAPI);
 		~SuccessManager() {};
 	
-		void NewGame();
+		void NewGame(int difficulty);
 	
 		//success only in "normal" difficulty
 		bool successEnable;
 		
-		//success 6 in a row (6 leaves in one combi)
+		//success 6 in a row (Delete 6 or more leaves in one swap)
 		void s6InARow(int nb);
 		bool b6InARow;
 		
-		//success HardScore gamer (100K points in one game)
+		//success HardScore gamer (Reach 1M points in total !)
 		void sHardScore(ScoreStorage* str);
 		bool bHardScore;
 		
-		//success Fast And finish (100K points in one game)
+		//success Fast And finish (Finish a tiles attack round within 35 secs)
 		void sFastAndFinish(int leavesDone, int limit, float time);
 		bool bFastAndFinish;
 		
-		//success Don't reset the grid (100K points in one game)
+		//success Don't reset the grid (In tiles attack, if you finish without resetting the grid)
 		void sResetGrid(int leavesDone, int limit);
 		bool bResetGrid;
 		
-		//success Don't reset the grid (100K points in one game)
+		//success Take it slow (Played a game more than 15 min)
 		void sTakeYourTime(float time);
 		bool bTakeYourTime;
 		
-		//success Don't reset the grid (100K points in one game)
+		//success Exterminascore (Start from scratch and skyrocket up to 100k in a row !)
 		void sExterminaScore(int points);
 		bool bExterminaScore;
 			
-		//success Don't reset the grid (100K points in one game)
+		//success 1k points for level 1 (Get 1000 points without levelling in normal mode)
 		void sLevel1For1K(int level, int points);
 		bool bLevel1For1K;
 		
-		//success Don't reset the grid (100K points in one game)
+		//success Level 10 (Reach level 10 in normal mode)
 		void sLevel10(int level);
 		bool bLevel10;
 			
-		//success Don't reset the grid (100K points in one game)
+		//success Bonus to excess (Get 100 bonus leaves in one game)
 		void sBonusToExcess(int type, int bonus, int nb);
 		bool bBonusToExcess;	
 		int bonusPoints;
 	
-		//success Don't reset the grid (100K points in one game)
+		//success Rainbow combination (Make one combination from each type in a row)
 		void sRainbow(int type);
 		bool bRainbow;		
 		int succEveryTypeInARow[8];

@@ -41,7 +41,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
             // call Enter before starting fade-in
          datas->mode2Manager[datas->mode]->Enter();
          MUSIC(datas->menu)->control = MusicComponent::Stop;
-         
+                  
          //update anim times
          static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete])->setAnimSpeed();
          static_cast<FallGameStateManager*> (datas->state2Manager[Fall])->setAnimSpeed();

@@ -13,11 +13,21 @@ void SuccessManager::sRainbow(int level) {
 SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	successAPI = sAPI;
 	successEnable=true;
-	b6InARow=false;
-	bHardScore=false;
+ 
+	bRainbow = false; 
+	bLevel10 = false; 
+	bLevel1For1K = false; 
+	bExterminaScore = false; 
+	bTakeYourTime = false; 
+	bResetGrid = false; 
+	bFastAndFinish = false; 
+	bHardScore = false; 
+	b6InARow = false;
 }
 
-void SuccessManager::NewGame() {
+void SuccessManager::NewGame(int difficulty) {
+	successEnable = difficulty;
+	
 	bonusPoints = 0;
 	for (int i=0; i<8; i++) {
 		succEveryTypeInARow[i] = 0;
