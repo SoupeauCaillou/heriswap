@@ -26,8 +26,9 @@ class SuccessManager {
 		bool bFastAndFinish;
 		
 		//success Don't reset the grid (In tiles attack, if you finish without resetting the grid)
-		void sResetGrid(int leavesDone, int limit);
+		void sResetGrid();
 		bool bResetGrid;
+		bool gridResetted;
 		
 		//success Take it slow (Played a game more than 15 min)
 		void sTakeYourTime(float time);
@@ -51,9 +52,20 @@ class SuccessManager {
 		int bonusPoints;
 	
 		//success Rainbow combination (Make one combination from each type in a row)
+		//success Double rainbow (Ohohoh, double rainbow)
 		void sRainbow(int type);
 		bool bRainbow;		
+		bool bDoubleRainbow;
 		int succEveryTypeInARow[8];
-			
+
+		//success Lucky Luke (Get more than 1 combi by 5 sec during 30 sec)
+		void sLuckyLuke();
+		float timeLL, timeLLloop; // timeLLloop used in userinput
+		bool bLuckyLuke;
+		
+		//success Donator (Click on Ads)
+		void sDonator();
+		bool bDonator;
+		
 		SuccessAPI* successAPI;
 };

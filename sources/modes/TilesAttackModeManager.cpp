@@ -40,12 +40,9 @@ void TilesAttackGameModeManager::Enter() {
 }
 
 void TilesAttackGameModeManager::Exit() {
-	if (!successMgr->bFastAndFinish) {
-		successMgr->sFastAndFinish(leavesDone, limit, time);
-	}
-	if (!successMgr->bResetGrid) {
-		successMgr->sResetGrid(leavesDone, limit);
-	}
+	successMgr->sFastAndFinish(leavesDone, limit, time);
+	
+	successMgr->sResetGrid();
 		
 	GameModeManager::Exit();
 }
@@ -114,11 +111,9 @@ void TilesAttackGameModeManager::ScoreCalc(int nb, int type) {
 
 	leavesDone+=nb;
 	
-	if (!successMgr->bRainbow)
-		successMgr->sRainbow(type);
+	successMgr->sRainbow(type);
 
-	if (!successMgr->bBonusToExcess)
-		successMgr->sBonusToExcess(type, bonus, nb);
+	successMgr->sBonusToExcess(type, bonus, nb);
 }
 
 void TilesAttackGameModeManager::LevelUp() {

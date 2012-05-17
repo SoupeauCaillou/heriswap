@@ -44,8 +44,8 @@ void DeleteGameStateManager::Enter() {
 	            }
 	        }
 	        modeMgr->WillScore(it->points.size(), it->type, littleLeavesDeleted);
-			if (!successMgr->b6InARow)
-				successMgr->s6InARow(it->points.size());
+
+			successMgr->s6InARow(it->points.size());
 	    }
     	SOUND(eRemove)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg");
 	}

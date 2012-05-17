@@ -31,8 +31,8 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
 
      state = BlackToLogoState;
 
-     state2Manager[Spawn] = new SpawnGameStateManager();
-     state2Manager[UserInput] = new UserInputGameStateManager();
+     state2Manager[Spawn] = new SpawnGameStateManager(successMgr);
+     state2Manager[UserInput] = new UserInputGameStateManager(successMgr);
      state2Manager[Delete] = new DeleteGameStateManager(successMgr);
      state2Manager[Fall] = new FallGameStateManager();
      state2Manager[LevelChanged] = new LevelStateManager();
@@ -41,7 +41,7 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI);
      state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successMgr,lAPI);
      state2Manager[Help] = new HelpStateManager();
-     state2Manager[Ads] = new AdsStateManager(storage);
+     state2Manager[Ads] = new AdsStateManager(storage, successMgr);
 
      state2Manager[BlackToLogoState] = new FadeGameStateManager(FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
      state2Manager[LogoToBlackState] = new FadeGameStateManager(FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);

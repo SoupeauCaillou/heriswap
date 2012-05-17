@@ -12,10 +12,11 @@
 #include "GameStateManager.h"
 #include "GridSystem.h"
 #include "DepthLayer.h"
+#include "SuccessManager.h"
 
 class SpawnGameStateManager : public GameStateManager {
 	public:
-		SpawnGameStateManager();
+		SpawnGameStateManager(SuccessManager* smgr);
 		~SpawnGameStateManager();
 		void Setup();
 		void Enter();
@@ -28,4 +29,6 @@ class SpawnGameStateManager : public GameStateManager {
 		// datas
 		Entity eSpawn, eGrid;
 		std::vector<Feuille> spawning;
+		
+		SuccessManager* successMgr;
 };

@@ -18,11 +18,12 @@
 #include "GameStateManager.h"
 #include "GridSystem.h"
 #include "Game.h"
+#include "SuccessManager.h"
 
 class UserInputGameStateManager : public GameStateManager {
 	public:
 
-		UserInputGameStateManager();
+		UserInputGameStateManager(SuccessManager* smgr) : successMgr(smgr) {};
 		~UserInputGameStateManager();
 		void Setup();
 		void Enter();
@@ -38,4 +39,6 @@ class UserInputGameStateManager : public GameStateManager {
 		int originI, originJ;
 		int swapI, swapJ;
         std::vector<Entity> inCombinationCells;
+        
+        SuccessManager* successMgr;
 };

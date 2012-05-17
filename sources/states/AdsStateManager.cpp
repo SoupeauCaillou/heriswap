@@ -51,6 +51,7 @@ void AdsStateManager::Enter() {
 GameState AdsStateManager::Update(float dt) {
 	stateActiveDuration += dt;
 	if (gameb4Ads>0 || BUTTON(eAds)->clicked) {
+		successMgr->sDonator();
 		return AdsToBlackState;
 	}
 	return Ads;

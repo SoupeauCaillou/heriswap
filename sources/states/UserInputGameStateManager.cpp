@@ -4,9 +4,6 @@
 static void activateADSR(Entity e, float a, float s);
 static void diffToGridCoords(const Vector2& c, int* i, int* j);
 
-UserInputGameStateManager::UserInputGameStateManager(){
-}
-
 UserInputGameStateManager::~UserInputGameStateManager() {
 	theEntityManager.DeleteEntity(eSwapper);
 }
@@ -39,9 +36,13 @@ void UserInputGameStateManager::Enter() {
 	ADSR(eSwapper)->activationTime = 0;
 	originI = originJ = -1;
 	dragged = 0;
+	
+	successMgr->timeLLloop = 0.f;
 }
 
 GameState UserInputGameStateManager::Update(float dt) {
+	successMgr->timeLLloop += dt;
+	
 	// drag/drop of cell
 	if (!theTouchInputManager.wasTouched() &&
 		theTouchInputManager.isTouched()) {
@@ -258,6 +259,8 @@ void UserInputGameStateManager::BackgroundUpdate(float dt) {
 void UserInputGameStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
     inCombinationCells.clear();
+    
+    successMgr->sLuckyLuke();
 }
 
 static void activateADSR(Entity e, float a, float s) {

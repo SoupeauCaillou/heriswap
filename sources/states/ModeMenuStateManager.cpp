@@ -234,8 +234,7 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 void ModeMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
-	if (!successMgr->bHardScore)
-		successMgr->sHardScore(storage);
+	successMgr->sHardScore(storage);
 
 	BUTTON(back)->enabled = true;
 	BUTTON(playButton)->enabled = true;

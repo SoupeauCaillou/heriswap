@@ -7,7 +7,8 @@
 static void fillTheBlank(std::vector<Feuille>& spawning);
 static Entity createCell(Feuille& f, bool assignGridPos);
 
-SpawnGameStateManager::SpawnGameStateManager(){
+SpawnGameStateManager::SpawnGameStateManager(SuccessManager* smgr){
+	successMgr = smgr;
 }
 
 SpawnGameStateManager::~SpawnGameStateManager() {
@@ -126,6 +127,7 @@ GameState SpawnGameStateManager::Update(float dt) {
             theGridSystem.DeleteAll();
             fillTheBlank(spawning);
             LOGI("nouvelle grille de %d elements! ", spawning.size());
+            successMgr->gridResetted = true;
         }
     } else {
 		return NextState(false);

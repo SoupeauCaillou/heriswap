@@ -47,8 +47,7 @@ void NormalGameModeManager::Enter() {
 }
 
 void NormalGameModeManager::Exit() {
-	if (!successMgr->bTakeYourTime)
-		successMgr->sTakeYourTime(time);
+	successMgr->sTakeYourTime(time);
 		
 	GameModeManager::Exit();
 }
@@ -150,14 +149,11 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 	if (remain[type]<0)
 		remain[type]=0;
 
-	if (!successMgr->bRainbow)
-		successMgr->sRainbow(type);
+	successMgr->sRainbow(type);
 
-	if (!successMgr->bBonusToExcess)
-		successMgr->sBonusToExcess(type, bonus, nb);
+	successMgr->sBonusToExcess(type, bonus, nb);
 	
-	if (!successMgr->bExterminaScore)
-		successMgr->sExterminaScore(points);
+	successMgr->sExterminaScore(points);
 
 }
 
@@ -169,16 +165,12 @@ void NormalGameModeManager::LevelUp() {
 	}
 	//si on a tous les objectifs
 	if (match) {
-
-		if (!successMgr->bLevel1For1K)
-			successMgr->sLevel1For1K(level, points);
-
+		successMgr->sLevel1For1K(level, points);
 
 		level++;
 		levelUp = true;
 
-		if (!successMgr->bLevel10)
-			successMgr->sLevel10(level);
+		successMgr->sLevel10(level);
 
 		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
 

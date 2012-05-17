@@ -4,11 +4,12 @@
 
 #include "Game.h"
 #include "GameStateManager.h"
+#include "SuccessManager.h"
 
 class AdsStateManager : public GameStateManager {
 	public:
 
-	AdsStateManager(ScoreStorage* str) : storage(str) { };
+	AdsStateManager(ScoreStorage* str, SuccessManager* smgr) : storage(str), successMgr(smgr) { };
 	~AdsStateManager();
 	void Setup();
 	void Enter();
@@ -20,4 +21,5 @@ class AdsStateManager : public GameStateManager {
 		Entity eAds;
 		ScoreStorage* storage;
 		int gameb4Ads;
+		SuccessManager* successMgr;
 };
