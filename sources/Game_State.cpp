@@ -24,6 +24,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
         togglePause(false);
     } else if (oldState == Pause && newState == MainMenu) {
          LOGI("aborted. going to main menu");
+         datas->state2Manager[datas->stateBeforePause]->Exit();
          datas->mode2Manager[datas->mode]->Exit();
          newState = MainMenu;
          static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->ended = false;
