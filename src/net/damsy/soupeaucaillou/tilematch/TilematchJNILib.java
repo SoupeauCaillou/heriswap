@@ -57,7 +57,7 @@ public class TilematchJNILib {
     	try {
 		    return TilematchActivity.soundPool.load(mgr.openFd(assetPath), 1);
     	} catch (Exception exc) {
-    		Log.e("tilematchJava", "Unable to load sound: " + assetPath);
+    		Log.e(TilematchActivity.Tag, "Unable to load sound: " + assetPath);
     		return -1;
     	}
     }
@@ -69,18 +69,18 @@ public class TilematchJNILib {
     }
      
     static public boolean soundEnable(boolean switchIt) {
-    	Log.i("TilematchJava", "soundEnable : " + switchIt);
+    	Log.i(TilematchActivity.Tag, "soundEnable : " + switchIt);
     	SQLiteDatabase db = TilematchActivity.optionsOpenHelper.getWritableDatabase();
     	Cursor cursor = db.query("info", new String[] {"value"}, "opt LIKE \"sound\"", null, null, null, null);
     	String value = null;
     	if (!cursor.moveToFirst()) {
-    		Log.w("TilematchJAva", "soundEnable select: no result");
+    		Log.w(TilematchActivity.Tag, "soundEnable select: no result");
     		ContentValues v = new ContentValues(1);
     		v.put("value", "on");
     		v.put("opt", "sound");
     		value = "on";
     		long rowsAffected = db.insert("info", null , v);
-    		Log.i("tilemacthJvave", "plop, insertt: 3"+rowsAffected);
+    		Log.i(TilematchActivity.Tag, "plop, insertt: 3"+rowsAffected);
     	} else {
     		int idx = cursor.getColumnIndex("value");
     		value = cursor.getString(idx);
@@ -94,7 +94,7 @@ public class TilematchJNILib {
     			v.put("value", "on");
     		}
     		long rowsAffected  = db.update("info", v, "opt='sound'", null);
-    		Log.i("tilemacthJvave", "plop, update: 3"+rowsAffected);
+    		Log.i(TilematchActivity.Tag, "plop, update: 3"+rowsAffected);
     	}
     	db.close();
     	return "on".equals(value);
@@ -119,16 +119,16 @@ public class TilematchJNILib {
     	db.close();
 
     	Leaderboard l = new Leaderboard(boards[mode - 1]);
-    	Log.i("tilematchJ", "leaderboard id: " + boards[mode - 1]);
+    	Log.i(TilematchActivity.Tag, "leaderboard id: " + boards[mode - 1]);
 		final Score s = new Score((long) ((mode != 2) ? points : (time * 1000)), null);
 
 		s.submitTo(l, new Score.SubmitToCB() {			
 			@Override public void onSuccess(boolean newHighScore) {
-				Log.i("tilematchJ", "score posting successfull");
+				Log.i(TilematchActivity.Tag, "score posting successfull");
 			}
 
 			@Override public void onFailure(String exceptionMessage) {
-				Log.i("tilematchJ", "score posting failure : " + exceptionMessage);
+				Log.i(TilematchActivity.Tag, "score posting failure : " + exceptionMessage);
 			}
 	 		
 			@Override public void onBlobUploadSuccess() {
@@ -145,16 +145,12 @@ public class TilematchJNILib {
 			
 			@Override
 			public void onSuccess(boolean newUnlock) {
-				Log.i("tilematchJ", "Achievement unlock successful");
+				Log.i(TilematchActivity.Tag, "Achievement unlock successful");
 			}
 		});
     } 
      
-    static public int getScores(int mode,  int[] points, int[] levels, float[] times, String[] names) {
-    	for (int i=0; i<5; i++) {
-    		Log.i("tilematchJ", points[i] + ", " + levels[i] + ", " + times[i] + ", " + names[i] + ".");
-    	}
-    	 
+    static public int getScores(int mode,  int[] points, int[] levels, float[] times, String[] names) {    	 
     	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getWritableDatabase();
     	Cursor cursor = null;
     	if (mode == 1 || mode == 3) {
@@ -164,7 +160,7 @@ public class TilematchJNILib {
     	}
     	int maxResult = Math.min(5, cursor.getCount());
     	cursor.moveToFirst();
-    	Log.i("tilematchJ", "Found " + maxResult + " result");
+    	Log.d(TilematchActivity.Tag, "Found " + maxResult + " result");
     	for (int i=0; i<maxResult; i++) {
     		points[i] = cursor.getInt(cursor.getColumnIndex("points"));
     		levels[i] = cursor.getInt(cursor.getColumnIndex("level"));
@@ -182,7 +178,7 @@ public class TilematchJNILib {
     	TilematchActivity.nameReady = false;
     	TilematchActivity.playerNameInputView.post(new Runnable() {
 			public void run() {
-				Log.i("tilematchJ", "requesting user input visibility");
+				Log.i(TilematchActivity.Tag, "requesting user input visibility");
 				TilematchActivity.playerNameInputView.setVisibility(View.VISIBLE);
 				TilematchActivity.playerNameInputView.requestFocus();
 				TilematchActivity.playerNameInputView.invalidate();
@@ -191,12 +187,12 @@ public class TilematchJNILib {
 		    	TilematchActivity.nameEdit.setText(TilematchActivity.playerName);	
 			}
 		});
-    	Log.i("tilematchJ", "showPlayerNameUI");
+    	Log.i(TilematchActivity.Tag, "showPlayerNameUI");
     }
     
     static public String queryPlayerName() {
     	if (TilematchActivity.nameReady) {
-    		Log.i("tilematchJ", "queryPlayerName done");
+    		Log.i(TilematchActivity.Tag, "queryPlayerName done");
     		return TilematchActivity.playerName;
     	} else {
     		return null;
@@ -254,7 +250,6 @@ public class TilematchJNILib {
 						if (cmd != null) { 
 							switch (cmd.type) {
 								case Buffer: {
-									// Log.i("tilematchJ", "queue " + cmd.buffer.length + "'" + bufferSize);
 									int result = track.write(cmd.buffer, 0, cmd.bufferSize);
 									if (result != cmd.bufferSize) {
 										Log.e("tilematchJ", "Error writing data to AudioTrack: " + result);
@@ -273,10 +268,10 @@ public class TilematchJNILib {
 										offset += cmd.master.getPlaybackHeadPosition();
 									}
 									if (offset != 0) {
-										Log.i("tilematchJ", "Setting offset: " + offset);
+										Log.i(TilematchActivity.Tag, "Setting offset: " + offset);
 										checkReturnCode("setPosition", track.setPlaybackHeadPosition(offset));
 									}
-									Log.i("tilematchJ", "start track");
+									Log.i(TilematchActivity.Tag, "start track");
 									// track.setStereoVolume(1, 1);
 									track.play();
 									break;
@@ -298,9 +293,9 @@ public class TilematchJNILib {
       
     static void checkReturnCode(String ctx, int result) {
     	switch (result) {
-    	case AudioTrack.SUCCESS: Log.i("tilematchJ", ctx + " : success"); break;
-    	case AudioTrack.ERROR_BAD_VALUE: Log.i("tilematchJ", ctx + " : bad value"); break;
-    	case AudioTrack.ERROR_INVALID_OPERATION: Log.i("tilematchJ", ctx + " : invalid op"); break;
+    	case AudioTrack.SUCCESS: Log.i(TilematchActivity.Tag, ctx + " : success"); break;
+    	case AudioTrack.ERROR_BAD_VALUE: Log.i(TilematchActivity.Tag, ctx + " : bad value"); break;
+    	case AudioTrack.ERROR_INVALID_OPERATION: Log.i(TilematchActivity.Tag, ctx + " : invalid op"); break;
     	}
     }
     static public Object createPlayer(int rate) {
@@ -361,7 +356,6 @@ public class TilematchJNILib {
     static public void startPlaying(Object o, Object master, int offset) {
     	DumbAndroid dumb = (DumbAndroid) o;
     	dumb.writeThread.start();
-    	Log.i("tilematchJ", "startPlaying! " + o + ", master:" + master + ", " + offset);
     	synchronized (dumb.track) { 
     		Command cmd = new Command();
     		cmd.type = Type.Play;
@@ -372,11 +366,10 @@ public class TilematchJNILib {
     		dumb.writePendings.add(cmd);
 			dumb.track.notify();
     	}
-    } 
+    }  
       
     static public void stopPlayer(Object o) {
     	DumbAndroid dumb = (DumbAndroid) o;
-    	Log.i("tilematchJ", "stop not fully implemented");
     	synchronized (dumb.track) {
     		dumb.track.stop();
     		// flush queue
@@ -394,8 +387,7 @@ public class TilematchJNILib {
     }
     
     static public void setPosition(Object o, int pos) {
-    	DumbAndroid dumb = (DumbAndroid) o;
-    	Log.i("tilematchJ", "pure setposition not implemented");
+
     }
     
     static public void setVolume(Object o, float v) {

@@ -31,8 +31,6 @@
   <ItemGroup>
     <None Include="sources\modes\GameModeManager.h" />
     <None Include="sources\modes\NormalModeManager.h" />
-    <None Include="sources\modes\ScoreAttackModeManager.h" />
-    <None Include="sources\modes\StaticTimeModeManager.h" />
     <None Include="sources\states\BackgroundManager.h" />
     <None Include="sources\states\DeleteGameStateManager.h" />
     <None Include="sources\states\FadeStateManager.h" />
@@ -60,11 +58,12 @@
     <None Include="jni\Application.mk" />
     <None Include="sources\states\AdsStateManager.h" />
     <None Include="sources\states\HelpStateManager.h" />
+    <None Include="sources\modes\TilesAttackModeManager.h" />
+    <None Include="sources\Callback.h" />
+    <None Include="sources\SuccessManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
-    <Compile Include="sources\modes\ScoreAttackModeManager.cpp" />
-    <Compile Include="sources\modes\StaticTimeModeManager.cpp" />
     <Compile Include="sources\states\BackgroundManager.cpp" />
     <Compile Include="sources\states\DeleteGameStateManager.cpp" />
     <Compile Include="sources\states\FadeStateManager.cpp" />
@@ -92,5 +91,8 @@
     <Compile Include="sources\Game_Private.cpp" />
     <Compile Include="sources\states\AdsStateManager.cpp" />
     <Compile Include="sources\states\HelpStateManager.cpp" />
+    <Compile Include="sources\modes\TilesAttackModeManager.cpp" />
+    <Compile Include="sources\Callback.cpp" />
+    <Compile Include="sources\SuccessManager.cpp" />
   </ItemGroup>
 </Project>

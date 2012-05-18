@@ -1,19 +1,11 @@
 package net.damsy.soupeaucaillou.tilematch;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.openfeint.api.OpenFeint;
-import com.openfeint.api.OpenFeintDelegate;
-import com.openfeint.api.OpenFeintSettings;
-import com.openfeint.api.resource.Achievement;
-import com.openfeint.api.resource.Leaderboard;
-
 import android.app.Activity;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
@@ -27,7 +19,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.openfeint.api.OpenFeint;
+import com.openfeint.api.OpenFeintDelegate;
+import com.openfeint.api.OpenFeintSettings;
+import com.openfeint.api.resource.Achievement;
+import com.openfeint.api.resource.Leaderboard;
+
 public class TilematchActivity extends Activity {
+	static public final String Tag = "TilematchJ";
+	
 	static final String gameName = "Feuilles";
 	static final String gameID = "469623";
 	static final String gameKey = "yWoOQ6qClGfYZY3ggwqobQ";
@@ -92,7 +92,7 @@ public class TilematchActivity extends Activity {
         	mGLView = new GL2JNIView(this, r, null);
         	TilematchActivity.openGLESVersion = 2;
         } catch (Exception exc) {
-        	Log.e("tilematchJava", "Failed to create OpenGL ES2 context, try ES1");
+        	Log.e(TilematchActivity.Tag, "Failed to create OpenGL ES2 context, try ES1");
         	mGLView = new GLSurfaceView(this);
         	mGLView.setRenderer(r);
         	TilematchActivity.openGLESVersion = 1;
@@ -110,7 +110,7 @@ public class TilematchActivity extends Activity {
 			
 			public void onClick(View v) {
 				playerName = nameEdit.getText().toString();
-				Log.i("tilematchJ", "Player name: '" + playerName + "'");
+				Log.i(TilematchActivity.Tag, "Player name: '" + playerName + "'");
 				if (playerName != null && playerName.length() > 0) {
 					playerNameInputView.setVisibility(View.GONE);
 					TilematchActivity.nameReady = true;
@@ -125,14 +125,14 @@ public class TilematchActivity extends Activity {
         if (savedInstanceState != null) {
 	        TilematchActivity.savedState = savedInstanceState.getByteArray(TILEMATCH_BUNDLE_KEY);
 	        if (TilematchActivity.savedState != null) {
-	        	Log.i("tilematchJava", "State restored from app bundle");
+	        	Log.i(TilematchActivity.Tag, "State restored from app bundle");
 	        } else {
-	        	Log.i("tilematchJava", "WTF?");
+	        	Log.i(TilematchActivity.Tag, "WTF?");
 	        }
         } else {
-        	Log.i("tilematchJava", "savedInstanceState is null");
+        	Log.i(TilematchActivity.Tag, "savedInstanceState is null");
         }
-    }
+    } 
 
     @Override
     protected void onPause() {
@@ -155,12 +155,12 @@ public class TilematchActivity extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
     	/* save current state; we'll be used only if app get killed */
     	synchronized (TilematchActivity.mutex) {
-	    	Log.i("tilematchJava", "Save state!");
+	    	Log.i(TilematchActivity.Tag, "Save state!");
 	    	byte[] savedState = TilematchJNILib.serialiazeState(TilematchActivity.game);
 	    	if (savedState != null) {
 	    		outState.putByteArray(TILEMATCH_BUNDLE_KEY, savedState);
 	    	}
-	    	Log.i("tilematchJava", "State saved");
+	    	Log.i(TilematchActivity.Tag, "State saved");
     	}
     	super.onSaveInstanceState(outState);
     }

@@ -30,7 +30,7 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
     		frameCount++;
     		long diff = System.currentTimeMillis() - time;
     		if (diff >= 10000) {
-    			Log.w("tilematchJava", "Render thread FPS: " + (float)1000*frameCount / diff);
+    			// Log.w(TilematchActivity.Tag, "Render thread FPS: " + (float)1000*frameCount / diff);
     			frameCount = 0;
     			time = System.currentTimeMillis();
     		}
@@ -55,7 +55,7 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
 						TilematchJNILib.pause(TilematchActivity.game);
 					}
 				}  
-				Log.i("tilematchJava", "Activity paused - exiting game thread");
+				Log.i(TilematchActivity.Tag, "Activity paused - exiting game thread");
 				gameThread = null;
 			}
 		}); 
@@ -64,11 +64,11 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
  
     boolean initDone = false;
     public void onSurfaceChanged(GL10 gl, final int width, final int height) {
-    	Log.i("tilematchJava", "surface changed-> width: " + width + ", height: " + height + ", " + initDone);
+    	Log.i(TilematchActivity.Tag, "surface changed-> width: " + width + ", height: " + height + ", " + initDone);
     	if (!initDone) {
 			TilematchJNILib.initFromRenderThread(TilematchActivity.game, width, height);
     		// TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
-    		Log.i("tilematchJava", "Start game thread");
+    		Log.i(TilematchActivity.Tag, "Start game thread");
     		// create game thread
     		startGameThread();
     	} else {
@@ -79,12 +79,12 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
     	
     	int err;
         while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
-        	Log.e("tilematchJava", "_GL error : " + GLU.gluErrorString(err));
+        	Log.e(TilematchActivity.Tag, "_GL error : " + GLU.gluErrorString(err));
         }
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-    	Log.i("tilematchJava", "Surface created (game: "  + TilematchActivity.game + ", " + initDone + ")");
+    	Log.i(TilematchActivity.Tag, "Surface created (game: "  + TilematchActivity.game + ", " + initDone + ")");
     	if (TilematchActivity.game == 0) {
     		initDone = false;
     		TilematchActivity.game = TilematchJNILib.createGame(asset, TilematchActivity.openGLESVersion);
