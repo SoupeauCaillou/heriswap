@@ -177,6 +177,7 @@ public class TilematchJNILib {
       
     static public void showPlayerNameUi() { 
     	TilematchActivity.nameReady = false;
+    	// show input view
     	TilematchActivity.playerNameInputView.post(new Runnable() {
 			public void run() {
 				Log.i(TilematchActivity.Tag, "requesting user input visibility");
@@ -294,7 +295,7 @@ public class TilematchJNILib {
       
     static void checkReturnCode(String ctx, int result) {
     	switch (result) {
-    	case AudioTrack.SUCCESS: Log.i(TilematchActivity.Tag, ctx + " : success"); break;
+    	case AudioTrack.SUCCESS: /*Log.i(TilematchActivity.Tag, ctx + " : success");*/ break;
     	case AudioTrack.ERROR_BAD_VALUE: Log.i(TilematchActivity.Tag, ctx + " : bad value"); break;
     	case AudioTrack.ERROR_INVALID_OPERATION: Log.i(TilematchActivity.Tag, ctx + " : invalid op"); break;
     	}

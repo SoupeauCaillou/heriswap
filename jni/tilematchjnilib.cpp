@@ -20,6 +20,7 @@
 #include "sac/api/android/MusicAPIAndroidImpl.h"
 #include "sac/api/android/SoundAPIAndroidImpl.h"
 #include "sac/api/android/LocalizeAPIAndroidImpl.h"
+#include "sac/api/android/NameInputAPIAndroidImpl.h"
 
 #include <png.h>
 #include <algorithm>
@@ -39,13 +40,6 @@ class AndroidSuccessAPI : public SuccessAPI {
 	public:
 		GameHolder* holder;
 		void successCompleted(const char* description, unsigned long successId);
-};
-
-struct AndroidPlayerNameInputUI : public PlayerNameInputUI {
-	public:
-		GameHolder* holder;
-		std::string show(std::vector<std::string> names);
-		void query(std::string& result);
 };
 
 class AndroidStorage: public ScoreStorage {
@@ -71,7 +65,7 @@ class AndroidStorage: public ScoreStorage {
 struct GameHolder {
 	Game* game;
 	int width, height;
-	AndroidPlayerNameInputUI inputUI;
+	NameInputAPIAndroidImpl* nameInput;
 	AndroidStorage sqlite;
 	AndroidSuccessAPI success;
 	LocalizeAPIAndroidImpl* localize;
@@ -127,8 +121,8 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
   	TimeUtil::init();
 	GameHolder* hld = new GameHolder();
 	hld->localize = new LocalizeAPIAndroidImpl(env);
-	hld->game = new Game(new AndroidNativeAssetLoader(hld), &hld->sqlite, &hld->inputUI, &hld->success, hld->localize);
-	hld->inputUI.holder = hld;
+    hld->nameInput = new NameInputAPIAndroidImpl();
+	hld->game = new Game(new AndroidNativeAssetLoader(hld), &hld->sqlite, hld->nameInput, &hld->success, hld->localize);
 	hld->renderThreadEnv = env;
 	hld->openGLESVersion = openglesVersion;
 	hld->assetManager = (jobject)env->NewGlobalRef(asset);
@@ -164,7 +158,8 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	theMusicSystem.musicAPI = new MusicAPIAndroidImpl(env);
 	theMusicSystem.assetAPI = new AssetAPIAndroidImpl(env, hld->assetManager);
 	theSoundSystem.soundAPI = new SoundAPIAndroidImpl(env, hld->assetManager);
-	
+
+    hld->nameInput->init(env);
 	hld->localize->env = env;
 	hld->localize->init();	
 	theMusicSystem.init();
@@ -548,32 +543,6 @@ void AndroidStorage::openfeintLB(int mode) {
 	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
 	jmethodID mid = env->GetStaticMethodID(c, "openfeintLeaderboard", "(I)V");
 	env->CallStaticVoidMethod(c, mid, mode);
-}
-
-std::string AndroidPlayerNameInputUI::show(std::vector<std::string> names) {
-	JNIEnv* env = holder->gameThreadEnv;
-	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
-	jmethodID mid = env->GetStaticMethodID(c, "showPlayerNameUi", "()V");
-	LOGI("method");
-	env->CallStaticVoidMethod(c, mid);
-	LOGI("done");
-    return "plop";
-}
-void AndroidPlayerNameInputUI::query(std::string& result) {
-	JNIEnv* env = holder->gameThreadEnv;
-	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
-	jmethodID mid = (env->GetStaticMethodID(c, "queryPlayerName", "()Ljava/lang/String;"));
-	jobject nnn = env->CallStaticObjectMethod(c, mid);
-	if (nnn && env->GetStringLength((jstring)nnn) > 0) {
-		const char *mfile = env->GetStringUTFChars((jstring)nnn, 0);
-		LOGW("name choosen: %s", mfile);
-		result = mfile;
-		env->ReleaseStringUTFChars((jstring)nnn, mfile);
-		return;
-	} else {
-		LOGW("name not choosen yet");
-		return;
-	}
 }
 
 #ifdef __cplusplus
