@@ -23,8 +23,11 @@ class ModeMenuStateManager : public GameStateManager {
 	private:
 		StorageAPI* storage;
 		NameInputAPI* nameInputAPI;
-		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, openfeint, scoreTitle;
+		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle;
 		Entity yourScore, fond;
+		#ifdef ANDROID
+		Entity openfeint;
+		#endif
 		std::string playerName;
 		SuccessManager* successMgr;
 		LocalizeAPI* localizeAPI;

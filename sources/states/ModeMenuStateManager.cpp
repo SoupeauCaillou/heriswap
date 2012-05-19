@@ -21,20 +21,6 @@
 #include "DepthLayer.h"
 #include "GridSystem.h"
 
-std::string diffic(int difficulty) {
-	std::stringstream s;
-	s << "Difficulty : ";
-	switch (difficulty) {
-		case 0:
-			s << "easy 5x5";
-			break;
-		case 1:
-			s << "medium 8x8";
-			break;
-	}
-	return s.str().c_str();
-}
-
 ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, NameInputAPI* pNameInputAPI, SuccessManager* sMgr, LocalizeAPI* lAPI) {
 	storage = storag;
 	successMgr = sMgr;
@@ -159,7 +145,8 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(bDifficulty, Button);
 	ADD_COMPONENT(bDifficulty, Sound);
 	BUTTON(bDifficulty)->enabled = false;
-
+	
+	#ifdef ANDROID
 	// openfeint button
 	openfeint = theEntityManager.CreateEntity();
 	ADD_COMPONENT(openfeint, Transformation);
@@ -171,7 +158,8 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(openfeint)->z = DL_MainMenuUITxt;
 	RENDERING(openfeint)->texture = theRenderingSystem.loadTextureFile("menu/openfeint.png");
 	BUTTON(openfeint)->enabled = false;
-
+	#endif
+	
 	// your score
 	yourScore = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
@@ -273,8 +261,10 @@ void ModeMenuStateManager::Enter() {
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
 	TEXT_RENDERING(play)->text = (gameOverState != NoGame) ? localizeAPI->text("rejouer", "Rejouer") : localizeAPI->text("jouer", "Jouer");
+	#ifdef ANDROID
 	RENDERING(openfeint)->hide = false;
 	BUTTON(openfeint)->enabled = true;
+	#endif
 	TEXT_RENDERING(scoreTitle)->hide = false;
 	TEXT_RENDERING(eDifficulty)->hide=false;
 	BUTTON(bDifficulty)->enabled = true;
@@ -377,13 +367,11 @@ GameState ModeMenuStateManager::Update(float dt) {
 		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		return MainMenu;
 	}
+	#ifdef ANDROID
 	if (BUTTON(openfeint)->clicked) {
-		#ifdef ANDROID
 		storage->openfeintLB(modeMgr->GetMode());
-		#else
-		LOGW("Openfeint clicked");
-		#endif
 	}
+	#endif
 	return ModeMenu;
 }
 
@@ -406,7 +394,10 @@ void ModeMenuStateManager::LateExit() {
 	TEXT_RENDERING(yourScore)->hide = true;
 	TEXT_RENDERING(play)->hide = true;
 	RENDERING(back)->hide = true;
+	#ifdef ANDROID
 	RENDERING(openfeint)->hide = true;
+	BUTTON(openfeint)->enabled = false;
+	#endif
 	for (int i=0;i<5;i++) {
 		TEXT_RENDERING(scoresName[i])->hide = true;
 		TEXT_RENDERING(scoresPoints[i])->hide = true;
@@ -420,7 +411,6 @@ void ModeMenuStateManager::LateExit() {
 	BUTTON(playButton)->enabled = false;
 	TEXT_RENDERING(scoreTitle)->hide = true;
 	RENDERING(herisson->actor.e)->hide = true;
-	BUTTON(openfeint)->enabled = false;
 
 	TEXT_RENDERING(eDifficulty)->hide=true;
 	BUTTON(bDifficulty)->enabled = false;

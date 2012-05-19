@@ -36,7 +36,7 @@ void NormalGameModeManager::Setup() {
 }
 
 void NormalGameModeManager::Enter() {
-	limit = 5;
+	limit = 45;
 	time = 0;
 	points = 0;
 	level = 1;
