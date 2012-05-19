@@ -135,6 +135,12 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
 	ADSR(inGameMusic.stressTrack)->sustainValue = 1.0;
 	ADSR(inGameMusic.stressTrack)->releaseTiming = 0.5;
 	ADSR(inGameMusic.stressTrack)->attackMode = Quadratic;
+	
+	const float MusicFadeOut = .5f;
+	std::vector<Entity> musics = theMusicSystem.RetrieveAllEntityWithComponent();
+	for (int i=0; i<musics.size(); i++) {
+		MUSIC(musics[i])->fadeOut = MusicFadeOut;
+	}
      
      (static_cast<NormalGameModeManager*> (mode2Manager[Normal]))->stressTrack = inGameMusic.stressTrack;
 	PauseStateManager* pause = static_cast<PauseStateManager*> (state2Manager[Pause]);

@@ -347,6 +347,7 @@ void Game::tick(float dt) {
     //update music
     if (pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause) { //si on joue
     	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Start;
+    	MUSIC(datas->inGameMusic.masterTrack)->volume = 1;
     	MUSIC(datas->inGameMusic.stressTrack)->control = MusicComponent::Start;
         if (MUSIC(datas->inGameMusic.masterTrack)->music == InvalidMusicRef) {
             std::vector<std::string> musics = newMusics();
@@ -358,6 +359,7 @@ void Game::tick(float dt) {
                  MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
                  mc->music = theMusicSystem.loadMusicFile(musics[i+1]);
                  mc->control = MusicComponent::Start;
+                 mc->volume = 1;
             }
         }
 
@@ -382,9 +384,10 @@ void Game::tick(float dt) {
 
     } else if (datas->state == MainMenu || datas->state == ModeMenu) { //dans les menus
         if (MUSIC(datas->menu)->music == InvalidMusicRef) {
-         LOGW("Start Menu music");
+         	LOGW("Start Menu music");
             MUSIC(datas->menu)->music = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");
             MUSIC(datas->menu)->control = MusicComponent::Start;
+            MUSIC(datas->menu)->volume = 1;
         }
 
         if (MUSIC(datas->menu)->loopNext == InvalidMusicRef) {

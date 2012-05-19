@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -51,6 +53,8 @@ public class TilematchActivity extends Activity {
 	static public EditText nameEdit;
 	static public String playerName;
 	static public boolean nameReady;
+	
+	PowerManager.WakeLock wl;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,13 +136,17 @@ public class TilematchActivity extends Activity {
         } else {
         	Log.i(TilematchActivity.Tag, "savedInstanceState is null");
         }
+        
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
     } 
 
     @Override
     protected void onPause() {
         super.onPause();
         mGLView.onPause();
-        
+        if (wl != null)
+        	wl.release();
         TilematchActivity.isPaused = true;
         TilematchActivity.isRunning = false;
     }
@@ -146,6 +154,8 @@ public class TilematchActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (wl != null)
+        	wl.acquire();
         TilematchActivity.isPaused = false;
         isRunning = true;
         mGLView.onResume();
