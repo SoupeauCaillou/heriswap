@@ -7,6 +7,8 @@
 #include <base/TimeUtil.h>
 #include <base/PlacementHelper.h>
 
+#include "api/NameInputAPI.h"
+
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/ButtonSystem.h"
@@ -101,7 +103,7 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, PlayerNameInputUI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI) {
+Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI) {
 	this->loader = ploader;
 	/* create EntityManager */
 	EntityManager::CreateInstance();
@@ -298,7 +300,6 @@ void Game::tick(float dt) {
             newState = LevelChanged;
         } else if (percentDone >= 1) {
             newState = GameToBlack;
-            static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->ended = true;
         }
      } else {
 		 toggleShowCombi(true);

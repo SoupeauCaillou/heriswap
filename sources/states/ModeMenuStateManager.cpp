@@ -36,13 +36,13 @@ std::string diffic(int difficulty) {
 	return s.str().c_str();
 }
 
-ModeMenuStateManager::ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII, SuccessManager* sMgr, LocalizeAPI* lAPI) {
+ModeMenuStateManager::ModeMenuStateManager(ScoreStorage* storag, NameInputAPI* pNameInputAPI, SuccessManager* sMgr, LocalizeAPI* lAPI) {
 	storage = storag;
 	successMgr = sMgr;
-	ended = false;
-	inputUI = inputUII;
+	nameInputAPI = pNameInputAPI;
 	localizeAPI = lAPI;
 	difficulty = 1;
+    gameOverState = NoGame;
 }
 
 ModeMenuStateManager::~ModeMenuStateManager() {
@@ -191,18 +191,21 @@ void ModeMenuStateManager::Setup() {
 
 
 
+static std::string buildScoreQuery(int mode, int difficulty) {
+    std::stringstream tmp;
+    tmp << "select * from score where mode= "<< mode << " and difficulty=" << difficulty;
+    if (mode==Normal)
+        tmp << " order by points desc limit 5";
+    else
+        tmp << " order by time asc limit 5";
+    return tmp.str();
+}
 
 void ModeMenuStateManager::LoadScore(int mode, int dif) {
 	/*getting scores*/
 	std::vector<ScoreStorage::Score> entries;
-	std::stringstream tmp;
-	tmp << "select * from score where mode= "<< mode << " and difficulty=" << dif;
-	if (mode==Normal)
-		 tmp << " order by points desc limit 5";
-	else
-		tmp << " order by time asc limit 5";
 
-	storage->request(tmp.str().c_str(), &entries, callbackScore);
+	storage->request(buildScoreQuery(mode, dif).c_str(), &entries, callbackScore);
 
 	/* treatment*/
 	bool alreadyGreen = false;
@@ -231,7 +234,7 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 			if (mode==Normal) {
 				trcL->hide = false;
 			}
-			if (!alreadyGreen && ended &&
+			if (!alreadyGreen && gameOverState == AskingPlayerName &&
 			 ((mode==Normal && entries[i].points == modeMgr->points)
 			  || (mode==TilesAttack && MathUtil::Abs(entries[i].time-modeMgr->time)<0.01f))
 			   && entries[i].name == playerName) {
@@ -258,11 +261,6 @@ void ModeMenuStateManager::Enter() {
 
 	BUTTON(back)->enabled = true;
 	BUTTON(playButton)->enabled = true;
-	if (ended) {
-		if (playerName.length() == 0) {
-			inputUI->query(playerName);
-		}
-	}
 
 	LoadScore(modeMgr->GetMode(), difficulty);
 
@@ -273,7 +271,7 @@ void ModeMenuStateManager::Enter() {
 	//~ TEXT_RENDERING(title)->hide = false;
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
-	TEXT_RENDERING(play)->text = ended ? localizeAPI->text("Rejouer") : localizeAPI->text("Jouer");
+	TEXT_RENDERING(play)->text = (gameOverState != NoGame) ? localizeAPI->text("Rejouer") : localizeAPI->text("Jouer");
 	RENDERING(openfeint)->hide = false;
 	BUTTON(openfeint)->enabled = true;
 	TEXT_RENDERING(scoreTitle)->hide = false;
@@ -283,33 +281,71 @@ void ModeMenuStateManager::Enter() {
 	std::stringstream s;
 }
 
-GameState ModeMenuStateManager::Update(float dt) {
-	if (ended) {
-		GameMode m = modeMgr->GetMode();
-		ScoreStorage::Score entry;
-		entry.points = modeMgr->points;
-		entry.time = modeMgr->time;
-		entry.name = playerName;
-		if (m==Normal) {
-			NormalGameModeManager* ng = static_cast<NormalGameModeManager*>(modeMgr);
-			entry.level = ng->currentLevel();
-		} else {
-			entry.level = 1;
-		}
-		storage->submitScore(entry, m, difficulty);
-		TEXT_RENDERING(yourScore)->hide = false;
-		std::stringstream a;
-        a << playerName << " ... ";
-		a.precision(1);
-		if (m==Normal)
-			a << entry.points << "... "<< localizeAPI->text("niv") << " " << entry.level;
-		else
-			a << std::fixed << entry.time << " s";
+void ModeMenuStateManager::submitScore(const std::string& playerName) {
+    GameMode m = modeMgr->GetMode();
+    ScoreStorage::Score entry;
+    entry.points = modeMgr->points;
+    entry.time = modeMgr->time;
+    entry.name = playerName;
+    if (m==Normal) {
+     NormalGameModeManager* ng = static_cast<NormalGameModeManager*>(modeMgr);
+     entry.level = ng->currentLevel();
+    } else {
+     entry.level = 1;
+    }
+    storage->submitScore(entry, m, difficulty);
+}
 
-		TEXT_RENDERING(yourScore)->text = a.str();
-		LoadScore(m, difficulty);
-		ended = false;
-	}
+bool ModeMenuStateManager::isCurrentScoreAHighOne() {
+    std::vector<ScoreStorage::Score> entries;
+    storage->request(buildScoreQuery(modeMgr->GetMode(), difficulty).c_str(), &entries, callbackScore);
+
+    int s = entries.size();
+    if (s < 5)
+        return true;
+
+    if (modeMgr->GetMode() == Normal) {
+        return modeMgr->points > entries[s - 1].points;
+    } else {
+        return modeMgr->points > entries[s - 1].time;
+    }
+}
+
+GameState ModeMenuStateManager::Update(float dt) {
+    switch (gameOverState) {
+        case NoGame: {
+            break;
+        }
+        case GameEnded: {
+            // ask player's name if needed
+            if (isCurrentScoreAHighOne()) {
+                nameInputAPI->show();
+                gameOverState = AskingPlayerName;
+            } else {
+                gameOverState = NoGame;
+            }
+
+            TEXT_RENDERING(yourScore)->hide = false;
+            std::stringstream a;
+            a.precision(1);
+            if (modeMgr->GetMode()==Normal) {
+                a << modeMgr->points << "... "<< localizeAPI->text("niv") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
+            } else {
+                a << std::fixed << modeMgr->time << " s";
+            }
+            TEXT_RENDERING(yourScore)->text = a.str();
+            break;
+        }
+        case AskingPlayerName: {
+            if (nameInputAPI->done(playerName)) {
+                nameInputAPI->hide();
+                submitScore(playerName);
+                LoadScore(modeMgr->GetMode(), difficulty);
+                gameOverState = NoGame;
+            }
+            break;
+        }
+    }
 
 	//herisson
 	Entity herissonActor=  herisson->actor.e;
@@ -376,7 +412,7 @@ void ModeMenuStateManager::LateExit() {
 	RENDERING(menubg)->hide = true;
 	RENDERING(menufg)->hide = true;
 	RENDERING(fond)->hide = true;
-	ended = false;
+	gameOverState = NoGame;
 	BUTTON(back)->enabled = false;
 	BUTTON(playButton)->enabled = false;
 	TEXT_RENDERING(scoreTitle)->hide = true;

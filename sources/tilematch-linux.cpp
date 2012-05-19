@@ -28,6 +28,7 @@
 #include "api/linux/AssetAPILinuxImpl.h"
 #include "api/linux/SoundAPILinuxOpenALImpl.h"
 #include "api/linux/LocalizeAPILinuxImpl.h"
+#include "api/linux/NameInputAPILinuxImpl.h"
 
 #include "Game.h"
 #include "Callback.cpp"
@@ -60,47 +61,6 @@ class MouseNativeTouchState: public NativeTouchState {
 			return glfwGetMouseButton(GLFW_MOUSE_BUTTON_1) == GLFW_PRESS;
 		}
 };
-
-struct TerminalPlayerNameInputUI : public PlayerNameInputUI {
-	public:
-		std::string show(std::vector<std::string> names) {
-			__log_enabled = false;
-			std::cout << "Choose your name !" << std::endl;
-			int size = MathUtil::Min((int)names.size(), 10);
-
-			for (int i=0; i<size; i++) {
-				std::cout << i <<". "<<names[i] << std::endl;
-			}
-			std::cout << "Or enter a new name : "  << std::endl;
-			std::string res;
-			std::cin >> res;
-			std::cin.ignore(100, '\n');
-			std::istringstream iss(res);
-			int value;
-			iss >> value;
-			//if its a valid number pick names[number]
-			if (res.size()<size/10+2 && value>0 && value<size || res[0]=='0') {
-				return names[value];
-			//else its not a number or number>size : its the new name
-			} else {
-				if (res.size()>10) res.resize(10);
-				std::cout << "Want to save it ? (yes or no(=everything else))" << std::endl;
-				std::string a;
-				getline(std::cin, a);
-				if (a.c_str()[0] == 'y') storage->saveOpt("name", res);
-				return res;
-			}
-		}
-		void query(std::string& result) {
-			storage->getName(result);
-			if (result.size()==0) {
-				result = show(storage->getName(result));
-				__log_enabled = true;
-			}
-		}
-		ScoreStorage* storage;
-};
-
 
 class LinuxSqliteExec: public ScoreStorage {
 	public :
@@ -210,14 +170,12 @@ int main(int argc, char** argv) {
 	}
 	// vérification de la table des scores
 	LinuxSqliteExec* sqliteExec = new LinuxSqliteExec();
-	TerminalPlayerNameInputUI* term = new TerminalPlayerNameInputUI();
 	if (!sqliteExec->initTable()) {
 		LOGI("probleme d'initialisation sql");
 		return 0;
 	}
-	term->storage=sqliteExec;
 
-	Game game(new LinuxNativeAssetLoader(), sqliteExec, term, new SuccessAPI(), new LocalizeAPILinuxImpl());
+	Game game(new LinuxNativeAssetLoader(), sqliteExec, new NameInputAPILinuxImpl(), new SuccessAPI(), new LocalizeAPILinuxImpl());
 
 	//theSoundSystem.init();
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());

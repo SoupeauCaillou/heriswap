@@ -1,5 +1,6 @@
 #pragma once
 
+#include "api/NameInputAPI.h"
 #include "SuccessManager.h"
 #include "states/GameStateManager.h"
 #include "Game.h"
@@ -7,7 +8,7 @@
 
 class ModeMenuStateManager : public GameStateManager {
 	public:
-		ModeMenuStateManager(ScoreStorage* storag, PlayerNameInputUI* inputUII, SuccessManager* successMgr, LocalizeAPI* lAPI);
+		ModeMenuStateManager(ScoreStorage* storag, NameInputAPI* nameInputAPI, SuccessManager* successMgr, LocalizeAPI* lAPI);
 		~ModeMenuStateManager();
 		void Setup();
 		void Enter();
@@ -17,13 +18,11 @@ class ModeMenuStateManager : public GameStateManager {
 
 		void LoadScore(int mode, int dif);
 
-		bool ended;
-
 		Entity title, menufg, menubg;
 		AnimatedActor* herisson;
 	private:
 		ScoreStorage* storage;
-		PlayerNameInputUI* inputUI;
+		NameInputAPI* nameInputAPI;
 		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, openfeint, scoreTitle;
 		Entity yourScore, fond;
 		std::string playerName;
@@ -33,5 +32,14 @@ class ModeMenuStateManager : public GameStateManager {
 		//variables for perso mode
 		int difficulty;
 		Entity eDifficulty, bDifficulty;
+
+        void submitScore(const std::string& playerName);
+        bool isCurrentScoreAHighOne();
+    public:
+        enum GameOverState {
+            NoGame,
+            GameEnded,
+            AskingPlayerName
+        } gameOverState;
 
 };

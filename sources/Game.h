@@ -11,6 +11,8 @@
 
 #include "api/LocalizeAPI.h"
 
+class NameInputAPI;
+
 class ScoreStorage {
 	public:
 		struct Score {
@@ -47,7 +49,7 @@ class SuccessAPI {
 class PrivateData;
 class Game {
 	public:
-		Game(NativeAssetLoader* loader, ScoreStorage* storage, PlayerNameInputUI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI);
+		Game(NativeAssetLoader* loader, ScoreStorage* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI);
 		void sacInit(int windowW, int windowH);
 		void init(const uint8_t* in = 0, int size = 0);
 		void tick(float dt);

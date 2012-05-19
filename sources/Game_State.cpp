@@ -29,7 +29,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
          datas->state2Manager[datas->stateBeforePause]->Exit();
          datas->mode2Manager[datas->mode]->Exit();
          newState = MainMenu;
-         static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->ended = false;
+         static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->gameOverState = ModeMenuStateManager::NoGame;
          stopInGameMusics();
      } else if (oldState == MainMenu && newState == ModeMenu) {
          datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
@@ -41,6 +41,8 @@ void Game::stateChanged(GameState oldState, GameState newState) {
         stopInGameMusics();
      } else if (newState == GameToBlack) {
 	     stopInGameMusics();
+        static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->gameOverState = ModeMenuStateManager::GameEnded;
+
      //let's play !
      } else if (newState == BlackToSpawn) {
             // call Enter before starting fade-in

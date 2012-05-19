@@ -16,10 +16,11 @@ class ScoreStorage;
 class PlayerNameInputUI;
 class GameStateManager;
 class SuccessAPI;
+class NameInputAPI;
 
 class PrivateData {
     public:
-        PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI);
+        PrivateData(Game* game, ScoreStorage* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI);
 
         void Setup(int windowW, int windowH);
 
