@@ -29,7 +29,7 @@
 #include "GameState.h"
 
 
-PrivateData::PrivateData(Game* game, ScoreStorage* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI) {
+PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI) {
      mode = Normal;
      mode2Manager[Normal] = new NormalGameModeManager(game,successMgr);
      mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game,successMgr);

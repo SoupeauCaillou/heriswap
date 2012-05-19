@@ -18,11 +18,24 @@
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
 
-#include "Callback.cpp"
 #include "DepthLayer.h"
 #include "GridSystem.h"
 
-ModeMenuStateManager::ModeMenuStateManager(ScoreStorage* storag, NameInputAPI* pNameInputAPI, SuccessManager* sMgr, LocalizeAPI* lAPI) {
+std::string diffic(int difficulty) {
+	std::stringstream s;
+	s << "Difficulty : ";
+	switch (difficulty) {
+		case 0:
+			s << "easy 5x5";
+			break;
+		case 1:
+			s << "medium 8x8";
+			break;
+	}
+	return s.str().c_str();
+}
+
+ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, NameInputAPI* pNameInputAPI, SuccessManager* sMgr, LocalizeAPI* lAPI) {
 	storage = storag;
 	successMgr = sMgr;
 	nameInputAPI = pNameInputAPI;
@@ -193,9 +206,7 @@ static std::string buildScoreQuery(int mode, int difficulty) {
 
 void ModeMenuStateManager::LoadScore(int mode, int dif) {
 	/*getting scores*/
-	std::vector<ScoreStorage::Score> entries;
-
-	storage->request(buildScoreQuery(mode, dif).c_str(), &entries, callbackScore);
+	std::vector<StorageAPI::Score> entries = storage->savedScores(mode, dif);
 
 	/* treatment*/
 	bool alreadyGreen = false;
@@ -273,7 +284,7 @@ void ModeMenuStateManager::Enter() {
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
     GameMode m = modeMgr->GetMode();
-    ScoreStorage::Score entry;
+    StorageAPI::Score entry;
     entry.points = modeMgr->points;
     entry.time = modeMgr->time;
     entry.name = playerName;
@@ -287,8 +298,7 @@ void ModeMenuStateManager::submitScore(const std::string& playerName) {
 }
 
 bool ModeMenuStateManager::isCurrentScoreAHighOne() {
-    std::vector<ScoreStorage::Score> entries;
-    storage->request(buildScoreQuery(modeMgr->GetMode(), difficulty).c_str(), &entries, callbackScore);
+    std::vector<StorageAPI::Score> entries = storage->savedScores(modeMgr->GetMode(), difficulty);
 
     int s = entries.size();
     if (s < 5)

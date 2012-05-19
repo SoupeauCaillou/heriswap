@@ -61,6 +61,8 @@
     <None Include="sources\modes\TilesAttackModeManager.h" />
     <None Include="sources\Callback.h" />
     <None Include="sources\SuccessManager.h" />
+    <None Include="sources\api\linux\StorageAPILinuxImpl.h" />
+    <None Include="sources\api\StorageAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -94,5 +96,6 @@
     <Compile Include="sources\modes\TilesAttackModeManager.cpp" />
     <Compile Include="sources\Callback.cpp" />
     <Compile Include="sources\SuccessManager.cpp" />
+    <Compile Include="sources\api\linux\StorageAPILinuxImpl.cpp" />
   </ItemGroup>
 </Project>

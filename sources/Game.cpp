@@ -103,7 +103,7 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-Game::Game(NativeAssetLoader* ploader, ScoreStorage* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI) {
+Game::Game(NativeAssetLoader* ploader, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI) {
 	this->loader = ploader;
 	/* create EntityManager */
 	EntityManager::CreateInstance();

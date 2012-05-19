@@ -108,36 +108,39 @@ public class TilematchJNILib {
 		"1149487",
 	};
      
-    static public void submitScore(int mode, int points, int level, float time, String name) {
+    static public void submitScore(int mode, int difficulty, int points, int level, float time, String name) {
     	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getWritableDatabase();
     	ContentValues v = new ContentValues();
     	v.put("name", name);
     	v.put("mode", mode);
+    	v.put("difficulty", mode);
     	v.put("points", points);
     	v.put("time", time);
     	v.put("level", level);
     	db.insert("score", null, v);
     	db.close();
 
-    	Leaderboard l = new Leaderboard(boards[mode - 1]);
-    	Log.i(TilematchActivity.Tag, "leaderboard id: " + boards[mode - 1]);
-		final Score s = new Score((long) ((mode != 2) ? points : (time * 1000)), null);
-
-		s.submitTo(l, new Score.SubmitToCB() {			
-			@Override public void onSuccess(boolean newHighScore) {
-				Log.i(TilematchActivity.Tag, "score posting successfull");
-			}
-
-			@Override public void onFailure(String exceptionMessage) {
-				Log.i(TilematchActivity.Tag, "score posting failure : " + exceptionMessage);
-			}
-	 		
-			@Override public void onBlobUploadSuccess() {
-			}
-			
-			@Override public void onBlobUploadFailure(String exceptionMessage) {
-			}
-		});
+    	if (difficulty == 1) {
+	    	Leaderboard l = new Leaderboard(boards[mode - 1]);
+	    	Log.i(TilematchActivity.Tag, "leaderboard id: " + boards[mode - 1]);
+			final Score s = new Score((long) ((mode != 2) ? points : (time * 1000)), null);
+	
+			s.submitTo(l, new Score.SubmitToCB() {			
+				@Override public void onSuccess(boolean newHighScore) {
+					Log.i(TilematchActivity.Tag, "score posting successfull");
+				}
+	
+				@Override public void onFailure(String exceptionMessage) {
+					Log.i(TilematchActivity.Tag, "score posting failure : " + exceptionMessage);
+				}
+		 		
+				@Override public void onBlobUploadSuccess() {
+				}
+				
+				@Override public void onBlobUploadFailure(String exceptionMessage) {
+				}
+			});
+    	}
     }
     
     static public void unlockAchievement(int id) {

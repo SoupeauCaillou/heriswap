@@ -20,7 +20,7 @@ class NameInputAPI;
 
 class PrivateData {
     public:
-        PrivateData(Game* game, ScoreStorage* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI);
+        PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI);
 
         void Setup(int windowW, int windowH);
 
@@ -33,7 +33,7 @@ class PrivateData {
      Entity sky, decord2nd, decord1er;
      std::map<GameState, GameStateManager*> state2Manager;
      std::map<GameMode, GameModeManager*> mode2Manager;
-     ScoreStorage* storage;
+     StorageAPI* storage;
      GameMode mode;
 
      Entity cursor;

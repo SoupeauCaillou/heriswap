@@ -10,6 +10,7 @@
 #include "GameState.h"
 
 #include "api/LocalizeAPI.h"
+#include "api/StorageAPI.h"
 
 class NameInputAPI;
 
@@ -33,12 +34,6 @@ class ScoreStorage {
 		#endif
 };
 
-class PlayerNameInputUI {
-	public:
-		virtual void query(std::string& result) = 0;
-		virtual std::string show(std::vector<std::string> names) = 0;
-};
-
 class SuccessAPI {
 	public:
 		virtual void successCompleted(const char* description, unsigned long successId) {
@@ -49,7 +44,7 @@ class SuccessAPI {
 class PrivateData;
 class Game {
 	public:
-		Game(NativeAssetLoader* loader, ScoreStorage* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI);
+		Game(NativeAssetLoader* loader, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI);
 		void sacInit(int windowW, int windowH);
 		void init(const uint8_t* in = 0, int size = 0);
 		void tick(float dt);

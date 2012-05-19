@@ -36,9 +36,7 @@ void AdsStateManager::Enter() {
 	stateActiveDuration = 0;
 	LOGI("%s", __PRETTY_FUNCTION__);
 
-	std::string s;
-	storage->request("select value from info where opt='gameb4Ads'", &s, 0);
-	gameb4Ads = std::atoi(s.c_str());
+	gameb4Ads = storage->getGameCountBeforeNextAd();
 	
 	if (!gameb4Ads) {
 		BUTTON(eAds)->enabled = true;
@@ -63,9 +61,7 @@ void AdsStateManager::Exit() {
 	BUTTON(eAds)->enabled = false;
 	if (gameb4Ads==0)
 		gameb4Ads=3;
-	std::stringstream s;
-	s << "update info set value='" << gameb4Ads-1 << "' where opt='gameb4Ads'";
-	storage->request(s.str(),0, 0);
+    storage->setGameCountBeforeNextAd(gameb4Ads);
 }
 
 void AdsStateManager::LateExit() {

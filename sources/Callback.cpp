@@ -1,12 +1,12 @@
 #include "Callback.h"
-
+#include "api/StorageAPI.h"
 #include <string>
 #include <sstream>
 #include <iostream>
 #include <vector>
 #include "Game.h"
 
-static int callbackSc(void *save, int argc, char **argv, char **azColName){
+int callbackSc(void *save, int argc, char **argv, char **azColName){
 	int *sav = static_cast<int*>(save);
 	for (int i=0; i<argc; i++) {
 		if (!strcmp(azColName[i],"points")) {
@@ -17,11 +17,11 @@ static int callbackSc(void *save, int argc, char **argv, char **azColName){
 	return 0;
 }
 
-static int callbackScore(void *save, int argc, char **argv, char **azColName){
+int callbackScore(void *save, int argc, char **argv, char **azColName){
 	int i;
 	// name | mode | difficulty | points | time
-	std::vector<ScoreStorage::Score> *sav = static_cast<std::vector<ScoreStorage::Score>* >(save);
-	ScoreStorage::Score score1;
+	std::vector<StorageAPI::Score> *sav = static_cast<std::vector<StorageAPI::Score>* >(save);
+	StorageAPI::Score score1;
 	for(i=0; i<argc; i++){
 		std::istringstream iss(argv[i]);
 		if (!strcmp(azColName[i],"name")) {
@@ -38,7 +38,7 @@ static int callbackScore(void *save, int argc, char **argv, char **azColName){
 	return 0;
 }
 
-static int callbackNames(void *save, int argc, char **argv, char **azColName){
+int callbackNames(void *save, int argc, char **argv, char **azColName){
 	std::vector<std::string> *sav = static_cast<std::vector<std::string>*>(save);
 	for (int i=0; i<argc; i++) {
 		sav->push_back(argv[i]);
@@ -46,7 +46,7 @@ static int callbackNames(void *save, int argc, char **argv, char **azColName){
 	return 0;
 }
 
-static int callback(void *save, int argc, char **argv, char **azColName){
+int callback(void *save, int argc, char **argv, char **azColName){
 	std::string *sav = static_cast<std::string*>(save);
 	*sav = argv[0];
 	return 0;

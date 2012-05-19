@@ -18,7 +18,7 @@ class SuccessManager {
 		bool b6InARow;
 		
 		//success HardScore gamer (Reach 1M points in total !)
-		void sHardScore(ScoreStorage* str);
+		void sHardScore(StorageAPI* str);
 		bool bHardScore;
 		
 		//success Fast And finish (Finish a tiles attack round within 35 secs)

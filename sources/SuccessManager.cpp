@@ -1,5 +1,4 @@
 #include "SuccessManager.h"
-#include "Callback.cpp"
 
 /* Proto :
 void SuccessManager::sName() {	
@@ -52,11 +51,9 @@ void SuccessManager::s6InARow(int nbInCombi) {
 	}
 }
 	
-void SuccessManager::sHardScore(ScoreStorage* storage) {	
+void SuccessManager::sHardScore(StorageAPI* storage) {
 	if (successEnable && !bHardScore) {
-		int sav=0;
-		storage->request("select points from score", &sav, callbackSc);
-		if (sav > 1000000) {
+		if (storage->getSavedGamePointsSum() > 1000000) {
 			successAPI->successCompleted("Hardscore gamer", 1653102);
 			bHardScore=true;
 		}

@@ -8,7 +8,7 @@
 
 class ModeMenuStateManager : public GameStateManager {
 	public:
-		ModeMenuStateManager(ScoreStorage* storag, NameInputAPI* nameInputAPI, SuccessManager* successMgr, LocalizeAPI* lAPI);
+		ModeMenuStateManager(StorageAPI* storag, NameInputAPI* nameInputAPI, SuccessManager* successMgr, LocalizeAPI* lAPI);
 		~ModeMenuStateManager();
 		void Setup();
 		void Enter();
@@ -21,7 +21,7 @@ class ModeMenuStateManager : public GameStateManager {
 		Entity title, menufg, menubg;
 		AnimatedActor* herisson;
 	private:
-		ScoreStorage* storage;
+		StorageAPI* storage;
 		NameInputAPI* nameInputAPI;
 		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, openfeint, scoreTitle;
 		Entity yourScore, fond;

@@ -514,7 +514,7 @@ void AndroidStorage::submitScore(ScoreStorage::Score scr, int mode, int diff) {
 	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
 	jmethodID mid = (env->GetStaticMethodID(c, "submitScore", "(IIIFLjava/lang/String;)V"));
 	jstring name = env->NewStringUTF(scr.name.c_str());
-	// env->CallStaticVoidMethod(c, mid, scr.mode, scr.points, scr.level, scr.time, name);
+	env->CallStaticVoidMethod(c, mid, scr.mode, scr.points, scr.level, scr.time, name);
 }
 
 void AndroidSuccessAPI::successCompleted(const char* description, unsigned long successId) {
