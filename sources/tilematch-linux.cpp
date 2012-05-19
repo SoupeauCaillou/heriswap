@@ -27,6 +27,7 @@
 #include "api/linux/MusicAPILinuxOpenALImpl.h"
 #include "api/linux/AssetAPILinuxImpl.h"
 #include "api/linux/SoundAPILinuxOpenALImpl.h"
+#include "api/linux/LocalizeAPILinuxImpl.h"
 
 #include "Game.h"
 #include "Callback.cpp"
@@ -37,12 +38,6 @@
 
 static char* loadPng(const char* assetName, int* width, int* height);
 static char* loadTextfile(const char* assetName);
-
-struct LinuxLocalizeAPI: public LocalizeAPI {
-	std::string text(const std::string& t) {
-		return t;
-	}
-};
 
 struct LinuxNativeAssetLoader: public NativeAssetLoader {
 	char* decompressPngImage(const std::string& assetName, int* width, int* height) {
@@ -222,7 +217,7 @@ int main(int argc, char** argv) {
 	}
 	term->storage=sqliteExec;
 
-	Game game(new LinuxNativeAssetLoader(), sqliteExec, term, new SuccessAPI(), new LinuxLocalizeAPI());
+	Game game(new LinuxNativeAssetLoader(), sqliteExec, term, new SuccessAPI(), new LocalizeAPILinuxImpl());
 
 	//theSoundSystem.init();
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());

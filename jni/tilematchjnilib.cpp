@@ -19,6 +19,7 @@
 #include "sac/api/android/AssetAPIAndroidImpl.h"
 #include "sac/api/android/MusicAPIAndroidImpl.h"
 #include "sac/api/android/SoundAPIAndroidImpl.h"
+#include "sac/api/android/LocalizeAPIAndroidImpl.h"
 
 #include <png.h>
 #include <algorithm>
@@ -67,19 +68,13 @@ class AndroidStorage: public ScoreStorage {
      bool request(std::string s, void* res, int (*callbackP)(void*,int,char**,char**)) {}
 };
 
-class AndroidLocalize : public LocalizeAPI {
-	public:
-		GameHolder* holder;
-		std::string text(const std::string& s);
-};
-
 struct GameHolder {
 	Game* game;
 	int width, height;
 	AndroidPlayerNameInputUI inputUI;
 	AndroidStorage sqlite;
 	AndroidSuccessAPI success;
-	AndroidLocalize localize;
+	LocalizeAPIAndroidImpl* localize;
 
 	struct __input {
 		 int touching;
@@ -131,7 +126,8 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
   	LOGW("%s -->", __FUNCTION__);
   	TimeUtil::init();
 	GameHolder* hld = new GameHolder();
-	hld->game = new Game(new AndroidNativeAssetLoader(hld), &hld->sqlite, &hld->inputUI, &hld->success, &hld->localize);
+	hld->localize = new LocalizeAPIAndroidImpl(env);
+	hld->game = new Game(new AndroidNativeAssetLoader(hld), &hld->sqlite, &hld->inputUI, &hld->success, hld->localize);
 	hld->inputUI.holder = hld;
 	hld->renderThreadEnv = env;
 	hld->openGLESVersion = openglesVersion;
@@ -141,7 +137,6 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
 	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
 	hld->sqlite.holder = hld;
 	hld->success.holder = hld;
-	hld->localize.holder = hld;
 	return (jlong)hld;
 }
 
@@ -170,8 +165,11 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	theMusicSystem.assetAPI = new AssetAPIAndroidImpl(env, hld->assetManager);
 	theSoundSystem.soundAPI = new SoundAPIAndroidImpl(env, hld->assetManager);
 	
+	hld->localize->env = env;
+	hld->localize->init();	
 	theMusicSystem.init();
 	theSoundSystem.init();
+	theMusicSystem.assetAPI->init();
 	
 	uint8_t* state = 0;
 	int size = 0;
@@ -576,11 +574,6 @@ void AndroidPlayerNameInputUI::query(std::string& result) {
 		LOGW("name not choosen yet");
 		return;
 	}
-}
-
-std::string AndroidLocalize::text(const std::string& s) {
-	LOGW("TODO");
-	return s;
 }
 
 #ifdef __cplusplus

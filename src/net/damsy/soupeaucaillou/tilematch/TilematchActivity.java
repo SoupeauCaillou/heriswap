@@ -6,6 +6,7 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.opengl.GLSurfaceView;
@@ -53,6 +54,7 @@ public class TilematchActivity extends Activity {
 	static public EditText nameEdit;
 	static public String playerName;
 	static public boolean nameReady;
+	static public Resources res;
 	
 	PowerManager.WakeLock wl;
 	
@@ -86,6 +88,7 @@ public class TilematchActivity extends Activity {
     			LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.main);
+        res = getResources();
        
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.parent_frame);
         

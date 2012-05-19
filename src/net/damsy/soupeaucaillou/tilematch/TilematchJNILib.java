@@ -11,6 +11,7 @@ import net.damsy.soupeaucaillou.tilematch.TilematchJNILib.DumbAndroid.Command;
 import net.damsy.soupeaucaillou.tilematch.TilematchJNILib.DumbAndroid.Command.Type;
 import android.content.ContentValues;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioFormat;
@@ -411,5 +412,14 @@ public class TilematchJNILib {
 			dumb.track.flush();
 			dumb.track.release();
     	}
+    }
+    
+    static public String localize(String name) {
+    	int id = TilematchActivity.res.getIdentifier(name, "string", "net.damsy.soupeaucaillou.tilematch");
+    	if (id == 0) {
+    		Log.e(TilematchActivity.Tag, "Cannot find text entry : '" + name + "' for localization");
+    		return "LOC" + name + "LOC";
+    	}
+    	return TilematchActivity.res.getString(id);
     }
 }
