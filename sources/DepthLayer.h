@@ -5,8 +5,9 @@
 #define DL_Decor2nd 0.07
 #define DL_Decor1er 0.1
 #define DL_Branch 0.12
-#define DL_LeafMin 0.13f
-#define DL_LeafMax 0.14f
+//#define DL_LeafMin 0.13f
+//#define DL_LeafMax 0.14f
+
 
 #define DL_Background 0.15
 #define DL_Animal 0.155
@@ -19,6 +20,8 @@
 #define DL_SnowDesaturate 0.4
 #define DL_SnowBackground 0.41
 #define DL_Snow 0.42
+#define DL_LeafMin 0.43f
+#define DL_LeafMax 0.44f
 #define DL_Score 0.45
 #define DL_MainMenuBg 0.47
 #define DL_MainMenuHerisson 0.48

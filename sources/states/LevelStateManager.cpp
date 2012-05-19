@@ -163,8 +163,13 @@ GameState LevelStateManager::Update(float dt) {
 		}
 	}
 	if (newLeavesGenerated) {
-		for (int i=0; i<modeMgr->branchLeaves.size(); i++)
+		for (int i=0; i<modeMgr->branchLeaves.size(); i++) {
 			TRANSFORM(modeMgr->branchLeaves[i].e)->size = Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f);
+			if (duration < 10) 
+				RENDERING(modeMgr->branchLeaves[i].e)->desaturate = false;
+			else 
+				RENDERING(modeMgr->branchLeaves[i].e)->desaturate = false;
+		}
 	}
 	
 	
