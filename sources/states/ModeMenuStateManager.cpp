@@ -323,6 +323,7 @@ GameState ModeMenuStateManager::Update(float dt) {
                 gameOverState = AskingPlayerName;
             } else {
                 gameOverState = NoGame;
+                submitScore("unknown");
             }
 
             TEXT_RENDERING(yourScore)->hide = false;
