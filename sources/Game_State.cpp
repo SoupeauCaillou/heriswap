@@ -37,6 +37,8 @@ void Game::stateChanged(GameState oldState, GameState newState) {
      } else if (newState == ModeMenu) {
         datas->mode2Manager[datas->mode]->Exit();
         stopInGameMusics();
+     } else if (newState == GameToBlack) {
+	     stopInGameMusics();
      //let's play !
      } else if (newState == BlackToSpawn) {
             // call Enter before starting fade-in

@@ -20,6 +20,8 @@ enum GameState {
      BlackToLogoState,
      BlackToMainMenu,
      BlackToSpawn,
+     GameToBlack,
+     BlackToModeMenu,
      Logo,
      Help,
      Ads

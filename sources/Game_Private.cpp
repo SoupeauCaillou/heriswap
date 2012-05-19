@@ -50,6 +50,8 @@ PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* 
      state2Manager[BlackToAds] = new FadeGameStateManager(FadeIn, BlackToAds, Ads, state2Manager[Ads], 0);
      state2Manager[AdsToBlackState] = new FadeGameStateManager(FadeOut, AdsToBlackState, BlackToSpawn, 0, state2Manager[Ads]);
      state2Manager[BlackToSpawn] = new FadeGameStateManager(FadeIn, BlackToSpawn, Spawn, 0, 0);
+	 state2Manager[GameToBlack] = new FadeGameStateManager(FadeOut, GameToBlack, BlackToModeMenu, 0, 0);
+     state2Manager[BlackToModeMenu] = new FadeGameStateManager(FadeIn, BlackToModeMenu, ModeMenu, state2Manager[ModeMenu], 0);
  }
 
  void PrivateData::Setup(int windowW, int windowH) {

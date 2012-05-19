@@ -298,7 +298,7 @@ void Game::tick(float dt) {
             static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel = m->currentLevel();
             newState = LevelChanged;
         } else if (percentDone >= 1) {
-            newState = ModeMenu;
+            newState = GameToBlack;
             static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->ended = true;
         }
      } else {
