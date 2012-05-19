@@ -260,9 +260,16 @@ int main(int argc, char** argv) {
 			dtAccumuled -= DT;
 			game.tick(DT);
 			running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
+			bool focus = glfwGetWindowParam(GLFW_ACTIVE);
+			if (focus) {
+				theMusicSystem.toggleMute(theSoundSystem.mute);
+			} else {
+				theMusicSystem.toggleMute(true);
+			}
 			//pause ?
-			if (glfwGetKey( GLFW_KEY_SPACE ))
+			if (glfwGetKey( GLFW_KEY_SPACE )) {// || !focus) {
 				game.togglePause(true);
+			}
 			//magic key?
 			if ((glfwGetKey( GLFW_KEY_ENTER ) || glfwGetKey( GLFW_KEY_KP_ENTER) ) && timer<=0) {
 				game.toggleShowCombi(false);
