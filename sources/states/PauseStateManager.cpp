@@ -30,7 +30,7 @@ void PauseStateManager::Setup() {
 	TRANSFORM(eRestart)->z = DL_PauseUIFg;
 	TEXT_RENDERING(eRestart)->color = green;
 	TEXT_RENDERING(eRestart)->charHeight = PlacementHelper::GimpHeightToScreen(75);
-	TEXT_RENDERING(eRestart)->text = localizeAPI->text("Reprendre");
+	TEXT_RENDERING(eRestart)->text = localizeAPI->text("reprendre", "Reprendre");
 	TEXT_RENDERING(eRestart)->hide = true;
 	TEXT_RENDERING(eRestart)->positioning = TextRenderingComponent::LEFT;
 	TRANSFORM(eRestart)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(300));
@@ -53,7 +53,7 @@ void PauseStateManager::Setup() {
 	TRANSFORM(eHelp)->z = DL_PauseUIFg;
 	TEXT_RENDERING(eHelp)->color = green;
 	TEXT_RENDERING(eHelp)->charHeight = PlacementHelper::GimpHeightToScreen(75);
-	TEXT_RENDERING(eHelp)->text = localizeAPI->text("Aide");
+	TEXT_RENDERING(eHelp)->text = localizeAPI->text("aide", "Aide");
 	TEXT_RENDERING(eHelp)->hide = true;
 	TEXT_RENDERING(eHelp)->positioning = TextRenderingComponent::LEFT;
 	TRANSFORM(eHelp)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(500));
@@ -75,7 +75,7 @@ void PauseStateManager::Setup() {
 	TRANSFORM(eAbort)->z = DL_PauseUIFg;
 	TEXT_RENDERING(eAbort)->color = green;
 	TEXT_RENDERING(eAbort)->charHeight = PlacementHelper::GimpHeightToScreen(75);
-	TEXT_RENDERING(eAbort)->text = localizeAPI->text("Abandonner");
+	TEXT_RENDERING(eAbort)->text = localizeAPI->text("abandonner", "Abandonner");
 	TEXT_RENDERING(eAbort)->hide = true;
 	TEXT_RENDERING(eAbort)->positioning = TextRenderingComponent::LEFT;
 	TRANSFORM(eAbort)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(900));

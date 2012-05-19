@@ -48,10 +48,10 @@ void MainMenuGameStateManager::Setup() {
 	    RENDERING(bStart[i])->texture = theRenderingSystem.loadTextureFile("menu/fond_bouton.png");
 	    RENDERING(bStart[i])->color.a = 0.5;
 	}
-	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("Classique");
+	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Classique");
 	TRANSFORM(eStart[0])->position.X = PlacementHelper::GimpXToScreen(394);
 	TRANSFORM(eStart[0])->position.Y = TRANSFORM(bStart[0])->position.Y = PlacementHelper::GimpYToScreen(156);
-	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("Mange tes feuilles");
+	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2", "Mange tes feuilles");
 	TRANSFORM(eStart[1])->position.X = PlacementHelper::GimpXToScreen(700);
 	TRANSFORM(eStart[1])->position.Y = TRANSFORM(bStart[1])->position.Y = PlacementHelper::GimpYToScreen(156+183);
 

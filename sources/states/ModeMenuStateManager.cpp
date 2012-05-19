@@ -22,20 +22,6 @@
 #include "DepthLayer.h"
 #include "GridSystem.h"
 
-std::string diffic(int difficulty) {
-	std::stringstream s;
-	s << "Difficulty : ";
-	switch (difficulty) {
-		case 0:
-			s << "easy 5x5";
-			break;
-		case 1:
-			s << "medium 8x8";
-			break;
-	}
-	return s.str().c_str();
-}
-
 ModeMenuStateManager::ModeMenuStateManager(ScoreStorage* storag, NameInputAPI* pNameInputAPI, SuccessManager* sMgr, LocalizeAPI* lAPI) {
 	storage = storag;
 	successMgr = sMgr;
@@ -109,7 +95,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(scoreTitle)->position = Vector2(PlacementHelper::GimpXToScreen(65), PlacementHelper::GimpYToScreen(476));
 	TRANSFORM(scoreTitle)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(scoreTitle, TextRendering);
-	TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("Score :");
+	TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("score", "Score :");
 	TEXT_RENDERING(scoreTitle)->fontName = "typo";
 	TEXT_RENDERING(scoreTitle)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(scoreTitle)->color = green;
@@ -122,7 +108,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(play)->position = Vector2(PlacementHelper::GimpXToScreen(65), PlacementHelper::GimpYToScreen(300));
 	TRANSFORM(play)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(play, TextRendering);
-	TEXT_RENDERING(play)->text = localizeAPI->text("Jouer");
+	TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Jouer");
 	TEXT_RENDERING(play)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(play)->color = green;
 	TEXT_RENDERING(play)->fontName = "typo";
@@ -146,7 +132,11 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(eDifficulty)->hide = true;
 	TEXT_RENDERING(eDifficulty)->charHeight = PlacementHelper::GimpHeightToScreen(45);
 	TEXT_RENDERING(eDifficulty)->color = green;
-	TEXT_RENDERING(eDifficulty)->text = localizeAPI->text(diffic(difficulty));
+	if (difficulty==0)
+		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy 5x5");
+	else 
+		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium 8x8");
+
 	//difficulty container
 	bDifficulty = theEntityManager.CreateEntity();
 	ADD_COMPONENT(bDifficulty, Transformation);
@@ -228,7 +218,7 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
 
-			a.str(""); a<< std::fixed <<localizeAPI->text("niv") << " " <<entries[i].level;
+			a.str(""); a<< std::fixed <<localizeAPI->text("lvl", "niv") << " " <<entries[i].level;
 			trcL->text = a.str();
 			//affichage lvl
 			if (mode==Normal) {
@@ -271,7 +261,7 @@ void ModeMenuStateManager::Enter() {
 	//~ TEXT_RENDERING(title)->hide = false;
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
-	TEXT_RENDERING(play)->text = (gameOverState != NoGame) ? localizeAPI->text("Rejouer") : localizeAPI->text("Jouer");
+	TEXT_RENDERING(play)->text = (gameOverState != NoGame) ? localizeAPI->text("rejouer", "Rejouer") : localizeAPI->text("jouer", "Jouer");
 	RENDERING(openfeint)->hide = false;
 	BUTTON(openfeint)->enabled = true;
 	TEXT_RENDERING(scoreTitle)->hide = false;
@@ -329,7 +319,7 @@ GameState ModeMenuStateManager::Update(float dt) {
             std::stringstream a;
             a.precision(1);
             if (modeMgr->GetMode()==Normal) {
-                a << modeMgr->points << "... "<< localizeAPI->text("niv") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
+                a << modeMgr->points << "... "<< localizeAPI->text("lvl", "niv") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
             } else {
                 a << std::fixed << modeMgr->time << " s";
             }
@@ -361,7 +351,10 @@ GameState ModeMenuStateManager::Update(float dt) {
 		difficulty++;
 		if (difficulty==2) difficulty=0;
 		LoadScore(modeMgr->GetMode(), difficulty);
-		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text(diffic(difficulty));
+		if (difficulty==0)
+			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy 5x5");
+		else 
+			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium 8x8");
 	}
 
 	if (BUTTON(playButton)->clicked) {

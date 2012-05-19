@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="Reprendre">Plop</string>
-	<string name="Aide">Help</string>
-	<string name="Abandonner">Quit</string>
-	<string name="Classique">Classique</string>
-	<string name="Mange_tes_feuilles">EAT THE LEAVES</string>
-	<string name="Score">Score :</string>
-	<string name="Jouer">Start</string>
-	<string name="Rejouer">Restart</string>
+	<string name="reprendre">Reprendre</string>
+	<string name="aide">Aide</string>
+	<string name="abandonner">Quitter</string>
+	<string name="mode_1">Classique</string>
+	<string name="mode_2">MANGE TES FEUILLES</string>
+	<string name="score">Score :</string>
+	<string name="jouer">Jouer</string>
+	<string name="rejouer">Recommencer</string>
+	<string name="diff_1">Facile 5x5</string>
+	<string name="diff_2">Difficile 8x8</string>
+	<string name="lvl">niv</string>
 </resources>
