@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "GameStateManager.h"
+#include "modes/NormalModeManager.h"
 
 typedef struct FeuilleOrientee {
 	Entity e;
@@ -13,8 +14,8 @@ typedef struct FeuilleOrientee {
 class LevelStateManager : public GameStateManager {
 	public:
 
-	LevelStateManager();
-	~LevelStateManager();
+	LevelStateManager(NormalGameModeManager* mgr) : modeMgr(mgr) { };
+	~LevelStateManager() { };
 	void Setup();
 	void Enter();
 	GameState Update(float dt);
@@ -33,4 +34,7 @@ class LevelStateManager : public GameStateManager {
 	Entity eMusic;
 	
 	float duration;
+	
+	NormalGameModeManager* modeMgr;
+	bool newLeavesGenerated;
 };

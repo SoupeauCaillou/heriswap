@@ -12,22 +12,12 @@
 #include "systems/MorphingSystem.h"
 #include "systems/ADSRSystem.h"
 
+#include "modes/GameModeManager.h"
 #include "TwitchSystem.h"
 #include "DepthLayer.h"
 #include "CombinationMark.h"
 #include "GridSystem.h"
 #include "Game.h"
-
-
-
-
-LevelStateManager::LevelStateManager() {
-
-}
-
-LevelStateManager::~LevelStateManager() {
-
-}
 
 void LevelStateManager::Setup() {
 	eGrid = theEntityManager.CreateEntity();
@@ -135,6 +125,8 @@ void LevelStateManager::Enter() {
 	for (int i=0; i<entities.size(); i++) {
 		CombinationMark::markCellInCombination(entities[i]);
 	}
+	
+	newLeavesGenerated = false;
 }
 
 GameState LevelStateManager::Update(float dt) {
@@ -163,11 +155,19 @@ GameState LevelStateManager::Update(float dt) {
 		mc->activationTime = 0;
 		mc->timing = 0.5;
 		
-		if (duration > 6) {
-			PARTICULE(eSnowEmitter)->emissionRate = 0;
+		PARTICULE(eSnowEmitter)->emissionRate = 0;
+		
+		if (!newLeavesGenerated) {
+			newLeavesGenerated = true;
+			modeMgr->generateLeaves(0, theGridSystem.Types);
 		}
 	}
-
+	if (newLeavesGenerated) {
+		for (int i=0; i<modeMgr->branchLeaves.size(); i++)
+			TRANSFORM(modeMgr->branchLeaves[i].e)->size = Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f);
+	}
+	
+	
 	if (MUSIC(eBigLevel)->music == InvalidMusicRef || duration > 10) {
 		return Spawn;
 	}
@@ -180,7 +180,6 @@ void LevelStateManager::Exit() {
 	ADSR(eGrid)->active = false;
 	feuilles.clear();
 	LOGI("%s", __PRETTY_FUNCTION__);
-	TEXT_RENDERING(eBigLevel)->text = "14";
 	TEXT_RENDERING(eBigLevel)->hide = true;
 	PARTICULE(eSnowEmitter)->emissionRate = 0;
 	// RENDERING(eDesaturate)->hide = false;

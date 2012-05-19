@@ -65,7 +65,6 @@ void NormalGameModeManager::GameUpdate(float dt) {
 	if (levelUpPending) {
 		RENDERING(herisson)->hide = false;
         LoadHerissonTexture(bonus+1);
-		generateLeaves(0, theGridSystem.Types);
 		levelUpPending = false;
 	}
 	time += dt;

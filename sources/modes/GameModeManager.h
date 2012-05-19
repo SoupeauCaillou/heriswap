@@ -66,6 +66,7 @@ class GameModeManager {
 		float time;
 		int points, bonus, limit;
         Entity sky;
+		std::vector<BranchLeaf> branchLeaves;
 
 	protected:
 		// display elements
@@ -75,7 +76,6 @@ class GameModeManager {
 		std::vector<Vector2> pts;
 		Entity herisson;
 		//feuilles de l'arbre
-		std::vector<BranchLeaf> branchLeaves;
 
 		SuccessManager* successMgr;
 	private:

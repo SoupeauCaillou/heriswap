@@ -43,7 +43,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      state2Manager[UserInput] = new UserInputGameStateManager(successMgr);
      state2Manager[Delete] = new DeleteGameStateManager(successMgr);
      state2Manager[Fall] = new FallGameStateManager();
-     state2Manager[LevelChanged] = new LevelStateManager();
+     state2Manager[LevelChanged] = new LevelStateManager(static_cast<NormalGameModeManager*> (mode2Manager[Normal]));
      state2Manager[Pause] = new PauseStateManager(lAPI);
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
      state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI);
