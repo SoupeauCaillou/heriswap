@@ -53,7 +53,7 @@ class GameModeManager {
         // state save/restore
         virtual int saveInternalState(uint8_t** out);
         virtual const uint8_t* restoreInternalState(const uint8_t* in, int size);
-		void generateLeaves(int* nb);
+		void generateLeaves(int* nb, int type);
 
 	protected:
 		float position(float t);

@@ -128,7 +128,6 @@ void GameModeManager::Enter() {
 	SCROLLING(decor1er)->hide = false;
     LoadHerissonTexture(bonus+1);
 
-	generateLeaves(0);
 	uiHelper.show();
     theGridSystem.HideAll(false);
     TRANSFORM(herisson)->position.X = initialHerissonPosition(herisson);
@@ -158,14 +157,14 @@ void GameModeManager::TogglePauseDisplay(bool paused) {
     RENDERING(uiHelper.pauseButton)->hide = paused;
 }
 
-void GameModeManager::generateLeaves(int* nb) {
+void GameModeManager::generateLeaves(int* nb, int type) {
 	for (int az=0;az<branchLeaves.size();az++)
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
 
 	branchLeaves.clear();
 	fillVec();
 
-    for (int j=0;j<8;j++) {
+    for (int j=0;j<type;j++) {
 	    for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
 			Entity e = theEntityManager.CreateEntity();
 			ADD_COMPONENT(e, Transformation);
@@ -312,7 +311,13 @@ const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int size
         memcpy(&c, &in[index], sizeof(uint8_t)); index += sizeof(uint8_t);
         nb[i] = c;
     }
-    generateLeaves(nb);
-
+    generateLeaves(nb,8);
+    /*
+    //ici ça depend du mode...
+    //mode tiles
+    generateLeaves(nb,8);
+	//mode normal
+	generateLeaves(nb, theGridSystem.Types);
+	*/
     return &in[index];
 }

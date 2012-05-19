@@ -35,15 +35,18 @@ void TilesAttackGameModeManager::Enter() {
 	else
 		limit = 30;
 	pts.push_back(Vector2(limit,1));//need limit leaves to end game
+
+	generateLeaves(0, 8);
 	
 	GameModeManager::Enter();
 }
 
 void TilesAttackGameModeManager::Exit() {
-	successMgr->sFastAndFinish(leavesDone, limit, time);
-	
-	successMgr->sResetGrid();
-		
+	//if we didn't give up
+	if (leavesDone > limit) {
+		successMgr->sFastAndFinish(time);
+		successMgr->sResetGrid();
+	}
 	GameModeManager::Exit();
 }
 

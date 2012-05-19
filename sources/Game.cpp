@@ -462,7 +462,7 @@ int Game::saveState(uint8_t** out) {
 	if (datas->state == LevelChanged) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = Spawn;
-		datas->mode2Manager[datas->mode]->generateLeaves(0);
+		datas->mode2Manager[datas->mode]->generateLeaves(0, theGridSystem.Types);
 	}
 
 	/* save all entities/components */

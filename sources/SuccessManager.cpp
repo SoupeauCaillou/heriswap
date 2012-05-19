@@ -61,9 +61,9 @@ void SuccessManager::sHardScore(ScoreStorage* storage) {
 		}
 	}
 }
-void SuccessManager::sFastAndFinish(int leavesDone, int limit, float time) {
+void SuccessManager::sFastAndFinish(float time) {
 	if (successEnable && !bFastAndFinish) {
-		if (leavesDone >= limit && time<=35.f) {
+		if (time<=35.f) {
 			successAPI->successCompleted("Fast and finish", 1666602);
 			bFastAndFinish = true;
 		}

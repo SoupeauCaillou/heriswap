@@ -43,6 +43,8 @@ void NormalGameModeManager::Enter() {
 	levelMoveDuration = 0;
 	levelUp = levelUpPending = false;
 
+	generateLeaves(0, theGridSystem.Types);
+
 	GameModeManager::Enter();
 }
 
@@ -60,7 +62,7 @@ void NormalGameModeManager::GameUpdate(float dt) {
 	if (levelUpPending) {
 		RENDERING(herisson)->hide = false;
         LoadHerissonTexture(bonus+1);
-		generateLeaves(0);
+		generateLeaves(0, theGridSystem.Types);
 		levelUpPending = false;
 	}
 	time += dt;

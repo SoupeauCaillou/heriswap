@@ -22,7 +22,7 @@ class SuccessManager {
 		bool bHardScore;
 		
 		//success Fast And finish (Finish a tiles attack round within 35 secs)
-		void sFastAndFinish(int leavesDone, int limit, float time);
+		void sFastAndFinish(float time);
 		bool bFastAndFinish;
 		
 		//success Don't reset the grid (In tiles attack, if you finish without resetting the grid)
