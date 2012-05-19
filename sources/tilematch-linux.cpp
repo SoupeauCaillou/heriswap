@@ -27,6 +27,7 @@
 #include "api/linux/MusicAPILinuxOpenALImpl.h"
 #include "api/linux/AssetAPILinuxImpl.h"
 #include "api/linux/SoundAPILinuxOpenALImpl.h"
+#include "api/linux/LocalizeAPILinuxImpl.h"
 
 #include "Game.h"
 #include "Callback.cpp"
@@ -37,12 +38,6 @@
 
 static char* loadPng(const char* assetName, int* width, int* height);
 static char* loadTextfile(const char* assetName);
-
-struct LinuxLocalizeAPI: public LocalizeAPI {
-	std::string text(const std::string& t) {
-		return t;
-	}
-};
 
 struct LinuxNativeAssetLoader: public NativeAssetLoader {
 	char* decompressPngImage(const std::string& assetName, int* width, int* height) {
@@ -222,7 +217,7 @@ int main(int argc, char** argv) {
 	}
 	term->storage=sqliteExec;
 
-	Game game(new LinuxNativeAssetLoader(), sqliteExec, term, new SuccessAPI(), new LinuxLocalizeAPI());
+	Game game(new LinuxNativeAssetLoader(), sqliteExec, term, new SuccessAPI(), new LocalizeAPILinuxImpl());
 
 	//theSoundSystem.init();
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());
@@ -265,9 +260,16 @@ int main(int argc, char** argv) {
 			dtAccumuled -= DT;
 			game.tick(DT);
 			running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
+			bool focus = glfwGetWindowParam(GLFW_ACTIVE);
+			if (focus) {
+				theMusicSystem.toggleMute(theSoundSystem.mute);
+			} else {
+				theMusicSystem.toggleMute(true);
+			}
 			//pause ?
-			if (glfwGetKey( GLFW_KEY_SPACE ))
+			if (glfwGetKey( GLFW_KEY_SPACE )) {// || !focus) {
 				game.togglePause(true);
+			}
 			//magic key?
 			if ((glfwGetKey( GLFW_KEY_ENTER ) || glfwGetKey( GLFW_KEY_KP_ENTER) ) && timer<=0) {
 				game.toggleShowCombi(false);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="Reprendre">Continue</string>
+	<string name="Reprendre">Plop</string>
 	<string name="Aide">Help</string>
 	<string name="Abandonner">Quit</string>
-	<string name="Classique">Classic</string>
+	<string name="Classique">Classique</string>
 	<string name="Mange_tes_feuilles">EAT THE LEAVES</string>
 	<string name="Score">Score :</string>
 	<string name="Jouer">Start</string>

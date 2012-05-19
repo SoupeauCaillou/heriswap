@@ -9,12 +9,7 @@
 
 #include "GameState.h"
 
-
-
-struct LocalizeAPI {
-	public :
-		virtual std::string text(const std::string& s) = 0;
-};
+#include "api/LocalizeAPI.h"
 
 class ScoreStorage {
 	public:
