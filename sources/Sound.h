@@ -1,5 +1,6 @@
 #pragma once
-#include "base/Log.h"
+
 #include <vector>
+#include <string>
 
 std::vector<std::string> newMusics();

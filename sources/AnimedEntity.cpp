@@ -1,11 +1,11 @@
+#include "AnimedEntity.h"
+
 #include <sstream>
 
-#include "base/EntityManager.h"
-#include "base/MathUtil.h"
+#include <base/MathUtil.h>
 
 #include "systems/RenderingSystem.h"
 
-#include "AnimedEntity.h"
 
 void switchAnim(AnimatedActor* a) {
 	a->frames++;

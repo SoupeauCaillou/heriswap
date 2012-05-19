@@ -3,7 +3,7 @@
 #include "states/GameStateManager.h"
 #include "modes/GameModeManager.h"
 #include "AnimedEntity.h"
-
+#include "Game.h"
 
 class MainMenuGameStateManager : public GameStateManager {
 	public:

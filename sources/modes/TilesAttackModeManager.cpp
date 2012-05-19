@@ -11,6 +11,7 @@
 #include "base/PlacementHelper.h"
 #include "Game.h"
 #include "CombinationMark.h"
+#include "GridSystem.h"
 
 TilesAttackGameModeManager::TilesAttackGameModeManager(Game* game, SuccessManager* successMgr) : GameModeManager(game, successMgr) {
 }

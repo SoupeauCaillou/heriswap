@@ -1,10 +1,11 @@
 #include "SuccessManager.h"
 #include "Callback.cpp"
+
 /* Proto :
-void SuccessManager::sRainbow(int level) {	
+void SuccessManager::sName() {	
 	if (successEnable) {		
-		if (
-			bRainbow = true;
+		if () {
+			bName = true;
 		}
 	}
 }

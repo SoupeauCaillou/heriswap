@@ -1,9 +1,6 @@
 #pragma once
 
-#include <sstream>
-
-#include "base/EntityManager.h"
-#include "base/MathUtil.h"
+#include <base/EntityManager.h>
 
 class CombinationMark {
     public:

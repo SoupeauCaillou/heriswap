@@ -1,23 +1,6 @@
 #pragma once
 
-#ifndef ANDROID
-#include <GL/glew.h>
-#include <GL/glfw.h>
-#endif
-
-#include "base/Log.h"
-#include "base/TouchInputManager.h"
-#include "base/EntityManager.h"
-
-#include "systems/TransformationSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/ADSRSystem.h"
-#include "systems/ButtonSystem.h"
-#include "systems/SoundSystem.h"
-
 #include "GameStateManager.h"
-#include "GridSystem.h"
-#include "Game.h"
 #include "SuccessManager.h"
 
 class UserInputGameStateManager : public GameStateManager {

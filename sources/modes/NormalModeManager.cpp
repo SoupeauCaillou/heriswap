@@ -1,5 +1,7 @@
 #include "NormalModeManager.h"
 
+#include <sstream>
+
 #include <base/Vector2.h>
 #include <base/MathUtil.h>
 #include <base/PlacementHelper.h>
@@ -8,10 +10,11 @@
 #include "systems/ContainerSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
+#include "systems/ADSRSystem.h"
 
 #include "CombinationMark.h"
 #include "Game.h"
-
+#include "GridSystem.h"
 
 #define SKY_SPEED 2.3
 #define DECOR2_SPEED 1.6

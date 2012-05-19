@@ -1,8 +1,20 @@
 #include "BackgroundManager.h"
-#include "../DepthLayer.h"
-#include "base/PlacementHelper.h"
+
+#include <sstream>
+
+#include <base/PlacementHelper.h>
+#include <base/Interval.h>
+#include <base/EntityManager.h>
+
+#include "systems/TransformationSystem.h"
+#include "systems/ADSRSystem.h"
+#include "systems/RenderingSystem.h"
+
+#include "Game.h"
+#include "DepthLayer.h"
 
 #define CAMERASPEED -1.f
+
 struct BackgroundManager::Actor {
 	Entity e;
 	float speed;

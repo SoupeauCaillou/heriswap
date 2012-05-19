@@ -1,6 +1,26 @@
 #include "ModeMenuStateManager.h"
-#include "Callback.cpp"
+
 #include <sstream>
+#include <fstream>
+
+#include <base/EntityManager.h>
+#include <base/TouchInputManager.h>
+#include <base/PlacementHelper.h>
+
+#include "systems/MorphingSystem.h"
+#include "systems/ButtonSystem.h"
+#include "systems/TextRenderingSystem.h"
+#include "systems/TransformationSystem.h"
+#include "systems/RenderingSystem.h"
+#include "systems/ContainerSystem.h"
+#include "systems/SoundSystem.h"
+
+#include "modes/GameModeManager.h"
+#include "modes/NormalModeManager.h"
+
+#include "Callback.cpp"
+#include "DepthLayer.h"
+#include "GridSystem.h"
 
 std::string diffic(int difficulty) {
 	std::stringstream s;

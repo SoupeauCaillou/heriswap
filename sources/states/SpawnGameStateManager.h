@@ -1,18 +1,8 @@
 #pragma once
 
-#include <sstream>
-
-#include "base/EntityManager.h"
-
-#include "systems/TransformationSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/ADSRSystem.h"
-
-#include "Game.h"
 #include "GameStateManager.h"
-#include "GridSystem.h"
-#include "DepthLayer.h"
 #include "SuccessManager.h"
+#include "GridSystem.h"
 
 class SpawnGameStateManager : public GameStateManager {
 	public:

@@ -1,7 +1,16 @@
 #include "PauseStateManager.h"
-#include "DepthLayer.h"
+
+#include "base/EntityManager.h"
 #include "base/PlacementHelper.h"
+
+#include "systems/TransformationSystem.h"
+#include "systems/TextRenderingSystem.h"
+#include "systems/ContainerSystem.h"
+#include "systems/ButtonSystem.h"
+#include "systems/SoundSystem.h"
 #include "systems/MusicSystem.h"
+
+#include "DepthLayer.h"
 
 PauseStateManager::~PauseStateManager() {
 	theTextRenderingSystem.DeleteEntity(eRestart);

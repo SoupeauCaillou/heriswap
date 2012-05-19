@@ -1,11 +1,8 @@
 #pragma once
 
-#include "base/EntityManager.h"
-#include "base/MathUtil.h"
+#include <vector>
 
-#include "Game.h"
 #include "GameStateManager.h"
-#include "GridSystem.h"
 
 typedef struct FeuilleOrientee {
 	Entity e;

@@ -1,10 +1,11 @@
 #include <sstream>
 
-#include "base/Log.h"
-#include "base/TouchInputManager.h"
-#include "base/MathUtil.h"
-#include "base/EntityManager.h"
-#include "base/TimeUtil.h"
+#include <base/Log.h>
+#include <base/TouchInputManager.h>
+#include <base/MathUtil.h>
+#include <base/EntityManager.h>
+#include <base/TimeUtil.h>
+#include <base/PlacementHelper.h>
 
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
@@ -25,15 +26,14 @@
 #include "states/ModeMenuStateManager.h"
 #include "states/PauseStateManager.h"
 
+#include "modes/NormalModeManager.h"
+
 #include "DepthLayer.h"
-#include "base/PlacementHelper.h"
 #include "GridSystem.h"
 #include "Game.h"
 #include "TwitchSystem.h"
 #include "CombinationMark.h"
 #include "Sound.h"
-
-#define GRIDSIZE 8
 #include "Game_Private.h"
 
 static bool inGameState(GameState state) {
@@ -78,7 +78,7 @@ static bool fadeLogoState(GameState state) {
 
 static const float offset = 0.2;
 static const float scale = 0.95;
-static const float size = (10 - 2 * offset) / GRIDSIZE;
+static const float size = (10 - 2 * offset) / 8;
 
 static void updateFps(float dt);
 
@@ -175,7 +175,6 @@ void Game::init(const uint8_t* in, int size) {
 
 	datas->Setup(PlacementHelper::WindowWidth, PlacementHelper::WindowHeight);
 
-	theGridSystem.GridSize = GRIDSIZE;
 	theSoundSystem.mute = !datas->storage->soundEnable(false);
     theMusicSystem.toggleMute(theSoundSystem.mute);
 

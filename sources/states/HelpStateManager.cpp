@@ -1,6 +1,15 @@
 #include "HelpStateManager.h"
+
+#include <base/PlacementHelper.h>
+
+#include "systems/TransformationSystem.h"
+#include "systems/TextRenderingSystem.h"
+#include "systems/ContainerSystem.h"
+#include "systems/ButtonSystem.h"
+#include "systems/SoundSystem.h"
+
+#include "Game.h"
 #include "DepthLayer.h"
-#include "base/PlacementHelper.h"
 
 HelpStateManager::~HelpStateManager() {
 	theEntityManager.DeleteEntity(eHelp);

@@ -15,10 +15,10 @@
 #include <cassert>
 #include <vector>
 
-#include "base/Vector2.h"
-#include "base/TouchInputManager.h"
-#include "base/TimeUtil.h"
-#include "base/MathUtil.h"
+#include <base/Vector2.h>
+#include <base/TouchInputManager.h>
+#include <base/TimeUtil.h>
+#include <base/MathUtil.h>
 
 #include "systems/RenderingSystem.h"
 #include "systems/SoundSystem.h"

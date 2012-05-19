@@ -1,9 +1,5 @@
 #pragma once
 
-#include "base/EntityManager.h"
-#include "base/TouchInputManager.h"
-
-#include "Game.h"
 #include "GameStateManager.h"
 
 class LogoStateManager : public GameStateManager {

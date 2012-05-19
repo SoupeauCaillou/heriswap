@@ -1,14 +1,16 @@
 #include "Game.h"
 #include "Game_Private.h"
+
 #include "states/ModeMenuStateManager.h"
 #include "states/MainMenuGameStateManager.h"
 #include "states/LevelStateManager.h"
-
 #include "states/DeleteGameStateManager.h"
 #include "states/UserInputGameStateManager.h"
 #include "states/SpawnGameStateManager.h"
 #include "states/FallGameStateManager.h"
+
 #include "modes/TilesAttackModeManager.h"
+#include "modes/NormalModeManager.h"
 
 void Game::stopInGameMusics() {
 	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Stop;

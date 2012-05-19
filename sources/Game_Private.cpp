@@ -1,10 +1,15 @@
 #include "Game.h"
 #include "Game_Private.h"
 
+#include <base/PlacementHelper.h>
+
+#include "systems/ButtonSystem.h"
+#include "systems/ADSRSystem.h"
+
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
 #include "modes/TilesAttackModeManager.h"
-#include "GameState.h"
+
 #include "states/GameStateManager.h"
 #include "states/SpawnGameStateManager.h"
 #include "states/UserInputGameStateManager.h"
@@ -19,6 +24,9 @@
 #include "states/LogoStateManager.h"
 #include "states/HelpStateManager.h"
 #include "states/AdsStateManager.h"
+
+#include "DepthLayer.h"
+#include "GameState.h"
 
 
 PrivateData::PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI) {

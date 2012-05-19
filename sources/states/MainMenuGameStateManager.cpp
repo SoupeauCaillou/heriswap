@@ -1,7 +1,8 @@
 #include "MainMenuGameStateManager.h"
 
-#include "base/EntityManager.h"
-#include "base/TouchInputManager.h"
+#include <base/EntityManager.h>
+#include <base/TouchInputManager.h>
+#include <base/PlacementHelper.h>
 
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
@@ -12,7 +13,6 @@
 #include "systems/SoundSystem.h"
 
 #include "DepthLayer.h"
-#include "base/PlacementHelper.h"
 
 MainMenuGameStateManager::~MainMenuGameStateManager() {
 	for (int i=0; i<2; i++) {

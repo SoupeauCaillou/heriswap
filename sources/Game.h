@@ -1,6 +1,15 @@
 #pragma once
-#include "GridSystem.h"
+
+#include <string>
+#include <vector>
+
+#include <base/MathUtil.h>
+
+#include "systems/RenderingSystem.h"
+
 #include "GameState.h"
+
+
 
 struct LocalizeAPI {
 	public :

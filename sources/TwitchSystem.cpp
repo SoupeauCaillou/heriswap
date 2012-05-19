@@ -1,5 +1,10 @@
 #include "TwitchSystem.h"
+
+#include <base/EntityManager.h>
+#include <base/MathUtil.h>
+
 #include "systems/TransformationSystem.h"
+
 INSTANCE_IMPL(TwitchSystem);
 
 TwitchSystem::TwitchSystem() : ComponentSystemImpl<TwitchComponent>("twitch_") {

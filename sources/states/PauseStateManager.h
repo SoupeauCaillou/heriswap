@@ -1,19 +1,11 @@
 #pragma once
 
-#include "base/EntityManager.h"
-
-#include "systems/TransformationSystem.h"
-#include "systems/TextRenderingSystem.h"
-#include "systems/ContainerSystem.h"
-#include "systems/ButtonSystem.h"
-#include "systems/SoundSystem.h"
+#include "states/HelpStateManager.h"
+#include "states/GameStateManager.h"
 
 #include "modes/GameModeManager.h"
-#include "states/GameStateManager.h"
-#include "states/HelpStateManager.h"
 
 #include "Game.h"
-#include "DepthLayer.h"
 
 class PauseStateManager : public GameStateManager {
 	public:

@@ -20,6 +20,7 @@
 #include "InGameUiHelper.h"
 #include "AnimedEntity.h"
 #include "TwitchSystem.h"
+#include "GridSystem.h"
 
 #include <algorithm>
 #include <functional>

@@ -1,6 +1,14 @@
 #include "FadeStateManager.h"
-#include "base/TouchInputManager.h"
-#include "../DepthLayer.h"
+
+#include <base/TouchInputManager.h>
+#include <base/EntityManager.h>
+
+#include "systems/TransformationSystem.h"
+#include "systems/RenderingSystem.h"
+#include "systems/ADSRSystem.h"
+
+#include "Game.h"
+#include "DepthLayer.h"
 
 FadeGameStateManager::FadeGameStateManager(FadeType fade, GameState whoAmI, GameState whoIsNext, GameStateManager* enter, GameStateManager* exitD):
 	fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(0), enterDelegate(enter), exitDelegate(exitD) {

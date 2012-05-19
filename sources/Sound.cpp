@@ -1,9 +1,6 @@
-#include "base/EntityManager.h"
-
-#include "systems/SoundSystem.h"
-
 #include "Sound.h"
-#include <sstream>
+
+#include <base/MathUtil.h>
 
 std::vector<std::string> newMusics() {
 	#define STR(tok) "audio/"#tok".ogg"

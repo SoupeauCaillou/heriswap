@@ -2,7 +2,8 @@
 
 #include <sstream>
 
-#include "base/PlacementHelper.h"
+#include <base/PlacementHelper.h>
+#include <base/EntityManager.h>
 
 #include "systems/TransformationSystem.h"
 #include "systems/TextRenderingSystem.h"
@@ -12,7 +13,7 @@
 
 #include "modes/GameModeManager.h"
 #include "states/GameStateManager.h"
-#include "Game.h"
+
 #include "DepthLayer.h"
 
 

@@ -1,4 +1,22 @@
 #include "UserInputGameStateManager.h"
+
+#ifndef ANDROID
+#include <GL/glew.h>
+#include <GL/glfw.h>
+#endif
+
+#include "base/Log.h"
+#include "base/TouchInputManager.h"
+#include "base/EntityManager.h"
+
+#include "systems/TransformationSystem.h"
+#include "systems/RenderingSystem.h"
+#include "systems/ADSRSystem.h"
+#include "systems/ButtonSystem.h"
+#include "systems/SoundSystem.h"
+
+#include "GridSystem.h"
+#include "Game.h"
 #include "CombinationMark.h"
 
 static void activateADSR(Entity e, float a, float s);

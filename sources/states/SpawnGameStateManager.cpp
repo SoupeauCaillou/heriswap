@@ -1,8 +1,19 @@
 #include "SpawnGameStateManager.h"
-#include "../DepthLayer.h"
+
+#include <sstream>
+
+#include "base/EntityManager.h"
+
+#include "systems/TransformationSystem.h"
+#include "systems/RenderingSystem.h"
+#include "systems/ADSRSystem.h"
 #include "systems/ScrollingSystem.h"
+
+#include "Game.h"
+#include "DepthLayer.h"
 #include "TwitchSystem.h"
 #include "CombinationMark.h"
+
 
 static void fillTheBlank(std::vector<Feuille>& spawning);
 static Entity createCell(Feuille& f, bool assignGridPos);

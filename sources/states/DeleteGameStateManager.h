@@ -1,15 +1,9 @@
 #pragma once
 
-#include "base/EntityManager.h"
-
-#include "systems/TransformationSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/ADSRSystem.h"
+#include <vector>
 
 #include "states/GameStateManager.h"
 #include "GridSystem.h"
-#include "Game.h"
-#include "modes/GameModeManager.h"
 #include "SuccessManager.h"
 
 class DeleteGameStateManager : public GameStateManager {

@@ -1,7 +1,15 @@
 #include "DeleteGameStateManager.h"
+
+#include "systems/SoundSystem.h"
+#include "systems/TransformationSystem.h"
+#include "systems/RenderingSystem.h"
+#include "systems/ADSRSystem.h"
+
+#include "modes/GameModeManager.h"
+
 #include "TwitchSystem.h"
 #include "CombinationMark.h"
-#include "systems/SoundSystem.h"
+#include "Game.h"
 
 DeleteGameStateManager::DeleteGameStateManager(SuccessManager* sMgr) : successMgr(sMgr) {
 	modeMgr=0;

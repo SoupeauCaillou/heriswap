@@ -1,6 +1,10 @@
 #include "CombinationMark.h"
+
+#include <base/MathUtil.h>
+
 #include "TwitchSystem.h"
 #include "systems/TransformationSystem.h"
+
 void markCellInCombination(Entity e);
         void clearCellInCombination(Entity e);
 

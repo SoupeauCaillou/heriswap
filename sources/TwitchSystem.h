@@ -1,8 +1,5 @@
 #pragma once
 
-#include "base/EntityManager.h"
-#include "base/MathUtil.h"
-
 #include "systems/System.h"
 
 struct TwitchComponent {

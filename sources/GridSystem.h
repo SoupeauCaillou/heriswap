@@ -1,14 +1,9 @@
 #pragma once
+
 #include <vector>
-#include <iostream>
+#include <base/EntityManager.h>
+#include <base/Vector2.h>
 
-#include "base/MathUtil.h"
-#include "base/EntityManager.h"
-
-#include "systems/System.h"
-#include "systems/TransformationSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/ADSRSystem.h"
 
 struct Feuille {
 	int X, Y;
@@ -96,18 +91,6 @@ bool IsValidGridPosition(int i, int j) {
 
 /* Clean the Grid from entities */
 void DeleteAll();
-
-/* Ces Fonctions ne servent plus en l'etat ... mais elles sont tjs en commentaire au cas où*/
-///* Return true if v1 = v2 */
-//bool EgalVec(std::vector<Combinais> v1, std::vector<Combinais> v2);
-
-///* Return true if c1 = c2 */
-//bool Egal(Combinais c1, Combinais c2);
-
-///*Return all the elements who are in v1 and not in v2 */
-//std::vector<Combinais> Diff(std::vector<Combinais> v1, std::vector<Combinais> v2);
-
-
 
 void print();
 

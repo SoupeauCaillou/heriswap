@@ -1,17 +1,22 @@
 #pragma once
 
-#include "base/EntityManager.h"
+#include <string>
+#include <map>
+
+#include <base/EntityManager.h>
+
 #include "systems/SoundSystem.h"
 #include "systems/MusicSystem.h"
+
+#include "modes/GameModeManager.h"
+
 #include "Sound.h"
 class Game;
 class ScoreStorage;
 class PlayerNameInputUI;
 class GameStateManager;
 class SuccessAPI;
-#include "modes/GameModeManager.h"
 
-#include <map>
 class PrivateData {
     public:
         PrivateData(Game* game, ScoreStorage* storagee, PlayerNameInputUI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI);

@@ -1,12 +1,7 @@
 #pragma once
 
-#include "base/EntityManager.h"
+#include <vector>
 
-#include "systems/TransformationSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/ADSRSystem.h"
-
-#include "Game.h"
 #include "GameStateManager.h"
 #include "GridSystem.h"
 

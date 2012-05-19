@@ -1,16 +1,11 @@
 #pragma once
 
-#include <sstream>
+#include <vector>
+#include <string>
 
-#include "base/EntityManager.h"
-#include "base/Interval.h"
-#include "systems/TransformationSystem.h"
-#include "systems/ADSRSystem.h"
-#include "systems/RenderingSystem.h"
+#include <base/Interval.h>
 
-#include "Game.h"
 #include "GameStateManager.h"
-#include "DepthLayer.h"
 
 class BackgroundManager : public GameStateManager {
 	public:

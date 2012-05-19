@@ -1,10 +1,15 @@
 #include "LogoStateManager.h"
 
+#include <base/EntityManager.h>
+#include <base/TouchInputManager.h>
+#include <base/PlacementHelper.h>
+
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
-#include "DepthLayer.h"
-#include "base/PlacementHelper.h"
 #include "systems/SoundSystem.h"
+
+#include "Game.h"
+#include "DepthLayer.h"
 
 LogoStateManager::LogoStateManager(GameState _following) : following(_following) {}
 
