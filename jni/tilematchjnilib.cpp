@@ -22,6 +22,8 @@
 #include "sac/api/android/LocalizeAPIAndroidImpl.h"
 #include "sac/api/android/NameInputAPIAndroidImpl.h"
 
+#include "api/android/StorageAPIAndroidImpl.h"
+
 #include <png.h>
 #include <algorithm>
 
@@ -40,33 +42,14 @@ class AndroidSuccessAPI : public SuccessAPI {
 	public:
 		GameHolder* holder;
 		void successCompleted(const char* description, unsigned long successId);
-};
-
-class AndroidStorage: public ScoreStorage {
-	public :
-		GameHolder* holder;
-		
-		std::vector<ScoreStorage::Score> getScore(int mode);
-
-		bool soundEnable(bool switchIt);
-
-		void submitScore(ScoreStorage::Score scr, int mode, int diff);
-
-		bool request(std::string s, std::string* res);
-		bool initTable();
-		void saveOpt(std::string opt, std::string name);
-        std::vector<std::string> getName(std::string& result);
-		
-		void openfeintLB(int mode);
-
-     bool request(std::string s, void* res, int (*callbackP)(void*,int,char**,char**)) {}
+        void openfeintLB(int mode);
 };
 
 struct GameHolder {
 	Game* game;
 	int width, height;
 	NameInputAPIAndroidImpl* nameInput;
-	AndroidStorage sqlite;
+    StorageAPIAndroidImpl* storage;
 	AndroidSuccessAPI success;
 	LocalizeAPIAndroidImpl* localize;
 
@@ -122,14 +105,14 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
 	GameHolder* hld = new GameHolder();
 	hld->localize = new LocalizeAPIAndroidImpl(env);
     hld->nameInput = new NameInputAPIAndroidImpl();
-	hld->game = new Game(new AndroidNativeAssetLoader(hld), &hld->sqlite, hld->nameInput, &hld->success, hld->localize);
+    hld->storage = new StorageAPIAndroidImpl(env);
+	hld->game = new Game(new AndroidNativeAssetLoader(hld), hld->storage, hld->nameInput, &hld->success, hld->localize);
 	hld->renderThreadEnv = env;
 	hld->openGLESVersion = openglesVersion;
 	hld->assetManager = (jobject)env->NewGlobalRef(asset);
 	theRenderingSystem.setNativeAssetLoader(new AndroidNativeAssetLoader(hld));
 	theRenderingSystem.opengles2 = (hld->openGLESVersion == 2);
 	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
-	hld->sqlite.holder = hld;
 	hld->success.holder = hld;
 	return (jlong)hld;
 }
@@ -164,6 +147,8 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	hld->localize->init();	
 	theMusicSystem.init();
 	theSoundSystem.init();
+    hld->storage->env = env;
+    hld->storage->init();
 	theMusicSystem.assetAPI->init();
 	
 	uint8_t* state = 0;
@@ -460,63 +445,6 @@ char* AndroidNativeAssetLoader::loadShaderFile(const std::string& assetName)
 	return result;
 }
 
-std::vector<ScoreStorage::Score> AndroidStorage::getScore(int mode) {
-	std::vector<ScoreStorage::Score> sav;
-	JNIEnv* env = holder->gameThreadEnv;
-	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
-	jmethodID mid = (env->GetStaticMethodID(c, "getScores", "(I[I[I[F[Ljava/lang/String;)I"));
-	// build arrays params
-	jintArray points = env->NewIntArray(5);
-	jintArray levels = env->NewIntArray(5);
-	jfloatArray times = env->NewFloatArray(5);
-	jobjectArray names = env->NewObjectArray(5, env->FindClass("java/lang/String"), env->NewStringUTF(""));
-	
-	jint idummy[5];
-	jfloat fdummy[5]; 
-	for (int i=0; i<5; i++) {
-		idummy[i] = i;
-		fdummy[i] = 2.0 * i;
-	}
-	env->SetIntArrayRegion(points, 0, 5, idummy);
-	env->SetIntArrayRegion(levels, 0, 5, idummy);
-	env->SetFloatArrayRegion(times, 0, 5, fdummy);
-	int count = env->CallStaticIntMethod(c, mid, mode, points, levels, times, names);
-
-	for (int i=0; i<count; i++) {
-		ScoreStorage::Score s;
-		// s.mode = mode;
-		env->GetIntArrayRegion(points, i, 1, &s.points);
-		env->GetIntArrayRegion(levels, i, 1, &s.level);
-		env->GetFloatArrayRegion(times, i, 1, &s.time);
-		jstring n = (jstring)env->GetObjectArrayElement(names, i);
-		if (n) {
-			const char *mfile = env->GetStringUTFChars(n, 0);
-			s.name = (char*)mfile;
-			env->ReleaseStringUTFChars(n, mfile);
-		} else {
-			s.name = "wtf";
-		}
-		sav.push_back(s);
-	}
-	
-	return sav;
-}
-
-bool AndroidStorage::soundEnable(bool switchIt) {
-	JNIEnv* env = holder->gameThreadEnv;
-	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
-	jmethodID mid = (env->GetStaticMethodID(c, "soundEnable", "(Z)Z"));
-	return env->CallStaticBooleanMethod(c, mid, switchIt);
-}
-
-void AndroidStorage::submitScore(ScoreStorage::Score scr, int mode, int diff) {
-	JNIEnv* env = holder->gameThreadEnv;
-	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
-	jmethodID mid = (env->GetStaticMethodID(c, "submitScore", "(IIIFLjava/lang/String;)V"));
-	jstring name = env->NewStringUTF(scr.name.c_str());
-	env->CallStaticVoidMethod(c, mid, scr.mode, scr.points, scr.level, scr.time, name);
-}
-
 void AndroidSuccessAPI::successCompleted(const char* description, unsigned long successId) {
 	SuccessAPI::successCompleted(description, successId);
 	// android spec stuff			
@@ -527,18 +455,7 @@ void AndroidSuccessAPI::successCompleted(const char* description, unsigned long 
 	env->CallStaticVoidMethod(c, mid, sid);
 }
 
-bool AndroidStorage::request(std::string s, std::string* res) {
-	return false;
-	}
-
-bool AndroidStorage::initTable() {
-	return false;
-}
-
-void AndroidStorage::saveOpt(std::string opt, std::string name){ }
-std::vector<std::string> AndroidStorage::getName(std::string& result)  {}
-
-void AndroidStorage::openfeintLB(int mode) {
+void AndroidSuccessAPI::openfeintLB(int mode) {
 	JNIEnv* env = holder->gameThreadEnv;
 	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
 	jmethodID mid = env->GetStaticMethodID(c, "openfeintLeaderboard", "(I)V");

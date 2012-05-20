@@ -8,7 +8,7 @@
 
 class ModeMenuStateManager : public GameStateManager {
 	public:
-		ModeMenuStateManager(StorageAPI* storag, NameInputAPI* nameInputAPI, SuccessManager* successMgr, LocalizeAPI* lAPI);
+		ModeMenuStateManager(StorageAPI* storag, NameInputAPI* nameInputAPI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI);
 		~ModeMenuStateManager();
 		void Setup();
 		void Enter();
@@ -23,6 +23,7 @@ class ModeMenuStateManager : public GameStateManager {
 	private:
 		StorageAPI* storage;
 		NameInputAPI* nameInputAPI;
+        SuccessAPI* successAPI;
 		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle;
 		Entity yourScore, fond;
 		#ifdef ANDROID

@@ -63,6 +63,7 @@
     <None Include="sources\SuccessManager.h" />
     <None Include="sources\api\linux\StorageAPILinuxImpl.h" />
     <None Include="sources\api\StorageAPI.h" />
+    <None Include="sources\api\android\StorageAPIAndroidImpl.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -97,5 +98,9 @@
     <Compile Include="sources\Callback.cpp" />
     <Compile Include="sources\SuccessManager.cpp" />
     <Compile Include="sources\api\linux\StorageAPILinuxImpl.cpp" />
+    <Compile Include="sources\api\android\StorageAPIAndroidImpl.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="sources\api\android\" />
   </ItemGroup>
 </Project>

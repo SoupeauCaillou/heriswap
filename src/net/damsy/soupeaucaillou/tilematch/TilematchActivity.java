@@ -6,6 +6,7 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -55,6 +56,7 @@ public class TilematchActivity extends Activity {
 	static public String playerName;
 	static public boolean nameReady;
 	static public Resources res;
+	static public SharedPreferences preferences;
 	
 	PowerManager.WakeLock wl;
 	
@@ -81,6 +83,8 @@ public class TilematchActivity extends Activity {
 				leaderboards = _leaderboards;
 			}
 		});
+        
+        preferences = getSharedPreferences("HeriswapPref", 0);
         
         mutex = new Object();
  

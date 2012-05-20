@@ -29,7 +29,7 @@
 #include "GameState.h"
 
 
-PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI) {
+PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI) {
      mode = Normal;
      mode2Manager[Normal] = new NormalGameModeManager(game,successMgr);
      mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game,successMgr);
@@ -47,7 +47,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      state2Manager[Pause] = new PauseStateManager(lAPI);
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
      state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI);
-     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successMgr,lAPI);
+     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successMgr,lAPI, sAPI);
      state2Manager[Help] = new HelpStateManager();
      state2Manager[Ads] = new AdsStateManager(storage, successMgr);
 

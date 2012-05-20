@@ -20,7 +20,7 @@ class NameInputAPI;
 
 class PrivateData {
     public:
-        PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI);
+        PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI);
 
         void Setup(int windowW, int windowH);
 

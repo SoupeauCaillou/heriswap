@@ -21,8 +21,9 @@
 #include "DepthLayer.h"
 #include "GridSystem.h"
 
-ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, NameInputAPI* pNameInputAPI, SuccessManager* sMgr, LocalizeAPI* lAPI) {
+ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, NameInputAPI* pNameInputAPI, SuccessManager* sMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI) {
 	storage = storag;
+    successAPI = sAPI;
 	successMgr = sMgr;
 	nameInputAPI = pNameInputAPI;
 	localizeAPI = lAPI;
@@ -370,7 +371,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 	}
 	#ifdef ANDROID
 	if (BUTTON(openfeint)->clicked) {
-		storage->openfeintLB(modeMgr->GetMode());
+		successAPI->openfeintLB(modeMgr->GetMode());
 	}
 	#endif
 	return ModeMenu;

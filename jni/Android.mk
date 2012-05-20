@@ -46,7 +46,8 @@ LOCAL_SRC_FILES := \
 	../sources/modes/GameModeManager.cpp \
 	../sources/modes/TilesAttackModeManager.cpp \
 	../sources/modes/InGameUiHelper.cpp \
-	../sources/modes/NormalModeManager.cpp
+	../sources/modes/NormalModeManager.cpp \
+    ../sources/api/android/StorageAPIAndroidImpl.cpp 
 
 LOCAL_STATIC_LIBRARIES := sac png tremor
 LOCAL_LDLIBS := -lGLESv2 -lGLESv1_CM -lEGL -llog -lz

@@ -109,7 +109,7 @@ Game::Game(NativeAssetLoader* ploader, StorageAPI* storage, NameInputAPI* inputU
 	EntityManager::CreateInstance();
 
 	/* create before system so it cannot use any of them (use Setup instead) */
-	datas = new PrivateData(this, storage, inputUI, new SuccessManager(sAPI), lAPI);
+	datas = new PrivateData(this, storage, inputUI, new SuccessManager(sAPI), lAPI, sAPI);
 
 	/* create systems singleton */
 	TransformationSystem::CreateInstance();

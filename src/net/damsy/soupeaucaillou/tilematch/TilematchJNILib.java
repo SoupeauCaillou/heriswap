@@ -10,8 +10,8 @@ import java.util.Queue;
 import net.damsy.soupeaucaillou.tilematch.TilematchJNILib.DumbAndroid.Command;
 import net.damsy.soupeaucaillou.tilematch.TilematchJNILib.DumbAndroid.Command.Type;
 import android.content.ContentValues;
+import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioFormat;
@@ -30,6 +30,8 @@ public class TilematchJNILib {
         System.loadLibrary("tilematch");
     }
 
+    static final String PREF_NAME = "HeriswapPref";
+    
     /* Create native game instance */
     public static native long createGame(AssetManager mgr, int openGLESVersion);
     /* Initialize game, reset graphics assets, etc... */
@@ -42,6 +44,9 @@ public class TilematchJNILib {
     public static native byte[] serialiazeState(long game);
     public static native void initAndReloadTextures(long game);
     
+    //-------------------------------------------------------------------------
+    // AssetAPI
+    //-------------------------------------------------------------------------
     static public  byte[] assetToByteArray(AssetManager mgr, String assetName) {
     	try {
     		InputStream stream = mgr.open(assetName);
@@ -53,7 +58,10 @@ public class TilematchJNILib {
     		return null;
     	} 
     }
-     
+
+    //-------------------------------------------------------------------------
+    // SoundAPI
+    //-------------------------------------------------------------------------
     static public int loadSound(AssetManager mgr, String assetPath) {
     	try {
 		    return TilematchActivity.soundPool.load(mgr.openFd(assetPath), 1);
@@ -69,38 +77,44 @@ public class TilematchJNILib {
     	TilematchActivity.soundPool.play(soundID, 0.25f*volume, 0.25f*volume, 0, 0, 1.0f);
     }
      
-    static public boolean soundEnable(boolean switchIt) {
-    	Log.i(TilematchActivity.Tag, "soundEnable : " + switchIt);
-    	SQLiteDatabase db = TilematchActivity.optionsOpenHelper.getWritableDatabase();
-    	Cursor cursor = db.query("info", new String[] {"value"}, "opt LIKE \"sound\"", null, null, null, null);
-    	String value = null;
-    	if (!cursor.moveToFirst()) {
-    		Log.w(TilematchActivity.Tag, "soundEnable select: no result");
-    		ContentValues v = new ContentValues(1);
-    		v.put("value", "on");
-    		v.put("opt", "sound");
-    		value = "on";
-    		long rowsAffected = db.insert("info", null , v);
-    		Log.i(TilematchActivity.Tag, "plop, insertt: 3"+rowsAffected);
-    	} else {
-    		int idx = cursor.getColumnIndex("value");
-    		value = cursor.getString(idx);
-    	}
-    	
-    	if (switchIt) {
-    		ContentValues v = new ContentValues(1);
-    		if ("on".equals(value)) {
-    			v.put("value", "off");
-    		} else {
-    			v.put("value", "on");
-    		}
-    		long rowsAffected  = db.update("info", v, "opt='sound'", null);
-    		Log.i(TilematchActivity.Tag, "plop, update: 3"+rowsAffected);
-    	}
-    	db.close();
-    	return "on".equals(value);
-    } 
+    //-------------------------------------------------------------------------
+    // StorageAPI
+    //-------------------------------------------------------------------------
+    static final String SoundEnabledPref = "SoundEnabled";
+    static final String GameCountBeforeAds = "GameCountBeforeAds";
     
+    static public boolean soundEnable(boolean switchIt) {
+    	boolean enabled = TilematchActivity.preferences.getBoolean(SoundEnabledPref, true);
+    	if (switchIt) {
+    		Editor ed = TilematchActivity.preferences.edit();
+    		ed.putBoolean(SoundEnabledPref, !enabled);
+    		ed.commit();
+    		return !enabled;
+    	} else {
+    		return enabled;
+    	}
+    }
+    
+    static public int getGameCountBeforeNextAd() {
+    	return TilematchActivity.preferences.getInt(GameCountBeforeAds, 10);
+    }
+    
+    static public void setGameCountBeforeNextAd(int value) {
+    	Editor ed = TilematchActivity.preferences.edit();
+    	ed.putInt(GameCountBeforeAds, value);
+    	ed.commit();
+    }
+    
+    static public int getSavedGamePointsSum() {
+    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getReadableDatabase();
+    	Cursor cursor = db.rawQuery("select sum(points) from score", null);
+    	if (cursor.getCount() > 0) {
+    		cursor.moveToFirst();
+    		return cursor.getInt(0);
+    	} else {
+    		return 0;
+    	}
+    }
 	
 	static final String[] boards = new String[] {
 		"1141887",
@@ -113,7 +127,7 @@ public class TilematchJNILib {
     	ContentValues v = new ContentValues();
     	v.put("name", name);
     	v.put("mode", mode);
-    	v.put("difficulty", mode);
+    	v.put("difficulty", difficulty);
     	v.put("points", points);
     	v.put("time", time);
     	v.put("level", level);
@@ -142,25 +156,14 @@ public class TilematchJNILib {
 			});
     	}
     }
-    
-    static public void unlockAchievement(int id) {
-    	Achievement achv = new Achievement(Integer.toString(id));
-    	achv.unlock(new Achievement.UnlockCB() {
-			
-			@Override
-			public void onSuccess(boolean newUnlock) {
-				Log.i(TilematchActivity.Tag, "Achievement unlock successful");
-			}
-		});
-    } 
-     
-    static public int getScores(int mode,  int[] points, int[] levels, float[] times, String[] names) {    	 
+         
+    static public int getScores(int mode, int difficulty, int[] points, int[] levels, float[] times, String[] names) {    	 
     	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getWritableDatabase();
     	Cursor cursor = null;
-    	if (mode == 1 || mode == 3) {
-    		cursor = db.query("score", new String[] {"name", "points", "time", "level"}, "mode='" + mode + "'", null, null, null, "points desc");
+    	if (mode == 1 || mode == 3) { 
+    		cursor = db.query("score", new String[] {"name", "points", "time", "level"}, "mode='" + mode + "' and difficulty='" + difficulty + "'", null, null, null, "points desc");
     	} else {
-    		cursor = db.query("score", new String[] {"name", "points", "time", "level"}, "mode='" + mode + "'", null, null, null, "time asc");
+    		cursor = db.query("score", new String[] {"name", "points", "time", "level"}, "mode='" + mode + "' and difficulty='" + difficulty + "'", null, null, null, "time asc");
     	}
     	int maxResult = Math.min(5, cursor.getCount());
     	cursor.moveToFirst();
@@ -178,6 +181,29 @@ public class TilematchJNILib {
     	return maxResult;
     }
       
+    //-------------------------------------------------------------------------
+    // SuccessAPI
+    //-------------------------------------------------------------------------
+    static public void unlockAchievement(int id) {
+    	Achievement achv = new Achievement(Integer.toString(id));
+    	achv.unlock(new Achievement.UnlockCB() {
+			
+			@Override
+			public void onSuccess(boolean newUnlock) {
+				Log.i(TilematchActivity.Tag, "Achievement unlock successful");
+			}
+		});
+    } 
+    
+    static public void openfeintLeaderboard(int mode) {
+    	if (mode >= 1 && mode <= 3) {
+    		Dashboard.openLeaderboard(boards[mode - 1]);
+    	}
+    }
+    
+    //-------------------------------------------------------------------------
+    // NameInputAPI
+    //------------------------------------------------------------------------- 
     static public void showPlayerNameUi() { 
     	TilematchActivity.nameReady = false;
     	// show input view
@@ -203,13 +229,10 @@ public class TilematchJNILib {
     		return null;
     	}
     }
-    
-    static public void openfeintLeaderboard(int mode) {
-    	if (mode >= 1 && mode <= 3) {
-    		Dashboard.openLeaderboard(boards[mode - 1]);
-    	}
-    }
-    
+
+    //-------------------------------------------------------------------------
+    // MusicAPI
+    //-------------------------------------------------------------------------
     static class DumbAndroid {
     	AudioTrack track;
     	int bufferSize;
@@ -418,6 +441,9 @@ public class TilematchJNILib {
     	}
     }
     
+    //-------------------------------------------------------------------------
+    // LocalizeAPI
+    //-------------------------------------------------------------------------
     static public String localize(String name) {
     	int id = TilematchActivity.res.getIdentifier(name, "string", "net.damsy.soupeaucaillou.tilematch");
     	if (id == 0) {
