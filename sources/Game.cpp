@@ -346,7 +346,7 @@ void Game::tick(float dt) {
 
     //update music
     if (!theMusicSystem.isMuted()) {
-	    if (pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause) { //si on joue
+	    if (pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause || datas->state == BlackToSpawn) { //si on joue
 	    	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Start;
 	    	MUSIC(datas->inGameMusic.masterTrack)->volume = 1;
 	    	MUSIC(datas->inGameMusic.stressTrack)->control = MusicComponent::Start;
