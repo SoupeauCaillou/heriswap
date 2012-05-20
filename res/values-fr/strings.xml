@@ -5,10 +5,12 @@
 	<string name="abandonner">Quitter</string>
 	<string name="mode_1">Classique</string>
 	<string name="mode_2">MANGE TES FEUILLES</string>
-	<string name="score">Score :</string>
+	<string name="score">Meilleurs scores :</string>
 	<string name="jouer">Jouer</string>
 	<string name="rejouer">Recommencer</string>
 	<string name="diff_1">Facile 5x5</string>
 	<string name="diff_2">Difficile 8x8</string>
 	<string name="lvl">niv</string>
+	<string name="enter_name">Nouveau meilleur score</string>
+	<string name="save_name">Enregistrer</string>
 </resources>

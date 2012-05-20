@@ -5,10 +5,12 @@
 	<string name="abandonner">Quit</string>
 	<string name="mode_1">Classic</string>
 	<string name="mode_2">EAT THE LEAVES</string>
-	<string name="score">Score :</string>
+	<string name="score">Highscores :</string>
 	<string name="jouer">Start</string>
 	<string name="rejouer">Restart</string>
 	<string name="diff_1">Easy 5x5</string>
 	<string name="diff_2">Hard 8x8</string>
 	<string name="lvl">lvl</string>
+	<string name="enter_name">Enter your name</string>
+	<string name="save_name">Save</string>
 </resources>
