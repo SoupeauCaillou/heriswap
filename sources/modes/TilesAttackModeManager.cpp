@@ -35,7 +35,6 @@ void TilesAttackGameModeManager::Enter() {
 		limit = 100;
 	else
 		limit = 30;
-     limit = 4;
 	pts.push_back(Vector2(limit,1));//need limit leaves to end game
 
 	generateLeaves(0, 8);
