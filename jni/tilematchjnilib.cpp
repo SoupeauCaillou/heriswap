@@ -28,7 +28,7 @@
 #include <algorithm>
 
 #include <sys/time.h>
-#define DT 1.0/30.
+#define DT 1.0/60.
 
 #ifndef _Included_net_damsy_soupeaucaillou_tilematch_TilematchJNILib
 #define _Included_net_damsy_soupeaucaillou_tilematch_TilematchJNILib
