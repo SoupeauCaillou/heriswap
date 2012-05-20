@@ -37,7 +37,7 @@ void AdsStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
 	gameb4Ads = storage->getGameCountBeforeNextAd();
-	
+
 	if (!gameb4Ads) {
 		BUTTON(eAds)->enabled = true;
 		RENDERING(eAds)->color = Color(1.f,1.f,1.f);
@@ -50,7 +50,8 @@ void AdsStateManager::Enter() {
 GameState AdsStateManager::Update(float dt) {
 	stateActiveDuration += dt;
 	if (gameb4Ads>0 || BUTTON(eAds)->clicked) {
-		successMgr->sDonator();
+		if (BUTTON(eADS)->clicked)
+			successMgr->sDonator();
 		return AdsToBlackState;
 	}
 	return Ads;
