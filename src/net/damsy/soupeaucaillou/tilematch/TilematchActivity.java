@@ -48,7 +48,7 @@ public class TilematchActivity extends Activity {
 	byte[] renderingSystemState;
 	static public SoundPool soundPool;
 	static public boolean isRunning;
-	static public boolean isPaused;
+	static public boolean requestPausedFromJava;
 	static public TilematchStorage.OptionsOpenHelper optionsOpenHelper;
 	static public TilematchStorage.ScoreOpenHelper scoreOpenHelper;
 	static public View playerNameInputView;
@@ -154,7 +154,7 @@ public class TilematchActivity extends Activity {
         mGLView.onPause();
         if (wl != null)
         	wl.release();
-        TilematchActivity.isPaused = true;
+        TilematchActivity.requestPausedFromJava = true;
         TilematchActivity.isRunning = false;
     }
 
@@ -163,7 +163,7 @@ public class TilematchActivity extends Activity {
         super.onResume();
         if (wl != null)
         	wl.acquire();
-        TilematchActivity.isPaused = false;
+        TilematchActivity.requestPausedFromJava = false;
         isRunning = true;
         mGLView.onResume();
     }
@@ -202,7 +202,8 @@ public class TilematchActivity extends Activity {
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
     	if (keyCode == KeyEvent.KEYCODE_MENU) {
-    		TilematchJNILib.pause(game);
+    		TilematchActivity.requestPausedFromJava = true;
+    		// TilematchJNILib.pause(game);
     	}
     	return super.onKeyUp(keyCode, event);
     }

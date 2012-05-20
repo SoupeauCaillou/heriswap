@@ -51,8 +51,9 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
 					TilematchJNILib.step(TilematchActivity.game);
 					TilematchActivity.mGLView.requestRender();
 					
-					if (TilematchActivity.isPaused) {
+					if (TilematchActivity.requestPausedFromJava) {
 						TilematchJNILib.pause(TilematchActivity.game);
+						TilematchActivity.requestPausedFromJava = false;
 					}
 				}  
 				Log.i(TilematchActivity.Tag, "Activity paused - exiting game thread");
