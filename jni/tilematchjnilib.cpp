@@ -28,7 +28,7 @@
 #include <algorithm>
 
 #include <sys/time.h>
-#define DT 1.0/60.
+#define DT 1.0/30.
 
 #ifndef _Included_net_damsy_soupeaucaillou_tilematch_TilematchJNILib
 #define _Included_net_damsy_soupeaucaillou_tilematch_TilematchJNILib
@@ -129,7 +129,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	UPDATE_ENV_PTR(hld->renderThreadEnv, env);
 	hld->width = w;
 	hld->height = h;
-	
+
 	hld->game->sacInit(hld->width, hld->height);
 	LOGW("%s <--", __FUNCTION__);
 }
@@ -144,13 +144,13 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 
     hld->nameInput->init(env);
 	hld->localize->env = env;
-	hld->localize->init();	
+	hld->localize->init();
 	theMusicSystem.init();
 	theSoundSystem.init();
     hld->storage->env = env;
     hld->storage->init();
 	theMusicSystem.assetAPI->init();
-	
+
 	uint8_t* state = 0;
 	int size = 0;
 	if (jstate) {
@@ -179,7 +179,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
 	UPDATE_ENV_PTR(hld->gameThreadEnv, env);
 	if (!hld->game)
   		return;
-  		
+
   	if (hld->firstCall) {
 		hld->time = TimeUtil::getTime();
 		hld->firstCall = false;
@@ -213,8 +213,8 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_r
   (JNIEnv *env, jclass, jlong g) {
   	GameHolder* hld = (GameHolder*) g;
   	UPDATE_ENV_PTR(hld->renderThreadEnv, env);
-	theRenderingSystem.render();  	
-	
+	theRenderingSystem.render();
+
 	frameCount++;
 	if (frameCount >= 200) {
 		LOGW("fps render: %.2f", 200.0 / (TimeUtil::getTime() - tttttt));
@@ -447,7 +447,7 @@ char* AndroidNativeAssetLoader::loadShaderFile(const std::string& assetName)
 
 void AndroidSuccessAPI::successCompleted(const char* description, unsigned long successId) {
 	SuccessAPI::successCompleted(description, successId);
-	// android spec stuff			
+	// android spec stuff
 	JNIEnv* env = holder->gameThreadEnv;
 	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
 	jmethodID mid = (env->GetStaticMethodID(c, "unlockAchievement", "(I)V"));
