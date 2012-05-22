@@ -5,9 +5,9 @@ file(
 	*.cpp
 )
 file(
-        GLOB_RECURSE
+        GLOB
         tilematch_files
-        ../sources/*.cpp
+			../sources/*.cpp ../sources/*.h ../sources/modes/*.cpp ../sources/modes/*.h ../sources/states/*.h ../sources/states/*.cpp ../sources/api/*.h ../sources/api/linux/*.h ../sources/api/linux/*.cpp
 )
 #message(STATUS "fcu " ${tilematch_tests_files})
 #message(STATUS "fcu " ${tilematch_files}) 
