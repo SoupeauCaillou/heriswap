@@ -108,11 +108,15 @@ public class TilematchJNILib {
     static public int getSavedGamePointsSum() {
     	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getReadableDatabase();
     	Cursor cursor = db.rawQuery("select sum(points) from score", null);
-    	if (cursor.getCount() > 0) {
-    		cursor.moveToFirst();
-    		return cursor.getInt(0);
-    	} else {
-    		return 0;
+	    try {
+	    	if (cursor.getCount() > 0) {
+	    		cursor.moveToFirst();
+	    		return cursor.getInt(0);
+	    	} else {
+	    		return 0;
+	    	}
+    	} finally {
+    		cursor.close();
     	}
     }
 	
@@ -177,6 +181,7 @@ public class TilematchJNILib {
     		//Log.i("tilematchJ", points[i] + ", " + levels[i] + ", " + times[i] + ", " + names[i] + ".");
     		cursor.moveToNext();
     	}   
+    	cursor.close();
     	db.close();
     	return maxResult;
     }
@@ -433,7 +438,7 @@ public class TilematchJNILib {
     
     static public void setVolume(Object o, float v) {
     	DumbAndroid dumb = (DumbAndroid) o;
-    	checkReturnCode("setVolume", dumb.track.setStereoVolume(v * 0.25f, v *0.25f));
+    	checkReturnCode("setVolume", dumb.track.setStereoVolume(v * 0.5f, v *0.5f));
     }
       
     static public boolean isPlaying(Object o) { 
