@@ -81,7 +81,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 }
 
 static int levelToLeaveToDelete(int leavesMaxSize, int limit, int nb, int leavesDone) {
-	int totalBranch = leavesMaxSize; // nb de feuilles total
+	int totalBranch = leavesMaxSize; // nb de feuilles total sur l'arbre
 	int breakBranch = totalBranch-20;
 	int breakComb = limit-20;
 	int toDelete=0;
@@ -106,15 +106,15 @@ static int levelToLeaveToDelete(int leavesMaxSize, int limit, int nb, int leaves
 }
 
 void TilesAttackGameModeManager::ScoreCalc(int nb, int type) {
-	if (type == bonus)
+	if (type == bonus) {
 		points += 10*2*nb*nb*nb/6;
-	else
+		deleteLeaves(-1, levelToLeaveToDelete(6*8, limit, 2*nb, leavesDone));
+		leavesDone+=2*nb;
+	} else {
 		points += 10*nb*nb*nb/6;
-
-	deleteLeaves(-1, levelToLeaveToDelete(6*8, limit, nb, leavesDone));
-
-	leavesDone+=nb;
-	
+		deleteLeaves(-1, levelToLeaveToDelete(6*8, limit, nb, leavesDone));
+		leavesDone+=nb;
+	}
 	successMgr->sRainbow(type);
 
 	successMgr->sBonusToExcess(type, bonus, nb);
