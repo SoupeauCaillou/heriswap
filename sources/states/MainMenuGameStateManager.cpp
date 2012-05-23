@@ -34,7 +34,6 @@ void MainMenuGameStateManager::Setup() {
 		TEXT_RENDERING(eStart[i])->color = green;
 		TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
 		theMorphingSystem.Add(eStart[i]);
-	    TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, Vector2(PlacementHelper::GimpXToScreen(700),PlacementHelper::GimpYToScreen(100)));
 	    TypedMorphElement<float>* sizeMorph = new TypedMorphElement<float>(&TEXT_RENDERING(eStart[i])->charHeight, TEXT_RENDERING(eStart[i])->charHeight, PlacementHelper::GimpHeightToScreen(54));
 	    MORPHING(eStart[i])->elements.push_back(sizeMorph);
 	    MORPHING(eStart[i])->timing = 0.2;

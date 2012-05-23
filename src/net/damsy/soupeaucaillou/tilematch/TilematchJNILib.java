@@ -156,7 +156,7 @@ public class TilematchJNILib {
 			});
     	}
     }
-         
+          
     static public int getScores(int mode, int difficulty, int[] points, int[] levels, float[] times, String[] names) {    	 
     	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getWritableDatabase();
     	Cursor cursor = null;
@@ -264,7 +264,7 @@ public class TilematchJNILib {
     		writeThread = new Thread(new Runnable() {
 				public void run() {
 					while (running) {
-						Log.w(TilematchActivity.Tag, "queue size: " + writePendings.size());
+						// Log.w(TilematchActivity.Tag, "queue size: " + writePendings.size());
 						Command cmd = null;
 						synchronized (track) {
 							if (!writePendings.isEmpty()) {
@@ -335,17 +335,17 @@ public class TilematchJNILib {
    
     static public int pcmBufferSize(int sampleRate) {
     	int r = (int) (0.1 * sampleRate * 2); // 100ms 
-    	Log.i(TilematchActivity.Tag, "size : " + r);
+    	// Log.i(TilematchActivity.Tag, "size : " + r);
     	return r;
     }
     static public byte[] allocate(int size) {
     	synchronized (DumbAndroid.bufferPool) {
     		int s = DumbAndroid.bufferPool.size();
 			if (s > 0) {
-				Log.i("tilematchJ", "Reuse old buffer (count: " + s + ")");
+				//Log.i("tilematchJ", "Reuse old buffer (count: " + s + ")");
 				return DumbAndroid.bufferPool.remove(s - 1);
 			} else {
-				 Log.i("tilematchJ", "Create new buffer: " + size);
+				 //Log.i("tilematchJ", "Create new buffer: " + size);
 				// assert(size <= dumb.track.getSampleRate() * 2);  
 				return new byte[size];
 			}
