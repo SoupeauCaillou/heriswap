@@ -143,7 +143,7 @@ std::cout << "Total: " << storage->getSavedGamePointsSum() << std::endl;
 			if (focus) {
 				theMusicSystem.toggleMute(theSoundSystem.mute);
 			} else {
-				theMusicSystem.toggleMute(true);
+				// theMusicSystem.toggleMute(true);
 			}
 			//pause ?
 			if (glfwGetKey( GLFW_KEY_SPACE )) {// || !focus) {
