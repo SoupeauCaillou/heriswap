@@ -48,6 +48,6 @@ int callbackNames(void *save, int argc, char **argv, char **azColName){
 
 int callback(void *save, int argc, char **argv, char **azColName){
 	std::string *sav = static_cast<std::string*>(save);
-	*sav = argv[0];
+	if (argc>1) *sav = argv[0];
 	return 0;
 }
