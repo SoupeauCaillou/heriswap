@@ -78,6 +78,9 @@ float NormalGameModeManager::GameProgressPercent() {
 
 void NormalGameModeManager::UiUpdate(float dt) {
 	ADSR(stressTrack)->active = (time > 37.5);
+    if (ADSR(stressTrack)->active) {
+        ADSR(stressTrack)->sustainValue = MathUtil::Min(1 / (time - 37.5), 1.0);
+    }
 
 	//Score
 	{
