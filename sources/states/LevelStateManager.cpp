@@ -42,6 +42,7 @@ void LevelStateManager::Setup() {
 	TEXT_RENDERING(eBigLevel)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(eBigLevel)->isANumber = true;
 	ADD_COMPONENT(eBigLevel, Music);
+    ADD_COMPONENT(eBigLevel, Morphing);
 	MUSIC(eBigLevel)->control = MusicComponent::Stop;
 
 	eSnowEmitter = theEntityManager.CreateEntity();
@@ -90,7 +91,6 @@ void LevelStateManager::Enter() {
 	MUSIC(eBigLevel)->music = theMusicSystem.loadMusicFile("audio/level_up.ogg");
 	MUSIC(eBigLevel)->control = MusicComponent::Start;
 
-	ADD_COMPONENT(eBigLevel, Morphing);
 	MORPHING(eBigLevel)->timing = 1;
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->color.a, 0, 1));
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(smallLevel)->color.a, 1, 0));
