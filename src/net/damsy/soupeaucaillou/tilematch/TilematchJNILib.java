@@ -222,6 +222,7 @@ public class TilematchJNILib {
 			    try {
 			    	for (int i=0; i<Math.min(3, cursor.getCount()); i++) {
 			    		cursor.moveToNext();
+			    		//je veux modifier le nom du bouton 2 aka string@reuse_name_2 ??
 			    		reuse_name_2 = cursor.getString(0);
 			    		Log.i(TilematchActivity.Tag, "aazeqsd   ");
 			    	}
@@ -229,6 +230,7 @@ public class TilematchJNILib {
 		    		cursor.close();
 		    	}
 			    
+
 				TilematchActivity.playerNameInputView.setVisibility(View.VISIBLE);
 				TilematchActivity.playerNameInputView.requestFocus();
 				TilematchActivity.playerNameInputView.invalidate();
