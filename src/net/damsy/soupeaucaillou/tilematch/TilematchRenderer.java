@@ -45,6 +45,9 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
     	gameThread = new Thread(new Runnable() {
 			public void run() {
 				TilematchJNILib.initFromGameThread(TilematchActivity.game, TilematchActivity.savedState);
+				// force gc before starting game
+				System.gc();
+				
 				TilematchActivity.savedState = null;
 				initDone = true;
 				while ( TilematchActivity.isRunning) {
