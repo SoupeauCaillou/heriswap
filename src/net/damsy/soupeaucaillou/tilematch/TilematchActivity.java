@@ -19,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -57,6 +58,7 @@ public class TilematchActivity extends Activity {
 	static public boolean nameReady;
 	static public Resources res;
 	static public SharedPreferences preferences;
+	static public Button[] oldName;
 	
 	PowerManager.WakeLock wl;
 	
@@ -118,16 +120,34 @@ public class TilematchActivity extends Activity {
         
         Button b = (Button) findViewById(R.id.name_save);
         b.setOnClickListener(new View.OnClickListener() {
-			
 			public void onClick(View v) {
 				playerName = nameEdit.getText().toString();
 				Log.i(TilematchActivity.Tag, "Player name: '" + playerName + "'");
 				if (playerName != null && playerName.length() > 0) {
 					playerNameInputView.setVisibility(View.GONE);
 					TilematchActivity.nameReady = true;
+					// hide keyboard
+					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					mgr.hideSoftInputFromWindow(nameEdit.getWindowToken(), 0);
 				}
 			}
-		}); 
+		});
+        oldName = new Button[3];
+        oldName[0] = (Button)findViewById(R.id.reuse_name_1);
+        oldName[1] = (Button)findViewById(R.id.reuse_name_2);
+        oldName[2] = (Button)findViewById(R.id.reuse_name_3);
+        for (int i=0 ;i<3; i++) {
+        	oldName[i].setOnClickListener( new View.OnClickListener() {	
+				public void onClick(View v) {
+	        		playerName = ((Button)v).getText().toString();
+	        		playerNameInputView.setVisibility(View.GONE);
+					TilematchActivity.nameReady = true;
+					// hide keyboard
+					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					mgr.hideSoftInputFromWindow(nameEdit.getWindowToken(), 0);
+	        	}
+        	});
+        }
         
         TilematchActivity.scoreOpenHelper = new TilematchStorage.ScoreOpenHelper(this);
         TilematchActivity.optionsOpenHelper = new TilematchStorage.OptionsOpenHelper(this);

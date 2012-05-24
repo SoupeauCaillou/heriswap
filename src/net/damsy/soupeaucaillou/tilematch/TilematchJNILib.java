@@ -215,6 +215,7 @@ public class TilematchJNILib {
     	TilematchActivity.playerNameInputView.post(new Runnable() {
 			public void run() {
 				Log.i(TilematchActivity.Tag, "requesting user input visibility");
+				
 				TilematchActivity.playerNameInputView.setVisibility(View.VISIBLE);
 				TilematchActivity.playerNameInputView.requestFocus();
 				TilematchActivity.playerNameInputView.invalidate();
