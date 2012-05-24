@@ -215,6 +215,20 @@ public class TilematchJNILib {
     	TilematchActivity.playerNameInputView.post(new Runnable() {
 			public void run() {
 				Log.i(TilematchActivity.Tag, "requesting user input visibility");
+				
+				//ici
+		    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getReadableDatabase();
+		    	Cursor cursor = db.rawQuery("select distinct name from score order by rowid desc", null);
+			    try {
+			    	for (int i=0; i<Math.min(3, cursor.getCount()); i++) {
+			    		cursor.moveToNext();
+			    		reuse_name_2 = cursor.getString(0);
+			    		Log.i(TilematchActivity.Tag, "aazeqsd   ");
+			    	}
+		    	} finally {
+		    		cursor.close();
+		    	}
+			    
 				TilematchActivity.playerNameInputView.setVisibility(View.VISIBLE);
 				TilematchActivity.playerNameInputView.requestFocus();
 				TilematchActivity.playerNameInputView.invalidate();
