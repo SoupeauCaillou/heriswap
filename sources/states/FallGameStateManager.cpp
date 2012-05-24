@@ -22,7 +22,7 @@ void FallGameStateManager::setAnimSpeed() {
 	
 	ADSR(eFall)->idleValue = 0;
 	ADSR(eFall)->attackValue = 1.0;
-	ADSR(eFall)->attackTiming = difficulty*.3;
+	ADSR(eFall)->attackTiming = difficulty*.15;
 	ADSR(eFall)->decayTiming = 0;
 	ADSR(eFall)->sustainValue = 1.0;
 	ADSR(eFall)->releaseTiming = 0;

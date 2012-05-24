@@ -31,10 +31,10 @@ void UserInputGameStateManager::setAnimSpeed() {
 	
 	ADSR(eSwapper)->idleValue = 0;
 	ADSR(eSwapper)->attackValue = 1.0;
-	ADSR(eSwapper)->attackTiming = difficulty*0.1;
+	ADSR(eSwapper)->attackTiming = 0.07 * difficulty;
 	ADSR(eSwapper)->decayTiming = 0;
 	ADSR(eSwapper)->sustainValue = 1.0;
-	ADSR(eSwapper)->releaseTiming = difficulty*0.1;
+	ADSR(eSwapper)->releaseTiming = 0.07 * difficulty;
 }
 
 void UserInputGameStateManager::Setup() {
@@ -86,13 +86,13 @@ GameState UserInputGameStateManager::Update(float dt) {
 				originI = i;
 				originJ = j;
 
-				activateADSR(dragged, 1.4, 1.2);
+				activateADSR(dragged, 1.3, 1.3);
 
 				// active neighboors
-				activateADSR(theGridSystem.GetOnPos(i+1,j), 1.2, 1.1);
-				activateADSR(theGridSystem.GetOnPos(i,j+1), 1.2, 1.1);
-				activateADSR(theGridSystem.GetOnPos(i-1,j), 1.2, 1.1);
-				activateADSR(theGridSystem.GetOnPos(i,j-1), 1.2, 1.1);
+				activateADSR(theGridSystem.GetOnPos(i+1,j), 1.1, 1.1);
+				activateADSR(theGridSystem.GetOnPos(i,j+1), 1.1, 1.1);
+				activateADSR(theGridSystem.GetOnPos(i-1,j), 1.1, 1.1);
+				activateADSR(theGridSystem.GetOnPos(i,j-1), 1.1, 1.1);
 			}
 		}
 	} else if (theTouchInputManager.wasTouched() && dragged && ADSR(dragged)->active) {
@@ -288,10 +288,10 @@ static void activateADSR(Entity e, float a, float s) {
 	ADSRComponent* ac = ADSR(e);
 	ac->idleValue = size;
 	ac->attackValue = size * a;
-	ac->attackTiming = 0.3;
-	ac->decayTiming = 0.2;
+	ac->attackTiming = 0.1;
+	ac->decayTiming = 0.0;
 	ac->sustainValue = size * s;
-	ac->releaseTiming = 0.2;
+	ac->releaseTiming = 0.08;
 	ac->active = true;
 }
 
