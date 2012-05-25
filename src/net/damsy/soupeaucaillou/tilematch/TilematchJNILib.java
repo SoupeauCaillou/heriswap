@@ -242,7 +242,7 @@ public class TilematchJNILib {
 				TilematchActivity.playerNameInputView.invalidate();
 				TilematchActivity.playerNameInputView.forceLayout();
 				TilematchActivity.playerNameInputView.bringToFront();
-		    	TilematchActivity.nameEdit.setText(TilematchActivity.playerName);	
+		    	TilematchActivity.nameEdit.setText("");	
 			}
 		});
     	Log.i(TilematchActivity.Tag, "showPlayerNameUI");
