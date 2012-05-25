@@ -61,7 +61,7 @@ void LevelStateManager::Setup() {
 	PARTICULE(eSnowEmitter)->forceDirection = Interval<float>(0, 0);
 	PARTICULE(eSnowEmitter)->forceAmplitude  = Interval<float>(0, 0);
 	PARTICULE(eSnowEmitter)->mass = 1;
-	
+
 	eSnowBranch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSnowBranch, Transformation);
 	TRANSFORM(eSnowBranch)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(218));
@@ -96,13 +96,13 @@ void LevelStateManager::Enter() {
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(smallLevel)->color.a, 1, 0));
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&RENDERING(eSnowGround)->color.a, 0, 1));
 	MORPHING(eBigLevel)->active = true;
-	
+
 	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
 	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(288);
 	TEXT_RENDERING(eBigLevel)->hide = false;
-	
+
 	duration = 0;
-	
+
 	// desaturate everyone except the branch, mute, pause and text elements
 	TextureRef branch = theRenderingSystem.loadTextureFile("branche.png");
 	TextureRef pause = theRenderingSystem.loadTextureFile("pause.png");
@@ -120,12 +120,12 @@ void LevelStateManager::Enter() {
 			rc->desaturate = true;
 		}
 	}
-	
+
 	entities = theGridSystem.RetrieveAllEntityWithComponent();
 	for (int i=0; i<entities.size(); i++) {
 		CombinationMark::markCellInCombination(entities[i]);
 	}
-	
+
 	newLeavesGenerated = false;
 }
 
@@ -141,7 +141,7 @@ GameState LevelStateManager::Update(float dt) {
 			TWITCH(*it)->speed = alpha * 9;
 		}
 	}
-	
+
 	if (duration > 6) {
 		MorphingComponent* mc = MORPHING(eBigLevel);
 		for (int i=0; i<mc->elements.size(); i++) {
@@ -154,10 +154,13 @@ GameState LevelStateManager::Update(float dt) {
 		mc->active = true;
 		mc->activationTime = 0;
 		mc->timing = 0.5;
-		
+
 		PARTICULE(eSnowEmitter)->emissionRate = 0;
-		
+
 		if (!newLeavesGenerated) {
+			//on bouge le herisson
+			TRANSFORM(modeMgr->herisson)->position.X = modeMgr->position(modeMgr->time);
+			//on genere les nouvelles feuilles
 			newLeavesGenerated = true;
 			modeMgr->generateLeaves(0, theGridSystem.Types);
 		}
@@ -165,14 +168,14 @@ GameState LevelStateManager::Update(float dt) {
 	if (newLeavesGenerated) {
 		for (int i=0; i<modeMgr->branchLeaves.size(); i++) {
 			TRANSFORM(modeMgr->branchLeaves[i].e)->size = Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f);
-			if (duration < 10) 
+			if (duration < 10)
 				RENDERING(modeMgr->branchLeaves[i].e)->desaturate = true;
 			else
 				RENDERING(modeMgr->branchLeaves[i].e)->desaturate = false;
 		}
 	}
-	
-	
+
+
 	if (duration > 10) {
 		return Spawn;
 	}
@@ -190,7 +193,7 @@ void LevelStateManager::Exit() {
 	// RENDERING(eDesaturate)->hide = false;
 	RENDERING(eSnowBranch)->hide = true;
 	RENDERING(eSnowGround)->hide = true;
-	
+
 	MorphingComponent* mc = MORPHING(eBigLevel);
 	for (int i=0; i<mc->elements.size(); i++) {
 		delete mc->elements[i];
@@ -200,7 +203,7 @@ void LevelStateManager::Exit() {
 	TEXT_RENDERING(eBigLevel)->hide = true;
 	// show small level
 	TEXT_RENDERING(smallLevel)->color.a = 1;
-	
+
 	std::vector<Entity> ent = theRenderingSystem.RetrieveAllEntityWithComponent();
 	for (int i=0; i<ent.size(); i++) {
 		RENDERING(ent[i])->desaturate = false;

@@ -63,7 +63,8 @@ void NormalGameModeManager::TogglePauseDisplay(bool paused) {
 
 void NormalGameModeManager::GameUpdate(float dt) {
 	if (levelUpPending) {
-		RENDERING(herisson)->hide = false;
+			//~ TRANSFORM(herisson)->position.X = GameModeManager::position(time);
+		//RENDERING(herisson)->hide = false;
         LoadHerissonTexture(bonus+1);
 		levelUpPending = false;
 	}
@@ -188,9 +189,9 @@ void NormalGameModeManager::LevelUp() {
 			remain[i] = 2+level;
 
 		// cacher le n'herisson
-		RENDERING(herisson)->hide = true;
+		//RENDERING(herisson)->hide = true;
 		// et le positionner
-		TRANSFORM(herisson)->position.X = GameModeManager::position(time);
+		//TRANSFORM(herisson)->position.X = GameModeManager::position(time);
 		levelUpPending = true;
 	}
 }

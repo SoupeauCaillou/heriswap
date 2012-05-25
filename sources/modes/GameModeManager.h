@@ -55,8 +55,8 @@ class GameModeManager {
         virtual const uint8_t* restoreInternalState(const uint8_t* in, int size);
 		void generateLeaves(int* nb, int type);
 
-	protected:
 		float position(float t);
+	protected:
 		void LoadHerissonTexture(int type);
 		void updateHerisson(float dt, float obj, float herissonSpeed);
 		void deleteLeaves(int type, int nb);
@@ -66,6 +66,8 @@ class GameModeManager {
 		float time;
 		unsigned int points, bonus, limit;
         Entity sky;
+		Entity herisson;
+		//feuilles de l'arbre
 		std::vector<BranchLeaf> branchLeaves;
 
 	protected:
@@ -74,8 +76,6 @@ class GameModeManager {
 		Entity branch;
 		Entity decor1er, decor2nd;
 		std::vector<Vector2> pts;
-		Entity herisson;
-		//feuilles de l'arbre
 
 		SuccessManager* successMgr;
 	private:
