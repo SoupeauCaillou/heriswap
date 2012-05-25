@@ -43,6 +43,7 @@ void UserInputGameStateManager::Setup() {
 
 	ADD_COMPONENT(eSwapper, Sound);
 	originI = originJ = -1;
+    swapI = swapJ = 0;
 	
 	setAnimSpeed();
 }
@@ -102,7 +103,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 				- Game::GridCoordsToPosition(originI, originJ, theGridSystem.GridSize);
 
 			if (diff.Length() > 1) {
-				int i,j;
+				int i=0,j=0;
 				diffToGridCoords(diff, &i, &j);
 
 				if (theGridSystem.IsValidGridPosition(originI + i, originJ + j)) {

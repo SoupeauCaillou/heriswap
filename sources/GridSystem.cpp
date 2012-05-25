@@ -39,9 +39,9 @@ void GridSystem::HideAll(bool activate) {
 }
 
 void GridSystem::DeleteAll() {
-	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-		Entity e = (*it).first;
-		theEntityManager.DeleteEntity(e);
+    std::vector<Entity> all = this->RetrieveAllEntityWithComponent();
+    for (int i=0; i<all.size(); i++) {
+		theEntityManager.DeleteEntity(all[i]);
 	}
 }
 
