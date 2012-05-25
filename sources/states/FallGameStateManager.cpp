@@ -14,9 +14,6 @@ FallGameStateManager::FallGameStateManager() {
 
 }
 
-FallGameStateManager::~FallGameStateManager() {
-	theEntityManager.DeleteEntity(eFall);
-}
 void FallGameStateManager::setAnimSpeed() {
 	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
 

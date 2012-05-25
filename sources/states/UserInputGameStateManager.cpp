@@ -22,9 +22,6 @@
 static void activateADSR(Entity e, float a, float s);
 static void diffToGridCoords(const Vector2& c, int* i, int* j);
 
-UserInputGameStateManager::~UserInputGameStateManager() {
-	theEntityManager.DeleteEntity(eSwapper);
-}
 
 void UserInputGameStateManager::setAnimSpeed() {
 	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy

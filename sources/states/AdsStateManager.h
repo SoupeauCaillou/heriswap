@@ -8,7 +8,6 @@ class AdsStateManager : public GameStateManager {
 	public:
 
 	AdsStateManager(StorageAPI* str, SuccessManager* smgr) : storage(str), successMgr(smgr) { };
-	~AdsStateManager();
 	void Setup();
 	void Enter();
 	GameState Update(float dt);

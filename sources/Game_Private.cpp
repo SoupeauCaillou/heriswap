@@ -62,6 +62,16 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      state2Manager[BlackToModeMenu] = new FadeGameStateManager(FadeIn, BlackToModeMenu, ModeMenu, state2Manager[ModeMenu], 0);
  }
 
+ PrivateData::~PrivateData() {
+     for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)
+         delete it->second;
+     state2Manager.clear();
+
+     for(std::map<GameMode, GameModeManager*>::iterator it=mode2Manager.begin(); it!=mode2Manager.end(); ++it)
+         delete it->second;
+     mode2Manager.clear();
+ }
+
  void PrivateData::Setup(int windowW, int windowH) {
      BackgroundManager* bg = new BackgroundManager((10.0 * windowH) / windowW);
      bg->cloudStartX = Interval<float>(0.0,15.0);

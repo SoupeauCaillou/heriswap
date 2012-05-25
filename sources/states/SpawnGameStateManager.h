@@ -7,7 +7,6 @@
 class SpawnGameStateManager : public GameStateManager {
 	public:
 		SpawnGameStateManager(SuccessManager* smgr);
-		~SpawnGameStateManager();
 		void Setup();
 		void Enter();
 		GameState Update(float dt);

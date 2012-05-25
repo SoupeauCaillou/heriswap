@@ -8,7 +8,6 @@
 class MainMenuGameStateManager : public GameStateManager {
 	public:
 		MainMenuGameStateManager(LocalizeAPI* lAPI, SuccessAPI* sAPI) : localizeAPI(lAPI), successAPI(sAPI) { };
-		~MainMenuGameStateManager();
 		void Setup();
 		void Enter();
 		GameState Update(float dt);

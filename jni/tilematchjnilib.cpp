@@ -15,6 +15,7 @@
 #include "sac/systems/SoundSystem.h"
 #include "sac/systems/MusicSystem.h"
 #include "sac/base/TouchInputManager.h"
+#include "sac/base/EntityManager.h"
 
 #include "sac/api/android/AssetAPIAndroidImpl.h"
 #include "sac/api/android/MusicAPIAndroidImpl.h"
@@ -64,6 +65,15 @@ struct GameHolder {
 	JNIEnv *gameThreadEnv, *renderThreadEnv;
 	jobject assetManager;
 	int openGLESVersion;
+
+
+    ~GameHolder() {
+        delete nameInput;
+        delete storage;
+        delete localize;
+        renderThreadEnv->DeleteGlobalRef(assetManager);
+        gameThreadEnv = renderThreadEnv = 0;
+    }
 };
 
 struct AndroidNativeTouchState : public NativeTouchState{
@@ -117,6 +127,15 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
 	return (jlong)hld;
 }
 
+JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_destroyGame
+  (JNIEnv *env, jclass, jlong g) {
+    GameHolder* hld = (GameHolder*) g;
+    theMusicSystem.uninit();
+    delete hld->game;
+    hld->renderThreadEnv = env;
+    delete hld;
+}
+
 /*
  * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
  * Method:    init
@@ -138,6 +157,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
   (JNIEnv *env, jclass, jlong g, jbyteArray jstate) {
   	GameHolder* hld = (GameHolder*) g;
 	UPDATE_ENV_PTR(hld->gameThreadEnv, env);
+
 	theMusicSystem.musicAPI = new MusicAPIAndroidImpl(env);
 	theMusicSystem.assetAPI = new AssetAPIAndroidImpl(env, hld->assetManager);
 	theSoundSystem.soundAPI = new SoundAPIAndroidImpl(env, hld->assetManager);
@@ -230,6 +250,8 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_p
   	if (!hld->game)
   		return;
 
+    // kill all music
+    theMusicSystem.toggleMute(true);
 	hld->game->togglePause(true);
 	LOGW("%s <--", __FUNCTION__);
 }
@@ -273,6 +295,9 @@ JNIEXPORT jbyteArray JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJN
 		env->SetByteArrayRegion(jb, 0, size, (jbyte*)state);
 		LOGW("Serialized state size: %d", size);
 	}
+
+    // delete hld->game;
+    // delete hld;
 
 	LOGW("%s <--", __FUNCTION__);
 	return jb;

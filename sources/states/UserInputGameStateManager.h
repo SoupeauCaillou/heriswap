@@ -7,7 +7,6 @@ class UserInputGameStateManager : public GameStateManager {
 	public:
 
 		UserInputGameStateManager(SuccessManager* smgr) : successMgr(smgr) {};
-		~UserInputGameStateManager();
 		void Setup();
 		void Enter();
 		GameState Update(float dt);

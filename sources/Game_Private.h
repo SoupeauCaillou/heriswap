@@ -21,7 +21,7 @@ class NameInputAPI;
 class PrivateData {
     public:
         PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI);
-
+        ~PrivateData();
         void Setup(int windowW, int windowH);
 
      //bench data

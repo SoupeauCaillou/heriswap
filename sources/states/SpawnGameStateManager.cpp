@@ -22,11 +22,6 @@ SpawnGameStateManager::SpawnGameStateManager(SuccessManager* smgr){
 	successMgr = smgr;
 }
 
-SpawnGameStateManager::~SpawnGameStateManager() {
-	theEntityManager.DeleteEntity(eSpawn);
-	theEntityManager.DeleteEntity(eGrid);
-}
-
 void SpawnGameStateManager::setAnimSpeed() {
 	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
 	

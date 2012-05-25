@@ -31,19 +31,6 @@ ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, NameInputAPI* pNa
     gameOverState = NoGame;
 }
 
-ModeMenuStateManager::~ModeMenuStateManager() {
-	for (int i=0; i<5; i++) {
-		theEntityManager.DeleteEntity(scoresName[i]);
-		theEntityManager.DeleteEntity(scoresPoints[i]);
-		theEntityManager.DeleteEntity(scoresLevel[i]);
-	}
-	theEntityManager.DeleteEntity(play);
-	theEntityManager.DeleteEntity(back);
-	theEntityManager.DeleteEntity(yourScore);
-	theEntityManager.DeleteEntity(eDifficulty);
-	theEntityManager.DeleteEntity(bDifficulty);
-}
-
 void ModeMenuStateManager::Setup() {
 	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
 

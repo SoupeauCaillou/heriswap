@@ -6,6 +6,7 @@
 class StorageAPIAndroidImpl : public StorageAPI {
     public:
         StorageAPIAndroidImpl(JNIEnv* env);
+        ~StorageAPIAndroidImpl();
         void init();
         void submitScore(Score scr, int mode, int diff);
         std::vector<Score> savedScores(int mode, int difficulty);

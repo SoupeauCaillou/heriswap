@@ -128,6 +128,29 @@ Game::Game(NativeAssetLoader* ploader, StorageAPI* storage, NameInputAPI* inputU
     TwitchSystem::CreateInstance();
 }
 
+Game::~Game() {
+    LOGW("Delete game instance %p", this);
+    theEntityManager.deleteAllEntities();
+    EntityManager::DestroyInstance();
+
+    TransformationSystem::DestroyInstance();
+    RenderingSystem::DestroyInstance();
+    SoundSystem::DestroyInstance();
+    MusicSystem::DestroyInstance();
+    GridSystem::DestroyInstance();
+    ADSRSystem::DestroyInstance();
+    ButtonSystem::DestroyInstance();
+    TextRenderingSystem::DestroyInstance();
+    ContainerSystem::DestroyInstance();
+    PhysicsSystem::DestroyInstance();
+    ParticuleSystem::DestroyInstance();
+    ScrollingSystem::DestroyInstance();
+    MorphingSystem::DestroyInstance();
+    TwitchSystem::DestroyInstance();
+
+    delete datas;
+}
+
 void Game::loadFont(const std::string& name) {
 	char* font = loader->loadShaderFile(name + ".desc");
 	std::stringstream sfont;

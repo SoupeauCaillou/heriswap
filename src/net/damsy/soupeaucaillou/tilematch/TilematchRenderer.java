@@ -50,7 +50,7 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
 				
 				TilematchActivity.savedState = null;
 				initDone = true;
-				while ( TilematchActivity.isRunning) {
+				while ( TilematchActivity.isRunning || TilematchActivity.requestPausedFromJava) {
 					TilematchJNILib.step(TilematchActivity.game);
 					TilematchActivity.mGLView.requestRender();
 					
@@ -61,6 +61,13 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
 				}  
 				Log.i(TilematchActivity.Tag, "Activity paused - exiting game thread");
 				gameThread = null;
+				/*
+				synchronized (TilematchActivity.mutex) {
+					TilematchJNILib.destroyGame(TilematchActivity.game);
+					Log.i(TilematchActivity.Tag, "Clearing game ref");
+					TilematchActivity.game = 0;
+				}
+				*/
 			}
 		}); 
 		gameThread.start(); 
@@ -74,9 +81,10 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
     		// TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
     		Log.i(TilematchActivity.Tag, "Start game thread");
     		// create game thread
+    		initDone = true;
     		startGameThread();
     	} else {
-    		TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
+    		
     		if (gameThread == null)
     			startGameThread();
     	}
@@ -88,11 +96,13 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-    	Log.i(TilematchActivity.Tag, "Surface created (game: "  + TilematchActivity.game + ", " + initDone + ")");
     	if (TilematchActivity.game == 0) {
+    		Log.i(TilematchActivity.Tag, "Activity LifeCycle ##### Game instance creation (onSurfaceCreated)");
     		initDone = false;
     		TilematchActivity.game = TilematchJNILib.createGame(asset, TilematchActivity.openGLESVersion);
     	} else {
+    		Log.i(TilematchActivity.Tag, "Activity LifeCycle ##### Game instance reused (onSurfaceCreated)");
+    		TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
     		initDone = true;
     	}
     }

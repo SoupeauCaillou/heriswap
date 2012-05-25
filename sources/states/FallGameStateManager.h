@@ -9,7 +9,6 @@ class FallGameStateManager : public GameStateManager {
 	public:
 
 	FallGameStateManager();
-	~FallGameStateManager();
 	void Setup();
 	void Enter();
 	GameState Update(float dt);
