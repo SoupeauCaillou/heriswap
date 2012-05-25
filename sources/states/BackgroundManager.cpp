@@ -55,10 +55,6 @@ BackgroundManager::BackgroundManager(float windowHeight) {
 
 
 BackgroundManager::~BackgroundManager() {
-	for(int i=0; i<clouds.size(); i++) {
-		theEntityManager.DeleteEntity(clouds[i]->e);
-		delete clouds[i];
-	}
 	clouds.clear();
 }
 

@@ -15,10 +15,6 @@ DeleteGameStateManager::DeleteGameStateManager(SuccessManager* sMgr) : successMg
 	modeMgr=0;
 }
 
-DeleteGameStateManager::~DeleteGameStateManager() {
-	theEntityManager.DeleteEntity(eRemove);
-}
-
 void DeleteGameStateManager::setAnimSpeed() {
 	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
 	

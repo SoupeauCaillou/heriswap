@@ -34,6 +34,7 @@ public class TilematchJNILib {
     
     /* Create native game instance */
     public static native long createGame(AssetManager mgr, int openGLESVersion);
+    public static native void destroyGame(long game);
     /* Initialize game, reset graphics assets, etc... */
     public static native void initFromRenderThread(long game, int width, int height);
     public static native void initFromGameThread(long game, byte[] state);
@@ -43,7 +44,7 @@ public class TilematchJNILib {
     public static native void handleInputEvent(long game, int event, float x, float y);
     public static native byte[] serialiazeState(long game);
     public static native void initAndReloadTextures(long game);
-    
+ 
     //-------------------------------------------------------------------------
     // AssetAPI
     //-------------------------------------------------------------------------
@@ -315,12 +316,12 @@ public class TilematchJNILib {
 								cmd = writePendings.poll();
 							}
 					 	} 
-						if (cmd != null) { 
+						if (cmd != null && running) { 
 							switch (cmd.type) {
 								case Buffer: {
 									int result = track.write(cmd.buffer, 0, cmd.bufferSize);
 									if (result != cmd.bufferSize) {
-										Log.e("tilematchJ", "Error writing data to AudioTrack: " + result);
+										Log.e("tilematchJ", "Error writing data to AudioTrack(" + track.toString() + "): " + result);
 										checkReturnCode("write,", result);
 									} else {
 										// Log.e("tilematchJ", "Successful write of " + data.length);
@@ -353,6 +354,7 @@ public class TilematchJNILib {
 							}
 		 				}
 					}
+					Log.i(TilematchActivity.Tag, "Effective delete of track: " + track.toString());
 					track.flush();
 					track.release();
 				}
@@ -457,6 +459,7 @@ public class TilematchJNILib {
     static public void stopPlayer(Object o) {
     	DumbAndroid dumb = (DumbAndroid) o;
     	synchronized (dumb.track) {
+    		Log.i(TilematchActivity.Tag, "Stop track: " + dumb.track.toString());
     		dumb.track.stop();
     		// flush queue
     		for (Command cmd: dumb.writePendings) {
@@ -491,6 +494,7 @@ public class TilematchJNILib {
     static public void deletePlayer(Object o) {
     	DumbAndroid dumb = (DumbAndroid) o;
     	synchronized (dumb.track) {
+    		Log.i(TilematchActivity.Tag, "Delete (delayed) track: " + dumb.track.toString());
     		synchronized (DumbAndroid.bufferPool) {
     			for (Command c : dumb.writePendings) {
         			if (c.type == Type.Buffer) {

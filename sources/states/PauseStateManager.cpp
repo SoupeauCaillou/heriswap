@@ -12,14 +12,6 @@
 
 #include "DepthLayer.h"
 
-PauseStateManager::~PauseStateManager() {
-	theTextRenderingSystem.DeleteEntity(eRestart);
-	theEntityManager.DeleteEntity(eAbort);
-	theTextRenderingSystem.DeleteEntity(bRestart);
-	theEntityManager.DeleteEntity(bAbort);
-	theTextRenderingSystem.DeleteEntity(eHelp);
-	theEntityManager.DeleteEntity(bHelp);
-}
 
 void PauseStateManager::Setup() {
 	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);

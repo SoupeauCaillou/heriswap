@@ -65,6 +65,7 @@ public class TilematchActivity extends Activity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TilematchActivity.Tag, "Activity LifeCycle ##### ON CREATE");
         
         Map<String, Object> options = new HashMap<String, Object>();
         options.put(OpenFeintSettings.SettingCloudStorageCompressionStrategy, OpenFeintSettings.CloudStorageCompressionStrategyDefault);
@@ -170,16 +171,18 @@ public class TilematchActivity extends Activity {
 
     @Override
     protected void onPause() {
+    	Log.i(TilematchActivity.Tag, "Activity LifeCycle ##### ON PAUSE");
         super.onPause();
         mGLView.onPause();
         if (wl != null)
         	wl.release();
         TilematchActivity.requestPausedFromJava = true;
-        TilematchActivity.isRunning = false;
+        // TilematchActivity.isRunning = false;
     }
 
     @Override
     protected void onResume() {
+    	Log.i(TilematchActivity.Tag, "Activity LifeCycle ##### ON RESUME");
         super.onResume();
         if (wl != null)
         	wl.acquire();
@@ -190,6 +193,7 @@ public class TilematchActivity extends Activity {
     
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+    	Log.i(TilematchActivity.Tag, "Activity LifeCycle ##### ON SAVE INSTANCE");
     	/* save current state; we'll be used only if app get killed */
     	synchronized (TilematchActivity.mutex) {
 	    	Log.i(TilematchActivity.Tag, "Save state!");

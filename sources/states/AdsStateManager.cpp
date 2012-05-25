@@ -16,11 +16,6 @@
 
 #include "DepthLayer.h"
 
-
-AdsStateManager::~AdsStateManager() {
-	theEntityManager.DeleteEntity(eAds);
-}
-
 void AdsStateManager::Setup() {
 	eAds = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eAds, Transformation);

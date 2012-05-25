@@ -22,6 +22,11 @@ struct StorageAPIAndroidImpl::StorageAPIAndroidImplDatas {
     jmethodID getScores;
 };
 
+StorageAPIAndroidImpl::~StorageAPIAndroidImpl() {
+    env->DeleteGlobalRef(datas->cls);
+    delete datas;
+}
+
 void StorageAPIAndroidImpl::init() {
     datas = new StorageAPIAndroidImplDatas();
 

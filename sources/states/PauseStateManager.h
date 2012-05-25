@@ -11,7 +11,6 @@ class PauseStateManager : public GameStateManager {
 	public:
 
 	PauseStateManager(LocalizeAPI* lAPI) : localizeAPI(lAPI) { };
-	~PauseStateManager();
 	void Setup();
 	void Enter();
 	GameState Update(float dt);

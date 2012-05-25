@@ -9,7 +9,6 @@
 class ModeMenuStateManager : public GameStateManager {
 	public:
 		ModeMenuStateManager(StorageAPI* storag, NameInputAPI* nameInputAPI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI);
-		~ModeMenuStateManager();
 		void Setup();
 		void Enter();
 		GameState Update(float dt);

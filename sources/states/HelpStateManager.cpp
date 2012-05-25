@@ -11,10 +11,6 @@
 #include "Game.h"
 #include "DepthLayer.h"
 
-HelpStateManager::~HelpStateManager() {
-	theEntityManager.DeleteEntity(eHelp);
-}
-
 void HelpStateManager::Setup() {
 	eHelp = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eHelp, Transformation);

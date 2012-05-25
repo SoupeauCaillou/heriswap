@@ -14,15 +14,6 @@
 
 #include "DepthLayer.h"
 
-MainMenuGameStateManager::~MainMenuGameStateManager() {
-	for (int i=0; i<2; i++) {
-		theTextRenderingSystem.DeleteEntity(eStart[i]);
-		theEntityManager.DeleteEntity(bStart[i]);
-	}
-	theTextRenderingSystem.DeleteEntity(eSuccess);
-	theEntityManager.DeleteEntity(bSuccess);
-}
-
 void MainMenuGameStateManager::Setup() {
 	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
 
@@ -35,7 +26,7 @@ void MainMenuGameStateManager::Setup() {
 		TEXT_RENDERING(eStart[i])->positioning = TextRenderingComponent::RIGHT;
 		TEXT_RENDERING(eStart[i])->color = green;
 		TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
-		theMorphingSystem.Add(eStart[i]);
+		ADD_COMPONENT(eStart[i], Morphing);
 	    TypedMorphElement<float>* sizeMorph = new TypedMorphElement<float>(&TEXT_RENDERING(eStart[i])->charHeight, TEXT_RENDERING(eStart[i])->charHeight, PlacementHelper::GimpHeightToScreen(54));
 	    MORPHING(eStart[i])->elements.push_back(sizeMorph);
 	    MORPHING(eStart[i])->timing = 0.2;

@@ -8,7 +8,6 @@ class HelpStateManager : public GameStateManager {
 	public:
 
 	HelpStateManager() { };
-	~HelpStateManager();
 	void Setup();
 	void Enter();
 	GameState Update(float dt);

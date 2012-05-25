@@ -10,7 +10,6 @@ class DeleteGameStateManager : public GameStateManager {
 	public:
 
 		DeleteGameStateManager(SuccessManager* successMgr);
-		~DeleteGameStateManager();
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
