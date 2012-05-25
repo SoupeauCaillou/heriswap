@@ -220,11 +220,16 @@ public class TilematchJNILib {
 		    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getReadableDatabase();
 		    	Cursor cursor = db.rawQuery("select distinct name from score order by rowid desc", null);
 			    try {
+			    	cursor.moveToFirst();
 			    	for (int i=0; i<Math.min(3, cursor.getCount()); i++) {
-			    		cursor.moveToNext();
 			    		//je veux modifier le nom du bouton 2 aka string@reuse_name_2 ??
-			    		reuse_name_2 = cursor.getString(0);
+			    		TilematchActivity.oldName[i].setText(cursor.getString(0));
+			    		TilematchActivity.oldName[i].setVisibility(View.VISIBLE);
+			    		cursor.moveToNext();
 			    		Log.i(TilematchActivity.Tag, "aazeqsd   ");
+			    	}
+			    	for (int i=cursor.getCount(); i<3; i++) {
+			    		TilematchActivity.oldName[i].setVisibility(View.GONE);
 			    	}
 		    	} finally {
 		    		cursor.close();
