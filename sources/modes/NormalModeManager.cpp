@@ -53,7 +53,7 @@ void NormalGameModeManager::Enter() {
 
 void NormalGameModeManager::Exit() {
 	successMgr->sTakeYourTime(time);
-		
+
 	GameModeManager::Exit();
 }
 
@@ -109,8 +109,8 @@ void NormalGameModeManager::UiUpdate(float dt) {
 	}
 }
 
-static int levelToLeaveToDelete(int nb, int level) {
-    return 6*nb/(2+level);
+static int levelToLeaveToDelete(int nb, int maxRemain, int done) {
+    return (6*(done+nb)/maxRemain-6*done/maxRemain);
 }
 
 static float timeGain(int nb, float time) {
@@ -118,7 +118,7 @@ static float timeGain(int nb, float time) {
 }
 
 void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
-    int nb = levelToLeaveToDelete(count, level);
+    int nb = levelToLeaveToDelete(count, level+2, remain[type]);
     for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
         if ((type+1) == branchLeaves[i].type) {
             CombinationMark::markCellInCombination(branchLeaves[i].e);
@@ -149,8 +149,8 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 	else
 		points += 10*level*nb*nb*nb/6;
 
+	deleteLeaves(type+1, levelToLeaveToDelete(nb, level+2, remain[type]));
 	remain[type] -= nb;
-	deleteLeaves(type+1, levelToLeaveToDelete(nb, level));
 	time -= timeGain(nb, time);
 
 	if (remain[type]<0)
@@ -159,7 +159,7 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 	successMgr->sRainbow(type);
 
 	successMgr->sBonusToExcess(type, bonus, nb);
-	
+
 	successMgr->sExterminaScore(points);
 
 }
