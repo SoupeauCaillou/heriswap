@@ -122,7 +122,10 @@ public class TilematchActivity extends Activity {
         Button b = (Button) findViewById(R.id.name_save);
         b.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				playerName = nameEdit.getText().toString();
+				playerName = filterPlayerName(nameEdit.getText().toString());
+				
+				
+				
 				Log.i(TilematchActivity.Tag, "Player name: '" + playerName + "'");
 				if (playerName != null && playerName.length() > 0) {
 					playerNameInputView.setVisibility(View.GONE);
@@ -234,6 +237,11 @@ public class TilematchActivity extends Activity {
     
     public static GLSurfaceView mGLView;
 
+    private String filterPlayerName(String name) {
+    	String n = name.trim();
+    	return n.replaceAll("[^a-zA-Z0-9]",".").substring(0, Math.min(11, name.length()));
+    }
+    
     static {
         System.loadLibrary("tilematch");
     }
