@@ -1,8 +1,8 @@
 #include "SuccessManager.h"
 
 /* Proto :
-void SuccessManager::sName() {	
-	if (successEnable) {		
+void SuccessManager::sName() {
+	if (successEnable) {
 		if () {
 			bName = true;
 		}
@@ -13,20 +13,20 @@ void SuccessManager::sName() {
 SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	successAPI = sAPI;
 	successEnable=true;
- 
-	bRainbow = false; 
+
+	bRainbow = false;
 	bDoubleRainbow = false;
-	bLevel10 = false; 
-	bLevel1For1K = false; 
-	bExterminaScore = false; 
-	bTakeYourTime = false; 
-	bResetGrid = false; 
-	bFastAndFinish = false; 
-	bHardScore = false; 
+	bLevel10 = false;
+	bLevel1For1K = false;
+	bExterminaScore = false;
+	bTakeYourTime = false;
+	bResetGrid = false;
+	bFastAndFinish = false;
+	bHardScore = false;
 	b6InARow = false;
 	bLuckyLuke = false;
 	bDonator = false;
-	
+
 	timeLL = 0.f;
 	timeLLloop = 0.f;
 }
@@ -35,7 +35,7 @@ void SuccessManager::NewGame(int difficulty) {
 	successEnable = difficulty;
 
 	gridResetted = false;
-	
+
 	bonusPoints = 0;
 	for (int i=0; i<8; i++) {
 		succEveryTypeInARow[i] = 0;
@@ -45,12 +45,13 @@ void SuccessManager::NewGame(int difficulty) {
 void SuccessManager::s6InARow(int nbInCombi) {
 	if (successEnable && !b6InARow) {
 		if (nbInCombi >= 6) {
+			printf("%d jjjjjjjjjjjjjjjjjjjjjjj\n\n\n\n\n",nbInCombi);
 			successAPI->successCompleted("6 in a row", 1652152);
 			b6InARow=true;
 		}
 	}
 }
-	
+
 void SuccessManager::sHardScore(StorageAPI* storage) {
 	if (successEnable && !bHardScore) {
 		if (storage->getSavedGamePointsSum() > 1000000) {
@@ -68,25 +69,25 @@ void SuccessManager::sFastAndFinish(float time) {
 	}
 }
 
-void SuccessManager::sResetGrid() {	
+void SuccessManager::sResetGrid() {
 	if (successEnable && !bResetGrid) {
 		if (!gridResetted) {
-			successAPI->successCompleted("Don't reset the grid !", 1666632);	
+			successAPI->successCompleted("Don't reset the grid !", 1666632);
 			bResetGrid = true;
 		}
-	}	
+	}
 }
 
-void SuccessManager::sTakeYourTime(float time) {	
+void SuccessManager::sTakeYourTime(float time) {
 	if (successEnable && !bTakeYourTime) {
-		if (time*60 > 15) {
+		if (time/60 > 15) {
 			successAPI->successCompleted("Take your time", 1652152);
 			bTakeYourTime = true;
 		}
 	}
 }
 
-void SuccessManager::sExterminaScore(int points) {		
+void SuccessManager::sExterminaScore(int points) {
 	if (successEnable && !bExterminaScore) {
 		if (points > 100000) {
 			successAPI->successCompleted("Exterminascore", 1653192);
@@ -94,7 +95,7 @@ void SuccessManager::sExterminaScore(int points) {
 		}
 	}
 }
-void SuccessManager::sLevel1For1K(int level, int points) {	
+void SuccessManager::sLevel1For1K(int level, int points) {
 	if (successEnable && !bLevel1For1K) {
 		if (level==1 && points>=1000) {
 			successAPI->successCompleted("1k points for level 1", 1653122);
@@ -102,9 +103,9 @@ void SuccessManager::sLevel1For1K(int level, int points) {
 		}
 	}
 }
-	
-void SuccessManager::sLevel10(int level) {	
-	if (successEnable && !bLevel10) {		
+
+void SuccessManager::sLevel10(int level) {
+	if (successEnable && !bLevel10) {
 		if (level == 10) {
 			successAPI->successCompleted("Level 10", 1653112);
 			bLevel10 = true;
@@ -117,10 +118,10 @@ bool rainbow(int* successType) {
 		if (successType[i]==0) return false;
 	}
 	return true;
-}	
+}
 
-void SuccessManager::sRainbow(int type) {	
-	if (successEnable && (!bRainbow || !bDoubleRainbow)) {		
+void SuccessManager::sRainbow(int type) {
+	if (successEnable && (!bRainbow || !bDoubleRainbow)) {
 		if (succEveryTypeInARow[type]) {
 			for (int i=0; i<8; i++) succEveryTypeInARow[i] = 0;
 			bRainbow = false;
@@ -138,8 +139,8 @@ void SuccessManager::sRainbow(int type) {
 		}
 	}
 }
-void SuccessManager::sBonusToExcess(int type, int bonus, int nb) {	
-	if (successEnable && !bBonusToExcess) {		
+void SuccessManager::sBonusToExcess(int type, int bonus, int nb) {
+	if (successEnable && !bBonusToExcess) {
 		if (type == bonus)
 			bonusPoints +=nb;
 		if (bonusPoints >= 100) {
@@ -149,13 +150,13 @@ void SuccessManager::sBonusToExcess(int type, int bonus, int nb) {
 	}
 }
 
-void SuccessManager::sLuckyLuke() {	
-	if (successEnable && !bLuckyLuke) {		
+void SuccessManager::sLuckyLuke() {
+	if (successEnable && !bLuckyLuke) {
 		if (timeLLloop<5.f)
 			timeLL += timeLLloop;
 		else
 			timeLL = 0.f;
-			
+
 		if (timeLL >= 30.f) {
 			successAPI->successCompleted("Lucky Luke", 1671902);
 			bLuckyLuke = true;
@@ -163,8 +164,8 @@ void SuccessManager::sLuckyLuke() {
 	}
 }
 
-void SuccessManager::sDonator() {	
-	if (successEnable && !bDonator) {		
+void SuccessManager::sDonator() {
+	if (successEnable && !bDonator) {
 		successAPI->successCompleted("Donator", 1671922);
 		bDonator = true;
 	}
