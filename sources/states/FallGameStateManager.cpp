@@ -19,7 +19,7 @@ FallGameStateManager::~FallGameStateManager() {
 }
 void FallGameStateManager::setAnimSpeed() {
 	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
-	
+
 	ADSR(eFall)->idleValue = 0;
 	ADSR(eFall)->attackValue = 1.0;
 	ADSR(eFall)->attackTiming = difficulty*.15;
@@ -49,7 +49,6 @@ void FallGameStateManager::Enter() {
 	}
 	// Recherche de combinaison
 	std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,false);
-	std::cout << "Possible combinations : "<< combinaisons.size()<<"\r\n" ;
 
 	// gestion des combinaisons
 	if (!combinaisons.empty())

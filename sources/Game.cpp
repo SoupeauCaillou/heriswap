@@ -164,7 +164,7 @@ void Game::sacInit(int windowW, int windowH) {
 	theRenderingSystem.loadAtlas("animals");
 	*/
 	theRenderingSystem.loadAtlas("alphabet");
-	
+
 	// init font
 	loadFont("typo");
 	loadFont("gdtypo");
@@ -218,7 +218,7 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 	if (forcedesactivate) activated = false;
 	if (datas->state != UserInput) activated = false;
 	if (activated) {
-		std::cout << "Affiche magique de la triche ! \n" ;
+		LOGI("Affiche magique de la triche !") ;
 		//j=0 : vertical
 		//j=1 : h
 		for (int j=0;j<2;j++) {
@@ -251,7 +251,7 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 				CombinationMark::clearCellInCombination(marks[i]);
 			}
 			marks.clear();
-			LOGI("Destruction des marquages et de la triche (%d)!\n", marks.size());
+			LOGI("Destruction des marquages et de la triche !");
 		}
 	}
 
@@ -363,7 +363,7 @@ void Game::tick(float dt) {
 	                 mc->volume = 1;
 	            }
 	        }
-	
+
 	        // if master track has looped, choose next songs to play
 	        if (MUSIC(datas->inGameMusic.masterTrack)->loopNext == InvalidMusicRef) {
 		        std::vector<std::string> musics = newMusics();
@@ -382,7 +382,7 @@ void Game::tick(float dt) {
 	        }
 	        MUSIC(datas->inGameMusic.stressTrack)->volume = ADSR(datas->inGameMusic.stressTrack)->value;
 	        MUSIC(datas->menu)->control = MusicComponent::Stop;
-	
+
 	    } else if (datas->state == MainMenu || datas->state == ModeMenu) { //dans les menus
 	        if (MUSIC(datas->menu)->music == InvalidMusicRef) {
 	         	LOGW("Start Menu music");
@@ -390,7 +390,7 @@ void Game::tick(float dt) {
 	            MUSIC(datas->menu)->control = MusicComponent::Start;
 	            MUSIC(datas->menu)->volume = 1;
 	        }
-	
+
 	        if (MUSIC(datas->menu)->loopNext == InvalidMusicRef) {
 	            MUSIC(datas->menu)->loopNext = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");
 	        }
