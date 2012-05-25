@@ -24,7 +24,7 @@ class TilesAttackGameModeManager : public GameModeManager {
 
 		void ScoreCalc(int nb, int type);
 	private:
-		int leavesDone;
+		unsigned int leavesDone;
 		bool succNoGridReset;
 };
 

@@ -38,7 +38,7 @@ void TilesAttackGameModeManager::Enter() {
 	pts.push_back(Vector2(limit,1));//need limit leaves to end game
 
 	generateLeaves(0, 8);
-	
+
 	GameModeManager::Enter();
 }
 
@@ -63,7 +63,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << MathUtil::Max(0, limit - leavesDone);
+	a << std::fixed << MathUtil::Max((unsigned)0, limit - leavesDone);
 	TEXT_RENDERING(uiHelper.smallLevel)->text = a.str();
 	}
 	//Temps

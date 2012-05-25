@@ -64,7 +64,7 @@ class GameModeManager {
 	public:
 		// game params
 		float time;
-		int points, bonus, limit;
+		unsigned int points, bonus, limit;
         Entity sky;
 		std::vector<BranchLeaf> branchLeaves;
 
