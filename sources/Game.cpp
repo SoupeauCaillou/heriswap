@@ -479,7 +479,7 @@ int Game::saveState(uint8_t** out) {
     uint8_t* gamemode = 0;
     int gSize = datas->mode2Manager[datas->mode]->saveInternalState(&gamemode);
 
-    int finalSize = sizeof(datas->state) + sizeof(datas->mode) + sizeof(eSize) + sizeof(sSize) + eSize + sSize + gSize;
+    int finalSize = sizeof(datas->state) + sizeof(datas->mode) + sizeof(theGridSystem.GridSize) + sizeof(eSize) + sizeof(sSize) + eSize + sSize + gSize;
 	*out = new uint8_t[finalSize];
     uint8_t* ptr = *out;
 
@@ -497,6 +497,7 @@ int Game::saveState(uint8_t** out) {
 	}
 
     ptr = (uint8_t*)mempcpy(ptr, &datas->mode, sizeof(datas->mode));
+    ptr = (uint8_t*)mempcpy(ptr, &theGridSystem.GridSize, sizeof(theGridSystem.GridSize));
     ptr = (uint8_t*)mempcpy(ptr, gamemode, gSize);
 
 	LOGI("%d + %d + %d + %d + %d + %d + %d -> %d (%p)",
@@ -527,6 +528,9 @@ void Game::loadGameState(const uint8_t* in, int size) {
     in += sizeof(datas->stateBeforePause);
     memcpy(&datas->mode, in, sizeof(datas->mode));
     in += sizeof(datas->mode);
+    memcpy(&theGridSystem.GridSize, in, sizeof(theGridSystem.GridSize));
+    theGridSystem.Types = theGridSystem.GridSize;
+    in += sizeof(theGridSystem.GridSize);
 
     datas->mode2Manager[datas->mode]->Enter();
     datas->mode2Manager[datas->mode]->restoreInternalState(in, size);

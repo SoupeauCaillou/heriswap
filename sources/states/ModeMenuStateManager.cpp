@@ -252,6 +252,8 @@ void ModeMenuStateManager::Enter() {
 	BUTTON(back)->enabled = true;
 	BUTTON(playButton)->enabled = true;
 
+    difficulty = (theGridSystem.GridSize == 8) ? 1 : 0;
+
 	LoadScore(modeMgr->GetMode(), difficulty);
 
 
@@ -270,7 +272,10 @@ void ModeMenuStateManager::Enter() {
 	TEXT_RENDERING(eDifficulty)->hide=false;
 	BUTTON(bDifficulty)->enabled = true;
 
-	std::stringstream s;
+    if (difficulty==0)
+        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy 5x5");
+    else
+        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium 8x8");
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
