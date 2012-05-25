@@ -45,7 +45,6 @@ void SuccessManager::NewGame(int difficulty) {
 void SuccessManager::s6InARow(int nbInCombi) {
 	if (successEnable && !b6InARow) {
 		if (nbInCombi >= 6) {
-			printf("%d jjjjjjjjjjjjjjjjjjjjjjj\n\n\n\n\n",nbInCombi);
 			successAPI->successCompleted("6 in a row", 1652152);
 			b6InARow=true;
 		}
@@ -81,7 +80,7 @@ void SuccessManager::sResetGrid() {
 void SuccessManager::sTakeYourTime(float time) {
 	if (successEnable && !bTakeYourTime) {
 		if (time/60 > 15) {
-			successAPI->successCompleted("Take your time", 1652152);
+			successAPI->successCompleted("Take your time", 1653092);
 			bTakeYourTime = true;
 		}
 	}
@@ -144,6 +143,7 @@ void SuccessManager::sBonusToExcess(int type, int bonus, int nb) {
 		if (type == bonus)
 			bonusPoints +=nb;
 		if (bonusPoints >= 100) {
+			LOGI("azertyuiop	%d\n", bonusPoints);
 			successAPI->successCompleted("Bonus to excess", 1653182);
 			bBonusToExcess = true;
 		}
