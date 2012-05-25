@@ -19,6 +19,8 @@ MainMenuGameStateManager::~MainMenuGameStateManager() {
 		theTextRenderingSystem.DeleteEntity(eStart[i]);
 		theEntityManager.DeleteEntity(bStart[i]);
 	}
+	theTextRenderingSystem.DeleteEntity(eSuccess);
+	theEntityManager.DeleteEntity(bSuccess);
 }
 
 void MainMenuGameStateManager::Setup() {
@@ -54,7 +56,7 @@ void MainMenuGameStateManager::Setup() {
 	TRANSFORM(eStart[1])->position.X = PlacementHelper::GimpXToScreen(700);
 	TRANSFORM(eStart[1])->position.Y = TRANSFORM(bStart[1])->position.Y = PlacementHelper::GimpYToScreen(156+183);
 
-	//Adding containers
+	//Containers properties
 	for (int i=0; i<2; i++) {
 		TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, Vector2(PlacementHelper::GimpXToScreen(700),PlacementHelper::GimpYToScreen(100)));
 		MORPHING(eStart[i])->elements.push_back(posMorph);
@@ -62,6 +64,29 @@ void MainMenuGameStateManager::Setup() {
 		ADD_COMPONENT(bStart[i], Button);
 		BUTTON(bStart[i])->enabled = false;
 	}
+
+
+	eSuccess = theTextRenderingSystem.CreateEntity();
+	TRANSFORM(eSuccess)->z = DL_MainMenuUITxt;
+	TEXT_RENDERING(eSuccess)->hide = true;
+	TEXT_RENDERING(eSuccess)->positioning = TextRenderingComponent::RIGHT;
+	TEXT_RENDERING(eSuccess)->color = green;
+	TEXT_RENDERING(eSuccess)->charHeight = PlacementHelper::GimpHeightToScreen(75);
+	TEXT_RENDERING(eSuccess)->text = localizeAPI->text("success", "Succes");
+    bSuccess = theEntityManager.CreateEntity();
+    ADD_COMPONENT(bSuccess, Transformation);
+    TRANSFORM(bSuccess)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
+    TRANSFORM(bSuccess)->position.X = 0;
+    TRANSFORM(bSuccess)->z = DL_MainMenuUIBg;
+    ADD_COMPONENT(bSuccess, Rendering);
+    RENDERING(bSuccess)->texture = theRenderingSystem.loadTextureFile("menu/fond_bouton.png");
+    RENDERING(bSuccess)->color.a = 0.5;
+	ADD_COMPONENT(bSuccess, Sound);
+	ADD_COMPONENT(bSuccess, Button);
+	BUTTON(bSuccess)->enabled = false;
+	TRANSFORM(eSuccess)->position.X = PlacementHelper::GimpXToScreen(394);
+	TRANSFORM(eSuccess)->position.Y = TRANSFORM(bSuccess)->position.Y = PlacementHelper::GimpYToScreen(156+2*183);
+
 
 	menubg = theEntityManager.CreateEntity();
 	ADD_COMPONENT(menubg, Transformation);
@@ -107,13 +132,16 @@ void MainMenuGameStateManager::Enter() {
 	RENDERING(herisson->actor.e)->hide = false;
 
 	for (int i=0; i<2; i++) {
-		MORPHING(eStart[i])->active = false;
 		RENDERING(bStart[i])->hide = false;
 		TEXT_RENDERING(eStart[i])->hide = false;
 		BUTTON(bStart[i])->enabled = true;
-		RENDERING(menubg)->hide = false;
-		RENDERING(menufg)->hide = false;
 	}
+	RENDERING(menubg)->hide = false;
+	RENDERING(menufg)->hide = false;
+	RENDERING(bSuccess)->hide = false;
+	TEXT_RENDERING(eSuccess)->hide = false;
+	BUTTON(bSuccess)->enabled = true;
+
 	if (modeTitleToReset) {
 		theMorphingSystem.reverse(MORPHING(modeTitleToReset));
 		MORPHING(modeTitleToReset)->activationTime = 0;
@@ -143,12 +171,21 @@ GameState MainMenuGameStateManager::Update(float dt) {
 			SOUND(bStart[1])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 			return ModeMenu;
 		}
+		#ifdef ANDROID
+		if (BUTTON(bSuccess)->clicked){
+			successAPI->openfeintSuccess();
+		}
+		#endif
 	}
 	return MainMenu;
 }
 
 void MainMenuGameStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
+
+	TEXT_RENDERING(eSuccess)->hide = true;
+	RENDERING(bSuccess)->hide = true;
+	BUTTON(bSuccess)->enabled = false;
 
 	for (int i=0; i<2; i++) {
 		if (i!=choosenGameMode-1) TEXT_RENDERING(eStart[i])->hide = true;

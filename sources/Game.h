@@ -17,7 +17,7 @@ class NameInputAPI;
 class ScoreStorage {
 	public:
 		struct Score {
-			int points, level;
+			unsigned int points, level;
 			float time;
 			std::string name;
 		};
@@ -40,6 +40,7 @@ class SuccessAPI {
 			LOGI("Success completed '%s': %d", description, successId);
 		}
         virtual void openfeintLB(int mode) {}
+        virtual void openfeintSuccess() {}
 };
 
 class PrivateData;

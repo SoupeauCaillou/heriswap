@@ -46,7 +46,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      state2Manager[LevelChanged] = new LevelStateManager(static_cast<NormalGameModeManager*> (mode2Manager[Normal]));
      state2Manager[Pause] = new PauseStateManager(lAPI);
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
-     state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI);
+     state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI, sAPI);
      state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successMgr,lAPI, sAPI);
      state2Manager[Help] = new HelpStateManager();
      state2Manager[Ads] = new AdsStateManager(storage, successMgr);
@@ -132,7 +132,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      MUSIC(inGameMusic.accessoryTrack)->loopAt = 17.0f;
      MUSIC(inGameMusic.accessoryTrack)->master = MUSIC(inGameMusic.masterTrack);
      MUSIC(inGameMusic.accessoryTrack)->volume = 0.75;
-     
+
      inGameMusic.stressTrack = theEntityManager.CreateEntity();
      ADD_COMPONENT(inGameMusic.stressTrack, Music);
      MUSIC(inGameMusic.stressTrack)->loopAt = 17.0f;
@@ -145,13 +145,13 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
 	ADSR(inGameMusic.stressTrack)->sustainValue = 1.0;
 	ADSR(inGameMusic.stressTrack)->releaseTiming = 0.5;
 	ADSR(inGameMusic.stressTrack)->attackMode = Quadratic;
-	
+
 	const float MusicFadeOut = .5f;
 	std::vector<Entity> musics = theMusicSystem.RetrieveAllEntityWithComponent();
 	for (int i=0; i<musics.size(); i++) {
 		MUSIC(musics[i])->fadeOut = MusicFadeOut;
 	}
-     
+
      (static_cast<NormalGameModeManager*> (mode2Manager[Normal]))->stressTrack = inGameMusic.stressTrack;
 	PauseStateManager* pause = static_cast<PauseStateManager*> (state2Manager[Pause]);
 	pause->helpMgr = static_cast<HelpStateManager*> (state2Manager[Help]);

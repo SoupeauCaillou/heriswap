@@ -7,7 +7,7 @@
 
 class MainMenuGameStateManager : public GameStateManager {
 	public:
-		MainMenuGameStateManager(LocalizeAPI* lAPI) : localizeAPI(lAPI) { };
+		MainMenuGameStateManager(LocalizeAPI* lAPI, SuccessAPI* sAPI) : localizeAPI(lAPI), successAPI(sAPI) { };
 		~MainMenuGameStateManager();
 		void Setup();
 		void Enter();
@@ -20,7 +20,9 @@ class MainMenuGameStateManager : public GameStateManager {
 		AnimatedActor* herisson;
 
 	private:
+		Entity eSuccess, bSuccess;
 		Entity bStart[2];
 		Entity modeTitleToReset;
 		LocalizeAPI* localizeAPI;
+        SuccessAPI* successAPI;
 };
