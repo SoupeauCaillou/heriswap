@@ -306,7 +306,7 @@ GameState ModeMenuStateManager::Update(float dt) {
                 gameOverState = AskingPlayerName;
             } else {
                 gameOverState = NoGame;
-                submitScore("unknown");
+                submitScore("rzehtrtyBg");
             }
 
             TEXT_RENDERING(yourScore)->hide = false;
