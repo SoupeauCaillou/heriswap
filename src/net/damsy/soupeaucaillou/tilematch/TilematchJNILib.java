@@ -248,13 +248,18 @@ public class TilematchJNILib {
 		    	Cursor cursor = db.rawQuery("select distinct name from score order by rowid desc", null);
 			    try {
 			    	cursor.moveToFirst();
-			    	for (int i=0; i<Math.min(3, cursor.getCount()); i++) {
-			    		//je veux modifier le nom du bouton 2 aka string@reuse_name_2 ??
+			    	int count = cursor.getCount();
+			    	if (count>0) {
+			    		TilematchActivity.playerNameInputView.findViewById(R.id.reuse).setVisibility(View.VISIBLE);
+					} else {
+			    		TilematchActivity.playerNameInputView.findViewById(R.id.reuse).setVisibility(View.GONE);
+					}
+			    	for (int i=0; i<Math.min(3, count); i++) {
 			    		TilematchActivity.oldName[i].setText(cursor.getString(0));
 			    		TilematchActivity.oldName[i].setVisibility(View.VISIBLE);
 			    		cursor.moveToNext();
 			    	}
-			    	for (int i=cursor.getCount(); i<3; i++) {
+			    	for (int i=count; i<3; i++) {
 			    		TilematchActivity.oldName[i].setVisibility(View.GONE);
 			    	}
 		    	} finally {
