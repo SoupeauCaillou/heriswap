@@ -87,7 +87,6 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      if (storage->soundEnable(false)) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
      else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
      ADD_COMPONENT(soundButton, Sound);
-     RENDERING(soundButton)->hide = false;
 
      for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)
          it->second->Setup();
