@@ -38,7 +38,7 @@ void LevelStateManager::Setup() {
 	ADD_COMPONENT(eBigLevel, TextRendering);
 	TEXT_RENDERING(eBigLevel)->color = Color(1, 1, 1);
 	TEXT_RENDERING(eBigLevel)->fontName = "gdtypo";
-	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(288);
+	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(234);
 	TEXT_RENDERING(eBigLevel)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(eBigLevel)->isANumber = true;
 	ADD_COMPONENT(eBigLevel, Music);
