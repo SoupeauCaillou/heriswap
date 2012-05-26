@@ -88,7 +88,6 @@ void LevelStateManager::Enter() {
 	PARTICULE(eSnowEmitter)->emissionRate = 50;
 	RENDERING(eSnowBranch)->hide = false;
 	RENDERING(eSnowGround)->hide = false;
-	MUSIC(eBigLevel)->music = theMusicSystem.loadMusicFile("audio/level_up.ogg");
 	MUSIC(eBigLevel)->control = MusicComponent::Start;
 
 	MORPHING(eBigLevel)->timing = 1;
@@ -131,6 +130,10 @@ void LevelStateManager::Enter() {
 
 GameState LevelStateManager::Update(float dt) {
 	duration += dt;
+
+   if (duration > 0.5 && MUSIC(eBigLevel)->music == InvalidMusicRef) {
+        MUSIC(eBigLevel)->music = theMusicSystem.loadMusicFile("audio/level_up.ogg");
+   }
 
 	if (duration > 0.15) {
 		ADSR(eGrid)->active = true;

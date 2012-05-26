@@ -42,6 +42,7 @@ public class TilematchJNILib {
     public static native void step(long game);
     public static native void render(long game);
     public static native void pause(long game);
+    public static native void invalidateTextures(long game);
     public static native void handleInputEvent(long game, int event, float x, float y);
     public static native byte[] serialiazeState(long game);
     public static native void initAndReloadTextures(long game);
@@ -50,12 +51,16 @@ public class TilematchJNILib {
     // AdsAPI
     //-------------------------------------------------------------------------
     static public void showAd() {
-    	TilematchActivity.adHasBeenShown = false;
-    	TilematchActivity.activity.runOnUiThread(new Runnable() {
-			public void run() {
-				GSSDK.getSharedInstance().displayAd(TilematchActivity.activity);
-			}
-		});
+    	if (GSSDK.getSharedInstance().isAdReady()) {
+    		TilematchActivity.adHasBeenShown = false;
+	    	TilematchActivity.activity.runOnUiThread(new Runnable() {
+				public void run() {
+					GSSDK.getSharedInstance().displayAd(TilematchActivity.activity);
+				}
+			});
+    	} else {
+    		TilematchActivity.adHasBeenShown = true;
+    	}
     	
     }
     

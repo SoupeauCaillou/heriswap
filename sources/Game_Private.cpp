@@ -155,7 +155,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
 	ADSR(inGameMusic.stressTrack)->releaseTiming = 0.5;
 	ADSR(inGameMusic.stressTrack)->attackMode = Quadratic;
 
-	const float MusicFadeOut = .5f;
+	const float MusicFadeOut = 1;
 	std::vector<Entity> musics = theMusicSystem.RetrieveAllEntityWithComponent();
 	for (int i=0; i<musics.size(); i++) {
 		MUSIC(musics[i])->fadeOut = MusicFadeOut;
