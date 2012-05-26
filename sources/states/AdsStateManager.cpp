@@ -13,6 +13,7 @@
 
 #include "modes/GameModeManager.h"
 #include "states/GameStateManager.h"
+#include "base/TimeUtil.h"
 
 #include "DepthLayer.h"
 
@@ -25,6 +26,7 @@ void AdsStateManager::Setup() {
 	TRANSFORM(eAds)->size = Vector2(PlacementHelper::WindowWidth, PlacementHelper::WindowHeight);
 	TRANSFORM(eAds)->position = Vector2(PlacementHelper::GimpXToScreen(0),PlacementHelper::GimpYToScreen(0));
 	BUTTON(eAds)->enabled = false;
+    lastAdTime = TimeUtil::getTime();
 }
 
 void AdsStateManager::Enter() {
@@ -33,10 +35,12 @@ void AdsStateManager::Enter() {
  	LOGI("%s : %d", __PRETTY_FUNCTION__, gameb4Ads);
 
 
-	if (!gameb4Ads && RENDERING(eAds)->hide) {
+	if ((!gameb4Ads || (TimeUtil::getTime() - lastAdTime > 180))  && RENDERING(eAds)->hide) {
 		BUTTON(eAds)->enabled = true;
 		RENDERING(eAds)->color = Color(1.f,1.f,1.f);
         adAPI->showAd();
+        gameb4Ads = 0;
+        lastAdTime = TimeUtil::getTime();
 	} else {
 		RENDERING(eAds)->color = Color(0.f,0.f,0.f);
 	}

@@ -19,5 +19,6 @@ class AdsStateManager : public GameStateManager {
         AdAPI* adAPI;
 		StorageAPI* storage;
 		int gameb4Ads;
+        float lastAdTime;
 		SuccessManager* successMgr;
 };
