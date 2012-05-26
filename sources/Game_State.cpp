@@ -65,7 +65,8 @@ void Game::stateChanged(GameState oldState, GameState newState) {
      } else if( newState == MainMenu && oldState == ModeMenu) {
          RENDERING(datas->soundButton)->hide = false;
          datas->state2Manager[oldState]->LateExit();
-     } else if (newState == Logo) {
+     } else if (newState == BlackToMainMenu) {
         SCROLLING(datas->sky)->hide = false;
+        RENDERING(datas->soundButton)->hide = false;
      }
 }
