@@ -36,7 +36,7 @@ void StorageAPIAndroidImpl::init() {
     datas->getGameCountBeforeNextAd = jniMethodLookup(env, datas->cls, "getGameCountBeforeNextAd", "()I");
     datas->setGameCountBeforeNextAd = jniMethodLookup(env, datas->cls, "setGameCountBeforeNextAd", "(I)V");
     datas->getSavedGamePointsSum = jniMethodLookup(env, datas->cls, "getSavedGamePointsSum", "()I");
-    datas->submitScore = jniMethodLookup(env, datas->cls, "submitScore", "(IIIIFLjava/lang/String;L)V");
+    datas->submitScore = jniMethodLookup(env, datas->cls, "submitScore", "(IIIIFLjava/lang/String;)V");
     datas->getScores = jniMethodLookup(env, datas->cls, "getScores", "(II[I[I[F[Ljava/lang/String;)I");
     datas->getModePlayedCount = jniMethodLookup(env, datas->cls, "getModePlayedCount", "()I");
 }
