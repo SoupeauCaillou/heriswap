@@ -197,7 +197,13 @@ public class TilematchActivity extends Activity {
         if (wl != null)
         	wl.release();
         TilematchActivity.requestPausedFromJava = true;
-        // TilematchActivity.isRunning = false;
+        
+        if (TilematchActivity.game != 0) {
+	        // TilematchActivity.isRunning = false;
+	        synchronized (TilematchActivity.mutex) {
+	        	TilematchJNILib.invalidateTextures(TilematchActivity.game);
+			}
+        }
     }
 
     @Override

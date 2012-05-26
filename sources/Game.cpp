@@ -379,6 +379,11 @@ void Game::tick(float dt) {
 		datas->mode2Manager[datas->mode]->UiUpdate(dt);
 	}
 
+    if (theTouchInputManager.wasTouched() && theMusicSystem.isMuted() && !theSoundSystem.mute) {
+        // restore music
+        theMusicSystem.toggleMute(false);
+    }
+
     //update music
     if (!theMusicSystem.isMuted()) {
 	    if (pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause || datas->state == BlackToSpawn) { //si on joue

@@ -261,6 +261,17 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_p
 	LOGW("%s <--", __FUNCTION__);
 }
 
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_invalidateTextures
+  (JNIEnv *env, jclass, jlong g) {
+     GameHolder* hld = (GameHolder*) g;
+     LOGW("%s -->", __FUNCTION__);
+     if (!hld->game || !RenderingSystem::GetInstancePointer())
+         return;
+
+    // kill all music
+    theRenderingSystem.invalidateAtlasTextures();
+}
+
 /*
  * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
  * Method:    handleInputEvent
