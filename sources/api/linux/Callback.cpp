@@ -6,6 +6,12 @@
 #include <vector>
 #include "Game.h"
 
+int callback(void *save, int argc, char **argv, char **azColName){
+	std::string *sav = static_cast<std::string*>(save);
+	if (argc>0) *sav = argv[0];
+	return 0;
+}
+
 int callbackSc(void *save, int argc, char **argv, char **azColName){
 	int *sav = static_cast<int*>(save);
 	for (int i=0; i<argc; i++) {
@@ -43,12 +49,6 @@ int callbackNames(void *save, int argc, char **argv, char **azColName){
 	for (int i=0; i<argc; i++) {
 		sav->push_back(argv[i]);
 	}
-	return 0;
-}
-
-int callback(void *save, int argc, char **argv, char **azColName){
-	std::string *sav = static_cast<std::string*>(save);
-	if (argc>1) *sav = argv[0];
 	return 0;
 }
 
