@@ -23,7 +23,7 @@ void MainMenuGameStateManager::Setup() {
 
 		TRANSFORM(eStart[i])->z = DL_MainMenuUITxt;
 		TEXT_RENDERING(eStart[i])->hide = true;
-		TEXT_RENDERING(eStart[i])->positioning = TextRenderingComponent::RIGHT;
+		TEXT_RENDERING(eStart[i])->positioning = TextRenderingComponent::LEFT;
 		TEXT_RENDERING(eStart[i])->color = green;
 		TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
 		ADD_COMPONENT(eStart[i], Morphing);
@@ -41,16 +41,18 @@ void MainMenuGameStateManager::Setup() {
 	    RENDERING(bStart[i])->color.a = 0.5;
 	}
 	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Classique");
-	TRANSFORM(eStart[0])->position.X = PlacementHelper::GimpXToScreen(394);
+	TRANSFORM(eStart[0])->position.X = PlacementHelper::GimpXToScreen(75);
 	TRANSFORM(eStart[0])->position.Y = TRANSFORM(bStart[0])->position.Y = PlacementHelper::GimpYToScreen(156);
 	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2", "Mange tes feuilles");
-	TRANSFORM(eStart[1])->position.X = PlacementHelper::GimpXToScreen(700);
+	TRANSFORM(eStart[1])->position.X = PlacementHelper::GimpXToScreen(75);
 	TRANSFORM(eStart[1])->position.Y = TRANSFORM(bStart[1])->position.Y = PlacementHelper::GimpYToScreen(156+183);
 
 	//Containers properties
 	for (int i=0; i<2; i++) {
 		TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, Vector2(PlacementHelper::GimpXToScreen(700),PlacementHelper::GimpYToScreen(100)));
-		MORPHING(eStart[i])->elements.push_back(posMorph);
+		TypedMorphElement<float>* alignMorph = new TypedMorphElement<float>(&TEXT_RENDERING(eStart[i])->positioning, TextRenderingComponent::LEFT, TextRenderingComponent::RIGHT);
+        MORPHING(eStart[i])->elements.push_back(posMorph);
+        MORPHING(eStart[i])->elements.push_back(alignMorph);
 		ADD_COMPONENT(bStart[i], Sound);
 		ADD_COMPONENT(bStart[i], Button);
 		BUTTON(bStart[i])->enabled = false;
@@ -60,7 +62,7 @@ void MainMenuGameStateManager::Setup() {
 	eSuccess = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(eSuccess)->z = DL_MainMenuUITxt;
 	TEXT_RENDERING(eSuccess)->hide = true;
-	TEXT_RENDERING(eSuccess)->positioning = TextRenderingComponent::RIGHT;
+	TEXT_RENDERING(eSuccess)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(eSuccess)->color = green;
 	TEXT_RENDERING(eSuccess)->charHeight = PlacementHelper::GimpHeightToScreen(75);
 	TEXT_RENDERING(eSuccess)->text = localizeAPI->text("success", "Succes");
@@ -75,7 +77,7 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(bSuccess, Sound);
 	ADD_COMPONENT(bSuccess, Button);
 	BUTTON(bSuccess)->enabled = false;
-	TRANSFORM(eSuccess)->position.X = PlacementHelper::GimpXToScreen(394);
+	TRANSFORM(eSuccess)->position.X = PlacementHelper::GimpXToScreen(75);
 	TRANSFORM(eSuccess)->position.Y = TRANSFORM(bSuccess)->position.Y = PlacementHelper::GimpYToScreen(156+2*183);
 
 

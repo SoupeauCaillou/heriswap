@@ -42,6 +42,7 @@ public class TilematchJNILib {
     public static native void step(long game);
     public static native void render(long game);
     public static native void pause(long game);
+    public static native void back(long game);
     public static native void invalidateTextures(long game);
     public static native void handleInputEvent(long game, int event, float x, float y);
     public static native byte[] serialiazeState(long game);
@@ -267,19 +268,26 @@ public class TilematchJNILib {
 		    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getReadableDatabase();
 		    	Cursor cursor = db.rawQuery("select distinct name from score order by rowid desc", null);
 			    try {
-			    	cursor.moveToFirst();
+			    	
 			    	int count = cursor.getCount();
 			    	if (count>0) {
 			    		TilematchActivity.playerNameInputView.findViewById(R.id.reuse).setVisibility(View.VISIBLE);
 					} else {
 			    		TilematchActivity.playerNameInputView.findViewById(R.id.reuse).setVisibility(View.GONE);
 					}
-			    	for (int i=0; i<Math.min(3, count); i++) {
-			    		TilematchActivity.oldName[i].setText(cursor.getString(0));
-			    		TilematchActivity.oldName[i].setVisibility(View.VISIBLE);
-			    		cursor.moveToNext();
+			    	int i = 0;
+			    	if (cursor.moveToFirst()) {
+				    	for (i=0; i<3 && cursor.moveToNext(); i++) {
+				    		String n = cursor.getString(0);
+				    		if (!n.equals("rzehtrtyBg")) {
+				    			TilematchActivity.oldName[i].setText(cursor.getString(0));
+				    			TilematchActivity.oldName[i].setVisibility(View.VISIBLE);
+				    		} else {
+				    			--i;
+				    		}
+				    	}
 			    	}
-			    	for (int i=count; i<3; i++) {
+			    	for (; i<3; i++) {
 			    		TilematchActivity.oldName[i].setVisibility(View.GONE);
 			    	}
 		    	} finally {

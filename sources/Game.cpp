@@ -289,6 +289,15 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 
 }
 
+void Game::backPressed() {
+    if (datas->state == ModeMenu) {
+        // go back to main menu
+        (static_cast<ModeMenuStateManager*>(datas->state2Manager[ModeMenu]))->pleaseGoBack = true;
+    } else if (pausableState(datas->state)) {
+        togglePause(true);
+    }
+}
+
 void Game::togglePause(bool activate) {
 	if (activate && datas->state != Pause && pausableState(datas->state)) {
         // pause

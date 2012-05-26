@@ -19,6 +19,8 @@ class ModeMenuStateManager : public GameStateManager {
 
 		Entity title, menufg, menubg;
 		AnimatedActor* herisson;
+
+        bool pleaseGoBack;
 	private:
 		StorageAPI* storage;
 		NameInputAPI* nameInputAPI;
