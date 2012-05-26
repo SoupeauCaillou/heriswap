@@ -26,6 +26,13 @@ SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	b6InARow = false;
 	bLuckyLuke = false;
 	bDonator = false;
+	bTestEverything = false;
+	bBTAC = false;
+	bBTAM = false;
+	bMozart = false;
+	b666Loser = false;
+	bTheyGood = false;
+	bWhatToDo = false;
 
 	timeLL = 0.f;
 	timeLLloop = 0.f;
@@ -168,5 +175,54 @@ void SuccessManager::sDonator() {
 	if (successEnable && !bDonator) {
 		successAPI->successCompleted("Donator", 1671922);
 		bDonator = true;
+	}
+}
+
+void SuccessManager::sTestEverything(StorageAPI* str) {
+	if (successEnable && !bTestEverything) {
+		successAPI->successCompleted("Test everything", 1684852);
+		bTestEverything = true;
+	}
+}
+
+void SuccessManager::sBTAC() {
+	if (successEnable && !bBTAC) {
+		successAPI->successCompleted("Beat them all (classic)", 1684862);
+		bBTAC = true;
+	}
+}
+
+void SuccessManager::sBTAM() {
+	if (successEnable && !bBTAM) {
+		successAPI->successCompleted("Beat them all (MODE2)", 1684872);
+		bBTAM = true;
+	}
+}
+
+void SuccessManager::sMozart() {
+	if (successEnable && !bMozart) {
+		successAPI->successCompleted("Mozart's song", 1684882);
+		bMozart = true;
+	}
+}
+
+void SuccessManager::s666Loser() {
+	if (successEnable && !b666Loser) {
+		successAPI->successCompleted("666 Loser !", 1684892);
+		b666Loser = true;
+	}
+}
+
+void SuccessManager::sTheyGood() {
+	if (successEnable && !bTheyGood) {
+		successAPI->successCompleted("They're too good", 1684902);
+		bTheyGood = true;
+	}
+}
+
+void SuccessManager::sWhatToDo() {
+	if (successEnable && !bWhatToDo) {
+		successAPI->successCompleted("What I gonna do ?", 1684912);
+		bWhatToDo = true;
 	}
 }
