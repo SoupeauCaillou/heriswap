@@ -11,8 +11,8 @@ class SuccessManager {
 		void NewGame(int difficulty);
 
 
-		//success only in "normal" difficulty
-		bool successEnable;
+		//success only in "hard" difficulty
+		bool hardMode;
 		SuccessAPI* successAPI;
 
 		//success 6 in a row (Delete 6 or more leaves in one swap)

@@ -61,13 +61,12 @@ public class TilematchJNILib {
     	} else {
     		TilematchActivity.adHasBeenShown = true;
     	}
-    	
     }
-    
+
     static public boolean done() {
     	return TilematchActivity.adHasBeenShown;
     }
-    
+
     //-------------------------------------------------------------------------
     // AssetAPI
     //-------------------------------------------------------------------------
@@ -144,6 +143,14 @@ public class TilematchJNILib {
     	}
     }
 
+    static public int getModePlayedCount() {
+    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getReadableDatabase();
+    	Cursor cursor = db.rawQuery("select distinct difficulty,mode from score", null);
+	    int count = cursor.getCount();
+   		cursor.close();
+    	return count;
+    }
+
 	static final String[] boards = new String[] {
 		"1180087",
 		"1180047",
@@ -163,7 +170,7 @@ public class TilematchJNILib {
     	db.insert("score", null, v);
     	db.close();
 
-    	
+
 	   	Leaderboard l = new Leaderboard(boards[mode*(difficulty+1)-1]);
 	   	Log.i(TilematchActivity.Tag, "leaderboard id: " + boards[mode*(difficulty+1)-1]);
 		final Score s = new Score((long) ((mode != 2) ? points : (time * 1000)), null);
@@ -179,7 +186,7 @@ public class TilematchJNILib {
 				@Override public void onBlobUploadFailure(String exceptionMessage) {
 			}
 		});
-    	
+
     }
 
     static public int getScores(int mode, int difficulty, int[] points, int[] levels, float[] times, String[] names) {
@@ -245,14 +252,18 @@ public class TilematchJNILib {
 		    	Cursor cursor = db.rawQuery("select distinct name from score order by rowid desc", null);
 			    try {
 			    	cursor.moveToFirst();
-			    	for (int i=0; i<Math.min(3, cursor.getCount()); i++) {
-			    		//je veux modifier le nom du bouton 2 aka string@reuse_name_2 ??
+			    	int count = cursor.getCount();
+			    	if (count>0) {
+			    		TilematchActivity.playerNameInputView.findViewById(R.id.reuse).setVisibility(View.VISIBLE);
+					} else {
+			    		TilematchActivity.playerNameInputView.findViewById(R.id.reuse).setVisibility(View.GONE);
+					}
+			    	for (int i=0; i<Math.min(3, count); i++) {
 			    		TilematchActivity.oldName[i].setText(cursor.getString(0));
 			    		TilematchActivity.oldName[i].setVisibility(View.VISIBLE);
 			    		cursor.moveToNext();
-			    		Log.i(TilematchActivity.Tag, "aazeqsd   ");
 			    	}
-			    	for (int i=cursor.getCount(); i<3; i++) {
+			    	for (int i=count; i<3; i++) {
 			    		TilematchActivity.oldName[i].setVisibility(View.GONE);
 			    	}
 		    	} finally {

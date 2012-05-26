@@ -63,7 +63,11 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << MathUtil::Min((unsigned)0, limit - leavesDone);
+	if (leavesDone>limit)
+		a << std::fixed << (unsigned)0;
+	else
+		a << std::fixed << limit - leavesDone;
+
 	TEXT_RENDERING(uiHelper.smallLevel)->text = a.str();
 	}
 	//Temps
@@ -120,10 +124,7 @@ void TilesAttackGameModeManager::ScoreCalc(int nb, int type) {
 	successMgr->sBonusToExcess(type, bonus, nb);
 }
 
-void TilesAttackGameModeManager::LevelUp() {
-}
-
-bool TilesAttackGameModeManager::LeveledUp() {
+bool TilesAttackGameModeManager::LevelUp() {
 	return false;
 }
 

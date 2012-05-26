@@ -11,4 +11,5 @@ class StorageAPILinuxImpl : public StorageAPI {
         int getGameCountBeforeNextAd();
         void setGameCountBeforeNextAd(int c);
         int getSavedGamePointsSum();
+        bool everyModesPlayed();
 };

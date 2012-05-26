@@ -14,6 +14,7 @@ class StorageAPIAndroidImpl : public StorageAPI {
         int getGameCountBeforeNextAd();
         void setGameCountBeforeNextAd(int c);
         int getSavedGamePointsSum();
+        bool everyModesPlayed();
 
     private:
         class StorageAPIAndroidImplDatas;

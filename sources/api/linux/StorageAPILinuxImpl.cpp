@@ -102,3 +102,9 @@ int StorageAPILinuxImpl::getSavedGamePointsSum() {
     request("select sum(points) from score", &s, 0);
     return atoi(s.c_str());
 }
+
+bool StorageAPILinuxImpl::everyModesPlayed() {
+    int s = 0;
+    request("select distinct difficulty,mode from score", &s, callbackResultSize);
+    return (s==4);
+}

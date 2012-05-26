@@ -15,8 +15,7 @@ class TilesAttackGameModeManager : public GameModeManager {
 		void Exit();
 		void TogglePauseDisplay(bool paused);
 
-		void LevelUp();
-		bool LeveledUp();
+		bool LevelUp();
 
 		void WillScore(int count, int type, std::vector<Entity>& out);
 
