@@ -238,13 +238,13 @@ public class TilematchActivity extends Activity {
     	}
     	
     	return super.onTouchEvent(event);
-    }
+    }  
     
     @Override
     public void onBackPressed() {
     	
     }
-    
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
     	if (keyCode == KeyEvent.KEYCODE_MENU) {

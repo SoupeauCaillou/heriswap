@@ -185,7 +185,16 @@ void Game::sacInit(int windowW, int windowH) {
 	theRenderingSystem.loadAtlas("sprites");
 	theRenderingSystem.loadAtlas("animals");
 	*/
+    theRenderingSystem.loadAtlas("sprites");
+    theRenderingSystem.loadAtlas("logo");
 	theRenderingSystem.loadAtlas("alphabet");
+    theRenderingSystem.loadAtlas("animals");
+    theRenderingSystem.loadAtlas("decor1");
+    theRenderingSystem.loadAtlas("decor2");
+    theRenderingSystem.loadAtlas("feuilles");
+    theRenderingSystem.loadAtlas("snow");
+
+
 
 	// init font
 	loadFont("typo");
@@ -213,8 +222,8 @@ void Game::init(const uint8_t* in, int size) {
 	SCROLLING(datas->sky)->images.push_back("ciel1.png");
 	SCROLLING(datas->sky)->images.push_back("ciel2.png");
 	SCROLLING(datas->sky)->images.push_back("ciel3.png");
-	SCROLLING(datas->sky)->speed = Vector2(-0.3, 0);
-	SCROLLING(datas->sky)->displaySize = Vector2(TRANSFORM(datas->sky)->size.X * 1.01, TRANSFORM(datas->sky)->size.Y);
+	SCROLLING(datas->sky)->speed = Vector2(-0.1, 0);
+	SCROLLING(datas->sky)->displaySize = Vector2(TRANSFORM(datas->sky)->size.X * 1, TRANSFORM(datas->sky)->size.Y);
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
 
 	datas->mode2Manager[Normal]->sky = datas->sky;

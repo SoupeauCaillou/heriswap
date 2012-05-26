@@ -56,7 +56,7 @@ GameState LogoStateManager::Update(float dt) {
 	
 	if (duration > 1.75) {
 		return following;
-	} else if (duration > 0.8+0.35) {
+	} else if (duration > 100*0.8+0.35) {
 		RENDERING(animLogo)->hide = true;
 	} else if (duration > 0.8+0.3) {
 		RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo2_365_331.png");
@@ -75,10 +75,12 @@ void LogoStateManager::Exit() {
 
 void LogoStateManager::LateExit() {
     // ou unloadLogo
+    theRenderingSystem.unloadAtlas("logo");
+    /*
     theRenderingSystem.unloadTexture(RENDERING(logo)->texture);
     theRenderingSystem.unloadTexture(theRenderingSystem.loadTextureFile("soupe_logo2_365_331.png"));
     theRenderingSystem.unloadTexture(theRenderingSystem.loadTextureFile("soupe_logo3_365_331.png"));
-
+    */
     theEntityManager.DeleteEntity(logo);
     theEntityManager.DeleteEntity(logobg);
 	theEntityManager.DeleteEntity(animLogo);
