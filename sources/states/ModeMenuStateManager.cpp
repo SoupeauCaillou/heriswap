@@ -73,7 +73,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(back)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(75));
 	TransformationSystem::setPosition(TRANSFORM(back), Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(82)), TransformationSystem::NW);
 	TRANSFORM(back)->z = DL_MainMenuUITxt;
-	RENDERING(back)->texture = theRenderingSystem.loadTextureFile("menu/back.png");
+	RENDERING(back)->texture = theRenderingSystem.loadTextureFile("back.png");
 	BUTTON(back)->enabled = false;
 
 	// score title
@@ -144,7 +144,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(openfeint)->size = Vector2(PlacementHelper::GimpWidthToScreen(90), PlacementHelper::GimpHeightToScreen(91));
 	TransformationSystem::setPosition(TRANSFORM(openfeint), Vector2(PlacementHelper::GimpXToScreen(605), PlacementHelper::GimpYToScreen(476)), TransformationSystem::NW);
 	TRANSFORM(openfeint)->z = DL_MainMenuUITxt;
-	RENDERING(openfeint)->texture = theRenderingSystem.loadTextureFile("menu/openfeint.png");
+	RENDERING(openfeint)->texture = theRenderingSystem.loadTextureFile("openfeint.png");
 	BUTTON(openfeint)->enabled = false;
 	#endif
 
@@ -164,7 +164,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(fond)->z = DL_MainMenuUIBg;
 	TransformationSystem::setPosition(TRANSFORM(fond), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(24)), TransformationSystem::NW);
 	ADD_COMPONENT(fond, Rendering);
-	RENDERING(fond)->texture = theRenderingSystem.loadTextureFile("menu/fond_menu_mode.png");
+	RENDERING(fond)->texture = theRenderingSystem.loadTextureFile("fond_menu_mode.png");
 	RENDERING(fond)->color.a = 0.5;
 }
 

@@ -193,8 +193,8 @@ void Game::sacInit(int windowW, int windowH) {
     theRenderingSystem.loadAtlas("decor2");
     theRenderingSystem.loadAtlas("feuilles");
     theRenderingSystem.loadAtlas("snow");
-
-
+    theRenderingSystem.loadAtlas("menu");
+    theRenderingSystem.loadAtlas("nuages");
 
 	// init font
 	loadFont("typo");
