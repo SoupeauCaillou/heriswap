@@ -25,7 +25,7 @@ static void diffToGridCoords(const Vector2& c, int* i, int* j);
 
 void UserInputGameStateManager::setAnimSpeed() {
 	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
-	
+
 	ADSR(eSwapper)->idleValue = 0;
 	ADSR(eSwapper)->attackValue = 1.0;
 	ADSR(eSwapper)->attackTiming = 0.07 * difficulty;
@@ -41,7 +41,7 @@ void UserInputGameStateManager::Setup() {
 	ADD_COMPONENT(eSwapper, Sound);
 	originI = originJ = -1;
     swapI = swapJ = 0;
-	
+
 	setAnimSpeed();
 }
 
@@ -52,13 +52,14 @@ void UserInputGameStateManager::Enter() {
 	ADSR(eSwapper)->activationTime = 0;
 	originI = originJ = -1;
 	dragged = 0;
-	
-	successMgr->timeLLloop = 0.f;
+
+	successMgr->timeUserInputloop = 0.f;
 }
 
 GameState UserInputGameStateManager::Update(float dt) {
-	successMgr->timeLLloop += dt;
-	
+	successMgr->timeUserInputloop += dt;
+	successMgr->sWhatToDo(theTouchInputManager.wasTouched() && theTouchInputManager.isTouched(), dt);
+
 	// drag/drop of cell
 	if (!theTouchInputManager.wasTouched() &&
 		theTouchInputManager.isTouched()) {
@@ -275,8 +276,9 @@ void UserInputGameStateManager::BackgroundUpdate(float dt) {
 void UserInputGameStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
     inCombinationCells.clear();
-    
+
     successMgr->sLuckyLuke();
+    successMgr->sWhatToDo(false, 0.f);
 }
 
 static void activateADSR(Entity e, float a, float s) {

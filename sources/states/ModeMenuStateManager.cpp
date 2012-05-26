@@ -121,7 +121,7 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(eDifficulty)->color = green;
 	if (difficulty==0)
 		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy 5x5");
-	else 
+	else
 		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium 8x8");
 
 	//difficulty container
@@ -133,7 +133,7 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(bDifficulty, Button);
 	ADD_COMPONENT(bDifficulty, Sound);
 	BUTTON(bDifficulty)->enabled = false;
-	
+
 	#ifdef ANDROID
 	// openfeint button
 	openfeint = theEntityManager.CreateEntity();
@@ -147,7 +147,7 @@ void ModeMenuStateManager::Setup() {
 	RENDERING(openfeint)->texture = theRenderingSystem.loadTextureFile("menu/openfeint.png");
 	BUTTON(openfeint)->enabled = false;
 	#endif
-	
+
 	// your score
 	yourScore = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
@@ -263,6 +263,8 @@ void ModeMenuStateManager::Enter() {
         TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy 5x5");
     else
         TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium 8x8");
+
+	successMgr->sTestEverything(storage);
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
@@ -322,6 +324,11 @@ GameState ModeMenuStateManager::Update(float dt) {
         }
         case AskingPlayerName: {
             if (nameInputAPI->done(playerName)) {
+				successMgr->sTheyGood(isCurrentScoreAHighOne());
+                if (modeMgr->GetMode()==Normal)
+					successMgr->sBTAC(storage, difficulty, modeMgr->points);
+				else
+					successMgr->sBTAM(storage, difficulty, modeMgr->time);
                 nameInputAPI->hide();
                 submitScore(playerName);
                 LoadScore(modeMgr->GetMode(), difficulty);
@@ -347,7 +354,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 		LoadScore(modeMgr->GetMode(), difficulty);
 		if (difficulty==0)
 			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy 5x5");
-		else 
+		else
 			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium 8x8");
 	}
 
@@ -363,7 +370,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 	}
 	#ifdef ANDROID
 	if (BUTTON(openfeint)->clicked) {
-		successAPI->openfeintLB(modeMgr->GetMode());
+		successAPI->openfeintLB(modeMgr->GetMode(), difficulty);
 	}
 	#endif
 	return ModeMenu;

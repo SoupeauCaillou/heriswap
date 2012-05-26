@@ -63,7 +63,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << MathUtil::Max((unsigned)0, limit - leavesDone);
+	a << std::fixed << MathUtil::Min((unsigned)0, limit - leavesDone);
 	TEXT_RENDERING(uiHelper.smallLevel)->text = a.str();
 	}
 	//Temps

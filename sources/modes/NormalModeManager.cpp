@@ -53,6 +53,7 @@ void NormalGameModeManager::Enter() {
 
 void NormalGameModeManager::Exit() {
 	successMgr->sTakeYourTime(time);
+	successMgr->s666Loser(level);
 
 	GameModeManager::Exit();
 }

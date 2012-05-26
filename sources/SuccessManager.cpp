@@ -26,9 +26,20 @@ SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	b6InARow = false;
 	bLuckyLuke = false;
 	bDonator = false;
+	bTestEverything = false;
+	bBTAC = false;
+	bBTAM = false;
+	b666Loser = false;
+	bTheyGood = false;
+	bWhatToDo = false;
 
-	timeLL = 0.f;
-	timeLLloop = 0.f;
+	timeTotalPlayed = 0.f;
+	timeUserInputloop = 0.f;
+	timeInSwappingPreparation = 0.f;
+
+	//ne dois pas etre reinit a chaque game :
+	l666numberLose = 0;
+	lTheyGood = 0;
 }
 
 void SuccessManager::NewGame(int difficulty) {
@@ -152,12 +163,12 @@ void SuccessManager::sBonusToExcess(int type, int bonus, int nb) {
 
 void SuccessManager::sLuckyLuke() {
 	if (successEnable && !bLuckyLuke) {
-		if (timeLLloop<5.f)
-			timeLL += timeLLloop;
+		if (timeUserInputloop<5.f)
+			timeTotalPlayed += timeUserInputloop;
 		else
-			timeLL = 0.f;
+			timeTotalPlayed = 0.f;
 
-		if (timeLL >= 30.f) {
+		if (timeTotalPlayed >= 30.f) {
 			successAPI->successCompleted("Lucky Luke", 1671902);
 			bLuckyLuke = true;
 		}
@@ -168,5 +179,76 @@ void SuccessManager::sDonator() {
 	if (successEnable && !bDonator) {
 		successAPI->successCompleted("Donator", 1671922);
 		bDonator = true;
+	}
+}
+
+void SuccessManager::sTestEverything(StorageAPI* str) {
+	if (successEnable && !bTestEverything) {
+		successAPI->successCompleted("Test everything", 1684852);
+		bTestEverything = true;
+	}
+}
+
+void SuccessManager::sBTAC(StorageAPI* storage, int difficulty, unsigned int points) {
+	if (successEnable && !bBTAC) {
+	    std::vector<StorageAPI::Score> entries = storage->savedScores(1, difficulty);
+		int s = entries.size();
+		if (s >= 5 && points > entries[0].points) {
+			successAPI->successCompleted("Beat them all (classic)", 1684862);
+			bBTAC = true;
+		}
+	}
+}
+
+void SuccessManager::sBTAM(StorageAPI* storage, int difficulty, float time) {
+	if (successEnable && !bBTAM) {
+		std::vector<StorageAPI::Score> entries = storage->savedScores(2, difficulty);
+		int s = entries.size();
+		if (s >= 5 && time < entries[0].time) {
+			successAPI->successCompleted("Beat them all (MODE2)", 1684872);
+			bBTAM = true;
+		}
+	}
+}
+
+void SuccessManager::s666Loser(int level) {
+	if (successEnable && !b666Loser) {
+		if (level==6)
+			l666numberLose++;
+		else
+			l666numberLose = 0;
+
+		if (l666numberLose==3) {
+			successAPI->successCompleted("666 Loser !", 1684892);
+			b666Loser = true;
+		}
+	}
+}
+
+void SuccessManager::sTheyGood(bool Ibetter) {
+	if (successEnable && !bTheyGood) {
+		if (!Ibetter)
+			lTheyGood++;
+		else
+			lTheyGood=0;
+
+		if (lTheyGood==3) {
+			successAPI->successCompleted("They're too good", 1684902);
+			bTheyGood = true;
+		}
+	}
+}
+
+void SuccessManager::sWhatToDo(bool swapInPreparation, float dt) {
+	if (successEnable && !bWhatToDo) {
+		if (swapInPreparation)
+			timeInSwappingPreparation+=dt;
+		else
+			timeInSwappingPreparation=0.f;
+
+		if (timeInSwappingPreparation>5.0f) {
+			successAPI->successCompleted("What I gonna do ?", 1684912);
+			bWhatToDo = true;
+		}
 	}
 }
