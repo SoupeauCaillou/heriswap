@@ -42,6 +42,7 @@ public class TilematchJNILib {
     public static native void step(long game);
     public static native void render(long game);
     public static native void pause(long game);
+    public static native void back(long game);
     public static native void invalidateTextures(long game);
     public static native void handleInputEvent(long game, int event, float x, float y);
     public static native byte[] serialiazeState(long game);

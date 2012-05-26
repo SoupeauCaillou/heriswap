@@ -51,7 +51,7 @@ public class TilematchActivity extends Activity {
 	byte[] renderingSystemState;
 	static public SoundPool soundPool;
 	static public boolean isRunning;
-	static public boolean requestPausedFromJava;
+	static public boolean requestPausedFromJava, backPressed;
 	static public TilematchStorage.OptionsOpenHelper optionsOpenHelper;
 	static public TilematchStorage.ScoreOpenHelper scoreOpenHelper;
 	static public View playerNameInputView;
@@ -244,11 +244,11 @@ public class TilematchActivity extends Activity {
     	}
     	
     	return super.onTouchEvent(event);
-    }  
+    }
     
     @Override
     public void onBackPressed() {
-    	
+    	TilematchActivity.backPressed = true;
     }
 
     @Override

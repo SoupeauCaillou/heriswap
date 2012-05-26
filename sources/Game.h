@@ -54,6 +54,7 @@ class Game {
 		void tick(float dt);
 		void togglePause(bool activate);
 		void toggleShowCombi(bool forcedesactivate);
+        void backPressed();
 		void setMode();
 		int saveState(uint8_t** out);
 

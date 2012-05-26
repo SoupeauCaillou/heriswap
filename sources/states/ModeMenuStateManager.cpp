@@ -233,7 +233,7 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 
 void ModeMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-
+    pleaseGoBack = false;
 	successMgr->sHardScore(storage);
 
 	BUTTON(back)->enabled = true;
@@ -363,7 +363,8 @@ GameState ModeMenuStateManager::Update(float dt) {
 		TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
 		TEXT_RENDERING(title)->hide = true;
 		return ModeMenuToBlackState;
-	} if (BUTTON(back)->clicked) {
+	} if (BUTTON(back)->clicked || pleaseGoBack) {
+        pleaseGoBack = false;
 		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		return MainMenu;
 	}
