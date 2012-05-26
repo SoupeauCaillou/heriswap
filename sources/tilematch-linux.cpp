@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
     StorageAPILinuxImpl* storage = new StorageAPILinuxImpl();
     storage->init();
 std::cout << "Total: " << storage->getSavedGamePointsSum() << std::endl;
-	Game game(new LinuxNativeAssetLoader(), storage, new NameInputAPILinuxImpl(), new SuccessAPI(), new LocalizeAPILinuxImpl());
+	Game game(new LinuxNativeAssetLoader(), storage, new NameInputAPILinuxImpl(), new SuccessAPI(), new LocalizeAPILinuxImpl(), new AdAPI());
 
 	//theSoundSystem.init();
 	theRenderingSystem.setNativeAssetLoader(new LinuxNativeAssetLoader());

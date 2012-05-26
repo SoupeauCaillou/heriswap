@@ -17,10 +17,11 @@ class PlayerNameInputUI;
 class GameStateManager;
 class SuccessAPI;
 class NameInputAPI;
+class AdAPI;
 
 class PrivateData {
     public:
-        PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI);
+        PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad);
         ~PrivateData();
         void Setup(int windowW, int windowH);
 
