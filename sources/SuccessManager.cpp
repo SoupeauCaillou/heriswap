@@ -29,13 +29,17 @@ SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	bTestEverything = false;
 	bBTAC = false;
 	bBTAM = false;
-	bMozart = false;
 	b666Loser = false;
 	bTheyGood = false;
 	bWhatToDo = false;
 
-	timeLL = 0.f;
-	timeLLloop = 0.f;
+	timeTotalPlayed = 0.f;
+	timeUserInputloop = 0.f;
+	timeInSwappingPreparation = 0.f;
+
+	//ne dois pas etre reinit a chaque game :
+	l666numberLose = 0;
+	lTheyGood = 0;
 }
 
 void SuccessManager::NewGame(int difficulty) {
@@ -159,12 +163,12 @@ void SuccessManager::sBonusToExcess(int type, int bonus, int nb) {
 
 void SuccessManager::sLuckyLuke() {
 	if (successEnable && !bLuckyLuke) {
-		if (timeLLloop<5.f)
-			timeLL += timeLLloop;
+		if (timeUserInputloop<5.f)
+			timeTotalPlayed += timeUserInputloop;
 		else
-			timeLL = 0.f;
+			timeTotalPlayed = 0.f;
 
-		if (timeLL >= 30.f) {
+		if (timeTotalPlayed >= 30.f) {
 			successAPI->successCompleted("Lucky Luke", 1671902);
 			bLuckyLuke = true;
 		}
@@ -185,44 +189,66 @@ void SuccessManager::sTestEverything(StorageAPI* str) {
 	}
 }
 
-void SuccessManager::sBTAC() {
+void SuccessManager::sBTAC(StorageAPI* storage, int difficulty, unsigned int points) {
 	if (successEnable && !bBTAC) {
-		successAPI->successCompleted("Beat them all (classic)", 1684862);
-		bBTAC = true;
+	    std::vector<StorageAPI::Score> entries = storage->savedScores(1, difficulty);
+		int s = entries.size();
+		if (s >= 5 && points > entries[0].points) {
+			successAPI->successCompleted("Beat them all (classic)", 1684862);
+			bBTAC = true;
+		}
 	}
 }
 
-void SuccessManager::sBTAM() {
+void SuccessManager::sBTAM(StorageAPI* storage, int difficulty, float time) {
 	if (successEnable && !bBTAM) {
-		successAPI->successCompleted("Beat them all (MODE2)", 1684872);
-		bBTAM = true;
+		std::vector<StorageAPI::Score> entries = storage->savedScores(2, difficulty);
+		int s = entries.size();
+		if (s >= 5 && time < entries[0].time) {
+			successAPI->successCompleted("Beat them all (MODE2)", 1684872);
+			bBTAM = true;
+		}
 	}
 }
 
-void SuccessManager::sMozart() {
-	if (successEnable && !bMozart) {
-		successAPI->successCompleted("Mozart's song", 1684882);
-		bMozart = true;
-	}
-}
-
-void SuccessManager::s666Loser() {
+void SuccessManager::s666Loser(int level) {
 	if (successEnable && !b666Loser) {
-		successAPI->successCompleted("666 Loser !", 1684892);
-		b666Loser = true;
+		if (level==6)
+			l666numberLose++;
+		else
+			l666numberLose = 0;
+
+		if (l666numberLose==3) {
+			successAPI->successCompleted("666 Loser !", 1684892);
+			b666Loser = true;
+		}
 	}
 }
 
-void SuccessManager::sTheyGood() {
+void SuccessManager::sTheyGood(bool Ibetter) {
 	if (successEnable && !bTheyGood) {
-		successAPI->successCompleted("They're too good", 1684902);
-		bTheyGood = true;
+		if (!Ibetter)
+			lTheyGood++;
+		else
+			lTheyGood=0;
+
+		if (lTheyGood==3) {
+			successAPI->successCompleted("They're too good", 1684902);
+			bTheyGood = true;
+		}
 	}
 }
 
-void SuccessManager::sWhatToDo() {
+void SuccessManager::sWhatToDo(bool swapInPreparation, float dt) {
 	if (successEnable && !bWhatToDo) {
-		successAPI->successCompleted("What I gonna do ?", 1684912);
-		bWhatToDo = true;
+		if (swapInPreparation)
+			timeInSwappingPreparation+=dt;
+		else
+			timeInSwappingPreparation=0.f;
+
+		if (timeInSwappingPreparation>5.0f) {
+			successAPI->successCompleted("What I gonna do ?", 1684912);
+			bWhatToDo = true;
+		}
 	}
 }

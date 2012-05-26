@@ -324,6 +324,11 @@ GameState ModeMenuStateManager::Update(float dt) {
         }
         case AskingPlayerName: {
             if (nameInputAPI->done(playerName)) {
+				successMgr->sTheyGood(isCurrentScoreAHighOne());
+                if (modeMgr->GetMode()==Normal)
+					successMgr->sBTAC(storage, difficulty, modeMgr->points);
+				else
+					successMgr->sBTAM(storage, difficulty, modeMgr->time);
                 nameInputAPI->hide();
                 submitScore(playerName);
                 LoadScore(modeMgr->GetMode(), difficulty);

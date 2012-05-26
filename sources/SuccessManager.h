@@ -62,8 +62,8 @@ class SuccessManager {
 
 		//success Lucky Luke (Get more than 1 combi by 5 sec during 30 sec)
 		void sLuckyLuke();
-		float timeLL, timeLLloop; // timeLLloop used in userinput
 		bool bLuckyLuke;
+		float timeTotalPlayed, timeUserInputloop; // timeLLloop used in userinput
 
 		//success Donator (Click on Ads)
 		void sDonator();
@@ -74,26 +74,25 @@ class SuccessManager {
 		bool bTestEverything;
 
 		//success Beat them all (classic) (Get a better score than 5 current top scores in classic gamemode)
-		void sBTAC();
+		void sBTAC(StorageAPI* storage, int difficulty, unsigned int points);
 		bool bBTAC;
 
 		//success Beat them all (MODE2) (Get a better score than 5 current top scores in MODE2 gamemode)
-		void sBTAM();
+		void sBTAM(StorageAPI* storage, int difficulty, float time);
 		bool bBTAM;
 
-		//success Mozart's song (Listen every assortment of musics in game)
-		void sMozart();
-		bool bMozart;
-
 		//success 666 Loser ! (Lose 3 classic game at level 6 in a row)
-		void s666Loser();
+		void s666Loser(int level);
 		bool b666Loser;
+		int l666numberLose;
 
 		//success They're too good (Don't beat anyone during 3 games in a row)
-		void sTheyGood();
+		void sTheyGood(bool imgood);
 		bool bTheyGood;
+		int lTheyGood;
 
 		//success What I gonna do ? (Keep a leaf in hand during 5 sec)
-		void sWhatToDo();
+		void sWhatToDo(bool swapInPreparation, float dt);
 		bool bWhatToDo;
+		float timeInSwappingPreparation;
 };
