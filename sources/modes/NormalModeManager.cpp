@@ -11,6 +11,7 @@
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/ADSRSystem.h"
+#include "systems/MusicSystem.h"
 
 #include "CombinationMark.h"
 #include "Game.h"
@@ -54,6 +55,9 @@ void NormalGameModeManager::Enter() {
 void NormalGameModeManager::Exit() {
 	successMgr->sTakeYourTime(time);
 	successMgr->s666Loser(level);
+
+    MUSIC(stressTrack)->volume = 0;
+    ADSR(stressTrack)->active = false;
 
 	GameModeManager::Exit();
 }
