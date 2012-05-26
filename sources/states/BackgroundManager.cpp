@@ -80,7 +80,6 @@ BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c, int group) {
 
 	int idx = MathUtil::RandomInt(textures[group].size());
 	RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile(textures[group][idx]);
-	RENDERING(c->e)->hide = false;
 	RENDERING(c->e)->color = Color(1, 1, 1, MathUtil::RandomFloatInRange(0.6, 0.9));
 	TRANSFORM(c->e)->size = Vector2(width, width / ratio);
 	c->visible = false;
@@ -91,6 +90,9 @@ BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c, int group) {
 
 void BackgroundManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
+    for (int i=0; i<3; i++) {
+        RENDERING(clouds[i]->e)->hide = false;
+    }
 }
 
 GameState BackgroundManager::Update(float dt) {

@@ -224,6 +224,7 @@ void Game::init(const uint8_t* in, int size) {
 	SCROLLING(datas->sky)->images.push_back("ciel3.png");
 	SCROLLING(datas->sky)->speed = Vector2(-0.1, 0);
 	SCROLLING(datas->sky)->displaySize = Vector2(TRANSFORM(datas->sky)->size.X * 1, TRANSFORM(datas->sky)->size.Y);
+    SCROLLING(datas->sky)->hide = true;
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
 
 	datas->mode2Manager[Normal]->sky = datas->sky;
@@ -566,6 +567,8 @@ void Game::loadGameState(const uint8_t* in, int size) {
     setMode();
     togglePause(true);
     datas->stateBeforePauseNeedEnter = true;
+    RENDERING(datas->soundButton)->hide = false;
+    SCROLLING(datas->sky)->hide = false;
     LOGW("RESTORED STATE: %d", datas->stateBeforePause);
 }
 

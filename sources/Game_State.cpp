@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Game_Private.h"
 
+#include "systems/ScrollingSystem.h"
 #include "states/ModeMenuStateManager.h"
 #include "states/MainMenuGameStateManager.h"
 #include "states/LevelStateManager.h"
@@ -26,6 +27,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
         togglePause(false);
     } else if (oldState == Pause && newState == MainMenu) {
          LOGI("aborted. going to main menu");
+         RENDERING(datas->soundButton)->hide = false;
          datas->state2Manager[datas->stateBeforePause]->Exit();
          datas->mode2Manager[datas->mode]->Exit();
          newState = MainMenu;
@@ -37,6 +39,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
          static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode-1];
          setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
      } else if (newState == ModeMenu) {
+        RENDERING(datas->soundButton)->hide = false;
         datas->mode2Manager[datas->mode]->Exit();
         stopInGameMusics();
      } else if (newState == GameToBlack) {
@@ -60,6 +63,9 @@ void Game::stateChanged(GameState oldState, GameState newState) {
         static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->getSmallLevelEntity();
         stopInGameMusics();
      } else if( newState == MainMenu && oldState == ModeMenu) {
-        datas->state2Manager[oldState]->LateExit();
+         RENDERING(datas->soundButton)->hide = false;
+         datas->state2Manager[oldState]->LateExit();
+     } else if (newState == Logo) {
+        SCROLLING(datas->sky)->hide = false;
      }
 }
