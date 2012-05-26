@@ -20,6 +20,7 @@ struct StorageAPIAndroidImpl::StorageAPIAndroidImplDatas {
     jmethodID getSavedGamePointsSum;
     jmethodID submitScore;
     jmethodID getScores;
+    jmethodID getModePlayedCount;
 };
 
 StorageAPIAndroidImpl::~StorageAPIAndroidImpl() {
@@ -35,8 +36,9 @@ void StorageAPIAndroidImpl::init() {
     datas->getGameCountBeforeNextAd = jniMethodLookup(env, datas->cls, "getGameCountBeforeNextAd", "()I");
     datas->setGameCountBeforeNextAd = jniMethodLookup(env, datas->cls, "setGameCountBeforeNextAd", "(I)V");
     datas->getSavedGamePointsSum = jniMethodLookup(env, datas->cls, "getSavedGamePointsSum", "()I");
-    datas->submitScore = jniMethodLookup(env, datas->cls, "submitScore", "(IIIIFLjava/lang/String;)V");
+    datas->submitScore = jniMethodLookup(env, datas->cls, "submitScore", "(IIIIFLjava/lang/String;L)V");
     datas->getScores = jniMethodLookup(env, datas->cls, "getScores", "(II[I[I[F[Ljava/lang/String;)I");
+    datas->getModePlayedCount = jniMethodLookup(env, datas->cls, "getModePlayedCount", "()I");
 }
 
 void StorageAPIAndroidImpl::submitScore(Score scr, int mode, int diff) {
@@ -79,7 +81,7 @@ std::vector<StorageAPI::Score> StorageAPIAndroidImpl::savedScores(int mode, int 
         }
         sav.push_back(s);
     }
-    
+
     return sav;
 }
 
@@ -97,4 +99,8 @@ void StorageAPIAndroidImpl::setGameCountBeforeNextAd(int c) {
 
 int StorageAPIAndroidImpl::getSavedGamePointsSum() {
     return env->CallStaticIntMethod(datas->cls, datas->getSavedGamePointsSum);
+}
+
+bool StorageAPIAndroidImpl::everyModesPlayed() {
+    return env->CallStaticIntMethod(datas->cls, datas->getModePlayedCount);
 }

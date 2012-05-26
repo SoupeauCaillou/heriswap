@@ -56,13 +56,13 @@ public class TilematchJNILib {
 				GSSDK.getSharedInstance().displayAd(TilematchActivity.activity);
 			}
 		});
-    	
+
     }
-    
+
     static public boolean done() {
     	return TilematchActivity.adHasBeenShown;
     }
-    
+
     //-------------------------------------------------------------------------
     // AssetAPI
     //-------------------------------------------------------------------------
@@ -139,6 +139,14 @@ public class TilematchJNILib {
     	}
     }
 
+    static public int getModePlayedCount() {
+    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getReadableDatabase();
+    	Cursor cursor = db.rawQuery("select distinct difficulty,mode from score", null);
+	    int count = cursor.getCount();
+   		cursor.close();
+    	return count;
+    }
+
 	static final String[] boards = new String[] {
 		"1180087",
 		"1180047",
@@ -158,7 +166,7 @@ public class TilematchJNILib {
     	db.insert("score", null, v);
     	db.close();
 
-    	
+
 	   	Leaderboard l = new Leaderboard(boards[mode*(difficulty+1)-1]);
 	   	Log.i(TilematchActivity.Tag, "leaderboard id: " + boards[mode*(difficulty+1)-1]);
 		final Score s = new Score((long) ((mode != 2) ? points : (time * 1000)), null);
@@ -174,7 +182,7 @@ public class TilematchJNILib {
 				@Override public void onBlobUploadFailure(String exceptionMessage) {
 			}
 		});
-    	
+
     }
 
     static public int getScores(int mode, int difficulty, int[] points, int[] levels, float[] times, String[] names) {
@@ -245,7 +253,6 @@ public class TilematchJNILib {
 			    		TilematchActivity.oldName[i].setText(cursor.getString(0));
 			    		TilematchActivity.oldName[i].setVisibility(View.VISIBLE);
 			    		cursor.moveToNext();
-			    		Log.i(TilematchActivity.Tag, "aazeqsd   ");
 			    	}
 			    	for (int i=cursor.getCount(); i<3; i++) {
 			    		TilematchActivity.oldName[i].setVisibility(View.GONE);

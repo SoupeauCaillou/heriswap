@@ -8,3 +8,4 @@ int callbackNames(void *save, int argc, char **argv, char **azColName);
 
 int callback(void *save, int argc, char **argv, char **azColName);
 
+int callbackResultSize(void *save, int argc, char **argv, char **azColName);

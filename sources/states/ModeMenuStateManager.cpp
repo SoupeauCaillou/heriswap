@@ -263,8 +263,6 @@ void ModeMenuStateManager::Enter() {
         TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy 5x5");
     else
         TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium 8x8");
-
-	successMgr->sTestEverything(storage);
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
@@ -299,7 +297,7 @@ bool ModeMenuStateManager::isCurrentScoreAHighOne() {
 GameState ModeMenuStateManager::Update(float dt) {
     switch (gameOverState) {
         case NoGame: {
-            break;
+			break;
         }
         case GameEnded: {
             // ask player's name if needed
@@ -320,6 +318,7 @@ GameState ModeMenuStateManager::Update(float dt) {
                 a << std::fixed << modeMgr->time << " s";
             }
             TEXT_RENDERING(yourScore)->text = a.str();
+            successMgr->sTestEverything(storage);
             break;
         }
         case AskingPlayerName: {

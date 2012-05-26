@@ -51,3 +51,10 @@ int callback(void *save, int argc, char **argv, char **azColName){
 	if (argc>1) *sav = argv[0];
 	return 0;
 }
+
+int callbackResultSize(void *save, int argc, char **argv, char **azColName){
+	int *sav = static_cast<int*>(save);
+	(*sav)++;
+	return 0;
+}
+

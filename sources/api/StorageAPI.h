@@ -18,4 +18,5 @@ class StorageAPI {
         virtual int getGameCountBeforeNextAd() = 0;
         virtual void setGameCountBeforeNextAd(int c) = 0;
         virtual int getSavedGamePointsSum() = 0;
+        virtual bool everyModesPlayed() = 0;
 };

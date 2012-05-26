@@ -8,8 +8,6 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.util.Log;
 
-import com.chartboost.sdk.ChartBoost;
-
 public class TilematchRenderer implements GLSurfaceView.Renderer {   
 	AssetManager asset; 
 	Thread gameThread;
