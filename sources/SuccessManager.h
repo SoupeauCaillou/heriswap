@@ -51,7 +51,7 @@ class SuccessManager {
 		//success Bonus to excess (Get 100 bonus leaves in one game)
 		void sBonusToExcess(int type, int bonus, int nb);
 		bool bBonusToExcess;
-		int bonusPoints;
+		int bonusTilesNumber;
 
 		//success Rainbow combination (Make one combination from each type in a row)
 		//success Double rainbow (Ohohoh, double rainbow)

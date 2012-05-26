@@ -47,7 +47,7 @@ void SuccessManager::NewGame(int difficulty) {
 
 	gridResetted = false;
 
-	bonusPoints = 0;
+	bonusTilesNumber = 0;
 	for (int i=0; i<8; i++) {
 		succEveryTypeInARow[i] = 0;
 	}
@@ -152,9 +152,8 @@ void SuccessManager::sRainbow(int type) {
 void SuccessManager::sBonusToExcess(int type, int bonus, int nb) {
 	if (hardMode && !bBonusToExcess) {
 		if (type == bonus)
-			bonusPoints +=nb;
-		if (bonusPoints >= 100) {
-			LOGI("azertyuiop	%d\n", bonusPoints);
+			bonusTilesNumber +=nb;
+		if (bonusTilesNumber >= 100) {
 			successAPI->successCompleted("Bonus to excess", 1653182);
 			bBonusToExcess = true;
 		}
