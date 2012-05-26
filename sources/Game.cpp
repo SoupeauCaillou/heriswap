@@ -35,7 +35,6 @@
 #include "Game.h"
 #include "TwitchSystem.h"
 #include "CombinationMark.h"
-#include "Sound.h"
 #include "Game_Private.h"
 
 static bool inGameState(GameState state) {
@@ -374,7 +373,7 @@ void Game::tick(float dt) {
 	    	MUSIC(datas->inGameMusic.masterTrack)->volume = 1;
 	    	MUSIC(datas->inGameMusic.stressTrack)->control = MusicComponent::Start;
 	        if (MUSIC(datas->inGameMusic.masterTrack)->music == InvalidMusicRef) {
-	            std::vector<std::string> musics = newMusics();
+	            std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);//. newMusics();
 	            MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
 	            MUSIC(datas->inGameMusic.stressTrack)->music = theMusicSystem.loadMusicFile("audio/F.ogg");
 	            MUSIC(datas->inGameMusic.stressTrack)->loopNext = theMusicSystem.loadMusicFile("audio/F.ogg");
@@ -389,7 +388,7 @@ void Game::tick(float dt) {
 
 	        // if master track has looped, choose next songs to play
 	        if (MUSIC(datas->inGameMusic.masterTrack)->loopNext == InvalidMusicRef) {
-		        std::vector<std::string> musics = newMusics();
+		        std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);//newMusics();
 		        MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile(musics[0]);
 		        int i;
 		        for (i=0; i<musics.size() - 1; i++) {
@@ -398,10 +397,6 @@ void Game::tick(float dt) {
 			        mc->control = MusicComponent::Start;
 		        }
 		        MUSIC(datas->inGameMusic.stressTrack)->loopNext = theMusicSystem.loadMusicFile("audio/F.ogg");
-		        if (MathUtil::RandomInt(2)) {
-		            MUSIC(datas->inGameMusic.accessoryTrack)->loopNext = theMusicSystem.loadMusicFile("audio/E.ogg");
-		            MUSIC(datas->inGameMusic.accessoryTrack)->control = MusicComponent::Start;
-	            }
 	        }
 	        MUSIC(datas->inGameMusic.stressTrack)->volume = ADSR(datas->inGameMusic.stressTrack)->value;
 	        MUSIC(datas->menu)->control = MusicComponent::Stop;

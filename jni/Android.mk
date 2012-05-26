@@ -26,7 +26,7 @@ LOCAL_SRC_FILES := \
     ../sources/Game_Private.cpp \
 	../sources/GridSystem.cpp \
 	../sources/SuccessManager.cpp \
-   ../sources/Sound.cpp \
+   ../sources/Jukebox.cpp \
    ../sources/CombinationMark.cpp \
    ../sources/TwitchSystem.cpp \
 	../sources/AnimedEntity.cpp \

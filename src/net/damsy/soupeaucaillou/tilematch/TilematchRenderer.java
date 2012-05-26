@@ -88,7 +88,7 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
     		if (gameThread == null)
     			startGameThread();
     	}
-    	
+
     	int err;
         while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
         	Log.e(TilematchActivity.Tag, "_GL error : " + GLU.gluErrorString(err));

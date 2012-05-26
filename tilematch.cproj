@@ -64,6 +64,7 @@
     <None Include="sources\api\linux\StorageAPILinuxImpl.h" />
     <None Include="sources\api\StorageAPI.h" />
     <None Include="sources\api\android\StorageAPIAndroidImpl.h" />
+    <None Include="sources\Jukebox.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -99,6 +100,7 @@
     <Compile Include="sources\SuccessManager.cpp" />
     <Compile Include="sources\api\linux\StorageAPILinuxImpl.cpp" />
     <Compile Include="sources\api\android\StorageAPIAndroidImpl.cpp" />
+    <Compile Include="sources\Jukebox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="sources\api\android\" />

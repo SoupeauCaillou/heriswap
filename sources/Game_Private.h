@@ -10,7 +10,7 @@
 
 #include "modes/GameModeManager.h"
 
-#include "Sound.h"
+#include "Jukebox.h"
 class Game;
 class ScoreStorage;
 class PlayerNameInputUI;
@@ -47,4 +47,5 @@ class PrivateData {
 	     Entity accessoryTrack;
 	     Entity stressTrack;
      } inGameMusic;
+     Jukebox jukebox;
 };
