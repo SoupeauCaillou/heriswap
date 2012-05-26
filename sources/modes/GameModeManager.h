@@ -47,8 +47,7 @@ class GameModeManager {
 		virtual void WillScore(int nb, int type, std::vector<Entity>& out) {}
 		virtual void ScoreCalc(int nb, int type) = 0;
 		virtual GameMode GetMode() = 0;
-		virtual void LevelUp() = 0;
-		virtual bool LeveledUp() = 0;
+		virtual bool LevelUp() = 0;
 
         // state save/restore
         virtual int saveInternalState(uint8_t** out);

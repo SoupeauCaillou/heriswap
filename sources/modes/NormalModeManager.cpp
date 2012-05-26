@@ -44,7 +44,7 @@ void NormalGameModeManager::Enter() {
 	for (int i=0;i<theGridSystem.Types;i++) remain[i]=3;
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
-	levelUp = levelUpPending = false;
+	levelUpPending = false;
 
 	generateLeaves(0, theGridSystem.Types);
 
@@ -70,7 +70,6 @@ void NormalGameModeManager::GameUpdate(float dt) {
 		levelUpPending = false;
 	}
 	time += dt;
-	LevelUp();
 }
 
 float NormalGameModeManager::GameProgressPercent() {
@@ -166,7 +165,7 @@ void NormalGameModeManager::ScoreCalc(int nb, int type) {
 
 }
 
-void NormalGameModeManager::LevelUp() {
+bool NormalGameModeManager::LevelUp() {
 	int match = 1, i=0;
 	while (match && i<theGridSystem.Types) {
 		if (remain[i] != 0)	match=0;
@@ -177,7 +176,6 @@ void NormalGameModeManager::LevelUp() {
 		successMgr->sLevel1For1K(level, points);
 
 		level++;
-		levelUp = true;
 
 		successMgr->sLevel10(level);
 
@@ -195,12 +193,7 @@ void NormalGameModeManager::LevelUp() {
 		//TRANSFORM(herisson)->position.X = GameModeManager::position(time);
 		levelUpPending = true;
 	}
-}
-
-bool NormalGameModeManager::LeveledUp() {
-	bool bid = levelUp;
-	levelUp = false;
-	return bid;
+	return match;
 }
 
 GameMode NormalGameModeManager::GetMode() {

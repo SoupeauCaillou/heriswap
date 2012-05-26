@@ -20,8 +20,7 @@ class NormalGameModeManager : public GameModeManager {
 		void WillScore(int nb, int type, std::vector<Entity>& out);
         void ScoreCalc(int nb, int type);
 		GameMode GetMode();
-		void LevelUp();
-		bool LeveledUp();
+		bool LevelUp();
 
 		Entity getSmallLevelEntity();
 
@@ -36,7 +35,6 @@ class NormalGameModeManager : public GameModeManager {
 	private:
 		unsigned int level;
 		int remain[8];
-		bool levelUp;
 		float nextHerissonSpeed;
 		float levelMoveDuration;
 		bool levelUpPending;

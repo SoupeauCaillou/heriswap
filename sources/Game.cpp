@@ -323,18 +323,21 @@ void Game::tick(float dt) {
 
     //updating game if needed
     if (datas->state == UserInput) {
-			datas->mode2Manager[datas->mode]->GameUpdate(dt);
-        // si on change de niveau
-        if (datas->mode2Manager[datas->mode]->LeveledUp()) {
-            NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[datas->mode]);
-            static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel = m->currentLevel();
-            newState = LevelChanged;
-        } else if (percentDone >= 1) {
+		datas->mode2Manager[datas->mode]->GameUpdate(dt);
+        if (percentDone >= 1) {
             newState = GameToBlack;
         }
      } else {
 		 toggleShowCombi(true);
 	 }
+
+	// si on change de niveau
+    if (datas->state == Delete && datas->mode2Manager[datas->mode]->LevelUp()) {
+            NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[datas->mode]);
+            static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel = m->currentLevel();
+            newState = LevelChanged;
+	}
+
 	//si on est passé de pause à quelque chose different de pause, on desactive la pause
 	if (datas->state == Pause && newState == Unpause) {
 		togglePause(false);
