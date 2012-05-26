@@ -39,7 +39,7 @@ class SuccessAPI {
 		virtual void successCompleted(const char* description, unsigned long successId) {
 			LOGI("Success completed '%s': %d", description, successId);
 		}
-        virtual void openfeintLB(int mode) {}
+        virtual void openfeintLB(int mode, int diff) {}
         virtual void openfeintSuccess() {}
 };
 

@@ -43,7 +43,8 @@ class AndroidSuccessAPI : public SuccessAPI {
 	public:
 		GameHolder* holder;
 		void successCompleted(const char* description, unsigned long successId);
-        void openfeintLB(int mode);
+        void openfeintLB(int mode, int diff);
+        void openfeintSuccess();
 };
 
 struct GameHolder {
@@ -480,13 +481,19 @@ void AndroidSuccessAPI::successCompleted(const char* description, unsigned long 
 	env->CallStaticVoidMethod(c, mid, sid);
 }
 
-void AndroidSuccessAPI::openfeintLB(int mode) {
+void AndroidSuccessAPI::openfeintLB(int mode, int diff) {
 	JNIEnv* env = holder->gameThreadEnv;
 	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
-	jmethodID mid = env->GetStaticMethodID(c, "openfeintLeaderboard", "(I)V");
-	env->CallStaticVoidMethod(c, mid, mode);
+	jmethodID mid = env->GetStaticMethodID(c, "openfeintLeaderboard", "(II)V");
+	env->CallStaticVoidMethod(c, mid, mode, diff);
 }
 
+void AndroidSuccessAPI::openfeintSuccess() {
+	JNIEnv* env = holder->gameThreadEnv;
+	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
+	jmethodID mid = env->GetStaticMethodID(c, "openfeintSuccess", "()V");
+	env->CallStaticVoidMethod(c, mid);
+}
 #ifdef __cplusplus
 }
 #endif
