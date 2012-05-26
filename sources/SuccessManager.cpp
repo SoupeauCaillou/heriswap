@@ -254,3 +254,12 @@ void SuccessManager::sWhatToDo(bool swapInPreparation, float dt) {
 		}
 	}
 }
+
+void SuccessManager::sBimBamBoum(int different) {
+	if (hardMode && !bBimBamBoum) {
+		if (different >= 3) {
+			successAPI->successCompleted("Bim Bam Boum", 1685032 );
+			bBimBamBoum = true;
+		}
+	}
+}

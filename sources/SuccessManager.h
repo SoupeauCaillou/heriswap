@@ -95,4 +95,8 @@ class SuccessManager {
 		void sWhatToDo(bool swapInPreparation, float dt);
 		bool bWhatToDo;
 		float timeInSwappingPreparation;
+
+		//success Bim Bam Boum (Get 3 differents colors combination by moving only one leaf)
+		void sBimBamBoum(int differents);
+		bool bBimBamBoum;
 };
