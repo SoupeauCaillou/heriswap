@@ -168,15 +168,31 @@ public class TilematchJNILib {
     	v.put("time", time);
     	v.put("level", level);
     	db.insert("score", null, v);
+    	
+    	//push only best score on OF
+    	Cursor cursor = null;
+		if (mode==1) {
+			cursor = db.query("score", new String[] {"name", "points", "time", "level"}, "mode='" + mode + "' and difficulty='" + difficulty + "'", null, null, null, "points desc");
+			cursor.moveToFirst();
+    		points = Math.max(points, cursor.getInt(cursor.getColumnIndex("points")));
+		} else {
+			cursor = db.query("score", new String[] {"name", "points", "time", "level"}, "mode='" + mode + "' and difficulty='" + difficulty + "'", null, null, null, "time asc");
+			cursor.moveToFirst();
+    		time = Math.min(time, cursor.getFloat(cursor.getColumnIndex("time")));
+		}
+    	cursor.close();
     	db.close();
 
 
-	   	Leaderboard l = new Leaderboard(boards[mode*(difficulty+1)-1]);
-	   	Log.i(TilematchActivity.Tag, "leaderboard id: " + boards[mode*(difficulty+1)-1]);
-		final Score s = new Score((long) ((mode != 2) ? points : (time * 1000)), null);
+	   	Leaderboard l = new Leaderboard(boards[2*(mode-1)+difficulty]);
+	   	Log.i(TilematchActivity.Tag, "leaderboard id: " + boards[2*(mode-1)+difficulty]);
+		Log.i(TilematchActivity.Tag, "aaaaaaaa" + points + "   " + 1000*time);
+
+		final Score s = new Score((long) ((mode == 1) ? points : time*1000), null);
 			s.submitTo(l, new Score.SubmitToCB() {
 			@Override public void onSuccess(boolean newHighScore) {
 				Log.i(TilematchActivity.Tag, "score posting successfull");
+
 			}
 				@Override public void onFailure(String exceptionMessage) {
 				Log.i(TilematchActivity.Tag, "score posting failure : " + exceptionMessage);
@@ -230,7 +246,7 @@ public class TilematchJNILib {
 
     static public void openfeintLeaderboard(int mode, int difficulty) {
     	if (mode >= 1 && mode <= 2 && difficulty >= 0 && difficulty <= 1) {
-    		Dashboard.openLeaderboard(boards[mode*2+(difficulty+1)-3]);
+    		Dashboard.openLeaderboard(boards[2*(mode-1)+difficulty]);
     	}
     }
 
