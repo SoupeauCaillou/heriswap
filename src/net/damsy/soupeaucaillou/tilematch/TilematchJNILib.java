@@ -20,6 +20,7 @@ import android.media.AudioTrack;
 import android.util.Log;
 import android.view.View;
 
+import com.greystripe.android.sdk.GSSDK;
 import com.openfeint.api.resource.Achievement;
 import com.openfeint.api.resource.Leaderboard;
 import com.openfeint.api.resource.Score;
@@ -45,6 +46,23 @@ public class TilematchJNILib {
     public static native byte[] serialiazeState(long game);
     public static native void initAndReloadTextures(long game);
 
+    //-------------------------------------------------------------------------
+    // AdsAPI
+    //-------------------------------------------------------------------------
+    static public void showAd() {
+    	TilematchActivity.adHasBeenShown = false;
+    	TilematchActivity.activity.runOnUiThread(new Runnable() {
+			public void run() {
+				GSSDK.getSharedInstance().displayAd(TilematchActivity.activity);
+			}
+		});
+    	
+    }
+    
+    static public boolean done() {
+    	return TilematchActivity.adHasBeenShown;
+    }
+    
     //-------------------------------------------------------------------------
     // AssetAPI
     //-------------------------------------------------------------------------

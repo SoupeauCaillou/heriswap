@@ -6,6 +6,7 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.AudioManager;
@@ -24,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.greystripe.android.sdk.GSSDK;
 import com.openfeint.api.OpenFeint;
 import com.openfeint.api.OpenFeintDelegate;
 import com.openfeint.api.OpenFeintSettings;
@@ -59,13 +61,28 @@ public class TilematchActivity extends Activity {
 	static public Resources res;
 	static public SharedPreferences preferences;
 	static public Button[] oldName;
+	static public boolean adHasBeenShown;
 	
+	static public TilematchActivity activity;
 	PowerManager.WakeLock wl;
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == GSSDK.GS_ACTIVITY_RESULT) {
+			// notify blocked 
+			Log.w(TilematchActivity.Tag, "Ad hidden");
+			adHasBeenShown = true;
+		}
+	}
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TilematchActivity.Tag, "Activity LifeCycle ##### ON CREATE");
+        activity = this;
+        GSSDK.initialize(this, "1eace49f-c89e-40be-857f-4cd88897cc02");
+        
         
         Map<String, Object> options = new HashMap<String, Object>();
         options.put(OpenFeintSettings.SettingCloudStorageCompressionStrategy, OpenFeintSettings.CloudStorageCompressionStrategyDefault);
@@ -197,6 +214,8 @@ public class TilematchActivity extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	Log.i(TilematchActivity.Tag, "Activity LifeCycle ##### ON SAVE INSTANCE");
+    	if (TilematchActivity.game == 0)
+    		return;
     	/* save current state; we'll be used only if app get killed */
     	synchronized (TilematchActivity.mutex) {
 	    	Log.i(TilematchActivity.Tag, "Save state!");

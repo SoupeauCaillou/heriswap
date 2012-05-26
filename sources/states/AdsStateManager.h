@@ -7,7 +7,7 @@
 class AdsStateManager : public GameStateManager {
 	public:
 
-	AdsStateManager(StorageAPI* str, SuccessManager* smgr) : storage(str), successMgr(smgr) { };
+	AdsStateManager(AdAPI* ad, StorageAPI* str, SuccessManager* smgr) : adAPI(ad), storage(str), successMgr(smgr) { };
 	void Setup();
 	void Enter();
 	GameState Update(float dt);
@@ -16,6 +16,7 @@ class AdsStateManager : public GameStateManager {
 
 	private:
 		Entity eAds;
+        AdAPI* adAPI;
 		StorageAPI* storage;
 		int gameb4Ads;
 		SuccessManager* successMgr;

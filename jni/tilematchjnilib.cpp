@@ -22,6 +22,7 @@
 #include "sac/api/android/SoundAPIAndroidImpl.h"
 #include "sac/api/android/LocalizeAPIAndroidImpl.h"
 #include "sac/api/android/NameInputAPIAndroidImpl.h"
+#include "sac/api/android/AdAPIAndroidImpl.h"
 
 #include "api/android/StorageAPIAndroidImpl.h"
 
@@ -54,6 +55,7 @@ struct GameHolder {
     StorageAPIAndroidImpl* storage;
 	AndroidSuccessAPI success;
 	LocalizeAPIAndroidImpl* localize;
+    AdAPIAndroidImpl* ad;
 
 	struct __input {
 		 int touching;
@@ -72,6 +74,7 @@ struct GameHolder {
         delete nameInput;
         delete storage;
         delete localize;
+        delete ad;
         renderThreadEnv->DeleteGlobalRef(assetManager);
         gameThreadEnv = renderThreadEnv = 0;
     }
@@ -116,8 +119,9 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
 	GameHolder* hld = new GameHolder();
 	hld->localize = new LocalizeAPIAndroidImpl(env);
     hld->nameInput = new NameInputAPIAndroidImpl();
+    hld->ad = new AdAPIAndroidImpl();
     hld->storage = new StorageAPIAndroidImpl(env);
-	hld->game = new Game(new AndroidNativeAssetLoader(hld), hld->storage, hld->nameInput, &hld->success, hld->localize);
+	hld->game = new Game(new AndroidNativeAssetLoader(hld), hld->storage, hld->nameInput, &hld->success, hld->localize, hld->ad);
 	hld->renderThreadEnv = env;
 	hld->openGLESVersion = openglesVersion;
 	hld->assetManager = (jobject)env->NewGlobalRef(asset);
@@ -162,7 +166,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	theMusicSystem.musicAPI = new MusicAPIAndroidImpl(env);
 	theMusicSystem.assetAPI = new AssetAPIAndroidImpl(env, hld->assetManager);
 	theSoundSystem.soundAPI = new SoundAPIAndroidImpl(env, hld->assetManager);
-
+    hld->ad->init(env);
     hld->nameInput->init(env);
 	hld->localize->env = env;
 	hld->localize->init();

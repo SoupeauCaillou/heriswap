@@ -8,6 +8,8 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.util.Log;
 
+import com.chartboost.sdk.ChartBoost;
+
 public class TilematchRenderer implements GLSurfaceView.Renderer {   
 	AssetManager asset; 
 	Thread gameThread;
@@ -50,6 +52,9 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
 				
 				TilematchActivity.savedState = null;
 				initDone = true;
+				
+				// TilematchActivity.cb.showInterstitial();
+				
 				while ( TilematchActivity.isRunning || TilematchActivity.requestPausedFromJava) {
 					TilematchJNILib.step(TilematchActivity.game);
 					TilematchActivity.mGLView.requestRender();
