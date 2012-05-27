@@ -32,6 +32,8 @@ class NormalGameModeManager : public GameModeManager {
         const uint8_t* restoreInternalState(const uint8_t* in, int size);
 
 		Entity stressTrack;
+		
+		static int levelToLeaveToDelete(int nb, int maxRemain, int done);
 	private:
 		unsigned int level;
 		int remain[8];

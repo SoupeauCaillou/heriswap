@@ -48,7 +48,6 @@
     <None Include="sources\TwitchSystem.h" />
     <None Include="sources\CombinationMark.h" />
     <None Include="sources\states\ModeMenuStateManager.h" />
-    <None Include="sources\Sound.h" />
     <None Include="sources\states\LogoStateManager.h" />
     <None Include="sources\GameState.h" />
     <None Include="sources\modes\PositionFeuilles.h" />
@@ -59,7 +58,6 @@
     <None Include="sources\states\AdsStateManager.h" />
     <None Include="sources\states\HelpStateManager.h" />
     <None Include="sources\modes\TilesAttackModeManager.h" />
-    <None Include="sources\Callback.h" />
     <None Include="sources\SuccessManager.h" />
     <None Include="sources\api\linux\StorageAPILinuxImpl.h" />
     <None Include="sources\api\StorageAPI.h" />
@@ -88,7 +86,6 @@
     <Compile Include="sources\TwitchSystem.cpp" />
     <Compile Include="sources\CombinationMark.cpp" />
     <Compile Include="sources\states\ModeMenuStateManager.cpp" />
-    <Compile Include="sources\Sound.cpp" />
     <Compile Include="sources\states\LogoStateManager.cpp" />
     <Compile Include="sources\Game_State.cpp" />
     <Compile Include="sources\AnimedEntity.cpp" />
@@ -96,11 +93,12 @@
     <Compile Include="sources\states\AdsStateManager.cpp" />
     <Compile Include="sources\states\HelpStateManager.cpp" />
     <Compile Include="sources\modes\TilesAttackModeManager.cpp" />
-    <Compile Include="sources\Callback.cpp" />
     <Compile Include="sources\SuccessManager.cpp" />
     <Compile Include="sources\api\linux\StorageAPILinuxImpl.cpp" />
     <Compile Include="sources\api\android\StorageAPIAndroidImpl.cpp" />
     <Compile Include="sources\Jukebox.cpp" />
+    <Compile Include="tests\TestNormalModeManager.cpp" />
+    <Compile Include="tests\TestTilesAttackModeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="sources\api\android\" />

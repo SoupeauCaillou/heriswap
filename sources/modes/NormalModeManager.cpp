@@ -114,8 +114,15 @@ void NormalGameModeManager::UiUpdate(float dt) {
 	}
 }
 
-static int levelToLeaveToDelete(int nb, int maxRemain, int done) {
-    return (6*(done+nb)/maxRemain-6*done/maxRemain);
+
+int NormalGameModeManager::levelToLeaveToDelete(int nb, int maxRemain, int done) {
+	// done is updated later, so done is the currently removed leaves
+	int previousRemovalCount = (int) (6 * done)/maxRemain;
+	// what should be removed at this step
+	int totalTheoricallyRemoved = (int) (6 * (done + nb))/maxRemain;
+	
+	// so, we have to removed the difference
+	return totalTheoricallyRemoved - previousRemovalCount;
 }
 
 static float timeGain(int nb, float time) {
@@ -123,7 +130,7 @@ static float timeGain(int nb, float time) {
 }
 
 void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
-    int nb = levelToLeaveToDelete(count, level+2, remain[type]);
+    int nb = levelToLeaveToDelete(count, level+2, level+2 - remain[type]);
     for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
         if ((type+1) == branchLeaves[i].type) {
             CombinationMark::markCellInCombination(branchLeaves[i].e);
