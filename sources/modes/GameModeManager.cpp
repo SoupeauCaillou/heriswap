@@ -99,7 +99,7 @@ void GameModeManager::Setup() {
 	SCROLLING(decor2nd)->images.push_back("decor2nd_1.png");
 	SCROLLING(decor2nd)->images.push_back("decor2nd_2.png");
 	SCROLLING(decor2nd)->images.push_back("decor2nd_3.png");
-	SCROLLING(decor2nd)->speed = Vector2(-.1, 0);
+	SCROLLING(decor2nd)->speed = Vector2(-.3, 0);
 	SCROLLING(decor2nd)->displaySize = Vector2(TRANSFORM(decor2nd)->size.X * 1.01, TRANSFORM(decor2nd)->size.Y);
 	SCROLLING(decor2nd)->hide = true;
 
