@@ -141,6 +141,7 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(openfeint, Transformation);
 	ADD_COMPONENT(openfeint, Rendering);
 	ADD_COMPONENT(openfeint, Button);
+    BUTTON(openfeint)->overSize = 1.3;
 	ADD_COMPONENT(openfeint, Sound);
 	TRANSFORM(openfeint)->size = Vector2(PlacementHelper::GimpWidthToScreen(90), PlacementHelper::GimpHeightToScreen(91));
 	TransformationSystem::setPosition(TRANSFORM(openfeint), Vector2(PlacementHelper::GimpXToScreen(605), PlacementHelper::GimpYToScreen(476)), TransformationSystem::NW);
