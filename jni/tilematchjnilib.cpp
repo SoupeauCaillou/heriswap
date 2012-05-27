@@ -224,11 +224,25 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
 	hld->dtAccumuled += dt;
 	hld->time = TimeUtil::getTime();
 
-	while (hld->dtAccumuled >= DT){
-		hld->game->tick(hld->dtAccumuled);
-		hld->dtAccumuled = 0;
-		// hld->dtAccumuled -= DT;
+	float accum = hld->dtAccumuled;
+	if (hld->dtAccumuled > 5 * DT) {
+		LOGW("BIG DT: %.3f s", hld->dtAccumuled);
+		accum = DT;
 	}
+
+	while (hld->dtAccumuled >= DT){
+		hld->game->tick(accum);
+		hld->dtAccumuled -= accum;
+	}
+}
+
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_resetTimestep
+  (JNIEnv *env, jclass, jlong g) {
+  	GameHolder* hld = (GameHolder*) g;
+
+	if (!hld)
+  		return;
+  	hld->firstCall = true;
 }
 
 static int frameCount = 0;
