@@ -292,7 +292,7 @@ bool ModeMenuStateManager::isCurrentScoreAHighOne() {
     if (modeMgr->GetMode() == Normal) {
         return modeMgr->points > entries[s - 1].points;
     } else {
-        return modeMgr->points > entries[s - 1].time;
+        return modeMgr->time < entries[s - 1].time;
     }
 }
 
