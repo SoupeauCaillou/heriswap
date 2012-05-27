@@ -254,11 +254,20 @@ void SuccessManager::sWhatToDo(bool swapInPreparation, float dt) {
 	}
 }
 
-void SuccessManager::sBimBamBoum(int different) {
+void SuccessManager::sBimBamBoum(std::vector<Combinais> &s) {
 	if (hardMode && !bBimBamBoum) {
-		if (different >= 3) {
-			successAPI->successCompleted("Bim Bam Boum", 1685032 );
-			bBimBamBoum = true;
+		//~ if (different >= 3) {
+			//~ successAPI->successCompleted("Bim Bam Boum", 1685032);
+			//~ bBimBamBoum = true;
+		//~ }
+	}
+}
+
+void SuccessManager::sDoubleInOne(std::vector<Combinais> &s) {
+	if (hardMode && !bDoubleInOne) {
+		if (s.size() > 1) {
+			successAPI->successCompleted("Double in one", 1685322);
+			bDoubleInOne = true;
 		}
 	}
 }

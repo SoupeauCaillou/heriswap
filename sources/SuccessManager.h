@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+
+#include "GridSystem.h"
 #include "Game.h"
 
 class SuccessManager {
@@ -86,7 +89,7 @@ class SuccessManager {
 		bool b666Loser;
 		int l666numberLose;
 
-		//success They're too good (Don't beat anyone during 3 games in a row)
+		//success They're too good (Don't get into the top 5 during 3 consecutive games)
 		void sTheyGood(bool imgood);
 		bool bTheyGood;
 		int lTheyGood;
@@ -97,6 +100,10 @@ class SuccessManager {
 		float timeInSwappingPreparation;
 
 		//success Bim Bam Boum (Get 3 differents colors combination by moving only one leaf)
-		void sBimBamBoum(int differents);
+		void sBimBamBoum(std::vector<Combinais> &s);
 		bool bBimBamBoum;
+
+		//success Double in one (Make a double combination by switching 2 leaves)
+		void sDoubleInOne(std::vector<Combinais> &s);
+		bool bDoubleInOne;
 };

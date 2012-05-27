@@ -17,7 +17,7 @@ DeleteGameStateManager::DeleteGameStateManager(SuccessManager* sMgr) : successMg
 
 void DeleteGameStateManager::setAnimSpeed() {
 	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
-	
+
 	ADSR(eRemove)->idleValue = 0;
 	ADSR(eRemove)->attackValue = 1.0;
 	ADSR(eRemove)->attackTiming = difficulty*0.3;
@@ -39,6 +39,8 @@ void DeleteGameStateManager::Enter() {
 
 	removing = theGridSystem.LookForCombination(true,true);
 	if (!removing.empty()) {
+		successMgr->sDoubleInOne(removing);
+		successMgr->sBimBamBoum(removing);
 	    for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
 	        for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
 	            Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);

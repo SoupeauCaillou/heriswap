@@ -153,10 +153,10 @@ public class TilematchJNILib {
     }
 
 	static final String[] boards = new String[] {
-		"1180087",
-		"1180047",
-		"1180057",
-		"1180067"
+		"1180207",
+		"1180177",
+		"1180187",
+		"1180197"
 	};
 
     static public void submitScore(int mode, int difficulty, int points, int level, float time, String name) {
@@ -187,7 +187,6 @@ public class TilematchJNILib {
 
 	   	Leaderboard l = new Leaderboard(boards[2*(mode-1)+difficulty]);
 	   	Log.i(TilematchActivity.Tag, "leaderboard id: " + boards[2*(mode-1)+difficulty]);
-		Log.i(TilematchActivity.Tag, "aaaaaaaa" + points + "   " + 1000*time);
 
 		final Score s = new Score((long) ((mode == 1) ? points : time*1000), null);
 			s.submitTo(l, new Score.SubmitToCB() {
@@ -266,9 +265,8 @@ public class TilematchJNILib {
 
 				//ici
 		    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getReadableDatabase();
-		    	Cursor cursor = db.rawQuery("select distinct name from score order by rowid desc", null);
+		    	Cursor cursor = db.rawQuery("select distinct name from score order by rowid desc limit 4", null);
 			    try {
-			    	
 			    	int count = cursor.getCount();
 			    	if (count>0) {
 			    		TilematchActivity.playerNameInputView.findViewById(R.id.reuse).setVisibility(View.VISIBLE);
@@ -280,6 +278,7 @@ public class TilematchJNILib {
 				    	for (i=0; i<3 && cursor.moveToNext(); i++) {
 				    		String n = cursor.getString(0);
 				    		if (!n.equals("rzehtrtyBg")) {
+				    			Log.i(TilematchActivity.Tag, "nom : " + cursor.getString(0));
 				    			TilematchActivity.oldName[i].setText(cursor.getString(0));
 				    			TilematchActivity.oldName[i].setVisibility(View.VISIBLE);
 				    		} else {
