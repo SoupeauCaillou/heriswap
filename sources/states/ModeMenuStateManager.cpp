@@ -349,7 +349,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 	}
 
 	//difficulty button
-	if (BUTTON(bDifficulty)->clicked) {
+	if (gameOverState != AskingPlayerName && BUTTON(bDifficulty)->clicked) {
 		difficulty++;
 		if (difficulty==2) difficulty=0;
 		LoadScore(modeMgr->GetMode(), difficulty);
@@ -359,19 +359,19 @@ GameState ModeMenuStateManager::Update(float dt) {
 			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium 8x8");
 	}
 
-	if (BUTTON(playButton)->clicked) {
+	if (gameOverState != AskingPlayerName && BUTTON(playButton)->clicked) {
 		SOUND(playButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		RENDERING(herisson->actor.e)->hide = true;
 		TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
 		TEXT_RENDERING(title)->hide = true;
 		return ModeMenuToBlackState;
-	} if (BUTTON(back)->clicked || pleaseGoBack) {
+	} if (gameOverState != AskingPlayerName && (BUTTON(back)->clicked || pleaseGoBack)) {
         pleaseGoBack = false;
 		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		return MainMenu;
 	}
 	#ifdef ANDROID
-	if (BUTTON(openfeint)->clicked) {
+	if (gameOverState != AskingPlayerName && BUTTON(openfeint)->clicked) {
 		successAPI->openfeintLB(modeMgr->GetMode(), difficulty);
 	}
 	#endif
