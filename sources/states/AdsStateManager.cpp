@@ -34,7 +34,6 @@ void AdsStateManager::Enter() {
 	gameb4Ads = storage->getGameCountBeforeNextAd();
  	LOGI("%s : %d", __PRETTY_FUNCTION__, gameb4Ads);
 
-
 	if ((!gameb4Ads || (TimeUtil::getTime() - lastAdTime > 180))  && RENDERING(eAds)->hide) {
 		BUTTON(eAds)->enabled = true;
 		RENDERING(eAds)->color = Color(1.f,1.f,1.f);

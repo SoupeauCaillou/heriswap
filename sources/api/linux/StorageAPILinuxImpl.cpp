@@ -94,7 +94,7 @@ int StorageAPILinuxImpl::getGameCountBeforeNextAd() {
 
 void StorageAPILinuxImpl::setGameCountBeforeNextAd(int c) {
     std::stringstream s;
-    s << "update info set value='" << c-1 << "' where opt='gameb4Ads'";
+    s << "update info set value='" << c << "' where opt='gameb4Ads'";
     request(s.str(),0, 0);
 }
 
