@@ -40,6 +40,7 @@ public class TilematchJNILib {
     public static native void initFromRenderThread(long game, int width, int height);
     public static native void initFromGameThread(long game, byte[] state);
     public static native void step(long game);
+    public static native void resetTimestep(long game);
     public static native void render(long game);
     public static native void pause(long game);
     public static native void back(long game);

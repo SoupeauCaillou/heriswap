@@ -217,6 +217,7 @@ public class TilematchActivity extends Activity {
         super.onResume();
         if (wl != null)
         	wl.acquire();
+        TilematchJNILib.resetTimestep(TilematchActivity.game);
         TilematchActivity.runGameLoop = true;
         TilematchActivity.requestPausedFromJava = false;
         isRunning = true;
