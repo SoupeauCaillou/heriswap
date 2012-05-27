@@ -247,7 +247,7 @@ void ModeMenuStateManager::Enter() {
 	TEXT_RENDERING(play)->hide = false;
 	RENDERING(back)->hide = false;
 	RENDERING(menubg)->hide = false;
-	//~ TEXT_RENDERING(title)->hide = false;
+	TEXT_RENDERING(title)->hide = false;
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
 	TEXT_RENDERING(play)->text = (gameOverState != NoGame) ? localizeAPI->text("rejouer", "Rejouer") : localizeAPI->text("jouer", "Jouer");
