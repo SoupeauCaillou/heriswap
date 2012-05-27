@@ -44,6 +44,7 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
     void startGameThread() {
     	gameThread = new Thread(new Runnable() {
 			public void run() {
+				TilematchActivity.runGameLoop = true;
 				TilematchJNILib.initFromGameThread(TilematchActivity.game, TilematchActivity.savedState);
 				// force gc before starting game
 				System.gc();
@@ -54,8 +55,14 @@ public class TilematchRenderer implements GLSurfaceView.Renderer {
 				// TilematchActivity.cb.showInterstitial();
 				
 				while ( TilematchActivity.isRunning || TilematchActivity.requestPausedFromJava) {
-					TilematchJNILib.step(TilematchActivity.game);
-					TilematchActivity.mGLView.requestRender();
+					if (TilematchActivity.runGameLoop) {
+						TilematchJNILib.step(TilematchActivity.game);
+						TilematchActivity.mGLView.requestRender();
+					} else {
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {}
+					}
 					
 					if (TilematchActivity.requestPausedFromJava) {
 						TilematchJNILib.pause(TilematchActivity.game);

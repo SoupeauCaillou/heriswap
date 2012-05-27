@@ -69,6 +69,7 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(back, Transformation);
 	ADD_COMPONENT(back, Rendering);
 	ADD_COMPONENT(back, Button);
+    BUTTON(back)->overSize = 1.3;
 	ADD_COMPONENT(back, Sound);
 	TRANSFORM(back)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(75));
 	TransformationSystem::setPosition(TRANSFORM(back), Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(82)), TransformationSystem::NW);
@@ -140,6 +141,7 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(openfeint, Transformation);
 	ADD_COMPONENT(openfeint, Rendering);
 	ADD_COMPONENT(openfeint, Button);
+    BUTTON(openfeint)->overSize = 1.3;
 	ADD_COMPONENT(openfeint, Sound);
 	TRANSFORM(openfeint)->size = Vector2(PlacementHelper::GimpWidthToScreen(90), PlacementHelper::GimpHeightToScreen(91));
 	TransformationSystem::setPosition(TRANSFORM(openfeint), Vector2(PlacementHelper::GimpXToScreen(605), PlacementHelper::GimpYToScreen(476)), TransformationSystem::NW);

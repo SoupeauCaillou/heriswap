@@ -42,6 +42,7 @@ void InGameUiHelper::build() {
 	RENDERING(pauseButton)->texture = theRenderingSystem.loadTextureFile("pause.png");
     ADD_COMPONENT(pauseButton, Sound);
 	ADD_COMPONENT(pauseButton, Button);
+    BUTTON(pauseButton)->overSize = 1.6;
 	BUTTON(pauseButton)->enabled = false;
 
 	scoreProgress = theEntityManager.CreateEntity();
