@@ -34,6 +34,7 @@ void LevelStateManager::Setup() {
 	eBigLevel = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eBigLevel, Transformation);
 	ADD_COMPONENT(eBigLevel, TextRendering);
+	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
 	TEXT_RENDERING(eBigLevel)->color = Color(1, 1, 1);
 	TEXT_RENDERING(eBigLevel)->fontName = "gdtypo";
 	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(234);
@@ -82,7 +83,6 @@ void LevelStateManager::Enter() {
 	a << currentLevel;
 	TEXT_RENDERING(eBigLevel)->text = a.str();
 	TEXT_RENDERING(eBigLevel)->hide = false;
-	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
 	TRANSFORM(eBigLevel)->z = DL_Score;
 
 	MUSIC(eBigLevel)->control = MusicComponent::Start;
@@ -95,6 +95,7 @@ void LevelStateManager::Enter() {
 
 	PARTICULE(eSnowEmitter)->emissionRate = 50;
 	RENDERING(eSnowBranch)->hide = false;
+	RENDERING(eSnowBranch)->color.a = 1;
 	RENDERING(eSnowGround)->hide = false;
 
 	duration = 0;
@@ -140,7 +141,7 @@ GameState LevelStateManager::Update(float dt) {
 	}
 
 	//start music at 0.5 s
-	if (duration > 0.5 && MUSIC(eBigLevel)->music == InvalidMusicRef) {
+	if (duration > 0.5 && MUSIC(eBigLevel)->music == InvalidMusicRef && !theMusicSystem.isMuted()) {
 		MUSIC(eBigLevel)->music = theMusicSystem.loadMusicFile("audio/level_up.ogg");
 	}
 	//move big score + hedgehog
@@ -166,11 +167,15 @@ GameState LevelStateManager::Update(float dt) {
 			//on genere les nouvelles feuilles
 			newLeavesGenerated = true;
 			modeMgr->generateLeaves(0, theGridSystem.Types);
+			for (int i=0; i<modeMgr->branchLeaves.size(); i++) {
+				TRANSFORM(modeMgr->branchLeaves[i].e)->size = 0;
+			}
 		} else {
 			//if leaves created, make them grow !
 			for (int i=0; i<modeMgr->branchLeaves.size(); i++) {
 				TRANSFORM(modeMgr->branchLeaves[i].e)->size = Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f);
 			}
+			RENDERING(eSnowBranch)->color.a = 1-(duration-6)/(10-6);
 		}
 	}
 
@@ -190,7 +195,6 @@ void LevelStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	TEXT_RENDERING(eBigLevel)->hide = true;
 	PARTICULE(eSnowEmitter)->emissionRate = 0;
-	// RENDERING(eDesaturate)->hide = false;
 	RENDERING(eSnowBranch)->hide = true;
 	RENDERING(eSnowGround)->hide = true;
 	RENDERING(modeMgr->herisson)->color.a = 1;
