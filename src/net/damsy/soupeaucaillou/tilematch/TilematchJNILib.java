@@ -190,7 +190,6 @@ public class TilematchJNILib {
 				@Override public void onBlobUploadFailure(String exceptionMessage) {
 			}
 		});
-
     }
 
     static public int getScores(int mode, int difficulty, int[] points, int[] levels, float[] times, String[] names) {
@@ -210,7 +209,7 @@ public class TilematchJNILib {
     		times[i] = cursor.getFloat(cursor.getColumnIndex("time"));
     		names[i] = cursor.getString(cursor.getColumnIndex("name"));
 
-    		//Log.i("tilematchJ", points[i] + ", " + levels[i] + ", " + times[i] + ", " + names[i] + ".");
+    		Log.i("tilematchJ", points[i] + ", " + levels[i] + ", " + times[i] + ", " + names[i] + ".");
     		cursor.moveToNext();
     	}
     	cursor.close();
