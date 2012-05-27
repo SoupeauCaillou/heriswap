@@ -357,6 +357,8 @@ GameState ModeMenuStateManager::Update(float dt) {
 			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy 5x5");
 		else
 			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium 8x8");
+
+		TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Jouer");
 	}
 
 	if (gameOverState != AskingPlayerName && BUTTON(playButton)->clicked) {
