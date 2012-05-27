@@ -24,7 +24,7 @@ SpawnGameStateManager::SpawnGameStateManager(SuccessManager* smgr){
 
 void SpawnGameStateManager::setAnimSpeed() {
 	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
-	
+
 	ADSR(eSpawn)->idleValue = 0;
 	ADSR(eSpawn)->attackValue = 1.0;
 	ADSR(eSpawn)->attackTiming = difficulty*0.2;
@@ -62,7 +62,8 @@ void SpawnGameStateManager::Enter() {
             if (spawning[i].fe == 0)
 			    spawning[i].fe = createCell(spawning[i], true);
 		}
-		int ite=0; //give up if no solutions
+		int ite=0;
+		//get a new grid which has no direct combinations but still combinations to do (give up at 100 try)
 		do {
 			c = theGridSystem.LookForCombination(false,true);
 			// change type from cells in combi
@@ -76,13 +77,8 @@ void SpawnGameStateManager::Enter() {
 				}
 			}
 			ite++;
-		} while(!c.empty() && ite<100);
-        /*for(int i=0; i<spawning.size(); i++) {
-            GridComponent* c = GRID(spawning[i].fe);
-            c->i = c->j = -1;
-        }*/
-		// spawning.clear();
-		// fillTheBlank(spawning);
+		} while((!c.empty() || !theGridSystem.StillCombinations()) && ite<100 );
+
         ADSR(eSpawn)->active = true;
 	} else {
 	    ADSR(eSpawn)->active = false;
