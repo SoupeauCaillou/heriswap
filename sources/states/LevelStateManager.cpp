@@ -90,12 +90,12 @@ void LevelStateManager::Enter() {
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->color.a, 0, 1));
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(smallLevel)->color.a, 1, 0));
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&RENDERING(eSnowGround)->color.a, 0, 1));
+	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&RENDERING(eSnowBranch)->color.a, 0, 2));
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&RENDERING(modeMgr->herisson)->color.a, 1, 0));
 	MORPHING(eBigLevel)->active = true;
 
 	PARTICULE(eSnowEmitter)->emissionRate = 50;
 	RENDERING(eSnowBranch)->hide = false;
-	RENDERING(eSnowBranch)->color.a = 1;
 	RENDERING(eSnowGround)->hide = false;
 
 	duration = 0;
@@ -176,6 +176,7 @@ GameState LevelStateManager::Update(float dt) {
 				TRANSFORM(modeMgr->branchLeaves[i].e)->size = Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f);
 			}
 			RENDERING(eSnowBranch)->color.a = 1-(duration-6)/(10-6);
+			RENDERING(eSnowGround)->color.a = 1-(duration-6)/(10-6);
 		}
 	}
 
