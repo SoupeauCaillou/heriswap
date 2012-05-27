@@ -3,12 +3,14 @@
 #include <iomanip>
 #include <sstream>
 
+#include <base/PlacementHelper.h>
+#include <base/MathUtil.h>
+
 #include "systems/ContainerSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
 
 #include "DepthLayer.h"
-#include "base/PlacementHelper.h"
 #include "Game.h"
 #include "CombinationMark.h"
 #include "GridSystem.h"
@@ -55,7 +57,7 @@ void TilesAttackGameModeManager::GameUpdate(float dt) {
 	time+=dt;
 }
 float TilesAttackGameModeManager::GameProgressPercent() {
-	return 1.0f*leavesDone/limit;
+	return MathUtil::Min(1.0f*leavesDone/limit, 1.0f);;
 }
 
 void TilesAttackGameModeManager::UiUpdate(float dt) {

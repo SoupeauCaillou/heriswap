@@ -29,6 +29,7 @@
 #include "states/PauseStateManager.h"
 
 #include "modes/NormalModeManager.h"
+#include "modes/TilesAttackModeManager.h"
 
 #include "DepthLayer.h"
 #include "GridSystem.h"
@@ -341,13 +342,23 @@ void Game::tick(float dt) {
 		 toggleShowCombi(true);
 	 }
 
-	// si on change de niveau
-    if (datas->state == Delete && datas->mode2Manager[datas->mode]->LevelUp()) {
-            NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[datas->mode]);
-            static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel = m->currentLevel();
-            newState = LevelChanged;
+	if (datas->state == Delete) {
+		// si on change de niveau (course au score), on remplit pas la grille avant l'anim
+		if (datas->mode == Normal) {
+			NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]);
+			if (m->LevelUp()) {
+				static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel = m->currentLevel();
+				newState = LevelChanged;
+			}
+		}
+		// si on a fini (contre la montre), on remplit pas la grille et on quitte direct
+		if (datas->mode == TilesAttack) {
+			TilesAttackGameModeManager* m = static_cast<TilesAttackGameModeManager*> (datas->mode2Manager[TilesAttack]);
+			if (m->GameProgressPercent()==1) {
+				newState = GameToBlack;
+			}
+		}
 	}
-
 	//si on est passé de pause à quelque chose different de pause, on desactive la pause
 	if (datas->state == Pause && newState == Unpause) {
 		togglePause(false);

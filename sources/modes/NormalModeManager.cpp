@@ -5,6 +5,7 @@
 #include <base/Vector2.h>
 #include <base/MathUtil.h>
 #include <base/PlacementHelper.h>
+#include <base/MathUtil.h>
 
 #include "systems/ScrollingSystem.h"
 #include "systems/ContainerSystem.h"
@@ -77,7 +78,7 @@ void NormalGameModeManager::GameUpdate(float dt) {
 }
 
 float NormalGameModeManager::GameProgressPercent() {
-	return (float)time/limit;
+	return MathUtil::Min(1.0f, (float)time/limit);
 }
 
 
