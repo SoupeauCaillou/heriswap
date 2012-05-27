@@ -86,7 +86,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	updateHerisson(dt, leavesDone, 0);
 }
 
-static int levelToLeaveToDelete(int leavesMaxSize, int limit, int nb, int leavesDone) {
+int TilesAttackGameModeManager::levelToLeaveToDelete(int leavesMaxSize, int limit, int nb, int leavesDone) {
 	int totalBranch = leavesMaxSize; // nb de feuilles total sur l'arbre
 	int breakBranch = totalBranch-20;
 	int breakComb = limit-20;
