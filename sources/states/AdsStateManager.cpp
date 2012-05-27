@@ -31,7 +31,7 @@ void AdsStateManager::Setup() {
 
 void AdsStateManager::Enter() {
 	stateActiveDuration = 0;
- gameb4Ads = storage->getGameCountBeforeNextAd();
+	gameb4Ads = storage->getGameCountBeforeNextAd();
  	LOGI("%s : %d", __PRETTY_FUNCTION__, gameb4Ads);
 
 

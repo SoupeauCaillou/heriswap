@@ -8,7 +8,8 @@
 
 int callback(void *save, int argc, char **argv, char **azColName){
 	std::string *sav = static_cast<std::string*>(save);
-	if (argc>0) *sav = argv[0];
+	if (argv[0] != 0)
+		*sav = argv[0];
 	return 0;
 }
 

@@ -1,4 +1,5 @@
 #include "StorageAPILinuxImpl.h"
+#include <string>
 #include <sstream>
 #include <sqlite3.h>
 #include "base/Log.h"
@@ -22,7 +23,7 @@ static bool request(std::string s, void* res, int (*callbackP)(void*,int,char**,
         rc = sqlite3_exec(db, s.c_str(), callback, res, &zErrMsg);
 
     if( rc!=SQLITE_OK ){
-        LOGI("SQL error: %s\n", zErrMsg);
+        LOGI("SQL error: %s (asked = %s)\n", zErrMsg, s.c_str());
         sqlite3_free(zErrMsg);
     }
     sqlite3_close(db);
@@ -98,7 +99,7 @@ void StorageAPILinuxImpl::setGameCountBeforeNextAd(int c) {
 }
 
 int StorageAPILinuxImpl::getSavedGamePointsSum() {
-    std::string s;
+    std::string s = "";
     request("select sum(points) from score", &s, 0);
     return atoi(s.c_str());
 }
