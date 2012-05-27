@@ -32,11 +32,14 @@ SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	b666Loser = false;
 	bTheyGood = false;
 	bWhatToDo = false;
+	bBimBamBoum = false;
+	bDoubleInOne = false;
 
 	timeTotalPlayed = 0.f;
 	timeUserInputloop = 0.f;
 	timeInSwappingPreparation = 0.f;
 
+	numberCombinationInARow = 0;
 	//ne dois pas etre reinit a chaque game :
 	l666numberLose = 0;
 	lTheyGood = 0;
@@ -46,6 +49,8 @@ void SuccessManager::NewGame(int difficulty) {
 	hardMode = difficulty;
 
 	gridResetted = false;
+
+	numberCombinationInARow = 0;
 
 	bonusTilesNumber = 0;
 	for (int i=0; i<8; i++) {
@@ -254,12 +259,20 @@ void SuccessManager::sWhatToDo(bool swapInPreparation, float dt) {
 	}
 }
 
-void SuccessManager::sBimBamBoum(std::vector<Combinais> &s) {
+// Delete::Enter gives newCombiCount
+// User::Enter cancel it and gives 0
+void SuccessManager::sBimBamBoum(int newCombiCount) {
 	if (hardMode && !bBimBamBoum) {
-		//~ if (different >= 3) {
-			//~ successAPI->successCompleted("Bim Bam Boum", 1685032);
-			//~ bBimBamBoum = true;
-		//~ }
+		if (newCombiCount == 0) {
+			numberCombinationInARow = 0;
+		} else {
+			numberCombinationInARow += newCombiCount;
+		}
+
+		if (numberCombinationInARow >= 3) {
+			successAPI->successCompleted("Bim Bam Boum", 1685032);
+			bBimBamBoum = true;
+		}
 	}
 }
 

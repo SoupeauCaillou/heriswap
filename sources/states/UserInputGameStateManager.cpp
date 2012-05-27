@@ -54,6 +54,8 @@ void UserInputGameStateManager::Enter() {
 	dragged = 0;
 
 	successMgr->timeUserInputloop = 0.f;
+
+	successMgr->sBimBamBoum(0);
 }
 
 GameState UserInputGameStateManager::Update(float dt) {

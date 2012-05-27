@@ -99,9 +99,10 @@ class SuccessManager {
 		bool bWhatToDo;
 		float timeInSwappingPreparation;
 
-		//success Bim Bam Boum (Get 3 differents colors combination by moving only one leaf)
-		void sBimBamBoum(std::vector<Combinais> &s);
+		//success Bim Bam Boum (Get 3 differents combination by moving only one leaf)
+		void sBimBamBoum(int count);
 		bool bBimBamBoum;
+		int numberCombinationInARow;
 
 		//success Double in one (Make a double combination by switching 2 leaves)
 		void sDoubleInOne(std::vector<Combinais> &s);

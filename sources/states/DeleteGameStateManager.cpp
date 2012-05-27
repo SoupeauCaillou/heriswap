@@ -40,7 +40,7 @@ void DeleteGameStateManager::Enter() {
 	removing = theGridSystem.LookForCombination(true,true);
 	if (!removing.empty()) {
 		successMgr->sDoubleInOne(removing);
-		successMgr->sBimBamBoum(removing);
+		successMgr->sBimBamBoum(removing.size());
 	    for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
 	        for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
 	            Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
