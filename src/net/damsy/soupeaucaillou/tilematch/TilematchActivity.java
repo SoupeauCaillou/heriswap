@@ -61,7 +61,8 @@ public class TilematchActivity extends Activity {
 	static public Resources res;
 	static public SharedPreferences preferences;
 	static public Button[] oldName;
-	static public boolean adHasBeenShown;
+	static public boolean adHasBeenShown, ofHasBeenShown;
+	static public boolean runGameLoop;
 	
 	static public TilematchActivity activity;
 	PowerManager.WakeLock wl;
@@ -74,6 +75,7 @@ public class TilematchActivity extends Activity {
 			Log.w(TilematchActivity.Tag, "Ad hidden");
 			adHasBeenShown = true;
 		}
+		ofHasBeenShown = false;
 	}
 	
 	@Override
@@ -81,6 +83,7 @@ public class TilematchActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.i(TilematchActivity.Tag, "Activity LifeCycle ##### ON CREATE");
         activity = this;
+        ofHasBeenShown = adHasBeenShown = false;
         GSSDK.initialize(this, "1eace49f-c89e-40be-857f-4cd88897cc02");
         
         
@@ -200,6 +203,7 @@ public class TilematchActivity extends Activity {
         
         if (TilematchActivity.game != 0) {
 	        // TilematchActivity.isRunning = false;
+        	TilematchActivity.runGameLoop = false; // prevent step being called again
 	        synchronized (TilematchActivity.mutex) {
 	        	TilematchJNILib.invalidateTextures(TilematchActivity.game);
 			}
@@ -209,9 +213,11 @@ public class TilematchActivity extends Activity {
     @Override
     protected void onResume() {
     	Log.i(TilematchActivity.Tag, "Activity LifeCycle ##### ON RESUME");
+    	ofHasBeenShown  = false;
         super.onResume();
         if (wl != null)
         	wl.acquire();
+        TilematchActivity.runGameLoop = true;
         TilematchActivity.requestPausedFromJava = false;
         isRunning = true;
         mGLView.onResume();

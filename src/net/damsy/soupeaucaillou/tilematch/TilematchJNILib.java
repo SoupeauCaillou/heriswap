@@ -246,13 +246,23 @@ public class TilematchJNILib {
     }
 
     static public void openfeintLeaderboard(int mode, int difficulty) {
-    	if (mode >= 1 && mode <= 2 && difficulty >= 0 && difficulty <= 1) {
-    		Dashboard.openLeaderboard(boards[2*(mode-1)+difficulty]);
+    	if (!TilematchActivity.ofHasBeenShown) {
+	    	if (mode >= 1 && mode <= 2 && difficulty >= 0 && difficulty <= 1) {
+	    		Dashboard.openLeaderboard(boards[2*(mode-1)+difficulty]);
+	    		TilematchActivity.ofHasBeenShown = true;
+	    	}
+    	} else {
+    		Log.w(TilematchActivity.Tag, "OF already shown");
     	}
     }
 
     static public void openfeintSuccess() {
-    	Dashboard.openAchievements();
+    	if (!TilematchActivity.ofHasBeenShown) {
+	    	Dashboard.openAchievements();
+	    	TilematchActivity.ofHasBeenShown = true;
+    	} else {
+    		Log.w(TilematchActivity.Tag, "OF already shown");
+    	}
     }
     //-------------------------------------------------------------------------
     // NameInputAPI
