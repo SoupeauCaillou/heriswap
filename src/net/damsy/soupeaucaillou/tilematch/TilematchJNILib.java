@@ -169,19 +169,7 @@ public class TilematchJNILib {
     	v.put("time", time);
     	v.put("level", level);
     	db.insert("score", null, v);
-    	
-    	//push only best score on OF
-    	Cursor cursor = null;
-		if (mode==1) {
-			cursor = db.query("score", new String[] {"name", "points", "time", "level"}, "mode='" + mode + "' and difficulty='" + difficulty + "'", null, null, null, "points desc");
-			cursor.moveToFirst();
-    		points = Math.max(points, cursor.getInt(cursor.getColumnIndex("points")));
-		} else {
-			cursor = db.query("score", new String[] {"name", "points", "time", "level"}, "mode='" + mode + "' and difficulty='" + difficulty + "'", null, null, null, "time asc");
-			cursor.moveToFirst();
-    		time = Math.min(time, cursor.getFloat(cursor.getColumnIndex("time")));
-		}
-    	cursor.close();
+
     	db.close();
 
 
@@ -245,23 +233,13 @@ public class TilematchJNILib {
     }
 
     static public void openfeintLeaderboard(int mode, int difficulty) {
-    	if (!TilematchActivity.ofHasBeenShown) {
-	    	if (mode >= 1 && mode <= 2 && difficulty >= 0 && difficulty <= 1) {
-	    		Dashboard.openLeaderboard(boards[2*(mode-1)+difficulty]);
-	    		TilematchActivity.ofHasBeenShown = true;
-	    	}
-    	} else {
-    		Log.w(TilematchActivity.Tag, "OF already shown");
+    	if (mode >= 1 && mode <= 2 && difficulty >= 0 && difficulty <= 1) {
+    		Dashboard.openLeaderboard(boards[2*(mode-1)+difficulty]);
     	}
     }
 
     static public void openfeintSuccess() {
-    	if (!TilematchActivity.ofHasBeenShown) {
-	    	Dashboard.openAchievements();
-	    	TilematchActivity.ofHasBeenShown = true;
-    	} else {
-    		Log.w(TilematchActivity.Tag, "OF already shown");
-    	}
+    	Dashboard.openAchievements();
     }
     //-------------------------------------------------------------------------
     // NameInputAPI
@@ -285,16 +263,17 @@ public class TilematchJNILib {
 					}
 			    	int i = 0;
 			    	if (cursor.moveToFirst()) {
-				    	for (i=0; i<3 && cursor.moveToNext(); i++) {
+				    	do {
 				    		String n = cursor.getString(0);
+			    			Log.i(TilematchActivity.Tag, "nsssssssssom : " + n);
+
 				    		if (!n.equals("rzehtrtyBg")) {
-				    			Log.i(TilematchActivity.Tag, "nom : " + cursor.getString(0));
-				    			TilematchActivity.oldName[i].setText(cursor.getString(0));
+				    			Log.i(TilematchActivity.Tag, "nom : " + n);
+				    			TilematchActivity.oldName[i].setText(n);
 				    			TilematchActivity.oldName[i].setVisibility(View.VISIBLE);
-				    		} else {
-				    			--i;
+				    			i++;
 				    		}
-				    	}
+				    	} while (i<3 && cursor.moveToNext());
 			    	}
 			    	for (; i<3; i++) {
 			    		TilematchActivity.oldName[i].setVisibility(View.GONE);
