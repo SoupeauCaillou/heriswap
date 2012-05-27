@@ -33,14 +33,11 @@ void LevelStateManager::Setup() {
 
 	eBigLevel = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eBigLevel, Transformation);
-	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
-	TRANSFORM(eBigLevel)->z = DL_Score;
 	ADD_COMPONENT(eBigLevel, TextRendering);
 	TEXT_RENDERING(eBigLevel)->color = Color(1, 1, 1);
 	TEXT_RENDERING(eBigLevel)->fontName = "gdtypo";
 	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(234);
 	TEXT_RENDERING(eBigLevel)->positioning = TextRenderingComponent::CENTER;
-	TEXT_RENDERING(eBigLevel)->isANumber = true;
 	ADD_COMPONENT(eBigLevel, Music);
     ADD_COMPONENT(eBigLevel, Morphing);
 	MUSIC(eBigLevel)->control = MusicComponent::Stop;
@@ -85,20 +82,20 @@ void LevelStateManager::Enter() {
 	a << currentLevel;
 	TEXT_RENDERING(eBigLevel)->text = a.str();
 	TEXT_RENDERING(eBigLevel)->hide = false;
-	PARTICULE(eSnowEmitter)->emissionRate = 50;
-	RENDERING(eSnowBranch)->hide = false;
-	RENDERING(eSnowGround)->hide = false;
-	MUSIC(eBigLevel)->control = MusicComponent::Start;
+	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
+	TRANSFORM(eBigLevel)->z = DL_Score;
 
+	MUSIC(eBigLevel)->control = MusicComponent::Start;
 	MORPHING(eBigLevel)->timing = 1;
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->color.a, 0, 1));
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(smallLevel)->color.a, 1, 0));
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&RENDERING(eSnowGround)->color.a, 0, 1));
+	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&RENDERING(modeMgr->herisson)->color.a, 1, 0));
 	MORPHING(eBigLevel)->active = true;
 
-	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
-	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(288);
-	TEXT_RENDERING(eBigLevel)->hide = false;
+	PARTICULE(eSnowEmitter)->emissionRate = 50;
+	RENDERING(eSnowBranch)->hide = false;
+	RENDERING(eSnowGround)->hide = false;
 
 	duration = 0;
 
@@ -131,10 +128,7 @@ void LevelStateManager::Enter() {
 GameState LevelStateManager::Update(float dt) {
 	duration += dt;
 
-   if (duration > 0.5 && MUSIC(eBigLevel)->music == InvalidMusicRef) {
-        MUSIC(eBigLevel)->music = theMusicSystem.loadMusicFile("audio/level_up.ogg");
-   }
-
+	//set grid alpha to 0
 	if (duration > 0.15) {
 		ADSR(eGrid)->active = true;
 		float alpha = 1 - ADSR(eGrid)->value;
@@ -145,6 +139,12 @@ GameState LevelStateManager::Update(float dt) {
 		}
 	}
 
+	//start music at 0.5 s
+	if (duration > 0.5 && MUSIC(eBigLevel)->music == InvalidMusicRef) {
+		MUSIC(eBigLevel)->music = theMusicSystem.loadMusicFile("audio/level_up.ogg");
+	}
+	//move big score + hedgehog
+	//generate new leaves
 	if (duration > 6) {
 		MorphingComponent* mc = MORPHING(eBigLevel);
 		for (int i=0; i<mc->elements.size(); i++) {
@@ -166,15 +166,16 @@ GameState LevelStateManager::Update(float dt) {
 			//on genere les nouvelles feuilles
 			newLeavesGenerated = true;
 			modeMgr->generateLeaves(0, theGridSystem.Types);
-		}
-	}
-	if (newLeavesGenerated) {
-		for (int i=0; i<modeMgr->branchLeaves.size(); i++) {
-			TRANSFORM(modeMgr->branchLeaves[i].e)->size = Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f);
+		} else {
+			//if leaves created, make them grow !
+			for (int i=0; i<modeMgr->branchLeaves.size(); i++) {
+				TRANSFORM(modeMgr->branchLeaves[i].e)->size = Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f);
+			}
 		}
 	}
 
 
+	//level ainmation ended - back to game
 	if (duration > 10) {
 		return Spawn;
 	}
@@ -192,6 +193,7 @@ void LevelStateManager::Exit() {
 	// RENDERING(eDesaturate)->hide = false;
 	RENDERING(eSnowBranch)->hide = true;
 	RENDERING(eSnowGround)->hide = true;
+	RENDERING(modeMgr->herisson)->color.a = 1;
 
 	MorphingComponent* mc = MORPHING(eBigLevel);
 	for (int i=0; i<mc->elements.size(); i++) {
