@@ -69,6 +69,7 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(back, Transformation);
 	ADD_COMPONENT(back, Rendering);
 	ADD_COMPONENT(back, Button);
+    BUTTON(back)->overSize = 1.3;
 	ADD_COMPONENT(back, Sound);
 	TRANSFORM(back)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(75));
 	TransformationSystem::setPosition(TRANSFORM(back), Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(82)), TransformationSystem::NW);
