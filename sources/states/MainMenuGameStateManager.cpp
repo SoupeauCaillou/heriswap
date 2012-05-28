@@ -40,10 +40,10 @@ void MainMenuGameStateManager::Setup() {
 	    RENDERING(bStart[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton.png");
 	    RENDERING(bStart[i])->color.a = 0.5;
 	}
-	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Classique");
+	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Course au score");
 	TRANSFORM(eStart[0])->position.X = PlacementHelper::GimpXToScreen(75);
 	TRANSFORM(eStart[0])->position.Y = TRANSFORM(bStart[0])->position.Y = PlacementHelper::GimpYToScreen(156);
-	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2", "Mange tes feuilles");
+	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2", "Contre la montre");
 	TRANSFORM(eStart[1])->position.X = PlacementHelper::GimpXToScreen(75);
 	TRANSFORM(eStart[1])->position.Y = TRANSFORM(bStart[1])->position.Y = PlacementHelper::GimpYToScreen(156+183);
 

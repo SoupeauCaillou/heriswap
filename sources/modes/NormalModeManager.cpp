@@ -58,6 +58,7 @@ void NormalGameModeManager::Exit() {
 
     MUSIC(stressTrack)->volume = 0;
     ADSR(stressTrack)->active = false;
+    ADSR(stressTrack)->value = 0;
 
 	GameModeManager::Exit();
 }
