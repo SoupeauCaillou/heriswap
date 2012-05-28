@@ -34,7 +34,7 @@ void SpawnGameStateManager::setAnimSpeed() {
 
 	ADSR(eGrid)->idleValue = 0;
 	ADSR(eGrid)->attackValue = 1.0;
-	ADSR(eGrid)->attackTiming = difficulty*0.3;
+	ADSR(eGrid)->attackTiming = difficulty*0.5;
 	ADSR(eGrid)->decayTiming = 0;
 	ADSR(eGrid)->sustainValue = 1.0;
 	ADSR(eGrid)->releaseTiming = 0;
@@ -141,6 +141,8 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
             fillTheBlank(spawning);
             LOGI("nouvelle grille de %lu elements! ", spawning.size());
             successMgr->gridResetted = true;
+            transitionCree->activationTime = 0;
+			transitionCree->active = true;
         }
     //sinon l'etat suivant depend de la grille actuelle
     } else {
