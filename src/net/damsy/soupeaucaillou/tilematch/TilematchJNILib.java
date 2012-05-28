@@ -177,7 +177,7 @@ public class TilematchJNILib {
 	   	Leaderboard l = new Leaderboard(boards[2*(mode-1)+difficulty]);
 	   	Log.i(TilematchActivity.Tag, "leaderboard id: " + boards[2*(mode-1)+difficulty]);
 
-		final Score s = new Score((long) ((mode == 1) ? points : time*1000), null);
+		final Score s = new Score((long) ((mode == 1) ? points : time*1000), (float)((int)(time*100)/100.f) + "s");
 			s.submitTo(l, new Score.SubmitToCB() {
 			@Override public void onSuccess(boolean newHighScore) {
 				Log.i(TilematchActivity.Tag, "score posting successfull");
@@ -223,13 +223,17 @@ public class TilematchJNILib {
     //-------------------------------------------------------------------------
     static public void unlockAchievement(int id) {
     	Achievement achv = new Achievement(Integer.toString(id));
-    	achv.unlock(new Achievement.UnlockCB() {
+    	achv.load(null);
+    	
+    	if (!achv.isUnlocked) {
+    		achv.unlock(new Achievement.UnlockCB() {
 
-			@Override
-			public void onSuccess(boolean newUnlock) {
-				Log.i(TilematchActivity.Tag, "Achievement unlock successful");
-			}
-		});
+    			@Override
+    			public void onSuccess(boolean newUnlock) {
+    				Log.i(TilematchActivity.Tag, "Achievement unlock successful");
+    			}
+    		});
+    	}
     }
 
     static public void openfeintLeaderboard(int mode, int difficulty) {
@@ -518,6 +522,8 @@ public class TilematchJNILib {
 
     static public int getPosition(Object o) {
     	DumbAndroid dumb = (DumbAndroid) o;
+    	if (dumb.track.getState() != AudioTrack.STATE_INITIALIZED || dumb.track.getPlayState() != AudioTrack.PLAYSTATE_PLAYING)
+    		return 0;
     	return dumb.track.getPlaybackHeadPosition();
     }
 

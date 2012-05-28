@@ -197,6 +197,7 @@ bool NormalGameModeManager::LevelUp() {
 		bonus = MathUtil::RandomInt(theGridSystem.Types);
 		LoadHerissonTexture(bonus+1);
 		RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
+		SCROLLING(decor1er)->speed.X = 0;
 	}
 	return match;
 }

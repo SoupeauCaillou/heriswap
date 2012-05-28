@@ -133,14 +133,14 @@ GameState LevelStateManager::Update(float dt) {
 	//set grid alpha to 0
 	if (levelState == Start && duration > 0.15) {
 		ADSR(eGrid)->active = true;
-		float alpha = 1 - ADSR(eGrid)->value;
-		std::vector<Entity> entities = theGridSystem.RetrieveAllEntityWithComponent();
-		for (std::vector<Entity>::iterator it = entities.begin(); it != entities.end(); ++it ) {
-			RENDERING(*it)->color.a = alpha;
-			TWITCH(*it)->speed = alpha * 9;
-		}
-		if (ADSR(eGrid)->value == 1)
-			levelState = GridHided;
+		levelState = GridHided;
+	}
+	
+	float alpha = 1 - ADSR(eGrid)->value;
+	std::vector<Entity> entities = theGridSystem.RetrieveAllEntityWithComponent();
+	for (std::vector<Entity>::iterator it = entities.begin(); it != entities.end(); ++it ) {
+		RENDERING(*it)->color.a = alpha;
+		TWITCH(*it)->speed = alpha * 9;
 	}
 
 	//start music at 0.5 s
@@ -214,6 +214,7 @@ void LevelStateManager::Exit() {
 	TEXT_RENDERING(eBigLevel)->hide = true;
 	// show small level
 	TEXT_RENDERING(smallLevel)->color.a = 1;
+	RENDERING(modeMgr->herisson)->color.a = 1;
 
 	std::vector<Entity> ent = theRenderingSystem.RetrieveAllEntityWithComponent();
 	for (unsigned int i=0; i<ent.size(); i++) {
