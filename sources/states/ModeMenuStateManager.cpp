@@ -262,9 +262,9 @@ void ModeMenuStateManager::Enter() {
 	BUTTON(bDifficulty)->enabled = true;
 
     if (difficulty==0)
-        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy 5x5");
+        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy");
     else
-        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium 8x8");
+        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium");
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
