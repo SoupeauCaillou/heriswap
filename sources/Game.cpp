@@ -176,7 +176,6 @@ void Game::sacInit(int windowW, int windowH) {
     theRenderingSystem.loadAtlas("sprites");
     theRenderingSystem.loadAtlas("logo");
 	theRenderingSystem.loadAtlas("alphabet");
-    theRenderingSystem.loadAtlas("animals");
     theRenderingSystem.loadAtlas("decor1");
     theRenderingSystem.loadAtlas("decor2");
     theRenderingSystem.loadAtlas("feuilles");
