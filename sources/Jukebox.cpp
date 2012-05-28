@@ -106,9 +106,8 @@ static void build4SongsComposition(std::vector<std::string>& selection) {
 // sinon 1+ thème et 1+ acc
 // et E/I ne peuvent pas être le seul acc
 
-static void initSelection(std::vector<std::string>& selection, int maxSongCount) {
-    int count = MathUtil::RandomInt(maxSongCount) + 1;
-    switch (count) {
+static void initSelection(std::vector<std::string>& selection, int songCount) {
+    switch (songCount) {
         case 2:
             build2SongsComposition(selection);
             break;
@@ -130,36 +129,61 @@ struct IsNotIn {
     std::vector<std::string>* other;
     IsNotIn(std::vector<std::string>* pO) : other(pO) {}
 
-    bool operator()(std::string v) {
+    bool operator()(const std::string& v) const {
+    	assert (other->size() > 0);
         for (unsigned int i=0; i<other->size(); i++) {
-            if ((*other)[i] == v)
+            if ((*other)[i] == v) {
                 return false;
+            }
         }
+
         return true;
     }
 };
 
 const std::vector<std::string>& Jukebox::pickNextSongs(int maxSongCount) {
-    currentSelection.clear();
-
-    if (currentSelection.size() || true) {
-        initSelection(currentSelection, maxSongCount);
+    if (currentSelection.empty()) {
+	    int songCount  = MathUtil::RandomInt(maxSongCount) + 1;
+        initSelection(currentSelection, songCount);
     } else {
+	    int songCount = 0;
+    	switch (currentSelection.size()) {
+	    	case 1:
+	    		songCount = 2;
+	    		break;
+	    	case 2: {
+	    		// bias toward 2 or 3
+	    		int r = MathUtil::RandomInt(5);
+	    		if (r==0)
+	    			songCount = 1;
+	    		else if (r < 3)
+		    		songCount = 2;
+	    		else
+	    			songCount = 3;
+	    		break;
+	    	}
+	    	default:
+	    		songCount = MathUtil::Min(maxSongCount, MathUtil::RandomIntInRange(currentSelection.size() - 1, currentSelection.size() + 2));
+	    		break;
+    	}
+    
         std::vector<std::string> newSelection;
         int maxTries = 100;
         do {
             newSelection.clear();
-            initSelection(newSelection, maxSongCount);
-
+            initSelection(newSelection, songCount);
+			// count elements in A which are not in B
             int cA = std::count_if(newSelection.begin(), newSelection.end(), IsNotIn(&currentSelection));
+            // count elements in B which are not in A
             int cB = std::count_if(currentSelection.begin(), currentSelection.end(), IsNotIn(&newSelection));
 
-            if (cA == 1 && cB <= 1)
+            if (cA == 1 && cB <= 1) {
                 break;
-            if (cB == 1 && cA <= 1)
+            }
+            if (cB == 1 && cA <= 1) {
                 break;
+            }
         } while (maxTries --);
-        LOGW("Mac tries: %d", maxTries);
         currentSelection = newSelection;
     }
     assert (currentSelection.size() <= (unsigned)maxSongCount);
