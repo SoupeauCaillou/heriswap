@@ -79,12 +79,11 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
 
      ADD_COMPONENT(soundButton, Transformation);
      TRANSFORM(soundButton)->z = DL_MainMenuUITxt;
-     TRANSFORM(soundButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(67), PlacementHelper::GimpHeightToScreen(80));
+     TRANSFORM(soundButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
      TransformationSystem::setPosition(TRANSFORM(soundButton), Vector2(PlacementHelper::GimpXToScreen(692), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
      ADD_COMPONENT(soundButton, Button);
-     BUTTON(soundButton)->overSize = 1.6;
+     BUTTON(soundButton)->overSize = 1.3;
      ADD_COMPONENT(soundButton, Rendering);
-     RENDERING(soundButton)->color = Color(3.0/255.0, 99.0/255, 71.0/255);
      if (storage->soundEnable(false)) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
      else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
      ADD_COMPONENT(soundButton, Sound);

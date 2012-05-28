@@ -522,6 +522,8 @@ public class TilematchJNILib {
 
     static public int getPosition(Object o) {
     	DumbAndroid dumb = (DumbAndroid) o;
+    	if (dumb.track.getState() != AudioTrack.STATE_INITIALIZED || dumb.track.getPlayState() != AudioTrack.PLAYSTATE_PLAYING)
+    		return 0;
     	return dumb.track.getPlaybackHeadPosition();
     }
 

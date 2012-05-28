@@ -4,6 +4,6 @@ ciel0.png,1,1,417,404,1
 ciel1.png,420,1,417,404,1
 ciel2.png,1,407,417,404,1
 ciel3.png,420,407,417,404,1
-pause.png,839,1,40,34,1
-sound_off.png,881,1,40,34,1
-sound_on.png,923,1,40,34,1
+pause.png,839,1,100,95,0
+sound_off.png,839,98,100,95,0
+sound_on.png,839,195,100,95,0
