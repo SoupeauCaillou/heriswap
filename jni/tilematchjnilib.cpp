@@ -398,6 +398,9 @@ char* AndroidNativeAssetLoader::decompressPngImage(const std::string& assetName,
 	png_byte* PNG_image_buffer;
 	int length = 0;
 	char* data = loadAsset(holder->renderThreadEnv, holder->assetManager, assetName, &length);
+	
+	if (data == 0)
+		return 0;
 
 	GLubyte PNG_header[8];
 

@@ -3,11 +3,12 @@
 #include "modes/GameModeManager.h"
 #include "states/GameStateManager.h"
 
+class LocalizeAPI;
 
 class HelpStateManager : public GameStateManager {
 	public:
 
-	HelpStateManager() { };
+	HelpStateManager(LocalizeAPI* l) : localize(l) { };
 	void Setup();
 	void Enter();
 	GameState Update(float dt);
@@ -17,5 +18,19 @@ class HelpStateManager : public GameStateManager {
 	GameMode mode;
 	
 	private:
-		Entity eHelp;
+		LocalizeAPI* localize;
+		Entity background;
+		// howtoplay
+		Entity title[2];
+		// mode1
+		Entity levelBig, levelSmall[3];
+		// objective/mode2
+		Entity difficulty[2];
+		Entity leaveLeft;
+		Entity bonus;
+		
+		enum State {
+			HowToPlay,
+			Objective
+		} state;
 };

@@ -9,6 +9,7 @@
 #include "states/UserInputGameStateManager.h"
 #include "states/SpawnGameStateManager.h"
 #include "states/FallGameStateManager.h"
+#include "states/HelpStateManager.h"
 
 #include "modes/TilesAttackModeManager.h"
 #include "modes/NormalModeManager.h"
@@ -68,5 +69,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
      } else if (newState == BlackToMainMenu) {
         SCROLLING(datas->sky)->hide = false;
         RENDERING(datas->soundButton)->hide = false;
+     } else if (newState == Help) {
+	     static_cast<HelpStateManager*> (datas->state2Manager[newState])->mode = datas->mode;
      }
 }
