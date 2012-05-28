@@ -23,4 +23,7 @@ class UserInputGameStateManager : public GameStateManager {
         std::vector<Entity> inCombinationCells;
         
         SuccessManager* successMgr;
+        
+        Entity currentCell, swappedCell;
+        Entity rollback;
 };

@@ -119,21 +119,13 @@ public class TilematchActivity extends Activity {
        
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.parent_frame);
         
-        Renderer r = new TilematchRenderer(getAssets());
-        assert(r != null);
-        try {
-        	if (true) throw new RuntimeException();
-        	mGLView = new GL2JNIView(this, r, null);
-        	TilematchActivity.openGLESVersion = 2;
-        } catch (Exception exc) {
-        	Log.e(TilematchActivity.Tag, "Failed to create OpenGL ES2 context, try ES1");
-        	mGLView = new GLSurfaceView(this);
-        	mGLView.setRenderer(r);
-        	TilematchActivity.openGLESVersion = 1;
-        }
+        Renderer r = new TilematchRenderer(getAssets());        
+        mGLView = (GLSurfaceView) findViewById(R.id.surfaceviewclass);
+        mGLView.setRenderer(r);
+        TilematchActivity.openGLESVersion = 1;
          
         mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        rl.addView(mGLView);
+        // rl.addView(mGLView);
         playerNameInputView = findViewById(R.id.enter_name);
         nameEdit = (EditText) findViewById(R.id.player_name_input);
         rl.bringChildToFront(playerNameInputView);
