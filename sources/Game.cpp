@@ -44,6 +44,7 @@ static bool inGameState(GameState state) {
 		case UserInput:
 		case Delete:
 		case Fall:
+		case LevelChanged:
 			return true;
 		default:
 			return false;
