@@ -44,7 +44,7 @@ public class TilematchActivity extends Activity {
 	public static List<Leaderboard> leaderboards = null;
 	  
 	static final String TILEMATCH_BUNDLE_KEY = "plop";
-	static public long game = 0 	;
+	static public long game = 0 ;
 	static public Object mutex;
 	static public byte[] savedState;
 	static public int openGLESVersion = 2;
@@ -66,6 +66,7 @@ public class TilematchActivity extends Activity {
 	
 	static public TilematchActivity activity;
 	PowerManager.WakeLock wl;
+	TilematchRenderer renderer;
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -118,10 +119,13 @@ public class TilematchActivity extends Activity {
         res = getResources();
        
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.parent_frame);
-        
-        Renderer r = new TilematchRenderer(getAssets());        
         mGLView = (GLSurfaceView) findViewById(R.id.surfaceviewclass);
-        mGLView.setRenderer(r);
+        
+        synchronized (mGLView) {
+        	renderer = new TilematchRenderer(getAssets());        
+            mGLView.setRenderer(renderer);	
+		}
+
         TilematchActivity.openGLESVersion = 1;
          
         mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -188,7 +192,11 @@ public class TilematchActivity extends Activity {
     protected void onPause() {
     	Log.i(TilematchActivity.Tag, "Activity LifeCycle ##### ON PAUSE");
         super.onPause();
-        mGLView.onPause();
+        synchronized (mGLView) {
+        	if (renderer != null) {
+        		mGLView.onPause();
+        	}
+        }
         if (wl != null)
         	wl.release();
         TilematchActivity.requestPausedFromJava = true;
@@ -213,7 +221,12 @@ public class TilematchActivity extends Activity {
         TilematchActivity.runGameLoop = true;
         TilematchActivity.requestPausedFromJava = false;
         isRunning = true;
-        mGLView.onResume();
+        
+        synchronized (mGLView) {
+        	if (renderer != null) {
+        		mGLView.onResume();
+        	}
+        }
     }
     
     @Override
