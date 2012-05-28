@@ -222,18 +222,37 @@ public class TilematchJNILib {
     // SuccessAPI
     //-------------------------------------------------------------------------
     static public void unlockAchievement(int id) {
-    	Achievement achv = new Achievement(Integer.toString(id));
-    	achv.load(null);
-    	
-    	if (!achv.isUnlocked) {
-    		achv.unlock(new Achievement.UnlockCB() {
+    	final Achievement achv = new Achievement(Integer.toString(id));
+    	Achievement.LoadCB loadCb = new Achievement.LoadCB() {
+			@Override
+			public void onSuccess() {
+		    	if (!achv.isUnlocked) {
+		    		achv.unlock(new Achievement.UnlockCB() {
 
-    			@Override
-    			public void onSuccess(boolean newUnlock) {
-    				Log.i(TilematchActivity.Tag, "Achievement unlock successful");
-    			}
-    		});
-    	}
+		    			@Override
+		    			public void onSuccess(boolean newUnlock) {
+		    				Log.i(TilematchActivity.Tag, "Achievement unlock successful");
+		    			}
+		    		});
+		    	}
+			}
+			
+			@Override
+			public void onFailure(String exceptionMessage) {
+				super.onFailure(exceptionMessage);
+				achv.unlock(new Achievement.UnlockCB() {
+
+	    			@Override
+	    			public void onSuccess(boolean newUnlock) {
+	    				Log.i(TilematchActivity.Tag, "Achievement unlock successful");
+	    			}
+	    		});
+			}
+			
+			
+		};
+		
+    	achv.load(loadCb);
     }
 
     static public void openfeintLeaderboard(int mode, int difficulty) {
