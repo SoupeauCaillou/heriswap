@@ -328,7 +328,7 @@ void Game::tick(float dt) {
 		 toggleShowCombi(true);
 	 }
 
-	if (datas->state == Delete) {
+	if ((datas->state == Delete && theGridSystem.entityCount() == theGridSystem.GridSize * theGridSystem.GridSize) || datas->state == UserInput) {
 		// si on change de niveau (course au score), on remplit pas la grille avant l'anim
 		if (datas->mode == Normal) {
 			NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]);
