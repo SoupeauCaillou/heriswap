@@ -65,7 +65,7 @@ void MainMenuGameStateManager::Setup() {
 	TEXT_RENDERING(eSuccess)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(eSuccess)->color = green;
 	TEXT_RENDERING(eSuccess)->charHeight = PlacementHelper::GimpHeightToScreen(75);
-	TEXT_RENDERING(eSuccess)->text = localizeAPI->text("success", "Succes");
+	TEXT_RENDERING(eSuccess)->text = localizeAPI->text("success", "Succès");
     bSuccess = theEntityManager.CreateEntity();
     ADD_COMPONENT(bSuccess, Transformation);
     TRANSFORM(bSuccess)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
@@ -159,7 +159,8 @@ GameState MainMenuGameStateManager::Update(float dt) {
 			choosenGameMode = Normal;
 			SOUND(bStart[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 			return ModeMenu;
-		} else if (BUTTON(bStart[1])->clicked){
+		} 
+		if(BUTTON(bStart[1])->clicked){
 			choosenGameMode = TilesAttack;
 			SOUND(bStart[1])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 			return ModeMenu;
