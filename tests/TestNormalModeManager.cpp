@@ -9,7 +9,7 @@ TEST(SuppressionFeuilleNiveauNormalDifficulty) {
 	char cleared[8];
 	memset(cleared, 0, sizeof(cleared));
 
-	for (int i=0; i<250; i++) {
+	for (int i=0; i<2500; i++) {
 		int initialCount = 48;
 		int level = 1 + MathUtil::RandomInt(20);
 		std::stringstream log;
@@ -45,6 +45,10 @@ TEST(SuppressionFeuilleNiveauNormalDifficulty) {
 			countLeft[color] -= count;
 			if (countLeft[color] < 0)
 				countLeft[color] = 0;
+				
+			if (initialCount == 0) {
+				CHECK_EQUAL(0, memcmp(countLeft, cleared, sizeof(countLeft)));
+			}
 		}
 		log << "Left at the end : " << initialCount << std::endl;
 		if (initialCount > 0) {

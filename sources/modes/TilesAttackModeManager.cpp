@@ -112,7 +112,7 @@ int TilesAttackGameModeManager::levelToLeaveToDelete(int leavesMaxSize, int limi
 }
 
 void TilesAttackGameModeManager::ScoreCalc(int nb, int type) {
-	if (type == bonus) {
+	if (type == (int)bonus) {
 		points += 10*2*nb*nb*nb/6;
 		deleteLeaves(-1, levelToLeaveToDelete(6*8, limit, 2*nb, leavesDone));
 		leavesDone+=2*nb;
@@ -140,7 +140,7 @@ void TilesAttackGameModeManager::TogglePauseDisplay(bool paused) {
 
 void TilesAttackGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
     int nb = levelToLeaveToDelete(48, limit, 3, leavesDone);
-    for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
+    for (unsigned int i=0; nb>0 && i<branchLeaves.size(); i++) {
 		CombinationMark::markCellInCombination(branchLeaves[i].e);
         out.push_back(branchLeaves[i].e);
         nb--;

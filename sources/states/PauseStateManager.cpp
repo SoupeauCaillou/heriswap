@@ -105,7 +105,7 @@ void PauseStateManager::Enter() {
 	helpMgr->mode = mode;
 }
 
-GameState PauseStateManager::Update(float dt) {
+GameState PauseStateManager::Update(float dt __attribute__((unused))) {
 	if (BUTTON(bAbort)->clicked) {
 		SOUND(bAbort)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		return MainMenu;

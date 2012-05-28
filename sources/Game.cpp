@@ -64,20 +64,6 @@ static bool pausableState(GameState state) {
 	}
 }
 
-static bool fadeLogoState(GameState state) {
-	switch (state) {
-		case BlackToLogoState:
-		case LogoToBlackState:
-		case BlackToMainMenu:
-		case BlackToAds:
-		case AdsToBlackState:
-		case Logo:
-			return true;
-		default:
-			return false;
-	}
-}
-
 static const float offset = 0.2;
 static const float scale = 0.95;
 static const float size = (10 - 2 * offset) / 8;
@@ -207,7 +193,7 @@ void Game::init(const uint8_t* in, int size) {
         in = loadEntitySystemState(in, size);
     }
 
-	datas->Setup(PlacementHelper::WindowWidth, PlacementHelper::WindowHeight);
+	datas->Setup();
 
 	theSoundSystem.mute = !datas->storage->soundEnable(false);
     theMusicSystem.toggleMute(theSoundSystem.mute);
@@ -280,7 +266,7 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 		}
 	} else {
 		if (marks.size()>0) {
-			for (int i=0; i<marks.size(); i++) {
+			for (unsigned int i=0; i<marks.size(); i++) {
 				CombinationMark::clearCellInCombination(marks[i]);
 			}
 			marks.clear();
@@ -406,7 +392,7 @@ void Game::tick(float dt) {
 
     //update music
     if (!theMusicSystem.isMuted()) {
-	    if (pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause || datas->state == BlackToSpawn) { //si on joue
+	    if ((pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause) || datas->state == BlackToSpawn) { //si on joue
 	    	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Start;
 	    	MUSIC(datas->inGameMusic.masterTrack)->volume = 1;
 	    	MUSIC(datas->inGameMusic.stressTrack)->control = MusicComponent::Start;
@@ -415,7 +401,7 @@ void Game::tick(float dt) {
 	            MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
 	            MUSIC(datas->inGameMusic.stressTrack)->music = theMusicSystem.loadMusicFile("audio/F.ogg");
 	            MUSIC(datas->inGameMusic.stressTrack)->loopNext = theMusicSystem.loadMusicFile("audio/F.ogg");
-	            int i;
+	            unsigned int i;
 	            for (i=0; i<musics.size() - 1; i++) {
 	                 MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
 	                 mc->music = theMusicSystem.loadMusicFile(musics[i+1]);
@@ -428,7 +414,7 @@ void Game::tick(float dt) {
 	        if (MUSIC(datas->inGameMusic.masterTrack)->loopNext == InvalidMusicRef) {
 		        std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);//newMusics();
 		        MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile(musics[0]);
-		        int i;
+		        unsigned int i;
 		        for (i=0; i<musics.size() - 1; i++) {
 			        MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
 			        mc->loopNext = theMusicSystem.loadMusicFile(musics[i+1]);
@@ -556,7 +542,7 @@ int Game::saveState(uint8_t** out) {
     ptr = (uint8_t*)mempcpy(ptr, &theGridSystem.GridSize, sizeof(theGridSystem.GridSize));
     ptr = (uint8_t*)mempcpy(ptr, gamemode, gSize);
 
-	LOGI("%d + %d + %d + %d + %d + %d + %d -> %d (%p)",
+	LOGI("%lu + %lu + %lu + %lu + %d + %d + %d -> %d (%p)",
 		sizeof(datas->stateBeforePause), sizeof(datas->mode), sizeof(eSize), sizeof(sSize), eSize, sSize, gSize, finalSize, *out);
 	return finalSize;
 }

@@ -170,25 +170,13 @@ void ModeMenuStateManager::Setup() {
 	RENDERING(fond)->color.a = 0.5;
 }
 
-
-
-static std::string buildScoreQuery(int mode, int difficulty) {
-    std::stringstream tmp;
-    tmp << "select * from score where mode= "<< mode << " and difficulty=" << difficulty;
-    if (mode==Normal)
-        tmp << " order by points desc limit 5";
-    else
-        tmp << " order by time asc limit 5";
-    return tmp.str();
-}
-
 void ModeMenuStateManager::LoadScore(int mode, int dif) {
 	/*getting scores*/
 	std::vector<StorageAPI::Score> entries = storage->savedScores(mode, dif);
 
 	/* treatment*/
 	bool alreadyGreen = false;
-	for (int i=0; i<5; i++) {
+	for (unsigned int i=0; i<5; i++) {
 		TextRenderingComponent* trcN = TEXT_RENDERING(scoresName[i]);
 		TextRenderingComponent* trcP = TEXT_RENDERING(scoresPoints[i]);
 		TextRenderingComponent* trcL = TEXT_RENDERING(scoresLevel[i]);

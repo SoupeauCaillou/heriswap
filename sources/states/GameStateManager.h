@@ -17,7 +17,7 @@ class GameStateManager {
 		/* Update gamestate, and returns the new GameState */
 		virtual GameState Update(float dt) = 0;
 		/* Always called */
-		virtual void BackgroundUpdate(float dt) {};
+		virtual void BackgroundUpdate(float dt __attribute__((unused))) {};
 		/* Prepare to leave as the active manager */
 		virtual void Exit() = 0;
         virtual void LateExit() {}

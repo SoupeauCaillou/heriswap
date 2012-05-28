@@ -112,7 +112,7 @@ void LevelStateManager::Enter() {
 	TextureRef sound2 = theRenderingSystem.loadTextureFile("sound_off.png");
 	std::vector<Entity> text = theTextRenderingSystem.RetrieveAllEntityWithComponent();
 	std::vector<Entity> entities = theRenderingSystem.RetrieveAllEntityWithComponent();
-	for (int i=0; i<entities.size(); i++) {
+	for (unsigned int i=0; i<entities.size(); i++) {
 		TransformationComponent* tc = TRANSFORM(entities[i]);
 		if (tc->parent <= 0 || std::find(text.begin(), text.end(), tc->parent) == text.end()) {
 			RenderingComponent* rc = RENDERING(entities[i]);
@@ -124,7 +124,7 @@ void LevelStateManager::Enter() {
 	}
 
 	entities = theGridSystem.RetrieveAllEntityWithComponent();
-	for (int i=0; i<entities.size(); i++) {
+	for (unsigned int i=0; i<entities.size(); i++) {
 		CombinationMark::markCellInCombination(entities[i]);
 	}
 }
@@ -154,7 +154,7 @@ GameState LevelStateManager::Update(float dt) {
 	if (levelState == MusicStarted && duration > 6) {
 		levelState = BigScoreBeganToMove;
 		MorphingComponent* mc = MORPHING(eBigLevel);
-		for (int i=0; i<mc->elements.size(); i++) {
+		for (unsigned int i=0; i<mc->elements.size(); i++) {
 			delete mc->elements[i];
 		}
 		mc->elements.clear();
@@ -172,15 +172,14 @@ GameState LevelStateManager::Update(float dt) {
 		RENDERING(modeMgr->herisson)->desaturate = false;
 		//on genere les nouvelles feuilles
 		modeMgr->generateLeaves(0, theGridSystem.Types);
-		for (int i=0; i<modeMgr->branchLeaves.size(); i++) {
+		for (unsigned int i=0; i<modeMgr->branchLeaves.size(); i++) {
 			TRANSFORM(modeMgr->branchLeaves[i].e)->size = 0;
 		}
 	}
 	if (levelState == BigScoreBeganToMove || levelState == BigScoreMoving) {
 		levelState = BigScoreMoving;
-
 		//if leaves created, make them grow !
-		for (int i=0; i<modeMgr->branchLeaves.size(); i++) {
+		for (unsigned int i=0; i<modeMgr->branchLeaves.size(); i++) {
 			TRANSFORM(modeMgr->branchLeaves[i].e)->size = Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f);
 		}
 		RENDERING(eSnowBranch)->color.a = 1-(duration-6)/(10-6);
@@ -207,7 +206,7 @@ void LevelStateManager::Exit() {
 	RENDERING(eSnowGround)->hide = true;
 
 	MorphingComponent* mc = MORPHING(eBigLevel);
-	for (int i=0; i<mc->elements.size(); i++) {
+	for (unsigned int i=0; i<mc->elements.size(); i++) {
 		delete mc->elements[i];
 	}
 	mc->elements.clear();
@@ -217,7 +216,7 @@ void LevelStateManager::Exit() {
 	TEXT_RENDERING(smallLevel)->color.a = 1;
 
 	std::vector<Entity> ent = theRenderingSystem.RetrieveAllEntityWithComponent();
-	for (int i=0; i<ent.size(); i++) {
+	for (unsigned int i=0; i<ent.size(); i++) {
 		RENDERING(ent[i])->desaturate = false;
 	}
 }

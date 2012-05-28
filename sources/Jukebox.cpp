@@ -131,7 +131,7 @@ struct IsNotIn {
     IsNotIn(std::vector<std::string>* pO) : other(pO) {}
 
     bool operator()(std::string v) {
-        for (int i=0; i<other->size(); i++) {
+        for (unsigned int i=0; i<other->size(); i++) {
             if ((*other)[i] == v)
                 return false;
         }
@@ -162,6 +162,6 @@ const std::vector<std::string>& Jukebox::pickNextSongs(int maxSongCount) {
         LOGW("Mac tries: %d", maxTries);
         currentSelection = newSelection;
     }
-    assert (currentSelection.size() <= maxSongCount);
+    assert (currentSelection.size() <= (unsigned)maxSongCount);
     return currentSelection;
 }

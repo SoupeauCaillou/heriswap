@@ -72,8 +72,8 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      mode2Manager.clear();
  }
 
- void PrivateData::Setup(int windowW, int windowH) {
-     BackgroundManager* bg = new BackgroundManager((10.0 * windowH) / windowW);
+ void PrivateData::Setup() {
+     BackgroundManager* bg = new BackgroundManager();
      bg->cloudStartX = Interval<float>(0.0,15.0);
      state2Manager[Background] = bg;
 
@@ -104,7 +104,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      TRANSFORM(benchTotalTime)->z = DL_Benchmark;
 
      std::vector<std::string> allSystems = ComponentSystem::registeredSystemNames();
-     for (int i = 0; i < allSystems.size() ; i ++) {
+     for (unsigned int i = 0; i < allSystems.size() ; i ++) {
          Entity b = theEntityManager.CreateEntity();
          ADD_COMPONENT(b, Rendering);
          ADD_COMPONENT(b, Transformation);
@@ -158,7 +158,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
 
 	const float MusicFadeOut = 1;
 	std::vector<Entity> musics = theMusicSystem.RetrieveAllEntityWithComponent();
-	for (int i=0; i<musics.size(); i++) {
+	for (unsigned int i=0; i<musics.size(); i++) {
 		MUSIC(musics[i])->fadeOut = MusicFadeOut;
 	}
 

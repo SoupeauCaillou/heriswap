@@ -28,7 +28,7 @@ struct BackgroundManager::AnimatedActor {
 	struct Actor actor;
 };
 
-BackgroundManager::BackgroundManager(float windowHeight) {
+BackgroundManager::BackgroundManager() {
 	cloudY[0] = Interval<float>(PlacementHelper::GimpYToScreen(70.0), PlacementHelper::GimpYToScreen(240));
 	cloudY[1] = Interval<float>(PlacementHelper::GimpYToScreen(390), PlacementHelper::GimpYToScreen(490));
 	cloudY[2] = Interval<float>(PlacementHelper::GimpYToScreen(560), PlacementHelper::GimpYToScreen(650));
@@ -95,7 +95,8 @@ void BackgroundManager::Enter() {
     }
 }
 
-GameState BackgroundManager::Update(float dt) {
+GameState BackgroundManager::Update(float dt __attribute__((unused))) {
+	return Background;
 }
 
 void BackgroundManager::BackgroundUpdate(float dt) {
@@ -120,7 +121,7 @@ void BackgroundManager::switchAnim(AnimatedActor* a)
 	if (a->frames>=30/(MathUtil::Abs(a->actor.speed)+MathUtil::Abs(CAMERASPEED))) {
 		RENDERING(a->actor.e)->texture = theRenderingSystem.loadTextureFile(a->anim[a->ind]);
 		a->ind++;
-		if (a->ind==a->anim.size()) a->ind = 0;
+		if (a->ind==(int)a->anim.size()) a->ind = 0;
 		a->frames=0;
 	}
 }
