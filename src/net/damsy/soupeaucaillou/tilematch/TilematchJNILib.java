@@ -223,13 +223,17 @@ public class TilematchJNILib {
     //-------------------------------------------------------------------------
     static public void unlockAchievement(int id) {
     	Achievement achv = new Achievement(Integer.toString(id));
-    	achv.unlock(new Achievement.UnlockCB() {
+    	achv.load(null);
+    	
+    	if (!achv.isUnlocked) {
+    		achv.unlock(new Achievement.UnlockCB() {
 
-			@Override
-			public void onSuccess(boolean newUnlock) {
-				Log.i(TilematchActivity.Tag, "Achievement unlock successful");
-			}
-		});
+    			@Override
+    			public void onSuccess(boolean newUnlock) {
+    				Log.i(TilematchActivity.Tag, "Achievement unlock successful");
+    			}
+    		});
+    	}
     }
 
     static public void openfeintLeaderboard(int mode, int difficulty) {
