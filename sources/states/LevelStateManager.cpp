@@ -214,6 +214,7 @@ void LevelStateManager::Exit() {
 	TEXT_RENDERING(eBigLevel)->hide = true;
 	// show small level
 	TEXT_RENDERING(smallLevel)->color.a = 1;
+	RENDERING(modeMgr->herisson)->color.a = 1;
 
 	std::vector<Entity> ent = theRenderingSystem.RetrieveAllEntityWithComponent();
 	for (unsigned int i=0; i<ent.size(); i++) {
