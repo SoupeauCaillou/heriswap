@@ -38,9 +38,11 @@ class ScoreStorage {
 class SuccessAPI {
 	public:
 		virtual void successCompleted(const char* description, unsigned long successId) {
-			LOGI("Success completed '%s': %d", description, successId);
+			LOGI("Success completed '%s': %lu", description, successId);
 		}
-        virtual void openfeintLB(int mode, int diff) {}
+        virtual void openfeintLB(int mode, int diff) {
+	        mode=mode; diff=diff;
+        }
         virtual void openfeintSuccess() {}
 };
 

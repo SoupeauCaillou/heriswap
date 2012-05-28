@@ -199,7 +199,7 @@ void SuccessManager::sBTAC(StorageAPI* storage, int difficulty, unsigned int poi
 	if (!bBTAC) {
 	    std::vector<StorageAPI::Score> entries = storage->savedScores(1, difficulty);
 		int s = entries.size();
-		if (s >= 5 && points > entries[0].points) {
+		if (s >= 5 && (int)points > entries[0].points) {
 			successAPI->successCompleted("Beat them all (classic)", 1684862);
 			bBTAC = true;
 		}

@@ -40,7 +40,7 @@ void GridSystem::HideAll(bool activate) {
 
 void GridSystem::DeleteAll() {
     std::vector<Entity> all = this->RetrieveAllEntityWithComponent();
-    for (int i=0; i<all.size(); i++) {
+    for (unsigned int i=0; i<all.size(); i++) {
 		theEntityManager.DeleteEntity(all[i]);
 	}
 }
@@ -57,7 +57,6 @@ Entity GridSystem::GetOnPos(int i, int j) {
 
 void GridSystem::ResetTest() {
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-		Entity a = (*it).first;
 		GridComponent* bc = (*it).second;
 		bc->checkedH = false;
 		bc->checkedV = false;
@@ -115,7 +114,6 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool u
 	std::vector<Combinais> combinaisons;
 
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-		Entity a = (*it).first;
 		GridComponent* gc = (*it).second;
 		int i=gc->i;
 		int j=gc->j;
@@ -161,7 +159,7 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool u
 			/*If there is at least 1 more cell
 			 * We add it to the solutions*/
 
-			if (potential.points.size()>=nbmin){
+			if ((int)potential.points.size()>=nbmin){
 				combinaisons.push_back(potential);
 			}
 
@@ -207,7 +205,7 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool u
 			 * We add it to the solutions
 			 * longueurCombi < 0 <-> Horizontale */
 
-			if (potential.points.size()>=nbmin){
+			if ((int)potential.points.size()>=nbmin){
 				combinaisons.push_back(potential);
 			}
 
@@ -252,7 +250,7 @@ std::vector<CellFall> GridSystem::TileFall() {
 	return result;
 }
 
-void GridSystem::DoUpdate(float dt) {
+void GridSystem::DoUpdate(float dt __attribute__((unused))) {
 }
 
 

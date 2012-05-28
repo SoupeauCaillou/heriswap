@@ -9,7 +9,7 @@
 
 class BackgroundManager : public GameStateManager {
 	public:
-		BackgroundManager(float windowHeight);
+		BackgroundManager();
 		~BackgroundManager();
 		void Setup();
 		void Enter();

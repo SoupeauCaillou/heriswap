@@ -44,7 +44,7 @@ class GameModeManager {
 
 
 		// scoring interface
-		virtual void WillScore(int nb, int type, std::vector<Entity>& out) {}
+		virtual void WillScore(int nb __attribute__((unused)), int type __attribute__((unused)), std::vector<Entity>& out __attribute__((unused))) {}
 		virtual void ScoreCalc(int nb, int type) = 0;
 		virtual GameMode GetMode() = 0;
 		virtual bool LevelUp() = 0;

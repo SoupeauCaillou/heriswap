@@ -57,7 +57,7 @@ void DeleteGameStateManager::Enter() {
 	}
 }
 
-GameState DeleteGameStateManager::Update(float dt) {
+GameState DeleteGameStateManager::Update(float dt __attribute__((unused))) {
 	ADSRComponent* transitionSuppr = ADSR(eRemove);
 	if (!removing.empty()) {
 		transitionSuppr->active = true;
@@ -77,7 +77,7 @@ GameState DeleteGameStateManager::Update(float dt) {
     			}
     		}
     	}
-        for (int i=0; i<littleLeavesDeleted.size(); i++) {
+        for (unsigned int i=0; i<littleLeavesDeleted.size(); i++) {
             TRANSFORM(littleLeavesDeleted[i])->size = cellSize;
         }
     	if (transitionSuppr->value  == transitionSuppr->sustainValue) {

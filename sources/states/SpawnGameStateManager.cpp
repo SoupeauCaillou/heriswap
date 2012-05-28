@@ -56,9 +56,9 @@ void SpawnGameStateManager::Enter() {
 
 	std::vector<Combinais> c;
 	fillTheBlank(spawning);
-	if (spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
-     std::cout << "create " << spawning.size() << " cells" << std::endl;
-		for(int i=0; i<spawning.size(); i++) {
+	if ((int)spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
+     	std::cout << "create " << spawning.size() << " cells" << std::endl;
+		for(unsigned int i=0; i<spawning.size(); i++) {
             if (spawning[i].fe == 0)
 			    spawning[i].fe = createCell(spawning[i], true);
 		}
@@ -67,8 +67,8 @@ void SpawnGameStateManager::Enter() {
 		do {
 			c = theGridSystem.LookForCombination(false,true);
 			// change type from cells in combi
-			for(int i=0; i<c.size(); i++) {
-				for(int j=0; j<c[i].points.size(); j++) {
+			for(unsigned int i=0; i<c.size(); i++) {
+				for(unsigned int j=0; j<c[i].points.size(); j++) {
 					Entity e = theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y);
 					int type = MathUtil::RandomInt(theGridSystem.Types);
 					GRID(e)->type = type;
@@ -89,11 +89,11 @@ void SpawnGameStateManager::Enter() {
 	ADSR(eGrid)->active = false;
 }
 
-GameState SpawnGameStateManager::Update(float dt) {
+GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
 	ADSRComponent* transitionCree = ADSR(eSpawn);
 	//si on doit recree des feuilles
 	if (!spawning.empty()) {
-        bool fullGridSpawn = (spawning.size() == theGridSystem.GridSize*theGridSystem.GridSize);
+        bool fullGridSpawn = (spawning.size() == (unsigned)theGridSystem.GridSize*theGridSystem.GridSize);
 		transitionCree->active = true;
 		for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
 			if (it->fe == 0) {
@@ -128,7 +128,7 @@ GameState SpawnGameStateManager::Update(float dt) {
         if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
             theGridSystem.DeleteAll();
             fillTheBlank(spawning);
-            LOGI("nouvelle grille de %d elements! ", spawning.size());
+            LOGI("nouvelle grille de %lu elements! ", spawning.size());
             successMgr->gridResetted = true;
         }
     } else {

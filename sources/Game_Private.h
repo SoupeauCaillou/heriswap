@@ -23,7 +23,7 @@ class PrivateData {
     public:
         PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad);
         ~PrivateData();
-        void Setup(int windowW, int windowH);
+        void Setup();
 
      //bench data
      std::map<std::string, Entity> benchTimeSystem;

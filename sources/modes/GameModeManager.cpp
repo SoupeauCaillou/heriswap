@@ -49,7 +49,7 @@ float GameModeManager::position(float t) {
 	if (t<=pts[0].X) {
 		p = pts[0].Y;
 	} else {
-		int i;
+		unsigned int i;
 		for (i = 0; i<pts.size()-1; i++) {
 			if (t>pts[i].X && t<pts[i+1].X) {
 				p = MathUtil::Lerp(pts[i].Y, pts[i+1].Y, (t-pts[i].X)/(pts[i+1].X-pts[i].X));
@@ -144,7 +144,7 @@ void GameModeManager::Exit() {
 	uiHelper.hide();
 
 	// delete leaves
-	for (int az=0;az<branchLeaves.size();az++) {
+	for (unsigned int az=0;az<branchLeaves.size();az++) {
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
 	}
 	branchLeaves.clear();
@@ -159,7 +159,7 @@ void GameModeManager::TogglePauseDisplay(bool paused) {
 }
 
 void GameModeManager::generateLeaves(int* nb, int type) {
-	for (int az=0;az<branchLeaves.size();az++)
+	for (unsigned int az=0;az<branchLeaves.size();az++)
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
 
 	branchLeaves.clear();
@@ -202,7 +202,7 @@ void GameModeManager::deleteLeaves(int type, int nb) {
 			nb--;
 		}
 	} else {
-		for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
+		for (unsigned int i=0; nb>0 && i<branchLeaves.size(); i++) {
 			if (type == branchLeaves[i].type) {
 				theEntityManager.DeleteEntity(branchLeaves[i].e);
 				branchLeaves.erase(branchLeaves.begin()+i);
@@ -291,7 +291,7 @@ int GameModeManager::saveInternalState(uint8_t** out) {
     ptr = (uint8_t*) mempcpy(ptr, &bonus, sizeof(bonus));
     for (int i=1; i<=8; i++) {
         uint8_t count = 0;
-        for (int j=0; j<branchLeaves.size(); j++) {
+        for (unsigned int j=0; j<branchLeaves.size(); j++) {
             if (branchLeaves[j].type == i)
                 count++;
         }

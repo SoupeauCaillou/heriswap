@@ -148,7 +148,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 							}
                         }
 					} else {
-                        for (int k=0; k<inCombinationCells.size(); k++) {
+                        for (unsigned int k=0; k<inCombinationCells.size(); k++) {
                             CombinationMark::clearCellInCombination(inCombinationCells[k]);
                         }
                         inCombinationCells.clear();
@@ -162,14 +162,14 @@ GameState UserInputGameStateManager::Update(float dt) {
 					}
 				} else {
 					ADSR(eSwapper)->active = false;
-                    for (int k=0; k<inCombinationCells.size(); k++) {
+                    for (unsigned int k=0; k<inCombinationCells.size(); k++) {
                         CombinationMark::clearCellInCombination(inCombinationCells[k]);
                     }
                     inCombinationCells.clear();
 				}
 			} else {
 				ADSR(eSwapper)->active = false;
-                for (int k=0; k<inCombinationCells.size(); k++) {
+                for (unsigned int k=0; k<inCombinationCells.size(); k++) {
                     CombinationMark::clearCellInCombination(inCombinationCells[k]);
                 }
                 inCombinationCells.clear();
@@ -226,7 +226,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 					return Delete;
 				}
 			}
-			for (int k=0; k<inCombinationCells.size(); k++) {
+			for (unsigned int k=0; k<inCombinationCells.size(); k++) {
             	CombinationMark::clearCellInCombination(inCombinationCells[k]);
             }
             inCombinationCells.clear();
@@ -247,7 +247,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 	return UserInput;
 }
 
-void UserInputGameStateManager::BackgroundUpdate(float dt) {
+void UserInputGameStateManager::BackgroundUpdate(float dt __attribute__((unused))) {
 	for(int i=0; i<theGridSystem.GridSize; i++) {
 		for(int j=0; j<theGridSystem.GridSize; j++) {
 			Entity e = theGridSystem.GetOnPos(i,j);

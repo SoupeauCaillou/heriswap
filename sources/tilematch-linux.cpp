@@ -287,7 +287,7 @@ static char* loadPng(const char* assetName, int* width, int* height)
 	PNG_image_buffer = (png_byte*)malloc(4 * (*width) * (*height));
 	png_byte** PNG_rows = (png_byte**)malloc(*height * sizeof(png_byte*));
 
-	unsigned int row;
+	int row;
 	for (row = 0; row < *height; ++row) {
 		PNG_rows[*height - 1 - row] = PNG_image_buffer + (row * 4 * *width);
 	}
