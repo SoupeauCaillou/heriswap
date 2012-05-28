@@ -195,8 +195,8 @@ void GameModeManager::generateLeaves(int* nb, int type) {
 	std::random_shuffle(branchLeaves.begin(), branchLeaves.end());
 }
 
-void GameModeManager::deleteLeaves(int type, int nb) {
-	if (type == -1) {
+void GameModeManager::deleteLeaves(unsigned int type, int nb) {
+	if (type == (unsigned int)~0b0) {
 		while (branchLeaves.size()>0 && nb) {
 			theEntityManager.DeleteEntity(branchLeaves[0].e);
 			branchLeaves.erase(branchLeaves.begin());
@@ -293,7 +293,7 @@ int GameModeManager::saveInternalState(uint8_t** out) {
     for (int i=1; i<=8; i++) {
         uint8_t count = 0;
         for (unsigned int j=0; j<branchLeaves.size(); j++) {
-            if (branchLeaves[j].type == i)
+            if (branchLeaves[j].type == (unsigned int)i)
                 count++;
         }
         ptr = (uint8_t*) mempcpy(ptr, &count, sizeof(count));

@@ -17,8 +17,8 @@ class NormalGameModeManager : public GameModeManager {
 		void TogglePauseDisplay(bool paused);
 
 		// scoring implementation
-		void WillScore(int nb, int type, std::vector<Entity>& out);
-        void ScoreCalc(int nb, int type);
+		void WillScore(int nb, unsigned int type, std::vector<Entity>& out);
+        void ScoreCalc(int nb, unsigned int type);
 		GameMode GetMode();
 		bool LevelUp();
 

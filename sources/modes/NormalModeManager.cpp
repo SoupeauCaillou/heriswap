@@ -123,9 +123,9 @@ static float timeGain(int nb, float time) {
 	return MathUtil::Min(time, 2.f*nb/theGridSystem.GridSize);
 }
 
-void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
+void NormalGameModeManager::WillScore(int count, unsigned int type, std::vector<Entity>& out) {
     int nb = levelToLeaveToDelete(count, level+2, level+2 - remain[type]);
-    for (int i=0; nb>0 && i<branchLeaves.size(); i++) {
+    for (unsigned int i=0; nb>0 && i<branchLeaves.size(); i++) {
         if ((type+1) == branchLeaves[i].type) {
             CombinationMark::markCellInCombination(branchLeaves[i].e);
             out.push_back(branchLeaves[i].e);
@@ -149,7 +149,7 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
 
 }
 
-void NormalGameModeManager::ScoreCalc(int nb, int type) {
+void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	if (type == bonus)
 		points += 10*level*2*nb*nb*nb/6;
 	else

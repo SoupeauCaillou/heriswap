@@ -21,8 +21,8 @@ class TilesAttackGameModeManager : public GameModeManager {
 
 		GameMode GetMode();
 
-		void ScoreCalc(int nb, int type);
-		
+		void ScoreCalc(int nb, unsigned int type);
+
 		static int levelToLeaveToDelete(int leavesMaxSize, int limit, int nb, int leavesDone);
 
 	private:

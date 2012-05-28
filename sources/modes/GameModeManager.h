@@ -16,7 +16,7 @@ class GameModeManager {
 	public:
 		struct BranchLeaf {
 			Entity e;
-			int type;
+			unsigned int type;
 		};
 		struct Render {
 			Vector2 v;
@@ -45,7 +45,7 @@ class GameModeManager {
 
 		// scoring interface
 		virtual void WillScore(int nb __attribute__((unused)), int type __attribute__((unused)), std::vector<Entity>& out __attribute__((unused))) {}
-		virtual void ScoreCalc(int nb, int type) = 0;
+		virtual void ScoreCalc(int nb, unsigned int type) = 0;
 		virtual GameMode GetMode() = 0;
 		virtual bool LevelUp() = 0;
 
@@ -58,7 +58,7 @@ class GameModeManager {
 	protected:
 		void LoadHerissonTexture(int type);
 		void updateHerisson(float dt, float obj, float herissonSpeed);
-		void deleteLeaves(int type, int nb);
+		void deleteLeaves(unsigned int type, int nb);
 
 	public:
 		// game params

@@ -202,7 +202,7 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 				trcL->hide = false;
 			}
 			if (!alreadyGreen && gameOverState == AskingPlayerName &&
-			 ((mode==Normal && entries[i].points == modeMgr->points)
+			 ((mode==Normal && (unsigned int)entries[i].points == modeMgr->points)
 			  || (mode==TilesAttack && MathUtil::Abs(entries[i].time-modeMgr->time)<0.01f))
 			   && entries[i].name == playerName) {
 				trcN->color = Color(1.0f,0.f,0.f);
@@ -278,7 +278,7 @@ bool ModeMenuStateManager::isCurrentScoreAHighOne() {
         return true;
 
     if (modeMgr->GetMode() == Normal) {
-        return modeMgr->points > entries[s - 1].points;
+        return modeMgr->points > (unsigned int)entries[s - 1].points;
     } else {
         return modeMgr->time < entries[s - 1].time;
     }
