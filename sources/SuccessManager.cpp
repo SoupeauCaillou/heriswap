@@ -167,12 +167,12 @@ void SuccessManager::sBonusToExcess(int type, int bonus, int nb) {
 
 void SuccessManager::sLuckyLuke() {
 	if (hardMode && !bLuckyLuke) {
-		if (timeUserInputloop<5.f)
+		if (timeUserInputloop<2.f)
 			timeTotalPlayed += timeUserInputloop;
 		else
 			timeTotalPlayed = 0.f;
 
-		if (timeTotalPlayed >= 30.f) {
+		if (timeTotalPlayed >= 15.f) {
 			successAPI->successCompleted("Lucky Luke", 1671902);
 			bLuckyLuke = true;
 		}
@@ -259,8 +259,8 @@ void SuccessManager::sWhatToDo(bool swapInPreparation, float dt) {
 	}
 }
 
-// Delete::Enter gives newCombiCount
-// User::Enter cancel it and gives 0
+// Delete::Enter gives the number of combinations it'll delete
+// User::Enter cancel success (user take the control) so it gives 0
 void SuccessManager::sBimBamBoum(int newCombiCount) {
 	if (hardMode && !bBimBamBoum) {
 		if (newCombiCount == 0) {
