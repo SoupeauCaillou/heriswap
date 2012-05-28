@@ -177,7 +177,7 @@ public class TilematchJNILib {
 	   	Leaderboard l = new Leaderboard(boards[2*(mode-1)+difficulty]);
 	   	Log.i(TilematchActivity.Tag, "leaderboard id: " + boards[2*(mode-1)+difficulty]);
 
-		final Score s = new Score((long) ((mode == 1) ? points : time*1000), null);
+		final Score s = new Score((long) ((mode == 1) ? points : time*1000), (float)((int)(time*100)/100.f) + "s");
 			s.submitTo(l, new Score.SubmitToCB() {
 			@Override public void onSuccess(boolean newHighScore) {
 				Log.i(TilematchActivity.Tag, "score posting successfull");
