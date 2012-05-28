@@ -33,4 +33,7 @@
 #define DL_LogoAnim 0.56
 #define DL_Benchmark 0.6
 #define DL_Ads 0.61
-#define DL_Fading 0.65
+#define DL_Help 0.7
+#define DL_HelpTextBg 0.71
+#define DL_HelpText 0.72
+#define DL_Fading 0.75

@@ -8,12 +8,18 @@
 	<string name="score">Highscores :</string>
 	<string name="jouer">Start</string>
 	<string name="rejouer">Restart</string>
-	<string name="diff_1">Easy 5x5</string>
-	<string name="diff_2">Hard 8x8</string>
+	<string name="diff_1">Easy</string>
+	<string name="diff_2">Hard</string>
 	<string name="lvl">lvl</string>
+	<string name="lvlcap">Lvl</string>
 	<string name="enter_name">Enter your name</string>
 	<string name="save_name">Save</string>
 	<string name="congrats">Congratulations! New high score</string>
 	<string name="reuse_name">Or select one from list :</string>
 	<string name="success">Success</string>
+	<string name="how_to_play">How to play ?</string>
+	<string name="bonus_x2">Bonus x2</string>
+	<string name="objective">Goal</string>
+	<string name="level">Level</string>
+	<string name="leave_left">Leave left</string>
 </resources>

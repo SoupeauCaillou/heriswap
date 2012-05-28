@@ -11,9 +11,15 @@
 	<string name="diff_1">Facile</string>
 	<string name="diff_2">Difficile</string>
 	<string name="lvl">niv</string>
+	<string name="lvlcap">Niv</string>
 	<string name="enter_name">Nouveau meilleur score</string>
 	<string name="save_name">Enregistrer</string>
 	<string name="congrats">Felicitation! Nouveau meilleur score</string>
 	<string name="reuse_name">Ou un de la liste :</string>
-	<string name="success">Success</string>
+	<string name="success">Succès</string>
+	<string name="how_to_play">Comment jouer ?</string>
+	<string name="bonus_x2">Bonus x2</string>
+	<string name="objective">Objectif</string>
+	<string name="level">Niveau</string>
+	<string name="leave_left">feuilles restantes</string>
 </resources>
