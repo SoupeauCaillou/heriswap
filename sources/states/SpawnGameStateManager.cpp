@@ -59,8 +59,8 @@ void SpawnGameStateManager::Enter() {
 	if ((int)spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
      	std::cout << "create " << spawning.size() << " cells" << std::endl;
 		for(unsigned int i=0; i<spawning.size(); i++) {
-            if (spawning[i].fe == 0)
-			    spawning[i].fe = createCell(spawning[i], true);
+            if (spawning[i].entity == 0)
+			    spawning[i].entity = createCell(spawning[i], true);
 		}
 		int ite=0;
 		//get a new grid which has no direct combinations but still combinations to do (give up at 100 try)
@@ -70,19 +70,11 @@ void SpawnGameStateManager::Enter() {
 			for(unsigned int i=0; i<c.size(); i++) {
 				int j = MathUtil::RandomInt(c[i].points.size());
 				Entity e = theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y);
-				Entity voisins[4] = {theGridSystem.GetOnPos(c[i].points[j].X+1, c[i].points[j].Y),
-					theGridSystem.GetOnPos(c[i].points[j].X-1, c[i].points[j].Y),
-					theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y-1),
-					theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y+1)};
-				int typeVoisins[4];
-				for (int i= 0; i<4; i++)
-					voisins[i] ? GRID(voisins[i])->type : -1;
-
-				int type;
+				int type, iter = 0;
 				do {
 					type = MathUtil::RandomInt(theGridSystem.Types);
-				} while (type == typeVoisins[0] || type == typeVoisins[1] || type == typeVoisins[2] || type == typeVoisins[3]);
-
+					iter++;
+				} while (theGridSystem.GridPosIsInCombination(c[i].points[j].X, c[i].points[j].Y, type, 0) && iter<100);
 				GRID(e)->type = type;
 				RenderingComponent* rc = RENDERING(e);
 				rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, &TRANSFORM(e)->rotation));
@@ -107,14 +99,14 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
         bool fullGridSpawn = (spawning.size() == (unsigned)theGridSystem.GridSize*theGridSystem.GridSize);
 		transitionCree->active = true;
 		for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
-			if (it->fe == 0) {
-				it->fe = createCell(*it, fullGridSpawn);
+			if (it->entity == 0) {
+				it->entity = createCell(*it, fullGridSpawn);
 			} else {
-                GridComponent* gc = GRID(it->fe);
+                GridComponent* gc = GRID(it->entity);
                 if (fullGridSpawn) {
                     gc->i = gc->j = -1;
                 }
-				TransformationComponent* tc = TRANSFORM(it->fe);
+				TransformationComponent* tc = TRANSFORM(it->entity);
 				float s = Game::CellSize(theGridSystem.GridSize);
 				if (transitionCree->value == 1){
 					tc->size = Vector2(s*0.1, s);
@@ -176,13 +168,48 @@ void SpawnGameStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 }
 
+
+int newLeavesInSpawning(std::vector<Feuille>& spawning, int i, int j) {
+	for (int k=0; k<spawning.size(); k++)
+		if (spawning[k].X == i && spawning[k].Y == j)
+			return spawning[k].type;
+	return -1;
+}
+
 void fillTheBlank(std::vector<Feuille>& spawning)
 {
 	for (int i=0; i<theGridSystem.GridSize; i++){
 		for (int j=0; j<theGridSystem.GridSize; j++){
-			if (theGridSystem.GetOnPos(i,j) == 0){
-				int r = MathUtil::RandomInt(theGridSystem.Types);
-				Feuille nouvfe = {i,j,0,r};
+			Entity e = theGridSystem.GetOnPos(i,j);
+			//oh ! it misses someone on (i,j)
+			if (!e){
+				//get its neighboors...
+				Entity voisins[8] = {
+					theGridSystem.GetOnPos(i-2, j),
+					theGridSystem.GetOnPos(i-1, j),
+					theGridSystem.GetOnPos(i+1, j),
+					theGridSystem.GetOnPos(i+2, j),
+					theGridSystem.GetOnPos(i, j-2),
+					theGridSystem.GetOnPos(i, j-1),
+					theGridSystem.GetOnPos(i, j+1),
+					theGridSystem.GetOnPos(i, j+2)
+				};
+				
+				//and their types
+				int typeVoisins[8];
+				for (int k = 0; k < 4; k++) {
+					typeVoisins[k] = voisins[k] ? GRID(voisins[k])->type : newLeavesInSpawning(spawning, i-2+k, j);
+				} for (int k = 4; k < 8; k++)
+					typeVoisins[k] = voisins[k] ? GRID(voisins[k])->type : newLeavesInSpawning(spawning, i, j-6+k);
+				
+				//get a type which doesn't create a combi with its neighboors
+				int type, ite = 0;
+				do {
+					type = MathUtil::RandomInt(theGridSystem.Types);
+					ite++;
+				} while (theGridSystem.GridPosIsInCombination(i, j, type, typeVoisins) && ite<5000);
+
+				Feuille nouvfe = {i,j,0,type};
 				spawning.push_back(nouvfe);
 			}
 		}
