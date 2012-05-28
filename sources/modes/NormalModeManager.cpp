@@ -46,7 +46,6 @@ void NormalGameModeManager::Enter() {
 	for (int i=0;i<theGridSystem.Types;i++) remain[i]=3;
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
-	levelUpPending = false;
 
 	generateLeaves(0, theGridSystem.Types);
 
@@ -68,12 +67,6 @@ void NormalGameModeManager::TogglePauseDisplay(bool paused) {
 }
 
 void NormalGameModeManager::GameUpdate(float dt) {
-	if (levelUpPending) {
-			//~ TRANSFORM(herisson)->position.X = GameModeManager::position(time);
-		//RENDERING(herisson)->hide = false;
-        LoadHerissonTexture(bonus+1);
-		levelUpPending = false;
-	}
 	time += dt;
 }
 
@@ -121,7 +114,7 @@ int NormalGameModeManager::levelToLeaveToDelete(int nb, int maxRemain, int done)
 	int previousRemovalCount = (int) (6 * done)/maxRemain;
 	// what should be removed at this step
 	int totalTheoricallyRemoved = (int) (6 * (done + nb))/maxRemain;
-	
+
 	// so, we have to removed the difference
 	return totalTheoricallyRemoved - previousRemovalCount;
 }
@@ -194,16 +187,15 @@ bool NormalGameModeManager::LevelUp() {
 		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
 
 		std::cout << "Level up to level " << level << std::endl;
-		bonus = MathUtil::RandomInt(theGridSystem.Types);
-		LoadHerissonTexture(bonus+1);
+
 		for (int i=0;i<theGridSystem.Types;i++)
 			remain[i] = 2+level;
 
-		// cacher le n'herisson
-		//RENDERING(herisson)->hide = true;
-		// et le positionner
-		//TRANSFORM(herisson)->position.X = GameModeManager::position(time);
-		levelUpPending = true;
+		//reput hedgehog on first animation position
+		c->ind = 0;
+		bonus = MathUtil::RandomInt(theGridSystem.Types);
+		LoadHerissonTexture(bonus+1);
+		RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
 	}
 	return match;
 }

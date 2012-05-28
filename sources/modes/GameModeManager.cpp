@@ -124,6 +124,7 @@ void GameModeManager::Setup() {
 
 void GameModeManager::Enter() {
 	RENDERING(herisson)->hide = false;
+	RENDERING(herisson)->color.a = 1;
 	RENDERING(branch)->hide = false;
 	SCROLLING(decor2nd)->hide = false;
 	SCROLLING(decor1er)->hide = false;

@@ -38,6 +38,7 @@ void LevelStateManager::Setup() {
 	TEXT_RENDERING(eBigLevel)->color = Color(1, 1, 1);
 	TEXT_RENDERING(eBigLevel)->fontName = "gdtypo";
 	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(234);
+	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
 	TEXT_RENDERING(eBigLevel)->positioning = TextRenderingComponent::CENTER;
 	ADD_COMPONENT(eBigLevel, Music);
     ADD_COMPONENT(eBigLevel, Morphing);
@@ -79,10 +80,14 @@ void LevelStateManager::Setup() {
 
 void LevelStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
+
+	levelState = Start;
 	std::stringstream a;
 	a << currentLevel;
 	TEXT_RENDERING(eBigLevel)->text = a.str();
 	TEXT_RENDERING(eBigLevel)->hide = false;
+	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(234);
+	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
 	TRANSFORM(eBigLevel)->z = DL_Score;
 
 	MUSIC(eBigLevel)->control = MusicComponent::Start;
@@ -122,15 +127,11 @@ void LevelStateManager::Enter() {
 	for (int i=0; i<entities.size(); i++) {
 		CombinationMark::markCellInCombination(entities[i]);
 	}
-
-	newLeavesGenerated = false;
 }
 
 GameState LevelStateManager::Update(float dt) {
-	duration += dt;
-
 	//set grid alpha to 0
-	if (duration > 0.15) {
+	if (levelState == Start && duration > 0.15) {
 		ADSR(eGrid)->active = true;
 		float alpha = 1 - ADSR(eGrid)->value;
 		std::vector<Entity> entities = theGridSystem.RetrieveAllEntityWithComponent();
@@ -138,15 +139,20 @@ GameState LevelStateManager::Update(float dt) {
 			RENDERING(*it)->color.a = alpha;
 			TWITCH(*it)->speed = alpha * 9;
 		}
+		if (ADSR(eGrid)->value == 1)
+			levelState = GridHided;
 	}
 
 	//start music at 0.5 s
-	if (duration > 0.5 && MUSIC(eBigLevel)->music == InvalidMusicRef && !theMusicSystem.isMuted()) {
-		MUSIC(eBigLevel)->music = theMusicSystem.loadMusicFile("audio/level_up.ogg");
+	if (levelState == GridHided && duration > 0.5) {
+		levelState = MusicStarted;
+		if (MUSIC(eBigLevel)->music == InvalidMusicRef && !theMusicSystem.isMuted())
+			MUSIC(eBigLevel)->music = theMusicSystem.loadMusicFile("audio/level_up.ogg");
 	}
 	//move big score + hedgehog
 	//generate new leaves
-	if (duration > 6) {
+	if (levelState == MusicStarted && duration > 6) {
+		levelState = BigScoreBeganToMove;
 		MorphingComponent* mc = MORPHING(eBigLevel);
 		for (int i=0; i<mc->elements.size(); i++) {
 			delete mc->elements[i];
@@ -160,29 +166,31 @@ GameState LevelStateManager::Update(float dt) {
 		mc->timing = 0.5;
 
 		PARTICULE(eSnowEmitter)->emissionRate = 0;
-
-		if (!newLeavesGenerated) {
-			//on bouge le herisson
-			TRANSFORM(modeMgr->herisson)->position.X = modeMgr->position(modeMgr->time);
-			//on genere les nouvelles feuilles
-			newLeavesGenerated = true;
-			modeMgr->generateLeaves(0, theGridSystem.Types);
-			for (int i=0; i<modeMgr->branchLeaves.size(); i++) {
-				TRANSFORM(modeMgr->branchLeaves[i].e)->size = 0;
-			}
-		} else {
-			//if leaves created, make them grow !
-			for (int i=0; i<modeMgr->branchLeaves.size(); i++) {
-				TRANSFORM(modeMgr->branchLeaves[i].e)->size = Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f);
-			}
-			RENDERING(eSnowBranch)->color.a = 1-(duration-6)/(10-6);
-			RENDERING(eSnowGround)->color.a = 1-(duration-6)/(10-6);
+		//on modifie le herisson
+		TRANSFORM(modeMgr->herisson)->position.X = modeMgr->position(modeMgr->time);
+		RENDERING(modeMgr->herisson)->color.a = 1;
+		RENDERING(modeMgr->herisson)->desaturate = false;
+		//on genere les nouvelles feuilles
+		modeMgr->generateLeaves(0, theGridSystem.Types);
+		for (int i=0; i<modeMgr->branchLeaves.size(); i++) {
+			TRANSFORM(modeMgr->branchLeaves[i].e)->size = 0;
 		}
 	}
+	if (levelState == BigScoreBeganToMove || levelState == BigScoreMoving) {
+		levelState = BigScoreMoving;
 
+		//if leaves created, make them grow !
+		for (int i=0; i<modeMgr->branchLeaves.size(); i++) {
+			TRANSFORM(modeMgr->branchLeaves[i].e)->size = Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f);
+		}
+		RENDERING(eSnowBranch)->color.a = 1-(duration-6)/(10-6);
+		RENDERING(eSnowGround)->color.a = 1-(duration-6)/(10-6.f);
+	}
 
-	//level ainmation ended - back to game
-	if (duration > 10) {
+	duration += dt;
+
+	//level animation ended - back to game
+	if (levelState == BigScoreMoving && duration > 10) {
 		return Spawn;
 	}
 
@@ -194,11 +202,9 @@ void LevelStateManager::Exit() {
 	ADSR(eGrid)->active = false;
 	feuilles.clear();
 	LOGI("%s", __PRETTY_FUNCTION__);
-	TEXT_RENDERING(eBigLevel)->hide = true;
 	PARTICULE(eSnowEmitter)->emissionRate = 0;
 	RENDERING(eSnowBranch)->hide = true;
 	RENDERING(eSnowGround)->hide = true;
-	RENDERING(modeMgr->herisson)->color.a = 1;
 
 	MorphingComponent* mc = MORPHING(eBigLevel);
 	for (int i=0; i<mc->elements.size(); i++) {

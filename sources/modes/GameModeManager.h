@@ -77,10 +77,9 @@ class GameModeManager {
 		std::vector<Vector2> pts;
 
 		SuccessManager* successMgr;
-	private:
 		//hérisson
 		AnimatedActor* c;
-
+	private:
 		std::vector<Render> posBranch;
 		void fillVec();
 		float distance;

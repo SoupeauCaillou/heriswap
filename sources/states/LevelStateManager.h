@@ -14,27 +14,35 @@ typedef struct FeuilleOrientee {
 class LevelStateManager : public GameStateManager {
 	public:
 
-	LevelStateManager(NormalGameModeManager* mgr) : modeMgr(mgr) { };
-	~LevelStateManager() { };
-	void Setup();
-	void Enter();
-	GameState Update(float dt);
-	void Exit();
-	
-	int currentLevel;
-	Entity smallLevel;
+		LevelStateManager(NormalGameModeManager* mgr) : modeMgr(mgr) { };
+		~LevelStateManager() { };
+		void Setup();
+		void Enter();
+		GameState Update(float dt);
+		void Exit();
+
+		int currentLevel;
+		Entity smallLevel;
 
 	private:
-	Entity eGrid;
-	std::vector<FeuilleOrientee> feuilles;
-	Entity eBigLevel;
-	Entity eSnowEmitter;
-	Entity eSnowBranch;
-	Entity eSnowGround;
-	Entity eMusic;
-	
-	float duration;
-	
-	NormalGameModeManager* modeMgr;
-	bool newLeavesGenerated;
+		Entity eGrid;
+		std::vector<FeuilleOrientee> feuilles;
+		Entity eBigLevel;
+		Entity eSnowEmitter;
+		Entity eSnowBranch;
+		Entity eSnowGround;
+		Entity eMusic;
+
+		float duration;
+
+		NormalGameModeManager* modeMgr;
+
+		enum levelState {
+            Start,
+            GridHided,
+            MusicStarted,
+            BigScoreBeganToMove,
+			BigScoreMoving
+        } levelState;
+
 };

@@ -19,6 +19,8 @@ void switchAnim(AnimatedActor* a) {
 
 void loadHerissonTexture(int type, AnimatedActor* c) {
 	std::stringstream t;
+	c->frames = 30;
+	c->ind = 0;
 	c->anim.clear();
 	t << "herisson_1_"<<type<<".png";
 	c->anim.push_back(t.str());
