@@ -329,7 +329,7 @@ void Game::tick(float dt) {
 		 toggleShowCombi(true);
 	 }
 
-	if (datas->state == Delete) {
+	if ((datas->state == Delete && theGridSystem.entityCount() == theGridSystem.GridSize * theGridSystem.GridSize) || datas->state == UserInput) {
 		// si on change de niveau (course au score), on remplit pas la grille avant l'anim
 		if (datas->mode == Normal) {
 			NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]);
@@ -398,7 +398,11 @@ void Game::tick(float dt) {
 	    	MUSIC(datas->inGameMusic.masterTrack)->volume = 1;
 	    	MUSIC(datas->inGameMusic.stressTrack)->control = MusicComponent::Start;
 	        if (MUSIC(datas->inGameMusic.masterTrack)->music == InvalidMusicRef) {
-	            std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);//. newMusics();
+	            std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);
+	            LOGW("New music picked for 'music' field (%lu):", musics.size());
+	            for (unsigned i=0; i<musics.size(); i++) {
+		            LOGW("\t%s", musics[i].c_str());
+	            }
 	            MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
 	            MUSIC(datas->inGameMusic.stressTrack)->music = theMusicSystem.loadMusicFile("audio/F.ogg");
 	            MUSIC(datas->inGameMusic.stressTrack)->loopNext = theMusicSystem.loadMusicFile("audio/F.ogg");
@@ -413,7 +417,12 @@ void Game::tick(float dt) {
 
 	        // if master track has looped, choose next songs to play
 	        if (MUSIC(datas->inGameMusic.masterTrack)->loopNext == InvalidMusicRef) {
-		        std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);//newMusics();
+		        std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);
+		        LOGW("New music picked for 'loopNext' field (%lu):", musics.size());
+	            for (unsigned i=0; i<musics.size(); i++) {
+		            LOGW("\t%s", musics[i].c_str());
+	            }
+
 		        MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile(musics[0]);
 		        unsigned int i;
 		        for (i=0; i<musics.size() - 1; i++) {

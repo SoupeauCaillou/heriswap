@@ -357,7 +357,16 @@ public class TilematchJNILib {
     		initialCount = Math.max((int)(2 * 0.5 * rate) / pcmBufferSize(rate), 1 + (int)AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT) / pcmBufferSize(rate));
     		bufferSize = initialCount * pcmBufferSize(rate);
         	writePendings = new LinkedList<Command>();
-        	track = new AudioTrack(AudioManager.STREAM_MUSIC, rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
+
+        	synchronized (DumbAndroid.audioTrackPool) {
+				if (DumbAndroid.audioTrackPool.size() > 0) {
+					track = DumbAndroid.audioTrackPool.remove(0);
+					Log.i(TilematchActivity.Tag, "Reuse audiotrack");
+				} else {
+					Log.i(TilematchActivity.Tag, "Create audiotrack");
+					track = new AudioTrack(AudioManager.STREAM_MUSIC, rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);		
+				}
+			} 
 
         	int state = track.getState();
         	if (state != AudioTrack.STATE_INITIALIZED) {
@@ -388,12 +397,14 @@ public class TilematchJNILib {
 						if (cmd != null && running) {
 							switch (cmd.type) {
 								case Buffer: {
-									int result = track.write(cmd.buffer, 0, cmd.bufferSize);
-									if (result != cmd.bufferSize) {
-										Log.e("tilematchJ", "Error writing data to AudioTrack(" + track.toString() + "): " + result);
-										checkReturnCode("write,", result);
-									} else {
-										// Log.e("tilematchJ", "Successful write of " + data.length);
+									if (playing) {
+										int result = track.write(cmd.buffer, 0, cmd.bufferSize);
+										if (result != cmd.bufferSize) {
+											Log.e("tilematchJ", "Error writing data to AudioTrack(" + track.toString() + "): " + result);
+											checkReturnCode("write,", result);
+										} else {
+											// Log.e("tilematchJ", "Successful write of " + data.length);
+										}
 									}
 									synchronized (bufferPool) {
 										bufferPool.add(cmd.buffer);
@@ -425,12 +436,16 @@ public class TilematchJNILib {
 					}
 					Log.i(TilematchActivity.Tag, "Effective delete of track: " + track.toString());
 					track.flush();
-					track.release();
+					synchronized (DumbAndroid.audioTrackPool) {
+						DumbAndroid.audioTrackPool.add(track);
+					}
+					// track.release();
 				}
     		}, "DumbAndroid");
     	}
     	// buffer pool shared accross all instances
     	static List<byte[]> bufferPool = new ArrayList<byte[]>();
+    	static List<AudioTrack> audioTrackPool = new ArrayList<AudioTrack>(10);
     }
 
     static void checkReturnCode(String ctx, int result) {
