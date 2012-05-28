@@ -404,7 +404,6 @@ void Game::tick(float dt) {
 	            }
 	            MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
 	            MUSIC(datas->inGameMusic.stressTrack)->music = theMusicSystem.loadMusicFile("audio/F.ogg");
-	            MUSIC(datas->inGameMusic.stressTrack)->loopNext = theMusicSystem.loadMusicFile("audio/F.ogg");
 	            unsigned int i;
 	            for (i=0; i<musics.size() - 1; i++) {
 	                 MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
