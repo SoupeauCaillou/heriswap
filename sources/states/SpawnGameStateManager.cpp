@@ -57,7 +57,7 @@ void SpawnGameStateManager::Enter() {
 	std::vector<Combinais> c;
 	fillTheBlank(spawning);
 	if (spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
-     std::cout << "create " << spawning.size() << " cells" << std::endl;
+		std::cout << "create " << spawning.size() << " cells" << std::endl;
 		for(int i=0; i<spawning.size(); i++) {
             if (spawning[i].fe == 0)
 			    spawning[i].fe = createCell(spawning[i], true);
@@ -68,16 +68,27 @@ void SpawnGameStateManager::Enter() {
 			c = theGridSystem.LookForCombination(false,true);
 			// change type from cells in combi
 			for(int i=0; i<c.size(); i++) {
-				for(int j=0; j<c[i].points.size(); j++) {
-					Entity e = theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y);
-					int type = MathUtil::RandomInt(theGridSystem.Types);
-					GRID(e)->type = type;
-					RenderingComponent* rc = RENDERING(e);
-					rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, &TRANSFORM(e)->rotation));
-				}
+				int j = MathUtil::RandomInt(c[i].points.size());
+				Entity e = theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y);
+				Entity voisins[4] = {theGridSystem.GetOnPos(c[i].points[j].X+1, c[i].points[j].Y),
+					theGridSystem.GetOnPos(c[i].points[j].X-1, c[i].points[j].Y),
+					theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y-1),
+					theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y+1)};
+				int typeVoisins[4];
+				for (int i= 0; i<4; i++)
+					voisins[i] ? GRID(voisins[i])->type : -1;
+
+				int type;
+				do {
+					type = MathUtil::RandomInt(theGridSystem.Types);
+				} while (type == typeVoisins[0] || type == typeVoisins[1] || type == typeVoisins[2] || type == typeVoisins[3]);
+
+				GRID(e)->type = type;
+				RenderingComponent* rc = RENDERING(e);
+				rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, &TRANSFORM(e)->rotation));
 			}
 			ite++;
-		} while((!c.empty() || !theGridSystem.StillCombinations()) && ite<100 );
+		} while((!c.empty() || !theGridSystem.StillCombinations()) && ite<100);
 
         ADSR(eSpawn)->active = true;
 	} else {
@@ -118,7 +129,7 @@ GameState SpawnGameStateManager::Update(float dt) {
 			spawning.clear();
 			return NextState(true);
 		}
-	//sinon on verifie qu'il reste des combi
+	//sinon si on fait une nouvelle grille
 	} else if (ADSR(eGrid)->active) {
         std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
         for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
@@ -131,6 +142,7 @@ GameState SpawnGameStateManager::Update(float dt) {
             LOGI("nouvelle grille de %d elements! ", spawning.size());
             successMgr->gridResetted = true;
         }
+    //sinon l'etat suivant depend de la grille actuelle
     } else {
 		return NextState(false);
 	}
