@@ -126,14 +126,6 @@ void TilesAttackGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	successMgr->sBonusToExcess(type, bonus, nb);
 }
 
-bool TilesAttackGameModeManager::LevelUp() {
-	return false;
-}
-
-GameMode TilesAttackGameModeManager::GetMode() {
-	return TilesAttack;
-}
-
 void TilesAttackGameModeManager::TogglePauseDisplay(bool paused) {
 	GameModeManager::TogglePauseDisplay(paused);
 }

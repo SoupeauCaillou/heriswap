@@ -15,11 +15,11 @@ class TilesAttackGameModeManager : public GameModeManager {
 		void Exit();
 		void TogglePauseDisplay(bool paused);
 
-		bool LevelUp();
+		bool LevelUp() { return false; };
 
 		void WillScore(int count, int type, std::vector<Entity>& out);
 
-		GameMode GetMode();
+		GameMode GetMode() { return TilesAttack; };
 
 		void ScoreCalc(int nb, unsigned int type);
 
