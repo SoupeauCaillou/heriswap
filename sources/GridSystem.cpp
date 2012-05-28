@@ -353,3 +353,43 @@ std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchHorizontal() {
 	}
 	return combin;
 }
+
+bool GridSystem::GridPosIsInCombination(int i, int j, int type, int* voisinsType) {
+	if (type==-1) 
+		return false;
+	
+	int* vType = voisinsType;
+	//is voisinsType is null, test with leaves currently in gridsystem
+	if (!vType) {
+		Entity voisins[8];
+		 
+		voisins[0] = GetOnPos(i-2, j);
+		voisins[1] = GetOnPos(i-1, j);
+		voisins[2] = GetOnPos(i+1, j);
+		voisins[3] = GetOnPos(i+2, j);
+		voisins[4] = GetOnPos(i, j-2);
+		voisins[5] = GetOnPos(i, j-1);
+		voisins[6] = GetOnPos(i, j+1);
+		voisins[7] = GetOnPos(i, j+2);
+				
+		vType = (int*)malloc(sizeof(int)*8);
+		for (int i= 0; i<8; i++)
+			vType[i] = voisins[i] ? GRID(voisins[i])->type : -1;
+	}
+	
+	bool res =  (
+	//horizontal combis ?
+	type == vType[0] && type == vType[1]
+	|| type == vType[1] && type == vType[2]
+	|| type == vType[2] && type == vType[3]
+	//vertical combis ?
+	|| type == vType[4] && type == vType[5]
+	|| type == vType[5] && type == vType[6]
+	|| type == vType[6] && type == vType[7]
+	);
+	
+	if (!voisinsType) 
+		free(vType);
+	
+	return res;
+}

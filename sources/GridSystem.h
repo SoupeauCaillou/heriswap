@@ -7,7 +7,7 @@
 
 struct Feuille {
 	int X, Y;
-	Entity fe;
+	Entity entity;
 	int type;
 };
 
@@ -88,6 +88,9 @@ void HideAll(bool activate);
 bool IsValidGridPosition(int i, int j) {
 	return (i>=0 && j>=0 && i<GridSize && j<GridSize);
 }
+
+/* Is leaf in position i,j in a combination (real grid or in voisinsType configuration) ? */
+bool GridPosIsInCombination(int i, int j, int type, int* voisinsType);
 
 /* Clean the Grid from entities */
 void DeleteAll();
