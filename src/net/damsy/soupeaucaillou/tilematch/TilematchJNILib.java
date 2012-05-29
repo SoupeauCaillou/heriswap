@@ -154,10 +154,10 @@ public class TilematchJNILib {
     }
 
 	static final String[] boards = new String[] {
-		"1180207",
-		"1180177",
-		"1180187",
-		"1180197"
+		"1180807",
+		"1180847",
+		"1180857",
+		"1180837"
 	};
 
     static public void submitScore(int mode, int difficulty, int points, int level, float time, String name) {
@@ -177,7 +177,12 @@ public class TilematchJNILib {
 	   	Leaderboard l = new Leaderboard(boards[2*(mode-1)+difficulty]);
 	   	Log.i(TilematchActivity.Tag, "leaderboard id: " + boards[2*(mode-1)+difficulty]);
 
-		final Score s = new Score((long) ((mode == 1) ? points : time*1000), (float)((int)(time*100)/100.f) + "s");
+		final Score s;
+			if (mode==1) 
+				s = new Score((long) points, null);
+			else
+				s = new Score((long)time*1000, (float)((int)(time*100)/100.f) + "s");
+				
 			s.submitTo(l, new Score.SubmitToCB() {
 			@Override public void onSuccess(boolean newHighScore) {
 				Log.i(TilematchActivity.Tag, "score posting successfull");
