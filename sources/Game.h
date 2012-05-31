@@ -49,7 +49,7 @@ class SuccessAPI {
 class PrivateData;
 class Game {
 	public:
-		Game(NativeAssetLoader* loader, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad);
+		Game(AssetAPI* asset, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad);
         ~Game();
         void sacInit(int windowW, int windowH);
 		void init(const uint8_t* in = 0, int size = 0);
@@ -76,5 +76,5 @@ class Game {
 		void stopInGameMusics();
 
 	PrivateData* datas;
-	NativeAssetLoader* loader;
+	AssetAPI* asset;
 };

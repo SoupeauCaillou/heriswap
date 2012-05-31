@@ -90,8 +90,8 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-Game::Game(NativeAssetLoader* ploader, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad) {
-	this->loader = ploader;
+Game::Game(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad) {
+	asset = ast;
 	/* create EntityManager */
 	EntityManager::CreateInstance();
 
@@ -139,9 +139,9 @@ Game::~Game() {
 }
 
 void Game::loadFont(const std::string& name) {
-	char* font = loader->loadShaderFile(name + ".desc");
+	FileBuffer file = asset->loadAsset(name + ".desc");
 	std::stringstream sfont;
-	sfont << font;
+	sfont << std::string((char*)file.data, file.size);
 	std::string line;
 	std::map<unsigned char, float> h2wratio;
 	while (getline(sfont, line)) {
@@ -151,7 +151,7 @@ void Game::loadFont(const std::string& name) {
 		sscanf(line.c_str(), "%d,%d,%d", &c, &w, &h);
 		h2wratio[c] = (float)w / h;
 	}
-	delete[] font;
+	delete[] file.data;
 	h2wratio[' '] = h2wratio['a'];
 	theTextRenderingSystem.registerFont(name, h2wratio);
 }
@@ -316,7 +316,10 @@ void Game::tick(float dt) {
     newState = datas->state2Manager[datas->state]->Update(dt);
 
 	//get the game progress
-	float percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent();
+	float percentDone = 0;
+	if (inGameState(datas->state)) {
+		datas->mode2Manager[datas->mode]->GameProgressPercent();
+	}
 
     //updating game if needed
     if (datas->state == UserInput) {
