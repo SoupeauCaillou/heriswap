@@ -22,7 +22,7 @@ void LogoStateManager::Setup() {
      TRANSFORM(logo)->position = Vector2(0,0);
      TRANSFORM(logo)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(869));
      TRANSFORM(logo)->z = DL_Logo;
-     RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("soupe_logo.png");
+     RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("soupe_logo");
 
      ADD_COMPONENT(logobg, Rendering);
      ADD_COMPONENT(logobg, Transformation);
@@ -42,7 +42,7 @@ void LogoStateManager::Enter() {
 		TransformationSystem::NW);
 	TRANSFORM(animLogo)->z = DL_LogoAnim;
 	ADD_COMPONENT(animLogo, Rendering);
-	RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo2_365_331.png");
+	RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo2_365_331");
 	RENDERING(animLogo)->hide = true;
 	duration = 0;
 	ADD_COMPONENT(animLogo, Sound);
@@ -59,9 +59,9 @@ GameState LogoStateManager::Update(float dt) {
 	} else if (duration > 100*0.8+0.35) {
 		RENDERING(animLogo)->hide = true;
 	} else if (duration > 0.8+0.3) {
-		RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo2_365_331.png");
+		RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo2_365_331");
 	} else if (duration > 0.8+0.05) {
-		RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo3_365_331.png");
+		RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo3_365_331");
 	} else if (duration > 0.8) {
 		RENDERING(animLogo)->hide = false;
 		SOUND(animLogo)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg");
@@ -78,8 +78,8 @@ void LogoStateManager::LateExit() {
     theRenderingSystem.unloadAtlas("logo");
     /*
     theRenderingSystem.unloadTexture(RENDERING(logo)->texture);
-    theRenderingSystem.unloadTexture(theRenderingSystem.loadTextureFile("soupe_logo2_365_331.png"));
-    theRenderingSystem.unloadTexture(theRenderingSystem.loadTextureFile("soupe_logo3_365_331.png"));
+    theRenderingSystem.unloadTexture(theRenderingSystem.loadTextureFile("soupe_logo2_365_331"));
+    theRenderingSystem.unloadTexture(theRenderingSystem.loadTextureFile("soupe_logo3_365_331"));
     */
     theEntityManager.DeleteEntity(logo);
     theEntityManager.DeleteEntity(logobg);

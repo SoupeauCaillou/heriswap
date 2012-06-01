@@ -87,7 +87,7 @@ void GameModeManager::Setup() {
 	TransformationSystem::setPosition(TRANSFORM(branch), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
 	ADD_COMPONENT(branch, Rendering);
 	RENDERING(branch)->hide = true;
-	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche.png");
+	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche");
 
 	decor2nd = theEntityManager.CreateEntity();
 	ADD_COMPONENT(decor2nd, Transformation);
@@ -95,10 +95,10 @@ void GameModeManager::Setup() {
 	TRANSFORM(decor2nd)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpWidthToScreen(470));
 	TransformationSystem::setPosition(TRANSFORM(decor2nd), Vector2(0, PlacementHelper::GimpYToScreen(610)), TransformationSystem::N);
 	ADD_COMPONENT(decor2nd, Scrolling);
-	SCROLLING(decor2nd)->images.push_back("decor2nd_0.png");
-	SCROLLING(decor2nd)->images.push_back("decor2nd_1.png");
-	SCROLLING(decor2nd)->images.push_back("decor2nd_2.png");
-	SCROLLING(decor2nd)->images.push_back("decor2nd_3.png");
+	SCROLLING(decor2nd)->images.push_back("decor2nd_0");
+	SCROLLING(decor2nd)->images.push_back("decor2nd_1");
+	SCROLLING(decor2nd)->images.push_back("decor2nd_2");
+	SCROLLING(decor2nd)->images.push_back("decor2nd_3");
 	SCROLLING(decor2nd)->speed = Vector2(-.3, 0);
 	SCROLLING(decor2nd)->displaySize = Vector2(TRANSFORM(decor2nd)->size.X * 1.01, TRANSFORM(decor2nd)->size.Y);
 	SCROLLING(decor2nd)->hide = true;
@@ -109,10 +109,10 @@ void GameModeManager::Setup() {
 	TRANSFORM(decor1er)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpWidthToScreen(300));
 	TransformationSystem::setPosition(TRANSFORM(decor1er), Vector2(0, PlacementHelper::GimpYToScreen(1280)), TransformationSystem::S);
 	ADD_COMPONENT(decor1er, Scrolling);
-	SCROLLING(decor1er)->images.push_back("decor1er_0.png");
-	SCROLLING(decor1er)->images.push_back("decor1er_1.png");
-	SCROLLING(decor1er)->images.push_back("decor1er_2.png");
-	SCROLLING(decor1er)->images.push_back("decor1er_3.png");
+	SCROLLING(decor1er)->images.push_back("decor1er_0");
+	SCROLLING(decor1er)->images.push_back("decor1er_1");
+	SCROLLING(decor1er)->images.push_back("decor1er_2");
+	SCROLLING(decor1er)->images.push_back("decor1er_3");
 	SCROLLING(decor1er)->speed = Vector2(-0.01, 0);
 	SCROLLING(decor1er)->displaySize = Vector2(TRANSFORM(decor1er)->size.X * 1.01, TRANSFORM(decor1er)->size.Y);
 	SCROLLING(decor1er)->hide = true;

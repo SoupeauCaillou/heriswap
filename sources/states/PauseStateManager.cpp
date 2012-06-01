@@ -33,7 +33,7 @@ void PauseStateManager::Setup() {
 	ADD_COMPONENT(bRestart, Rendering);
 	ADD_COMPONENT(bRestart, Sound);
 	RENDERING(bRestart)->color.a = .5;
-	RENDERING(bRestart)->texture = theRenderingSystem.loadTextureFile("fond_bouton.png");
+	RENDERING(bRestart)->texture = theRenderingSystem.loadTextureFile("fond_bouton");
 	TRANSFORM(bRestart)->z = DL_PauseUIBg;
 	TRANSFORM(bRestart)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
 	TRANSFORM(bRestart)->position = Vector2(0, PlacementHelper::GimpYToScreen(300));
@@ -56,7 +56,7 @@ void PauseStateManager::Setup() {
 	ADD_COMPONENT(bHelp, Rendering);
 	ADD_COMPONENT(bHelp, Sound);
 	RENDERING(bHelp)->color.a = .5;
-	RENDERING(bHelp)->texture = theRenderingSystem.loadTextureFile("fond_bouton.png");
+	RENDERING(bHelp)->texture = theRenderingSystem.loadTextureFile("fond_bouton");
 	TRANSFORM(bHelp)->z = DL_PauseUIBg;
 	TRANSFORM(bHelp)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
 	TRANSFORM(bHelp)->position = Vector2(0, PlacementHelper::GimpYToScreen(500));
@@ -78,7 +78,7 @@ void PauseStateManager::Setup() {
 	ADD_COMPONENT(bAbort, Rendering);
 	ADD_COMPONENT(bAbort, Sound);
 	RENDERING(bAbort)->color.a = .5;
-	RENDERING(bAbort)->texture = theRenderingSystem.loadTextureFile("fond_bouton.png");
+	RENDERING(bAbort)->texture = theRenderingSystem.loadTextureFile("fond_bouton");
 	TRANSFORM(bAbort)->z = DL_PauseUIBg;
 	TRANSFORM(bAbort)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
 	TRANSFORM(bAbort)->position = Vector2(0, PlacementHelper::GimpYToScreen(900));

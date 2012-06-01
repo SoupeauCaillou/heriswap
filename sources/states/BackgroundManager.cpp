@@ -41,16 +41,16 @@ BackgroundManager::BackgroundManager() {
 	cloudSpeed[1] = Interval<float>(-0.25, -0.13);
 	cloudSpeed[2] = Interval<float>(-0.1, -0.03);
 
-	textures[0].push_back("haut_0.png");
-	textures[0].push_back("haut_1.png");
-	textures[0].push_back("haut_2.png");
-	textures[1].push_back("moyen_0.png");
-	textures[1].push_back("moyen_1.png");
-	textures[2].push_back("bas_0.png");
-	textures[2].push_back("bas_1.png");
-	textures[2].push_back("bas_2.png");
-	textures[2].push_back("bas_3.png");
-	textures[2].push_back("bas_4.png");
+	textures[0].push_back("haut_0");
+	textures[0].push_back("haut_1");
+	textures[0].push_back("haut_2");
+	textures[1].push_back("moyen_0");
+	textures[1].push_back("moyen_1");
+	textures[2].push_back("bas_0");
+	textures[2].push_back("bas_1");
+	textures[2].push_back("bas_2");
+	textures[2].push_back("bas_3");
+	textures[2].push_back("bas_4");
 }
 
 

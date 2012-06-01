@@ -37,7 +37,7 @@ void MainMenuGameStateManager::Setup() {
 	    TRANSFORM(bStart[i])->position.X = 0;
 	    TRANSFORM(bStart[i])->z = DL_MainMenuUIBg;
 	    ADD_COMPONENT(bStart[i], Rendering);
-	    RENDERING(bStart[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton.png");
+	    RENDERING(bStart[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
 	    RENDERING(bStart[i])->color.a = 0.5;
 	}
 	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Course au score");
@@ -72,7 +72,7 @@ void MainMenuGameStateManager::Setup() {
     TRANSFORM(bSuccess)->position.X = 0;
     TRANSFORM(bSuccess)->z = DL_MainMenuUIBg;
     ADD_COMPONENT(bSuccess, Rendering);
-    RENDERING(bSuccess)->texture = theRenderingSystem.loadTextureFile("fond_bouton.png");
+    RENDERING(bSuccess)->texture = theRenderingSystem.loadTextureFile("fond_bouton");
     RENDERING(bSuccess)->color.a = 0.5;
 	ADD_COMPONENT(bSuccess, Sound);
 	ADD_COMPONENT(bSuccess, Button);
@@ -87,7 +87,7 @@ void MainMenuGameStateManager::Setup() {
 	TransformationSystem::setPosition(TRANSFORM(menubg), Vector2(0, PlacementHelper::GimpYToScreen(542)), TransformationSystem::N);
 	TRANSFORM(menubg)->z = DL_MainMenuBg;
 	ADD_COMPONENT(menubg, Rendering);
-	RENDERING(menubg)->texture = theRenderingSystem.loadTextureFile("2emeplan.png");
+	RENDERING(menubg)->texture = theRenderingSystem.loadTextureFile("2emeplan");
 	RENDERING(menubg)->hide = true;
 
 	menufg = theEntityManager.CreateEntity();
@@ -96,7 +96,7 @@ void MainMenuGameStateManager::Setup() {
 	TransformationSystem::setPosition(TRANSFORM(menufg), Vector2(0, PlacementHelper::GimpYToScreen(1280)), TransformationSystem::S);
 	TRANSFORM(menufg)->z = DL_MainMenuFg;
 	ADD_COMPONENT(menufg, Rendering);
-	RENDERING(menufg)->texture = theRenderingSystem.loadTextureFile("1erplan.png");
+	RENDERING(menufg)->texture = theRenderingSystem.loadTextureFile("1erplan");
 	RENDERING(menufg)->hide = true;
 
 	herisson = new AnimatedActor();

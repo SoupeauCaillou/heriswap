@@ -84,8 +84,8 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      ADD_COMPONENT(soundButton, Button);
      BUTTON(soundButton)->overSize = 1.3;
      ADD_COMPONENT(soundButton, Rendering);
-     if (storage->soundEnable(false)) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
-     else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
+     if (storage->soundEnable(false)) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on");
+     else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
      ADD_COMPONENT(soundButton, Sound);
 
      for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)

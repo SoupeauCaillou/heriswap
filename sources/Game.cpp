@@ -205,10 +205,10 @@ void Game::init(const uint8_t* in, int size) {
 	TRANSFORM(datas->sky)->size = Vector2(bgElementWidth, (bgElementWidth * 833.0) / 808.0);
 	TransformationSystem::setPosition(TRANSFORM(datas->sky), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
 	ADD_COMPONENT(datas->sky, Scrolling);
-	SCROLLING(datas->sky)->images.push_back("ciel0.png");
-	SCROLLING(datas->sky)->images.push_back("ciel1.png");
-	SCROLLING(datas->sky)->images.push_back("ciel2.png");
-	SCROLLING(datas->sky)->images.push_back("ciel3.png");
+	SCROLLING(datas->sky)->images.push_back("ciel0");
+	SCROLLING(datas->sky)->images.push_back("ciel1");
+	SCROLLING(datas->sky)->images.push_back("ciel2");
+	SCROLLING(datas->sky)->images.push_back("ciel3");
 	SCROLLING(datas->sky)->speed = Vector2(-0.1, 0);
 	SCROLLING(datas->sky)->displaySize = Vector2(TRANSFORM(datas->sky)->size.X * 1, TRANSFORM(datas->sky)->size.Y);
     SCROLLING(datas->sky)->hide = true;
@@ -377,9 +377,9 @@ void Game::tick(float dt) {
         theMusicSystem.toggleMute(theSoundSystem.mute);
 		if (!theSoundSystem.mute) {
             SOUND(datas->soundButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-            RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on.png");
+            RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on");
         } else {
-            RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off.png");
+            RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
         }
 	}
 
@@ -613,7 +613,7 @@ std::string Game::cellTypeToTextureNameAndRotation(int type, float* rotation) {
 		*rotation = rotations[type];
 
 	std::stringstream s;
-	s << "feuille" << (type+1) << ".png";
+	s << "feuille" << (type+1);
 	return s.str();
 }
 

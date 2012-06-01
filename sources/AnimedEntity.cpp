@@ -22,15 +22,15 @@ void loadHerissonTexture(int type, AnimatedActor* c) {
 	c->frames = 30;
 	c->ind = 0;
 	c->anim.clear();
-	t << "herisson_1_"<<type<<".png";
+	t << "herisson_1_"<<type;
 	c->anim.push_back(t.str());
 	t.str("");
-	t << "herisson_2_"<<type<<".png";
+	t << "herisson_2_"<<type;
 	c->anim.push_back(t.str());
 	t.str("");
-	t << "herisson_3_"<<type<<".png";
+	t << "herisson_3_"<<type;
 	c->anim.push_back(t.str());
 	t.str("");
-	t << "herisson_2_"<<type<<".png";
+	t << "herisson_2_"<<type;
 	c->anim.push_back(t.str());
 }

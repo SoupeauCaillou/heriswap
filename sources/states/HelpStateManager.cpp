@@ -36,7 +36,7 @@ void HelpStateManager::Setup() {
     TRANSFORM(title[1])->z = DL_HelpTextBg;
     TRANSFORM(title[1])->position = TRANSFORM(title[0])->position;
     ADD_COMPONENT(title[1], Rendering);
-    RENDERING(title[1])->texture = theRenderingSystem.loadTextureFile("fond_bouton.png");
+    RENDERING(title[1])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
     RENDERING(title[1])->color.a = 0.5;
     
     bonus = theEntityManager.CreateEntity();
@@ -110,7 +110,7 @@ void HelpStateManager::Enter() {
 
 	// setup how to play help page
 	theRenderingSystem.unloadTexture(RENDERING(background)->texture);
-	RENDERING(background)->texture = theRenderingSystem.loadTextureFile("bg_help_howto.png");
+	RENDERING(background)->texture = theRenderingSystem.loadTextureFile("bg_help_howto");
 	RENDERING(background)->hide = false;
 	TEXT_RENDERING(title[0])->hide = false;
 	TEXT_RENDERING(title[0])->text = localize->text("how_to_play", "Comment jouer ?");
@@ -122,8 +122,8 @@ GameState HelpStateManager::Update(float dt) {
 	if (!theTouchInputManager.isTouched() && theTouchInputManager.wasTouched()) {
 		if (state == HowToPlay) {
 			RENDERING(background)->texture = (mode == Normal) ? 
-				theRenderingSystem.loadTextureFile("bg_help_obj_score.png"):
-				theRenderingSystem.loadTextureFile("bg_help_obj_time.png");
+				theRenderingSystem.loadTextureFile("bg_help_obj_score"):
+				theRenderingSystem.loadTextureFile("bg_help_obj_time");
 			TEXT_RENDERING(title[0])->text = localize->text("objective", "Objectif");
 			if (mode == Normal) {
 				TEXT_RENDERING(levelBig)->hide = false;

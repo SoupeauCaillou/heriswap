@@ -38,7 +38,7 @@ void InGameUiHelper::build() {
     TransformationSystem::setPosition(TRANSFORM(pauseButton), Vector2(PlacementHelper::GimpXToScreen(108), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::E);
     TRANSFORM(pauseButton)->z = DL_Score;
 	ADD_COMPONENT(pauseButton, Rendering);
-	RENDERING(pauseButton)->texture = theRenderingSystem.loadTextureFile("pause.png");
+	RENDERING(pauseButton)->texture = theRenderingSystem.loadTextureFile("pause");
     ADD_COMPONENT(pauseButton, Sound);
 	ADD_COMPONENT(pauseButton, Button);
     BUTTON(pauseButton)->overSize = 1.6;

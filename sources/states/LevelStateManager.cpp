@@ -51,7 +51,7 @@ void LevelStateManager::Setup() {
 	TRANSFORM(eSnowEmitter)->z = DL_Snow;
 	ADD_COMPONENT(eSnowEmitter, Particule);
 	PARTICULE(eSnowEmitter)->emissionRate = 0;
-	PARTICULE(eSnowEmitter)->texture = theRenderingSystem.loadTextureFile("snow_flake0.png");
+	PARTICULE(eSnowEmitter)->texture = theRenderingSystem.loadTextureFile("snow_flake0");
 	PARTICULE(eSnowEmitter)->lifetime = Interval<float>(5.0f, 6.5f);
 	PARTICULE(eSnowEmitter)->initialColor = Interval<Color> (Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 1.0));
 	PARTICULE(eSnowEmitter)->finalColor  = Interval<Color> (Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 1.0));
@@ -67,7 +67,7 @@ void LevelStateManager::Setup() {
 	TransformationSystem::setPosition(TRANSFORM(eSnowBranch), Vector2(PlacementHelper::GimpXToScreen(0), PlacementHelper::GimpYToScreen(0)), TransformationSystem::NW);
 	TRANSFORM(eSnowBranch)->z = DL_SnowBackground;
 	ADD_COMPONENT(eSnowBranch, Rendering);
-	RENDERING(eSnowBranch)->texture = theRenderingSystem.loadTextureFile("snow_branch.png");
+	RENDERING(eSnowBranch)->texture = theRenderingSystem.loadTextureFile("snow_branch");
 
 	eSnowGround = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSnowGround, Transformation);
@@ -75,7 +75,7 @@ void LevelStateManager::Setup() {
 	TransformationSystem::setPosition(TRANSFORM(eSnowGround), Vector2(PlacementHelper::GimpXToScreen(0), PlacementHelper::GimpYToScreen(1280)), TransformationSystem::SW);
 	TRANSFORM(eSnowGround)->z = DL_SnowBackground;
 	ADD_COMPONENT(eSnowGround, Rendering);
-	RENDERING(eSnowGround)->texture = theRenderingSystem.loadTextureFile("snow_ground.png");
+	RENDERING(eSnowGround)->texture = theRenderingSystem.loadTextureFile("snow_ground");
 }
 
 void LevelStateManager::Enter() {
@@ -106,10 +106,10 @@ void LevelStateManager::Enter() {
 	duration = 0;
 
 	// desaturate everyone except the branch, mute, pause and text elements
-	TextureRef branch = theRenderingSystem.loadTextureFile("branche.png");
-	TextureRef pause = theRenderingSystem.loadTextureFile("pause.png");
-	TextureRef sound1 = theRenderingSystem.loadTextureFile("sound_on.png");
-	TextureRef sound2 = theRenderingSystem.loadTextureFile("sound_off.png");
+	TextureRef branch = theRenderingSystem.loadTextureFile("branche");
+	TextureRef pause = theRenderingSystem.loadTextureFile("pause");
+	TextureRef sound1 = theRenderingSystem.loadTextureFile("sound_on");
+	TextureRef sound2 = theRenderingSystem.loadTextureFile("sound_off");
 	std::vector<Entity> text = theTextRenderingSystem.RetrieveAllEntityWithComponent();
 	std::vector<Entity> entities = theRenderingSystem.RetrieveAllEntityWithComponent();
 	for (unsigned int i=0; i<entities.size(); i++) {
