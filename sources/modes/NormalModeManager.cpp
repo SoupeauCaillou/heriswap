@@ -68,6 +68,10 @@ void NormalGameModeManager::TogglePauseDisplay(bool paused) {
 }
 
 void NormalGameModeManager::GameUpdate(float dt) {
+#ifdef DEBUG
+	// no time update when debug shown
+	if (!_debug)
+#endif
 	time += dt;
 }
 
