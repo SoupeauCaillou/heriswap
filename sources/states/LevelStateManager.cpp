@@ -209,6 +209,9 @@ void LevelStateManager::Exit() {
 	for (unsigned int i=0; i<mc->elements.size(); i++) {
 		delete mc->elements[i];
 	}
+	for (unsigned int i=0; i<modeMgr->branchLeaves.size(); i++) {
+		TRANSFORM(modeMgr->branchLeaves[i].e)->size = Vector2(Game::CellSize(8) * Game::CellContentScale());
+	}
 	mc->elements.clear();
 	// hide big level
 	TEXT_RENDERING(eBigLevel)->hide = true;

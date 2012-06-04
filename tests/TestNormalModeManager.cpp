@@ -10,7 +10,8 @@ TEST(SuppressionFeuilleNiveauNormalDifficulty) {
 	memset(cleared, 0, sizeof(cleared));
 
 	for (int i=0; i<2500; i++) {
-		int initialCount = 48;
+		unsigned char initialCountByType[8];
+		memset(initialCountByType, 6, 8);
 		int level = 1 + MathUtil::RandomInt(20);
 		std::stringstream log;
 		// log.setw(2);
@@ -18,6 +19,8 @@ TEST(SuppressionFeuilleNiveauNormalDifficulty) {
 		memset(countLeft, level + 2, sizeof(countLeft));
 		
 		log << "Level: " << level << std::endl;
+		
+		// PARTIE FINIE ?
 		while (memcmp(countLeft, cleared, sizeof(countLeft)) != 0) {
 			int color = MathUtil::RandomInt(8);
 			if (countLeft[color] == 0)
@@ -26,17 +29,20 @@ TEST(SuppressionFeuilleNiveauNormalDifficulty) {
 			for (int k=0; k<8; k++) {
 				log << std::setw(2) << (int)countLeft[k] << " ";
 			}
-			log << " => left: " << initialCount << std::endl;
+			log << " => left: ";
+			for (int k=0; k<8; k++) {
+				log << std::setw(2) << (int)initialCountByType[k] << " ";
+			}
 			
-			if (initialCount < 0) {
-				CHECK(initialCount > 0);
+			if (!memcmp(countLeft, cleared, sizeof(countLeft))) {
+				CHECK(!memcmp(countLeft, cleared, sizeof(countLeft)));
 				std::cerr << log.str() << std::endl;
 				break;
 			}
 			int count = MathUtil::Min(1 + MathUtil::RandomIntInRange(2, 5), (int)countLeft[color]);
 			
 			int remove = NormalGameModeManager::levelToLeaveToDelete(count, level + 2, level + 2 - countLeft[color]);
-			initialCount -= remove;
+			initialCountByType[color] -= remove;
 			
 			for (int k=0; k<color; k++)
 				log << "   ";
@@ -45,15 +51,20 @@ TEST(SuppressionFeuilleNiveauNormalDifficulty) {
 			countLeft[color] -= count;
 			if (countLeft[color] < 0)
 				countLeft[color] = 0;
-				
-			if (initialCount == 0) {
-				CHECK_EQUAL(0, memcmp(countLeft, cleared, sizeof(countLeft)));
+
+			for (int i=0; i<8; i++) {
+				if (initialCountByType[color] == 0) {
+					CHECK_EQUAL(0, countLeft[color]);
+				} else if (initialCountByType[color] > 0) {
+					CHECK(countLeft[color] > 0);
+				} else {
+					CHECK(false);
+				}
 			}
 		}
-		log << "Left at the end : " << initialCount << std::endl;
-		if (initialCount > 0) {
+		if (memcmp(initialCountByType, cleared, sizeof(countLeft))) {
 			std::cerr << log.str() << std::endl;
 		}
-		CHECK( initialCount <= 0 );
+		CHECK_EQUAL(0, memcmp(initialCountByType, cleared, sizeof(countLeft)));
 	}
 }
