@@ -410,18 +410,19 @@ void Game::tick(float dt) {
 		            LOGW("\t%s", musics[i].c_str());
 	            }
 	            MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
+	            MUSIC(datas->inGameMusic.masterTrack)->fadeIn = 1;
 	            MUSIC(datas->inGameMusic.stressTrack)->music = theMusicSystem.loadMusicFile("audio/F.ogg");
 	            unsigned int i;
 	            for (i=0; i<musics.size() - 1; i++) {
 	                 MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
 	                 mc->music = theMusicSystem.loadMusicFile(musics[i+1]);
+	                 mc->fadeIn = 1;
 	                 mc->control = MusicComponent::Start;
 	                 mc->volume = 1;
 	            }
-	        }
-
+	        } 
 	        // if master track has looped, choose next songs to play
-	        if (MUSIC(datas->inGameMusic.masterTrack)->loopNext == InvalidMusicRef) {
+	        else if (MUSIC(datas->inGameMusic.masterTrack)->loopNext == InvalidMusicRef) {
 		        std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);
 		        LOGW("New music picked for 'loopNext' field (%lu):", musics.size());
 	            for (unsigned i=0; i<musics.size(); i++) {
