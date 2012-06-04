@@ -37,3 +37,4 @@
 #define DL_HelpTextBg 0.71
 #define DL_HelpText 0.72
 #define DL_Fading 0.75
+#define DL_DebugLayer 0.9

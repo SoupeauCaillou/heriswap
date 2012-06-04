@@ -107,6 +107,18 @@ void NormalGameModeManager::UiUpdate(float dt) {
 	} else {
 		updateHerisson(dt, time, 0);
 	}
+	
+#ifdef DEBUG
+	if (_debug) {
+		for(int i=0; i<8; i++) {
+			std::stringstream text;
+			text << (int)remain[i] << "," << (int)(level+2) << "," <<  countBranchLeavesOfType(i);
+			TEXT_RENDERING(debugEntities[2*i+1])->text = text.str();
+			TEXT_RENDERING(debugEntities[2*i+1])->hide = false;
+			TEXT_RENDERING(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
+		}
+	}
+#endif
 }
 
 
@@ -127,7 +139,7 @@ static float timeGain(int nb, float time) {
 void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
     int nb = levelToLeaveToDelete(count, level+2, level+2 - remain[type]);
     for (unsigned int i=0; nb>0 && i<branchLeaves.size(); i++) {
-        if ((type+1) == branchLeaves[i].type) {
+        if (type== branchLeaves[i].type) {
             CombinationMark::markCellInCombination(branchLeaves[i].e);
             out.push_back(branchLeaves[i].e);
             nb--;
@@ -156,7 +168,7 @@ void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	else
 		points += 10*level*nb*nb*nb/6;
 
-	deleteLeaves(type+1, levelToLeaveToDelete(nb, level+2, remain[type]));
+	deleteLeaves(type, levelToLeaveToDelete(nb, level+2, remain[type]));
 	remain[type] -= nb;
 	time -= timeGain(nb, time);
 

@@ -281,7 +281,11 @@ void Game::backPressed() {
         // go back to main menu
         (static_cast<ModeMenuStateManager*>(datas->state2Manager[ModeMenu]))->pleaseGoBack = true;
     } else if (pausableState(datas->state)) {
+	    #ifdef DEBUG
+	    datas->mode2Manager[datas->mode]->toggleDebugDisplay();
+	    #else
         togglePause(true);
+        #endif
     }
 }
 

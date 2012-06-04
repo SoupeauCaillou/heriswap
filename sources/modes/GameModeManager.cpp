@@ -120,6 +120,28 @@ void GameModeManager::Setup() {
 	fillVec();
 
 	uiHelper.build();
+	
+	#ifdef DEBUG
+	_debug = false;
+	for(int i=0; i<8; i++) {
+		debugEntities[2*i] = theEntityManager.CreateEntity();
+		ADD_COMPONENT(debugEntities[2*i], Rendering);
+		ADD_COMPONENT(debugEntities[2*i], Transformation);
+		RENDERING(debugEntities[2*i])->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(i, 0));
+		TransformationSystem::setPosition(TRANSFORM(debugEntities[2*i]), Vector2(PlacementHelper::GimpXToScreen(0) + i * PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpYToScreen(1280)), TransformationSystem::SW);
+		TRANSFORM(debugEntities[2*i])->z = DL_DebugLayer;
+		TRANSFORM(debugEntities[2*i])->size = Vector2(PlacementHelper::GimpWidthToScreen(80));
+		
+		debugEntities[2*i + 1] = theEntityManager.CreateEntity();
+		ADD_COMPONENT(debugEntities[2*i + 1], TextRendering);
+		TEXT_RENDERING(debugEntities[2*i + 1])->positioning = TextRenderingComponent::CENTER;
+		ADD_COMPONENT(debugEntities[2*i + 1], Transformation);
+		TRANSFORM(debugEntities[2*i + 1])->position = TRANSFORM(debugEntities[2*i])->position;
+		TRANSFORM(debugEntities[2*i+1])->z = DL_DebugLayer+0.01;
+		TEXT_RENDERING(debugEntities[2*i + 1])->fontName = "typo";
+		TEXT_RENDERING(debugEntities[2*i + 1])->charHeight = PlacementHelper::GimpHeightToScreen(25);
+	}
+	#endif
 }
 
 void GameModeManager::Enter() {
@@ -185,7 +207,7 @@ void GameModeManager::generateLeaves(int* nb, int type) {
 			TRANSFORM(e)->z = MathUtil::Lerp(DL_LeafMin, DL_LeafMax, MathUtil::RandomFloat());
 			BranchLeaf bl;
 			bl.e = e;
-			bl.type=j+1;
+			bl.type=j;
 			branchLeaves.push_back(bl);
 		}
 	}
@@ -323,3 +345,21 @@ const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int size
 	*/
     return &in[index];
 }
+
+#ifdef DEBUG
+void GameModeManager::toggleDebugDisplay() { 
+	_debug = !_debug;
+	for(int i=0; i<8; i++) {
+		RENDERING(debugEntities[2*i])->hide = !_debug;
+		TEXT_RENDERING(debugEntities[2*i+1])->hide = !_debug;
+	}
+}
+
+int GameModeManager::countBranchLeavesOfType(int t) const {
+	int count = 0;
+	for (unsigned int i=0; i<branchLeaves.size(); i++) {
+        count += (t == branchLeaves[i].type);
+	}
+	return count;       
+}
+#endif

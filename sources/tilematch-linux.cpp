@@ -139,6 +139,9 @@ std::cout << "Total: " << storage->getSavedGamePointsSum() << std::endl;
 				game.toggleShowCombi(false);
 				timer = MAGICKEYTIME;
 			}
+			if (glfwGetKey( GLFW_KEY_BACKSPACE)) {
+				game.backPressed();
+			}
 			if (glfwGetKey( GLFW_KEY_LSHIFT)) {
 				uint8_t* state = 0;
 				int size = game.saveState(&state);

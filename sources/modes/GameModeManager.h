@@ -41,6 +41,13 @@ class GameModeManager {
 		virtual void Exit();
 		// to be called to toggle pause mode display
 		virtual void TogglePauseDisplay(bool paused);
+		
+		#ifdef DEBUG
+		void toggleDebugDisplay();
+		bool _debug;
+		Entity debugEntities[16];
+		int countBranchLeavesOfType(int t) const;
+		#endif
 
 
 		// scoring interface

@@ -84,6 +84,21 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	}
 
 	updateHerisson(dt, leavesDone, 0);
+	
+#ifdef DEBUG
+	if (_debug) {
+		for(int i=0; i<8; i++) {
+			std::stringstream text;
+			text << countBranchLeavesOfType(i);
+			if (i == 7) {
+				text << ":" << leavesDone;
+			}
+			TEXT_RENDERING(debugEntities[2*i+1])->text = text.str();
+			TEXT_RENDERING(debugEntities[2*i+1])->hide = false;
+			TEXT_RENDERING(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
+		}
+	}
+#endif
 }
 
 int TilesAttackGameModeManager::levelToLeaveToDelete(int leavesMaxSize, int limit, int nb, int leavesDone) {
