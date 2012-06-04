@@ -80,7 +80,7 @@ void ModeMenuStateManager::Setup() {
 	// score title
 	scoreTitle = theEntityManager.CreateEntity();
 	ADD_COMPONENT(scoreTitle, Transformation);
-	TRANSFORM(scoreTitle)->position = Vector2(PlacementHelper::GimpXToScreen(65), PlacementHelper::GimpYToScreen(476));
+	TRANSFORM(scoreTitle)->position = Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(476));
 	TRANSFORM(scoreTitle)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(scoreTitle, TextRendering);
 	TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("score", "Score :");
@@ -93,7 +93,7 @@ void ModeMenuStateManager::Setup() {
 	// play text
 	play = theEntityManager.CreateEntity();
 	ADD_COMPONENT(play, Transformation);
-	TRANSFORM(play)->position = Vector2(PlacementHelper::GimpXToScreen(65), PlacementHelper::GimpYToScreen(300));
+	TRANSFORM(play)->position = Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(300));
 	TRANSFORM(play)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(play, TextRendering);
 	TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Jouer");
@@ -115,15 +115,15 @@ void ModeMenuStateManager::Setup() {
 	//difficulty text
 	eDifficulty = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(eDifficulty)->z = DL_MainMenuUITxt;
-	TRANSFORM(eDifficulty)->position = Vector2(PlacementHelper::GimpXToScreen(85),PlacementHelper::GimpYToScreen(400));
+	TRANSFORM(eDifficulty)->position = Vector2(PlacementHelper::GimpXToScreen(92),PlacementHelper::GimpYToScreen(400));
 	TEXT_RENDERING(eDifficulty)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(eDifficulty)->hide = true;
 	TEXT_RENDERING(eDifficulty)->charHeight = PlacementHelper::GimpHeightToScreen(45);
 	TEXT_RENDERING(eDifficulty)->color = green;
 	if (difficulty==0)
-		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy 5x5");
+		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "Facile");
 	else
-		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium 8x8");
+		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "Normal");
 
 	//difficulty container
 	bDifficulty = theEntityManager.CreateEntity();
@@ -250,9 +250,9 @@ void ModeMenuStateManager::Enter() {
 	BUTTON(bDifficulty)->enabled = true;
 
     if (difficulty==0)
-        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy");
+        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "Facile");
     else
-        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium");
+        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "Normal");
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
@@ -342,9 +342,9 @@ GameState ModeMenuStateManager::Update(float dt) {
 		if (difficulty==2) difficulty=0;
 		LoadScore(modeMgr->GetMode(), difficulty);
 		if (difficulty==0)
-			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "easy");
+			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "Facile");
 		else
-			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "medium");
+			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "Normal");
 
 		TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Jouer");
 	}
