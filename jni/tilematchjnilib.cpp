@@ -56,6 +56,7 @@ struct GameHolder {
 	AndroidSuccessAPI success;
 	LocalizeAPIAndroidImpl* localize;
     AdAPIAndroidImpl* ad;
+    AssetAPIAndroidImpl* asset;
 
 	struct __input {
 		 int touching;
@@ -107,15 +108,16 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
   	LOGW("%s -->", __FUNCTION__);
   	TimeUtil::init();
 	GameHolder* hld = new GameHolder();
+	hld->assetManager = (jobject)env->NewGlobalRef(asset);
 	hld->localize = new LocalizeAPIAndroidImpl(env);
     hld->nameInput = new NameInputAPIAndroidImpl();
     hld->ad = new AdAPIAndroidImpl();
     hld->storage = new StorageAPIAndroidImpl(env);
-	hld->game = new Game(new AndroidNativeAssetLoader(hld), hld->storage, hld->nameInput, &hld->success, hld->localize, hld->ad);
+    hld->asset = new AssetAPIAndroidImpl(env, hld->assetManager);
+	hld->game = new Game(hld->asset, hld->storage, hld->nameInput, &hld->success, hld->localize, hld->ad);
 	hld->renderThreadEnv = env;
 	hld->openGLESVersion = openglesVersion;
-	hld->assetManager = (jobject)env->NewGlobalRef(asset);
-	theRenderingSystem.setNativeAssetLoader(new AndroidNativeAssetLoader(hld));
+	theRenderingSystem.assetAPI = hld->asset;
 	theRenderingSystem.opengles2 = (hld->openGLESVersion == 2);
 	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
 	hld->success.holder = hld;
@@ -144,6 +146,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	hld->width = w;
 	hld->height = h;
 
+	hld->asset->init();
 	hld->game->sacInit(hld->width, hld->height);
 	LOGW("%s <--", __FUNCTION__);
 }

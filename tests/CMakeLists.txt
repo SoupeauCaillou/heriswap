@@ -17,7 +17,7 @@ include_directories(${PROJECT_SOURCE_DIR}/sources)
 include_directories(${PROJECT_SOURCE_DIR}/sac)
 include_directories("/usr/include/unittest++/")
 add_executable(tilematch_tests ${tilematch_tests_files} ${tilematch_files})
-target_link_libraries(tilematch_tests sac UnitTest++ GLEW glfw openal sndfile vorbisidec sqlite3 png)
+target_link_libraries(tilematch_tests sac UnitTest++ GLEW glfw openal z vorbisidec sqlite3)
 add_custom_command(
 	TARGET tilematch_tests
 	POST_BUILD
