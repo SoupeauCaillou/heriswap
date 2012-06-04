@@ -132,7 +132,7 @@ int NormalGameModeManager::levelToLeaveToDelete(int nb, int maxRemain, int done)
 	// what should be removed at this step
 	int totalTheoricallyRemoved = (int) (6 * (done + nb))/maxRemain;
 
-	// so, we have to removed the difference
+	// so, we have to remove the difference
 	return totalTheoricallyRemoved - previousRemovalCount;
 }
 
@@ -172,7 +172,7 @@ void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	else
 		points += 10*level*nb*nb*nb/6;
 
-	deleteLeaves(type, levelToLeaveToDelete(nb, level+2, remain[type]));
+	deleteLeaves(type, levelToLeaveToDelete(nb, level+2, level+2 - remain[type]));
 	remain[type] -= nb;
 	time -= timeGain(nb, time);
 
