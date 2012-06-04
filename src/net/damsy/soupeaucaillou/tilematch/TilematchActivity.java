@@ -276,7 +276,7 @@ public class TilematchActivity extends Activity {
 
     private String filterPlayerName(String name) {
     	String n = name.trim();
-    	return n.replaceAll("[^a-zA-Z0-9]",".").substring(0, Math.min(11, name.length()));
+    	return n.replaceAll("[^a-zA-Z0-9 ]"," ").substring(0, Math.min(11, name.length()));
     }
     
     static {
