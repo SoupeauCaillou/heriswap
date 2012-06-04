@@ -384,7 +384,7 @@ void Game::tick(float dt) {
 	}
 
     //updating HUD
-	if (inGameState(newState)) {
+	if (inGameState(newState) && newState != LevelChanged) {
 		datas->mode2Manager[datas->mode]->UiUpdate(dt);
 	}
 
