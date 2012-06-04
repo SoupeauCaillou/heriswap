@@ -122,7 +122,7 @@ public class TilematchActivity extends Activity {
         mGLView = (GLSurfaceView) findViewById(R.id.surfaceviewclass);
         
         synchronized (mGLView) {
-        	renderer = new TilematchRenderer(getAssets());        
+        	renderer = new TilematchRenderer(getAssets());
             mGLView.setRenderer(renderer);	
 		}
 
