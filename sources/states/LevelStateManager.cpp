@@ -59,6 +59,7 @@ void LevelStateManager::Setup() {
 	PARTICULE(eSnowEmitter)->finalSize = Interval<float>(PlacementHelper::GimpWidthToScreen(30), PlacementHelper::GimpWidthToScreen(40));
 	PARTICULE(eSnowEmitter)->forceDirection = Interval<float>(0, 0);
 	PARTICULE(eSnowEmitter)->forceAmplitude  = Interval<float>(0, 0);
+	PARTICULE(eSnowEmitter)->moment  = Interval<float>(-3, 3);
 	PARTICULE(eSnowEmitter)->mass = 1;
 
 	eSnowBranch = theEntityManager.CreateEntity();
