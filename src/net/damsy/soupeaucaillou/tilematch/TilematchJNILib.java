@@ -444,6 +444,7 @@ public class TilematchJNILib {
 					synchronized (DumbAndroid.audioTrackPool) {
 						DumbAndroid.audioTrackPool.add(track);
 					}
+					writePendings.clear();
 					// track.release();
 				}
     		}, "DumbAndroid");
@@ -542,6 +543,8 @@ public class TilematchJNILib {
     		cmd.offset = offset;
     		dumb.writePendings.add(cmd);
 			dumb.track.notify();
+			
+			Log.i(TilematchActivity.Tag, "BUFFER POOL size: " + DumbAndroid.bufferPool.size());
     	}
     }
 
