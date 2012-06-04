@@ -166,6 +166,7 @@ GameState SpawnGameStateManager::NextState(bool marker) {
 
 void SpawnGameStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
+	spawning.clear();
 }
 
 
