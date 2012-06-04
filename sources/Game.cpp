@@ -318,7 +318,7 @@ void Game::tick(float dt) {
 	//get the game progress
 	float percentDone = 0;
 	if (inGameState(datas->state)) {
-		datas->mode2Manager[datas->mode]->GameProgressPercent();
+		percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent();
 	}
 
     //updating game if needed
