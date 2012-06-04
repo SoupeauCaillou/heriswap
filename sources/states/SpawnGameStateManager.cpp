@@ -125,7 +125,7 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
 	} else if (ADSR(eGrid)->active) {
         std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
         for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
-            Vector2 cellSize = Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale() * (1 - ADSR(eGrid)->value);
+            Vector2 cellSize = Vector2(Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale() * (1 - ADSR(eGrid)->value));
             ADSR(*it)->idleValue = cellSize.X;
         }
         if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
@@ -170,7 +170,7 @@ void SpawnGameStateManager::Exit() {
 
 
 int newLeavesInSpawning(std::vector<Feuille>& spawning, int i, int j) {
-	for (int k=0; k<spawning.size(); k++)
+	for (unsigned int k=0; k<spawning.size(); k++)
 		if (spawning[k].X == i && spawning[k].Y == j)
 			return spawning[k].type;
 	return -1;
@@ -229,7 +229,7 @@ static Entity createCell(Feuille& f, bool assignGridPos) {
 	RenderingComponent* rc = RENDERING(e);
 	rc->hide = false;
 
-	TRANSFORM(e)->size = 0;
+	TRANSFORM(e)->size = Vector2(0.0f);
 	ADSR(e)->idleValue = Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale();
 	GRID(e)->type = f.type;
 	if (assignGridPos) {

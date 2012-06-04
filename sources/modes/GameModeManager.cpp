@@ -174,7 +174,7 @@ void GameModeManager::generateLeaves(int* nb, int type) {
             ADD_COMPONENT(e, Twitch);
 			RENDERING(e)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(j, 0));
 			RENDERING(e)->hide = false;
-			TRANSFORM(e)->size = Game::CellSize(8) * Game::CellContentScale();
+			TRANSFORM(e)->size.X = TRANSFORM(e)->size.Y = Game::CellSize(8) * Game::CellContentScale();
 
 			int rand = MathUtil::RandomInt(posBranch.size());
 			TRANSFORM(e)->position = posBranch[rand].v;

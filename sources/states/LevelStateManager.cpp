@@ -173,14 +173,14 @@ GameState LevelStateManager::Update(float dt) {
 		//on genere les nouvelles feuilles
 		modeMgr->generateLeaves(0, theGridSystem.Types);
 		for (unsigned int i=0; i<modeMgr->branchLeaves.size(); i++) {
-			TRANSFORM(modeMgr->branchLeaves[i].e)->size = 0;
+			TRANSFORM(modeMgr->branchLeaves[i].e)->size =Vector2::Zero;
 		}
 	}
 	if (levelState == BigScoreBeganToMove || levelState == BigScoreMoving) {
 		levelState = BigScoreMoving;
 		//if leaves created, make them grow !
 		for (unsigned int i=0; i<modeMgr->branchLeaves.size(); i++) {
-			TRANSFORM(modeMgr->branchLeaves[i].e)->size = Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f);
+			TRANSFORM(modeMgr->branchLeaves[i].e)->size = Vector2(Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f));
 		}
 		RENDERING(eSnowBranch)->color.a = 1-(duration-6)/(10-6);
 		RENDERING(eSnowGround)->color.a = 1-(duration-6)/(10-6.f);

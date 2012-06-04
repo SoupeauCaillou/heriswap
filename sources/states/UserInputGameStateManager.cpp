@@ -65,26 +65,40 @@ void UserInputGameStateManager::Enter() {
 	successMgr->sBimBamBoum(0);
 }
 
-static Entity cellUnderFinger(const Vector2& pos) {
-	int i, j;
-	for( i=0; i<theGridSystem.GridSize; i++) {
-		for(j=0; j<theGridSystem.GridSize; j++) {
-			Entity e = theGridSystem.GetOnPos(i,j);
-			if (!e) continue;
+static bool contains(const std::vector<Combinais>& combi, const GridComponent* g) {
+	for (unsigned int i=0; i<combi.size(); i++) {
+		for (unsigned int j=0; j<combi[i].points.size(); j++) {
+			const Vector2& p = combi[i].points[j];
+			if (p.X == g->i && p.Y == g->j)
+				return true;
+		}
+	}
+	return false;
+}
+
+static Entity cellUnderFinger(const Vector2& pos, bool preferInCombi) {
+	std::vector<Combinais> combinaisons;// = theGridSystem.LookForCombination(false,false);
+	const float maxDist = Game::CellSize(theGridSystem.GridSize);
+
+	// 4 nearest
+	Entity e = 0;
+	float nearestDist = maxDist;
+	bool nearestInCombi = 0;
+
+	std::vector<Entity> leaves = theGridSystem.RetrieveAllEntityWithComponent();
+	for (std::vector<Entity>::iterator it=leaves.begin(); it!=leaves.end(); ++it) {
+		float sqdist = Vector2::DistanceSquared(pos, TRANSFORM(*it)->worldPosition);
+		if (sqdist < maxDist) {
+			bool inCombi = contains(combinaisons, GRID(*it));
 			
-			if (i>=1 && i <theGridSystem.GridSize-1) {
-				if (ButtonSystem::inside(pos, TRANSFORM(e)->worldPosition, TRANSFORM(e)->size)) {
-					return e;
-				}
-			} else {
-				Vector2 s = TRANSFORM(e)->size;
-				if (ButtonSystem::inside(pos, TRANSFORM(e)->worldPosition + s.X * 0.2, Vector2(s.X * 1.4, 1))) {
-					return e;
-				}				
+			if (sqdist < nearestDist || (inCombi && !nearestInCombi)) {
+				nearestDist = sqdist;
+				nearestInCombi = inCombi;	
+				e = *it;
 			}
 		}
 	}
-	return 0;
+	return e;
 }
 
 static Entity moveToCell(Entity original, const Vector2& move, float threshold) {
@@ -131,7 +145,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 		if (!theTouchInputManager.wasTouched() &&
 			theTouchInputManager.isTouched()) {			
 			const Vector2& pos = theTouchInputManager.getTouchLastPosition();
-			currentCell = cellUnderFinger(pos);
+			currentCell = cellUnderFinger(pos, true);
 			
 			if (currentCell) {
 				CombinationMark::markCellInCombination(currentCell);
@@ -229,7 +243,7 @@ void UserInputGameStateManager::BackgroundUpdate(float dt __attribute__((unused)
 		for(int j=0; j<theGridSystem.GridSize; j++) {
 			Entity e = theGridSystem.GetOnPos(i,j);
 			if (e) {
-				TRANSFORM(e)->size = ADSR(e)->value;
+				TRANSFORM(e)->size.X = TRANSFORM(e)->size.Y = ADSR(e)->value;
 			}
 		}
 	}
