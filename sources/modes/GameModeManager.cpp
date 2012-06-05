@@ -96,10 +96,11 @@ void GameModeManager::Setup() {
 	TransformationSystem::setPosition(TRANSFORM(decor2nd), Vector2(0, PlacementHelper::GimpYToScreen(610)), TransformationSystem::N);
 	ADD_COMPONENT(decor2nd, Scrolling);
 	SCROLLING(decor2nd)->images.push_back("decor2nd_0");
-	SCROLLING(decor2nd)->images.push_back("decor2nd_1");
-	SCROLLING(decor2nd)->images.push_back("decor2nd_2");
 	SCROLLING(decor2nd)->images.push_back("decor2nd_3");
-	SCROLLING(decor2nd)->speed = Vector2(-.05, 0);
+	SCROLLING(decor2nd)->images.push_back("decor2nd_2");
+	SCROLLING(decor2nd)->images.push_back("decor2nd_1");
+	
+	SCROLLING(decor2nd)->speed = Vector2(.05, 0);
 	SCROLLING(decor2nd)->displaySize = Vector2(TRANSFORM(decor2nd)->size.X * 1.01, TRANSFORM(decor2nd)->size.Y);
 	SCROLLING(decor2nd)->hide = true;
 

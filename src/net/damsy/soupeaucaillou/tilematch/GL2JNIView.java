@@ -35,7 +35,7 @@ import android.util.Log;
  *
  * - The class must use a custom context factory to enable 2.0 rendering.
  *   See ContextFactory class definition below.
- * 
+ *    
  * - The class must use a custom EGLConfigChooser to be able to select
  *   an EGLConfig that supports 2.0. This is done by providing a config
  *   specification to eglChooseConfig() that has the attribute
@@ -45,7 +45,7 @@ import android.util.Log;
  * - The class must select the surface's format, then choose an EGLConfig
  *   that matches it exactly (w ith regards to red/green/blue/alpha channels
  *   bit depths). Failure to do so would result in an EGL_BAD_MATCH error.
- */
+ */ 
 class GL2JNIView extends GLSurfaceView {
     private static String TAG = "GL2JNIView";
     private static final boolean DEBUG = false;

@@ -514,6 +514,11 @@ void Game::bench(bool active, float updateDuration, float dt) {
 	}
 }
 int Game::saveState(uint8_t** out) {
+	if (datas->state == Help) {
+		datas->state2Manager[datas->state]->Exit();
+		datas->state = Pause;
+		datas->state2Manager[datas->state]->Enter();
+	}
 	bool pausable = pausableState(datas->state);
 	if (!pausable) {
 		LOGI("Current state is '%d' -> nothing to save", datas->state);

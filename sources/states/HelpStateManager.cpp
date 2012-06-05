@@ -162,7 +162,6 @@ GameState HelpStateManager::Update(float dt) {
 void HelpStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
-	theRenderingSystem.unloadTexture(RENDERING(background)->texture);
 	TEXT_RENDERING(levelBig)->hide = true;
 	for (int i=0; i<3; i++) {
 		TEXT_RENDERING(levelSmall[i])->hide = true;
@@ -175,6 +174,7 @@ void HelpStateManager::Exit() {
 	RENDERING(bg2)->hide = true;
 	TEXT_RENDERING(title[0])->hide = true;
 	RENDERING(title[1])->hide = true;
+	TEXT_RENDERING(bonus)->hide = true;
 	
 	theRenderingSystem.unloadAtlas("logo");
 }

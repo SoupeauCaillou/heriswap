@@ -217,11 +217,12 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
 	hld->dtAccumuled += dt;
 	hld->time = TimeUtil::getTime();
 
-	float accum = hld->dtAccumuled;
+	const float accum = DT;
+	/*hld->dtAccumuled;
 	if (hld->dtAccumuled > 5 * DT) {
 		LOGW("BIG DT: %.3f s", hld->dtAccumuled);
 		accum = DT;
-	}
+	}*/
 
 	while (hld->dtAccumuled >= DT){
 		hld->game->tick(accum);
