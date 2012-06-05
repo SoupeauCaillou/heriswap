@@ -354,6 +354,7 @@ void GameModeManager::toggleDebugDisplay() {
 		TEXT_RENDERING(debugEntities[2*i+1])->hide = !_debug;
 	}
 }
+#endif
 
 int GameModeManager::countBranchLeavesOfType(int t) const {
 	int count = 0;
@@ -362,4 +363,3 @@ int GameModeManager::countBranchLeavesOfType(int t) const {
 	}
 	return count;       
 }
-#endif

@@ -33,7 +33,7 @@ class NormalGameModeManager : public GameModeManager {
 
 		Entity stressTrack;
 
-		static int levelToLeaveToDelete(int nb, int maxRemain, int done);
+		static int levelToLeaveToDelete(int type, int nb, int maxRemain, int done, int leftOnBranchOfSameType);
 
 	private:
 		unsigned int level;

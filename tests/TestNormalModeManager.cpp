@@ -5,6 +5,52 @@
 #include <iostream>
 #include <iomanip>
 
+
+TEST(SiReste3FeuillesASupprIlReste3DansLArbe) {
+	for (int i=0; i<2500; i++) {
+		int onBranch = 6;
+		int initialInGrid = 3 + MathUtil::RandomInt(30);
+		int inGrid = initialInGrid;
+		int removed = 0;
+
+		std::stringstream log;
+		log << "initialInGrid: " << initialInGrid << std::endl;	
+		do {
+			int remove = MathUtil::RandomIntInRange(3, 7);
+			inGrid = MathUtil::Max(inGrid - remove, 0);
+			int rmv = NormalGameModeManager::levelToLeaveToDelete(0, remove, initialInGrid, removed, onBranch);
+			removed += remove;
+			onBranch = onBranch - rmv;
+			log << "\tRemove: " << remove << " -> " << rmv << " = grid: " << inGrid << ", branch: " << onBranch << std::endl;
+			
+			if (onBranch < 0 || onBranch > 6) {
+				CHECK(onBranch >= 0);
+				CHECK(onBranch <= 6);
+				std::cerr << log.str();
+				break;
+			}
+			
+			if (inGrid > 3) {
+				if (!(inGrid >= onBranch)) {
+					CHECK(inGrid >= onBranch);
+					std::cerr << log.str();
+					break;
+				}
+			} else {
+				if (inGrid != onBranch) {
+					CHECK_EQUAL(inGrid, onBranch);
+					std::cerr << log.str();
+					break;
+				}
+			}
+		} while (inGrid > 0);
+		
+		if (inGrid == 0 && onBranch == 0) {
+			// std::cerr << "SUCCESS:" << std::endl << log.str() << "----------------------------------" << std::endl;
+		}
+	}
+}
+
 TEST(SuppressionFeuilleNiveauNormalDifficulty) {
 	char cleared[8];
 	memset(cleared, 0, sizeof(cleared));
@@ -33,6 +79,7 @@ TEST(SuppressionFeuilleNiveauNormalDifficulty) {
 			for (int k=0; k<8; k++) {
 				log << std::setw(2) << (int)initialCountByType[k] << " ";
 			}
+			log << std::endl;
 			
 			if (!memcmp(countLeft, cleared, sizeof(countLeft))) {
 				CHECK(!memcmp(countLeft, cleared, sizeof(countLeft)));
@@ -41,7 +88,7 @@ TEST(SuppressionFeuilleNiveauNormalDifficulty) {
 			}
 			int count = MathUtil::Min(1 + MathUtil::RandomIntInRange(2, 5), (int)countLeft[color]);
 			
-			int remove = NormalGameModeManager::levelToLeaveToDelete(count, level + 2, level + 2 - countLeft[color]);
+			int remove = NormalGameModeManager::levelToLeaveToDelete(color, count, level + 2, level + 2 - countLeft[color], initialCountByType[color]);
 			initialCountByType[color] -= remove;
 			
 			for (int k=0; k<color; k++)
@@ -54,7 +101,11 @@ TEST(SuppressionFeuilleNiveauNormalDifficulty) {
 
 			for (int i=0; i<8; i++) {
 				if (initialCountByType[color] == 0) {
-					CHECK_EQUAL(0, countLeft[color]);
+					if (countLeft[color] != 0) {
+						CHECK_EQUAL(0, (int)countLeft[color]);
+						std::cerr << log.str() << std::endl;
+						break;
+					}		
 				} else if (initialCountByType[color] > 0) {
 					CHECK(countLeft[color] > 0);
 				} else {
@@ -68,3 +119,4 @@ TEST(SuppressionFeuilleNiveauNormalDifficulty) {
 		CHECK_EQUAL(0, memcmp(initialCountByType, cleared, sizeof(countLeft)));
 	}
 }
+

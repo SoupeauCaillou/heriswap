@@ -125,15 +125,19 @@ void NormalGameModeManager::UiUpdate(float dt) {
 #endif
 }
 
-
-int NormalGameModeManager::levelToLeaveToDelete(int nb, int maxRemain, int done) {
-	// done is updated later, so done is the currently removed leaves
-	int previousRemovalCount = (int) (6 * done)/maxRemain;
-	// what should be removed at this step
-	int totalTheoricallyRemoved = (int) (6 * (done + nb))/maxRemain;
-
-	// so, we have to remove the difference
-	return totalTheoricallyRemoved - previousRemovalCount;
+#include <cmath>
+int NormalGameModeManager::levelToLeaveToDelete(int type, int nb, int initialLeaveCount, int removedLeave, int leftOnBranch) {
+	int leftForType = MathUtil::Max(0, initialLeaveCount - (removedLeave + nb));
+	if (leftForType <= 3) {
+		assert (leftOnBranch >= leftForType);
+		return (leftOnBranch - leftForType);
+	} else {
+		// il y a 3 feuilles à supprimer pour (initialLeaveCount - 3) feuilles dans la grille
+		int shouldBeRemoved = floor(3 * (removedLeave + nb) / (float)(initialLeaveCount - 3));
+		assert (shouldBeRemoved >= 0 && shouldBeRemoved <= 3);
+		int alreadyRmvd = 6 - leftOnBranch;
+		return shouldBeRemoved - alreadyRmvd;
+	}
 }
 
 static float timeGain(int nb, float time) {
@@ -141,7 +145,7 @@ static float timeGain(int nb, float time) {
 }
 
 void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
-    int nb = levelToLeaveToDelete(count, level+2, level+2 - remain[type]);
+    int nb = levelToLeaveToDelete(type, count, level+2, level+2 - remain[type], countBranchLeavesOfType(type));
     for (unsigned int i=0; nb>0 && i<branchLeaves.size(); i++) {
         if (type== branchLeaves[i].type) {
             CombinationMark::markCellInCombination(branchLeaves[i].e);
@@ -172,7 +176,7 @@ void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	else
 		points += 10*level*nb*nb*nb/6;
 
-	deleteLeaves(type, levelToLeaveToDelete(nb, level+2, level+2 - remain[type]));
+	deleteLeaves(type, levelToLeaveToDelete(type, nb, level+2, level+2 - remain[type], countBranchLeavesOfType(type)));
 	remain[type] -= nb;
 	time -= timeGain(nb, time);
 

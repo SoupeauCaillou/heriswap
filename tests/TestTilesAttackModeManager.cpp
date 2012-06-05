@@ -6,11 +6,8 @@
 #include <iomanip>
 
 TEST(TilesSuppressionFeuilleNiveauNormalDifficulty) {
-	char cleared[8];
-	memset(cleared, 0, sizeof(cleared));
-
 	// 50 tests
-	for (int i=0; i<250; i++) {
+	for (int i=0; i<2500; i++) {
 		int initialCount = 48;
 		int limit = MathUtil::RandomInt(2) ? 30 : 100;
 		int left = limit;
@@ -25,11 +22,14 @@ TEST(TilesSuppressionFeuilleNiveauNormalDifficulty) {
 				break;
 			}
 			int count = 1 + MathUtil::RandomIntInRange(2, 6);
-			
-			
+
 			int remove = TilesAttackGameModeManager::levelToLeaveToDelete(48, limit, count, limit - left);
 			left -= count;
 			initialCount -= remove;
+			
+			if (left <= 20) {
+				CHECK_EQUAL(left, initialCount);
+			}
 			
 			log << "remove: " << count << " => " << remove << std::endl;
 		}

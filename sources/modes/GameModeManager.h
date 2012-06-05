@@ -46,8 +46,8 @@ class GameModeManager {
 		void toggleDebugDisplay();
 		bool _debug;
 		Entity debugEntities[16];
-		int countBranchLeavesOfType(int t) const;
 		#endif
+		int countBranchLeavesOfType(int t) const;
 
 
 		// scoring interface
