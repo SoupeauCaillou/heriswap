@@ -19,7 +19,7 @@ class HelpStateManager : public GameStateManager {
 	
 	private:
 		LocalizeAPI* localize;
-		Entity background;
+		Entity background, bg2;
 		// howtoplay
 		Entity title[2];
 		// mode1

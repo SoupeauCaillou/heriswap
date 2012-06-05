@@ -18,7 +18,12 @@ void HelpStateManager::Setup() {
 	ADD_COMPONENT(background, Rendering);
 	ADD_COMPONENT(background, Transformation);
 	TRANSFORM(background)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::ScreenHeight);
-	TRANSFORM(background)->z = DL_Help;
+	TRANSFORM(background)->z = DL_Help1;
+	
+	bg2 = theEntityManager.CreateEntity();
+	ADD_COMPONENT(bg2, Rendering);
+	ADD_COMPONENT(bg2, Transformation);
+	TRANSFORM(bg2)->z = DL_Help2;
 
 	// title text + bg
 	title[0] = theEntityManager.CreateEntity();
@@ -121,9 +126,18 @@ void HelpStateManager::Enter() {
 GameState HelpStateManager::Update(float dt) {
 	if (!theTouchInputManager.isTouched() && theTouchInputManager.wasTouched()) {
 		if (state == HowToPlay) {
-			RENDERING(background)->texture = (mode == Normal) ? 
-				theRenderingSystem.loadTextureFile("bg_help_obj_score"):
-				theRenderingSystem.loadTextureFile("bg_help_obj_time");
+			if (mode == Normal) {
+				RENDERING(bg2)->texture = theRenderingSystem.loadTextureFile("bg_help_obj_score");
+				TRANSFORM(bg2)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(482*2));
+				TransformationSystem::setPosition(TRANSFORM(bg2), Vector2(0, PlacementHelper::GimpYToScreen(112*2)), TransformationSystem::N);
+			} else {
+				RENDERING(bg2)->texture = theRenderingSystem.loadTextureFile("bg_help_obj_time");
+				TRANSFORM(bg2)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(495*2));
+				TransformationSystem::setPosition(TRANSFORM(bg2), Vector2(0, PlacementHelper::GimpYToScreen(101*2)), TransformationSystem::N);
+			}
+			std::cout << TRANSFORM(bg2)->size << ", " << TRANSFORM(bg2)->position << std::endl;
+			RENDERING(bg2)->hide = false;
+			
 			TEXT_RENDERING(title[0])->text = localize->text("objective", "Objectif");
 			if (mode == Normal) {
 				TEXT_RENDERING(levelBig)->hide = false;
@@ -158,7 +172,9 @@ void HelpStateManager::Exit() {
 		TEXT_RENDERING(difficulty[i])->hide = true;
 	}
 	RENDERING(background)->hide = true;
+	RENDERING(bg2)->hide = true;
 	TEXT_RENDERING(title[0])->hide = true;
 	RENDERING(title[1])->hide = true;
-
+	
+	theRenderingSystem.unloadAtlas("logo");
 }
