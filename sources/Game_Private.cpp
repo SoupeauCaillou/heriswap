@@ -164,4 +164,6 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      (static_cast<NormalGameModeManager*> (mode2Manager[Normal]))->stressTrack = inGameMusic.stressTrack;
 	PauseStateManager* pause = static_cast<PauseStateManager*> (state2Manager[Pause]);
 	pause->helpMgr = static_cast<HelpStateManager*> (state2Manager[Help]);
+	
+	static_cast<ModeMenuStateManager*>(state2Manager[ModeMenu])->helpMgr = pause->helpMgr;
 }

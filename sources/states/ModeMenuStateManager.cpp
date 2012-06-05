@@ -17,6 +17,7 @@
 
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
+#include "states/HelpStateManager.h"
 
 #include "DepthLayer.h"
 #include "GridSystem.h"
@@ -350,7 +351,15 @@ GameState ModeMenuStateManager::Update(float dt) {
 		RENDERING(herisson->actor.e)->hide = true;
 		TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
 		TEXT_RENDERING(title)->hide = true;
-		return ModeMenuToBlackState;
+		
+		if (storage->savedScores(modeMgr->GetMode(), difficulty).size() == 0) {
+			// show help
+			helpMgr->mode = modeMgr->GetMode();
+			helpMgr->oldState = ModeMenuToBlackState;
+			return Help;
+		} else {
+			return ModeMenuToBlackState;
+		}
 	} if (gameOverState != AskingPlayerName && (BUTTON(back)->clicked || pleaseGoBack)) {
         pleaseGoBack = false;
 		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");

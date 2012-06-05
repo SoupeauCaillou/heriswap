@@ -6,6 +6,8 @@
 #include "Game.h"
 #include "AnimedEntity.h"
 
+class HelpStateManager;
+
 class ModeMenuStateManager : public GameStateManager {
 	public:
 		ModeMenuStateManager(StorageAPI* storag, NameInputAPI* nameInputAPI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI);
@@ -21,6 +23,7 @@ class ModeMenuStateManager : public GameStateManager {
 		AnimatedActor* herisson;
 
         bool pleaseGoBack;
+        HelpStateManager* helpMgr;
 	private:
 		StorageAPI* storage;
 		NameInputAPI* nameInputAPI;
