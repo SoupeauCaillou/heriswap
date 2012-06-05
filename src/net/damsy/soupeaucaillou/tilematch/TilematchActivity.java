@@ -46,7 +46,7 @@ public class TilematchActivity extends Activity {
 	static final String TILEMATCH_BUNDLE_KEY = "plop";
 	static public long game = 0 ;
 	static public Object mutex;
-	static public byte[] savedState;
+	static public byte[] savedState; 
 	static public int openGLESVersion = 2;
 	byte[] renderingSystemState;
 	static public SoundPool soundPool;
