@@ -37,7 +37,7 @@ void LevelStateManager::Setup() {
 	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
 	TEXT_RENDERING(eBigLevel)->color = Color(1, 1, 1);
 	TEXT_RENDERING(eBigLevel)->fontName = "gdtypo";
-	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(234);
+	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(350);
 	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
 	TEXT_RENDERING(eBigLevel)->positioning = TextRenderingComponent::CENTER;
 	ADD_COMPONENT(eBigLevel, Music);
@@ -81,15 +81,18 @@ void LevelStateManager::Setup() {
 
 void LevelStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-
+	Color blue = Color(164.0/255.0, 164.0/255, 164.0/255);
+	
 	levelState = Start;
 	std::stringstream a;
 	a << currentLevel;
 	TEXT_RENDERING(eBigLevel)->text = a.str();
 	TEXT_RENDERING(eBigLevel)->hide = false;
-	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(234);
+	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(300);
 	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
 	TRANSFORM(eBigLevel)->z = DL_Score;
+
+	TEXT_RENDERING(eBigLevel)->color = blue;
 
 	MUSIC(eBigLevel)->control = MusicComponent::Start;
 	MORPHING(eBigLevel)->timing = 1;
@@ -160,7 +163,9 @@ GameState LevelStateManager::Update(float dt) {
 		}
 		mc->elements.clear();
 		// move big score to small score
+		Color blue = Color(164.0/255.0, 164.0/255, 164.0/255);
 		mc->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->charHeight, TEXT_RENDERING(eBigLevel)->charHeight, TEXT_RENDERING(smallLevel)->charHeight));
+		// mc->elements.push_back(new TypedMorphElement<Color> (&TEXT_RENDERING(eBigLevel)->color, blue, Color(1,1,1,1)));
 		mc->elements.push_back(new TypedMorphElement<Vector2> (&TRANSFORM(eBigLevel)->position, TRANSFORM(eBigLevel)->position, TRANSFORM(smallLevel)->position));
 		mc->active = true;
 		mc->activationTime = 0;
@@ -217,6 +222,7 @@ void LevelStateManager::Exit() {
 	// hide big level
 	TEXT_RENDERING(eBigLevel)->hide = true;
 	// show small level
+	TEXT_RENDERING(smallLevel)->text = TEXT_RENDERING(eBigLevel)->text;
 	TEXT_RENDERING(smallLevel)->color.a = 1;
 	RENDERING(modeMgr->herisson)->color.a = 1;
 

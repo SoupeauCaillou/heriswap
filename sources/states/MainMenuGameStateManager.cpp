@@ -49,10 +49,12 @@ void MainMenuGameStateManager::Setup() {
 
 	//Containers properties
 	for (int i=0; i<2; i++) {
-		TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, Vector2(PlacementHelper::GimpXToScreen(700),PlacementHelper::GimpYToScreen(100)));
-		TypedMorphElement<float>* alignMorph = new TypedMorphElement<float>(&TEXT_RENDERING(eStart[i])->positioning, TextRenderingComponent::LEFT, TextRenderingComponent::RIGHT);
+		TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(54);
+		float w = theTextRenderingSystem.computeTextRenderingComponentWidth(TEXT_RENDERING(eStart[i]));
+		TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
+		Vector2 target = Vector2(PlacementHelper::GimpXToScreen(700) - w ,PlacementHelper::GimpYToScreen(100));
+		TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, target);
         MORPHING(eStart[i])->elements.push_back(posMorph);
-        MORPHING(eStart[i])->elements.push_back(alignMorph);
 		ADD_COMPONENT(bStart[i], Sound);
 		ADD_COMPONENT(bStart[i], Button);
 		BUTTON(bStart[i])->enabled = false;

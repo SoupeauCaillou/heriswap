@@ -73,7 +73,7 @@ void GameModeManager::Setup() {
 	ADD_COMPONENT(herisson, Rendering);
 	TRANSFORM(herisson)->z = DL_Animal;
 	TRANSFORM(herisson)->size = Vector2(PlacementHelper::GimpWidthToScreen(142),PlacementHelper::GimpHeightToScreen(116));
-	TransformationSystem::setPosition(TRANSFORM(herisson), Vector2(0, PlacementHelper::GimpYToScreen(1058)), TransformationSystem::N);
+	TransformationSystem::setPosition(TRANSFORM(herisson), Vector2(0, PlacementHelper::GimpYToScreen(1028)), TransformationSystem::N);
 	c = new AnimatedActor();
 	c->actor.e = herisson;
 	c->frames=0;
@@ -99,7 +99,7 @@ void GameModeManager::Setup() {
 	SCROLLING(decor2nd)->images.push_back("decor2nd_1");
 	SCROLLING(decor2nd)->images.push_back("decor2nd_2");
 	SCROLLING(decor2nd)->images.push_back("decor2nd_3");
-	SCROLLING(decor2nd)->speed = Vector2(-.15, 0);
+	SCROLLING(decor2nd)->speed = Vector2(-.05, 0);
 	SCROLLING(decor2nd)->displaySize = Vector2(TRANSFORM(decor2nd)->size.X * 1.01, TRANSFORM(decor2nd)->size.Y);
 	SCROLLING(decor2nd)->hide = true;
 

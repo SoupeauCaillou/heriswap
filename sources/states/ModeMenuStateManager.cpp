@@ -72,7 +72,7 @@ void ModeMenuStateManager::Setup() {
     BUTTON(back)->overSize = 1.3;
 	ADD_COMPONENT(back, Sound);
 	TRANSFORM(back)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(75));
-	TransformationSystem::setPosition(TRANSFORM(back), Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(82)), TransformationSystem::NW);
+	TransformationSystem::setPosition(TRANSFORM(back), Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(95)), TransformationSystem::W);
 	TRANSFORM(back)->z = DL_MainMenuUITxt;
 	RENDERING(back)->texture = theRenderingSystem.loadTextureFile("back");
 	BUTTON(back)->enabled = false;
@@ -80,10 +80,10 @@ void ModeMenuStateManager::Setup() {
 	// score title
 	scoreTitle = theEntityManager.CreateEntity();
 	ADD_COMPONENT(scoreTitle, Transformation);
-	TRANSFORM(scoreTitle)->position = Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(476));
+	TRANSFORM(scoreTitle)->position = Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(520));
 	TRANSFORM(scoreTitle)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(scoreTitle, TextRendering);
-	TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("score", "Score :");
+	TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("score", "Meilleurs scores :");
 	TEXT_RENDERING(scoreTitle)->fontName = "typo";
 	TEXT_RENDERING(scoreTitle)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(scoreTitle)->color = green;
@@ -93,11 +93,11 @@ void ModeMenuStateManager::Setup() {
 	// play text
 	play = theEntityManager.CreateEntity();
 	ADD_COMPONENT(play, Transformation);
-	TRANSFORM(play)->position = Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(300));
+	TRANSFORM(play)->position = Vector2(0, PlacementHelper::GimpYToScreen(275));
 	TRANSFORM(play)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(play, TextRendering);
 	TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Jouer");
-	TEXT_RENDERING(play)->positioning = TextRenderingComponent::LEFT;
+	TEXT_RENDERING(play)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(play)->color = green;
 	TEXT_RENDERING(play)->fontName = "typo";
 	TEXT_RENDERING(play)->charHeight = PlacementHelper::GimpHeightToScreen(100);
@@ -115,15 +115,15 @@ void ModeMenuStateManager::Setup() {
 	//difficulty text
 	eDifficulty = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(eDifficulty)->z = DL_MainMenuUITxt;
-	TRANSFORM(eDifficulty)->position = Vector2(PlacementHelper::GimpXToScreen(92),PlacementHelper::GimpYToScreen(400));
-	TEXT_RENDERING(eDifficulty)->positioning = TextRenderingComponent::LEFT;
+	TRANSFORM(eDifficulty)->position = Vector2(0, PlacementHelper::GimpYToScreen(375));
+	TEXT_RENDERING(eDifficulty)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(eDifficulty)->hide = true;
 	TEXT_RENDERING(eDifficulty)->charHeight = PlacementHelper::GimpHeightToScreen(45);
 	TEXT_RENDERING(eDifficulty)->color = green;
 	if (difficulty==0)
-		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "Facile");
+		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "{ Facile }");
 	else
-		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "Normal");
+		TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "{ Difficile }");
 
 	//difficulty container
 	bDifficulty = theEntityManager.CreateEntity();
@@ -135,7 +135,7 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(bDifficulty, Sound);
 	BUTTON(bDifficulty)->enabled = false;
 
-	#ifdef ANDROID
+	#if 1
 	// openfeint button
 	openfeint = theEntityManager.CreateEntity();
 	ADD_COMPONENT(openfeint, Transformation);
@@ -241,7 +241,7 @@ void ModeMenuStateManager::Enter() {
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
 	TEXT_RENDERING(play)->text = (gameOverState != NoGame) ? localizeAPI->text("rejouer", "Rejouer") : localizeAPI->text("jouer", "Jouer");
-	#ifdef ANDROID
+	#if 1
 	RENDERING(openfeint)->hide = false;
 	BUTTON(openfeint)->enabled = true;
 	#endif
@@ -250,9 +250,9 @@ void ModeMenuStateManager::Enter() {
 	BUTTON(bDifficulty)->enabled = true;
 
     if (difficulty==0)
-        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "Facile");
+        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "{ Facile }");
     else
-        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "Normal");
+        TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "{ Difficile }");
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
@@ -342,9 +342,9 @@ GameState ModeMenuStateManager::Update(float dt) {
 		if (difficulty==2) difficulty=0;
 		LoadScore(modeMgr->GetMode(), difficulty);
 		if (difficulty==0)
-			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "Facile");
+			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_1", "{ Facile }");
 		else
-			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "Normal");
+			TEXT_RENDERING(eDifficulty)->text = localizeAPI->text("diff_2", "{ Difficile }");
 
 		TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Jouer");
 	}
@@ -387,7 +387,7 @@ void ModeMenuStateManager::LateExit() {
 	TEXT_RENDERING(yourScore)->hide = true;
 	TEXT_RENDERING(play)->hide = true;
 	RENDERING(back)->hide = true;
-	#ifdef ANDROID
+	#if 1
 	RENDERING(openfeint)->hide = true;
 	BUTTON(openfeint)->enabled = false;
 	#endif

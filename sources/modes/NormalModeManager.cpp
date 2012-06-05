@@ -197,6 +197,7 @@ bool NormalGameModeManager::LevelUp() {
 		if (remain[i] != 0)	match=0;
 		i++;
 	}
+
 	//si on a tous les objectifs
 	if (match) {
 		successMgr->sLevel1For1K(level, points);

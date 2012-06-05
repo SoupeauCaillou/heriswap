@@ -35,7 +35,7 @@ void InGameUiHelper::build() {
 	pauseButton = theEntityManager.CreateEntity();
 	ADD_COMPONENT(pauseButton, Transformation);
     TRANSFORM(pauseButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
-    TransformationSystem::setPosition(TRANSFORM(pauseButton), Vector2(PlacementHelper::GimpXToScreen(108), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::E);
+    TransformationSystem::setPosition(TRANSFORM(pauseButton), Vector2(-PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
     TRANSFORM(pauseButton)->z = DL_Score;
 	ADD_COMPONENT(pauseButton, Rendering);
 	RENDERING(pauseButton)->texture = theRenderingSystem.loadTextureFile("pause");

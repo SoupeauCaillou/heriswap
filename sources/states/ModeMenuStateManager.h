@@ -27,7 +27,7 @@ class ModeMenuStateManager : public GameStateManager {
         SuccessAPI* successAPI;
 		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle;
 		Entity yourScore, fond;
-		#ifdef ANDROID
+		#if 1
 		Entity openfeint;
 		#endif
 		std::string playerName;

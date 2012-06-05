@@ -80,7 +80,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      ADD_COMPONENT(soundButton, Transformation);
      TRANSFORM(soundButton)->z = DL_MainMenuUITxt;
      TRANSFORM(soundButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
-     TransformationSystem::setPosition(TRANSFORM(soundButton), Vector2(PlacementHelper::GimpXToScreen(692), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
+     TransformationSystem::setPosition(TRANSFORM(soundButton), Vector2(PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::E);
      ADD_COMPONENT(soundButton, Button);
      BUTTON(soundButton)->overSize = 1.3;
      ADD_COMPONENT(soundButton, Rendering);
