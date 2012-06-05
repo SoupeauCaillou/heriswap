@@ -247,9 +247,9 @@ void ModeMenuStateManager::Enter() {
 	BUTTON(bDifficulty)->enabled = true;
 
     if (difficulty==0)
-        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Facile") + " }";
+        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Débutant") + " }";
     else
-        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Difficile") + " }";
+        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Confirmé") + " }";
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
@@ -339,9 +339,9 @@ GameState ModeMenuStateManager::Update(float dt) {
 		if (difficulty==2) difficulty=0;
 		LoadScore(modeMgr->GetMode(), difficulty);
 		if (difficulty==0)
-			TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Facile") + " }";
+			TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Débutant") + " }";
 		else
-			TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Difficile") + " }";
+			TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Confirmé") + " }";
 
 		TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Jouer");
 	}

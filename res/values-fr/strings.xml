@@ -8,8 +8,8 @@
 	<string name="score">Meilleurs scores :</string>
 	<string name="jouer">Jouer</string>
 	<string name="rejouer">Rejouer</string>
-	<string name="diff_1">Facile</string>
-	<string name="diff_2">Difficile</string>
+	<string name="diff_1">Débutant</string>
+	<string name="diff_2">Confirmé</string>
 	<string name="lvl">niv</string>
 	<string name="lvlcap">Niv</string>
 	<string name="enter_name">Nouveau meilleur score</string>
