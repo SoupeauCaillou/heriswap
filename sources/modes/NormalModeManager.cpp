@@ -81,9 +81,10 @@ float NormalGameModeManager::GameProgressPercent() {
 
 
 void NormalGameModeManager::UiUpdate(float dt) {
-	ADSR(stressTrack)->active = (time > 37.5);
+	#define CLOCHETTE_TIME 35.0f
+	ADSR(stressTrack)->active = (time > CLOCHETTE_TIME);
     if (ADSR(stressTrack)->active) {
-        ADSR(stressTrack)->attackValue = ADSR(stressTrack)->sustainValue = MathUtil::Min((time - 37.5) / (limit - 37.5), 1.0);
+        ADSR(stressTrack)->attackValue = ADSR(stressTrack)->sustainValue = MathUtil::Min((time - CLOCHETTE_TIME) / (limit - CLOCHETTE_TIME), 1.0f);
     }
 
 	//Score
