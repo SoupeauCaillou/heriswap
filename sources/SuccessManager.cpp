@@ -25,7 +25,6 @@ SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	bHardScore = false;
 	b6InARow = false;
 	bLuckyLuke = false;
-	bDonator = false;
 	bTestEverything = false;
 	bBTAC = false;
 	bBTAM = false;
@@ -77,7 +76,7 @@ void SuccessManager::sHardScore(StorageAPI* storage) {
 }
 void SuccessManager::sFastAndFinish(float time) {
 	if (hardMode && !bFastAndFinish) {
-		if (time<=35.f) {
+		if (time<=53.f) {
 			successAPI->successCompleted("Fast and finish", 1666602);
 			bFastAndFinish = true;
 		}
@@ -176,13 +175,6 @@ void SuccessManager::sLuckyLuke() {
 			successAPI->successCompleted("Lucky Luke", 1671902);
 			bLuckyLuke = true;
 		}
-	}
-}
-
-void SuccessManager::sDonator() {
-	if (!bDonator) {
-		successAPI->successCompleted("Donator", 1671922);
-		bDonator = true;
 	}
 }
 

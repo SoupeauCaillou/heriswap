@@ -26,7 +26,7 @@ class SuccessManager {
 		void sHardScore(StorageAPI* str);
 		bool bHardScore;
 
-		//success Fast And finish (Finish a tiles attack round within 35 secs)
+		//success Fast And finish (Finish a tiles attack round within 53 secs)
 		void sFastAndFinish(float time);
 		bool bFastAndFinish;
 
@@ -67,10 +67,6 @@ class SuccessManager {
 		void sLuckyLuke();
 		bool bLuckyLuke;
 		float timeTotalPlayed, timeUserInputloop; // timeLLloop used in userinput
-
-		//success Donator (Click on Ads)
-		void sDonator();
-		bool bDonator;
 
 		//success Test everything (Get one score in each mode and difficulty)
 		void sTestEverything(StorageAPI* str);
