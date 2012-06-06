@@ -49,4 +49,6 @@ class PrivateData {
 	     Entity stressTrack;
      } inGameMusic;
      Jukebox jukebox;
+     int scoreboardRankInSight;
+     std::vector<int> bestScores;
 };

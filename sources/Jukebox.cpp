@@ -4,9 +4,6 @@
 #include <algorithm>
 #include <assert.h>
 
-#define STR(tok) "audio/"#tok".ogg"
-#define L(a) STR(a)
-
 enum Theme {
     A=0, B, I
 };
@@ -18,7 +15,7 @@ static std::string themes[] = {
 };
 
 enum Accomp {
-    C=0, D, G, H, E
+    C=0, D, G, E
 };
 
 
@@ -26,7 +23,6 @@ static std::string accomp[] = {
     "audio/C.ogg",
     "audio/D.ogg",
     "audio/G.ogg",
-    "audio/H.ogg",
     "audio/E.ogg"
 };
 
@@ -48,18 +44,14 @@ static void randomNumbersInRange(int fromIncl, int toIncl, int* out, int count) 
 }
 
 static void build1SongComposition(std::vector<std::string>& selection) {
-    if (MathUtil::RandomInt(2)) {
-        selection.push_back(themes[A]);
-    } else {
-        selection.push_back(accomp[H]);
-    }
+    selection.push_back(themes[A]);
 }
 
 static void build2SongsComposition(std::vector<std::string>& selection) {
     // theme (excl. I)
     selection.push_back(themes[MathUtil::RandomInt(2)]);
     // accomp (excl. E)
-    selection.push_back(accomp[MathUtil::RandomInt(4)]);
+    selection.push_back(accomp[MathUtil::RandomInt(3)]);
 }
 
 static void build3SongsComposition(std::vector<std::string>& selection) {
@@ -67,7 +59,7 @@ static void build3SongsComposition(std::vector<std::string>& selection) {
     selection.push_back(themes[MathUtil::RandomInt(3)]);
     // 2 diff accomp
     int a[2];
-    randomNumbersInRange(0, 4, a, 2);
+    randomNumbersInRange(0, 3, a, 2);
     for (int i=0; i<2; i++) {
         selection.push_back(accomp[a[i]]);
     }
@@ -79,7 +71,7 @@ static void build4SongsComposition(std::vector<std::string>& selection) {
         selection.push_back(themes[MathUtil::RandomInt(3)]);
         // 3 diff accomp
         int a[3];
-        randomNumbersInRange(0, 4, a, 3);
+        randomNumbersInRange(0, 3, a, 3);
         for (int i=0; i<3; i++) {
             selection.push_back(accomp[a[i]]);
         }
@@ -93,7 +85,7 @@ static void build4SongsComposition(std::vector<std::string>& selection) {
 
         // 2 diff accomp
         int a[2];
-        randomNumbersInRange(0, 4, a, 2);
+        randomNumbersInRange(0, 3, a, 2);
         for (int i=0; i<2; i++) {
             selection.push_back(accomp[a[i]]);
         }

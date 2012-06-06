@@ -58,7 +58,16 @@ void Game::stateChanged(GameState oldState, GameState newState) {
          static_cast<FallGameStateManager*> (datas->state2Manager[Fall])->setAnimSpeed();
          static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn])->setAnimSpeed();
 		 static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->setAnimSpeed();
-        
+
+		 std::vector<StorageAPI::Score> entries = datas->storage->savedScores(datas->mode, (theGridSystem.GridSize == 5 ? 0 : 1));
+		 datas->bestScores.clear();
+		 datas->bestScores.reserve(entries.size());
+		 for (int i=0; i<entries.size(); i++) {
+			datas->bestScores[i] = entries[i].points;
+		 }
+		 datas->scoreboardRankInSight = entries.size();
+		 
+		 
      } else if (newState == LevelChanged) {
         static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel =
         static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->getSmallLevelEntity();
