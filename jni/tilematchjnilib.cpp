@@ -32,8 +32,8 @@
 #include <sys/time.h>
 #define DT 1.0/60.
 
-#ifndef _Included_net_damsy_soupeaucaillou_tilematch_TilematchJNILib
-#define _Included_net_damsy_soupeaucaillou_tilematch_TilematchJNILib
+#ifndef _Included_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib
+#define _Included_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -99,11 +99,11 @@ static char* loadPng(const char* assetName, int* width, int* height);
 #define UPDATE_ENV_PTR(ptr, env) if (ptr != env) ptr = env
 
 /*
- * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
+ * Class:     net_damsy_soupeaucaillou_heriswap_HeriswapJNILib
  * Method:    createGame
  * Signature: ()J
  */
-JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_createGame
+JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_createGame
   (JNIEnv *env, jclass, jobject asset, jint openglesVersion) {
   	LOGW("%s -->", __FUNCTION__);
   	TimeUtil::init();
@@ -124,7 +124,7 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
 	return (jlong)hld;
 }
 
-JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_destroyGame
+JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_destroyGame
   (JNIEnv *env, jclass, jlong g) {
     GameHolder* hld = (GameHolder*) g;
     theMusicSystem.uninit();
@@ -134,11 +134,11 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_
 }
 
 /*
- * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
+ * Class:     net_damsy_soupeaucaillou_heriswap_HeriswapJNILib
  * Method:    init
  * Signature: (JII)V
  */
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_initFromRenderThread
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_initFromRenderThread
   (JNIEnv *env, jclass, jlong g, jint w, jint h) {
   LOGW("%s -->", __FUNCTION__);
 	GameHolder* hld = (GameHolder*) g;
@@ -151,7 +151,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 	LOGW("%s <--", __FUNCTION__);
 }
 
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_initFromGameThread
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_initFromGameThread
   (JNIEnv *env, jclass, jlong g, jbyteArray jstate) {
   	GameHolder* hld = (GameHolder*) g;
 	UPDATE_ENV_PTR(hld->gameThreadEnv, env);
@@ -186,11 +186,11 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 }
 
 /*
- * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
+ * Class:     net_damsy_soupeaucaillou_heriswap_HeriswapJNILib
  * Method:    step
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_step
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_step
   (JNIEnv *env, jclass, jlong g) {
   	GameHolder* hld = (GameHolder*) g;
 
@@ -230,7 +230,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_s
 	}
 }
 
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_resetTimestep
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_resetTimestep
   (JNIEnv *env, jclass, jlong g) {
   	GameHolder* hld = (GameHolder*) g;
 
@@ -242,7 +242,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_r
 static int frameCount = 0;
 static float tttttt = 0;
 
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_render
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_render
   (JNIEnv *env, jclass, jlong g) {
   	GameHolder* hld = (GameHolder*) g;
   	UPDATE_ENV_PTR(hld->renderThreadEnv, env);
@@ -256,7 +256,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_r
 	}
 }
 
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_pause
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_pause
   (JNIEnv *env, jclass, jlong g) {
   	GameHolder* hld = (GameHolder*) g;
   	LOGW("%s -->", __FUNCTION__);
@@ -269,7 +269,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_p
 	LOGW("%s <--", __FUNCTION__);
 }
 
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_back
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_back
   (JNIEnv *env, jclass, jlong g) {
      GameHolder* hld = (GameHolder*) g;
      LOGW("%s -->", __FUNCTION__);
@@ -281,7 +281,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_b
 }
 
 
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_invalidateTextures
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_invalidateTextures
   (JNIEnv *env, jclass, jlong g) {
      GameHolder* hld = (GameHolder*) g;
      LOGW("%s -->", __FUNCTION__);
@@ -293,11 +293,11 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 }
 
 /*
- * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
+ * Class:     net_damsy_soupeaucaillou_heriswap_HeriswapJNILib
  * Method:    handleInputEvent
  * Signature: (JIFF)V
  */
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_handleInputEvent
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_handleInputEvent
   (JNIEnv *env, jclass, jlong g, jint evt, jfloat x, jfloat y) {
 	GameHolder* hld = (GameHolder*) g;
 
@@ -314,11 +314,11 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_h
 }
 
 /*
- * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
+ * Class:     net_damsy_soupeaucaillou_heriswap_HeriswapJNILib
  * Method:    serialiazeState
  * Signature: (J)[B
  */
-JNIEXPORT jbyteArray JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_serialiazeState
+JNIEXPORT jbyteArray JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_serialiazeState
   (JNIEnv *env, jclass, jlong g) {
 	LOGW("%s -->", __FUNCTION__);
 	GameHolder* hld = (GameHolder*) g;
@@ -340,11 +340,11 @@ JNIEXPORT jbyteArray JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJN
 }
 
 /*
- * Class:     net_damsy_soupeaucaillou_tilematch_TilematchJNILib
+ * Class:     net_damsy_soupeaucaillou_heriswap_HeriswapJNILib
  * Method:    restoreRenderingSystemState
  * Signature: (J[B)V
  */
-JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_initAndReloadTextures
+JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_initAndReloadTextures
   (JNIEnv *env, jclass, jlong g) {
   LOGW("%s -->", __FUNCTION__);
   GameHolder* hld = (GameHolder*) g;
@@ -355,7 +355,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_tilematch_TilematchJNILib_i
 }
 
 static char* loadAsset(JNIEnv *env, jobject assetManager, const std::string& assetName, int* length) {
-	jclass util = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
+	jclass util = env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib");
 	if (!util) {
 		LOGW("ERROR - cannot find class (%p)", env);
 	}
@@ -390,7 +390,7 @@ void AndroidSuccessAPI::successCompleted(const char* description, unsigned long 
 	SuccessAPI::successCompleted(description, successId);
 	// android spec stuff
 	JNIEnv* env = holder->gameThreadEnv;
-	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
+	jclass c = env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib");
 	jmethodID mid = (env->GetStaticMethodID(c, "unlockAchievement", "(I)V"));
 	int sid = (int) successId;
 	env->CallStaticVoidMethod(c, mid, sid);
@@ -398,14 +398,14 @@ void AndroidSuccessAPI::successCompleted(const char* description, unsigned long 
 
 void AndroidSuccessAPI::openfeintLB(int mode, int diff) {
 	JNIEnv* env = holder->gameThreadEnv;
-	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
+	jclass c = env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib");
 	jmethodID mid = env->GetStaticMethodID(c, "openfeintLeaderboard", "(II)V");
 	env->CallStaticVoidMethod(c, mid, mode, diff);
 }
 
 void AndroidSuccessAPI::openfeintSuccess() {
 	JNIEnv* env = holder->gameThreadEnv;
-	jclass c = env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib");
+	jclass c = env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib");
 	jmethodID mid = env->GetStaticMethodID(c, "openfeintSuccess", "()V");
 	env->CallStaticVoidMethod(c, mid);
 }

@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.damsy.soupeaucaillou.tilematch"
+    package="net.damsy.soupeaucaillou.heriswap"
     android:versionCode="1"
     android:versionName="1.0" 
     >
-
-    <uses-sdk android:minSdkVersion="4" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="9"/>
     
-    <!-- This .apk has no Java code itself, so set hasCode to false. -->
-    <application android:label="Heriswap" android:debuggable="true" android:icon="@drawable/ic_launcher">
+    <application android:label="Heriswap" android:icon="@drawable/ic_launcher">
     
         <!-- Our activity is the built-in NativeActivity framework class.
              This will take care of integrating with our NDK code. -->
-        <activity android:name="net.damsy.soupeaucaillou.tilematch.TilematchActivity"
+        <activity android:name="net.damsy.soupeaucaillou.heriswap.HeriswapActivity"
                 android:label="Heriswap" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +43,7 @@
                   android:theme="@style/OFNestedWindow"/>
         
         <provider android:name="com.greystripe.android.sdk.AdContentProvider"
-android:authorities="net.damsy.soupeaucaillou.tilematch.AdContentProvider"
+android:authorities="net.damsy.soupeaucaillou.heriswap.AdContentProvider"
 android:multiprocess="true"
 android:exported="false" />
 <activity android:name="com.greystripe.android.sdk.AdView"
@@ -49,10 +54,4 @@ android:configChanges="keyboard|keyboardHidden|orientation" >
 </activity>
         
     </application>
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-	<uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
 </manifest>

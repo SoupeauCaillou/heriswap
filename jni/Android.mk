@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
 
 APP_DIR := $(LOCAL_PATH)
 
-LOCAL_MODULE := tilematch
+LOCAL_MODULE := heriswap
 
 LOCAL_CFLAGS := -DANDROID_NDK \
                 -DDISABLE_IMPORTGL \

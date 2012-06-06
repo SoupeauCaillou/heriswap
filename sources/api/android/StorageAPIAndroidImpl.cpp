@@ -31,7 +31,7 @@ StorageAPIAndroidImpl::~StorageAPIAndroidImpl() {
 void StorageAPIAndroidImpl::init() {
     datas = new StorageAPIAndroidImplDatas();
 
-    datas->cls = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/tilematch/TilematchJNILib"));
+    datas->cls = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib"));
     datas->soundEnable = jniMethodLookup(env, datas->cls, "soundEnable", "(Z)Z");
     datas->getGameCountBeforeNextAd = jniMethodLookup(env, datas->cls, "getGameCountBeforeNextAd", "()I");
     datas->setGameCountBeforeNextAd = jniMethodLookup(env, datas->cls, "setGameCountBeforeNextAd", "(I)V");

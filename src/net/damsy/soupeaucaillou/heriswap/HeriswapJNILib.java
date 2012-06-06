@@ -1,14 +1,13 @@
-package net.damsy.soupeaucaillou.tilematch;
+package net.damsy.soupeaucaillou.heriswap;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import net.damsy.soupeaucaillou.tilematch.TilematchJNILib.DumbAndroid.Command;
-import net.damsy.soupeaucaillou.tilematch.TilematchJNILib.DumbAndroid.Command.Type;
+import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command;
+import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command.Type;
 import android.content.ContentValues;
 import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
@@ -26,9 +25,9 @@ import com.openfeint.api.resource.Leaderboard;
 import com.openfeint.api.resource.Score;
 import com.openfeint.api.ui.Dashboard;
  
-public class TilematchJNILib {
+public class HeriswapJNILib {
     static {
-        System.loadLibrary("tilematch");
+        System.loadLibrary("heriswap");
     }
 
     static final String PREF_NAME = "HeriswapPref";
@@ -54,19 +53,19 @@ public class TilematchJNILib {
     //-------------------------------------------------------------------------
     static public void showAd() {
     	if (GSSDK.getSharedInstance().isAdReady()) {
-    		TilematchActivity.adHasBeenShown = false;
-	    	TilematchActivity.activity.runOnUiThread(new Runnable() {
+    		HeriswapActivity.adHasBeenShown = false;
+	    	HeriswapActivity.activity.runOnUiThread(new Runnable() {
 				public void run() {
-					GSSDK.getSharedInstance().displayAd(TilematchActivity.activity);
+					GSSDK.getSharedInstance().displayAd(HeriswapActivity.activity);
 				}
 			});
     	} else {
-    		TilematchActivity.adHasBeenShown = true;
+    		HeriswapActivity.adHasBeenShown = true;
     	}
     }
 
     static public boolean done() {
-    	return TilematchActivity.adHasBeenShown;
+    	return HeriswapActivity.adHasBeenShown;
     }
 
     //-------------------------------------------------------------------------
@@ -79,7 +78,7 @@ public class TilematchJNILib {
 	    	stream.read(data);
 	    	return data;
     	} catch (Exception exc) {
-    		Log.e("plop", exc.toString());
+    		Log.e(HeriswapActivity.Tag, exc.toString());
     		return null;
     	}
     }
@@ -89,9 +88,9 @@ public class TilematchJNILib {
     //-------------------------------------------------------------------------
     static public int loadSound(AssetManager mgr, String assetPath) {
     	try {
-		    return TilematchActivity.soundPool.load(mgr.openFd(assetPath), 1);
+		    return HeriswapActivity.soundPool.load(mgr.openFd(assetPath), 1);
     	} catch (Exception exc) {
-    		Log.e(TilematchActivity.Tag, "Unable to load sound: " + assetPath);
+    		Log.e(HeriswapActivity.Tag, "Unable to load sound: " + assetPath);
     		return -1;
     	}
     }
@@ -99,7 +98,7 @@ public class TilematchJNILib {
     static public void playSound(int soundID, float volume) {
     	if (soundID < 0)
     		return;
-    	TilematchActivity.soundPool.play(soundID, 0.25f*volume, 0.25f*volume, 0, 0, 1.0f);
+    	HeriswapActivity.soundPool.play(soundID, 0.25f*volume, 0.25f*volume, 0, 0, 1.0f);
     }
 
     //-------------------------------------------------------------------------
@@ -109,9 +108,9 @@ public class TilematchJNILib {
     static final String GameCountBeforeAds = "GameCountBeforeAds";
 
     static public boolean soundEnable(boolean switchIt) {
-    	boolean enabled = TilematchActivity.preferences.getBoolean(SoundEnabledPref, true);
+    	boolean enabled = HeriswapActivity.preferences.getBoolean(SoundEnabledPref, true);
     	if (switchIt) {
-    		Editor ed = TilematchActivity.preferences.edit();
+    		Editor ed = HeriswapActivity.preferences.edit();
     		ed.putBoolean(SoundEnabledPref, !enabled);
     		ed.commit();
     		return !enabled;
@@ -121,17 +120,17 @@ public class TilematchJNILib {
     }
 
     static public int getGameCountBeforeNextAd() {
-    	return TilematchActivity.preferences.getInt(GameCountBeforeAds, 10);
+    	return HeriswapActivity.preferences.getInt(GameCountBeforeAds, 10);
     }
 
     static public void setGameCountBeforeNextAd(int value) {
-    	Editor ed = TilematchActivity.preferences.edit();
+    	Editor ed = HeriswapActivity.preferences.edit();
     	ed.putInt(GameCountBeforeAds, value);
     	ed.commit();
     }
 
     static public int getSavedGamePointsSum() {
-    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getReadableDatabase();
+    	SQLiteDatabase db = HeriswapActivity.scoreOpenHelper.getReadableDatabase();
     	Cursor cursor = db.rawQuery("select sum(points) from score", null);
 	    try {
 	    	if (cursor.getCount() > 0) {
@@ -146,7 +145,7 @@ public class TilematchJNILib {
     }
 
     static public int getModePlayedCount() {
-    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getReadableDatabase();
+    	SQLiteDatabase db = HeriswapActivity.scoreOpenHelper.getReadableDatabase();
     	Cursor cursor = db.rawQuery("select distinct difficulty,mode from score", null);
 	    int count = cursor.getCount();
    		cursor.close();
@@ -161,7 +160,7 @@ public class TilematchJNILib {
 	};
 
     static public void submitScore(int mode, int difficulty, int points, int level, float time, String name) {
-    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getWritableDatabase();
+    	SQLiteDatabase db = HeriswapActivity.scoreOpenHelper.getWritableDatabase();
     	ContentValues v = new ContentValues();
     	v.put("name", name);
     	v.put("mode", mode);
@@ -175,7 +174,7 @@ public class TilematchJNILib {
 
 
 	   	Leaderboard l = new Leaderboard(boards[2*(mode-1)+difficulty]);
-	   	Log.i(TilematchActivity.Tag, "leaderboard id: " + boards[2*(mode-1)+difficulty]);
+	   	Log.i(HeriswapActivity.Tag, "leaderboard id: " + boards[2*(mode-1)+difficulty]);
 
 		final Score s;
 			if (mode==1) 
@@ -185,11 +184,11 @@ public class TilematchJNILib {
 				
 			s.submitTo(l, new Score.SubmitToCB() {
 			@Override public void onSuccess(boolean newHighScore) {
-				Log.i(TilematchActivity.Tag, "score posting successfull");
+				Log.i(HeriswapActivity.Tag, "score posting successfull");
 
 			}
 				@Override public void onFailure(String exceptionMessage) {
-				Log.i(TilematchActivity.Tag, "score posting failure : " + exceptionMessage);
+				Log.i(HeriswapActivity.Tag, "score posting failure : " + exceptionMessage);
 			}
 				@Override public void onBlobUploadSuccess() {
 			}
@@ -199,7 +198,7 @@ public class TilematchJNILib {
     }
 
     static public int getScores(int mode, int difficulty, int[] points, int[] levels, float[] times, String[] names) {
-    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getWritableDatabase();
+    	SQLiteDatabase db = HeriswapActivity.scoreOpenHelper.getWritableDatabase();
     	Cursor cursor = null;
     	if (mode == 1) {
     		cursor = db.query("score", new String[] {"name", "points", "time", "level"}, "mode='" + mode + "' and difficulty='" + difficulty + "'", null, null, null, "points desc");
@@ -208,14 +207,14 @@ public class TilematchJNILib {
     	}
     	int maxResult = Math.min(5, cursor.getCount());
     	cursor.moveToFirst();
-    	Log.d(TilematchActivity.Tag, "Found " + maxResult + " result");
+    	Log.d(HeriswapActivity.Tag, "Found " + maxResult + " result");
     	for (int i=0; i<maxResult; i++) {
     		points[i] = cursor.getInt(cursor.getColumnIndex("points"));
     		levels[i] = cursor.getInt(cursor.getColumnIndex("level"));
     		times[i] = cursor.getFloat(cursor.getColumnIndex("time"));
     		names[i] = cursor.getString(cursor.getColumnIndex("name"));
 
-    		Log.i("tilematchJ", points[i] + ", " + levels[i] + ", " + times[i] + ", " + names[i] + ".");
+    		Log.i(HeriswapActivity.Tag, points[i] + ", " + levels[i] + ", " + times[i] + ", " + names[i] + ".");
     		cursor.moveToNext();
     	}
     	cursor.close();
@@ -236,7 +235,7 @@ public class TilematchJNILib {
 
 		    			@Override
 		    			public void onSuccess(boolean newUnlock) {
-		    				Log.i(TilematchActivity.Tag, "Achievement unlock successful");
+		    				Log.i(HeriswapActivity.Tag, "Achievement unlock successful");
 		    			}
 		    		});
 		    	}
@@ -249,7 +248,7 @@ public class TilematchJNILib {
 
 	    			@Override
 	    			public void onSuccess(boolean newUnlock) {
-	    				Log.i(TilematchActivity.Tag, "Achievement unlock successful");
+	    				Log.i(HeriswapActivity.Tag, "Achievement unlock successful");
 	    			}
 	    		});
 			}
@@ -273,59 +272,59 @@ public class TilematchJNILib {
     // NameInputAPI
     //-------------------------------------------------------------------------
     static public void showPlayerNameUi() {
-    	TilematchActivity.nameReady = false;
+    	HeriswapActivity.nameReady = false;
     	// show input view
-    	TilematchActivity.playerNameInputView.post(new Runnable() {
+    	HeriswapActivity.playerNameInputView.post(new Runnable() {
 			public void run() {
-				Log.i(TilematchActivity.Tag, "requesting user input visibility");
+				Log.i(HeriswapActivity.Tag, "requesting user input visibility");
 
 				//ici
-		    	SQLiteDatabase db = TilematchActivity.scoreOpenHelper.getReadableDatabase();
+		    	SQLiteDatabase db = HeriswapActivity.scoreOpenHelper.getReadableDatabase();
 		    	Cursor cursor = db.rawQuery("select distinct name from score order by rowid desc limit 4", null);
 			    try {
 			    	int count = cursor.getCount();
 			    	if (count>0) {
-			    		TilematchActivity.playerNameInputView.findViewById(R.id.reuse).setVisibility(View.VISIBLE);
+			    		HeriswapActivity.playerNameInputView.findViewById(R.id.reuse).setVisibility(View.VISIBLE);
 					} else {
-			    		TilematchActivity.playerNameInputView.findViewById(R.id.reuse).setVisibility(View.GONE);
+			    		HeriswapActivity.playerNameInputView.findViewById(R.id.reuse).setVisibility(View.GONE);
 					}
 			    	int i = 0;
 			    	if (cursor.moveToFirst()) {
 				    	do {
 				    		String n = cursor.getString(0);
-			    			Log.i(TilematchActivity.Tag, "nsssssssssom : " + n);
+			    			Log.i(HeriswapActivity.Tag, "nsssssssssom : " + n);
 
 				    		if (!n.equals("rzehtrtyBg")) {
-				    			Log.i(TilematchActivity.Tag, "nom : " + n);
-				    			TilematchActivity.oldName[i].setText(n);
-				    			TilematchActivity.oldName[i].setVisibility(View.VISIBLE);
+				    			Log.i(HeriswapActivity.Tag, "nom : " + n);
+				    			HeriswapActivity.oldName[i].setText(n);
+				    			HeriswapActivity.oldName[i].setVisibility(View.VISIBLE);
 				    			i++;
 				    		}
 				    	} while (i<3 && cursor.moveToNext());
 			    	}
 			    	for (; i<3; i++) {
-			    		TilematchActivity.oldName[i].setVisibility(View.GONE);
+			    		HeriswapActivity.oldName[i].setVisibility(View.GONE);
 			    	}
 		    	} finally {
 		    		cursor.close();
 		    	}
 
 
-				TilematchActivity.playerNameInputView.setVisibility(View.VISIBLE);
-				TilematchActivity.playerNameInputView.requestFocus();
-				TilematchActivity.playerNameInputView.invalidate();
-				TilematchActivity.playerNameInputView.forceLayout();
-				TilematchActivity.playerNameInputView.bringToFront();
-		    	TilematchActivity.nameEdit.setText("");
+				HeriswapActivity.playerNameInputView.setVisibility(View.VISIBLE);
+				HeriswapActivity.playerNameInputView.requestFocus();
+				HeriswapActivity.playerNameInputView.invalidate();
+				HeriswapActivity.playerNameInputView.forceLayout();
+				HeriswapActivity.playerNameInputView.bringToFront();
+		    	HeriswapActivity.nameEdit.setText("");
 			}
 		});
-    	Log.i(TilematchActivity.Tag, "showPlayerNameUI");
+    	Log.i(HeriswapActivity.Tag, "showPlayerNameUI");
     }
 
     static public String queryPlayerName() {
-    	if (TilematchActivity.nameReady) {
-    		Log.i(TilematchActivity.Tag, "queryPlayerName done");
-    		return TilematchActivity.playerName;
+    	if (HeriswapActivity.nameReady) {
+    		Log.i(HeriswapActivity.Tag, "queryPlayerName done");
+    		return HeriswapActivity.playerName;
     	} else {
     		return null;
     	}
@@ -366,16 +365,16 @@ public class TilematchJNILib {
         	synchronized (DumbAndroid.audioTrackPool) {
 				if (DumbAndroid.audioTrackPool.size() > 0) {
 					track = DumbAndroid.audioTrackPool.remove(0);
-					Log.i(TilematchActivity.Tag, "Reuse audiotrack");
+					Log.i(HeriswapActivity.Tag, "Reuse audiotrack");
 				} else {
-					Log.i(TilematchActivity.Tag, "Create audiotrack");
+					Log.i(HeriswapActivity.Tag, "Create audiotrack");
 					track = new AudioTrack(AudioManager.STREAM_MUSIC, rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);		
 				}
 			} 
 
         	int state = track.getState();
         	if (state != AudioTrack.STATE_INITIALIZED) {
-        		Log.e(TilematchActivity.Tag, "Failed to create AudioTrack");
+        		Log.e(HeriswapActivity.Tag, "Failed to create AudioTrack");
         		track.release();
         		track = null;
         		return;
@@ -405,10 +404,10 @@ public class TilematchJNILib {
 									if (playing) {
 										int result = track.write(cmd.buffer, 0, cmd.bufferSize);
 										if (result != cmd.bufferSize) {
-											Log.e("tilematchJ", "Error writing data to AudioTrack(" + track.toString() + "): " + result);
+											Log.e(HeriswapActivity.Tag, "Error writing data to AudioTrack(" + track.toString() + "): " + result);
 											checkReturnCode("write,", result);
 										} else {
-											// Log.e("tilematchJ", "Successful write of " + data.length);
+											// Log.e(HeriswapActivity.Tag, "Successful write of " + data.length);
 										}
 									}
 									synchronized (bufferPool) {
@@ -422,10 +421,10 @@ public class TilematchJNILib {
 										offset += cmd.master.getPlaybackHeadPosition();
 									}
 									if (offset != 0) {
-										Log.i(TilematchActivity.Tag, "Setting offset: " + offset);
+										Log.i(HeriswapActivity.Tag, "Setting offset: " + offset);
 										checkReturnCode("setPosition", track.setPlaybackHeadPosition(offset));
 									}
-									Log.i(TilematchActivity.Tag, "start track (" + initialCount + ")");
+									Log.i(HeriswapActivity.Tag, "start track (" + initialCount + ")");
 									// track.setStereoVolume(1, 1);
 									track.play();
 									break;
@@ -439,7 +438,7 @@ public class TilematchJNILib {
 							}
 		 				}
 					}
-					Log.i(TilematchActivity.Tag, "Effective delete of track: " + track.toString());
+					Log.i(HeriswapActivity.Tag, "Effective delete of track: " + track.toString());
 					track.flush();
 					synchronized (DumbAndroid.audioTrackPool) {
 						DumbAndroid.audioTrackPool.add(track);
@@ -457,8 +456,8 @@ public class TilematchJNILib {
     static void checkReturnCode(String ctx, int result) {
     	switch (result) {
     	case AudioTrack.SUCCESS: /*Log.i(TilematchActivity.Tag, ctx + " : success");*/ break;
-    	case AudioTrack.ERROR_BAD_VALUE: Log.i(TilematchActivity.Tag, ctx + " : bad value"); break;
-    	case AudioTrack.ERROR_INVALID_OPERATION: Log.i(TilematchActivity.Tag, ctx + " : invalid op"); break;
+    	case AudioTrack.ERROR_BAD_VALUE: Log.i(HeriswapActivity.Tag, ctx + " : bad value"); break;
+    	case AudioTrack.ERROR_INVALID_OPERATION: Log.i(HeriswapActivity.Tag, ctx + " : invalid op"); break;
     	}
     }
     static public Object createPlayer(int rate) {
@@ -478,10 +477,10 @@ public class TilematchJNILib {
     	synchronized (DumbAndroid.bufferPool) {
     		int s = DumbAndroid.bufferPool.size();
 			if (s > 0) {
-				//Log.i("tilematchJ", "Reuse old buffer (count: " + s + ")");
+				//Log.i(HeriswapActivity.Tag, "Reuse old buffer (count: " + s + ")");
 				return DumbAndroid.bufferPool.remove(s - 1);
 			} else {
-				 //Log.i("tilematchJ", "Create new buffer: " + size);
+				 //Log.i(HeriswapActivity.Tag, "Create new buffer: " + size);
 				// assert(size <= dumb.track.getSampleRate() * 2);
 				return new byte[size];
 			}
@@ -503,7 +502,7 @@ public class TilematchJNILib {
     	DumbAndroid dumb = (DumbAndroid) o;
 //Log.i(TilematchActivity.Tag, "queue data");
     	synchronized (dumb.track) {
-    		if (size > dumb.bufferSize) {
+    		/*if (size > dumb.bufferSize) {
 	    		// split buffer
 	    		int start = 0;
 	    		do {
@@ -518,7 +517,7 @@ public class TilematchJNILib {
 	    		synchronized (DumbAndroid.bufferPool) {
 	    			DumbAndroid.bufferPool.add(audioData);
 	    		}
-    		} else {
+    		} else*/ {  
     			Command cmd = new Command();
     			cmd.type = Type.Buffer;
     			cmd.buffer = audioData;
@@ -544,14 +543,14 @@ public class TilematchJNILib {
     		dumb.writePendings.add(cmd);
 			dumb.track.notify();
 			
-			Log.i(TilematchActivity.Tag, "BUFFER POOL size: " + DumbAndroid.bufferPool.size());
+			Log.i(HeriswapActivity.Tag, "BUFFER POOL size: " + DumbAndroid.bufferPool.size());
     	}
     }
 
     static public void stopPlayer(Object o) {
     	DumbAndroid dumb = (DumbAndroid) o;
     	synchronized (dumb.track) {
-    		Log.i(TilematchActivity.Tag, "Stop track: " + dumb.track.toString());
+    		Log.i(HeriswapActivity.Tag, "Stop track: " + dumb.track.toString());
     		dumb.track.stop();
     		// flush queue
     		for (Command cmd: dumb.writePendings) {
@@ -588,7 +587,7 @@ public class TilematchJNILib {
     static public void deletePlayer(Object o) {
     	DumbAndroid dumb = (DumbAndroid) o;
     	synchronized (dumb.track) {
-    		Log.i(TilematchActivity.Tag, "Delete (delayed) track: " + dumb.track.toString());
+    		Log.i(HeriswapActivity.Tag, "Delete (delayed) track: " + dumb.track.toString());
     		synchronized (DumbAndroid.bufferPool) {
     			for (Command c : dumb.writePendings) {
         			if (c.type == Type.Buffer) {
@@ -607,11 +606,11 @@ public class TilematchJNILib {
     // LocalizeAPI
     //-------------------------------------------------------------------------
     static public String localize(String name) {
-    	int id = TilematchActivity.res.getIdentifier(name, "string", "net.damsy.soupeaucaillou.tilematch");
+    	int id = HeriswapActivity.res.getIdentifier(name, "string", "net.damsy.soupeaucaillou.heriswap");
     	if (id == 0) {
-    		Log.e(TilematchActivity.Tag, "Cannot find text entry : '" + name + "' for localization");
+    		Log.e(HeriswapActivity.Tag, "Cannot find text entry : '" + name + "' for localization");
     		return "LOC" + name + "LOC";
     	}
-    	return TilematchActivity.res.getString(id);
+    	return HeriswapActivity.res.getString(id);
     }
 }
