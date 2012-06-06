@@ -22,8 +22,11 @@ void CombinationMark::markCellInCombination(Entity e){
 }
 
 void CombinationMark::clearCellInCombination(Entity e) {
-    if (e) TWITCH(e)->speed = 0;
-    
+    if (!e)
+		return;
+
+	TWITCH(e)->speed = 0;
+
     // restore proper orientation
     TRANSFORM(e)->rotation = Game::cellTypeToRotation(GRID(e)->type);
 }

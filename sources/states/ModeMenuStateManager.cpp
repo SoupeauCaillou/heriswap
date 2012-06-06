@@ -291,8 +291,10 @@ GameState ModeMenuStateManager::Update(float dt) {
             if (isCurrentScoreAHighOne()) {
                 nameInputAPI->show();
                 gameOverState = AskingPlayerName;
+                successMgr->sTheyGood(true);
             } else {
-                gameOverState = NoGame;
+                successMgr->sTheyGood(false);
+				gameOverState = NoGame;
                 submitScore("rzehtrtyBg");
             }
 
@@ -310,7 +312,6 @@ GameState ModeMenuStateManager::Update(float dt) {
         }
         case AskingPlayerName: {
             if (nameInputAPI->done(playerName)) {
-				successMgr->sTheyGood(isCurrentScoreAHighOne());
                 if (modeMgr->GetMode()==Normal)
 					successMgr->sBTAC(storage, difficulty, modeMgr->points);
 				else
@@ -351,7 +352,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 		RENDERING(herisson->actor.e)->hide = true;
 		TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
 		TEXT_RENDERING(title)->hide = true;
-		
+
 		if (storage->savedScores(modeMgr->GetMode(), difficulty).size() == 0) {
 			// show help
 			helpMgr->mode = modeMgr->GetMode();
