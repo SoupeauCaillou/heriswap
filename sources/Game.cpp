@@ -327,14 +327,19 @@ void Game::tick(float dt) {
 	}
 
     //updating game if needed
-    if (datas->state == UserInput) {
-		datas->mode2Manager[datas->mode]->GameUpdate(dt);
-        if (percentDone >= 1) {
-            newState = GameToBlack;
-        }
-     } else {
-		 toggleShowCombi(true);
-	 }
+    if (datas->mode == TilesAttack) {
+		datas->mode2Manager[TilesAttack]->GameUpdate(dt);
+	} else if (datas->mode == Normal && datas->state == UserInput) {
+		datas->mode2Manager[Normal]->GameUpdate(dt);
+	}
+
+	if (datas->state != UserInput) {
+		toggleShowCombi(true);
+	}
+
+	if (percentDone >= 1) {
+		newState = GameToBlack;
+	}
 
 	if ((datas->state == Delete && theGridSystem.entityCount() == theGridSystem.GridSize * theGridSystem.GridSize) || datas->state == UserInput) {
 		// si on change de niveau (course au score), on remplit pas la grille avant l'anim
@@ -408,7 +413,7 @@ void Game::tick(float dt) {
 		        MUSIC(datas->inGameMusic.stressTrack)->music = theMusicSystem.loadMusicFile("audio/F.ogg");
 				if (shouldPlayPiano()) {
 					MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile("audio/H.ogg");
-	            	MUSIC(datas->inGameMusic.masterTrack)->fadeIn = 1;	
+	            	MUSIC(datas->inGameMusic.masterTrack)->fadeIn = 1;
 				} else {
 		            std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);
 		            LOGW("New music picked for 'music' field (%lu):", musics.size());
@@ -416,8 +421,8 @@ void Game::tick(float dt) {
 			            LOGW("\t%s", musics[i].c_str());
 		            }
 		            MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
-		            MUSIC(datas->inGameMusic.masterTrack)->fadeIn = 1;	
-		            
+		            MUSIC(datas->inGameMusic.masterTrack)->fadeIn = 1;
+
 		            unsigned int i;
 		            for (i=0; i<musics.size() - 1; i++) {
 		                 MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
@@ -427,11 +432,11 @@ void Game::tick(float dt) {
 		                 mc->volume = 1;
 		            }
 				}
-	        } 
+	        }
 	        // if master track has looped, choose next songs to play
 	        else if (MUSIC(datas->inGameMusic.masterTrack)->loopNext == InvalidMusicRef) {
 		        MUSIC(datas->inGameMusic.stressTrack)->loopNext = theMusicSystem.loadMusicFile("audio/F.ogg");
-		        
+
 		        if (shouldPlayPiano()) {
 		        	MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile("audio/H.ogg");
 		        } else {
@@ -440,7 +445,7 @@ void Game::tick(float dt) {
 		            for (unsigned i=0; i<musics.size(); i++) {
 			            LOGW("\t%s", musics[i].c_str());
 		            }
-	
+
 			        MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile(musics[0]);
 			        unsigned int i;
 			        for (i=0; i<musics.size() - 1; i++) {
@@ -662,7 +667,7 @@ bool Game::shouldPlayPiano() {
 	if (datas->mode == Normal && datas->scoreboardRankInSight > 0) {
 		int score = datas->mode2Manager[datas->mode]->points;
 		int cmpTo = datas->bestScores[datas->scoreboardRankInSight - 1];
-			        
+
 		LOGW("SCORE TARGET: %d (current: %d, rank: %d)", cmpTo, score, datas->scoreboardRankInSight);
 		if (score >= cmpTo) {
 			// play piano
