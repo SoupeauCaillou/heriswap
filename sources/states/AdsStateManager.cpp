@@ -53,7 +53,7 @@ void AdsStateManager::Enter() {
 
 GameState AdsStateManager::Update(float dt) {
 	stateActiveDuration += dt;
-	if (gameb4Ads>0 || BUTTON(eAds)->clicked || adAPI->done()) {
+	if (gameb4Ads>0 || BUTTON(eAds)->clicked || adAPI->done() || stateActiveDuration > 60) {
 		return AdsToBlackState;
 	}
 	return Ads;

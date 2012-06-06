@@ -49,22 +49,27 @@ void LogoStateManager::Enter() {
     RENDERING(logo)->hide = RENDERING(logobg)->hide = false;
     // preload sound
     theSoundSystem.loadSoundFile("audio/son_monte.ogg");
+    step = LogoStep1;
 }
 
 GameState LogoStateManager::Update(float dt) {
 	duration += dt;
 	
-	if (duration > 1.75) {
+	if (duration > 1.75 && step == LogoStep5) {
 		return following;
-	} else if (duration > 100*0.8+0.35) {
+	} else if (duration > 0.8+0.35 && step == LogoStep4) {
 		RENDERING(animLogo)->hide = true;
-	} else if (duration > 0.8+0.3) {
+		step = LogoStep5;
+	} else if (duration > 0.8+0.3 && step == LogoStep3) {
 		RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo2_365_331");
-	} else if (duration > 0.8+0.05) {
+		step = LogoStep4;
+	} else if (duration > 0.8+0.05 && step == LogoStep2) {
 		RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo3_365_331");
-	} else if (duration > 0.8) {
+		step = LogoStep3;
+	} else if (duration > 0.8 && step == LogoStep1) {
 		RENDERING(animLogo)->hide = false;
 		SOUND(animLogo)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg");
+		step = LogoStep2;
 	}
 	return Logo;
 }

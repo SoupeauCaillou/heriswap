@@ -58,18 +58,20 @@ public class HeriswapJNILib {
     		HeriswapActivity.adHasBeenShown = false;
 	    	HeriswapActivity.activity.runOnUiThread(new Runnable() {
 				public void run() {
-					GSSDK.getSharedInstance().displayAd(HeriswapActivity.activity);
+					if (!GSSDK.getSharedInstance().displayAd(HeriswapActivity.activity)) {
+						HeriswapActivity.adHasBeenShown = true;
+					}
 				}
 			});
     	} else {
     		HeriswapActivity.adHasBeenShown = true;
     	}
     }
-
+ 
     static public boolean done() {
     	return HeriswapActivity.adHasBeenShown;
     }
-
+  
     //-------------------------------------------------------------------------
     // AssetAPI
     //-------------------------------------------------------------------------
@@ -223,7 +225,7 @@ public class HeriswapJNILib {
 				super.onFailure(exceptionMessage);
 				s.submitTo(l, scCB);
 			}
-		});
+		}); 
     }
 
     static public int getScores(int mode, int difficulty, int[] points, int[] levels, float[] times, String[] names) {

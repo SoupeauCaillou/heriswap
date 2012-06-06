@@ -39,7 +39,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
          //reference title into mode menu from main menu
          static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode-1];
          setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
-     } else if (newState == ModeMenu) {
+     } else if (newState == BlackToModeMenu) {
         RENDERING(datas->soundButton)->hide = false;
         datas->mode2Manager[datas->mode]->Exit();
         stopInGameMusics();
@@ -51,6 +51,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
      } else if (newState == BlackToSpawn) {
             // call Enter before starting fade-in
          datas->mode2Manager[datas->mode]->Enter();
+         datas->mode2Manager[datas->mode]->UiUpdate(0);
          MUSIC(datas->menu)->control = MusicComponent::Stop;
                   
          //update anim times

@@ -173,14 +173,14 @@ void Game::sacInit(int windowW, int windowH) {
 	theRenderingSystem.loadAtlas("sprites");
 	theRenderingSystem.loadAtlas("animals");
 	*/
-    theRenderingSystem.loadAtlas("sprites");
+    theRenderingSystem.loadAtlas("sprites", true);
     theRenderingSystem.loadAtlas("logo");
-	theRenderingSystem.loadAtlas("alphabet");
+	theRenderingSystem.loadAtlas("alphabet", true);
     theRenderingSystem.loadAtlas("decor1");
     theRenderingSystem.loadAtlas("decor2");
     theRenderingSystem.loadAtlas("feuilles");
     theRenderingSystem.loadAtlas("snow");
-    theRenderingSystem.loadAtlas("menu");
+    theRenderingSystem.loadAtlas("menu", true);
     theRenderingSystem.loadAtlas("nuages");
     theRenderingSystem.loadAtlas("help");
 
@@ -327,7 +327,7 @@ void Game::tick(float dt) {
 	}
 
     //updating game if needed
-    if (datas->mode == TilesAttack) {
+    if (datas->mode == TilesAttack && inGameState(datas->state)) {
 		datas->mode2Manager[TilesAttack]->GameUpdate(dt);
 	} else if (datas->mode == Normal && datas->state == UserInput) {
 		datas->mode2Manager[Normal]->GameUpdate(dt);

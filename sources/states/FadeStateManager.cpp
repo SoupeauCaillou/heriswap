@@ -10,8 +10,8 @@
 #include "Game.h"
 #include "DepthLayer.h"
 
-FadeGameStateManager::FadeGameStateManager(FadeType fade, GameState whoAmI, GameState whoIsNext, GameStateManager* enter, GameStateManager* exitD):
-	fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(0), enterDelegate(enter), exitDelegate(exitD) {
+FadeGameStateManager::FadeGameStateManager(float d, FadeType fade, GameState whoAmI, GameState whoIsNext, GameStateManager* enter, GameStateManager* exitD):
+	duration(d), fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(0), enterDelegate(enter), exitDelegate(exitD) {
 }
 
 void FadeGameStateManager::Setup() {
@@ -27,7 +27,7 @@ void FadeGameStateManager::Setup() {
 	ADD_COMPONENT(eFading, ADSR);
 	ADSR(eFading)->idleValue = 0;
 	ADSR(eFading)->attackValue = 1.0;
-	ADSR(eFading)->attackTiming = 0.2;
+	ADSR(eFading)->attackTiming = duration;
 	ADSR(eFading)->decayTiming = 0;
 	ADSR(eFading)->sustainValue = 1.0;
 	ADSR(eFading)->releaseTiming = .2;

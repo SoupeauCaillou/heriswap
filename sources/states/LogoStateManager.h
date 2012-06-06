@@ -14,6 +14,14 @@ class LogoStateManager : public GameStateManager {
 		GameState following;
 		Entity logo, animLogo, logobg;
 		float duration;
+		
+		enum LogoStep {
+			LogoStep1,
+			LogoStep2,
+			LogoStep3,
+			LogoStep4,
+			LogoStep5,
+		} step;
 };
 
 
