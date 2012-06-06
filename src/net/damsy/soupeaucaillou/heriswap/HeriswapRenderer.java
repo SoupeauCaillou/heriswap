@@ -67,6 +67,8 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
 					if (HeriswapActivity.requestPausedFromJava) {
 						HeriswapJNILib.pause(HeriswapActivity.game);
 						HeriswapActivity.requestPausedFromJava = false;
+						// force rendering
+						HeriswapActivity.mGLView.requestRender();
 					} else if (HeriswapActivity.backPressed) {
 						HeriswapJNILib.back(HeriswapActivity.game);
 						HeriswapActivity.backPressed = false;
