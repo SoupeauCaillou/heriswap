@@ -356,7 +356,8 @@ GameState ModeMenuStateManager::Update(float dt) {
 		if (storage->savedScores(modeMgr->GetMode(), difficulty).size() == 0) {
 			// show help
 			helpMgr->mode = modeMgr->GetMode();
-			helpMgr->oldState = ModeMenuToBlackState;
+			helpMgr->oldState = BlackToSpawn;
+			this->LateExit();
 			return Help;
 		} else {
 			return ModeMenuToBlackState;
