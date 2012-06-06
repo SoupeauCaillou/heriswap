@@ -20,9 +20,11 @@ import android.util.Log;
 import android.view.View;
 
 import com.greystripe.android.sdk.GSSDK;
+import com.openfeint.api.OpenFeint;
 import com.openfeint.api.resource.Achievement;
 import com.openfeint.api.resource.Leaderboard;
 import com.openfeint.api.resource.Score;
+import com.openfeint.api.resource.User;
 import com.openfeint.api.ui.Dashboard;
  
 public class HeriswapJNILib {
@@ -159,7 +161,7 @@ public class HeriswapJNILib {
 		"1180837"
 	};
 
-    static public void submitScore(int mode, int difficulty, int points, int level, float time, String name) {
+    static public void submitScore(final int mode, int difficulty, int points, int level, float time, String name) {
     	SQLiteDatabase db = HeriswapActivity.scoreOpenHelper.getWritableDatabase();
     	ContentValues v = new ContentValues();
     	v.put("name", name);
@@ -172,17 +174,19 @@ public class HeriswapJNILib {
 
     	db.close();
 
-
-	   	Leaderboard l = new Leaderboard(boards[2*(mode-1)+difficulty]);
+    	// retrieve Leaderboard
+	   	final Leaderboard l = new Leaderboard(boards[2*(mode-1)+difficulty]);
 	   	Log.i(HeriswapActivity.Tag, "leaderboard id: " + boards[2*(mode-1)+difficulty]);
 
+	   	// Build score object
 		final Score s;
-			if (mode==1) 
-				s = new Score((long) points, null);
-			else
-				s = new Score((long)time*1000, (float)((int)(time*100)/100.f) + "s");
-				
-			s.submitTo(l, new Score.SubmitToCB() {
+		if (mode==1) 
+			s = new Score((long) points, null);
+		else
+			s = new Score((long)time*1000, (float)((int)(time*100)/100.f) + "s");
+		
+		// Callback called by OF on score querying
+		final Score.SubmitToCB scCB = new Score.SubmitToCB() {
 			@Override public void onSuccess(boolean newHighScore) {
 				Log.i(HeriswapActivity.Tag, "score posting successfull");
 
@@ -193,6 +197,31 @@ public class HeriswapJNILib {
 				@Override public void onBlobUploadSuccess() {
 			}
 				@Override public void onBlobUploadFailure(String exceptionMessage) {
+			}
+		};
+		
+		// Retrieve user best score
+	   	l.getUserScore(OpenFeint.getCurrentUser(), new Leaderboard.GetUserScoreCB() {
+			@Override
+			public void onSuccess(Score best) {
+				boolean send = false;
+				if (best == null) {
+					send = true;
+				} else if (mode == 1) {
+					send = (best.score < s.score);
+				} else {
+					send = (best.score > s.score);
+				}
+				if (send) {
+					s.submitTo(l, scCB);
+				} else {
+					Log.w(HeriswapActivity.Tag, "Inferior score not submitted to OF");
+				}
+			}
+			@Override
+			public void onFailure(String exceptionMessage) {
+				super.onFailure(exceptionMessage);
+				s.submitTo(l, scCB);
 			}
 		});
     }
