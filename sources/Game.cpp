@@ -330,7 +330,7 @@ void Game::tick(float dt) {
     //updating game if needed
     if (datas->mode == TilesAttack && inGameState(datas->state)) {
 		datas->mode2Manager[TilesAttack]->GameUpdate(dt);
-	} else if (datas->mode == Normal && datas->state == UserInput) {
+	} else if (datas->mode == Normal && newState == UserInput) {
 		datas->mode2Manager[Normal]->GameUpdate(dt);
 	}
 
