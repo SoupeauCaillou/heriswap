@@ -99,8 +99,8 @@ void GameModeManager::Setup() {
 	SCROLLING(decor2nd)->images.push_back("decor2nd_3");
 	SCROLLING(decor2nd)->images.push_back("decor2nd_2");
 	SCROLLING(decor2nd)->images.push_back("decor2nd_1");
-	
-	SCROLLING(decor2nd)->speed = Vector2(.05, 0);
+	SCROLLING(decor2nd)->direction = Vector2::UnitX;
+	SCROLLING(decor2nd)->speed = 0.05;
 	SCROLLING(decor2nd)->displaySize = Vector2(TRANSFORM(decor2nd)->size.X * 1.01, TRANSFORM(decor2nd)->size.Y);
 	SCROLLING(decor2nd)->hide = true;
 
@@ -114,7 +114,8 @@ void GameModeManager::Setup() {
 	SCROLLING(decor1er)->images.push_back("decor1er_1");
 	SCROLLING(decor1er)->images.push_back("decor1er_2");
 	SCROLLING(decor1er)->images.push_back("decor1er_3");
-	SCROLLING(decor1er)->speed = Vector2(-0.01, 0);
+	SCROLLING(decor1er)->direction = -Vector2::UnitX;
+	SCROLLING(decor1er)->speed = 0;
 	SCROLLING(decor1er)->displaySize = Vector2(TRANSFORM(decor1er)->size.X * 1.01, TRANSFORM(decor1er)->size.Y);
 	SCROLLING(decor1er)->hide = true;
 

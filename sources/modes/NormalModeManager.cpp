@@ -107,7 +107,7 @@ void NormalGameModeManager::UiUpdate(float dt) {
 		levelMoveDuration -= dt;
 		if (levelMoveDuration <= 0) {
 			// stop scrolling
-			SCROLLING(decor1er)->speed.X = 0;
+			SCROLLING(decor1er)->speed = 0;
 		}
 	} else {
 		updateHerisson(dt, time, 0);
@@ -163,9 +163,9 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
     float newPos = GameModeManager::position(time - timeGain(count, time));
     // update herisson and decor at the same time.
     levelMoveDuration = deleteDuration + spawnDuration;
-    nextHerissonSpeed = (newPos - currentPos) / levelMoveDuration;
+    nextHerissonSpeed = (currentPos - newPos) / levelMoveDuration;
 
-    SCROLLING(decor1er)->speed.X = nextHerissonSpeed;
+    SCROLLING(decor1er)->speed = MathUtil::Max(0.0f, nextHerissonSpeed);
     // SCROLLING(decor2nd)->speed.X = nextHerissonSpeed * DECOR2_SPEED;
     // SCROLLING(sky)->speed.X = nextHerissonSpeed * SKY_SPEED;
 
@@ -219,7 +219,7 @@ bool NormalGameModeManager::LevelUp() {
 		bonus = MathUtil::RandomInt(theGridSystem.Types);
 		LoadHerissonTexture(bonus+1);
 		RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
-		SCROLLING(decor1er)->speed.X = 0;
+		SCROLLING(decor1er)->speed = 0;
 	}
 	return match;
 }
