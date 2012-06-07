@@ -38,8 +38,13 @@ void AdsStateManager::Enter() {
  	}
 
 	float timeSinceLAstAd = TimeUtil::getTime() - lastAdTime;
+	
+	// postpone ad if previous ad was shown less than 30sec ago
+	if (gameb4Ads <= 0 && timeSinceLAstAd < 30) {
+		gameb4Ads = 1;
+	}
 
-	if (((!gameb4Ads && timeSinceLAstAd >= 30) || timeSinceLAstAd > 180)  && RENDERING(eAds)->hide) {
+	if ((!gameb4Ads || timeSinceLAstAd > 180)  && RENDERING(eAds)->hide) {
 		BUTTON(eAds)->enabled = true;
 		RENDERING(eAds)->color = Color(1.f,1.f,1.f);
         adAPI->showAd();
@@ -53,7 +58,7 @@ void AdsStateManager::Enter() {
 
 GameState AdsStateManager::Update(float dt) {
 	stateActiveDuration += dt;
-	if (gameb4Ads>0 || BUTTON(eAds)->clicked || adAPI->done() || stateActiveDuration > 60) {
+	if (gameb4Ads>0 || BUTTON(eAds)->clicked || adAPI->done()) {
 		return AdsToBlackState;
 	}
 	return Ads;
