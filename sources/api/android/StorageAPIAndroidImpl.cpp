@@ -102,5 +102,5 @@ int StorageAPIAndroidImpl::getSavedGamePointsSum() {
 }
 
 bool StorageAPIAndroidImpl::everyModesPlayed() {
-    return env->CallStaticIntMethod(datas->cls, datas->getModePlayedCount);
+    return (env->CallStaticIntMethod(datas->cls, datas->getModePlayedCount) == 4);
 }
