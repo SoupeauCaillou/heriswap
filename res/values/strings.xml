@@ -14,12 +14,13 @@
 	<string name="lvlcap">Lvl</string>
 	<string name="enter_name">Enter your name</string>
 	<string name="save_name">Save</string>
-	<string name="congrats">Congratulations! New high score</string>
-	<string name="reuse_name">Or select one from list :</string>
+	<string name="congrats">New high score!</string>
+	<string name="reuse_name">Or pick one:</string>
 	<string name="success">Success</string>
-	<string name="how_to_play">How to play ?</string>
+	<string name="how_to_play">How to play?</string>
 	<string name="bonus_x2">Bonus x2</string>
 	<string name="objective">Goal</string>
 	<string name="level">Level</string>
-	<string name="leave_left">Leave left</string>
+	<string name="leave_left">leaves left</string>
+	<string name="quitter">Exit</string>
 </resources>

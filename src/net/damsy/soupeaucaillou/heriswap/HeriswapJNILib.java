@@ -13,6 +13,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Shader.TileMode;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -201,6 +202,12 @@ public class HeriswapJNILib {
 				@Override public void onBlobUploadFailure(String exceptionMessage) {
 			}
 		};
+		
+		User user = OpenFeint.getCurrentUser();
+		
+		if (user == null) {
+			return;
+		}
 		
 		// Retrieve user best score
 	   	l.getUserScore(OpenFeint.getCurrentUser(), new Leaderboard.GetUserScoreCB() {
@@ -643,5 +650,12 @@ public class HeriswapJNILib {
     		return "LOC" + name + "LOC";
     	}
     	return HeriswapActivity.res.getString(id);
+    }
+    
+  //-------------------------------------------------------------------------
+    // ExitAPI
+    //-------------------------------------------------------------------------
+    static public void exitGame() {
+    	HeriswapActivity.activity.finish();
     }
 }

@@ -27,6 +27,7 @@
 #include "api/linux/SoundAPILinuxOpenALImpl.h"
 #include "api/linux/LocalizeAPILinuxImpl.h"
 #include "api/linux/NameInputAPILinuxImpl.h"
+#include "api/linux/ExitAPILinuxImpl.h"
 
 #include "api/linux/StorageAPILinuxImpl.h"
 
@@ -81,7 +82,7 @@ int main(int argc, char** argv) {
     StorageAPILinuxImpl* storage = new StorageAPILinuxImpl();
     storage->init();
 std::cout << "Total: " << storage->getSavedGamePointsSum() << std::endl;
-	Game game(new AssetAPILinuxImpl(), storage, new NameInputAPILinuxImpl(), new SuccessAPI(), new LocalizeAPILinuxImpl(), new AdAPI());
+	Game game(new AssetAPILinuxImpl(), storage, new NameInputAPILinuxImpl(), new SuccessAPI(), new LocalizeAPILinuxImpl(), new AdAPI(), new ExitAPILinuxImpl());
 
 	//theSoundSystem.init();
 	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());

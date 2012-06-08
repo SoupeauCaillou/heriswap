@@ -12,6 +12,7 @@
 #include "api/LocalizeAPI.h"
 #include "api/StorageAPI.h"
 #include "api/AdAPI.h"
+#include "api/ExitAPI.h"
 
 class NameInputAPI;
 
@@ -49,7 +50,7 @@ class SuccessAPI {
 class PrivateData;
 class Game {
 	public:
-		Game(AssetAPI* asset, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad);
+		Game(AssetAPI* asset, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad, ExitAPI* exAPI);
         ~Game();
         void sacInit(int windowW, int windowH);
 		void init(const uint8_t* in = 0, int size = 0);
@@ -79,4 +80,5 @@ class Game {
 	PrivateData* datas;
 	AssetAPI* asset;
 	SuccessAPI* successAPI;
+	ExitAPI* exitAPI;
 };

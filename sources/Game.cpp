@@ -90,9 +90,10 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-Game::Game(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad) {
+Game::Game(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad, ExitAPI* exAPI) {
 	asset = ast;
 	successAPI = sAPI;
+	exitAPI = exAPI;
 	
 	/* create EntityManager */
 	EntityManager::CreateInstance();

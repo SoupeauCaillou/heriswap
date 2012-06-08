@@ -24,5 +24,6 @@ enum GameState {
      BlackToModeMenu,
      Logo,
      Help,
-     Ads
+     Ads,
+     ExitState
 };

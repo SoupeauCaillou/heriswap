@@ -92,6 +92,27 @@ void MainMenuGameStateManager::Setup() {
 	TRANSFORM(a)->size = Vector2(PlacementHelper::GimpWidthToScreen(310), PlacementHelper::GimpHeightToScreen(253))*MathUtil::RandomFloatInRange(.3f,1.f);
 	TransformationSystem::setPosition(TRANSFORM(a), Vector2(PlacementHelper::GimpXToScreen(-MathUtil::RandomInt(300))-TRANSFORM(a)->size.X, PlacementHelper::GimpYToScreen(MathUtil::RandomIntInRange(830,1150))), TransformationSystem::SW);
 
+	quitButton[0] = theEntityManager.CreateEntity();
+	ADD_COMPONENT(quitButton[0], Transformation);
+	TRANSFORM(quitButton[0])->z = DL_MainMenuUITxt;
+	TRANSFORM(quitButton[0])->position = Vector2(0, PlacementHelper::GimpYToScreen(1215));
+	ADD_COMPONENT(quitButton[0], TextRendering);
+	TEXT_RENDERING(quitButton[0])->text = " " + localizeAPI->text("quitter", "Quitter") + " ";
+	TEXT_RENDERING(quitButton[0])->hide = true;
+	TEXT_RENDERING(quitButton[0])->positioning = TextRenderingComponent::CENTER;
+	TEXT_RENDERING(quitButton[0])->color = green;
+	TEXT_RENDERING(quitButton[0])->charHeight = PlacementHelper::GimpHeightToScreen(60);
+
+	quitButton[1] = theEntityManager.CreateEntity();
+	ADD_COMPONENT(quitButton[1], Transformation);
+	TRANSFORM(quitButton[1])->size = Vector2(theTextRenderingSystem.computeTextRenderingComponentWidth(TEXT_RENDERING(quitButton[0])), PlacementHelper::GimpHeightToScreen(95));
+	TRANSFORM(quitButton[1])->position = Vector2(0, PlacementHelper::GimpYToScreen(1215));
+	TRANSFORM(quitButton[1])->z = DL_MainMenuUIBg;
+	ADD_COMPONENT(quitButton[1], Rendering);
+	RENDERING(quitButton[1])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
+	RENDERING(quitButton[1])->color.a = 0.5;
+	ADD_COMPONENT(quitButton[1], Button);
+
 	modeTitleToReset = 0;
 }
 
@@ -116,6 +137,9 @@ void MainMenuGameStateManager::Enter() {
 		MORPHING(modeTitleToReset)->activationTime = 0;
 		MORPHING(modeTitleToReset)->active = true;
 	}
+	TEXT_RENDERING(quitButton[0])->hide = false;
+	RENDERING(quitButton[1])->hide = false;
+	BUTTON(quitButton[1])->enabled = true;
 }
 
 GameState MainMenuGameStateManager::Update(float dt) {
@@ -141,6 +165,9 @@ GameState MainMenuGameStateManager::Update(float dt) {
 			SOUND(bStart[1])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 			return ModeMenu;
 		}
+		if (BUTTON(quitButton[1])->clicked) {
+			return ExitState;
+		}
 	}
 	return MainMenu;
 }
@@ -161,4 +188,8 @@ void MainMenuGameStateManager::Exit() {
     modeTitleToReset = eStart[choosenGameMode-1];
 
     herisson->actor.speed = 4.5f;
+    
+	TEXT_RENDERING(quitButton[0])->hide = true;
+	RENDERING(quitButton[1])->hide = true;
+	BUTTON(quitButton[1])->enabled = false;
 }

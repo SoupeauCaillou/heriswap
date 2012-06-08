@@ -23,6 +23,7 @@
 #include "sac/api/android/LocalizeAPIAndroidImpl.h"
 #include "sac/api/android/NameInputAPIAndroidImpl.h"
 #include "sac/api/android/AdAPIAndroidImpl.h"
+#include "sac/api/android/ExitAPIAndroidImpl.h"
 
 #include "api/android/StorageAPIAndroidImpl.h"
 
@@ -57,7 +58,8 @@ struct GameHolder {
 	LocalizeAPIAndroidImpl* localize;
     AdAPIAndroidImpl* ad;
     AssetAPIAndroidImpl* asset;
-
+	ExitAPIAndroidImpl exitAPI;
+	
 	struct __input {
 		 int touching;
 		 float x, y;
@@ -114,7 +116,7 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_cr
     hld->ad = new AdAPIAndroidImpl();
     hld->storage = new StorageAPIAndroidImpl(env);
     hld->asset = new AssetAPIAndroidImpl(env, hld->assetManager);
-	hld->game = new Game(hld->asset, hld->storage, hld->nameInput, &hld->success, hld->localize, hld->ad);
+	hld->game = new Game(hld->asset, hld->storage, hld->nameInput, &hld->success, hld->localize, hld->ad, &hld->exitAPI);
 	hld->renderThreadEnv = env;
 	hld->openGLESVersion = openglesVersion;
 	theRenderingSystem.assetAPI = hld->asset;
@@ -168,6 +170,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_ini
     hld->storage->env = env;
     hld->storage->init();
 	theMusicSystem.assetAPI->init();
+	hld->exitAPI.init(env);
 
 	uint8_t* state = 0;
 	int size = 0;

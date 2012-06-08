@@ -81,5 +81,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
         RENDERING(datas->soundButton)->hide = false;
      } else if (newState == Help) {
 	     static_cast<HelpStateManager*> (datas->state2Manager[newState])->mode = datas->mode;
+     } else if (newState == ExitState) {
+	     exitAPI->exitGame();
      }
 }

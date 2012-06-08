@@ -20,6 +20,7 @@ class MainMenuGameStateManager : public GameStateManager {
 
 	private:
 		Entity bStart[2];
+		Entity quitButton[2];
 		Entity modeTitleToReset;
 		LocalizeAPI* localizeAPI;
         SuccessAPI* successAPI;
