@@ -36,6 +36,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      storage = storagee;
 
      soundButton = theEntityManager.CreateEntity();
+     openfeint = theEntityManager.CreateEntity();
 
      state = BlackToLogoState;
 
@@ -80,13 +81,22 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      ADD_COMPONENT(soundButton, Transformation);
      TRANSFORM(soundButton)->z = DL_MainMenuUITxt;
      TRANSFORM(soundButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
-     TransformationSystem::setPosition(TRANSFORM(soundButton), Vector2(PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::E);
+     TransformationSystem::setPosition(TRANSFORM(soundButton), Vector2(0 + PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::E);
      ADD_COMPONENT(soundButton, Button);
      BUTTON(soundButton)->overSize = 1.3;
      ADD_COMPONENT(soundButton, Rendering);
      if (storage->soundEnable(false)) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on");
      else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
      ADD_COMPONENT(soundButton, Sound);
+ 
+     ADD_COMPONENT(openfeint, Transformation);
+     TRANSFORM(openfeint)->z = DL_MainMenuUITxt;
+     TRANSFORM(openfeint)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
+     TransformationSystem::setPosition(TRANSFORM(openfeint), Vector2(0 - PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
+     ADD_COMPONENT(openfeint, Button);
+     BUTTON(openfeint)->overSize = 1.3;
+     ADD_COMPONENT(openfeint, Rendering);
+     RENDERING(openfeint)->texture = theRenderingSystem.loadTextureFile("openfeint");
 
      for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)
          it->second->Setup();

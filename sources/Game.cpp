@@ -92,6 +92,8 @@ float Game::CellContentScale() {
 
 Game::Game(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad) {
 	asset = ast;
+	successAPI = sAPI;
+	
 	/* create EntityManager */
 	EntityManager::CreateInstance();
 
@@ -371,6 +373,8 @@ void Game::tick(float dt) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
+		
+		RENDERING(datas->openfeint)->hide = (newState != MainMenu && newState != ModeMenu);
 	}
 
     // background (unconditionnal) update of state managers
@@ -392,6 +396,15 @@ void Game::tick(float dt) {
         } else {
             RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
         }
+	}
+	
+	if (BUTTON(datas->openfeint)->clicked){
+		if (datas->state == ModeMenu) {
+			int d = (static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]))->getDifficulty();
+			successAPI->openfeintLB(datas->mode, d);
+		} else {
+			successAPI->openfeintSuccess();
+		}
 	}
 
     //updating HUD

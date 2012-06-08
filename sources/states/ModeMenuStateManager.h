@@ -18,6 +18,8 @@ class ModeMenuStateManager : public GameStateManager {
         void LateExit();
 
 		void LoadScore(int mode, int dif);
+		
+		int getDifficulty() const { return difficulty; }
 
 		Entity title, menufg, menubg;
 		AnimatedActor* herisson;
@@ -30,9 +32,6 @@ class ModeMenuStateManager : public GameStateManager {
         SuccessAPI* successAPI;
 		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle;
 		Entity yourScore, fond;
-		#if 1
-		Entity openfeint;
-		#endif
 		std::string playerName;
 		SuccessManager* successMgr;
 		LocalizeAPI* localizeAPI;

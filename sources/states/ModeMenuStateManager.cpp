@@ -132,21 +132,6 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(bDifficulty, Sound);
 	BUTTON(bDifficulty)->enabled = false;
 
-	#if 1
-	// openfeint button
-	openfeint = theEntityManager.CreateEntity();
-	ADD_COMPONENT(openfeint, Transformation);
-	ADD_COMPONENT(openfeint, Rendering);
-	ADD_COMPONENT(openfeint, Button);
-    BUTTON(openfeint)->overSize = 1.3;
-	ADD_COMPONENT(openfeint, Sound);
-	TRANSFORM(openfeint)->size = Vector2(PlacementHelper::GimpWidthToScreen(90), PlacementHelper::GimpHeightToScreen(91));
-	TransformationSystem::setPosition(TRANSFORM(openfeint), Vector2(PlacementHelper::GimpXToScreen(605), PlacementHelper::GimpYToScreen(476)), TransformationSystem::NW);
-	TRANSFORM(openfeint)->z = DL_MainMenuUITxt;
-	RENDERING(openfeint)->texture = theRenderingSystem.loadTextureFile("openfeint");
-	BUTTON(openfeint)->enabled = false;
-	#endif
-
 	// your score
 	yourScore = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
@@ -238,10 +223,6 @@ void ModeMenuStateManager::Enter() {
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
 	TEXT_RENDERING(play)->text = (gameOverState != NoGame) ? localizeAPI->text("rejouer", "Rejouer") : localizeAPI->text("jouer", "Jouer");
-	#if 1
-	RENDERING(openfeint)->hide = false;
-	BUTTON(openfeint)->enabled = true;
-	#endif
 	TEXT_RENDERING(scoreTitle)->hide = false;
 	TEXT_RENDERING(eDifficulty)->hide=false;
 	BUTTON(bDifficulty)->enabled = true;
@@ -367,11 +348,6 @@ GameState ModeMenuStateManager::Update(float dt) {
 		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		return MainMenu;
 	}
-	#ifdef ANDROID
-	if (gameOverState != AskingPlayerName && BUTTON(openfeint)->clicked) {
-		successAPI->openfeintLB(modeMgr->GetMode(), difficulty);
-	}
-	#endif
 	return ModeMenu;
 }
 
@@ -394,10 +370,6 @@ void ModeMenuStateManager::LateExit() {
 	TEXT_RENDERING(yourScore)->hide = true;
 	TEXT_RENDERING(play)->hide = true;
 	RENDERING(back)->hide = true;
-	#if 1
-	RENDERING(openfeint)->hide = true;
-	BUTTON(openfeint)->enabled = false;
-	#endif
 	for (int i=0;i<5;i++) {
 		TEXT_RENDERING(scoresName[i])->hide = true;
 		TEXT_RENDERING(scoresPoints[i])->hide = true;

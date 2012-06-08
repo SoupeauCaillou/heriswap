@@ -78,4 +78,5 @@ class Game {
 
 	PrivateData* datas;
 	AssetAPI* asset;
+	SuccessAPI* successAPI;
 };

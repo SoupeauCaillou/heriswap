@@ -19,7 +19,6 @@ class MainMenuGameStateManager : public GameStateManager {
 		AnimatedActor* herisson;
 
 	private:
-		Entity eSuccess, bSuccess;
 		Entity bStart[2];
 		Entity modeTitleToReset;
 		LocalizeAPI* localizeAPI;

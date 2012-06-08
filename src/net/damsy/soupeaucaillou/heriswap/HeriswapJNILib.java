@@ -297,7 +297,7 @@ public class HeriswapJNILib {
     }
 
     static public void openfeintSuccess() {
-    	Dashboard.openAchievements();
+    	Dashboard.open();
     }
     //-------------------------------------------------------------------------
     // NameInputAPI
