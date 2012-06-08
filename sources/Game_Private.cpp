@@ -140,6 +140,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      inGameMusic.masterTrack = theEntityManager.CreateEntity();
      ADD_COMPONENT(inGameMusic.masterTrack, Music);
      MUSIC(inGameMusic.masterTrack)->loopAt = 17.0f;
+
      for (int i=0; i<3; i++) {
      	inGameMusic.secondaryTracks[i] = theEntityManager.CreateEntity();
      	ADD_COMPONENT(inGameMusic.secondaryTracks[i], Music);

@@ -296,6 +296,7 @@ void Game::backPressed() {
 
 void Game::togglePause(bool activate) {
 	if (activate && datas->state != Pause && pausableState(datas->state)) {
+		stopInGameMusics();
         // pause
 		datas->stateBeforePause = datas->state;
 		datas->stateBeforePauseNeedEnter = false;

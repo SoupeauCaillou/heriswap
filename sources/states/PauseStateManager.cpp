@@ -98,7 +98,7 @@ void PauseStateManager::Enter() {
 	BUTTON(bRestart)->enabled = true;
 	BUTTON(bAbort)->enabled = true;
 
-    theMusicSystem.toggleMute(true);
+    // theMusicSystem.toggleMute(true);
 	BUTTON(bHelp)->enabled = true;
 	
 	helpMgr->oldState = Pause;
