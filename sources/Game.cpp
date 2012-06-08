@@ -376,6 +376,7 @@ void Game::tick(float dt) {
 		datas->state2Manager[datas->state]->Enter();
 		
 		RENDERING(datas->openfeint)->hide = (newState != MainMenu && newState != ModeMenu);
+		BUTTON(datas->openfeint)->enabled = !RENDERING(datas->openfeint)->hide;
 	}
 
     // background (unconditionnal) update of state managers

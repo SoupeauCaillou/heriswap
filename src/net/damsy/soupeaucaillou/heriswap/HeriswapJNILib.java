@@ -186,7 +186,7 @@ public class HeriswapJNILib {
 		if (mode==1) 
 			s = new Score((long) points, null);
 		else
-			s = new Score((long)time*1000, (float)((int)(time*100)/100.f) + "s");
+			s = new Score((long)(time*1000), (float)((int)(time*100)/100.f) + "s");
 		
 		// Callback called by OF on score querying
 		final Score.SubmitToCB scCB = new Score.SubmitToCB() {

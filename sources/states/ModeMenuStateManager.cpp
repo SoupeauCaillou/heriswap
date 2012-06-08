@@ -135,8 +135,8 @@ void ModeMenuStateManager::Setup() {
 	// your score
 	yourScore = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
-	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(50),PlacementHelper::GimpYToScreen(1242));
-	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::LEFT;
+	TRANSFORM(yourScore)->position = Vector2(0,PlacementHelper::GimpYToScreen(1242));
+	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(yourScore)->hide = true;
 	TEXT_RENDERING(yourScore)->charHeight = PlacementHelper::GimpHeightToScreen(56);
 	TEXT_RENDERING(yourScore)->color = green;

@@ -114,7 +114,6 @@ void HelpStateManager::Enter() {
 	state = HowToPlay;
 
 	// setup how to play help page
-	theRenderingSystem.unloadTexture(RENDERING(background)->texture);
 	RENDERING(background)->texture = theRenderingSystem.loadTextureFile("bg_help_howto");
 	RENDERING(background)->hide = false;
 	TEXT_RENDERING(title[0])->hide = false;
@@ -176,5 +175,5 @@ void HelpStateManager::Exit() {
 	RENDERING(title[1])->hide = true;
 	TEXT_RENDERING(bonus)->hide = true;
 	
-	theRenderingSystem.unloadAtlas("logo");
+	theRenderingSystem.unloadAtlas("help");
 }

@@ -19,18 +19,18 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
 		frameCount = 0;
 		time = System.currentTimeMillis();
 	}
-	
+
     public void onDrawFrame(GL10 gl) {
     	synchronized (HeriswapActivity.mutex) {
     		if (HeriswapActivity.game == 0 || !initDone)
     	 		return;
     		
     		HeriswapJNILib.render(HeriswapActivity.game);
-    		
+
     		frameCount++;
     		long diff = System.currentTimeMillis() - time;
     		if (diff >= 10000) {
-    			// Log.w(HeriswapActivity.Tag, "Render thread FPS: " + (float)1000*frameCount / diff);
+    			Log.w(HeriswapActivity.Tag, "Render thread FPS: " + (float)1000*frameCount / diff);
     			frameCount = 0;
     			time = System.currentTimeMillis();
     		}
@@ -99,10 +99,11 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     		initDone = true;
     		startGameThread();
     	} else {
-    		
     		if (gameThread == null)
     			startGameThread();
     	}
+    	// rendering is ready, game loop can run
+    	HeriswapActivity.runGameLoop = true;
 
     	int err;
         while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
@@ -117,6 +118,7 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     		HeriswapActivity.game = HeriswapJNILib.createGame(asset, HeriswapActivity.openGLESVersion);
     	} else {
     		Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### Game instance reused (onSurfaceCreated)");
+    		HeriswapJNILib.invalidateTextures(HeriswapActivity.game);
     		HeriswapJNILib.initAndReloadTextures(HeriswapActivity.game);
     		initDone = true;
     	}

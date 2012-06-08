@@ -293,6 +293,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_inv
 
     // kill all music
     theRenderingSystem.invalidateAtlasTextures();
+    LOGW("%s <--", __FUNCTION__);
 }
 
 /*

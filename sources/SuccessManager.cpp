@@ -33,6 +33,8 @@ SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	bWhatToDo = false;
 	bBimBamBoum = false;
 	bDoubleInOne = false;
+	bBonusToExcess = false;
+	
 
 	timeTotalPlayed = 0.f;
 	timeUserInputloop = 0.f;
