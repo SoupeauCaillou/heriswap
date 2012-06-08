@@ -83,5 +83,16 @@ void Game::stateChanged(GameState oldState, GameState newState) {
 	     static_cast<HelpStateManager*> (datas->state2Manager[newState])->mode = datas->mode;
      } else if (newState == ExitState) {
 	     exitAPI->exitGame();
+     } else if (newState == Spawn) {
+		if (!theMusicSystem.isMuted() && datas->mode == Normal) {
+		    if (MUSIC(datas->inGameMusic.masterTrack)->loopNext != InvalidMusicRef) {
+			    if (shouldPlayPiano()) {
+				    // replace master track next
+				    theMusicSystem.unloadMusic(MUSIC(datas->inGameMusic.masterTrack)->loopNext);
+				    MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile("audio/H.ogg");
+			    }
+			    
+		    }
+	 	}
      }
 }
