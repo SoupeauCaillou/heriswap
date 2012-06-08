@@ -163,6 +163,7 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
     float newPos = GameModeManager::position(time - timeGain(count, time));
     // update herisson and decor at the same time.
     levelMoveDuration = deleteDuration + spawnDuration;
+    if (theGridSystem.GridSize == 5) levelMoveDuration *= 2;
     nextHerissonSpeed = (newPos - currentPos) / levelMoveDuration;
 
     SCROLLING(decor1er)->speed = MathUtil::Max(0.0f, -nextHerissonSpeed);
