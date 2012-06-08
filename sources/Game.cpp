@@ -680,8 +680,10 @@ void updateFps(float dt) {
 
 bool Game::shouldPlayPiano() {
 	// are we near to beat the next score ?
-	if (datas->mode == Normal && datas->scoreboardRankInSight > 0) {
-		int score = datas->mode2Manager[datas->mode]->points;
+	if (datas->scoreboardRankInSight == 0 || datas->mode != Normal)
+		return false;
+	int score = datas->mode2Manager[datas->mode]->points;
+	if ((score / (float)datas->scoreboardRankInSight) > 0.95) {
 		int cmpTo = datas->bestScores[datas->scoreboardRankInSight - 1];
 
 		LOGW("SCORE TARGET: %d (current: %d, rank: %d)", cmpTo, score, datas->scoreboardRankInSight);
