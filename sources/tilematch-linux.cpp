@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
 		return 1;
 
 	Vector2 reso16_9(394, 700);
-	Vector2 reso16_10(500, 800);
+	Vector2 reso16_10(430, 700);
 
 	Vector2* reso = (argc == 1) ? &reso16_10 : &reso16_9;
 	if( !glfwOpenWindow( reso->X,reso->Y, 8,8,8,8,8,8, GLFW_WINDOW ) )
