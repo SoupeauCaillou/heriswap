@@ -3,6 +3,8 @@ package net.damsy.soupeaucaillou.heriswap;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.openfeint.api.OpenFeint;
+
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
@@ -44,6 +46,7 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     void startGameThread() {
     	gameThread = new Thread(new Runnable() {
 			public void run() {
+				OpenFeint.login();
 				HeriswapActivity.runGameLoop = true;
 				HeriswapJNILib.initFromGameThread(HeriswapActivity.game, HeriswapActivity.savedState);
 				// force gc before starting game
