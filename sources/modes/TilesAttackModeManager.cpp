@@ -46,7 +46,7 @@ void TilesAttackGameModeManager::Enter() {
 
 void TilesAttackGameModeManager::Exit() {
 	//if we didn't give up
-	if (leavesDone > limit) {
+	if (leavesDone >= limit) {
 		successMgr->sFastAndFinish(time);
 		successMgr->sResetGrid();
 	}

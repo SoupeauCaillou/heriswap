@@ -96,7 +96,7 @@ void SuccessManager::sResetGrid() {
 
 void SuccessManager::sTakeYourTime(float time) {
 	if (hardMode && !bTakeYourTime) {
-		if (time/60 > 15) {
+		if ((time/60) > 15) {
 			successAPI->successCompleted("Take your time", 1653092);
 			bTakeYourTime = true;
 		}
