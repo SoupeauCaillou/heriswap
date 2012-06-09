@@ -140,6 +140,7 @@ void MainMenuGameStateManager::Enter() {
 	TEXT_RENDERING(quitButton[0])->hide = false;
 	RENDERING(quitButton[1])->hide = false;
 	BUTTON(quitButton[1])->enabled = true;
+	choosenGameMode = Normal;
 }
 
 GameState MainMenuGameStateManager::Update(float dt) {

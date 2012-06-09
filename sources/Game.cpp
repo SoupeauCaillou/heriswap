@@ -371,6 +371,9 @@ void Game::tick(float dt) {
     //sinon si on a change d'etat
     else if (newState != datas->state) {
 		stateChanged(datas->state, newState);
+		
+		if (newState == ExitState)
+			return;
 
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
@@ -542,7 +545,10 @@ void Game::bench(bool active, float updateDuration, float dt) {
 int Game::saveState(uint8_t** out) {
 	if (datas->state == Help) {
 		datas->state2Manager[datas->state]->Exit();
-		datas->state = Pause;
+		datas->state = static_cast<HelpStateManager*>(datas->state2Manager[datas->state])->oldState;//Pause;
+		if (datas->state == BlackToSpawn) {
+			datas->state = MainMenu;
+		}
 		datas->state2Manager[datas->state]->Enter();
 	}
 	bool pausable = pausableState(datas->state);
