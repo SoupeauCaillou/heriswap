@@ -13,7 +13,6 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Shader.TileMode;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -512,6 +511,8 @@ public class HeriswapJNILib {
 															+ ". Is track playing ? "
 															+ track.getPlayState());
 											checkReturnCode("write,", result);
+											if (result == 0)
+												track.stop();
 										} else {
 											// Log.e(HeriswapActivity.Tag,
 											// "Successful write of " +
@@ -753,6 +754,6 @@ public class HeriswapJNILib {
 	// ExitAPI
 	// -------------------------------------------------------------------------
 	static public void exitGame() {
-		HeriswapActivity.activity.finish();
+		System.exit(0);
 	}
 }
