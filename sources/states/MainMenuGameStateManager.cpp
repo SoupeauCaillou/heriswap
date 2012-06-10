@@ -105,7 +105,9 @@ void MainMenuGameStateManager::Setup() {
 
 	quitButton[1] = theEntityManager.CreateEntity();
 	ADD_COMPONENT(quitButton[1], Transformation);
-	TRANSFORM(quitButton[1])->size = Vector2(theTextRenderingSystem.computeTextRenderingComponentWidth(TEXT_RENDERING(quitButton[0])), PlacementHelper::GimpHeightToScreen(95));
+	float hhh = PlacementHelper::GimpHeightToScreen(95);
+	float www = hhh / 0.209; //theTextRenderingSystem.computeTextRenderingComponentWidth(TEXT_RENDERING(quitButton[0]));
+	TRANSFORM(quitButton[1])->size = Vector2(www, www * 0.209);
 	TRANSFORM(quitButton[1])->position = Vector2(0, PlacementHelper::GimpYToScreen(1215));
 	TRANSFORM(quitButton[1])->z = DL_MainMenuUIBg;
 	ADD_COMPONENT(quitButton[1], Rendering);
