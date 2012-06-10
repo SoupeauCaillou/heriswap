@@ -434,7 +434,7 @@ void Game::tick(float dt) {
 	            std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);
 	            LOGW("New music picked for 'music' field (%lu):", musics.size());
 	            for (unsigned i=0; i<musics.size(); i++) {
-		            LOGW("\t%s", musics[i].c_str());
+		            LOGW("(music)\t%s", musics[i].c_str());
 	            }
 
 	            MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
@@ -456,7 +456,7 @@ void Game::tick(float dt) {
 		        std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);
 		        LOGW("New music picked for 'loopNext' field (%lu):", musics.size());
 	            for (unsigned i=0; i<musics.size(); i++) {
-		            LOGW("\t%s", musics[i].c_str());
+		            LOGW("(music)\t%s", musics[i].c_str());
 	            }
 
 		        MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile(musics[0]);
@@ -465,8 +465,13 @@ void Game::tick(float dt) {
 			        MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
 			        mc->loopNext = theMusicSystem.loadMusicFile(musics[i+1]);
 			        mc->control = MusicComponent::Start;
-			      	
 				}
+	        } else {
+	        	static MusicRef a = MUSIC(datas->inGameMusic.masterTrack)->loopNext;
+	        	if (MUSIC(datas->inGameMusic.masterTrack)->loopNext != a) {
+		        	std::cout << "music: master loopnext: " << MUSIC(datas->inGameMusic.masterTrack)->loopNext << std::endl;
+		        	a = MUSIC(datas->inGameMusic.masterTrack)->loopNext;
+	        	}
 	        }
 	        MUSIC(datas->inGameMusic.stressTrack)->volume = ADSR(datas->inGameMusic.stressTrack)->value;
 	        MUSIC(datas->menu)->control = MusicComponent::Stop;

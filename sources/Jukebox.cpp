@@ -72,7 +72,7 @@ static void build3SongsComposition(std::vector<std::string>& selection) {
 	    // 2 diff accomp
 	    int a[2];
 	    
-	    randomNumbersInRange(0, 3, a, 2, A, G);
+	    randomNumbersInRange(A, E, a, 2, A, G);
 	    for (int i=0; i<2; i++) {
 	        selection.push_back(accomp[a[i]]);
 	    }
@@ -107,7 +107,7 @@ static void build4SongsComposition(std::vector<std::string>& selection) {
 
         // 2 diff accomp
         int a[2];
-        randomNumbersInRange(0, 3, a, 2, A, G);
+        randomNumbersInRange(A, E, a, 2, A, G);
         for (int i=0; i<2; i++) {
             selection.push_back(accomp[a[i]]);
         }
