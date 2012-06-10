@@ -694,7 +694,7 @@ public class HeriswapJNILib {
 			}
 			dumb.track.notify();
 		}
-	}
+	} 
 
 	static public int getPosition(Object o) {
 		DumbAndroid dumb = (DumbAndroid) o;
@@ -707,10 +707,10 @@ public class HeriswapJNILib {
 	static public void setPosition(Object o, int pos) {
 
 	}
-
+ 
 	static public void setVolume(Object o, float v) {
 		DumbAndroid dumb = (DumbAndroid) o;
-		// Log.w(HeriswapActivity.Tag, " set volume : " + dumb.toString() + " => " + v);
+		//Log.w(HeriswapActivity.Tag, " set volume : " + dumb.toString() + " => " + v);
 		checkReturnCode("setVolume",
 				dumb.track.setStereoVolume(v * 0.5f, v * 0.5f));
 	}

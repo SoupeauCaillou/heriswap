@@ -5,46 +5,57 @@
 #include <assert.h>
 
 enum Theme {
-    A=0, B, I
+    C=0, D, I
 };
 
 static std::string themes[] = {
-    "audio/A.ogg",
-    "audio/B.ogg",
+    "audio/C.ogg",
+    "audio/D.ogg",
     "audio/I.ogg"
 };
 
 enum Accomp {
-    C=0, D, G, E
+    A=0, B, G, E
 };
 
 
 static std::string accomp[] = {
-    "audio/C.ogg",
-    "audio/D.ogg",
+    "audio/A.ogg",
+    "audio/B.ogg",
     "audio/G.ogg",
     "audio/E.ogg"
 };
 
-static void randomNumbersInRange(int fromIncl, int toIncl, int* out, int count) {
+static void randomNumbersInRange(int fromIncl, int toIncl, int* out, int count, int incomp1, int incomp2) {
+    bool i1Used = false, i2Used = false;
     out[0] = MathUtil::RandomIntInRange(fromIncl, toIncl + 1);
+    if (out[0] == incomp1) i1Used = true;
+    else if (out[0] == incomp2) i2Used = true;
     for (int i=1; i<count ;i++) {
         bool equalToPrevious;
         do {
             equalToPrevious = false;
             out[i] = MathUtil::RandomIntInRange(fromIncl, toIncl + 1);
-            for (int j=0; j<i; j++) {
-                if (out[i] == out[j]) {
-                    equalToPrevious = true;
-                    break;
-                }
-            }
+            if (i1Used && out[i] == incomp2) {
+	            equalToPrevious = true;
+            } else if (i2Used && out[i] == incomp1) {
+	            equalToPrevious = true;
+	        } else {
+	            for (int j=0; j<i; j++) {
+	                if (out[i] == out[j]) {
+	                    equalToPrevious = true;
+	                    break;
+	                }
+	            }
+	        }
         } while (equalToPrevious);
+        if (out[i] == incomp1) i1Used = true;
+    	else if (out[i] == incomp2) i2Used = true;
     }
 }
 
 static void build1SongComposition(std::vector<std::string>& selection) {
-    selection.push_back(themes[A]);
+    selection.push_back(accomp[A]);
 }
 
 static void build2SongsComposition(std::vector<std::string>& selection) {
@@ -55,37 +66,48 @@ static void build2SongsComposition(std::vector<std::string>& selection) {
 }
 
 static void build3SongsComposition(std::vector<std::string>& selection) {
-    // 1 theme
-    selection.push_back(themes[MathUtil::RandomInt(3)]);
-    // 2 diff accomp
-    int a[2];
-    randomNumbersInRange(0, 3, a, 2);
-    for (int i=0; i<2; i++) {
-        selection.push_back(accomp[a[i]]);
-    }
+	if (MathUtil::RandomInt(2)) {
+	    // 1 theme (excl. I)
+	    selection.push_back(themes[MathUtil::RandomInt(2)]);
+	    // 2 diff accomp
+	    int a[2];
+	    
+	    randomNumbersInRange(0, 3, a, 2, A, G);
+	    for (int i=0; i<2; i++) {
+	        selection.push_back(accomp[a[i]]);
+	    }
+	} else {
+	    // 2 themes
+	    int a[2];
+	    randomNumbersInRange(0, 2, a, 2, -1, -1);
+	    for (int i=0; i<2; i++)
+	        selection.push_back(themes[a[i]]);
+	    // 1 accomp
+		selection.push_back(accomp[MathUtil::RandomInt(E)]);
+	}
 }
 
 static void build4SongsComposition(std::vector<std::string>& selection) {
     if (MathUtil::RandomInt(2)) {
-        // 1 theme
-        selection.push_back(themes[MathUtil::RandomInt(3)]);
-        // 3 diff accomp
-        int a[3];
-        randomNumbersInRange(0, 3, a, 3);
+        // 3 theme
+        int t[3];
+        randomNumbersInRange(0, 2, t, 3, -1, -1);
         for (int i=0; i<3; i++) {
-            selection.push_back(accomp[a[i]]);
+            selection.push_back(themes[t[i]]);
         }
+        // 1 diff accomp (excl E)
+        selection.push_back(accomp[MathUtil::RandomInt(E)]);
     } else {
         // 2 theme
         int t[2];
-        randomNumbersInRange(0, 2, t, 2);
+        randomNumbersInRange(0, 2, t, 2, -1, -1);
         for (int i=0; i<2; i++) {
             selection.push_back(themes[t[i]]);
         }
 
         // 2 diff accomp
         int a[2];
-        randomNumbersInRange(0, 3, a, 2);
+        randomNumbersInRange(0, 3, a, 2, A, G);
         for (int i=0; i<2; i++) {
             selection.push_back(accomp[a[i]]);
         }

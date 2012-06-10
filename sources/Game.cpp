@@ -465,7 +465,7 @@ void Game::tick(float dt) {
 			        MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
 			        mc->loopNext = theMusicSystem.loadMusicFile(musics[i+1]);
 			        mc->control = MusicComponent::Start;
-			      
+			      	
 				}
 	        }
 	        MUSIC(datas->inGameMusic.stressTrack)->volume = ADSR(datas->inGameMusic.stressTrack)->value;
