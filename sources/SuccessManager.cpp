@@ -17,7 +17,7 @@ SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	bRainbow = false;
 	bDoubleRainbow = false;
 	bLevel10 = false;
-	bLevel1For1K = false;
+	bLevel1For2K = false;
 	bExterminaScore = false;
 	bTakeYourTime = false;
 	bResetGrid = false;
@@ -34,7 +34,7 @@ SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	bBimBamBoum = false;
 	bDoubleInOne = false;
 	bBonusToExcess = false;
-	
+
 
 	timeTotalPlayed = 0.f;
 	timeUserInputloop = 0.f;
@@ -111,11 +111,11 @@ void SuccessManager::sExterminaScore(int points) {
 		}
 	}
 }
-void SuccessManager::sLevel1For1K(int level, int points) {
-	if (hardMode && !bLevel1For1K) {
+void SuccessManager::sLevel1For2K(int level, int points) {
+	if (hardMode && !bLevel1For2K) {
 		if (level==1 && points>=1000) {
 			successAPI->successCompleted("1k points for level 1", 1653122);
-			bLevel1For1K = true;
+			bLevel1For2K = true;
 		}
 	}
 }

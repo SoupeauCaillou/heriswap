@@ -44,8 +44,8 @@ class SuccessManager {
 		bool bExterminaScore;
 
 		//success 1k points for level 1 (Get 1000 points without levelling in normal mode)
-		void sLevel1For1K(int level, int points);
-		bool bLevel1For1K;
+		void sLevel1For2K(int level, int points);
+		bool bLevel1For2K;
 
 		//success Level 10 (Reach level 10 in normal mode)
 		void sLevel10(int level);

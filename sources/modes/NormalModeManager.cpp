@@ -112,7 +112,7 @@ void NormalGameModeManager::UiUpdate(float dt) {
 	} else {
 		updateHerisson(dt, time, 0);
 	}
-	
+
 #ifdef DEBUG
 	if (_debug) {
 		for(int i=0; i<8; i++) {
@@ -202,7 +202,7 @@ bool NormalGameModeManager::LevelUp() {
 
 	//si on a tous les objectifs
 	if (match) {
-		successMgr->sLevel1For1K(level, points);
+		successMgr->sLevel1For2K(level, points);
 
 		level++;
 
