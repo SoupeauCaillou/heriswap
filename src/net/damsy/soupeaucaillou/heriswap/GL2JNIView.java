@@ -112,7 +112,7 @@ class GL2JNIView extends GLSurfaceView {
     private static void checkEglError(String prompt, EGL10 egl) {
         int error;
         while ((error = egl.eglGetError()) != EGL10.EGL_SUCCESS) {
-            Log.e(HeriswapActivity.Tag, String.format("%s: EGL error: 0x%x", prompt, error));
+            //Log.e(HeriswapActivity.Tag, String.format("%s: EGL error: 0x%x", prompt, error));
         }
     }
 
