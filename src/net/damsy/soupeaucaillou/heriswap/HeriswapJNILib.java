@@ -176,8 +176,8 @@ public class HeriswapJNILib {
 		return count;
 	}
 
-	static final String[] boards = new String[] { "1180807", "1180847",
-			"1180857", "1180837" };
+	static final String[] boards = new String[] { "1188517", "1188507",
+			"1188537", "1188527" };
 
 	static public void submitScore(final int mode, int difficulty, int points,
 			int level, float time, String name) {
