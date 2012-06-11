@@ -9,6 +9,7 @@ import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 //NOLOGimport android.util.Log;
+import android.util.Log;
 
 public class HeriswapRenderer implements GLSurfaceView.Renderer {   
 	AssetManager asset; 
@@ -32,7 +33,7 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     		frameCount++;
     		long diff = System.currentTimeMillis() - time;
     		if (diff >= 10000) {
-    			//NOLOGLog.w(HeriswapActivity.Tag, "Render thread FPS: " + (float)1000*frameCount / diff);
+    			Log.w("TAG", "Render thread FPS: " + (float)1000*frameCount / diff);
     			frameCount = 0;
     			time = System.currentTimeMillis();
     		}
@@ -42,7 +43,7 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
         	Log.e(HeriswapActivity.Tag, "GL error : " + GLU.gluErrorString(err));
         } */
     }
-    
+
     void startGameThread() {
     	gameThread = new Thread(new Runnable() {
 			public void run() {

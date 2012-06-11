@@ -84,6 +84,7 @@ int main(int argc, char** argv) {
 std::cout << "Total: " << storage->getSavedGamePointsSum() << std::endl;
 	Game game(new AssetAPILinuxImpl(), storage, new NameInputAPILinuxImpl(), new SuccessAPI(), new LocalizeAPILinuxImpl(), new AdAPI(), new ExitAPILinuxImpl());
 
+theRenderingSystem.opengles2 = true;
 	//theSoundSystem.init();
 	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());
     theMusicSystem.musicAPI = new MusicAPILinuxOpenALImpl();

@@ -50,17 +50,17 @@ class GL2JNIView extends GLSurfaceView {
     private static String TAG = "GL2JNIView";
     private static final boolean DEBUG = false;
 
-    public GL2JNIView(Context context, Renderer r, AttributeSet set) {
+    public GL2JNIView(Context context, AttributeSet set) {
         super(context, set);
-        init(r, false, 0, 0);
+        init(false, 0, 0);
     } 
 
-    public GL2JNIView(Context context, Renderer r, boolean translucent, int depth, int stencil) {
+    public GL2JNIView(Context context, boolean translucent, int depth, int stencil) {
         super(context);
-        init(r, translucent, depth, stencil);
+        init(translucent, depth, stencil);
     }
  
-    private void init(Renderer r, boolean translucent, int depth, int stencil) {
+    private void init(boolean translucent, int depth, int stencil) {
 
         /* By default, GLSurfaceView() creates a RGB_565 opaque surface.
          * If we want a translucent one, we should change the surface's
@@ -81,9 +81,7 @@ class GL2JNIView extends GLSurfaceView {
         setEGLConfigChooser( translucent ?
                              new ConfigChooser(8, 8, 8, 8, depth, stencil) :
                              new ConfigChooser(5, 6, 5, 0, depth, stencil) );
-        
-        setRenderer(r);
-    }
+    } 
     
     private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
         private static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;

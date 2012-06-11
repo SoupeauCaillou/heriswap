@@ -63,6 +63,9 @@
     <None Include="sources\api\StorageAPI.h" />
     <None Include="sources\api\android\StorageAPIAndroidImpl.h" />
     <None Include="sources\Jukebox.h" />
+    <None Include="assets\default.fs" />
+    <None Include="assets\default.vs" />
+    <None Include="assets\desaturate.fs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
