@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.util.Log;
+//NOLOGimport android.util.Log;
 import android.view.View;
 
 import com.greystripe.android.sdk.GSSDK;
@@ -97,7 +97,7 @@ public class HeriswapJNILib {
 			stream.read(data);
 			return data;
 		} catch (Exception exc) {
-			Log.e(HeriswapActivity.Tag, exc.toString());
+			//NOLOGLog.e(HeriswapActivity.Tag, exc.toString());
 			return null;
 		}
 	}
@@ -109,7 +109,7 @@ public class HeriswapJNILib {
 		try {
 			return HeriswapActivity.soundPool.load(mgr.openFd(assetPath), 1);
 		} catch (Exception exc) {
-			Log.e(HeriswapActivity.Tag, "Unable to load sound: " + assetPath);
+			//NOLOGLog.e(HeriswapActivity.Tag, "Unable to load sound: " + assetPath);
 			return -1;
 		}
 	}
@@ -197,8 +197,7 @@ public class HeriswapJNILib {
 		// retrieve Leaderboard
 		final Leaderboard l = new Leaderboard(boards[2 * (mode - 1)
 				+ difficulty]);
-		Log.i(HeriswapActivity.Tag, "leaderboard id: "
-				+ boards[2 * (mode - 1) + difficulty]);
+		//NOLOGLog.i(HeriswapActivity.Tag, "leaderboard id: " + boards[2 * (mode - 1) + difficulty]);
 
 		// Build score object
 		final Score s;
@@ -212,14 +211,13 @@ public class HeriswapJNILib {
 		final Score.SubmitToCB scCB = new Score.SubmitToCB() {
 			@Override
 			public void onSuccess(boolean newHighScore) {
-				Log.i(HeriswapActivity.Tag, "score posting successfull");
+				//NOLOGLog.i(HeriswapActivity.Tag, "score posting successfull");
 
 			}
 
 			@Override
 			public void onFailure(String exceptionMessage) {
-				Log.i(HeriswapActivity.Tag, "score posting failure : "
-						+ exceptionMessage);
+				//NOLOGLog.i(HeriswapActivity.Tag, "score posting failure : "+ exceptionMessage);
 			}
 
 			@Override
@@ -253,8 +251,7 @@ public class HeriswapJNILib {
 						if (send) {
 							s.submitTo(l, scCB);
 						} else {
-							Log.w(HeriswapActivity.Tag,
-									"Inferior score not submitted to OF");
+							//NOLOGLog.w(HeriswapActivity.Tag,"Inferior score not submitted to OF");
 						}
 					}
 
@@ -282,15 +279,14 @@ public class HeriswapJNILib {
 		}
 		int maxResult = Math.min(5, cursor.getCount());
 		cursor.moveToFirst();
-		Log.d(HeriswapActivity.Tag, "Found " + maxResult + " result");
+		//NOLOGLog.d(HeriswapActivity.Tag, "Found " + maxResult + " result");
 		for (int i = 0; i < maxResult; i++) {
 			points[i] = cursor.getInt(cursor.getColumnIndex("points"));
 			levels[i] = cursor.getInt(cursor.getColumnIndex("level"));
 			times[i] = cursor.getFloat(cursor.getColumnIndex("time"));
 			names[i] = cursor.getString(cursor.getColumnIndex("name"));
 
-			Log.i(HeriswapActivity.Tag, points[i] + ", " + levels[i] + ", "
-					+ times[i] + ", " + names[i] + ".");
+			//NOLOGLog.i(HeriswapActivity.Tag, points[i] + ", " + levels[i] + ", "+ times[i] + ", " + names[i] + ".");
 			cursor.moveToNext();
 		}
 		cursor.close();
@@ -311,8 +307,7 @@ public class HeriswapJNILib {
 
 						@Override
 						public void onSuccess(boolean newUnlock) {
-							Log.i(HeriswapActivity.Tag,
-									"Achievement unlock successful");
+							//NOLOGLog.i(HeriswapActivity.Tag,"Achievement unlock successful");
 						}
 					});
 				}
@@ -325,8 +320,7 @@ public class HeriswapJNILib {
 
 					@Override
 					public void onSuccess(boolean newUnlock) {
-						Log.i(HeriswapActivity.Tag,
-								"Achievement unlock successful");
+						//NOLOGLog.i(HeriswapActivity.Tag,"Achievement unlock successful");
 					}
 				});
 			}
@@ -354,7 +348,7 @@ public class HeriswapJNILib {
 		// show input view
 		HeriswapActivity.playerNameInputView.post(new Runnable() {
 			public void run() {
-				Log.i(HeriswapActivity.Tag, "requesting user input visibility");
+				//NOLOGLog.i(HeriswapActivity.Tag, "requesting user input visibility");
 
 				// ici
 				SQLiteDatabase db = HeriswapActivity.scoreOpenHelper
@@ -376,10 +370,10 @@ public class HeriswapJNILib {
 					if (cursor.moveToFirst()) {
 						do {
 							String n = cursor.getString(0);
-							Log.i(HeriswapActivity.Tag, "nsssssssssom : " + n);
+							//NOLOGLog.i(HeriswapActivity.Tag, "nsssssssssom : " + n);
 
 							if (!n.equals("rzehtrtyBg")) {
-								Log.i(HeriswapActivity.Tag, "nom : " + n);
+								//NOLOGLog.i(HeriswapActivity.Tag, "nom : " + n);
 								HeriswapActivity.oldName[i].setText(n);
 								HeriswapActivity.oldName[i]
 										.setVisibility(View.VISIBLE);
@@ -403,12 +397,12 @@ public class HeriswapJNILib {
 				HeriswapActivity.nameEdit.setText("");
 			}
 		});
-		Log.i(HeriswapActivity.Tag, "showPlayerNameUI");
+		//NOLOGLog.i(HeriswapActivity.Tag, "showPlayerNameUI");
 	}
 
 	static public String queryPlayerName() {
 		if (HeriswapActivity.nameReady) {
-			Log.i(HeriswapActivity.Tag, "queryPlayerName done");
+			//NOLOGLog.i(HeriswapActivity.Tag, "queryPlayerName done");
 			return HeriswapActivity.playerName;
 		} else {
 			return null;
@@ -458,9 +452,9 @@ public class HeriswapJNILib {
 			synchronized (DumbAndroid.audioTrackPool) {
 				if (DumbAndroid.audioTrackPool.size() > 0) {
 					track = DumbAndroid.audioTrackPool.remove(0);
-					Log.i(HeriswapActivity.Tag, "Reuse audiotrack");
+					//NOLOGLog.i(HeriswapActivity.Tag, "Reuse audiotrack");
 				} else {
-					Log.i(HeriswapActivity.Tag, "Create audiotrack");
+					//NOLOGLog.i(HeriswapActivity.Tag, "Create audiotrack");
 					track = new AudioTrack(AudioManager.STREAM_MUSIC, rate,
 							AudioFormat.CHANNEL_OUT_MONO,
 							AudioFormat.ENCODING_PCM_16BIT, bufferSize,
@@ -470,7 +464,7 @@ public class HeriswapJNILib {
 
 			int state = track.getState();
 			if (state != AudioTrack.STATE_INITIALIZED) {
-				Log.e(HeriswapActivity.Tag, "Failed to create AudioTrack");
+				//NOLOGLog.e(HeriswapActivity.Tag, "Failed to create AudioTrack");
 				track.release();
 				track = null;
 				return;
@@ -503,13 +497,7 @@ public class HeriswapJNILib {
 										int result = track.write(cmd.buffer, 0,
 												cmd.bufferSize);
 										if (result != cmd.bufferSize) {
-											Log.e(HeriswapActivity.Tag,
-													"Error writing data to AudioTrack("
-															+ track.toString()
-															+ "): "
-															+ result
-															+ ". Is track playing ? "
-															+ track.getPlayState());
+											//NOLOGLog.e(HeriswapActivity.Tag,"Error writing data to AudioTrack("+ track.toString()+ "): "+ result+ ". Is track playing ? "+ track.getPlayState());
 											checkReturnCode("write,", result);
 											if (result == 0)
 												track.stop();
@@ -531,14 +519,12 @@ public class HeriswapJNILib {
 												.getPlaybackHeadPosition();
 									}
 									if (offset != 0) {
-										Log.i(HeriswapActivity.Tag,
-												"Setting offset: " + offset);
+										//NOLOGLog.i(HeriswapActivity.Tag,"Setting offset: " + offset);
 										checkReturnCode(
 												"setPosition",
 												track.setPlaybackHeadPosition(offset));
 									}
-									Log.i(HeriswapActivity.Tag, "start track ("
-											+ initialCount + ")");
+									//NOLOGLog.i(HeriswapActivity.Tag, "start track ("+ initialCount + ")");
 									// track.setStereoVolume(1, 1);
 									track.play();
 									break;
@@ -552,8 +538,7 @@ public class HeriswapJNILib {
 							}
 						}
 					}
-					Log.i(HeriswapActivity.Tag, "Effective delete of track: "
-							+ track.toString());
+					//NOLOGLog.i(HeriswapActivity.Tag, "Effective delete of track: "+ track.toString());
 					synchronized (DumbAndroid.bufferPool) {
 						for (Command c : writePendings) {
 							if (c.type == Type.Buffer) {
@@ -587,10 +572,10 @@ public class HeriswapJNILib {
 								 */
 			break;
 		case AudioTrack.ERROR_BAD_VALUE:
-			Log.i(HeriswapActivity.Tag, ctx + " : bad value");
+			//NOLOGLog.i(HeriswapActivity.Tag, ctx + " : bad value");
 			break;
 		case AudioTrack.ERROR_INVALID_OPERATION:
-			Log.i(HeriswapActivity.Tag, ctx + " : invalid op");
+			//NOLOGLog.i(HeriswapActivity.Tag, ctx + " : invalid op");
 			break;
 		}
 	}
@@ -674,15 +659,14 @@ public class HeriswapJNILib {
 			dumb.writePendings.add(cmd);
 			dumb.track.notify();
 
-			Log.i(HeriswapActivity.Tag, "BUFFER POOL size: "
-					+ DumbAndroid.bufferPool.size());
+			//NOLOGLog.i(HeriswapActivity.Tag, "BUFFER POOL size: "+ DumbAndroid.bufferPool.size());
 		}
 	}
 
 	static public void stopPlayer(Object o) {
 		DumbAndroid dumb = (DumbAndroid) o;
 		synchronized (dumb.track) {
-			Log.i(HeriswapActivity.Tag, "Stop track: " + dumb.track.toString());
+			//NOLOGLog.i(HeriswapActivity.Tag, "Stop track: " + dumb.track.toString());
 			synchronized (dumb.destroyMutex) {
 				dumb.track.stop();
 				// flush queue
@@ -732,8 +716,7 @@ public class HeriswapJNILib {
 			dumb.track.notify();
 		}
 		
-		Log.i(HeriswapActivity.Tag,
-				"Delete (delayed) track: " + dumb.track.toString());
+		//NOLOGLog.i(HeriswapActivity.Tag,"Delete (delayed) track: " + dumb.track.toString());
 	}
 
 	// -------------------------------------------------------------------------
@@ -743,8 +726,7 @@ public class HeriswapJNILib {
 		int id = HeriswapActivity.res.getIdentifier(name, "string",
 				"net.damsy.soupeaucaillou.heriswap");
 		if (id == 0) {
-			Log.e(HeriswapActivity.Tag, "Cannot find text entry : '" + name
-					+ "' for localization");
+			//NOLOGLog.e(HeriswapActivity.Tag, "Cannot find text entry : '" + name+ "' for localization");
 			return "LOC" + name + "LOC";
 		}
 		return HeriswapActivity.res.getString(id);
