@@ -108,7 +108,7 @@ class GL2JNIView extends GLSurfaceView {
             egl.eglDestroyContext(display, context);
         }
     }
-    
+     
     private static void checkEglError(String prompt, EGL10 egl) {
         int error;
         while ((error = egl.eglGetError()) != EGL10.EGL_SUCCESS) {

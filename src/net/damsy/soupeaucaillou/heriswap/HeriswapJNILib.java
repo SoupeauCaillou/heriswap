@@ -117,8 +117,8 @@ public class HeriswapJNILib {
 	static public void playSound(int soundID, float volume) {
 		if (soundID < 0)
 			return;
-		HeriswapActivity.soundPool.play(soundID, 0.25f * volume,
-				0.25f * volume, 0, 0, 1.0f);
+		HeriswapActivity.soundPool.play(soundID, 0.5f * volume,
+				0.5f * volume, 0, 0, 1.0f);
 	}
 
 	// -------------------------------------------------------------------------
@@ -696,7 +696,7 @@ public class HeriswapJNILib {
 		DumbAndroid dumb = (DumbAndroid) o;
 		//Log.w(HeriswapActivity.Tag, " set volume : " + dumb.toString() + " => " + v);
 		checkReturnCode("setVolume",
-				dumb.track.setStereoVolume(v * 0.5f, v * 0.5f));
+				dumb.track.setStereoVolume(v, v));
 	}
 
 	static public boolean isPlaying(Object o) {
