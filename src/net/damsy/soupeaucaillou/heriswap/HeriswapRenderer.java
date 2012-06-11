@@ -36,7 +36,7 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     			frameCount = 0;
     			time = System.currentTimeMillis();
     		}
-    	}
+    	} 
         /*int err;
         while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
         	Log.e(HeriswapActivity.Tag, "GL error : " + GLU.gluErrorString(err));
