@@ -283,7 +283,7 @@ GameState ModeMenuStateManager::Update(float dt) {
             std::stringstream a;
             a.precision(1);
             if (modeMgr->GetMode()==Normal) {
-                a << modeMgr->points << "... "<< localizeAPI->text("lvl", "niv") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
+                a << modeMgr->points << " : "<< localizeAPI->text("lvl", "niv") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
             } else {
                 a << std::fixed << modeMgr->time << " s";
             }
