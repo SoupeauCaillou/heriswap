@@ -5,7 +5,7 @@
   android:id="@+id/parent_frame"
   android:layout_height="fill_parent" android:layout_width="fill_parent">
 
-    <net.damsy.soupeaucaillou.heriswap.GL2JNIView android:id="@+id/surfaceviewclass"
+    <android.opengl.GLSurfaceView android:id="@+id/surfaceviewclass"
 android:layout_width="match_parent"
 android:layout_height="match_parent"/>
     
