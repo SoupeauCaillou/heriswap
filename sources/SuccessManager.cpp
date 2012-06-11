@@ -113,8 +113,8 @@ void SuccessManager::sExterminaScore(int points) {
 }
 void SuccessManager::sLevel1For2K(int level, int points) {
 	if (hardMode && !bLevel1For2K) {
-		if (level==1 && points>=2000) {
-			successAPI->successCompleted("2k points for level 1", 1697142);
+		if (level==1 && points>=1000) {
+			successAPI->successCompleted("1k points for level 1", 1697142);
 			bLevel1For2K = true;
 		}
 	}
@@ -160,7 +160,7 @@ void SuccessManager::sBonusToExcess(int type, int bonus, int nb) {
 		if (type == bonus)
 			bonusTilesNumber +=nb;
 		if (bonusTilesNumber >= 100) {
-			successAPI->successCompleted("Bonus bonus", 1697212);
+			successAPI->successCompleted("Bonus to excess", 1697212);
 			bBonusToExcess = true;
 		}
 	}
@@ -194,7 +194,7 @@ void SuccessManager::sBTAC(StorageAPI* storage, int difficulty, unsigned int poi
 	    std::vector<StorageAPI::Score> entries = storage->savedScores(1, difficulty);
 		int s = entries.size();
 		if (s >= 5 && (int)points > entries[0].points) {
-			successAPI->successCompleted("Beat them all (score racce)", 1697152);
+			successAPI->successCompleted("Beat them all (classic)", 1697152);
 			bBTAC = true;
 		}
 	}
@@ -205,7 +205,7 @@ void SuccessManager::sBTAM(StorageAPI* storage, int difficulty, float time) {
 		std::vector<StorageAPI::Score> entries = storage->savedScores(2, difficulty);
 		int s = entries.size();
 		if (s >= 5 && time < entries[0].time) {
-			successAPI->successCompleted("Beat them all (time attack)", 1697222);
+			successAPI->successCompleted("Beat them all (MODE2)", 1697222);
 			bBTAM = true;
 		}
 	}
@@ -247,7 +247,7 @@ void SuccessManager::sWhatToDo(bool swapInPreparation, float dt) {
 			timeInSwappingPreparation=0.f;
 
 		if (timeInSwappingPreparation>5.0f) {
-			successAPI->successCompleted("What are you waiting for, Christmas ?", 1697062);
+			successAPI->successCompleted("What I gonna do ?", 1697062);
 			bWhatToDo = true;
 		}
 	}
@@ -260,7 +260,7 @@ void SuccessManager::sBimBamBoum(int newCombiCount) {
 		if (newCombiCount == 0) {
 			numberCombinationInARow = 0;
 		} else {
-			numberCombinationInARow += newCombiCount;
+			numberCombinationInARow += 1;
 		}
 
 		if (numberCombinationInARow >= 3) {
