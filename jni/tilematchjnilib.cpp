@@ -251,6 +251,9 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_ste
 	}
 }
 
+float pauseTime;
+// HACK: this one is called only from Activity::onResume
+// Here we'll compute the time since pause. If < 5s -> autoresume the music
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_resetTimestep
   (JNIEnv *env, jclass, jlong g) {
   	GameHolder* hld = (GameHolder*) g;
@@ -258,6 +261,10 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_res
 	if (!hld)
   		return;
   	hld->firstCall = true;
+  	float d = TimeUtil::getTime();
+  	if (d - pauseTime <= 5) {
+	  	theMusicSystem.toggleMute(theSoundSystem.mute);
+  	}
 }
 
 static int frameCount = 0;
@@ -287,6 +294,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_pau
     // kill all music
     theMusicSystem.toggleMute(true);
 	hld->game->togglePause(true);
+	pauseTime = TimeUtil::getTime();
 	LOGW("%s <--", __FUNCTION__);
 }
 
