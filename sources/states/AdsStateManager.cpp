@@ -39,6 +39,7 @@ void AdsStateManager::Setup() {
 	eAds = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eAds, Transformation);
 	ADD_COMPONENT(eAds, Rendering);
+	RENDERING(eAds)->color = Color(0.f,0.f,0.f);
 	ADD_COMPONENT(eAds, Button);
 	TRANSFORM(eAds)->z = DL_Ads;
 	TRANSFORM(eAds)->size = Vector2(PlacementHelper::WindowWidth, PlacementHelper::WindowHeight);
@@ -65,14 +66,11 @@ void AdsStateManager::Enter() {
 	if (gameb4Ads==0 || timeSinceLAstAd > 180) {
 		if (adAPI->showAd()) {	
 			BUTTON(eAds)->enabled = true;
-			RENDERING(eAds)->color = Color(0.f,0.f,0.f);
 	        gameb4Ads = 0;
 	        lastAdTime = TimeUtil::getTime();
 		} else {
 			gameb4Ads = 1;
 		}
-	} else {
-		RENDERING(eAds)->color = Color(0.f,0.f,0.f);
 	}
 	RENDERING(eAds)->hide = false;
 }

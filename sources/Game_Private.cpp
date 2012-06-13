@@ -73,8 +73,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      state2Manager[BlackToLogoState] = new FadeGameStateManager(0.2, FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
      state2Manager[LogoToBlackState] = new FadeGameStateManager(0.3, FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);
      state2Manager[BlackToMainMenu] = new FadeGameStateManager(0.3, FadeIn, BlackToMainMenu, MainMenu, state2Manager[MainMenu], 0);
-     state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(0.2, FadeOut, ModeMenuToBlackState, BlackToAds, 0, state2Manager[ModeMenu]);
-     state2Manager[BlackToAds] = new FadeGameStateManager(0.2, FadeIn, BlackToAds, Ads, state2Manager[Ads], 0);
+     state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(0.2, FadeOut, ModeMenuToBlackState, Ads, 0, state2Manager[ModeMenu]);
      state2Manager[AdsToBlackState] = new FadeGameStateManager(0.2, FadeOut, AdsToBlackState, BlackToSpawn, 0, state2Manager[Ads]);
      state2Manager[BlackToSpawn] = new FadeGameStateManager(0.5, FadeIn, BlackToSpawn, Spawn, 0, 0);
 	 state2Manager[GameToBlack] = new FadeGameStateManager(1, FadeOut, GameToBlack, BlackToModeMenu, 0, 0);

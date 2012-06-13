@@ -89,7 +89,22 @@ public class HeriswapJNILib {
 	// AdsAPI
 	// -------------------------------------------------------------------------
 	static public boolean showAd() {
-		if (GSSDK.getSharedInstance().isAdReady()) {
+		ChartBoost _cb = ChartBoost.getSharedChartBoost(HeriswapActivity.activity);
+		
+		int adProviderSelection = -1;
+		
+		boolean gsReady = GSSDK.getSharedInstance().isAdReady();
+		boolean cbReady = _cb.hasCachedInterstitial();
+
+		if (gsReady && cbReady) {
+			adProviderSelection = (Math.random() > 0.5) ? 0 : 1;
+		} else if (gsReady) {
+			adProviderSelection = 0;
+		} else if (cbReady) {
+			adProviderSelection = 1;
+		}
+		
+		if (adProviderSelection == 0) {
 			HeriswapActivity.adHasBeenShown = false;
 			HeriswapActivity.activity.runOnUiThread(new Runnable() {
 				public void run() {
@@ -100,19 +115,15 @@ public class HeriswapJNILib {
 				}
 			});
 			return true;
+		} else if (adProviderSelection == 1) {
+			_cb.cacheInterstitial();
+			_cb.showInterstitial();
+			return true;
 		} else {
-			ChartBoost _cb = ChartBoost.getSharedChartBoost(HeriswapActivity.activity);
-			if (_cb.hasCachedInterstitial()) {
-				_cb.cacheInterstitial();
-				_cb.showInterstitial();
-				return true;
-			} else {
-				_cb.cacheInterstitial();
-				Log.w("AD", "No ad ready");
-				HeriswapActivity.adHasBeenShown = true;
-				return false;
-			}
-			
+			_cb.cacheInterstitial();
+			Log.w("AD", "No ad ready");
+			HeriswapActivity.adHasBeenShown = true;
+			return false;
 		}
 	}
 
