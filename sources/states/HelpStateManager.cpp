@@ -91,8 +91,8 @@ void HelpStateManager::Setup() {
 		TEXT_RENDERING(difficulty[i])->hide = true;
 		TEXT_RENDERING(difficulty[i])->positioning = TextRenderingComponent::RIGHT;
 		TEXT_RENDERING(difficulty[i])->color = green;
-		TEXT_RENDERING(difficulty[i])->charHeight = PlacementHelper::GimpHeightToScreen(55);			
-		TEXT_RENDERING(difficulty[i])->text = ((i==0) ? localize->text("diff_1", "Facile") : localize->text("diff_2", "Difficile")) + " :";
+		TEXT_RENDERING(difficulty[i])->charHeight = PlacementHelper::GimpHeightToScreen(45);
+		TEXT_RENDERING(difficulty[i])->text = ((i==0) ? localize->text("diff_1", "Débutant") : localize->text("diff_2", "Confirmé")) + ":";
 	}
 	
 	// leaves left
