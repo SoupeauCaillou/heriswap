@@ -14,12 +14,14 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Shader.TileMode;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.util.Log;
 import android.view.View;
 
+import com.chartboost.sdk.ChartBoost;
 import com.greystripe.android.sdk.GSSDK;
 import com.openfeint.api.OpenFeint;
 import com.openfeint.api.resource.Achievement;
@@ -65,7 +67,7 @@ public class HeriswapJNILib {
 
 	public static native void initAndReloadTextures(long game);
 
-	// -------------------------------------------------------------------------
+	// --- ----------------------------------------------------------------------
 	// AdsAPI
 	// -------------------------------------------------------------------------
 	static public boolean showAd() {
@@ -81,9 +83,18 @@ public class HeriswapJNILib {
 			});
 			return true;
 		} else {
-			Log.w("AD", "No ad ready");
-			HeriswapActivity.adHasBeenShown = true;
-			return false;
+			ChartBoost _cb = ChartBoost.getSharedChartBoost(HeriswapActivity.activity);
+			if (_cb.hasCachedInterstitial()) {
+				_cb.cacheInterstitial();
+				_cb.showInterstitial();
+				return true;
+			} else {
+				_cb.cacheInterstitial();
+				Log.w("AD", "No ad ready");
+				HeriswapActivity.adHasBeenShown = true;
+				return false;
+			}
+			
 		}
 	}
 

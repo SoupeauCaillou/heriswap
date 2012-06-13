@@ -46,6 +46,13 @@
                   android:configChanges="orientation|keyboardHidden"
                   android:theme="@style/OFNestedWindow"/>
         
+		<activity android:name="com.chartboost.sdk.CBDialogActivity"
+		android:configChanges="orientation|keyboard|keyboardHidden"
+		android:windowSoftInputMode="adjustResize"
+		android:theme="@android:style/Theme.Translucent"
+		android:launchMode="singleTop" android:screenOrientation="portrait">
+		</activity>
+        
         <provider android:name="com.greystripe.android.sdk.AdContentProvider"
 android:authorities="net.damsy.soupeaucaillou.heriswap.AdContentProvider"
 android:multiprocess="true"

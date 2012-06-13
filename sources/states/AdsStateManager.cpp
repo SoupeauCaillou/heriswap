@@ -26,7 +26,7 @@ void AdsStateManager::Setup() {
 	TRANSFORM(eAds)->size = Vector2(PlacementHelper::WindowWidth, PlacementHelper::WindowHeight);
 	TRANSFORM(eAds)->position = Vector2(PlacementHelper::GimpXToScreen(0),PlacementHelper::GimpYToScreen(0));
 	BUTTON(eAds)->enabled = false;
-    lastAdTime = 0;
+    lastAdTime = -30;
 }
 
 void AdsStateManager::Enter() {
