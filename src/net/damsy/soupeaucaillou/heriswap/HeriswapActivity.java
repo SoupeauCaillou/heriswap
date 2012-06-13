@@ -95,7 +95,6 @@ public class HeriswapActivity extends Activity {
       //NOLOGLog.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON CREATE");
         activity = this;
         ofHasBeenShown = adHasBeenShown = false;
-        GSSDK.initialize(this, HeriswapSecret.GS_appId);
         
         ChartBoost _cb = ChartBoost.getSharedChartBoost(this);
         _cb.setAppId(HeriswapSecret.CB_appId);

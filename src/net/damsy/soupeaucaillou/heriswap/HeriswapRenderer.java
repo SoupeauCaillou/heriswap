@@ -21,6 +21,7 @@ package net.damsy.soupeaucaillou.heriswap;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.greystripe.android.sdk.GSSDK;
 import com.openfeint.api.OpenFeint;
 
 import android.content.res.AssetManager;
@@ -63,6 +64,8 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     }
 
     void startGameThread() {
+    	GSSDK.initialize(HeriswapActivity.activity, HeriswapSecret.GS_appId);
+    	
     	gameThread = new Thread(new Runnable() {
 			public void run() {
 				OpenFeint.login();
