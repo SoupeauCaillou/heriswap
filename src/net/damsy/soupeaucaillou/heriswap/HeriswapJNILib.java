@@ -8,6 +8,7 @@ import java.util.Queue;
 
 import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command;
 import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command.Type;
+import android.R.bool;
 import android.content.ContentValues;
 import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
@@ -16,7 +17,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-//NOLOGimport android.util.Log;
+import android.util.Log;
 import android.view.View;
 
 import com.greystripe.android.sdk.GSSDK;
@@ -67,7 +68,7 @@ public class HeriswapJNILib {
 	// -------------------------------------------------------------------------
 	// AdsAPI
 	// -------------------------------------------------------------------------
-	static public void showAd() {
+	static public boolean showAd() {
 		if (GSSDK.getSharedInstance().isAdReady()) {
 			HeriswapActivity.adHasBeenShown = false;
 			HeriswapActivity.activity.runOnUiThread(new Runnable() {
@@ -78,8 +79,11 @@ public class HeriswapJNILib {
 					}
 				}
 			});
+			return true;
 		} else {
+			Log.w("AD", "No ad ready");
 			HeriswapActivity.adHasBeenShown = true;
+			return false;
 		}
 	}
 

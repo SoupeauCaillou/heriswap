@@ -26,7 +26,7 @@ void AdsStateManager::Setup() {
 	TRANSFORM(eAds)->size = Vector2(PlacementHelper::WindowWidth, PlacementHelper::WindowHeight);
 	TRANSFORM(eAds)->position = Vector2(PlacementHelper::GimpXToScreen(0),PlacementHelper::GimpYToScreen(0));
 	BUTTON(eAds)->enabled = false;
-    lastAdTime = TimeUtil::getTime();
+    lastAdTime = 0;
 }
 
 void AdsStateManager::Enter() {
@@ -44,12 +44,15 @@ void AdsStateManager::Enter() {
 		gameb4Ads = 1;
 	}
 
-	if ((!gameb4Ads || timeSinceLAstAd > 180)  && RENDERING(eAds)->hide) {
-		BUTTON(eAds)->enabled = true;
-		RENDERING(eAds)->color = Color(0.f,0.f,0.f);
-        adAPI->showAd();
-        gameb4Ads = 0;
-        lastAdTime = TimeUtil::getTime();
+	if (gameb4Ads==0 || timeSinceLAstAd > 180) {
+		if (adAPI->showAd()) {	
+			BUTTON(eAds)->enabled = true;
+			RENDERING(eAds)->color = Color(0.f,0.f,0.f);
+	        gameb4Ads = 0;
+	        lastAdTime = TimeUtil::getTime();
+		} else {
+			gameb4Ads = 1;
+		}
 	} else {
 		RENDERING(eAds)->color = Color(0.f,0.f,0.f);
 	}
