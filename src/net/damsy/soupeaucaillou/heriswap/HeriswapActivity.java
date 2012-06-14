@@ -104,13 +104,13 @@ public class HeriswapActivity extends Activity {
         	@Override
         	public void didCloseInterstitial(View interstitialView) {
         		super.didCloseInterstitial(interstitialView);
-        		ofHasBeenShown = true;
+        		adHasBeenShown = true;
         	}
         	
         	@Override
         	public void didFailToLoadInterstitial() {
         		super.didFailToLoadInterstitial();
-        		ofHasBeenShown = true;
+        		adHasBeenShown = true;
         	}
 		});
         _cb.cacheInterstitial();
