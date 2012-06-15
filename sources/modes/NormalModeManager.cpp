@@ -71,7 +71,7 @@ void NormalGameModeManager::Enter() {
 }
 
 void NormalGameModeManager::Exit() {
-	successMgr->sTakeYourTime(time);
+	successMgr->sTakeYourTime();
 	successMgr->s666Loser(level);
 
     MUSIC(stressTrack)->volume = 0;
@@ -91,6 +91,7 @@ void NormalGameModeManager::GameUpdate(float dt) {
 	if (!_debug)
 #endif
 	time += dt;
+	successMgr->gameDuration += dt;
 }
 
 float NormalGameModeManager::GameProgressPercent() {

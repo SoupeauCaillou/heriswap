@@ -54,7 +54,8 @@ class SuccessManager {
 		bool gridResetted;
 
 		//success Take it slow (Played a game more than 15 min)
-		void sTakeYourTime(float time);
+		void sTakeYourTime();
+		float gameDuration;
 		bool bTakeYourTime;
 
 		//success Exterminascore (Start from scratch and skyrocket up to 100k in a row !)

@@ -62,6 +62,7 @@ SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	//ne dois pas etre reinit a chaque game :
 	l666numberLose = 0;
 	lTheyGood = 0;
+	gameDuration = 0;
 }
 
 void SuccessManager::NewGame(int difficulty) {
@@ -112,13 +113,14 @@ void SuccessManager::sResetGrid() {
 	}
 }
 
-void SuccessManager::sTakeYourTime(float time) {
+void SuccessManager::sTakeYourTime() {
 	if (hardMode && !bTakeYourTime) {
-		if ((time/60) > 15) {
+		if (gameDuration > 900.) {
 			successAPI->successCompleted("Take your time", 1697172);
 			bTakeYourTime = true;
 		}
 	}
+	gameDuration = 0.;
 }
 
 void SuccessManager::sExterminaScore(int points) {
