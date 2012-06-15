@@ -129,12 +129,10 @@ public class HeriswapActivity extends Activity {
         mGLView = (GLSurfaceView) findViewById(R.id.surfaceviewclass);
         
         synchronized (mGLView) {
-        	mGLView.setEGLContextClientVersion(2);
+        	HeriswapActivity.openGLESVersion = 2;
         	renderer = new HeriswapRenderer(getAssets());
             mGLView.setRenderer(renderer);	
 		}
-
-        // HeriswapActivity.openGLESVersion = 1;
          
         mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         // rl.addView(mGLView);
@@ -197,11 +195,12 @@ public class HeriswapActivity extends Activity {
     @Override
     protected void onPause() {
     	//NOLOGLog.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON PAUSE");
-        super.onPause();
-        synchronized (mGLView) {
-        	if (renderer != null) {
-        		mGLView.onPause();
-        	}
+        synchronized (HeriswapActivity.mutex) { // avoid conflict with onDrawFrame
+	        synchronized (mGLView) {
+	        	if (renderer != null) {
+	        		mGLView.onPause();
+	        	}
+	        }
         }
         if (wl != null)
         	wl.release();
@@ -216,6 +215,7 @@ public class HeriswapActivity extends Activity {
         }
         
         OpenFeint.onPause();
+        super.onPause();
     }
 
     @Override
