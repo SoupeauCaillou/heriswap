@@ -129,6 +129,7 @@ public class HeriswapActivity extends Activity {
         mGLView = (GLSurfaceView) findViewById(R.id.surfaceviewclass);
         
         synchronized (mGLView) {
+        	mGLView.setEGLContextClientVersion(2);
         	HeriswapActivity.openGLESVersion = 2;
         	renderer = new HeriswapRenderer(getAssets());
             mGLView.setRenderer(renderer);	
@@ -195,13 +196,12 @@ public class HeriswapActivity extends Activity {
     @Override
     protected void onPause() {
     	//NOLOGLog.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON PAUSE");
-        synchronized (HeriswapActivity.mutex) { // avoid conflict with onDrawFrame
-	        synchronized (mGLView) {
-	        	if (renderer != null) {
-	        		mGLView.onPause();
-	        	}
-	        }
-        }
+    	synchronized (mGLView) {
+	       	if (renderer != null) {
+	       		// must be done before super.pause()
+	       		mGLView.onPause();
+	       	}
+	    }
         if (wl != null)
         	wl.release();
         HeriswapActivity.requestPausedFromJava = true;
@@ -213,7 +213,7 @@ public class HeriswapActivity extends Activity {
 	        	// HeriswapJNILib.invalidateTextures(HeriswapActivity.game);
 			}
         }
-        
+
         OpenFeint.onPause();
         super.onPause();
     }
