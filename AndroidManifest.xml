@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.damsy.soupeaucaillou.heriswap"
-    android:versionCode="4"
-    android:versionName="1.0.3"
+    android:versionCode="5"
+    android:versionName="1.0.4"
     android:installLocation="auto" 
     >
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -17,7 +17,7 @@
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="9"/>
     <supports-gl-texture android:name="GL_OES_compressed_ETC1_RGB8_texture" />
     
-    <application android:label="Heriswap" android:icon="@drawable/ic_launcher" android:name=".HeriswapApplication">
+    <application android:label="Heriswap" android:icon="@drawable/ic_launcher" android:name=".HeriswapApplication" android:debuggable="true">
     
         <!-- Our activity is the built-in NativeActivity framework class.
              This will take care of integrating with our NDK code. -->
