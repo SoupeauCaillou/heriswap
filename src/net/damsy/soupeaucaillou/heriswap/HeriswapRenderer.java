@@ -77,15 +77,13 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
 				HeriswapActivity.savedState = null;
 				initDone = true;
 				
-				// TilematchActivity.cb.showInterstitial();
-				
 				while ( HeriswapActivity.isRunning || HeriswapActivity.requestPausedFromJava) {
 					if (HeriswapActivity.runGameLoop) {
 						HeriswapJNILib.step(HeriswapActivity.game);
 						HeriswapActivity.mGLView.requestRender();
 					} else {
 						try {
-							Thread.sleep(10);
+							Thread.sleep(100);
 						} catch (InterruptedException e) {}
 					}
 					
@@ -138,11 +136,11 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
     	if (HeriswapActivity.game == 0) {
-    		//NOLOGLog.i(HeriswapActivity.Tag, "Activity LifeCycle ##### Game instance creation (onSurfaceCreated)");
+    		Log.i("HeriswapActivity.Tag", "Activity LifeCycle ##### Game instance creation (onSurfaceCreated)");
     		initDone = false;
     		HeriswapActivity.game = HeriswapJNILib.createGame(asset, HeriswapActivity.openGLESVersion);
     	} else {
-    		//NOLOGLog.i(HeriswapActivity.Tag, "Activity LifeCycle ##### Game instance reused (onSurfaceCreated)");
+    		Log.i("HeriswapActivity.Tag", "Activity LifeCycle ##### Game instance reused (onSurfaceCreated)");
     		HeriswapJNILib.invalidateTextures(HeriswapActivity.game);
     		HeriswapJNILib.initAndReloadTextures(HeriswapActivity.game);
     		initDone = true;

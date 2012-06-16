@@ -27,8 +27,6 @@ static jmethodID jniMethodLookup(JNIEnv* env, jclass c, const std::string& name,
     return mId;
 }
 
-StorageAPIAndroidImpl::StorageAPIAndroidImpl(JNIEnv* penv) : env(penv) {}
-
 struct StorageAPIAndroidImpl::StorageAPIAndroidImplDatas {
     jclass cls;
 
@@ -39,16 +37,28 @@ struct StorageAPIAndroidImpl::StorageAPIAndroidImplDatas {
     jmethodID submitScore;
     jmethodID getScores;
     jmethodID getModePlayedCount;
+    
+    bool initialized;
 };
 
+StorageAPIAndroidImpl::StorageAPIAndroidImpl() {
+	datas = new StorageAPIAndroidImplDatas();
+	datas->initialized = false;
+}
+
 StorageAPIAndroidImpl::~StorageAPIAndroidImpl() {
-    env->DeleteGlobalRef(datas->cls);
+	if (datas->initialized) {
+    	env->DeleteGlobalRef(datas->cls);
+	}
     delete datas;
 }
 
-void StorageAPIAndroidImpl::init() {
-    datas = new StorageAPIAndroidImplDatas();
-
+void StorageAPIAndroidImpl::init(JNIEnv* pEnv) {
+	if (datas->initialized) {
+		LOGW("StorageAPI not properly uninitialized");
+	}
+	env = pEnv;
+	
     datas->cls = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib"));
     datas->soundEnable = jniMethodLookup(env, datas->cls, "soundEnable", "(Z)Z");
     datas->getGameCountBeforeNextAd = jniMethodLookup(env, datas->cls, "getGameCountBeforeNextAd", "()I");
@@ -57,6 +67,11 @@ void StorageAPIAndroidImpl::init() {
     datas->submitScore = jniMethodLookup(env, datas->cls, "submitScore", "(IIIIFLjava/lang/String;)V");
     datas->getScores = jniMethodLookup(env, datas->cls, "getScores", "(II[I[I[F[Ljava/lang/String;)I");
     datas->getModePlayedCount = jniMethodLookup(env, datas->cls, "getModePlayedCount", "()I");
+}
+
+void StorageAPIAndroidImpl::uninit(JNIEnv* env) {
+	env->DeleteGlobalRef(datas->cls);
+	datas->initialized = false;
 }
 
 void StorageAPIAndroidImpl::submitScore(Score scr, int mode, int diff) {

@@ -64,7 +64,7 @@ public class HeriswapJNILib {
 	public static native void initFromRenderThread(long game, int width,
 			int height);
 
-	public static native void initFromGameThread(long game, byte[] state);
+	public static native void initFromGameThread(AssetManager mgr, long game, byte[] state);
 
 	public static native void step(long game);
 

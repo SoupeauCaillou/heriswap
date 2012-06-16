@@ -29,7 +29,6 @@ class StorageAPI {
             std::string name;
         };
 
-        virtual void init() = 0;
         virtual void submitScore(Score scr, int mode, int diff) = 0;
         virtual std::vector<Score> savedScores(int mode, int difficulty) = 0;
         virtual bool soundEnable(bool switchIt) = 0;

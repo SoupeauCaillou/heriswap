@@ -70,12 +70,12 @@ class AndroidSuccessAPI : public SuccessAPI {
 struct GameHolder {
 	Game* game;
 	int width, height;
-	NameInputAPIAndroidImpl* nameInput;
-    StorageAPIAndroidImpl* storage;
+	NameInputAPIAndroidImpl nameInput;
+    StorageAPIAndroidImpl storage;
 	AndroidSuccessAPI success;
-	LocalizeAPIAndroidImpl* localize;
-    AdAPIAndroidImpl* ad;
-    AssetAPIAndroidImpl* asset;
+	LocalizeAPIAndroidImpl localize;
+    AdAPIAndroidImpl ad;
+    AssetAPIAndroidImpl asset[2];
 	ExitAPIAndroidImpl exitAPI;
 	
 	struct __input {
@@ -87,16 +87,11 @@ struct GameHolder {
 	float dtAccumuled, time;
 
 	JNIEnv *gameThreadEnv, *renderThreadEnv;
-	jobject assetManager;
+	jobject assetManager[2];
 	int openGLESVersion;
 
 
     ~GameHolder() {
-        delete nameInput;
-        delete storage;
-        delete localize;
-        delete ad;
-        renderThreadEnv->DeleteGlobalRef(assetManager);
         gameThreadEnv = renderThreadEnv = 0;
     }
 };
@@ -128,16 +123,11 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_cr
   	LOGW("%s -->", __FUNCTION__);
   	TimeUtil::init();
 	GameHolder* hld = new GameHolder();
-	hld->assetManager = (jobject)env->NewGlobalRef(asset);
-	hld->localize = new LocalizeAPIAndroidImpl(env);
-    hld->nameInput = new NameInputAPIAndroidImpl();
-    hld->ad = new AdAPIAndroidImpl();
-    hld->storage = new StorageAPIAndroidImpl(env);
-    hld->asset = new AssetAPIAndroidImpl(env, hld->assetManager);
-	hld->game = new Game(hld->asset, hld->storage, hld->nameInput, &hld->success, hld->localize, hld->ad, &hld->exitAPI);
+	hld->assetManager[1] = (jobject)env->NewGlobalRef(asset);
+	hld->game = new Game(&hld->asset[0], &hld->storage, &hld->nameInput, &hld->success, &hld->localize, &hld->ad, &hld->exitAPI);
 	hld->renderThreadEnv = env;
 	hld->openGLESVersion = openglesVersion;
-	theRenderingSystem.assetAPI = hld->asset;
+	theRenderingSystem.assetAPI = &hld->asset[1];
 	theRenderingSystem.opengles2 = (hld->openGLESVersion == 2);
 	theTouchInputManager.setNativeTouchStatePtr(new AndroidNativeTouchState(hld));
 	hld->success.holder = hld;
@@ -166,16 +156,17 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_ini
 	hld->width = w;
 	hld->height = h;
 
-	hld->asset->init();
+	hld->asset[1].init(hld->renderThreadEnv);
 	hld->game->sacInit(hld->width, hld->height);
 	LOGW("%s <--", __FUNCTION__);
 }
 
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_initFromGameThread
-  (JNIEnv *env, jclass, jlong g, jbyteArray jstate) {
+  (JNIEnv *env, jclass, jobject asset, jlong g, jbyteArray jstate) {
   	GameHolder* hld = (GameHolder*) g;
 	UPDATE_ENV_PTR(hld->gameThreadEnv, env);
 
+	hld->assetManager[0] = (jobject)env->NewGlobalRef(asset);
 	theMusicSystem.musicAPI = new MusicAPIAndroidImpl(env);
 	theMusicSystem.assetAPI = new AssetAPIAndroidImpl(env, hld->assetManager);
 	theSoundSystem.soundAPI = new SoundAPIAndroidImpl(env, hld->assetManager);
