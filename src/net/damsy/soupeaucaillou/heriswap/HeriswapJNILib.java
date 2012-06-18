@@ -26,13 +26,11 @@ import java.util.Queue;
 
 import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command;
 import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command.Type;
-import android.R.bool;
 import android.content.ContentValues;
 import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Shader.TileMode;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -40,7 +38,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.chartboost.sdk.ChartBoost;
-import com.greystripe.android.sdk.GSSDK;
 import com.openfeint.api.OpenFeint;
 import com.openfeint.api.resource.Achievement;
 import com.openfeint.api.resource.Leaderboard;
@@ -56,15 +53,19 @@ public class HeriswapJNILib {
 	static final String PREF_NAME = "HeriswapPref";
 
 	/* Create native game instance */
-	public static native long createGame(AssetManager mgr, int openGLESVersion);
+	public static native long createGame(int openGLESVersion);
 
 	public static native void destroyGame(long game);
 
 	/* Initialize game, reset graphics assets, etc... */
-	public static native void initFromRenderThread(long game, int width,
+	public static native void initFromRenderThread(AssetManager mgr, long game, int width,
 			int height);
 
 	public static native void initFromGameThread(AssetManager mgr, long game, byte[] state);
+	
+	public static native void uninitFromRenderThread(long game);
+
+	public static native void uninitFromGameThread(long game);
 
 	public static native void step(long game);
 
@@ -76,7 +77,7 @@ public class HeriswapJNILib {
 
 	public static native void back(long game);
 
-	public static native void invalidateTextures(long game);
+	public static native void invalidateTextures(AssetManager mgr, long game);
 
 	public static native void handleInputEvent(long game, int event, float x,
 			float y);
@@ -93,7 +94,7 @@ public class HeriswapJNILib {
 		
 		int adProviderSelection = -1;
 		
-		boolean gsReady = GSSDK.getSharedInstance().isAdReady();
+		boolean gsReady = false; //GSSDK.getSharedInstance().isAdReady();
 		boolean cbReady = _cb.hasCachedInterstitial();
 
 		if (gsReady && cbReady) {
@@ -105,19 +106,21 @@ public class HeriswapJNILib {
 		}
 		
 		if (adProviderSelection == 0) {
-			HeriswapActivity.adHasBeenShown = false;
-			HeriswapActivity.activity.runOnUiThread(new Runnable() {
+			HeriswapActivity.adHasBeenShown = true;
+			/* HeriswapActivity.activity.runOnUiThread(new Runnable() {
 				public void run() {
 					if (!GSSDK.getSharedInstance().displayAd(
 							HeriswapActivity.activity)) {
 						HeriswapActivity.adHasBeenShown = true;
 					}
 				}
-			});
-			return true;
+			});*/
+			return false;
 		} else if (adProviderSelection == 1) {
-			_cb.cacheInterstitial();
+			HeriswapActivity.adHasBeenShown = false;
+			HeriswapActivity.adWaitingAdDisplay = true;
 			_cb.showInterstitial();
+			_cb.cacheInterstitial();
 			return true;
 		} else {
 			_cb.cacheInterstitial();

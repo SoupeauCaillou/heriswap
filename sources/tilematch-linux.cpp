@@ -105,12 +105,15 @@ std::cout << "Total: " << storage->getSavedGamePointsSum() << std::endl;
 theRenderingSystem.opengles2 = true;
 	//theSoundSystem.init();
 	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());
-    theMusicSystem.musicAPI = new MusicAPILinuxOpenALImpl();
+	MusicAPILinuxOpenALImpl* openal = new MusicAPILinuxOpenALImpl();
+    theMusicSystem.musicAPI = openal;
     theMusicSystem.assetAPI = new AssetAPILinuxImpl();
     theRenderingSystem.assetAPI = new AssetAPILinuxImpl();
-    theSoundSystem.soundAPI = new SoundAPILinuxOpenALImpl();
+    SoundAPILinuxOpenALImpl* soundAPI = new SoundAPILinuxOpenALImpl();
+    theSoundSystem.soundAPI = soundAPI;
+    openal->init();
     theMusicSystem.init();
-    theSoundSystem.init();
+    soundAPI->init();
     
     game.sacInit(reso->X,reso->Y);
 	game.init(state, size);

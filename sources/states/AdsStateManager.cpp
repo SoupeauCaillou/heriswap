@@ -63,7 +63,7 @@ void AdsStateManager::Enter() {
 		gameb4Ads = 1;
 	}
 
-	if (gameb4Ads==0 || timeSinceLAstAd > 180) {
+	if (gameb4Ads==0 || timeSinceLAstAd > 150) {
 		if (adAPI->showAd()) {	
 			BUTTON(eAds)->enabled = true;
 	        gameb4Ads = 0;

@@ -67,11 +67,15 @@ void StorageAPIAndroidImpl::init(JNIEnv* pEnv) {
     datas->submitScore = jniMethodLookup(env, datas->cls, "submitScore", "(IIIIFLjava/lang/String;)V");
     datas->getScores = jniMethodLookup(env, datas->cls, "getScores", "(II[I[I[F[Ljava/lang/String;)I");
     datas->getModePlayedCount = jniMethodLookup(env, datas->cls, "getModePlayedCount", "()I");
+    
+    datas->initialized = true;
 }
 
-void StorageAPIAndroidImpl::uninit(JNIEnv* env) {
-	env->DeleteGlobalRef(datas->cls);
-	datas->initialized = false;
+void StorageAPIAndroidImpl::uninit() {
+	if (datas->initialized) {
+		env->DeleteGlobalRef(datas->cls);
+		datas->initialized = false;
+	}
 }
 
 void StorageAPIAndroidImpl::submitScore(Score scr, int mode, int diff) {

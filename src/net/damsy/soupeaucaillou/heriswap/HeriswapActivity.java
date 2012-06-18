@@ -18,9 +18,6 @@
 */
 package net.damsy.soupeaucaillou.heriswap;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +28,7 @@ import android.media.SoundPool;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,13 +40,10 @@ import android.widget.RelativeLayout;
 
 import com.chartboost.sdk.ChartBoost;
 import com.chartboost.sdk.ChartBoostDelegate;
-import com.greystripe.android.sdk.GSSDK;
 import com.openfeint.api.OpenFeint;
-import com.openfeint.api.OpenFeintDelegate;
-import com.openfeint.api.OpenFeintSettings;
  
 public class HeriswapActivity extends Activity {
-	// static public final String Tag = "HeriswapJ";
+static public final String Tag = "HeriswapJ";
 	// public static List<Achievement> achievements = null;
 	// public static List<Leaderboard> leaderboards = null;
 
@@ -70,7 +65,7 @@ public class HeriswapActivity extends Activity {
 	static public Resources res;
 	static public SharedPreferences preferences;
 	static public Button[] oldName;
-	static public boolean adHasBeenShown, ofHasBeenShown;
+	static public boolean adHasBeenShown, ofHasBeenShown, adWaitingAdDisplay;
 	static public boolean runGameLoop;
 	
 	static public HeriswapActivity activity;
@@ -80,30 +75,30 @@ public class HeriswapActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == GSSDK.GS_ACTIVITY_RESULT) {
+		/*if (resultCode == GSSDK.GS_ACTIVITY_RESULT) {
 			// notify blocked 
 			//NOLOGLog.w(HeriswapActivity.Tag, "Ad hidden");
 			adHasBeenShown = true;
-		}
-		adHasBeenShown = true;
+		}*/
 		ofHasBeenShown = false;
 	}
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //NOLOGLog.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON CREATE");
+      Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON CREATE");
         activity = this;
-        ofHasBeenShown = adHasBeenShown = false;
+        ofHasBeenShown = adHasBeenShown = adWaitingAdDisplay = false;
         
         ChartBoost _cb = ChartBoost.getSharedChartBoost(this);
         _cb.setAppId(HeriswapSecret.CB_appId);
         _cb.setAppSignature(HeriswapSecret.CB_AppSignature);
-        
+        _cb.install();
         _cb.setDelegate(new ChartBoostDelegate() {
         	@Override
         	public void didCloseInterstitial(View interstitialView) {
         		super.didCloseInterstitial(interstitialView);
+        		adWaitingAdDisplay = false;
         		adHasBeenShown = true;
         	}
         	
@@ -111,6 +106,11 @@ public class HeriswapActivity extends Activity {
         	public void didFailToLoadInterstitial() {
         		super.didFailToLoadInterstitial();
         		adHasBeenShown = true;
+        	}
+        	
+        	@Override
+        	public boolean shouldDisplayInterstitial(View interstitialView) {
+        		return adWaitingAdDisplay;
         	}
 		});
         _cb.cacheInterstitial();
@@ -195,7 +195,7 @@ public class HeriswapActivity extends Activity {
 
     @Override
     protected void onPause() {
-    	//NOLOGLog.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON PAUSE");
+    	Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON PAUSE");
     	synchronized (mGLView) {
 	       	if (renderer != null) {
 	       		// must be done before super.pause()
@@ -221,7 +221,7 @@ public class HeriswapActivity extends Activity {
     @Override
     protected void onResume() {
     	ChartBoost.getSharedChartBoost(this);
-    	//NOLOGLog.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON RESUME");
+Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON RESUME");
     	ofHasBeenShown  = false;
         super.onResume();
         if (wl != null)
@@ -235,10 +235,10 @@ public class HeriswapActivity extends Activity {
         		mGLView.onResume();
         	}
         }
-        
+
         OpenFeint.onResume();
-    }
-    
+    } 
+      
     @Override
     protected void onSaveInstanceState(Bundle outState) {
     	//NOLOGLog.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON SAVE INSTANCE");
@@ -278,7 +278,7 @@ public class HeriswapActivity extends Activity {
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
     	if (keyCode == KeyEvent.KEYCODE_MENU) {
-    		HeriswapActivity.requestPausedFromJava = true;
+    		HeriswapActivity.backPressed = true;
     		// TilematchJNILib.pause(game);
     	}
     	return super.onKeyUp(keyCode, event);
@@ -299,5 +299,6 @@ public class HeriswapActivity extends Activity {
     protected void onDestroy() {
     	super.onDestroy();
     	OpenFeint.onExit();
+    	Log.i(HeriswapActivity.Tag, "Activity destroyed");
     }
 }

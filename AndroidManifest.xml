@@ -7,7 +7,6 @@
     >
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-	<uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -51,18 +50,6 @@
 		android:windowSoftInputMode="adjustResize"
 		android:theme="@android:style/Theme.Translucent"
 		android:launchMode="singleTop" android:screenOrientation="portrait">
-		</activity>
-        
-        <provider android:name="com.greystripe.android.sdk.AdContentProvider"
-android:authorities="net.damsy.soupeaucaillou.heriswap.AdContentProvider"
-android:multiprocess="true"
-android:exported="false" />
-<activity android:name="com.greystripe.android.sdk.AdView"
-android:configChanges="keyboard|keyboardHidden|orientation" >
-<intent-filter>
-<category android:name="android.intent.category.LAUNCHER" />
-</intent-filter>
-</activity>
-        
+		</activity>        
     </application>
 </manifest>
