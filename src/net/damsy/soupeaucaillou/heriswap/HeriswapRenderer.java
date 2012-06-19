@@ -24,7 +24,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
-import android.util.Log;
+// import android.util.Log;
 
 import com.openfeint.api.OpenFeint;
 
@@ -43,7 +43,7 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 gl) {
     	synchronized (HeriswapActivity.mutex) {
     		if (HeriswapActivity.game == 0 || !initDone) {
-    			Log.i(HeriswapActivity.Tag, "No rendering: " + HeriswapActivity.game + ", " + initDone);
+    			// Log.i(HeriswapActivity.Tag, "No rendering: " + HeriswapActivity.game + ", " + initDone);
     	 		return;
     		}
     		
@@ -52,15 +52,15 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     		frameCount++;
     		long diff = System.currentTimeMillis() - time;
     		if (diff >= 10000) {
-    			Log.w("TAG", "Render thread FPS: " + (float)1000*frameCount / diff);
+    			// Log.w("TAG", "Render thread FPS: " + (float)1000*frameCount / diff);
     			frameCount = 0;
     			time = System.currentTimeMillis();
     		}
     	} 
-        int err;
+        /*int err;
         while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
         	Log.e(HeriswapActivity.Tag, "GL error : " + GLU.gluErrorString(err));
-        }
+        }*/
     }
 
     void startGameThread() {
@@ -83,7 +83,7 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
 						HeriswapActivity.mGLView.requestRender();
 					} else {
 						try {
-							Log.w(HeriswapActivity.Tag, "Game thread sleeping");
+							// Log.w(HeriswapActivity.Tag, "Game thread sleeping");
 							synchronized (gameThread) {
 								gameThread.wait();
 							}
@@ -104,7 +104,7 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
 						HeriswapActivity.backPressed = false;
 					}
 				}
-				Log.i(HeriswapActivity.Tag, "Activity paused - exiting game thread");
+				// Log.i(HeriswapActivity.Tag, "Activity paused - exiting game thread");
 				gameThread = null;
 				/*
 				synchronized (TilematchActivity.mutex) {
@@ -120,11 +120,11 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
  
     boolean initDone = false;
     public void onSurfaceChanged(GL10 gl, final int width, final int height) {
-    	Log.i(HeriswapActivity.Tag, "surface changed-> width: " + width + ", height: " + height + ", " + initDone);
+    	// Log.i(HeriswapActivity.Tag, "surface changed-> width: " + width + ", height: " + height + ", " + initDone);
     	if (!initDone) {
 			HeriswapJNILib.initFromRenderThread(asset, HeriswapActivity.game, width, height);
     		// TilematchJNILib.initAndReloadTextures(TilematchActivity.game);
-			Log.i(HeriswapActivity.Tag, "Start game thread");
+			// Log.i(HeriswapActivity.Tag, "Start game thread");
     		// create game thread
     		initDone = true;
     		HeriswapActivity.runGameLoop = true;
@@ -132,10 +132,10 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     	} else {
     		HeriswapActivity.runGameLoop = true;
     		if (gameThread == null) {
-    			Log.i(HeriswapActivity.Tag, "Start game thread");
+    			// Log.i(HeriswapActivity.Tag, "Start game thread");
     			startGameThread();
     		} else {
-    			Log.i(HeriswapActivity.Tag, "Wake up game thread");
+    			// Log.i(HeriswapActivity.Tag, "Wake up game thread");
     			synchronized (gameThread) {
     				gameThread.notify();
 				}
@@ -150,11 +150,11 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
     	if (HeriswapActivity.game == 0) {
-    		Log.i("HeriswapActivity.Tag", "Activity LifeCycle ##### Game instance creation (onSurfaceCreated)");
+    		// Log.i("HeriswapActivity.Tag", "Activity LifeCycle ##### Game instance creation (onSurfaceCreated)");
     		initDone = false;
     		HeriswapActivity.game = HeriswapJNILib.createGame(HeriswapActivity.openGLESVersion);
     	} else {
-    		Log.i("HeriswapActivity.Tag", "Activity LifeCycle ##### Game instance reused (onSurfaceCreated)");
+    		// Log.i("HeriswapActivity.Tag", "Activity LifeCycle ##### Game instance reused (onSurfaceCreated)");
     		HeriswapJNILib.invalidateTextures(asset, HeriswapActivity.game);
     		HeriswapJNILib.initAndReloadTextures(HeriswapActivity.game);
     		initDone = true;

@@ -251,6 +251,8 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_ini
 	theMusicSystem.assetAPI = &hld->gameThreadJNICtx.asset;
 	theSoundSystem.soundAPI = &hld->gameThreadJNICtx.soundAPI;
 	
+	theSoundSystem.init();
+	
 	uint8_t* state = 0;
 	int size = 0;
 	if (jstate) {

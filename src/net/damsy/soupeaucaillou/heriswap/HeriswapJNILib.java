@@ -34,7 +34,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.util.Log;
+//import android.util.Log;
 import android.view.View;
 
 import com.chartboost.sdk.ChartBoost;
@@ -124,7 +124,7 @@ public class HeriswapJNILib {
 			return true;
 		} else {
 			_cb.cacheInterstitial();
-			Log.w("AD", "No ad ready");
+			// Log.w("AD", "No ad ready");
 			HeriswapActivity.adHasBeenShown = true;
 			return false;
 		}
@@ -148,7 +148,7 @@ public class HeriswapJNILib {
 			return null;
 		}
 	}
-
+ 
 	// -------------------------------------------------------------------------
 	// SoundAPI
 	// -------------------------------------------------------------------------
@@ -159,7 +159,7 @@ public class HeriswapJNILib {
 			//NOLOGLog.e(HeriswapActivity.Tag, "Unable to load sound: " + assetPath);
 			return -1;
 		}
-	}
+	} 
 
 	static public boolean playSound(int soundID, float volume) {
 		if (soundID < 0)

@@ -28,7 +28,7 @@ import android.media.SoundPool;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.util.Log;
+// import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -86,7 +86,7 @@ static public final String Tag = "HeriswapJ";
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON CREATE");
+      //Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON CREATE");
         activity = this;
         ofHasBeenShown = adHasBeenShown = adWaitingAdDisplay = false;
         
@@ -201,7 +201,7 @@ static public final String Tag = "HeriswapJ";
 
     @Override
     protected void onPause() {
-    	Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON PAUSE");
+    	//Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON PAUSE");
     	synchronized (mGLView) {
 	       	if (renderer != null) {
 	       		// must be done before super.pause()
@@ -227,7 +227,7 @@ static public final String Tag = "HeriswapJ";
     @Override
     protected void onResume() {
     	ChartBoost.getSharedChartBoost(this);
-Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON RESUME");
+//Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON RESUME");
     	ofHasBeenShown  = false;
         super.onResume();
         if (wl != null)
@@ -305,6 +305,6 @@ Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON RESUME");
     protected void onDestroy() {
     	super.onDestroy();
     	OpenFeint.onExit();
-    	Log.i(HeriswapActivity.Tag, "Activity destroyed");
+    	//Log.i(HeriswapActivity.Tag, "Activity destroyed");
     }
 }
