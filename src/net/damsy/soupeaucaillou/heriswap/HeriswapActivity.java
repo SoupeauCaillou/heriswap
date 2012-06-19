@@ -67,7 +67,7 @@ static public final String Tag = "HeriswapJ";
 	static public Button[] oldName;
 	static public boolean adHasBeenShown, ofHasBeenShown, adWaitingAdDisplay;
 	static public boolean runGameLoop;
-	
+
 	static public HeriswapActivity activity;
 	PowerManager.WakeLock wl;
 	HeriswapRenderer renderer;
@@ -105,12 +105,18 @@ static public final String Tag = "HeriswapJ";
         	@Override
         	public void didFailToLoadInterstitial() {
         		super.didFailToLoadInterstitial();
+        		adWaitingAdDisplay = false;
         		adHasBeenShown = true;
         	}
         	
         	@Override
         	public boolean shouldDisplayInterstitial(View interstitialView) {
-        		return adWaitingAdDisplay;
+        		if (adWaitingAdDisplay && interstitialView != null) {
+        			adWaitingAdDisplay = false;
+        			return true;
+        		} else {
+        			return false;
+        		}
         	}
 		});
         _cb.cacheInterstitial();
