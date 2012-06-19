@@ -103,7 +103,7 @@ public class HeriswapJNILib {
 			adProviderSelection = 0;
 		} else if (cbReady) {
 			adProviderSelection = 1;
-		}
+		} 
 		
 		if (adProviderSelection == 0) {
 			HeriswapActivity.adHasBeenShown = true;
@@ -161,11 +161,11 @@ public class HeriswapJNILib {
 		}
 	}
 
-	static public void playSound(int soundID, float volume) {
+	static public boolean playSound(int soundID, float volume) {
 		if (soundID < 0)
-			return;
-		HeriswapActivity.soundPool.play(soundID, 0.5f * volume,
-				0.5f * volume, 0, 0, 1.0f);
+			return false;
+		return HeriswapActivity.soundPool.play(soundID, 0.5f * volume,
+				0.5f * volume, 0, 0, 1.0f) != 0;
 	}
 
 	// -------------------------------------------------------------------------
