@@ -9,7 +9,7 @@ AM_CXXFLAGS = $(GLFW_CFLAGS) \
 	$(VORBIS_CFLAGS) \
 	$(VORBISFILE_CFLAGS) \
 	$(SQLITE_CFLAGS) \
-	-I../sac \
+	-I$(top_srcdir)/sac \
 	-DDATADIR=\"$(pkgdatadir)/\"
 
 heriswap_SOURCES = tilematch-linux.cpp \
