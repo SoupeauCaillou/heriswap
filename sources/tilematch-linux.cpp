@@ -73,10 +73,14 @@ int main(int argc, char** argv) {
 	Vector2 reso16_9(394, 700);
 	Vector2 reso16_10(430, 700);
 
+	glfwOpenWindowHint( GLFW_WINDOW_NO_RESIZE, GL_TRUE );
+	
 	Vector2* reso = (argc == 1) ? &reso16_10 : &reso16_9;
 	if( !glfwOpenWindow( reso->X,reso->Y, 8,8,8,8,8,8, GLFW_WINDOW ) )
 		return 1;
 
+	glfwSetWindowTitle("Heriswap");
+	
 	glewInit();
 
 
