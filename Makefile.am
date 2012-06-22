@@ -1,1 +1,1 @@
-SUBDIRS = sac sources assets
+SUBDIRS = sac sources assets po

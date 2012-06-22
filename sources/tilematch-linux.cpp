@@ -51,8 +51,12 @@
 
 #include "Game.h"
 
+#include <locale.h>
+
 #define DT 1/60.
 #define MAGICKEYTIME 0.3
+
+
 
 class MouseNativeTouchState: public NativeTouchState {
 	public:
@@ -67,6 +71,10 @@ class MouseNativeTouchState: public NativeTouchState {
 };
 
 int main(int argc, char** argv) {
+	setlocale( LC_ALL, "" );
+	
+	gettext("Test localisation");
+
 	if (!glfwInit())
 		return 1;
 
