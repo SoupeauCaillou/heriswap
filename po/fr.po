@@ -27,6 +27,9 @@ msgstr "Meilleurs scores :"
 msgid "Start"
 msgstr "Jouer"
 
+msgid "Play"
+msgstr "Jouer"
+
 #: sources/states/ModeMenuStateManager.cpp:198
 #: sources/states/ModeMenuStateManager.cpp:304
 msgid "lvl"

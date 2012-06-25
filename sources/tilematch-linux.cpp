@@ -72,10 +72,6 @@ class MouseNativeTouchState: public NativeTouchState {
 };
 
 int main(int argc, char** argv) {
-	setlocale( LC_ALL, "" );
-	
-	
-
 	if (!glfwInit())
 		return 1;
 
@@ -91,7 +87,6 @@ int main(int argc, char** argv) {
 	glfwSetWindowTitle("Heriswap");
 	
 	glewInit();
-
 
 	// pose de l'origine du temps ici t = 0
 	TimeUtil::init();
@@ -112,13 +107,13 @@ int main(int argc, char** argv) {
 
     StorageAPILinuxImpl* storage = new StorageAPILinuxImpl();
     storage->init();
-std::cout << "Total: " << storage->getSavedGamePointsSum() << std::endl;
+
 	LocalizeAPILinuxImpl* loc = new LocalizeAPILinuxImpl();
-	loc->init();
-	std::cout << gettext("Test localisation") << std::endl;
+	
+	
 	Game game(new AssetAPILinuxImpl(), storage, new NameInputAPILinuxImpl(), new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl());
 
-theRenderingSystem.opengles2 = true;
+	theRenderingSystem.opengles2 = true;
 	//theSoundSystem.init();
 	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());
 	MusicAPILinuxOpenALImpl* openal = new MusicAPILinuxOpenALImpl();
@@ -132,6 +127,10 @@ theRenderingSystem.opengles2 = true;
     soundAPI->init();
     
     game.sacInit(reso->X,reso->Y);
+    
+    setlocale( LC_ALL, "" );
+	loc->init();
+	
 	game.init(state, size);
 
 	bool running = true;

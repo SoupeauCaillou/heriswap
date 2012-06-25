@@ -397,7 +397,12 @@ void Game::tick(float dt) {
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
 		
-		RENDERING(datas->openfeint)->hide = (newState != MainMenu && newState != ModeMenu);
+		#ifdef ANDROID
+		bool ofHidden = (newState != MainMenu && newState != ModeMenu);
+		#else
+		bool ofHidden = true;
+    	#endif
+		RENDERING(datas->openfeint)->hide = ofHidden;
 		BUTTON(datas->openfeint)->enabled = !RENDERING(datas->openfeint)->hide;
 	}
 

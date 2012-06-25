@@ -66,6 +66,7 @@
     <None Include="assets\default.fs" />
     <None Include="assets\default.vs" />
     <None Include="assets\desaturate.fs" />
+    <None Include="po\fr.po" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
