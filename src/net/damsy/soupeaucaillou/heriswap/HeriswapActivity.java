@@ -280,7 +280,7 @@ static public final String Tag = "HeriswapJ";
     public void onBackPressed() {
     	HeriswapActivity.backPressed = true;
     }
-
+ 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
     	if (keyCode == KeyEvent.KEYCODE_MENU) {
@@ -294,7 +294,7 @@ static public final String Tag = "HeriswapJ";
 
     private String filterPlayerName(String name) {
     	String n = name.trim();
-    	return n.replaceAll("[^a-zA-Z0-9 ]"," ").substring(0, Math.min(11, name.length()));
+    	return n.replaceAll("[^a-zA-Z0-9 ]"," ").substring(0, Math.min(11, n.length()));
     }
     
     static {
