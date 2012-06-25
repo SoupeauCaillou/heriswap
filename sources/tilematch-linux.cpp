@@ -52,6 +52,7 @@
 #include "Game.h"
 
 #include <locale.h>
+#include <libintl.h>
 
 #define DT 1/60.
 #define MAGICKEYTIME 0.3
@@ -73,7 +74,7 @@ class MouseNativeTouchState: public NativeTouchState {
 int main(int argc, char** argv) {
 	setlocale( LC_ALL, "" );
 	
-	gettext("Test localisation");
+	
 
 	if (!glfwInit())
 		return 1;
@@ -112,7 +113,10 @@ int main(int argc, char** argv) {
     StorageAPILinuxImpl* storage = new StorageAPILinuxImpl();
     storage->init();
 std::cout << "Total: " << storage->getSavedGamePointsSum() << std::endl;
-	Game game(new AssetAPILinuxImpl(), storage, new NameInputAPILinuxImpl(), new SuccessAPI(), new LocalizeAPILinuxImpl(), new AdAPI(), new ExitAPILinuxImpl());
+	LocalizeAPILinuxImpl* loc = new LocalizeAPILinuxImpl();
+	loc->init();
+	std::cout << gettext("Test localisation") << std::endl;
+	Game game(new AssetAPILinuxImpl(), storage, new NameInputAPILinuxImpl(), new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl());
 
 theRenderingSystem.opengles2 = true;
 	//theSoundSystem.init();

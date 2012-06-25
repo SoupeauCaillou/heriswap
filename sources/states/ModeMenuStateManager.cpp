@@ -102,7 +102,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(scoreTitle)->position = Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(520));
 	TRANSFORM(scoreTitle)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(scoreTitle, TextRendering);
-	TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("score", "Meilleurs scores :");
+	TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("score", "Highscores:");
 	TEXT_RENDERING(scoreTitle)->fontName = "typo";
 	TEXT_RENDERING(scoreTitle)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(scoreTitle)->color = green;
@@ -115,7 +115,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(play)->position = Vector2(0, PlacementHelper::GimpYToScreen(275));
 	TRANSFORM(play)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(play, TextRendering);
-	TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Jouer");
+	TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Start");
 	TEXT_RENDERING(play)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(play)->color = green;
 	TEXT_RENDERING(play)->fontName = "typo";
@@ -195,7 +195,7 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
 
-			a.str(""); a<< std::fixed <<localizeAPI->text("lvl", "niv") << " " <<entries[i].level;
+			a.str(""); a<< std::fixed <<localizeAPI->text("lvl", "lvl") << " " <<entries[i].level;
 			trcL->text = a.str();
 			//affichage lvl
 			if (mode==Normal) {
@@ -240,15 +240,15 @@ void ModeMenuStateManager::Enter() {
 	TEXT_RENDERING(title)->hide = false;
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
-	TEXT_RENDERING(play)->text = (gameOverState != NoGame) ? localizeAPI->text("rejouer", "Rejouer") : localizeAPI->text("jouer", "Jouer");
+	TEXT_RENDERING(play)->text = (gameOverState != NoGame) ? localizeAPI->text("rejouer", "Restart") : localizeAPI->text("jouer", "Play");
 	TEXT_RENDERING(scoreTitle)->hide = false;
 	TEXT_RENDERING(eDifficulty)->hide=false;
 	BUTTON(bDifficulty)->enabled = true;
 
     if (difficulty==0)
-        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Débutant") + " }";
+        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
     else
-        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Confirmé") + " }";
+        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Hard") + " }";
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
@@ -301,7 +301,7 @@ GameState ModeMenuStateManager::Update(float dt) {
             std::stringstream a;
             a.precision(1);
             if (modeMgr->GetMode()==Normal) {
-                a << modeMgr->points << " : "<< localizeAPI->text("lvl", "niv") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
+                a << modeMgr->points << " : "<< localizeAPI->text("lvl", "lvl") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
             } else {
                 a << std::fixed << modeMgr->time << " s";
             }
@@ -339,11 +339,11 @@ GameState ModeMenuStateManager::Update(float dt) {
 		if (difficulty==2) difficulty=0;
 		LoadScore(modeMgr->GetMode(), difficulty);
 		if (difficulty==0)
-			TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Débutant") + " }";
+			TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
 		else
-			TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Confirmé") + " }";
+			TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Hard") + " }";
 
-		TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Jouer");
+		TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Play");
 	}
 
 	if (gameOverState != AskingPlayerName && BUTTON(playButton)->clicked) {

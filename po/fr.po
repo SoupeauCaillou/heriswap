@@ -18,56 +18,56 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: sources/states/ModeMenuStateManager.cpp:105
-msgid "Meilleurs scores :"
-msgstr ""
+msgid "Highscores:"
+msgstr "Meilleurs scores :"
 
 #: sources/states/ModeMenuStateManager.cpp:118
 #: sources/states/ModeMenuStateManager.cpp:243
 #: sources/states/ModeMenuStateManager.cpp:346
-msgid "Jouer"
+msgid "Start"
 msgstr "Jouer"
 
 #: sources/states/ModeMenuStateManager.cpp:198
 #: sources/states/ModeMenuStateManager.cpp:304
-msgid "niv"
+msgid "lvl"
 msgstr "niv"
 
 #: sources/states/ModeMenuStateManager.cpp:243
-msgid "Rejouer"
+msgid "Restart"
 msgstr "Rejouer"
 
 #: sources/states/ModeMenuStateManager.cpp:249
 #: sources/states/ModeMenuStateManager.cpp:342
-msgid "Débutant"
+msgid "Easy"
 msgstr "Débutant"
 
 #: sources/states/ModeMenuStateManager.cpp:251
 #: sources/states/ModeMenuStateManager.cpp:344
-msgid "Confirmé"
+msgid "Hard"
 msgstr "Confirmé"
 
 #: sources/states/MainMenuGameStateManager.cpp:61
-msgid "Course au score"
+msgid "Score race"
 msgstr "Course au score"
 
 #: sources/states/MainMenuGameStateManager.cpp:64
-msgid "Contre la montre"
+msgid "Time attack"
 msgstr "Contre la montre"
 
 #: sources/states/MainMenuGameStateManager.cpp:118
-msgid "Quitter"
+msgid "Exit"
 msgstr "Quitter"
 
 #: sources/states/PauseStateManager.cpp:43
-msgid "Reprendre"
+msgid "Continue"
 msgstr "Reprendre"
 
 #: sources/states/PauseStateManager.cpp:66
-msgid "Aide"
+msgid "Help"
 msgstr "Aide"
 
 #: sources/states/PauseStateManager.cpp:88
-msgid "Abandonner"
+msgid "Quit"
 msgstr "Abandonner"
 
 #: sources/states/HelpStateManager.cpp:74
@@ -75,25 +75,25 @@ msgid "Bonus x2"
 msgstr "Bonus x2"
 
 #: sources/states/HelpStateManager.cpp:88
-msgid "Niveau"
+msgid "Level"
 msgstr "Niveau"
 
 #: sources/states/HelpStateManager.cpp:99
-msgid "Niv"
+msgid "Lvl"
 msgstr "Niv"
 
 #: sources/states/HelpStateManager.cpp:126
-msgid "feuilles restantes"
+msgid "leaves left"
 msgstr "feuilles restantes"
 
 #: sources/states/HelpStateManager.cpp:138
-msgid "Comment jouer ?"
+msgid "How to play?"
 msgstr "Comment jouer ?"
 
 #: sources/states/HelpStateManager.cpp:158
-msgid "Objectif"
+msgid "Objective"
 msgstr "Objectif"
 
 #: sources/tilematch-linux.cpp:76
 msgid "Test localisation"
-msgstr "Test localisation"
+msgstr "Test localisation FR"

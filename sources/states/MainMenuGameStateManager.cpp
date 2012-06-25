@@ -58,10 +58,10 @@ void MainMenuGameStateManager::Setup() {
 	    RENDERING(bStart[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
 	    RENDERING(bStart[i])->color.a = 0.5;
 	}
-	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Course au score");
+	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Score race");
 	TRANSFORM(eStart[0])->position.X = PlacementHelper::GimpXToScreen(75);
 	TRANSFORM(eStart[0])->position.Y = TRANSFORM(bStart[0])->position.Y = PlacementHelper::GimpYToScreen(156);
-	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2", "Contre la montre");
+	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2", "Time attack");
 	TRANSFORM(eStart[1])->position.X = PlacementHelper::GimpXToScreen(75);
 	TRANSFORM(eStart[1])->position.Y = TRANSFORM(bStart[1])->position.Y = PlacementHelper::GimpYToScreen(156+183);
 
@@ -115,7 +115,7 @@ void MainMenuGameStateManager::Setup() {
 	TRANSFORM(quitButton[0])->z = DL_MainMenuUITxt;
 	TRANSFORM(quitButton[0])->position = Vector2(0, PlacementHelper::GimpYToScreen(1215));
 	ADD_COMPONENT(quitButton[0], TextRendering);
-	TEXT_RENDERING(quitButton[0])->text = " " + localizeAPI->text("quitter", "Quitter") + " ";
+	TEXT_RENDERING(quitButton[0])->text = " " + localizeAPI->text("quitter", "Exit") + " ";
 	TEXT_RENDERING(quitButton[0])->hide = true;
 	TEXT_RENDERING(quitButton[0])->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(quitButton[0])->color = green;

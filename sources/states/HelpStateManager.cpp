@@ -85,7 +85,7 @@ void HelpStateManager::Setup() {
 	TEXT_RENDERING(levelBig)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(levelBig)->color = green;
 	TEXT_RENDERING(levelBig)->charHeight = PlacementHelper::GimpHeightToScreen(55);
-	TEXT_RENDERING(levelBig)->text = localize->text("level", "Niveau");
+	TEXT_RENDERING(levelBig)->text = localize->text("level", "Level");
 	for (int i=0; i<3; i++) {
     	levelSmall[i] = theEntityManager.CreateEntity();
     	ADD_COMPONENT(levelSmall[i], Transformation);
@@ -96,7 +96,7 @@ void HelpStateManager::Setup() {
 		TEXT_RENDERING(levelSmall[i])->positioning = TextRenderingComponent::LEFT;
 		TEXT_RENDERING(levelSmall[i])->color = green;
 		TEXT_RENDERING(levelSmall[i])->charHeight = PlacementHelper::GimpHeightToScreen(55);			
-		TEXT_RENDERING(levelSmall[i])->text = localize->text("lvlcap", "Niv");
+		TEXT_RENDERING(levelSmall[i])->text = localize->text("lvlcap", "Lvl");
 	}
 	
 	// difficulty
@@ -110,7 +110,7 @@ void HelpStateManager::Setup() {
 		TEXT_RENDERING(difficulty[i])->positioning = TextRenderingComponent::RIGHT;
 		TEXT_RENDERING(difficulty[i])->color = green;
 		TEXT_RENDERING(difficulty[i])->charHeight = PlacementHelper::GimpHeightToScreen(45);
-		TEXT_RENDERING(difficulty[i])->text = ((i==0) ? localize->text("diff_1", "Débutant") : localize->text("diff_2", "Confirmé")) + ":";
+		TEXT_RENDERING(difficulty[i])->text = ((i==0) ? localize->text("diff_1", "Easy") : localize->text("diff_2", "Hard")) + ":";
 	}
 	
 	// leaves left
@@ -123,7 +123,7 @@ void HelpStateManager::Setup() {
 	TEXT_RENDERING(leaveLeft)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(leaveLeft)->color = green;
 	TEXT_RENDERING(leaveLeft)->charHeight = PlacementHelper::GimpHeightToScreen(55);
-	TEXT_RENDERING(leaveLeft)->text = localize->text("leave_left", "feuilles restantes");
+	TEXT_RENDERING(leaveLeft)->text = localize->text("leave_left", "leaves left");
 }
 
 void HelpStateManager::Enter() {
@@ -135,7 +135,7 @@ void HelpStateManager::Enter() {
 	RENDERING(background)->texture = theRenderingSystem.loadTextureFile("bg_help_howto");
 	RENDERING(background)->hide = false;
 	TEXT_RENDERING(title[0])->hide = false;
-	TEXT_RENDERING(title[0])->text = localize->text("how_to_play", "Comment jouer ?");
+	TEXT_RENDERING(title[0])->text = localize->text("how_to_play", "How to play?");
 	RENDERING(title[1])->hide = false;
 	TEXT_RENDERING(bonus)->hide = false;
 }
@@ -155,7 +155,7 @@ GameState HelpStateManager::Update(float dt) {
 			std::cout << TRANSFORM(bg2)->size << ", " << TRANSFORM(bg2)->position << std::endl;
 			RENDERING(bg2)->hide = false;
 			
-			TEXT_RENDERING(title[0])->text = localize->text("objective", "Objectif");
+			TEXT_RENDERING(title[0])->text = localize->text("objective", "Objective");
 			if (mode == Normal) {
 				TEXT_RENDERING(levelBig)->hide = false;
 				for (int i=0; i<3; i++) {
