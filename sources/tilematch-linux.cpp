@@ -181,6 +181,7 @@ int main(int argc, char** argv) {
 	TEXT_RENDERING(nameInput->nameEdit)->color = green;
 	TEXT_RENDERING(nameInput->nameEdit)->charHeight = PlacementHelper::GimpHeightToScreen(54);
 	TEXT_RENDERING(nameInput->nameEdit)->hide = true;
+	TEXT_RENDERING(nameInput->nameEdit)->caretSpeed = 0.5;
 	
 	nameInput->background = theEntityManager.CreateEntity();
 	ADD_COMPONENT(nameInput->background, Transformation);
