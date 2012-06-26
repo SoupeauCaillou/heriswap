@@ -23,13 +23,16 @@
 #include "base/Log.h"
 #include "Callback.h"
 #include "../../modes/GameModeManager.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 
-static bool request(std::string s, void* res, int (*callbackP)(void*,int,char**,char**)) {
+
+static bool request(const std::string& dbPath, std::string s, void* res, int (*callbackP)(void*,int,char**,char**)) {
     sqlite3 *db;
     char *zErrMsg = 0;
-    int rc = sqlite3_open("tilematch.db", &db);
+    int rc = sqlite3_open(dbPath.c_str(), &db);
     if( rc ){
-        LOGI("Can't open database tilematch.db: %s\n", sqlite3_errmsg(db));
+        LOGI("Can't open database %s: %s\n", dbPath.c_str(), sqlite3_errmsg(db));
         sqlite3_close(db);
         return false;
     }
@@ -49,27 +52,50 @@ static bool request(std::string s, void* res, int (*callbackP)(void*,int,char**,
 }
 
 void StorageAPILinuxImpl::init() {
-    bool r = request("", 0, 0);
+	std::stringstream ss;
+	char * pPath = getenv ("XDG_DATA_HOME");
+	if (pPath) {
+		ss << pPath;
+	} else if ((pPath = getenv ("HOME")) != 0) {
+		ss << pPath << "/.local/share/";
+	} else {
+		ss << "/tmp/";
+	}
+	ss << "heriswap/";
+	dbPath = ss.str();
+	// create folder if needed
+	struct stat statFolder;
+	int st = stat(dbPath.c_str(), &statFolder);
+	if (st || (statFolder.st_mode & S_IFMT) != S_IFDIR) {
+		if (mkdir(dbPath.c_str(), S_IRWXU | S_IWGRP | S_IROTH)) {
+			std::cerr << "Failed to create : '%s'" <<  dbPath << std::endl;
+			return;
+		}
+	}
+
+	ss << "heriswap.db";
+	dbPath = ss.str();
+    bool r = request(dbPath, "", 0, 0);
     if (r) {
         LOGI("initializing database...");
-        request("create table score(name varchar2(11) default 'Anonymous', mode number(1) default '0', difficulty number(1) default '1', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0, 0);
-        request("create table info(opt varchar2(8), value varchar2(11), constraint f1 primary key(opt,value))", 0, 0);
+        request(dbPath, "create table score(name varchar2(11) default 'Anonymous', mode number(1) default '0', difficulty number(1) default '1', points number(7) default '0', time number(5) default '0', level number(3) default '1')", 0, 0);
+        request(dbPath, "create table info(opt varchar2(8), value varchar2(11), constraint f1 primary key(opt,value))", 0, 0);
         std::string s;
-        request("select value from info where opt like 'sound'", &s, 0);
+        request(dbPath, "select value from info where opt like 'sound'", &s, 0);
         if (s.length()==0) {
-            request("insert into info values('sound', 'on')", 0, 0);
+            request(dbPath, "insert into info values('sound', 'on')", 0, 0);
         }
         s = "";
-        request("select value from info where opt like 'helpActive'", &s, 0);
+        request(dbPath, "select value from info where opt like 'helpActive'", &s, 0);
         if (s.length()==0) {
-            request("insert into info values('helpActive', '1')", 0, 0);
+            request(dbPath, "insert into info values('helpActive', '1')", 0, 0);
         }
         s = "";
-        request("select value from info where opt like 'gameb4Ads'", &s, 0);
+        request(dbPath, "select value from info where opt like 'gameb4Ads'", &s, 0);
         if (s.length()==0) {
-            request("insert into info values('gameb4Ads', '2')", 0, 0);
+            request(dbPath, "insert into info values('gameb4Ads', '2')", 0, 0);
         } else {
-            request("UPDATE info SET value='2' where opt='gameb4Ads'",0, 0);
+            request(dbPath, "UPDATE info SET value='2' where opt='gameb4Ads'",0, 0);
         }
     }
 }
@@ -77,7 +103,7 @@ void StorageAPILinuxImpl::init() {
 void StorageAPILinuxImpl::submitScore(Score scr, int mode, int diff) {
     std::stringstream tmp;
     tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << mode<<","<<diff<<","<<scr.points<<","<<scr.time<<","<<scr.level<<")";
-    request(tmp.str().c_str(), 0, 0);
+    request(dbPath, tmp.str().c_str(), 0, 0);
 }
 
 std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(int mode, int difficulty) {
@@ -89,16 +115,16 @@ std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(int mode, int di
         tmp << " order by points desc limit 5";
     else
         tmp << " order by time asc limit 5";
-    request(tmp.str().c_str(), &result, callbackScore);
+    request(dbPath, tmp.str().c_str(), &result, callbackScore);
     return result;
 }
 
 bool StorageAPILinuxImpl::soundEnable(bool switchIt) {
     std::string s;
-    request("select value from info where opt like 'sound'", &s, 0);
+    request(dbPath, "select value from info where opt like 'sound'", &s, 0);
     if (switchIt) {
-        if (s=="on") request("UPDATE info SET value='off' where opt='sound'",0, 0);
-        else request("UPDATE info SET value='on' where opt='sound'",0, 0);
+        if (s=="on") request(dbPath, "UPDATE info SET value='off' where opt='sound'",0, 0);
+        else request(dbPath, "UPDATE info SET value='on' where opt='sound'",0, 0);
         LOGI("switched to !%s", s.c_str());
     }
     return (s == "on");
@@ -106,24 +132,24 @@ bool StorageAPILinuxImpl::soundEnable(bool switchIt) {
 
 int StorageAPILinuxImpl::getGameCountBeforeNextAd() {
     std::string s;
-    request("select value from info where opt='gameb4Ads'", &s, 0);
+    request(dbPath, "select value from info where opt='gameb4Ads'", &s, 0);
     return std::atoi(s.c_str());
 }
 
 void StorageAPILinuxImpl::setGameCountBeforeNextAd(int c) {
     std::stringstream s;
     s << "update info set value='" << c << "' where opt='gameb4Ads'";
-    request(s.str(),0, 0);
+    request(dbPath, s.str(),0, 0);
 }
 
 int StorageAPILinuxImpl::getSavedGamePointsSum() {
     std::string s = "";
-    request("select sum(points) from score", &s, 0);
+    request(dbPath, "select sum(points) from score", &s, 0);
     return atoi(s.c_str());
 }
 
 bool StorageAPILinuxImpl::everyModesPlayed() {
     int s = 0;
-    request("select distinct difficulty,mode from score", &s, callbackResultSize);
+    request(dbPath, "select distinct difficulty,mode from score", &s, callbackResultSize);
     return (s==4);
 }

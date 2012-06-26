@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
 
 	glfwOpenWindowHint( GLFW_WINDOW_NO_RESIZE, GL_TRUE );
 	
-	Vector2* reso = (argc == 1) ? &reso16_10 : &reso16_9;
+	Vector2* reso = &reso16_10; // (argc == 1) ? &reso16_10 : &reso16_9;
 	if( !glfwOpenWindow( reso->X,reso->Y, 8,8,8,8,8,8, GLFW_WINDOW ) )
 		return 1;
 
@@ -92,6 +92,7 @@ int main(int argc, char** argv) {
 	TimeUtil::init();
 	uint8_t* state = 0;
 	int size = 0;
+	#if 0
 	if (argc > 1 && !strcmp(argv[1], "-restore")) {
 		FILE* file = fopen("dump.bin", "r+b");
 		if (file) {
@@ -104,6 +105,7 @@ int main(int argc, char** argv) {
 			fclose(file);
 		}
 	}
+	#endif
 
     StorageAPILinuxImpl* storage = new StorageAPILinuxImpl();
     storage->init();

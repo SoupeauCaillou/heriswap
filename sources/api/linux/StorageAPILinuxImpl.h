@@ -30,4 +30,7 @@ class StorageAPILinuxImpl : public StorageAPI {
         void setGameCountBeforeNextAd(int c);
         int getSavedGamePointsSum();
         bool everyModesPlayed();
+        
+    private:
+    	std::string dbPath;
 };
