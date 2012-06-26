@@ -76,7 +76,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(0.2, FadeOut, ModeMenuToBlackState, Ads, 0, state2Manager[ModeMenu]);
      state2Manager[AdsToBlackState] = new FadeGameStateManager(0.2, FadeOut, AdsToBlackState, BlackToSpawn, 0, state2Manager[Ads]);
      state2Manager[BlackToSpawn] = new FadeGameStateManager(0.5, FadeIn, BlackToSpawn, Spawn, 0, 0);
-	 state2Manager[GameToBlack] = new FadeGameStateManager(1, FadeOut, GameToBlack, BlackToModeMenu, 0, 0);
+	 state2Manager[GameToBlack] = new FadeGameStateManager(4, FadeOut, GameToBlack, BlackToModeMenu, 0, 0);
      state2Manager[BlackToModeMenu] = new FadeGameStateManager(0.5, FadeIn, BlackToModeMenu, ModeMenu, state2Manager[ModeMenu], 0);
  }
 
@@ -105,7 +105,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      if (storage->soundEnable(false)) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on");
      else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
      ADD_COMPONENT(soundButton, Sound);
- 
+
      ADD_COMPONENT(openfeint, Transformation);
      TRANSFORM(openfeint)->z = DL_MainMenuUITxt;
      TRANSFORM(openfeint)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
@@ -192,6 +192,6 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      (static_cast<NormalGameModeManager*> (mode2Manager[Normal]))->stressTrack = inGameMusic.stressTrack;
 	PauseStateManager* pause = static_cast<PauseStateManager*> (state2Manager[Pause]);
 	pause->helpMgr = static_cast<HelpStateManager*> (state2Manager[Help]);
-	
+
 	static_cast<ModeMenuStateManager*>(state2Manager[ModeMenu])->helpMgr = pause->helpMgr;
 }
