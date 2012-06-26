@@ -112,7 +112,7 @@ Game::Game(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI
 	asset = ast;
 	successAPI = sAPI;
 	exitAPI = exAPI;
-	
+
 	/* create EntityManager */
 	EntityManager::CreateInstance();
 
@@ -271,22 +271,17 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 			{
 				for ( std::vector<Vector2>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
 				{
-					//rajout de 2 marques sur les elements a swich
-					for (int i=0;i<2;i++) {
-						if (j) {
-							CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->X, it->Y));
-							CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->X+i, it->Y));
-							marks.push_back(theGridSystem.GetOnPos(it->X, it->Y));
-							marks.push_back(theGridSystem.GetOnPos(it->X+1, it->Y));
-						} else {
-							CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->X, it->Y));
-							CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->X, it->Y+1));						}
-							marks.push_back(theGridSystem.GetOnPos(it->X, it->Y));
-							marks.push_back(theGridSystem.GetOnPos(it->X, it->Y+1));
-					}
+					CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->X, it->Y));
+					marks.push_back(theGridSystem.GetOnPos(it->X, it->Y));
+					CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->X+(j+1)/2, it->Y+(j+1)%2));
+					marks.push_back(theGridSystem.GetOnPos(it->X+(j+1)/2, it->Y+(j+1)%2));
 				}
 			}
 		}
+
+
+//rajout de 2 marques sur les elements a switch
+
 	} else {
 		if (marks.size()>0) {
 			for (unsigned int i=0; i<marks.size(); i++) {
@@ -362,6 +357,26 @@ void Game::tick(float dt) {
 
 	if (percentDone >= 1) {
 		newState = GameToBlack;
+		//show combinations which remain in score attack
+		if (datas->mode == Normal) {
+			std::vector<Entity> leaves = theGridSystem.RetrieveAllEntityWithComponent();
+			for (unsigned int i = 0; i < leaves.size(); i++)
+				RENDERING(leaves[i])->desaturate = true;
+
+			for (int j = 0 ; j < 2 ; j++) {
+				std::vector<Vector2> combinaisons;
+				if (j)
+					combinaisons = theGridSystem.LookForCombinationsOnSwitchHorizontal();
+				else
+					combinaisons = theGridSystem.LookForCombinationsOnSwitchVertical();
+
+				for (unsigned int i = 0; i < combinaisons.size(); i++) {
+					RENDERING(theGridSystem.GetOnPos(combinaisons[i].X, combinaisons[i].Y))->desaturate = false;
+					if (( j && combinaisons[i].X < theGridSystem.GridSize-1) || ( !j && combinaisons[i].Y < theGridSystem.GridSize-1))
+						RENDERING(theGridSystem.GetOnPos(combinaisons[i].X+(j+1)/2, combinaisons[i].Y+(j+1)%2))->desaturate = false;
+				}
+			}
+		}
 	}
 
 	if ((datas->state == Delete && theGridSystem.entityCount() == theGridSystem.GridSize * theGridSystem.GridSize) || datas->state == UserInput) {
@@ -389,14 +404,14 @@ void Game::tick(float dt) {
     //sinon si on a change d'etat
     else if (newState != datas->state) {
 		stateChanged(datas->state, newState);
-		
+
 		if (newState == ExitState)
 			return;
 
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = newState;
 		datas->state2Manager[datas->state]->Enter();
-		
+
 		#ifdef ANDROID
 		bool ofHidden = (newState != MainMenu && newState != ModeMenu);
 		#else
@@ -426,7 +441,7 @@ void Game::tick(float dt) {
             RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
         }
 	}
-	
+
 	if (BUTTON(datas->openfeint)->clicked){
 		if (datas->state == ModeMenu) {
 			int d = (static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]))->getDifficulty();
@@ -447,7 +462,7 @@ void Game::tick(float dt) {
     }
 
     //update music
-    if (!theMusicSystem.isMuted()) {	    
+    if (!theMusicSystem.isMuted()) {
 	    if ((pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause) || datas->state == BlackToSpawn) { //si on joue
 	    	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Start;
 	    	MUSIC(datas->inGameMusic.masterTrack)->volume = 1;
@@ -715,10 +730,10 @@ bool Game::shouldPlayPiano() {
 		return false;
 	int score = datas->mode2Manager[datas->mode]->points;
 	float v = (score / (float)target);
-	
+
 	LOGW("SCORE TARGET: %d (current: %d, rank: %d) -> %.2f", target, score, datas->scoreboardRankInSight, v);
 	if (v >= 0.95) {
-		
+
 		// play piano
 		datas->scoreboardRankInSight--;
 		return true;
