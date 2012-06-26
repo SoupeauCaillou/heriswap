@@ -235,6 +235,7 @@ void Game::init(const uint8_t* in, int size) {
 	SCROLLING(datas->sky)->speed = 0.1;
 	SCROLLING(datas->sky)->displaySize = Vector2(TRANSFORM(datas->sky)->size.X * 1.01, TRANSFORM(datas->sky)->size.Y);
     SCROLLING(datas->sky)->hide = true;
+    SCROLLING(datas->sky)->opaqueType = RenderingComponent::FULL_OPAQUE;
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
 
 	datas->mode2Manager[Normal]->sky = datas->sky;

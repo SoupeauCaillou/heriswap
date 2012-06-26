@@ -46,15 +46,15 @@ public class HeriswapActivity extends Activity {
 static public final String Tag = "HeriswapJ";
 	// public static List<Achievement> achievements = null;
 	// public static List<Leaderboard> leaderboards = null;
-
+ 
 	static final String TILEMATCH_BUNDLE_KEY = "plop";
 	static public long game = 0 ;
 	static public Object mutex;
-	static public byte[] savedState; 
+	static public byte[] savedState;
 	static public int openGLESVersion = 2;
-	byte[] renderingSystemState;
+	byte[] renderingSystemState; 
 	static public SoundPool soundPool;
-	static public boolean isRunning;
+	static public boolean isRunning;    
 	static public boolean requestPausedFromJava, backPressed;
 	static public HeriswapStorage.OptionsOpenHelper optionsOpenHelper;
 	static public HeriswapStorage.ScoreOpenHelper scoreOpenHelper;
@@ -67,22 +67,22 @@ static public final String Tag = "HeriswapJ";
 	static public Button[] oldName;
 	static public boolean adHasBeenShown, ofHasBeenShown, adWaitingAdDisplay;
 	static public boolean runGameLoop;
-
-	static public HeriswapActivity activity;
+ 
+	static public HeriswapActivity activity; 
 	PowerManager.WakeLock wl;
 	HeriswapRenderer renderer;
 	
-	@Override
+	@Override    
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		/*if (resultCode == GSSDK.GS_ACTIVITY_RESULT) {
-			// notify blocked 
+			// notify blocked   
 			//NOLOGLog.w(HeriswapActivity.Tag, "Ad hidden");
 			adHasBeenShown = true;
 		}*/
 		ofHasBeenShown = false;
-	}
-	
+	}   
+ 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -275,12 +275,12 @@ static public final String Tag = "HeriswapJ";
     	
     	return super.onTouchEvent(event);
     }
-    
+     
     @Override
     public void onBackPressed() {
     	HeriswapActivity.backPressed = true;
     }
- 
+  
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
     	if (keyCode == KeyEvent.KEYCODE_MENU) {

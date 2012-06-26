@@ -11,7 +11,8 @@ AM_CXXFLAGS = $(GLFW_CFLAGS) \
 	$(SQLITE_CFLAGS) \
 	-I$(top_srcdir)/sac \
 	-DDATADIR=\"$(pkgdatadir)/\" \
-	-DLOCALEDIR=\"$(localedir)/\"
+	-DLOCALEDIR=\"$(localedir)/\" \
+	-g -O2
 
 heriswap_SOURCES = tilematch-linux.cpp \
 	AnimedEntity.cpp \

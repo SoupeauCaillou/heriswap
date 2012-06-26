@@ -86,6 +86,8 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(menubg, Rendering);
 	RENDERING(menubg)->texture = theRenderingSystem.loadTextureFile("2emeplan");
 	RENDERING(menubg)->hide = true;
+	RENDERING(menubg)->opaqueType = RenderingComponent::OPAQUE_UNDER;
+	RENDERING(menubg)->opaqueSeparation = 0.26;
 
 	menufg = theEntityManager.CreateEntity();
 	ADD_COMPONENT(menufg, Transformation);
@@ -95,6 +97,8 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(menufg, Rendering);
 	RENDERING(menufg)->texture = theRenderingSystem.loadTextureFile("1erplan");
 	RENDERING(menufg)->hide = true;
+	RENDERING(menufg)->opaqueType = RenderingComponent::OPAQUE_UNDER;
+	RENDERING(menufg)->opaqueSeparation = (PlacementHelper::GimpHeightToScreen(1092) - PlacementHelper::GimpHeightToScreen(1280 - 570)) / TRANSFORM(menufg)->size.Y;
 
 	herisson = new AnimatedActor();
 	herisson->frames=0;

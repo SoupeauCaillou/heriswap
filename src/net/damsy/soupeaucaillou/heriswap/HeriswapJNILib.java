@@ -103,15 +103,15 @@ public class HeriswapJNILib {
 			adProviderSelection = 0;
 		} else if (cbReady) {
 			adProviderSelection = 1;
-		} 
-		
+		}    
+		 
 		if (adProviderSelection == 0) {
 			HeriswapActivity.adHasBeenShown = true;
 			/* HeriswapActivity.activity.runOnUiThread(new Runnable() {
 				public void run() {
 					if (!GSSDK.getSharedInstance().displayAd(
 							HeriswapActivity.activity)) {
-						HeriswapActivity.adHasBeenShown = true;
+	    					HeriswapActivity.adHasBeenShown = true;
 					}
 				}
 			});*/

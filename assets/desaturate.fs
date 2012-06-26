@@ -11,8 +11,8 @@ varying vec2 uvVarying;
 
 void main()
 {
-    gl_FragColor = texture2D(tex0, uvVarying) * vColor;
-    float sum = (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b) / 3.0;
+    vec4 col = vec4(texture2D(tex0, uvVarying).rgb, 1.0) * vColor;
+    float sum = (col.r * 0.333 + col.g * 0.333 + col.b * 0.333);
     gl_FragColor.rgb = vec3(sum);
     gl_FragColor.a = texture2D(tex1, uvVarying).a * vColor.a;
 }

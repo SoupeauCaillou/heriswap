@@ -121,6 +121,8 @@ void GameModeManager::Setup() {
 	SCROLLING(decor2nd)->speed = 0.05;
 	SCROLLING(decor2nd)->displaySize = Vector2(TRANSFORM(decor2nd)->size.X * 1.01, TRANSFORM(decor2nd)->size.Y);
 	SCROLLING(decor2nd)->hide = true;
+	SCROLLING(decor2nd)->opaqueType = RenderingComponent::OPAQUE_UNDER;
+	SCROLLING(decor2nd)->opaqueSeparation = 0.40;
 
 	decor1er = theEntityManager.CreateEntity();
 	ADD_COMPONENT(decor1er, Transformation);
@@ -136,6 +138,8 @@ void GameModeManager::Setup() {
 	SCROLLING(decor1er)->speed = 0;
 	SCROLLING(decor1er)->displaySize = Vector2(TRANSFORM(decor1er)->size.X * 1.01, TRANSFORM(decor1er)->size.Y);
 	SCROLLING(decor1er)->hide = true;
+	SCROLLING(decor1er)->opaqueType = RenderingComponent::OPAQUE_UNDER;
+	SCROLLING(decor1er)->opaqueSeparation = 0.21;
 
 	fillVec();
 

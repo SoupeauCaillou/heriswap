@@ -24,7 +24,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
-// import android.util.Log;
+import android.util.Log;
 
 import com.openfeint.api.OpenFeint;
 
@@ -52,20 +52,20 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     		frameCount++;
     		long diff = System.currentTimeMillis() - time;
     		if (diff >= 10000) {
-    			// Log.w("TAG", "Render thread FPS: " + (float)1000*frameCount / diff);
+    			Log.w("TAG", "Render thread FPS: " + (float)1000*frameCount / diff);
     			frameCount = 0;
     			time = System.currentTimeMillis();
     		}
     	} 
-        /*int err;
+        int err;
         while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
         	Log.e(HeriswapActivity.Tag, "GL error : " + GLU.gluErrorString(err));
-        }*/
+        }
     }
 
     void startGameThread() {
     	// GSSDK.initialize(HeriswapActivity.activity, HeriswapSecret.GS_appId);
-    	
+    	  
     	gameThread = new Thread(new Runnable() {
 			public void run() {
 				OpenFeint.login();
@@ -149,6 +149,8 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+    	  String extensions = gl.glGetString(GL10.GL_EXTENSIONS);
+    	  Log.i("H", "Extensions supported: " + extensions);
     	if (HeriswapActivity.game == 0) {
     		// Log.i("HeriswapActivity.Tag", "Activity LifeCycle ##### Game instance creation (onSurfaceCreated)");
     		initDone = false;
