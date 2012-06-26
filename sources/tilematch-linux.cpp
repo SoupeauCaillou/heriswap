@@ -49,6 +49,12 @@
 
 #include "api/linux/StorageAPILinuxImpl.h"
 
+#include "systems/TextRenderingSystem.h"
+#include "systems/ButtonSystem.h"
+#include "systems/TransformationSystem.h"
+#include "base/PlacementHelper.h"
+#include "DepthLayer.h"
+
 #include "Game.h"
 
 #include <locale.h>
@@ -70,6 +76,21 @@ class MouseNativeTouchState: public NativeTouchState {
 			return glfwGetMouseButton(GLFW_MOUSE_BUTTON_1) == GLFW_PRESS;
 		}
 };
+
+Entity globalFTW = 0;
+void GLFWCALL myCharCallback( int c, int action ) {
+	if (globalFTW == 0)
+		return;
+		
+	if (!TEXT_RENDERING(globalFTW)->hide) {
+		if (action == GLFW_PRESS && (isalnum(c) || c == ' ')) {
+			if (TEXT_RENDERING(globalFTW)->text.length() > 20) 
+				return;
+			// filter out all unsupported keystrokes
+			TEXT_RENDERING(globalFTW)->text.push_back((char)c);
+		}
+	}
+}
 
 int main(int argc, char** argv) {
 	if (!glfwInit())
@@ -112,8 +133,9 @@ int main(int argc, char** argv) {
 
 	LocalizeAPILinuxImpl* loc = new LocalizeAPILinuxImpl();
 	
+	NameInputAPILinuxImpl* nameInput = new NameInputAPILinuxImpl();
 	
-	Game game(new AssetAPILinuxImpl(), storage, new NameInputAPILinuxImpl(), new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl());
+	Game game(new AssetAPILinuxImpl(), storage, nameInput, new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl());
 
 	theRenderingSystem.opengles2 = true;
 	//theSoundSystem.init();
@@ -134,12 +156,50 @@ int main(int argc, char** argv) {
 	loc->init();
 	
 	game.init(state, size);
+	
+	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
+	// name input entities
+	nameInput->title = theEntityManager.CreateEntity();
+	ADD_COMPONENT(nameInput->title, Transformation);
+	TRANSFORM(nameInput->title)->position = Vector2(0, PlacementHelper::GimpYToScreen(275));
+	TRANSFORM(nameInput->title)->z = DL_HelpText;
+	ADD_COMPONENT(nameInput->title, TextRendering);
+	TEXT_RENDERING(nameInput->title)->text = loc->text("enter_name", "Enter your name:");
+	TEXT_RENDERING(nameInput->title)->fontName = "typo";
+	TEXT_RENDERING(nameInput->title)->positioning = TextRenderingComponent::CENTER;
+	TEXT_RENDERING(nameInput->title)->color = green;
+	TEXT_RENDERING(nameInput->title)->charHeight = PlacementHelper::GimpHeightToScreen(54);
+	TEXT_RENDERING(nameInput->title)->hide = true;
+	
+	globalFTW = nameInput->nameEdit = theEntityManager.CreateEntity();
+	ADD_COMPONENT(nameInput->nameEdit, Transformation);
+	TRANSFORM(nameInput->nameEdit)->position = Vector2(0, PlacementHelper::GimpYToScreen(390));
+	TRANSFORM(nameInput->nameEdit)->z = DL_HelpText;
+	ADD_COMPONENT(nameInput->nameEdit, TextRendering);
+	TEXT_RENDERING(nameInput->nameEdit)->fontName = "typo";
+	TEXT_RENDERING(nameInput->nameEdit)->positioning = TextRenderingComponent::CENTER;
+	TEXT_RENDERING(nameInput->nameEdit)->color = green;
+	TEXT_RENDERING(nameInput->nameEdit)->charHeight = PlacementHelper::GimpHeightToScreen(54);
+	TEXT_RENDERING(nameInput->nameEdit)->hide = true;
+	
+	nameInput->background = theEntityManager.CreateEntity();
+	ADD_COMPONENT(nameInput->background, Transformation);
+	TRANSFORM(nameInput->background)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(256));
+	TRANSFORM(nameInput->background)->position = Vector2(0, PlacementHelper::GimpYToScreen(320));
+	TRANSFORM(nameInput->background)->z = DL_HelpTextBg;
+	ADD_COMPONENT(nameInput->background, Rendering);
+	RENDERING(nameInput->background)->hide = true;
+	RENDERING(nameInput->background)->texture = theRenderingSystem.loadTextureFile("fond_bouton");
+	RENDERING(nameInput->background)->color.a = 1;
 
 	bool running = true;
 	float timer = 0;
 	float dtAccumuled=0, dt = 0, time = 0;
 
 	time = TimeUtil::getTime();
+	
+	glfwSetCharCallback(myCharCallback);
+
 
 	int frames = 0;
 	float nextfps = time + 5;
@@ -176,11 +236,20 @@ int main(int argc, char** argv) {
 			}
 			//magic key?
 			if ((glfwGetKey( GLFW_KEY_ENTER ) || glfwGetKey( GLFW_KEY_KP_ENTER) ) && timer<=0) {
-				game.toggleShowCombi(false);
-				timer = MAGICKEYTIME;
+				if (!TEXT_RENDERING(nameInput->nameEdit)->hide) {
+					nameInput->textIsReady = true;
+				}
+				// game.toggleShowCombi(false);
+				// timer = MAGICKEYTIME;
 			}
 			if (glfwGetKey( GLFW_KEY_BACKSPACE)) {
-				game.backPressed();
+				// game.backPressed();
+				if (!TEXT_RENDERING(nameInput->nameEdit)->hide) {
+					std::string& text = TEXT_RENDERING(nameInput->nameEdit)->text;
+					if (text.length() > 0) {
+						text.resize(text.length() - 1);
+					}
+				}
 			}
 			if (glfwGetKey( GLFW_KEY_LSHIFT)) {
 				uint8_t* state = 0;
