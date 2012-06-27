@@ -271,7 +271,6 @@ std::vector<CellFall> GridSystem::TileFall() {
 void GridSystem::DoUpdate(float dt __attribute__((unused))) {
 }
 
-
 bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 	//test right and top
 	Entity e = GetOnPos(i+1,j);
@@ -323,8 +322,6 @@ bool GridSystem::StillCombinations() {
 	return false;
 }
 
-
-
 std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchVertical() {
 	std::vector<Vector2> combin;
 	for (int i=0; i<GridSize; i++) {
@@ -364,6 +361,140 @@ std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchHorizontal() {
 		}
 	}
 	return combin;
+}
+
+std::vector< std::vector<Entity> > GridSystem::GetSwapCombinations() {
+	std::vector< std::vector<Entity> > res;
+	for (int i = 0; i < GridSize; i++) {
+		for (int j = 0; j < GridSize; j++) {
+			Entity e = GetOnPos(i,j);
+			//if it makes a combi on its left, search the combination
+			std::vector<Entity> n = getCombiEntitiesInLine(e, i-1, j, 0);
+			if (n.size() > 1)
+				res.push_back(n);
+  			//if it makes a combi on its right, search the combination
+			n = getCombiEntitiesInLine(e, i+1, j, 2);
+			if (n.size() > 1)
+				res.push_back(n);
+			//or below its
+			n = getCombiEntitiesInLine(e, i, j-1, 1);
+			if (n.size() > 1)
+				res.push_back(n);
+			//or above its
+			n = getCombiEntitiesInLine(e, i, j+1, 3);
+			if (n.size() > 1)
+				res.push_back(n);
+		}
+	}
+	return res;
+}
+
+std::vector<Entity> GridSystem::getCombiEntitiesInLine(Entity a, int i, int j, int move) {
+	std::vector<Entity> res;
+	if (i < 0 || i == GridSize || j < 0 || j == GridSize)
+		return res;
+
+	int type = GRID(a)->type;
+
+	//adding itself
+	res.push_back(a);
+
+
+	//if horizontal switch
+	if (move % 2 == 0) {
+		int cpt = 0;
+		int sens = move-1;
+		int k = i + sens;
+		//first look the line (NB : entity's type in (i,j) != type necessary)
+		//so only right in right move, only left in left move
+		Entity e = GetOnPos(k, j);
+		while (k < GridSize && k >= 0 && GRID(e)->type == type) {
+			cpt++;
+			k += sens;
+			res.push_back(e);
+			e = GetOnPos(k, j);
+		}
+
+		//so if cpt < 2, there is no line combination and we need to remove entites in res vector
+		if (cpt < 2) {
+			res.clear();
+			res.push_back(a);
+		}
+		cpt = 0;
+		//now look on column
+		//look below
+		k = j-1;
+		e = GetOnPos(i, k);
+		while (k >= 0 && GRID(e)->type == type) {
+			res.push_back(e);
+			k--;
+			cpt++;
+			e = GetOnPos(i, k);
+		}
+		//look above
+		k=j+1;
+		e = GetOnPos(i, k);
+		while (k<GridSize && GRID(e)->type == type) {
+			res.push_back(e);
+			k++;
+			cpt++;
+			e = GetOnPos(i, k);
+		}
+		//if cpt < 2, it was only horizontal combination, removes "cpt" last enties from res
+		if (cpt < 2) {
+			while (cpt > 0) {
+				res.pop_back();
+				cpt--;
+			}
+		}
+	} else {
+		int cpt = 0;
+		int sens = move-2;
+		int k = j + sens;
+		//first look the column (NB : entity's type in (i,j) != type necessary)
+		//so only top in top move, only bot in bot move
+		Entity e = GetOnPos(i, k);
+		while (k < GridSize && k >= 0 && GRID(e)->type == type) {
+			cpt++;
+			k += sens;
+			res.push_back(e);
+			e = GetOnPos(i, k);
+		}
+
+		//so if cpt < 2, there is no line combination and we need to remove entites in res vector
+		if (cpt < 2) {
+			res.clear();
+			res.push_back(a);
+		}
+		cpt = 0;
+		//now look on line
+		//look left
+		k = i-1;
+		e = GetOnPos(k, j);
+		while (k >= 0 && GRID(e)->type == type) {
+			res.push_back(e);
+			k--;
+			cpt++;
+			e = GetOnPos(k, j);
+		}
+		//look right
+		k=i+1;
+		e = GetOnPos(k, j);
+		while (k<GridSize && GRID(e)->type == type) {
+			res.push_back(e);
+			k++;
+			cpt++;
+			e = GetOnPos(k, j);
+		}
+		//if cpt < 2, it was only horizontal combination, removes "cpt" last enties from res
+		if (cpt < 2) {
+			while (cpt > 0) {
+				res.pop_back();
+				cpt--;
+			}
+		}
+	}
+	return res;
 }
 
 bool GridSystem::GridPosIsInCombination(int i, int j, int type, int* voisinsType) {

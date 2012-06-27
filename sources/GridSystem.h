@@ -66,7 +66,7 @@ public:
 /* Return the Entity in pos (i,j)*/
 Entity GetOnPos(int i, int j);
 
-/* Return the finale list  of combinaisons*/
+/* Return the finale list of actual combinations (no switch needed)*/
 std::vector<Combinais> LookForCombination(bool markAsChecked, bool useChecked);
 
 /* Set Back all entity at "not checked"*/
@@ -90,6 +90,17 @@ std::vector<CellFall> TileFall();
 /* Returns points (x,y) which generate new Combi */
 std::vector<Vector2> LookForCombinationsOnSwitchVertical();
 std::vector<Vector2> LookForCombinationsOnSwitchHorizontal();
+
+/* Returns all potentials combinations */
+std::vector< std::vector<Entity> > GetSwapCombinations();
+
+/* Returns entities in the combination with a moved in (i,j)*/
+/* move :
+ *      T=3
+ * L=0		R=2
+ * 		B=1
+*/
+std::vector<Entity> getCombiEntitiesInLine(Entity a, int i, int j, int move);
 
 /* return true if there is still at least 1 combi by switching 2 entites */
 bool StillCombinations();
