@@ -364,18 +364,10 @@ void Game::tick(float dt) {
 			for (unsigned int i = 0; i < leaves.size(); i++)
 				RENDERING(leaves[i])->desaturate = true;
 
-			for (int j = 0 ; j < 2 ; j++) {
-				std::vector<Vector2> combinaisons;
-				if (j)
-					combinaisons = theGridSystem.LookForCombinationsOnSwitchHorizontal();
-				else
-					combinaisons = theGridSystem.LookForCombinationsOnSwitchVertical();
-
-				for (unsigned int i = 0; i < combinaisons.size(); i++) {
-					RENDERING(theGridSystem.GetOnPos(combinaisons[i].X, combinaisons[i].Y))->desaturate = false;
-					if (( j && combinaisons[i].X < theGridSystem.GridSize-1) || ( !j && combinaisons[i].Y < theGridSystem.GridSize-1))
-						RENDERING(theGridSystem.GetOnPos(combinaisons[i].X+(j+1)/2, combinaisons[i].Y+(j+1)%2))->desaturate = false;
-				}
+			std::vector < std::vector<Entity> > c = theGridSystem.GetSwapCombinations();
+			int i = MathUtil::RandomInt(c.size());
+			for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
+				RENDERING(*it)->desaturate = false;
 			}
 		}
 	}
