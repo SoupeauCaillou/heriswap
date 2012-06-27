@@ -391,7 +391,7 @@ bool GridSystem::GridPosIsInCombination(int i, int j, int type, int* voisinsType
 
 	bool res =  (
 	//horizontal combis ?
-	type == (vType[0] && type == vType[1])
+	   (type == vType[0] && type == vType[1])
 	|| (type == vType[1] && type == vType[2])
 	|| (type == vType[2] && type == vType[3])
 	//vertical combis ?
