@@ -500,7 +500,7 @@ void Game::tick(float dt) {
 	        } else {
 	        	static MusicRef a = MUSIC(datas->inGameMusic.masterTrack)->loopNext;
 	        	if (MUSIC(datas->inGameMusic.masterTrack)->loopNext != a) {
-		        	std::cout << "music: master loopnext: " << MUSIC(datas->inGameMusic.masterTrack)->loopNext << std::endl;
+		        	LOGI("music: master loopnext: %d", MUSIC(datas->inGameMusic.masterTrack)->loopNext);
 		        	a = MUSIC(datas->inGameMusic.masterTrack)->loopNext;
 	        	}
 	        }

@@ -229,7 +229,7 @@ bool NormalGameModeManager::LevelUp() {
 
 		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
 
-		std::cout << "Level up to level " << level << std::endl;
+		LOGI("Level up to level %d", level);
 
 		for (int i=0;i<theGridSystem.Types;i++)
 			remain[i] = 2+level;

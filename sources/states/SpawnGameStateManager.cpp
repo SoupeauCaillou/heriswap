@@ -75,7 +75,7 @@ void SpawnGameStateManager::Enter() {
 	std::vector<Combinais> c;
 	fillTheBlank(spawning);
 	if ((int)spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
-     	std::cout << "create " << spawning.size() << " cells" << std::endl;
+     	LOGI("create %u cells", spawning.size());
 		for(unsigned int i=0; i<spawning.size(); i++) {
             if (spawning[i].entity == 0)
 			    spawning[i].entity = createCell(spawning[i], true);

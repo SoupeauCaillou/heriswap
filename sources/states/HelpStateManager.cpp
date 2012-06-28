@@ -152,7 +152,6 @@ GameState HelpStateManager::Update(float dt) {
 				TRANSFORM(bg2)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(495*2));
 				TransformationSystem::setPosition(TRANSFORM(bg2), Vector2(0, PlacementHelper::GimpYToScreen(101*2)), TransformationSystem::N);
 			}
-			std::cout << TRANSFORM(bg2)->size << ", " << TRANSFORM(bg2)->position << std::endl;
 			RENDERING(bg2)->hide = false;
 			
 			TEXT_RENDERING(title[0])->text = localize->text("objective", "Objective");
