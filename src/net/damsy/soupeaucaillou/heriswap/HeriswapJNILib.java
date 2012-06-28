@@ -345,6 +345,10 @@ public class HeriswapJNILib {
 	// SuccessAPI
 	// -------------------------------------------------------------------------
 	static public void unlockAchievement(int id) {
+		if (!OpenFeint.isNetworkConnected()) {
+			return;
+		}
+		
 		final Achievement achv = new Achievement(Integer.toString(id));
 		Achievement.LoadCB loadCb = new Achievement.LoadCB() {
 			@Override

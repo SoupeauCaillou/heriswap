@@ -108,7 +108,7 @@ static public final String Tag = "HeriswapJ";
         		adWaitingAdDisplay = false;
         		adHasBeenShown = true;
         	}
-        	
+           	 
         	@Override
         	public boolean shouldDisplayInterstitial(View interstitialView) {
         		if (adWaitingAdDisplay && interstitialView != null) {

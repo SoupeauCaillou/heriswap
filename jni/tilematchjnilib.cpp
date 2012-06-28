@@ -314,11 +314,9 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_ste
 	hld->time = TimeUtil::getTime();
 
 	const float accum = DT;
-	/*hld->dtAccumuled;
 	if (hld->dtAccumuled > 5 * DT) {
 		LOGW("BIG DT: %.3f s", hld->dtAccumuled);
-		accum = DT;
-	}*/
+	}
 
 	while (hld->dtAccumuled >= DT){
 		hld->game->tick(accum);

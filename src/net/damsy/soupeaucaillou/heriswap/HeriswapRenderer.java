@@ -56,11 +56,11 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     			frameCount = 0;
     			time = System.currentTimeMillis();
     		}
-    	} 
-        int err;
+    	}
+        /*int err;
         while( (err = gl.glGetError()) != GL10.GL_NO_ERROR) {
         	Log.e(HeriswapActivity.Tag, "GL error : " + GLU.gluErrorString(err));
-        }
+        }*/
     }
 
     void startGameThread() {
@@ -91,7 +91,7 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
 								HeriswapJNILib.initFromGameThread(asset, HeriswapActivity.game, null);
 							}
 						} catch (InterruptedException e) {
-							
+ 
 						}
 					}
 					
@@ -115,6 +115,7 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
 				*/
 			}
 		}); 
+    	gameThread.setPriority(Thread.MAX_PRIORITY);
 		gameThread.start(); 
     } 
  
