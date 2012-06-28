@@ -11,4 +11,4 @@ file(
 
 add_executable(tilematch ${source_files})
 
-target_link_libraries(tilematch sac GLEW glfw openal sndfile sqlite3  vorbisidec z)
+target_link_libraries(tilematch sac GLEW glfw openal sqlite3  vorbisfile vorbis z)
