@@ -328,7 +328,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 	Entity herissonActor=  herisson->actor.e;
 	if (TRANSFORM(herissonActor)->position.X < PlacementHelper::ScreenWidth+TRANSFORM(herissonActor)->size.X) {
 		TRANSFORM(herissonActor)->position.X += herisson->actor.speed*dt;
-		switchAnim(herisson);
+		updateAnim(herisson, dt);
 	} else {
 		RENDERING(herissonActor)->hide = true;
 	}

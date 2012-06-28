@@ -25,7 +25,12 @@
 #include "systems/RenderingSystem.h"
 
 
-void switchAnim(AnimatedActor* a) {
+void updateAnim(AnimatedActor* a, float dt) {
+	a->timeElapsed+=dt;
+	if (a->timeElapsed < 1/60.f)
+		return;
+
+	a->timeElapsed = 0.f;
 	a->frames++;
 	if (a->frames>=30/(MathUtil::Abs(a->actor.speed))) {
 		RENDERING(a->actor.e)->texture = theRenderingSystem.loadTextureFile(a->anim[a->ind]);

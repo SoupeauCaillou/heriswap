@@ -77,7 +77,7 @@ void MainMenuGameStateManager::Setup() {
 		ADD_COMPONENT(bStart[i], Button);
 		BUTTON(bStart[i])->enabled = false;
 	}
-	
+
 	menubg = theEntityManager.CreateEntity();
 	ADD_COMPONENT(menubg, Transformation);
 	TRANSFORM(menubg)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(570));
@@ -169,7 +169,7 @@ void MainMenuGameStateManager::Enter() {
 
 GameState MainMenuGameStateManager::Update(float dt) {
 	Entity a = herisson->actor.e;
-	switchAnim(herisson);
+	updateAnim(herisson, dt);
 	if (TRANSFORM(a)->position.X < PlacementHelper::GimpXToScreen(800)+TRANSFORM(a)->size.X) {
 		TRANSFORM(a)->position.X += herisson->actor.speed/8.*dt;
 	} else {
@@ -184,7 +184,7 @@ GameState MainMenuGameStateManager::Update(float dt) {
 			choosenGameMode = Normal;
 			SOUND(bStart[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 			return ModeMenu;
-		} 
+		}
 		if(BUTTON(bStart[1])->clicked){
 			choosenGameMode = TilesAttack;
 			SOUND(bStart[1])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
@@ -213,7 +213,7 @@ void MainMenuGameStateManager::Exit() {
     modeTitleToReset = eStart[choosenGameMode-1];
 
     herisson->actor.speed = 4.5f;
-    
+
 	TEXT_RENDERING(quitButton[0])->hide = true;
 	RENDERING(quitButton[1])->hide = true;
 	BUTTON(quitButton[1])->enabled = false;

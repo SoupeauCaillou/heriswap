@@ -144,7 +144,7 @@ void GameModeManager::Setup() {
 	fillVec();
 
 	uiHelper.build();
-	
+
 	#ifdef DEBUG
 	_debug = false;
 	for(int i=0; i<8; i++) {
@@ -155,7 +155,7 @@ void GameModeManager::Setup() {
 		TransformationSystem::setPosition(TRANSFORM(debugEntities[2*i]), Vector2(PlacementHelper::GimpXToScreen(0) + i * PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpYToScreen(1280)), TransformationSystem::SW);
 		TRANSFORM(debugEntities[2*i])->z = DL_DebugLayer;
 		TRANSFORM(debugEntities[2*i])->size = Vector2(PlacementHelper::GimpWidthToScreen(80));
-		
+
 		debugEntities[2*i + 1] = theEntityManager.CreateEntity();
 		ADD_COMPONENT(debugEntities[2*i + 1], TextRendering);
 		TEXT_RENDERING(debugEntities[2*i + 1])->positioning = TextRenderingComponent::CENTER;
@@ -322,7 +322,7 @@ void GameModeManager::updateHerisson(float dt, float obj, float herissonSpeed) {
 	tc->position.X = newPos;
 
 	if (herissonSpeed > 0) {
-		switchAnim(c);
+		updateAnim(c, dt);
 	} else {
 		RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
 	}
@@ -371,7 +371,7 @@ const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int size
 }
 
 #ifdef DEBUG
-void GameModeManager::toggleDebugDisplay() { 
+void GameModeManager::toggleDebugDisplay() {
 	_debug = !_debug;
 	for(int i=0; i<8; i++) {
 		RENDERING(debugEntities[2*i])->hide = !_debug;
@@ -385,5 +385,5 @@ int GameModeManager::countBranchLeavesOfType(int t) const {
 	for (unsigned int i=0; i<branchLeaves.size(); i++) {
         count += (t == branchLeaves[i].type);
 	}
-	return count;       
+	return count;
 }

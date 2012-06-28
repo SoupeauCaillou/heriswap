@@ -30,8 +30,9 @@ struct Actor {
 };
 struct AnimatedActor {
 	int frames, ind;
+	float timeElapsed;
 	std::vector<std::string> anim;
 	struct Actor actor;
 };
-void switchAnim(AnimatedActor* a);
+void updateAnim(AnimatedActor* a, float dt);
 void loadHerissonTexture(int type, AnimatedActor* c);
