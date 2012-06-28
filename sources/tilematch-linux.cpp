@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
 	if (!glfwInit())
 		return 1;
 
-	Vector2 reso16_9(394, 700);
+	Vector2 reso16_9(700, 394);
 	Vector2 reso16_10(700, 430);//, 700);
 
 	glfwOpenWindowHint( GLFW_WINDOW_NO_RESIZE, GL_TRUE );
