@@ -31,6 +31,7 @@
 
 #include "modes/TilesAttackModeManager.h"
 #include "modes/NormalModeManager.h"
+#include "systems/MorphingSystem.h"
 
 void Game::stopInGameMusics() {
 	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Stop;
@@ -64,7 +65,8 @@ void Game::stateChanged(GameState oldState, GameState newState) {
      } else if (newState == GameToBlack) {
 	     stopInGameMusics();
         static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->gameOverState = ModeMenuStateManager::GameEnded;
-
+		// place title
+		MORPHING(static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title)->active = true;
      //let's play !
      } else if (newState == BlackToSpawn) {
             // call Enter before starting fade-in

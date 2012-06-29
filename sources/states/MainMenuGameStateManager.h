@@ -35,11 +35,11 @@ class MainMenuGameStateManager : public GameStateManager {
 		Entity eStart[2];
 		Entity menufg, menubg;
 		AnimatedActor* herisson;
-
+	Entity modeTitleToReset;
 	private:
 		Entity bStart[2];
 		Entity quitButton[2];
-		Entity modeTitleToReset;
+		
 		LocalizeAPI* localizeAPI;
         SuccessAPI* successAPI;
 };

@@ -673,9 +673,10 @@ void Game::loadGameState(const uint8_t* in, int size) {
     togglePause(true);
     datas->stateBeforePauseNeedEnter = true;
     
+    MainMenuGameStateManager* mgsm = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]);
     static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = 
-    	static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode-1];
-    
+    	mgsm->modeTitleToReset = mgsm->eStart[datas->mode-1];
+
     RENDERING(datas->soundButton)->hide = false;
     SCROLLING(datas->sky)->hide = false;
     LOGW("RESTORED STATE: %d", datas->stateBeforePause);
