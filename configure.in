@@ -2,7 +2,7 @@ AC_INIT(sources/tilematch-linux.cpp)
 
 PACKAGE=heriswap
 PACKAGE_NAME=heriswap
-VERSION=0.1.0
+VERSION=0.1.2
 
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
 

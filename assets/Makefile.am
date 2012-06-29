@@ -31,8 +31,9 @@ image_DATA=alphabet_alpha.png \
 	gdtypo.desc \
 	default.fs \
 	desaturate.fs \
-	default.vs
-
+	default.vs \
+	default_no_alpha.fs
+	
 audiodir=$(datadir)/@PACKAGE@/audio
 audio_DATA=audio/A.ogg \
 	audio/B.ogg \
