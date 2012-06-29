@@ -336,7 +336,7 @@ int GameModeManager::saveInternalState(uint8_t** out) {
     ptr = (uint8_t*) mempcpy(ptr, &limit, sizeof(limit));
     ptr = (uint8_t*) mempcpy(ptr, &points, sizeof(points));
     ptr = (uint8_t*) mempcpy(ptr, &bonus, sizeof(bonus));
-    for (int i=1; i<=8; i++) {
+    for (int i=0; i<8; i++) {
         uint8_t count = 0;
         for (unsigned int j=0; j<branchLeaves.size(); j++) {
             if (branchLeaves[j].type == (unsigned int)i)
