@@ -677,6 +677,8 @@ void Game::loadGameState(const uint8_t* in, int size) {
     static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = 
     	mgsm->modeTitleToReset = mgsm->eStart[datas->mode-1];
 
+	setupGameProp();
+
     RENDERING(datas->soundButton)->hide = false;
     SCROLLING(datas->sky)->hide = false;
     LOGW("RESTORED STATE: %d", datas->stateBeforePause);

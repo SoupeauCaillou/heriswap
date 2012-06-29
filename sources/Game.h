@@ -94,6 +94,8 @@ class Game {
 		void bench(bool active, float updateDuration, float dt);
 		void stopInGameMusics();
 		bool shouldPlayPiano();
+		
+		void setupGameProp();
 
 	PrivateData* datas;
 	AssetAPI* asset;
