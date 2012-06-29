@@ -45,6 +45,7 @@
 #include "states/LevelStateManager.h"
 #include "states/ModeMenuStateManager.h"
 #include "states/PauseStateManager.h"
+#include "states/MainMenuGameStateManager.h"
 
 #include "modes/NormalModeManager.h"
 #include "modes/TilesAttackModeManager.h"
@@ -671,6 +672,10 @@ void Game::loadGameState(const uint8_t* in, int size) {
     setMode();
     togglePause(true);
     datas->stateBeforePauseNeedEnter = true;
+    
+    static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = 
+    	static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode-1];
+    
     RENDERING(datas->soundButton)->hide = false;
     SCROLLING(datas->sky)->hide = false;
     LOGW("RESTORED STATE: %d", datas->stateBeforePause);

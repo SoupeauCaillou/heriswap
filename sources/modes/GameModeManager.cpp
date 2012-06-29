@@ -360,6 +360,8 @@ const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int size
         nb[i] = c;
     }
     generateLeaves(nb,8);
+    LoadHerissonTexture(bonus+1);
+
     /*
     //ici ça depend du mode...
     //mode tiles
