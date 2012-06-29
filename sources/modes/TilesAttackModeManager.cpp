@@ -171,3 +171,21 @@ void TilesAttackGameModeManager::WillScore(int count, int type, std::vector<Enti
         nb--;
     }
 }
+
+int TilesAttackGameModeManager::saveInternalState(uint8_t** out) {
+    uint8_t* tmp;
+    int parent = GameModeManager::saveInternalState(&tmp);
+    int s = sizeof(leavesDone);
+    uint8_t* ptr = *out = new uint8_t[parent + s];
+    ptr = (uint8_t*) mempcpy(ptr, tmp, parent);
+    ptr = (uint8_t*) mempcpy(ptr, &leavesDone, sizeof(leavesDone));
+
+    delete[] tmp;
+    return (parent + s);
+}
+
+const uint8_t* TilesAttackGameModeManager::restoreInternalState(const uint8_t* in, int size) {
+    in = GameModeManager::restoreInternalState(in, size);
+    memcpy(&leavesDone, in, sizeof(leavesDone)); in += sizeof(leavesDone);
+    return in;
+}
