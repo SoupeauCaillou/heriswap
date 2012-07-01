@@ -76,9 +76,9 @@ void FadeGameStateManager::Enter() {
 GameState FadeGameStateManager::Update(float dt) {
 	stateActiveDuration += dt;
 	updateColor(eFading, fading);
-	if (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()) {
+	/*if (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()) {
 		return heIs;
-	}
+	}*/
 	if (ADSR(eFading)->value == ADSR(eFading)->sustainValue) {
 		accum += dt;
 		if (accum >= timeout)
