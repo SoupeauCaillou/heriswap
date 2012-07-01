@@ -83,4 +83,5 @@ heriswap_LDADD = ../sac/libsac.a \
 	$(OPENAL_LIBS) \
 	$(VORBIS_LIBS) \
 	$(VORBISFILE_LIBS) \
-	$(SQLITE_LIBS)
+	$(SQLITE_LIBS) \
+	-lGL
