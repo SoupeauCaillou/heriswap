@@ -72,35 +72,16 @@ void SpawnGameStateManager::Setup() {
 void SpawnGameStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
-	std::vector<Combinais> c;
 	fillTheBlank(spawning);
+	//we need to create the whole grid
 	if ((int)spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
      	LOGI("create %u cells", spawning.size());
 		for(unsigned int i=0; i<spawning.size(); i++) {
             if (spawning[i].entity == 0)
 			    spawning[i].entity = createCell(spawning[i], true);
 		}
-		int ite=0;
-		//get a new grid which has no direct combinations but still combinations to do (give up at 100 try)
-		do {
-			c = theGridSystem.LookForCombination(false,true);
-			// change type from cells in combi
-			for(unsigned int i=0; i<c.size(); i++) {
-				int j = MathUtil::RandomInt(c[i].points.size());
-				Entity e = theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y);
-				int type, iter = 0;
-				do {
-					type = MathUtil::RandomInt(theGridSystem.Types);
-					iter++;
-				} while (theGridSystem.GridPosIsInCombination(c[i].points[j].X, c[i].points[j].Y, type, 0) && iter<100);
-				GRID(e)->type = type;
-				RenderingComponent* rc = RENDERING(e);
-				rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, &TRANSFORM(e)->rotation));
-			}
-			ite++;
-		} while((!c.empty() || !theGridSystem.StillCombinations()) && ite<100);
-
         ADSR(eSpawn)->active = true;
+		removeEntitiesInCombination();
 	} else {
 	    ADSR(eSpawn)->active = false;
     }
@@ -108,6 +89,29 @@ void SpawnGameStateManager::Enter() {
 
 	ADSR(eGrid)->activationTime = 0;
 	ADSR(eGrid)->active = false;
+}
+
+void SpawnGameStateManager::removeEntitiesInCombination() {
+	std::vector<Combinais> c;
+	int ite=0;
+	//get a new grid which has no direct combinations but still combinations to do (give up at 100 try)
+	do {
+		c = theGridSystem.LookForCombination(false,true);
+		// change type from cells in combi
+		for(unsigned int i=0; i<c.size(); i++) {
+			int j = MathUtil::RandomInt(c[i].points.size());
+			Entity e = theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y);
+			int type, iter = 0;
+			do {
+				type = MathUtil::RandomInt(theGridSystem.Types);
+				iter++;
+			} while (theGridSystem.GridPosIsInCombination(c[i].points[j].X, c[i].points[j].Y, type, 0) && iter<100);
+			GRID(e)->type = type;
+			RenderingComponent* rc = RENDERING(e);
+			rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, &TRANSFORM(e)->rotation));
+		}
+		ite++;
+	} while((!c.empty() || !theGridSystem.StillCombinations()) && ite<100);
 }
 
 GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
@@ -142,12 +146,13 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
 	//sinon si on fait une nouvelle grille
 	} else if (ADSR(eGrid)->active) {
         std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
+        //les feuilles disparaissent (taille tend vers 0)
         for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
             Vector2 cellSize = Vector2(Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale() * (1 - ADSR(eGrid)->value));
             ADSR(*it)->idleValue = cellSize.X;
         }
         if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
-            theGridSystem.DeleteAll();
+			theGridSystem.DeleteAll();
             fillTheBlank(spawning);
             LOGI("nouvelle grille de %lu elements! ", spawning.size());
             successMgr->gridResetted = true;
@@ -213,14 +218,14 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 					theGridSystem.GetOnPos(i, j+1),
 					theGridSystem.GetOnPos(i, j+2)
 				};
-				
+
 				//and their types
 				int typeVoisins[8];
 				for (int k = 0; k < 4; k++) {
 					typeVoisins[k] = voisins[k] ? GRID(voisins[k])->type : newLeavesInSpawning(spawning, i-2+k, j);
 				} for (int k = 4; k < 8; k++)
 					typeVoisins[k] = voisins[k] ? GRID(voisins[k])->type : newLeavesInSpawning(spawning, i, j-6+k);
-				
+
 				//get a type which doesn't create a combi with its neighboors
 				int type, ite = 0;
 				do {

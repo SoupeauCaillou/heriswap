@@ -31,11 +31,12 @@ class SpawnGameStateManager : public GameStateManager {
 		GameState NextState(bool marker);
 		void Exit();
 		void setAnimSpeed();
-		
+		void removeEntitiesInCombination();
+
 	private:
 		// datas
 		Entity eSpawn, eGrid;
 		std::vector<Feuille> spawning;
-		
+
 		SuccessManager* successMgr;
 };
