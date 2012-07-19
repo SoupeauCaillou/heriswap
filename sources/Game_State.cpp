@@ -61,6 +61,7 @@ void Game::setupGameProp() {
 void Game::stateChanged(GameState oldState, GameState newState) {
     if (newState == Unpause) {
         togglePause(false);
+    //pressing "give up" button
     } else if (oldState == Pause && newState == MainMenu) {
          LOGI("aborted. going to main menu");
          RENDERING(datas->soundButton)->hide = false;
@@ -69,6 +70,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
          newState = MainMenu;
          static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->gameOverState = ModeMenuStateManager::NoGame;
          stopInGameMusics();
+     //click on a mode button
      } else if (oldState == MainMenu && newState == ModeMenu) {
          datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
          //reference title into mode menu from main menu
@@ -78,6 +80,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
         RENDERING(datas->soundButton)->hide = false;
         datas->mode2Manager[datas->mode]->Exit();
         stopInGameMusics();
+     //end game, stop musics
      } else if (newState == GameToBlack) {
 	     stopInGameMusics();
         static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->gameOverState = ModeMenuStateManager::GameEnded;
@@ -89,12 +92,13 @@ void Game::stateChanged(GameState oldState, GameState newState) {
          datas->mode2Manager[datas->mode]->Enter();
          datas->mode2Manager[datas->mode]->UiUpdate(0);
          MUSIC(datas->menu)->control = MusicComponent::Stop;
-                  
+
          setupGameProp();
      } else if (newState == LevelChanged) {
         static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel =
         static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->getSmallLevelEntity();
         stopInGameMusics();
+     //back button to main
      } else if( newState == MainMenu && oldState == ModeMenu) {
          RENDERING(datas->soundButton)->hide = false;
          datas->state2Manager[oldState]->LateExit();
@@ -113,7 +117,6 @@ void Game::stateChanged(GameState oldState, GameState newState) {
 				    theMusicSystem.unloadMusic(MUSIC(datas->inGameMusic.masterTrack)->loopNext);
 				    MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile("audio/H.ogg");
 			    }
-			    
 		    }
 	 	}
      }
