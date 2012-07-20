@@ -67,7 +67,7 @@ public:
 Entity GetOnPos(int i, int j);
 
 /* Return the finale list of actual combinations (no switch needed)*/
-std::vector<Combinais> LookForCombination(bool markAsChecked, bool useChecked);
+std::vector<Combinais> LookForCombination(bool markAsChecked, bool recheckEveryone);
 
 /* Set Back all entity at "not checked"*/
 void ResetTest();

@@ -128,7 +128,7 @@ std::vector<Combinais> GridSystem::MergeCombination(std::vector<Combinais> combi
 	return combinmerged;
 }
 
-std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool useChecked) {
+std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool recheckEveryone) {
 	std::vector<Combinais> combinaisons;
 
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
@@ -139,7 +139,7 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool u
 		potential.type = gc->type;
 
 		/*Check on j*/
-		if (!useChecked || !gc->checkedV) {
+		if (!recheckEveryone || !gc->checkedV) {
 			Combinais potential;
 			potential.type = gc->type;
 			/*Looking for twins on the bottom of the point*/
@@ -185,7 +185,7 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool u
 		}
 
 		/*Check on i*/
-		if (!useChecked || !gc->checkedH) {
+		if (!recheckEveryone || !gc->checkedH) {
 			Combinais potential;
 			potential.type = gc->type;
 
