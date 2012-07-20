@@ -303,7 +303,7 @@ GameState ModeMenuStateManager::Update(float dt) {
             if (modeMgr->GetMode()==Normal) {
                 a << modeMgr->points << " : "<< localizeAPI->text("lvl", "lvl") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
             } else {
-                a << std::fixed << modeMgr->time << " s";
+                a << std::fixed << ((int)(modeMgr->time*10))/10.f << " s";
             }
             TEXT_RENDERING(yourScore)->text = a.str();
             successMgr->sTestEverything(storage);
