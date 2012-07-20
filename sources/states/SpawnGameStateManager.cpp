@@ -127,6 +127,7 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
                     gc->i = gc->j = -1;
                 }
 				TransformationComponent* tc = TRANSFORM(it->entity);
+				//leaves grow up from 0 to fixed size
 				float s = Game::CellSize(theGridSystem.GridSize);
 				if (ADSR(haveToAddLeavesInGrid)->value == 1){
 					tc->size = Vector2(s*0.1, s);
@@ -142,7 +143,11 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
 			newLeaves.clear();
 			return NextState(true);
 		}
-	//sinon si on est en train de supprimer une grille
+	//sinon si on est en train de supprimer une grille (plus de combinaisons)
+
+	/* (on doit pas etre en changement de niveau / fin de jeu)
+	 */
+
 	} else if (ADSR(replaceGrid)->active) {
         std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
         //les feuilles disparaissent (taille tend vers 0)
