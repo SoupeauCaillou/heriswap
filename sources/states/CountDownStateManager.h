@@ -33,5 +33,6 @@ class CountDownStateManager : public GameStateManager {
 	GameMode mode;
 	private:
 		Entity counter;
+		Entity vorhang;
 		float timeRemaining;
 };

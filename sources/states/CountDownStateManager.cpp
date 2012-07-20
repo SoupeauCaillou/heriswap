@@ -28,27 +28,39 @@
 #include "DepthLayer.h"
 
 void CountDownStateManager::Setup() {
-		counter = theTextRenderingSystem.CreateEntity();
+	counter = theEntityManager.CreateEntity();
+	ADD_COMPONENT(counter, Transformation);
+	ADD_COMPONENT(counter, TextRendering);
+	TRANSFORM(counter)->position = Vector2(0, PlacementHelper::GimpYToScreen(650));
+	TEXT_RENDERING(counter)->color = Color(164.0/255.0, 164.0/255, 164.0/255);
+	TEXT_RENDERING(counter)->color = Color(3.0/255.0, 99.0/255, 71.0/255);
+	TEXT_RENDERING(counter)->fontName = "gdtypo";
+	TEXT_RENDERING(counter)->positioning = TextRenderingComponent::CENTER;
+	TEXT_RENDERING(counter)->charHeight = PlacementHelper::GimpHeightToScreen(300);
+	TRANSFORM(counter)->z = DL_MainMenuFg;
 
-		TRANSFORM(counter)->z = DL_MainMenuUITxt;
-		TEXT_RENDERING(counter)->hide = true;
-		TEXT_RENDERING(counter)->positioning = TextRenderingComponent::LEFT;
-		TEXT_RENDERING(counter)->color = Color(0.f,0.f,0.f,1.f);
-		TEXT_RENDERING(counter)->charHeight = PlacementHelper::GimpHeightToScreen(450);
-		TEXT_RENDERING(counter)->isANumber = true;
+	vorhang = theEntityManager.CreateEntity();
+	ADD_COMPONENT(vorhang, Rendering);
+	ADD_COMPONENT(vorhang, Transformation);
+	TRANSFORM(vorhang)->z = DL_MainMenuBg;
+	TRANSFORM(vorhang)->size = Vector2(PlacementHelper::GimpWidth, PlacementHelper::GimpHeight);
+	RENDERING(vorhang)->color = Color(0.f, 0.f, 0.f, 0.2f);
 }
 
 void CountDownStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
-	TEXT_RENDERING(counter)->hide = false;
-
+	if (mode != Normal) {
+		TEXT_RENDERING(counter)->hide = false;
+		RENDERING(vorhang)->hide = false;
+	}
 	timeRemaining = 3.f;
 }
 
 GameState CountDownStateManager::Update(float dt) {
-	if (mode == Normal)
+	if (mode == Normal) {
 		return UserInput;
+	}
 
 	timeRemaining -= dt;
 
@@ -66,4 +78,5 @@ void CountDownStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
 	TEXT_RENDERING(counter)->hide = true;
+	RENDERING(vorhang)->hide = true;
 }
