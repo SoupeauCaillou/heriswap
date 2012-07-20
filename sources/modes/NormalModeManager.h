@@ -51,11 +51,18 @@ class NormalGameModeManager : public GameModeManager {
 
 		Entity stressTrack;
 
+		std::vector<Entity> leavesInHelpCombination;
+
 		static int levelToLeaveToDelete(int type, int nb, int maxRemain, int done, int leftOnBranchOfSameType);
 
 	private:
+
+		void ShowOneCombination();
+
 		unsigned int level;
 		int remain[8];
+		bool helpAvailable;
 		float nextHerissonSpeed;
 		float levelMoveDuration;
 };
+

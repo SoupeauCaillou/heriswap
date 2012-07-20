@@ -64,6 +64,8 @@ void NormalGameModeManager::Enter() {
 	for (int i=0;i<theGridSystem.Types;i++) remain[i]=3;
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
+	helpAvailable = true;
+	BUTTON(herisson)->enabled = true;
 
 	generateLeaves(0, theGridSystem.Types);
 
@@ -73,6 +75,8 @@ void NormalGameModeManager::Enter() {
 void NormalGameModeManager::Exit() {
 	successMgr->sTakeYourTime();
 	successMgr->s666Loser(level);
+
+	BUTTON(herisson)->enabled = false;
 
     MUSIC(stressTrack)->volume = 0;
     ADSR(stressTrack)->active = false;
@@ -92,6 +96,20 @@ void NormalGameModeManager::GameUpdate(float dt) {
 #endif
 	time += dt;
 	successMgr->gameDuration += dt;
+
+	if (helpAvailable && BUTTON(herisson)->clicked) {
+		ShowOneCombination();
+		helpAvailable = false;
+	}
+}
+
+void NormalGameModeManager::ShowOneCombination() {
+	std::vector < std::vector<Entity> > c = theGridSystem.GetSwapCombinations();
+	int i = MathUtil::RandomInt(c.size());
+	for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
+		RENDERING(*it)->desaturate = true;
+		leavesInHelpCombination.push_back(*it);
+	}
 }
 
 float NormalGameModeManager::GameProgressPercent() {
@@ -167,7 +185,7 @@ static float timeGain(int nb, float time) {
 void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
     int nb = levelToLeaveToDelete(type, count, level+2, level+2 - remain[type], countBranchLeavesOfType(type));
     for (unsigned int i=0; nb>0 && i<branchLeaves.size(); i++) {
-        if (type== branchLeaves[i].type) {
+        if (type == branchLeaves[i].type) {
             CombinationMark::markCellInCombination(branchLeaves[i].e);
             out.push_back(branchLeaves[i].e);
             nb--;
@@ -230,6 +248,13 @@ bool NormalGameModeManager::LevelUp() {
 		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
 
 		LOGI("Level up to level %d", level);
+
+		//if help unused, get a score bonus
+		if (helpAvailable) {
+			points += level * 1000;
+		}
+
+		helpAvailable = true;
 
 		for (int i=0;i<theGridSystem.Types;i++)
 			remain[i] = 2+level;

@@ -89,6 +89,7 @@ void GameModeManager::Setup() {
 	herisson = theEntityManager.CreateEntity();
 	ADD_COMPONENT(herisson, Transformation);
 	ADD_COMPONENT(herisson, Rendering);
+	ADD_COMPONENT(herisson, Button);
 	TRANSFORM(herisson)->z = DL_Animal;
 	TRANSFORM(herisson)->size = Vector2(PlacementHelper::GimpWidthToScreen(142),PlacementHelper::GimpHeightToScreen(116));
 	TransformationSystem::setPosition(TRANSFORM(herisson), Vector2(0, PlacementHelper::GimpYToScreen(1028)), TransformationSystem::N);
@@ -97,6 +98,7 @@ void GameModeManager::Setup() {
 	c->frames=0;
 	c->actor.speed = 4.1;
 	RENDERING(herisson)->hide = true;
+	BUTTON(herisson)->enabled = false;
 
 	branch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(branch, Transformation);
