@@ -88,7 +88,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
 		MORPHING(static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title)->active = true;
      //let's play !
      } else if (newState == BlackToSpawn) {
-            // call Enter before starting fade-in
+         // call Enter before starting fade-in
          datas->mode2Manager[datas->mode]->Enter();
          datas->mode2Manager[datas->mode]->UiUpdate(0);
          MUSIC(datas->menu)->control = MusicComponent::Stop;

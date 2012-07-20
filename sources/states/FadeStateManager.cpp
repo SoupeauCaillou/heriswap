@@ -64,11 +64,13 @@ void FadeGameStateManager::Enter() {
 	stateActiveDuration = 0;
 	LOGW("Fade type: %d", fading);
 	RENDERING(eFading)->hide = false;
+	//update duration (can be changed)
+	ADSR(eFading)->attackTiming = duration;
 	ADSR(eFading)->active = true;
 
 	accum = 0;
 	updateColor(eFading, fading);
-	
+
 	if (enterDelegate)
 		enterDelegate->Enter();
 }

@@ -32,8 +32,9 @@ class FadeGameStateManager : public GameStateManager {
 		void Enter();
 		GameState Update(float dt);
 		void Exit();
-	private:
+
 		float duration;
+	private:
 		Entity eFading;
 		FadeType fading;
 		GameState iAm, heIs;

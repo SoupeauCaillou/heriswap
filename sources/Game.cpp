@@ -46,6 +46,7 @@
 #include "states/ModeMenuStateManager.h"
 #include "states/PauseStateManager.h"
 #include "states/MainMenuGameStateManager.h"
+#include "states/FadeStateManager.h"
 
 #include "modes/NormalModeManager.h"
 #include "modes/TilesAttackModeManager.h"
@@ -252,6 +253,11 @@ void Game::init(const uint8_t* in, int size) {
 void Game::setMode() {
 	datas->state2Manager[Delete]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[ModeMenu]->modeMgr = datas->mode2Manager[datas->mode];
+	if (datas->mode == Normal) {
+		static_cast<FadeGameStateManager*> (datas->state2Manager[GameToBlack])->duration = 4.0f;
+	} else {
+		static_cast<FadeGameStateManager*> (datas->state2Manager[GameToBlack])->duration = 0.5f;
+	}
 }
 
 void Game::toggleShowCombi(bool forcedesactivate) {
@@ -672,9 +678,9 @@ void Game::loadGameState(const uint8_t* in, int size) {
     setMode();
     togglePause(true);
     datas->stateBeforePauseNeedEnter = true;
-    
+
     MainMenuGameStateManager* mgsm = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]);
-    static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = 
+    static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title =
     	mgsm->modeTitleToReset = mgsm->eStart[datas->mode-1];
 
 	setupGameProp();
