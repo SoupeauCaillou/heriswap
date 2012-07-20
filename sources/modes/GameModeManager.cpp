@@ -104,7 +104,7 @@ void GameModeManager::Setup() {
 	ADD_COMPONENT(branch, Transformation);
 	TRANSFORM(branch)->z = DL_Branch;
 	TRANSFORM(branch)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(400.0));
-	TransformationSystem::setPosition(TRANSFORM(branch), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
+	TransformationSystem::setPosition(TRANSFORM(branch), Vector2(-PlacementHelper::ScreenWidth*0.5, PlacementHelper::GimpYToScreen(0)), TransformationSystem::NW);
 	ADD_COMPONENT(branch, Rendering);
 	RENDERING(branch)->hide = true;
 	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche");
@@ -112,7 +112,7 @@ void GameModeManager::Setup() {
 	decor2nd = theEntityManager.CreateEntity();
 	ADD_COMPONENT(decor2nd, Transformation);
 	TRANSFORM(decor2nd)->z = DL_Decor2nd;
-	TRANSFORM(decor2nd)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpWidthToScreen(470));
+	TRANSFORM(decor2nd)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpWidthToScreen(470));
 	TransformationSystem::setPosition(TRANSFORM(decor2nd), Vector2(0, PlacementHelper::GimpYToScreen(610)), TransformationSystem::N);
 	ADD_COMPONENT(decor2nd, Scrolling);
 	SCROLLING(decor2nd)->images.push_back("decor2nd_0");
@@ -129,7 +129,7 @@ void GameModeManager::Setup() {
 	decor1er = theEntityManager.CreateEntity();
 	ADD_COMPONENT(decor1er, Transformation);
 	TRANSFORM(decor1er)->z = DL_Decor1er;
-	TRANSFORM(decor1er)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpWidthToScreen(300));
+	TRANSFORM(decor1er)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpWidthToScreen(300));
 	TransformationSystem::setPosition(TRANSFORM(decor1er), Vector2(0, PlacementHelper::GimpYToScreen(1280)), TransformationSystem::S);
 	ADD_COMPONENT(decor1er, Scrolling);
 	SCROLLING(decor1er)->images.push_back("decor1er_0");
@@ -226,6 +226,7 @@ void GameModeManager::generateLeaves(int* nb, int type) {
 
 			int rand = MathUtil::RandomInt(posBranch.size());
 			TRANSFORM(e)->position = posBranch[rand].v;
+			TRANSFORM(e)->position.X -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenWidth*0.5;
 			TRANSFORM(e)->rotation = posBranch[rand].rot;
 
 			posBranch.erase(posBranch.begin()+rand);
