@@ -70,14 +70,14 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      state2Manager[Help] = new HelpStateManager(lAPI);
      state2Manager[Ads] = new AdsStateManager(ad, storage, successMgr);
 
-     state2Manager[BlackToLogoState] = new FadeGameStateManager(0.2, FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
-     state2Manager[LogoToBlackState] = new FadeGameStateManager(0.3, FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);
-     state2Manager[BlackToMainMenu] = new FadeGameStateManager(0.3, FadeIn, BlackToMainMenu, MainMenu, state2Manager[MainMenu], 0);
-     state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(0.2, FadeOut, ModeMenuToBlackState, Ads, 0, state2Manager[ModeMenu]);
-     state2Manager[AdsToBlackState] = new FadeGameStateManager(0.2, FadeOut, AdsToBlackState, BlackToSpawn, 0, state2Manager[Ads]);
-     state2Manager[BlackToSpawn] = new FadeGameStateManager(0.5, FadeIn, BlackToSpawn, Spawn, 0, 0);
-	 state2Manager[GameToBlack] = new FadeGameStateManager(4, FadeOut, GameToBlack, BlackToModeMenu, 0, 0);
-     state2Manager[BlackToModeMenu] = new FadeGameStateManager(0.5, FadeIn, BlackToModeMenu, ModeMenu, state2Manager[ModeMenu], 0);
+     state2Manager[BlackToLogoState] = new FadeGameStateManager(0.2f, FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
+     state2Manager[LogoToBlackState] = new FadeGameStateManager(0.3f, FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);
+     state2Manager[BlackToMainMenu] = new FadeGameStateManager(0.3f, FadeIn, BlackToMainMenu, MainMenu, state2Manager[MainMenu], 0);
+     state2Manager[ModeMenuToBlackState] = new FadeGameStateManager(0.2f, FadeOut, ModeMenuToBlackState, Ads, 0, state2Manager[ModeMenu]);
+     state2Manager[AdsToBlackState] = new FadeGameStateManager(0.2f, FadeOut, AdsToBlackState, BlackToSpawn, 0, state2Manager[Ads]);
+     state2Manager[BlackToSpawn] = new FadeGameStateManager(0.5f, FadeIn, BlackToSpawn, Spawn, 0, 0);
+	 state2Manager[GameToBlack] = new FadeGameStateManager(4.f, FadeOut, GameToBlack, BlackToModeMenu, 0, 0);
+     state2Manager[BlackToModeMenu] = new FadeGameStateManager(0.5f, FadeIn, BlackToModeMenu, ModeMenu, state2Manager[ModeMenu], 0);
  }
 
  PrivateData::~PrivateData() {
