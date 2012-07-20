@@ -43,6 +43,7 @@ LOCAL_SRC_FILES := \
 	../sources/states/PauseStateManager.cpp \
 	../sources/states/SpawnGameStateManager.cpp \
 	../sources/states/UserInputGameStateManager.cpp \
+	../sources/states/CountDownStateManager.cpp \
 	../sources/modes/GameModeManager.cpp \
 	../sources/modes/TilesAttackModeManager.cpp \
 	../sources/modes/InGameUiHelper.cpp \
