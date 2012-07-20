@@ -249,11 +249,6 @@ bool NormalGameModeManager::LevelUp() {
 
 		LOGI("Level up to level %d", level);
 
-		//if help unused, get a score bonus
-		if (helpAvailable) {
-			points += level * 1000;
-		}
-
 		helpAvailable = true;
 
 		for (int i=0;i<theGridSystem.Types;i++)
