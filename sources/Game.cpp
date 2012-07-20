@@ -359,8 +359,16 @@ void Game::tick(float dt) {
 		datas->mode2Manager[Normal]->GameUpdate(dt);
 	}
 
+	//quand c'est plus au joueur de jouer, on supprime les marquages sur les feuilles
 	if (datas->state != UserInput) {
 		toggleShowCombi(true);
+		if (datas->mode == Normal) {
+			std::vector<Entity>& leavesInHelpCombination = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->leavesInHelpCombination;
+			for ( std::vector<Entity>::reverse_iterator it = leavesInHelpCombination.rbegin(); it != leavesInHelpCombination.rend(); ++it) {
+				RENDERING(*it)->desaturate = false;
+			}
+			leavesInHelpCombination.clear();
+		}
 	}
 
 	if (percentDone >= 1) {
@@ -387,9 +395,8 @@ void Game::tick(float dt) {
 				static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel = m->currentLevel();
 				newState = LevelChanged;
 			}
-		}
 		// si on a fini (contre la montre), on remplit pas la grille et on quitte direct
-		if (datas->mode == TilesAttack) {
+		} else {
 			TilesAttackGameModeManager* m = static_cast<TilesAttackGameModeManager*> (datas->mode2Manager[TilesAttack]);
 			if (m->GameProgressPercent()==1) {
 				newState = GameToBlack;
