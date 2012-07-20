@@ -293,8 +293,7 @@ void Game::toggleShowCombi(bool forcedesactivate) {
 		}
 
 
-//rajout de 2 marques sur les elements a switch
-
+	//rajout de 2 marques sur les elements a switch
 	} else {
 		if (marks.size()>0) {
 			for (unsigned int i=0; i<marks.size(); i++) {
@@ -357,11 +356,14 @@ void Game::tick(float dt) {
 		percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent();
 	}
 
-    //updating game if needed
-    if (datas->mode == TilesAttack && inGameState(datas->state)) {
-		datas->mode2Manager[TilesAttack]->GameUpdate(dt);
-	} else if (datas->mode == Normal && newState == UserInput) {
-		datas->mode2Manager[Normal]->GameUpdate(dt);
+    //dont update until game has really began (after countdown)
+    if (datas->state != CountDown && static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame == false) {
+		//updating game if needed
+	    if (datas->mode == TilesAttack && inGameState(datas->state)) {
+			datas->mode2Manager[TilesAttack]->GameUpdate(dt);
+		} else if (datas->mode == Normal && newState == UserInput) {
+			datas->mode2Manager[Normal]->GameUpdate(dt);
+		}
 	}
 
 	//quand c'est plus au joueur de jouer, on supprime les marquages sur les feuilles
