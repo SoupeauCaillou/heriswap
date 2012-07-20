@@ -38,7 +38,7 @@ void LogoStateManager::Setup() {
     ADD_COMPONENT(logo, Rendering);
      ADD_COMPONENT(logo, Transformation);
      TRANSFORM(logo)->position = Vector2(0,0);
-     TRANSFORM(logo)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(869));
+     TRANSFORM(logo)->size = Vector2(PlacementHelper::GimpHeightToScreen(800), PlacementHelper::GimpHeightToScreen(869));
      TRANSFORM(logo)->z = DL_Logo;
      RENDERING(logo)->texture = theRenderingSystem.loadTextureFile("soupe_logo");
 

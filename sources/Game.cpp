@@ -224,7 +224,7 @@ void Game::init(const uint8_t* in, int size) {
 	theSoundSystem.mute = !datas->storage->soundEnable(false);
     theMusicSystem.toggleMute(theSoundSystem.mute);
 
-	float bgElementWidth = PlacementHelper::GimpWidthToScreen(800);
+	float bgElementWidth = PlacementHelper::ScreenWidth;
 	datas->sky = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->sky, Transformation);
 	TRANSFORM(datas->sky)->z = DL_Sky;

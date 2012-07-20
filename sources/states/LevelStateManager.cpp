@@ -64,7 +64,7 @@ void LevelStateManager::Setup() {
 
 	eSnowEmitter = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSnowEmitter, Transformation);
-	TRANSFORM(eSnowEmitter)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), 0.5);
+	TRANSFORM(eSnowEmitter)->size = Vector2(PlacementHelper::ScreenWidth, 0.5);
 	TransformationSystem::setPosition(TRANSFORM(eSnowEmitter), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::S);
 	TRANSFORM(eSnowEmitter)->z = DL_Snow;
 	ADD_COMPONENT(eSnowEmitter, Particule);
@@ -83,14 +83,14 @@ void LevelStateManager::Setup() {
 	eSnowBranch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSnowBranch, Transformation);
 	TRANSFORM(eSnowBranch)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(218));
-	TransformationSystem::setPosition(TRANSFORM(eSnowBranch), Vector2(PlacementHelper::GimpXToScreen(0), PlacementHelper::GimpYToScreen(0)), TransformationSystem::NW);
+	TransformationSystem::setPosition(TRANSFORM(eSnowBranch), Vector2(-PlacementHelper::ScreenWidth*0.5, PlacementHelper::GimpYToScreen(0)), TransformationSystem::NW);
 	TRANSFORM(eSnowBranch)->z = DL_SnowBackground;
 	ADD_COMPONENT(eSnowBranch, Rendering);
 	RENDERING(eSnowBranch)->texture = theRenderingSystem.loadTextureFile("snow_branch");
 
 	eSnowGround = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSnowGround, Transformation);
-	TRANSFORM(eSnowGround)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(300));
+	TRANSFORM(eSnowGround)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(300));
 	TransformationSystem::setPosition(TRANSFORM(eSnowGround), Vector2(PlacementHelper::GimpXToScreen(0), PlacementHelper::GimpYToScreen(1280)), TransformationSystem::SW);
 	TRANSFORM(eSnowGround)->z = DL_SnowBackground;
 	ADD_COMPONENT(eSnowGround, Rendering);
