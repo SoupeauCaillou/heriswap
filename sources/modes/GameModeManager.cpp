@@ -112,7 +112,7 @@ void GameModeManager::Setup() {
 	decor2nd = theEntityManager.CreateEntity();
 	ADD_COMPONENT(decor2nd, Transformation);
 	TRANSFORM(decor2nd)->z = DL_Decor2nd;
-	TRANSFORM(decor2nd)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpWidthToScreen(470));
+	TRANSFORM(decor2nd)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(470));
 	TransformationSystem::setPosition(TRANSFORM(decor2nd), Vector2(0, PlacementHelper::GimpYToScreen(610)), TransformationSystem::N);
 	ADD_COMPONENT(decor2nd, Scrolling);
 	SCROLLING(decor2nd)->images.push_back("decor2nd_0");
@@ -129,7 +129,7 @@ void GameModeManager::Setup() {
 	decor1er = theEntityManager.CreateEntity();
 	ADD_COMPONENT(decor1er, Transformation);
 	TRANSFORM(decor1er)->z = DL_Decor1er;
-	TRANSFORM(decor1er)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpWidthToScreen(300));
+	TRANSFORM(decor1er)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(300));
 	TransformationSystem::setPosition(TRANSFORM(decor1er), Vector2(0, PlacementHelper::GimpYToScreen(1280)), TransformationSystem::S);
 	ADD_COMPONENT(decor1er, Scrolling);
 	SCROLLING(decor1er)->images.push_back("decor1er_0");

@@ -228,7 +228,7 @@ void Game::init(const uint8_t* in, int size) {
 	datas->sky = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->sky, Transformation);
 	TRANSFORM(datas->sky)->z = DL_Sky;
-	TRANSFORM(datas->sky)->size = Vector2(bgElementWidth, (bgElementWidth * 833.0) / 808.0);
+	TRANSFORM(datas->sky)->size = Vector2(bgElementWidth, (PlacementHelper::GimpWidthToScreen(800) * 833.0) / 808.0);
 	TransformationSystem::setPosition(TRANSFORM(datas->sky), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
 	ADD_COMPONENT(datas->sky, Scrolling);
 	SCROLLING(datas->sky)->images.push_back("ciel0");
