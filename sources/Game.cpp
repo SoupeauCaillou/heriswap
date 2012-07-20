@@ -47,6 +47,8 @@
 #include "states/PauseStateManager.h"
 #include "states/MainMenuGameStateManager.h"
 #include "states/FadeStateManager.h"
+#include "states/CountDownStateManager.h"
+#include "states/UserInputGameStateManager.h"
 
 #include "modes/NormalModeManager.h"
 #include "modes/TilesAttackModeManager.h"
@@ -253,11 +255,14 @@ void Game::init(const uint8_t* in, int size) {
 void Game::setMode() {
 	datas->state2Manager[Delete]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[ModeMenu]->modeMgr = datas->mode2Manager[datas->mode];
+	static_cast<CountDownStateManager*> (datas->state2Manager[CountDown])->mode = datas->mode;
 	if (datas->mode == Normal) {
 		static_cast<FadeGameStateManager*> (datas->state2Manager[GameToBlack])->duration = 4.0f;
 	} else {
 		static_cast<FadeGameStateManager*> (datas->state2Manager[GameToBlack])->duration = 0.5f;
 	}
+	//for count down in 2nd mode
+	static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame = true;
 }
 
 void Game::toggleShowCombi(bool forcedesactivate) {

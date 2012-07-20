@@ -30,8 +30,11 @@ class UserInputGameStateManager : public GameStateManager {
 		GameState Update(float dt);
 		void BackgroundUpdate(float dt);
 		void Exit();
-		
+
 		void setAnimSpeed();
+
+		//for count down in 2nd mode
+		bool newGame;
 	private:
 		// datas
 		Entity eSwapper, dragged;
@@ -39,9 +42,9 @@ class UserInputGameStateManager : public GameStateManager {
 		int originI, originJ;
 		int swapI, swapJ;
         std::vector<Entity> inCombinationCells;
-        
+
         SuccessManager* successMgr;
-        
+
         Entity currentCell, swappedCell;
         Entity rollback;
 };

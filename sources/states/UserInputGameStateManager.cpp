@@ -62,10 +62,12 @@ void UserInputGameStateManager::Setup() {
     swapI = swapJ = 0;
 
 	setAnimSpeed();
-	
+
 	rollback = theEntityManager.CreateEntity();
 	ADD_COMPONENT(rollback, Morphing);
 	MORPHING(rollback)->timing = 0.1;
+
+	newGame = true;
 }
 
 void UserInputGameStateManager::Enter() {
@@ -75,7 +77,7 @@ void UserInputGameStateManager::Enter() {
 	ADSR(eSwapper)->activationTime = 0;
 	originI = originJ = -1;
 	dragged = 0;
-	
+
 	currentCell = swappedCell = 0;
 
 	successMgr->timeUserInputloop = 0.f;
@@ -108,10 +110,10 @@ static Entity cellUnderFinger(const Vector2& pos, bool preferInCombi) {
 		float sqdist = Vector2::DistanceSquared(pos, TRANSFORM(*it)->worldPosition);
 		if (sqdist < maxDist) {
 			bool inCombi = contains(combinaisons, GRID(*it));
-			
+
 			if (sqdist < nearestDist || (inCombi && !nearestInCombi)) {
 				nearestDist = sqdist;
-				nearestInCombi = inCombi;	
+				nearestInCombi = inCombi;
 				e = *it;
 			}
 		}
@@ -122,7 +124,7 @@ static Entity cellUnderFinger(const Vector2& pos, bool preferInCombi) {
 static Entity moveToCell(Entity original, const Vector2& move, float threshold) {
 	if (move.LengthSquared() < threshold)
 		return 0;
-	
+
 	int i = GRID(original)->i;
 	int j = GRID(original)->j;
 
@@ -137,7 +139,7 @@ static Entity moveToCell(Entity original, const Vector2& move, float threshold) 
 			return theGridSystem.GetOnPos(i,j-1);
 		} else {
 			return theGridSystem.GetOnPos(i,j+1);
-		}		
+		}
 	}
 }
 
@@ -151,6 +153,10 @@ static void exchangeGridCoords(Entity a, Entity b) {
 }
 
 GameState UserInputGameStateManager::Update(float dt) {
+	if (newGame) {
+		newGame = false;
+		return CountDown;
+	}
 	successMgr->timeUserInputloop += dt;
 	successMgr->sWhatToDo(theTouchInputManager.wasTouched() && theTouchInputManager.isTouched(), dt);
 
@@ -161,10 +167,10 @@ GameState UserInputGameStateManager::Update(float dt) {
 	if (!currentCell) {
 		// beginning of drag
 		if (!theTouchInputManager.wasTouched() &&
-			theTouchInputManager.isTouched()) {			
+			theTouchInputManager.isTouched()) {
 			const Vector2& pos = theTouchInputManager.getTouchLastPosition();
 			currentCell = cellUnderFinger(pos, true);
-			
+
 			if (currentCell) {
 				CombinationMark::markCellInCombination(currentCell);
 			}
@@ -178,11 +184,11 @@ GameState UserInputGameStateManager::Update(float dt) {
 		if (theTouchInputManager.isTouched()) {
 			// swap cell on axis
 			Entity c = moveToCell(currentCell, move, TRANSFORM(currentCell)->size.X * 0.01);
-			
+
 			// same cell, keep going
 			if (c && (!swappedCell || swappedCell == c)) {
 				if (!swappedCell) {
-					CombinationMark::markCellInCombination(c);	
+					CombinationMark::markCellInCombination(c);
 				}
 				swappedCell = c;
 
@@ -199,7 +205,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 				if (!c) {
 					TRANSFORM(currentCell)->position = posA;
 				} else {
-					CombinationMark::markCellInCombination(c);	
+					CombinationMark::markCellInCombination(c);
 				}
 				swappedCell = c;
 			}
