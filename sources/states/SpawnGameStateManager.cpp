@@ -33,7 +33,7 @@
 #include "CombinationMark.h"
 
 
-static void fillTheBlank(std::vector<Feuille>& spawning);
+static void fillTheBlank(std::vector<Feuille>& newLeaves);
 static Entity createCell(Feuille& f, bool assignGridPos);
 
 SpawnGameStateManager::SpawnGameStateManager(SuccessManager* smgr){
@@ -43,27 +43,27 @@ SpawnGameStateManager::SpawnGameStateManager(SuccessManager* smgr){
 void SpawnGameStateManager::setAnimSpeed() {
 	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
 
-	ADSR(eSpawn)->idleValue = 0;
-	ADSR(eSpawn)->attackValue = 1.0;
-	ADSR(eSpawn)->attackTiming = difficulty*0.2;
-	ADSR(eSpawn)->decayTiming = 0;
-	ADSR(eSpawn)->sustainValue = 1.0;
-	ADSR(eSpawn)->releaseTiming = 0;
+	ADSR(haveToAddLeavesInGrid)->idleValue = 0;
+	ADSR(haveToAddLeavesInGrid)->attackValue = 1.0;
+	ADSR(haveToAddLeavesInGrid)->attackTiming = difficulty*0.2;
+	ADSR(haveToAddLeavesInGrid)->decayTiming = 0;
+	ADSR(haveToAddLeavesInGrid)->sustainValue = 1.0;
+	ADSR(haveToAddLeavesInGrid)->releaseTiming = 0;
 
-	ADSR(eGrid)->idleValue = 0;
-	ADSR(eGrid)->attackValue = 1.0;
-	ADSR(eGrid)->attackTiming = difficulty*0.5;
-	ADSR(eGrid)->decayTiming = 0;
-	ADSR(eGrid)->sustainValue = 1.0;
-	ADSR(eGrid)->releaseTiming = 0;
+	ADSR(replaceGrid)->idleValue = 0;
+	ADSR(replaceGrid)->attackValue = 1.0;
+	ADSR(replaceGrid)->attackTiming = difficulty*0.5;
+	ADSR(replaceGrid)->decayTiming = 0;
+	ADSR(replaceGrid)->sustainValue = 1.0;
+	ADSR(replaceGrid)->releaseTiming = 0;
 }
 
 void SpawnGameStateManager::Setup() {
-	eSpawn = theEntityManager.CreateEntity();
-	ADD_COMPONENT(eSpawn, ADSR);
+	haveToAddLeavesInGrid = theEntityManager.CreateEntity();
+	ADD_COMPONENT(haveToAddLeavesInGrid, ADSR);
 
-	eGrid = theEntityManager.CreateEntity();
-	ADD_COMPONENT(eGrid, ADSR);
+	replaceGrid = theEntityManager.CreateEntity();
+	ADD_COMPONENT(replaceGrid, ADSR);
 
 	setAnimSpeed();
 }
@@ -71,23 +71,23 @@ void SpawnGameStateManager::Setup() {
 void SpawnGameStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
-	fillTheBlank(spawning);
+	fillTheBlank(newLeaves);
 	//we need to create the whole grid (start game and level change)
-	if ((int)spawning.size()==theGridSystem.GridSize*theGridSystem.GridSize) {
-     	LOGI("create %u cells", spawning.size());
-		for(unsigned int i=0; i<spawning.size(); i++) {
-            if (spawning[i].entity == 0)
-			    spawning[i].entity = createCell(spawning[i], true);
+	if ((int)newLeaves.size() == theGridSystem.GridSize*theGridSystem.GridSize) {
+     	LOGI("create %u cells", newLeaves.size());
+		for(unsigned int i=0; i<newLeaves.size(); i++) {
+            if (newLeaves[i].entity == 0)
+			    newLeaves[i].entity = createCell(newLeaves[i], true);
 		}
-        ADSR(eSpawn)->active = true;
+        ADSR(haveToAddLeavesInGrid)->active = true;
 		removeEntitiesInCombination();
 	} else {
-	    ADSR(eSpawn)->active = false;
+	    ADSR(haveToAddLeavesInGrid)->active = false;
     }
-    ADSR(eSpawn)->activationTime = 0;
+    ADSR(haveToAddLeavesInGrid)->activationTime = 0;
 
-	ADSR(eGrid)->activationTime = 0;
-	ADSR(eGrid)->active = false;
+	ADSR(replaceGrid)->activationTime = 0;
+	ADSR(replaceGrid)->active = false;
 }
 
 void SpawnGameStateManager::removeEntitiesInCombination() {
@@ -114,11 +114,11 @@ void SpawnGameStateManager::removeEntitiesInCombination() {
 }
 
 GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
-	//si on doit recree des feuilles
-	if (!spawning.empty()) {
-        bool fullGridSpawn = (spawning.size() == (unsigned)theGridSystem.GridSize*theGridSystem.GridSize);
-		ADSR(eSpawn)->active = true;
-		for ( std::vector<Feuille>::reverse_iterator it = spawning.rbegin(); it != spawning.rend(); ++it ) {
+	//si on est en train de créer des feuilles
+	if (!newLeaves.empty()) {
+        bool fullGridSpawn = (newLeaves.size() == (unsigned)theGridSystem.GridSize*theGridSystem.GridSize);
+		ADSR(haveToAddLeavesInGrid)->active = true;
+		for ( std::vector<Feuille>::reverse_iterator it = newLeaves.rbegin(); it != newLeaves.rend(); ++it ) {
 			if (it->entity == 0) {
 				it->entity = createCell(*it, fullGridSpawn);
 			} else {
@@ -128,54 +128,58 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
                 }
 				TransformationComponent* tc = TRANSFORM(it->entity);
 				float s = Game::CellSize(theGridSystem.GridSize);
-				if (ADSR(eSpawn)->value == 1){
+				if (ADSR(haveToAddLeavesInGrid)->value == 1){
 					tc->size = Vector2(s*0.1, s);
 					gc->i = it->X;
 					gc->j = it->Y;
 				} else {
-					tc->size = Vector2(s * ADSR(eSpawn)->value, s * ADSR(eSpawn)->value);
+					tc->size = Vector2(s * ADSR(haveToAddLeavesInGrid)->value, s * ADSR(haveToAddLeavesInGrid)->value);
 				}
 			}
 		}
-		if (ADSR(eSpawn)->value == 1) {
-			spawning.clear();
+		//tout le monde est en place : quel sera le prochain état ?
+		if (ADSR(haveToAddLeavesInGrid)->value == 1) {
+			newLeaves.clear();
 			return NextState(true);
 		}
-	//sinon si on fait une nouvelle grille
-	} else if (ADSR(eGrid)->active) {
+	//sinon si on est en train de supprimer une grille
+	} else if (ADSR(replaceGrid)->active) {
         std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
         //les feuilles disparaissent (taille tend vers 0)
         for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
-            Vector2 cellSize = Vector2(Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale() * (1 - ADSR(eGrid)->value));
+            Vector2 cellSize = Vector2(Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale() * (1 - ADSR(replaceGrid)->value));
             ADSR(*it)->idleValue = cellSize.X;
         }
-        if (ADSR(eGrid)->value == ADSR(eGrid)->sustainValue) {
+        //les feuilles ont disparu, ont les supprime en on remplit avec de nouvelles feuilles
+        if (ADSR(replaceGrid)->value == ADSR(replaceGrid)->sustainValue) {
 			theGridSystem.DeleteAll();
-            fillTheBlank(spawning);
-            LOGI("nouvelle grille de %lu elements! ", spawning.size());
+            fillTheBlank(newLeaves);
+            LOGI("nouvelle grille de %lu elements! ", newLeaves.size());
             successMgr->gridResetted = true;
-            ADSR(eSpawn)->activationTime = 0;
-			ADSR(eSpawn)->active = true;
+            ADSR(haveToAddLeavesInGrid)->activationTime = 0;
+			ADSR(haveToAddLeavesInGrid)->active = true;
         }
     //sinon l'etat suivant depend de la grille actuelle
+    //sinon on regarde dans quel état on arrive avec notre grille actuelle
     } else {
 		return NextState(false);
 	}
 	return Spawn;
 }
 
-GameState SpawnGameStateManager::NextState(bool marker) {
-	std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,marker);
+GameState SpawnGameStateManager::NextState(bool recheckEveryoneInGrid) {
+	std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false, recheckEveryoneInGrid);
 	//si on a des combinaisons dans la grille on passe direct à Delete
 	if (!combinaisons.empty()) {
 		return Delete;
 	//sinon
 	} else {
 		//si y a des combi, c'est au player de player
-		if (theGridSystem.StillCombinations()) return UserInput;
+		if (theGridSystem.StillCombinations()) {
+			return UserInput;
 		//sinon on genere une nouvelle grille
-		else {
-			ADSR(eGrid)->active = true;
+		} else {
+			ADSR(replaceGrid)->active = true;
 			std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
 			for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
 				CombinationMark::markCellInCombination(*it);
@@ -187,18 +191,18 @@ GameState SpawnGameStateManager::NextState(bool marker) {
 
 void SpawnGameStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
-	spawning.clear();
+	newLeaves.clear();
 }
 
 
-int newLeavesInSpawning(std::vector<Feuille>& spawning, int i, int j) {
-	for (unsigned int k=0; k<spawning.size(); k++)
-		if (spawning[k].X == i && spawning[k].Y == j)
-			return spawning[k].type;
+int newLeavesInSpawning(std::vector<Feuille>& newLeaves, int i, int j) {
+	for (unsigned int k=0; k<newLeaves.size(); k++)
+		if (newLeaves[k].X == i && newLeaves[k].Y == j)
+			return newLeaves[k].type;
 	return -1;
 }
 
-void fillTheBlank(std::vector<Feuille>& spawning)
+void fillTheBlank(std::vector<Feuille>& newLeaves)
 {
 	for (int i=0; i<theGridSystem.GridSize; i++){
 		for (int j=0; j<theGridSystem.GridSize; j++){
@@ -220,9 +224,9 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 				//and their types
 				int typeVoisins[8];
 				for (int k = 0; k < 4; k++) {
-					typeVoisins[k] = voisins[k] ? GRID(voisins[k])->type : newLeavesInSpawning(spawning, i-2+k, j);
+					typeVoisins[k] = voisins[k] ? GRID(voisins[k])->type : newLeavesInSpawning(newLeaves, i-2+k, j);
 				} for (int k = 4; k < 8; k++)
-					typeVoisins[k] = voisins[k] ? GRID(voisins[k])->type : newLeavesInSpawning(spawning, i, j-6+k);
+					typeVoisins[k] = voisins[k] ? GRID(voisins[k])->type : newLeavesInSpawning(newLeaves, i, j-6+k);
 
 				//get a type which doesn't create a combi with its neighboors
 				int type, ite = 0;
@@ -232,7 +236,7 @@ void fillTheBlank(std::vector<Feuille>& spawning)
 				} while (theGridSystem.GridPosIsInCombination(i, j, type, typeVoisins) && ite<5000);
 
 				Feuille nouvfe = {i,j,0,type};
-				spawning.push_back(nouvfe);
+				newLeaves.push_back(nouvfe);
 			}
 		}
 	}

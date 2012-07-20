@@ -28,15 +28,15 @@ class SpawnGameStateManager : public GameStateManager {
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
-		GameState NextState(bool marker);
+		GameState NextState(bool recheckEveryone);
 		void Exit();
 		void setAnimSpeed();
 		void removeEntitiesInCombination();
 
 	private:
 		// datas
-		Entity eSpawn, eGrid;
-		std::vector<Feuille> spawning;
+		Entity haveToAddLeavesInGrid, replaceGrid;
+		std::vector<Feuille> newLeaves;
 
 		SuccessManager* successMgr;
 };
