@@ -119,6 +119,7 @@ static public final String Tag = "HeriswapJ";
         		}
         	}
 		});
+        
         _cb.cacheInterstitial();
         
         preferences = getSharedPreferences("HeriswapPref", 0);
@@ -183,6 +184,8 @@ static public final String Tag = "HeriswapJ";
         HeriswapActivity.scoreOpenHelper = new HeriswapStorage.ScoreOpenHelper(this);
         HeriswapActivity.optionsOpenHelper = new HeriswapStorage.OptionsOpenHelper(this);
         HeriswapActivity.soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
+        
+        AppRater.app_launched(this, (int)(mGLView.getWidth() * 0.9));
         
         if (savedInstanceState != null) {
 	        HeriswapActivity.savedState = savedInstanceState.getByteArray(TILEMATCH_BUNDLE_KEY);
