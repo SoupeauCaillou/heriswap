@@ -32,7 +32,6 @@ void CountDownStateManager::Setup() {
 	ADD_COMPONENT(counter, Transformation);
 	ADD_COMPONENT(counter, TextRendering);
 	TRANSFORM(counter)->position = Vector2(0, PlacementHelper::GimpYToScreen(650));
-	TEXT_RENDERING(counter)->color = Color(164.0/255.0, 164.0/255, 164.0/255);
 	TEXT_RENDERING(counter)->color = Color(3.0/255.0, 99.0/255, 71.0/255);
 	TEXT_RENDERING(counter)->fontName = "gdtypo";
 	TEXT_RENDERING(counter)->positioning = TextRenderingComponent::CENTER;
