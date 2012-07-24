@@ -20,7 +20,7 @@
 
 #include <GL/glew.h>
 #include <GL/glfw.h>
-//liste des keys dans /usr/include/GL/glfw.h 
+//liste des keys dans /usr/include/GL/glfw.h
 #include <sstream>
 #include <iostream>
 #include <fstream>
@@ -81,10 +81,10 @@ Entity globalFTW = 0;
 void GLFWCALL myCharCallback( int c, int action ) {
 	if (globalFTW == 0)
 		return;
-		
+
 	if (!TEXT_RENDERING(globalFTW)->hide) {
 		if (action == GLFW_PRESS && (isalnum(c) || c == ' ')) {
-			if (TEXT_RENDERING(globalFTW)->text.length() > 20) 
+			if (TEXT_RENDERING(globalFTW)->text.length() > 10)
 				return;
 			// filter out all unsupported keystrokes
 			TEXT_RENDERING(globalFTW)->text.push_back((char)c);
@@ -101,13 +101,13 @@ int main(int argc, char** argv) {
 	Vector2 reso16_10(430, 700);
 
 	glfwOpenWindowHint( GLFW_WINDOW_NO_RESIZE, GL_TRUE );
-	
+
 	Vector2* reso = &reso16_10; // (argc == 1) ? &reso16_10 : &reso16_9;
 	if( !glfwOpenWindow( reso->X,reso->Y, 8,8,8,8,8,8, GLFW_WINDOW ) )
 		return 1;
 
 	glfwSetWindowTitle("Heriswap");
-	
+
 	glewInit();
 
 	// pose de l'origine du temps ici t = 0
@@ -128,16 +128,16 @@ int main(int argc, char** argv) {
 		}
 	}
 	#endif
-	
+
 	__log_enabled = (argc > 1 && !strcmp(argv[1], "--verbose"));
 
     StorageAPILinuxImpl* storage = new StorageAPILinuxImpl();
     storage->init();
 
 	LocalizeAPILinuxImpl* loc = new LocalizeAPILinuxImpl();
-	
+
 	NameInputAPILinuxImpl* nameInput = new NameInputAPILinuxImpl();
-	
+
 	Game game(new AssetAPILinuxImpl(), storage, nameInput, new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl());
 
 	theRenderingSystem.opengles2 = true;
@@ -152,14 +152,14 @@ int main(int argc, char** argv) {
     openal->init();
     theMusicSystem.init();
     soundAPI->init();
-    
+
     game.sacInit(reso->X,reso->Y);
-    
+
     setlocale( LC_ALL, "" );
 	loc->init();
-	
+
 	game.init(state, size);
-	
+
 	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
 	// name input entities
 	nameInput->title = theEntityManager.CreateEntity();
@@ -173,7 +173,7 @@ int main(int argc, char** argv) {
 	TEXT_RENDERING(nameInput->title)->color = green;
 	TEXT_RENDERING(nameInput->title)->charHeight = PlacementHelper::GimpHeightToScreen(54);
 	TEXT_RENDERING(nameInput->title)->hide = true;
-	
+
 	globalFTW = nameInput->nameEdit = theEntityManager.CreateEntity();
 	ADD_COMPONENT(nameInput->nameEdit, Transformation);
 	TRANSFORM(nameInput->nameEdit)->position = Vector2(0, PlacementHelper::GimpYToScreen(390));
@@ -185,7 +185,7 @@ int main(int argc, char** argv) {
 	TEXT_RENDERING(nameInput->nameEdit)->charHeight = PlacementHelper::GimpHeightToScreen(54);
 	TEXT_RENDERING(nameInput->nameEdit)->hide = true;
 	TEXT_RENDERING(nameInput->nameEdit)->caretSpeed = 0.5;
-	
+
 	nameInput->background = theEntityManager.CreateEntity();
 	ADD_COMPONENT(nameInput->background, Transformation);
 	TRANSFORM(nameInput->background)->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(256));
@@ -201,7 +201,7 @@ int main(int argc, char** argv) {
 	float dtAccumuled=0, dt = 0, time = 0;
 
 	time = TimeUtil::getTime();
-	
+
 	glfwSetCharCallback(myCharCallback);
 
 
@@ -238,7 +238,7 @@ int main(int argc, char** argv) {
 			if (glfwGetKey( GLFW_KEY_SPACE )) {// || !focus) {
 				game.togglePause(true);
 			}
-			//magic key?
+			//user entered his name?
 			if ((glfwGetKey( GLFW_KEY_ENTER ) || glfwGetKey( GLFW_KEY_KP_ENTER) ) && timer<=0) {
 				if (!TEXT_RENDERING(nameInput->nameEdit)->hide) {
 					nameInput->textIsReady = true;
