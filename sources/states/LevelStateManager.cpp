@@ -91,7 +91,7 @@ void LevelStateManager::Setup() {
 	eSnowGround = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSnowGround, Transformation);
 	TRANSFORM(eSnowGround)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(300));
-	TransformationSystem::setPosition(TRANSFORM(eSnowGround), Vector2(PlacementHelper::GimpXToScreen(0), PlacementHelper::GimpYToScreen(1280)), TransformationSystem::SW);
+	TransformationSystem::setPosition(TRANSFORM(eSnowGround), Vector2(0, PlacementHelper::GimpYToScreen(1280)), TransformationSystem::S);
 	TRANSFORM(eSnowGround)->z = DL_SnowBackground;
 	ADD_COMPONENT(eSnowGround, Rendering);
 	RENDERING(eSnowGround)->texture = theRenderingSystem.loadTextureFile("snow_ground");
