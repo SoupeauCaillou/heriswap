@@ -55,13 +55,13 @@ public class AppRater {
     
     public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor, int width) {
         final Dialog dialog = new Dialog(mContext);
-        dialog.setTitle("Rate " + APP_TITLE);
+        dialog.setTitle(APP_TITLE);
 
         LinearLayout ll = new LinearLayout(mContext);
         ll.setOrientation(LinearLayout.VERTICAL);
         
         TextView tv = new TextView(mContext);
-        tv.setText("If you enjoy using " + APP_TITLE + ", please take a moment to rate it. Thanks for your support!");
+        tv.setText(R.string.rate_it);
         //tv.setWidth(width);
         tv.setPadding(4, 0, 4, 10);
         ll.addView(tv);

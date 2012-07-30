@@ -52,7 +52,7 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     		frameCount++;
     		long diff = System.currentTimeMillis() - time;
     		if (diff >= 10000) {
-    			Log.w("TAG", "Render thread FPS: " + (float)1000*frameCount / diff);
+    			// Log.w("TAG", "Render thread FPS: " + (float)1000*frameCount / diff);
     			frameCount = 0;
     			time = System.currentTimeMillis();
     		}
