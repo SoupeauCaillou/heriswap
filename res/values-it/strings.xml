@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="reprendre">Riprendi</string>
+	<string name="aide">Aiuto</string>
+	<string name="abandonner">Aiuto</string>
+	<string name="mode_1">Corsa al punteggio</string>
+	<string name="mode_2">Contro il tempo</string>
+	<string name="score">Punteggi migliori :</string>
+	<string name="jouer">Gioca</string>
+	<string name="rejouer">Rigioca</string>
+	<string name="diff_1">Debuttante</string>
+	<string name="diff_2">Confermato</string>
+	<string name="lvl">liv</string>
+	<string name="lvlcap">Liv</string>
+	<string name="enter_name">Digita il tuo nome</string>
+	<string name="save_name">Registrare</string>
+	<string name="congrats">Nuovo miglior punteggio !</string>
+	<string name="reuse_name">O uno della lista :</string>
+	<string name="success">Successo</string>
+	<string name="how_to_play">Come giocare ?</string>
+	<string name="bonus_x2">Bonus x2</string>
+	<string name="objective">obiettivo</string>
+	<string name="level">livello</string>
+	<string name="leave_left">foglie restanti</string>
+	<string name="quitter">Esci</string>
+	<string name="rate_it">Se ti è piaciuto Heriswap, spenderesti qualche secondo per lasciare una valutazione o un commento? grazie in anticipo.</string>
+</resources>

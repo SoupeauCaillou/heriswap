@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="reprendre">Wieder aufnehmen</string>
+	<string name="aide">Hilfe</string>
+	<string name="abandonner">Aufgeben</string>
+	<string name="mode_1">Rennen zur Punkte</string>
+	<string name="mode_2">Gegen die Zeit</string>
+	<string name="score">Highscores</string>
+	<string name="jouer">Spielen</string>
+	<string name="rejouer">Wiederspielen</string>
+	<string name="diff_1">Anfänger</string>
+	<string name="diff_2">Erfahrene</string>
+	<string name="lvl">lvl</string>
+	<string name="lvlcap">Lvl</string>
+	<string name="enter_name">Ihren Name geben</string>
+	<string name="save_name">Aufnehmen</string>
+	<string name="congrats">Neue Highscore !</string>
+	<string name="reuse_name">oder aus der Liste :</string>
+	<string name="success">Erfolg</string>
+	<string name="how_to_play">Wie spielen ?</string>
+	<string name="bonus_x2">Bonus x2</string>
+	<string name="objective">Ziel</string>
+	<string name="level">Ebene</string>
+	<string name="leave_left">Verbliebene Blätter</string>
+	<string name="quitter">Verlassen</string>
+	<string name="rate_it">If you enjoy using Heriswap, please take a moment to rate it. Thanks for your support!</string>
+</resources>
