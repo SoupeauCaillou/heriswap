@@ -255,6 +255,7 @@ void Game::init(const uint8_t* in, int size) {
 void Game::setMode() {
 	datas->state2Manager[Delete]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[ModeMenu]->modeMgr = datas->mode2Manager[datas->mode];
+	datas->state2Manager[Spawn]->modeMgr = datas->mode2Manager[datas->mode];
 	static_cast<CountDownStateManager*> (datas->state2Manager[CountDown])->mode = datas->mode;
 	if (datas->mode == Normal) {
 		static_cast<FadeGameStateManager*> (datas->state2Manager[GameToBlack])->duration = 4.0f;
@@ -356,13 +357,13 @@ void Game::tick(float dt) {
 		percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent();
 	}
 
-    //dont update until game has really began (after countdown)
+    //update only if game has really begun (after countdown)
     if (datas->state != CountDown && static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame == false) {
-		//updating game if needed
-	    if (datas->mode == TilesAttack && inGameState(datas->state)) {
-			datas->mode2Manager[TilesAttack]->GameUpdate(dt);
-		} else if (datas->mode == Normal && newState == UserInput) {
+		//updating game if playing
+		if (datas->mode == Normal && newState == UserInput) {
 			datas->mode2Manager[Normal]->GameUpdate(dt);
+	    } else if (datas->mode == TilesAttack && inGameState(datas->state)) {
+			datas->mode2Manager[TilesAttack]->GameUpdate(dt);
 		}
 	}
 
@@ -378,6 +379,7 @@ void Game::tick(float dt) {
 		}
 	}
 
+	//game ended
 	if (percentDone >= 1) {
 		newState = GameToBlack;
 		//show combinations which remain in score attack
@@ -394,29 +396,36 @@ void Game::tick(float dt) {
 		}
 	}
 
-	if ((datas->state == Delete && theGridSystem.entityCount() == theGridSystem.GridSize * theGridSystem.GridSize) || datas->state == UserInput) {
-		// si on change de niveau (course au score), on remplit pas la grille avant l'anim
+	//ne pas changer la grille si fin de niveau/jeu
+	if (datas->state == UserInput) {
 		if (datas->mode == Normal) {
 			NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]);
 			if (m->LevelUp()) {
-				static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel = m->currentLevel();
 				newState = LevelChanged;
 			}
 		// si on a fini (contre la montre), on remplit pas la grille et on quitte direct
 		} else {
 			TilesAttackGameModeManager* m = static_cast<TilesAttackGameModeManager*> (datas->mode2Manager[TilesAttack]);
-			if (m->GameProgressPercent()==1) {
+			if (m->GameProgressPercent() == 1) {
 				newState = GameToBlack;
 			}
 		}
 	}
+
 	//si on est passé de pause à quelque chose different de pause, on desactive la pause
 	if (datas->state == Pause && newState == Unpause) {
 		togglePause(false);
 
 	}
-    //sinon si on a change d'etat
-    else if (newState != datas->state) {
+
+	//il faut mettre à jour le niveau si on level up
+	if (newState == LevelChanged) {
+		static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel =
+			(static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]))->currentLevel();
+	}
+
+    //si on a change d'etat
+     if (newState != datas->state) {
 		stateChanged(datas->state, newState);
 
 		if (newState == ExitState)
@@ -455,7 +464,7 @@ void Game::tick(float dt) {
             RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
         }
 	}
-
+	//if openfeint is clicked
 	if (BUTTON(datas->openfeint)->clicked){
 		if (datas->state == ModeMenu) {
 			int d = (static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]))->getDifficulty();
@@ -465,7 +474,7 @@ void Game::tick(float dt) {
 		}
 	}
 
-    //updating HUD
+    //updating HUD if playing
 	if (inGameState(newState) && newState != LevelChanged) {
 		datas->mode2Manager[datas->mode]->UiUpdate(dt);
 	}

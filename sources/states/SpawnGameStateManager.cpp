@@ -27,6 +27,9 @@
 #include "systems/ADSRSystem.h"
 #include "systems/ScrollingSystem.h"
 
+#include "modes/GameModeManager.h"
+#include "states/GameStateManager.h"
+
 #include "Game.h"
 #include "DepthLayer.h"
 #include "TwitchSystem.h"
@@ -68,10 +71,12 @@ void SpawnGameStateManager::Setup() {
 	setAnimSpeed();
 }
 
+//oldState = ModeMenu or LevelChanged or Delete
 void SpawnGameStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
 	fillTheBlank(newLeaves);
+
 	//we need to create the whole grid (start game and level change)
 	if ((int)newLeaves.size() == theGridSystem.GridSize*theGridSystem.GridSize) {
      	LOGI("create %u cells", newLeaves.size());
@@ -114,7 +119,7 @@ void SpawnGameStateManager::removeEntitiesInCombination() {
 }
 
 GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
-	//si on est en train de créer des feuilles
+	//si on bouche les trous
 	if (!newLeaves.empty()) {
         bool fullGridSpawn = (newLeaves.size() == (unsigned)theGridSystem.GridSize*theGridSystem.GridSize);
 		ADSR(haveToAddLeavesInGrid)->active = true;
@@ -143,11 +148,7 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
 			newLeaves.clear();
 			return NextState(true);
 		}
-	//sinon si on est en train de supprimer une grille (plus de combinaisons)
-
-	/* (on doit pas etre en changement de niveau / fin de jeu)
-	 */
-
+	//sinon si on est en train de remplacer la grille (plus de combinaisons en cours de jeu)
 	} else if (ADSR(replaceGrid)->active) {
         std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
         //les feuilles disparaissent (taille tend vers 0)
@@ -155,7 +156,7 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
             Vector2 cellSize = Vector2(Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale() * (1 - ADSR(replaceGrid)->value));
             ADSR(*it)->idleValue = cellSize.X;
         }
-        //les feuilles ont disparu, ont les supprime en on remplit avec de nouvelles feuilles
+        //les feuilles ont disparu, on les supprime et on remplit avec de nouvelles feuilles
         if (ADSR(replaceGrid)->value == ADSR(replaceGrid)->sustainValue) {
 			theGridSystem.DeleteAll();
             fillTheBlank(newLeaves);
@@ -164,7 +165,6 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
             ADSR(haveToAddLeavesInGrid)->activationTime = 0;
 			ADSR(haveToAddLeavesInGrid)->active = true;
         }
-    //sinon l'etat suivant depend de la grille actuelle
     //sinon on regarde dans quel état on arrive avec notre grille actuelle
     } else {
 		return NextState(false);
@@ -174,22 +174,29 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
 
 GameState SpawnGameStateManager::NextState(bool recheckEveryoneInGrid) {
 	std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false, recheckEveryoneInGrid);
-	//si on a des combinaisons dans la grille on passe direct à Delete
-	if (!combinaisons.empty()) {
-		return Delete;
-	//sinon
-	} else {
-		//si y a des combi, c'est au player de player
-		if (theGridSystem.StillCombinations()) {
-			return UserInput;
-		//sinon on genere une nouvelle grille
-		} else {
+	//pas de combinaisons à supprimer, qu'est-ce qu'il faut donc faire ?
+	if (combinaisons.empty()) {
+		//si y a plus de combi, on genere une nouvelle grille (uniquement parce que y a plus de solutions)
+		if (!theGridSystem.StillCombinations()) {
+			//(on doit pas etre en changement de niveau / fin de jeu)
+			if (modeMgr->GetMode() == Normal && modeMgr->LevelUp())
+				return LevelChanged;
+			//inutile logiquement (on quitte avant)
+			//~else if (modeMgr->GetMode() == TilesAttack && modeMgr->GameProgressPercent() == 1)
+				//~return GameToBlack;
+
 			ADSR(replaceGrid)->active = true;
 			std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
 			for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
 				CombinationMark::markCellInCombination(*it);
 			}
+		//sinon y a des combi, c'est au player de player
+		} else {
+			return UserInput;
 		}
+	//sinon on a des combinaisons dans la grille on passe à Delete
+	} else {
+		return Delete;
 	}
 	return Spawn;
 }
