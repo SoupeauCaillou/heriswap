@@ -61,7 +61,7 @@
 #include <libintl.h>
 
 #define DT 1/60.
-#define MAGICKEYTIME 0.3
+#define MAGICKEYTIME 0.15
 
 
 
@@ -129,7 +129,7 @@ int main(int argc, char** argv) {
 	}
 	#endif
 
-	__log_enabled = (argc > 1 && !strcmp(argv[1], "--verbose"));
+	__log_enabled = (argc > 1 && (!strcmp(argv[1], "--verbose") || !strcmp(argv[1], "-v")));
 
     StorageAPILinuxImpl* storage = new StorageAPILinuxImpl();
     storage->init();
@@ -239,15 +239,16 @@ int main(int argc, char** argv) {
 				game.togglePause(true);
 			}
 			//user entered his name?
-			if ((glfwGetKey( GLFW_KEY_ENTER ) || glfwGetKey( GLFW_KEY_KP_ENTER) ) && timer<=0) {
+			if ((glfwGetKey( GLFW_KEY_ENTER ) || glfwGetKey( GLFW_KEY_KP_ENTER) )) {// && timer<=0) {
 				if (!TEXT_RENDERING(nameInput->nameEdit)->hide) {
 					nameInput->textIsReady = true;
 				}
 				// game.toggleShowCombi(false);
 				// timer = MAGICKEYTIME;
 			}
-			if (glfwGetKey( GLFW_KEY_BACKSPACE)) {
+			if (glfwGetKey( GLFW_KEY_BACKSPACE) && timer <= 0) {
 				// game.backPressed();
+				timer = MAGICKEYTIME;
 				if (!TEXT_RENDERING(nameInput->nameEdit)->hide) {
 					std::string& text = TEXT_RENDERING(nameInput->nameEdit)->text;
 					if (text.length() > 0) {
