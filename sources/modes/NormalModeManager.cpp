@@ -98,7 +98,7 @@ void NormalGameModeManager::GameUpdate(float dt) {
 	successMgr->gameDuration += dt;
 
 	if (helpAvailable && BUTTON(herisson)->clicked) {
-		ShowOneCombination();
+		//ShowOneCombination();
 		helpAvailable = false;
 	}
 }
