@@ -29,23 +29,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.openfeint.internal.ui.IntroFlow"
-                  android:label="IntroFlow"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:theme="@style/OFNestedWindow" />
-        <activity android:name="com.openfeint.api.ui.Dashboard"
-                  android:label="Dashboard"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:theme="@style/OFNestedWindow"/>
-        <activity android:name="com.openfeint.internal.ui.Settings"
-                  android:label="Settings"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:theme="@style/OFNestedWindow"/>
-        <activity android:name="com.openfeint.internal.ui.NativeBrowser"
-                  android:label="NativeBrowser"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:theme="@style/OFNestedWindow"/>
-
 		<activity android:name="com.swarmconnect.SwarmMainActivity"
 				android:configChanges="orientation|keyboardHidden"
 				android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
