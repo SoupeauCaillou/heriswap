@@ -45,6 +45,9 @@ import com.openfeint.api.resource.Score;
 import com.openfeint.api.resource.User;
 import com.openfeint.api.ui.Dashboard;
 
+import com.swarmconnect.Swarm;
+import com.swarmconnect.SwarmAchievement;
+
 public class HeriswapJNILib {
 	static {
 		System.loadLibrary("heriswap");
@@ -388,7 +391,8 @@ public class HeriswapJNILib {
 	}
 
 	static public void openfeintSuccess() {
-		Dashboard.open();
+		//Dashboard.open();
+		//Swarm.showDashboard();
 	}
 
 	// -------------------------------------------------------------------------
