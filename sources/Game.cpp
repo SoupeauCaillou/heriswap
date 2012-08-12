@@ -262,8 +262,6 @@ void Game::setMode() {
 	} else {
 		static_cast<FadeGameStateManager*> (datas->state2Manager[GameToBlack])->duration = 0.5f;
 	}
-	//for count down in 2nd mode
-	static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame = true;
 }
 
 void Game::toggleShowCombi(bool forcedesactivate) {
