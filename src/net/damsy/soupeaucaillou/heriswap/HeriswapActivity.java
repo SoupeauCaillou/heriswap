@@ -18,7 +18,6 @@
 */
 package net.damsy.soupeaucaillou.heriswap;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,7 +39,6 @@ import android.widget.RelativeLayout;
 
 import com.chartboost.sdk.ChartBoost;
 import com.chartboost.sdk.ChartBoostDelegate;
-import com.openfeint.api.OpenFeint;
 
 import com.swarmconnect.Swarm;
 import com.swarmconnect.SwarmActivity;
@@ -92,7 +90,7 @@ static public final String Tag = "HeriswapJ";
       //Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON CREATE");
         activity = this;
         ofHasBeenShown = adHasBeenShown = adWaitingAdDisplay = false;
-		//Swarm.init(this, 1143, "33fd8ce3947234f7ebb8c5099aaea6ab");
+		Swarm.init(this, HeriswapSecret.Swarm_gameID, HeriswapSecret.Swarm_gameKey);
 
         ChartBoost _cb = ChartBoost.getSharedChartBoost(this);
         _cb.setAppId(HeriswapSecret.CB_appId);
@@ -226,8 +224,8 @@ static public final String Tag = "HeriswapJ";
 	        	// HeriswapJNILib.invalidateTextures(HeriswapActivity.game);
 			}
         }
-
-        OpenFeint.onPause();
+        Swarm.setInactive(this);
+        //OpenFeint.onPause();
         super.onPause();
     }
 
@@ -249,7 +247,8 @@ static public final String Tag = "HeriswapJ";
         	}
         }
 
-        OpenFeint.onResume();
+        //OpenFeint.onResume();
+        Swarm.setActive(this);
     }
 
     @Override
@@ -311,7 +310,8 @@ static public final String Tag = "HeriswapJ";
     @Override
     protected void onDestroy() {
     	super.onDestroy();
-    	OpenFeint.onExit();
+    	//OpenFeint.onExit();
+    	Swarm.logOut();
     	//Log.i(HeriswapActivity.Tag, "Activity destroyed");
     }
 }

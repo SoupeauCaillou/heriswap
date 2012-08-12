@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command;
@@ -38,15 +39,10 @@ import android.media.AudioTrack;
 import android.view.View;
 
 import com.chartboost.sdk.ChartBoost;
-import com.openfeint.api.OpenFeint;
-import com.openfeint.api.resource.Achievement;
-import com.openfeint.api.resource.Leaderboard;
-import com.openfeint.api.resource.Score;
-import com.openfeint.api.resource.User;
-import com.openfeint.api.ui.Dashboard;
 
 import com.swarmconnect.Swarm;
 import com.swarmconnect.SwarmAchievement;
+import com.swarmconnect.SwarmLeaderboard;
 
 public class HeriswapJNILib {
 	static {
@@ -228,9 +224,9 @@ public class HeriswapJNILib {
 
 	static final String[] boards = new String[] { "1188517", "1188507",
 			"1188537", "1188527" };
-
-	static public void submitScore(final int mode, int difficulty, int points,
-			int level, float time, String name) {
+	
+	static public void submitScore(final int mode, final int difficulty, final int points,
+			final int level, final float time, final String name) {
 		SQLiteDatabase db = HeriswapActivity.scoreOpenHelper
 				.getWritableDatabase();
 		ContentValues v = new ContentValues();
@@ -245,10 +241,29 @@ public class HeriswapJNILib {
 		db.close();
 
 		// retrieve Leaderboard
-		final Leaderboard l = new Leaderboard(boards[2 * (mode - 1)
-				+ difficulty]);
 		//NOLOGLog.i(HeriswapActivity.Tag, "leaderboard id: " + boards[2 * (mode - 1) + difficulty]);
 
+		
+		SwarmLeaderboard.GotLeaderboardCB callback = new SwarmLeaderboard.GotLeaderboardCB() {
+		    public void gotLeaderboard(SwarmLeaderboard leaderboard) {
+
+		    		if (leaderboard != null) {
+		    			//que si meilleur score
+		    			
+		    			//leaderboard.getScoreForUser(Swarm.user, truc);
+		    			if (true) {
+		    				if (mode == 1)
+		    					leaderboard.submitScore(points);
+		    				else 
+		    					leaderboard.submitScore(time);
+		    			}
+		        	}
+		        }
+		    };
+		 
+		SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[2 * (mode - 1) + difficulty], callback);
+
+		/*
 		// Build score object
 		final Score s;
 		if (mode == 1)
@@ -256,6 +271,8 @@ public class HeriswapJNILib {
 		else
 			s = new Score((long) (time * 1000),
 					(float) ((int) (time * 100) / 100.f) + "s");
+
+//		final Leaderboard l = new Leaderboard(boards[2 * (mode - 1)	+ difficulty]);
 
 		// Callback called by OF on score querying
 		final Score.SubmitToCB scCB = new Score.SubmitToCB() {
@@ -310,7 +327,7 @@ public class HeriswapJNILib {
 						super.onFailure(exceptionMessage);
 						s.submitTo(l, scCB);
 					}
-				});
+				});*/
 	}
 
 	static public int getScores(int mode, int difficulty, int[] points,
@@ -347,11 +364,29 @@ public class HeriswapJNILib {
 	// -------------------------------------------------------------------------
 	// SuccessAPI
 	// -------------------------------------------------------------------------
-	static public void unlockAchievement(int id) {
-		if (!OpenFeint.isNetworkConnected()) {
+	static public void unlockAchievement(int idS) {
+		//if (!OpenFeint.isNetworkConnected()) {
+		if (!Swarm.isLoggedIn()) {
 			return;
 		}
+		final int id = idS;
 		
+		SwarmAchievement.GotAchievementsMapCB callback = new SwarmAchievement.GotAchievementsMapCB() {
+			@Override
+			public void gotMap(Map<Integer, SwarmAchievement> achievements) {
+		        SwarmAchievement achievement = achievements.get(id);
+		        // No need to unlock more than once...
+		        if (achievement != null && achievement.unlocked == false) {
+		            achievement.unlock();
+		        }
+			}
+		};
+		SwarmAchievement.getAchievementsMap(callback);
+		
+		//final SwarmAchievement ach = new SwarmAchievement();
+		//SwarmAchievement.GotAchievementsListCB loadC = new SwarmAchievement.GotAchievementsListCB() {
+		//}
+		/*
 		final Achievement achv = new Achievement(Integer.toString(id));
 		Achievement.LoadCB loadCb = new Achievement.LoadCB() {
 			@Override
@@ -381,18 +416,30 @@ public class HeriswapJNILib {
 
 		};
 
-		achv.load(loadCb);
+		achv.load(loadCb);*/
 	}
 
-	static public void openfeintLeaderboard(int mode, int difficulty) {
+	
+	static public void openLeaderboard(int mode, int difficulty) {
 		if (mode >= 1 && mode <= 2 && difficulty >= 0 && difficulty <= 1) {
-			Dashboard.openLeaderboard(boards[2 * (mode - 1) + difficulty]);
+			//Dashboard.openLeaderboard();
+			
+			SwarmLeaderboard.GotLeaderboardCB callback = new SwarmLeaderboard.GotLeaderboardCB() {
+			    public void gotLeaderboard(SwarmLeaderboard leaderboard) {
+
+			    	if (leaderboard != null) {
+			    		leaderboard.showLeaderboard();
+			        }
+			    }
+			};
+			
+			SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[2 * (mode - 1) + difficulty], callback);
 		}
 	}
 
-	static public void openfeintSuccess() {
+	static public void openDashboard() {
 		//Dashboard.open();
-		//Swarm.showDashboard();
+		Swarm.showDashboard();
 	}
 
 	// -------------------------------------------------------------------------
