@@ -63,8 +63,8 @@ class AndroidSuccessAPI : public SuccessAPI {
 	public:
 		GameHolder* holder;
 		void successCompleted(const char* description, unsigned long successId);
-        void openfeintLB(int mode, int diff);
-        void openfeintSuccess();
+        void openLeaderboard(int mode, int diff);
+        void openDashboard();
 };
 
 enum {
@@ -74,9 +74,9 @@ enum {
 };
 
 struct JNIEnvDependantContext {
-	virtual void init(JNIEnv* pEnv, jobject assetMgr) { env = pEnv; }	
+	virtual void init(JNIEnv* pEnv, jobject assetMgr) { env = pEnv; }
 	virtual void uninit(JNIEnv* pEnv) { env = 0; }
-	
+
 	JNIEnv* env;
 };
 
@@ -90,7 +90,7 @@ struct GameThreadJNIEnvCtx : JNIEnvDependantContext {
 	MusicAPIAndroidImpl musicAPI;
 	SoundAPIAndroidImpl soundAPI;
 	jobject assetManager;
-	
+
 	void init(JNIEnv* env, jobject assetMgr) {
 		assetManager = env->NewGlobalRef(assetMgr);
 
@@ -102,10 +102,10 @@ struct GameThreadJNIEnvCtx : JNIEnvDependantContext {
 		exitAPI.init(env);
 		musicAPI.init(env);
 		soundAPI.init(env, assetManager);
-	
+
 		JNIEnvDependantContext::init(env, assetMgr);
 	}
-	
+
 	void uninit(JNIEnv* pEnv) {
 		if (env == pEnv) {
 			nameInput.uninit();
@@ -118,7 +118,7 @@ struct GameThreadJNIEnvCtx : JNIEnvDependantContext {
 			soundAPI.uninit();
 			env->DeleteGlobalRef(assetManager);
 		}
-		
+
 		JNIEnvDependantContext::uninit(pEnv);
 	}
 };
@@ -126,13 +126,13 @@ struct GameThreadJNIEnvCtx : JNIEnvDependantContext {
 struct RenderThreadJNIEnvCtx : JNIEnvDependantContext {
     AssetAPIAndroidImpl asset;
 	jobject assetManager;
-	
+
 	void init(JNIEnv* env, jobject assetMgr) {
 		assetManager = env->NewGlobalRef(assetMgr);
 	    asset.init(env, assetManager);
 		JNIEnvDependantContext::init(env, assetMgr);
 	}
-	
+
 	void uninit(JNIEnv* pEnv) {
 		if (env == pEnv) {
 			asset.uninit();
@@ -145,11 +145,11 @@ struct RenderThreadJNIEnvCtx : JNIEnvDependantContext {
 struct GameHolder {
 	Game* game;
 	int width, height;
-	
+
 	GameThreadJNIEnvCtx gameThreadJNICtx;
 	RenderThreadJNIEnvCtx renderThreadJNICtx;
 	AndroidSuccessAPI success;
-	
+
 	struct __input {
 		 int touching;
 		 float x, y;
@@ -188,14 +188,14 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_cr
   	TimeUtil::init();
 	GameHolder* hld = new GameHolder();
 	hld->initDone = false;
-	hld->game = new Game(&hld->renderThreadJNICtx.asset, 
+	hld->game = new Game(&hld->renderThreadJNICtx.asset,
 		&hld->gameThreadJNICtx.storage,
 		&hld->gameThreadJNICtx.nameInput,
 		&hld->success,
 		&hld->gameThreadJNICtx.localize,
 		&hld->gameThreadJNICtx.ad,
 		&hld->gameThreadJNICtx.exitAPI);
-	
+
 	hld->openGLESVersion = openglesVersion;
 	theRenderingSystem.assetAPI = &hld->renderThreadJNICtx.asset;
 	theRenderingSystem.opengles2 = (hld->openGLESVersion == 2);
@@ -223,7 +223,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_ini
 	GameHolder* hld = (GameHolder*) g;
 	hld->width = w;
 	hld->height = h;
-	
+
 	hld->renderThreadJNICtx.init(env, asset);
 
 	hld->game->sacInit(hld->width, hld->height);
@@ -240,19 +240,19 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_uni
 
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_initFromGameThread
   (JNIEnv *env, jclass, jobject asset, jlong g, jbyteArray jstate) {
-  	GameHolder* hld = (GameHolder*) g;	
+  	GameHolder* hld = (GameHolder*) g;
   	bool fullInit = true;
-  	
-  	if (hld->gameThreadJNICtx.env && hld->gameThreadJNICtx.env != env && !jstate) 
+
+  	if (hld->gameThreadJNICtx.env && hld->gameThreadJNICtx.env != env && !jstate)
   		fullInit = false;
 	hld->gameThreadJNICtx.init(env, asset);
-	
+
 	theMusicSystem.musicAPI = &hld->gameThreadJNICtx.musicAPI;
 	theMusicSystem.assetAPI = &hld->gameThreadJNICtx.asset;
 	theSoundSystem.soundAPI = &hld->gameThreadJNICtx.soundAPI;
-	
+
 	theSoundSystem.init();
-	
+
 	uint8_t* state = 0;
 	int size = 0;
 	if (jstate) {
@@ -264,9 +264,9 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_ini
 	} else {
 		LOGW("No saved state: creating a new Game instance from scratch");
 	}
-	
+
 	theMusicSystem.init();
-	
+
 	hld->firstCall = true;
 	hld->dtAccumuled = 0;
 
@@ -389,7 +389,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_inv
      LOGW("%s -->", __FUNCTION__);
      if (!hld->game || !RenderingSystem::GetInstancePointer())
          return;
-         
+
     hld->renderThreadJNICtx.init(env, asset);
 
     // kill all music
@@ -405,7 +405,7 @@ JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_inv
 JNIEXPORT void JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_handleInputEvent
   (JNIEnv *env, jclass, jlong g, jint evt, jfloat x, jfloat y) {
 	GameHolder* hld = (GameHolder*) g;
-	
+
 	if (g == 0)
 		return;
 
@@ -503,17 +503,17 @@ void AndroidSuccessAPI::successCompleted(const char* description, unsigned long 
 	env->CallStaticVoidMethod(c, mid, sid);
 }
 
-void AndroidSuccessAPI::openfeintLB(int mode, int diff) {
+void AndroidSuccessAPI::openLeaderboard(int mode, int diff) {
 	JNIEnv* env = holder->gameThreadJNICtx.env;
 	jclass c = env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib");
-	jmethodID mid = env->GetStaticMethodID(c, "openfeintLeaderboard", "(II)V");
+	jmethodID mid = env->GetStaticMethodID(c, "openLeaderboard", "(II)V");
 	env->CallStaticVoidMethod(c, mid, mode, diff);
 }
 
-void AndroidSuccessAPI::openfeintSuccess() {
+void AndroidSuccessAPI::openDashboard() {
 	JNIEnv* env = holder->gameThreadJNICtx.env;
 	jclass c = env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib");
-	jmethodID mid = env->GetStaticMethodID(c, "openfeintSuccess", "()V");
+	jmethodID mid = env->GetStaticMethodID(c, "openDashboard", "()V");
 	env->CallStaticVoidMethod(c, mid);
 }
 #ifdef __cplusplus

@@ -81,7 +81,7 @@ void SuccessManager::NewGame(int difficulty) {
 void SuccessManager::s6InARow(int nbInCombi) {
 	if (hardMode && !b6InARow) {
 		if (nbInCombi >= 6) {
-			successAPI->successCompleted("6 in a row", 1697182);
+			successAPI->successCompleted("6 in a row", 3430);
 			b6InARow=true;
 		}
 	}
@@ -90,7 +90,7 @@ void SuccessManager::s6InARow(int nbInCombi) {
 void SuccessManager::sHardScore(StorageAPI* storage) {
 	if (!bHardScore) {
 		if (storage->getSavedGamePointsSum() > 1000000) {
-			successAPI->successCompleted("Hardscore gamer", 1697162);
+			successAPI->successCompleted("Hardscore gamer", 3432);
 			bHardScore=true;
 		}
 	}
@@ -98,7 +98,7 @@ void SuccessManager::sHardScore(StorageAPI* storage) {
 void SuccessManager::sFastAndFinish(float time) {
 	if (hardMode && !bFastAndFinish) {
 		if (time<=53.f) {
-			successAPI->successCompleted("Fast and finish", 1697242);
+			successAPI->successCompleted("Fast and finish", 2988);
 			bFastAndFinish = true;
 		}
 	}
@@ -107,7 +107,7 @@ void SuccessManager::sFastAndFinish(float time) {
 void SuccessManager::sResetGrid() {
 	if (hardMode && !bResetGrid) {
 		if (!gridResetted) {
-			successAPI->successCompleted("Don't reset the grid !", 1697232);
+			successAPI->successCompleted("Don't reset the grid !", 3418);
 			bResetGrid = true;
 		}
 	}
@@ -116,7 +116,7 @@ void SuccessManager::sResetGrid() {
 void SuccessManager::sTakeYourTime() {
 	if (hardMode && !bTakeYourTime) {
 		if (gameDuration > 900.) {
-			successAPI->successCompleted("Take your time", 1697172);
+			successAPI->successCompleted("Take your time", 3424);
 			bTakeYourTime = true;
 		}
 	}
@@ -126,15 +126,15 @@ void SuccessManager::sTakeYourTime() {
 void SuccessManager::sExterminaScore(int points) {
 	if (hardMode && !bExterminaScore) {
 		if (points > 100000) {
-			successAPI->successCompleted("Exterminascore", 1697202);
+			successAPI->successCompleted("Exterminascore", 3422);
 			bExterminaScore = true;
 		}
 	}
 }
 void SuccessManager::sLevel1For2K(int level, int points) {
 	if (hardMode && !bLevel1For2K) {
-		if (level==1 && points>=1000) {
-			successAPI->successCompleted("1k points for level 1", 1697142);
+		if (level==1 && points>=2000) {
+			successAPI->successCompleted("2k points for level 1", 3434);
 			bLevel1For2K = true;
 		}
 	}
@@ -143,7 +143,7 @@ void SuccessManager::sLevel1For2K(int level, int points) {
 void SuccessManager::sLevel10(int level) {
 	if (hardMode && !bLevel10) {
 		if (level == 10) {
-			successAPI->successCompleted("Level 10", 1697192);
+			successAPI->successCompleted("Level 10", 3426);
 			bLevel10 = true;
 		}
 	}
@@ -166,10 +166,10 @@ void SuccessManager::sRainbow(int type) {
 		}
 		if (rainbow(succEveryTypeInARow)) {
 			if (!bRainbow) {
-				successAPI->successCompleted("Rainbow combination", 1697102);
+				successAPI->successCompleted("Rainbow combination", 3440);
 				bRainbow = true;
 			} else {
-				successAPI->successCompleted("Double rainbow ", 1697112);
+				successAPI->successCompleted("Double rainbow ", 3444);
 				bDoubleRainbow = true;
 			}
 		}
@@ -180,7 +180,7 @@ void SuccessManager::sBonusToExcess(int type, int bonus, int nb) {
 		if (type == bonus)
 			bonusTilesNumber +=nb;
 		if (bonusTilesNumber >= 100) {
-			successAPI->successCompleted("Bonus to excess", 1697212);
+			successAPI->successCompleted("Bonus bonus", 3420);
 			bBonusToExcess = true;
 		}
 	}
@@ -194,7 +194,7 @@ void SuccessManager::sLuckyLuke() {
 			timeTotalPlayed = 0.f;
 
 		if (timeTotalPlayed >= 15.f) {
-			successAPI->successCompleted("Lucky Luke", 1697092);
+			successAPI->successCompleted("Lucky Luke", 3442);
 			bLuckyLuke = true;
 		}
 	}
@@ -203,7 +203,7 @@ void SuccessManager::sLuckyLuke() {
 void SuccessManager::sTestEverything(StorageAPI* str) {
 	if (!bTestEverything) {
 		if (str->everyModesPlayed()) {
-			successAPI->successCompleted("Test everything", 1697082);
+			successAPI->successCompleted("Test everything", 3454);
 			bTestEverything = true;
 		}
 	}
@@ -214,7 +214,7 @@ void SuccessManager::sBTAC(StorageAPI* storage, int difficulty, unsigned int poi
 	    std::vector<StorageAPI::Score> entries = storage->savedScores(1, difficulty);
 		int s = entries.size();
 		if (s >= 5 && (int)points > entries[0].points) {
-			successAPI->successCompleted("Beat them all (classic)", 1697152);
+			successAPI->successCompleted("Beat them all (score race)", 3436);
 			bBTAC = true;
 		}
 	}
@@ -225,7 +225,7 @@ void SuccessManager::sBTAM(StorageAPI* storage, int difficulty, float time) {
 		std::vector<StorageAPI::Score> entries = storage->savedScores(2, difficulty);
 		int s = entries.size();
 		if (s >= 5 && time < entries[0].time) {
-			successAPI->successCompleted("Beat them all (MODE2)", 1697222);
+			successAPI->successCompleted("Beat them all (time attack)", 3428);
 			bBTAM = true;
 		}
 	}
@@ -239,7 +239,7 @@ void SuccessManager::s666Loser(int level) {
 			l666numberLose = 0;
 
 		if (l666numberLose==3) {
-			successAPI->successCompleted("666 Loser !", 1697132);
+			successAPI->successCompleted("666 Loser !", 3438);
 			b666Loser = true;
 		}
 	}
@@ -253,7 +253,7 @@ void SuccessManager::sTheyGood(bool Ibetter) {
 			lTheyGood=0;
 
 		if (lTheyGood==3) {
-			successAPI->successCompleted("They're too good", 1697072);
+			successAPI->successCompleted("They're too good", 3446);
 			bTheyGood = true;
 		}
 	}
@@ -267,7 +267,7 @@ void SuccessManager::sWhatToDo(bool swapInPreparation, float dt) {
 			timeInSwappingPreparation=0.f;
 
 		if (timeInSwappingPreparation>5.0f) {
-			successAPI->successCompleted("What I gonna do ?", 1697062);
+			successAPI->successCompleted("What I gonna do ?", 3448);
 			bWhatToDo = true;
 		}
 	}
@@ -284,7 +284,7 @@ void SuccessManager::sBimBamBoum(int newCombiCount) {
 		}
 
 		if (numberCombinationInARow >= 3) {
-			successAPI->successCompleted("Bim Bam Boum", 1697052);
+			successAPI->successCompleted("Bim Bam Boum", 3450);
 			bBimBamBoum = true;
 		}
 	}
@@ -293,7 +293,7 @@ void SuccessManager::sBimBamBoum(int newCombiCount) {
 void SuccessManager::sDoubleInOne(std::vector<Combinais> &s) {
 	if (hardMode && !bDoubleInOne) {
 		if (s.size() > 1) {
-			successAPI->successCompleted("Double in one", 1697042);
+			successAPI->successCompleted("Double in one", 3452);
 			bDoubleInOne = true;
 		}
 	}

@@ -59,10 +59,10 @@ class SuccessAPI {
 		virtual void successCompleted(const char* description, unsigned long successId) {
 			LOGI("Success completed '%s': %lu", description, successId);
 		}
-        virtual void openfeintLB(int mode, int diff) {
+        virtual void openLeaderboard(int mode, int diff) {
 	        mode=mode; diff=diff;
         }
-        virtual void openfeintSuccess() {}
+        virtual void openDashboard() {}
 };
 
 class PrivateData;
@@ -94,7 +94,7 @@ class Game {
 		void bench(bool active, float updateDuration, float dt);
 		void stopInGameMusics();
 		bool shouldPlayPiano();
-		
+
 		void setupGameProp();
 
 	PrivateData* datas;

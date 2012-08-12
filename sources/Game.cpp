@@ -466,9 +466,9 @@ void Game::tick(float dt) {
 	if (BUTTON(datas->openfeint)->clicked){
 		if (datas->state == ModeMenu) {
 			int d = (static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]))->getDifficulty();
-			successAPI->openfeintLB(datas->mode, d);
+			successAPI->openLeaderboard(datas->mode, d);
 		} else {
-			successAPI->openfeintSuccess();
+			successAPI->openDashboard();
 		}
 	}
 
