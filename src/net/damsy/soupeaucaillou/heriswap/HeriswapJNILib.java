@@ -260,7 +260,9 @@ public class HeriswapJNILib {
 		        	}
 		        }
 		    };
-		 
+		if (!Swarm.isLoggedIn())
+			Swarm.init(HeriswapActivity.activity, HeriswapSecret.Swarm_gameID, HeriswapSecret.Swarm_gameKey);
+		
 		SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[2 * (mode - 1) + difficulty], callback);
 
 		/*
