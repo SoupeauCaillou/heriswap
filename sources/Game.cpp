@@ -47,7 +47,6 @@
 #include "states/PauseStateManager.h"
 #include "states/MainMenuGameStateManager.h"
 #include "states/FadeStateManager.h"
-#include "states/CountDownStateManager.h"
 #include "states/UserInputGameStateManager.h"
 
 #include "modes/NormalModeManager.h"
@@ -256,7 +255,6 @@ void Game::setMode() {
 	datas->state2Manager[Delete]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[ModeMenu]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[Spawn]->modeMgr = datas->mode2Manager[datas->mode];
-	static_cast<CountDownStateManager*> (datas->state2Manager[CountDown])->mode = datas->mode;
 	if (datas->mode == Normal) {
 		static_cast<FadeGameStateManager*> (datas->state2Manager[GameToBlack])->duration = 4.0f;
 	} else {
@@ -355,8 +353,8 @@ void Game::tick(float dt) {
 		percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent();
 	}
 
-    //update only if game has really begun (after countdown)
-    if (datas->state != CountDown && static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame == false) {
+    //update only if game has really begun (after first move)
+    if (static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame == false) {
 		//updating game if playing
 		if (datas->mode == Normal && newState == UserInput) {
 			datas->mode2Manager[Normal]->GameUpdate(dt);

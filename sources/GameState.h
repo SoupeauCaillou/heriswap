@@ -19,7 +19,6 @@
 #pragma once
 
 enum GameState {
-     CountDown,
      Spawn,
      UserInput,
      Delete,
