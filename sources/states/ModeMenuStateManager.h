@@ -36,7 +36,7 @@ class ModeMenuStateManager : public GameStateManager {
         void LateExit();
 
 		void LoadScore(int mode, int dif);
-		
+
 		int getDifficulty() const { return difficulty; }
 
 		Entity title, menufg, menubg;
@@ -44,6 +44,13 @@ class ModeMenuStateManager : public GameStateManager {
 
         bool pleaseGoBack;
         HelpStateManager* helpMgr;
+
+        enum GameOverState {
+            NoGame,
+            GameEnded,
+            AskingPlayerName
+        } gameOverState;
+
 	private:
 		StorageAPI* storage;
 		NameInputAPI* nameInputAPI;
@@ -54,17 +61,12 @@ class ModeMenuStateManager : public GameStateManager {
 		SuccessManager* successMgr;
 		LocalizeAPI* localizeAPI;
 
-		//variables for perso mode
 		int difficulty;
 		Entity eDifficulty, bDifficulty;
 
+		Entity facebook, twitter, enableSwarm, enableSwarmContainer;
+
         void submitScore(const std::string& playerName);
         bool isCurrentScoreAHighOne();
-    public:
-        enum GameOverState {
-            NoGame,
-            GameEnded,
-            AskingPlayerName
-        } gameOverState;
 
 };

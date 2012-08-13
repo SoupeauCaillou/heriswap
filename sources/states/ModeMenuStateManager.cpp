@@ -153,11 +153,73 @@ void ModeMenuStateManager::Setup() {
 	// your score
 	yourScore = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
-	TRANSFORM(yourScore)->position = Vector2(0,PlacementHelper::GimpYToScreen(1242));
+	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(250),PlacementHelper::GimpYToScreen(1242));
 	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(yourScore)->hide = true;
 	TEXT_RENDERING(yourScore)->charHeight = PlacementHelper::GimpHeightToScreen(56);
 	TEXT_RENDERING(yourScore)->color = green;
+
+	// facebook button
+	facebook = theEntityManager.CreateEntity();
+	ADD_COMPONENT(facebook, Transformation);
+	ADD_COMPONENT(facebook, Rendering);
+	ADD_COMPONENT(facebook, Button);
+	BUTTON(facebook)->enabled = false;
+	RENDERING(facebook)->texture = theRenderingSystem.loadTextureFile("facebook");
+	TRANSFORM(facebook)->position = Vector2(PlacementHelper::GimpXToScreen(500),PlacementHelper::GimpYToScreen(1242));
+	TRANSFORM(facebook)->size = Vector2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
+	TRANSFORM(facebook)->z = DL_MainMenuUITxt;
+
+	// twitter button
+	twitter = theEntityManager.CreateEntity();
+	ADD_COMPONENT(twitter, Transformation);
+	ADD_COMPONENT(twitter, Rendering);
+	ADD_COMPONENT(twitter, Button);
+	BUTTON(twitter)->enabled = false;
+	RENDERING(twitter)->texture = theRenderingSystem.loadTextureFile("twitter");
+	TRANSFORM(twitter)->position = Vector2(PlacementHelper::GimpXToScreen(600),PlacementHelper::GimpYToScreen(1242));
+	TRANSFORM(twitter)->size = Vector2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
+	TRANSFORM(twitter)->z = DL_MainMenuUITxt;
+
+	// enable swarm text
+	enableSwarm = theTextRenderingSystem.CreateEntity();
+	TRANSFORM(enableSwarm)->z = DL_MainMenuUITxt;
+	TRANSFORM(enableSwarm)->position = Vector2(0, PlacementHelper::GimpYToScreen(1100));
+	TEXT_RENDERING(enableSwarm)->positioning = TextRenderingComponent::CENTER;
+	TEXT_RENDERING(enableSwarm)->hide = true;
+	TEXT_RENDERING(enableSwarm)->charHeight = PlacementHelper::GimpHeightToScreen(45);
+	TEXT_RENDERING(enableSwarm)->color = green;
+	TEXT_RENDERING(enableSwarm)->text = "Enable swarm to see online scores";
+
+	// enable swarm container
+	enableSwarmContainer = theEntityManager.CreateEntity();
+	ADD_COMPONENT(enableSwarmContainer, Transformation);
+	ADD_COMPONENT(enableSwarmContainer, Container);
+	CONTAINER(enableSwarmContainer)->entities.push_back(enableSwarm);
+	CONTAINER(enableSwarmContainer)->includeChildren = true;
+	ADD_COMPONENT(enableSwarmContainer, Button);
+	BUTTON(enableSwarmContainer)->enabled = false;
+
+	//difficulty text
+	eDifficulty = theTextRenderingSystem.CreateEntity();
+	TRANSFORM(eDifficulty)->z = DL_MainMenuUITxt;
+	TRANSFORM(eDifficulty)->position = Vector2(0, PlacementHelper::GimpYToScreen(375));
+	TEXT_RENDERING(eDifficulty)->positioning = TextRenderingComponent::CENTER;
+	TEXT_RENDERING(eDifficulty)->hide = true;
+	TEXT_RENDERING(eDifficulty)->charHeight = PlacementHelper::GimpHeightToScreen(45);
+	TEXT_RENDERING(eDifficulty)->color = green;
+
+	//difficulty container
+	bDifficulty = theEntityManager.CreateEntity();
+	ADD_COMPONENT(bDifficulty, Transformation);
+	ADD_COMPONENT(bDifficulty, Container);
+	CONTAINER(bDifficulty)->entities.push_back(eDifficulty);
+	CONTAINER(bDifficulty)->includeChildren = true;
+	ADD_COMPONENT(bDifficulty, Button);
+	ADD_COMPONENT(bDifficulty, Sound);
+	BUTTON(bDifficulty)->enabled = false;
+
+
 
 	// fond
 	fond = theEntityManager.CreateEntity();
@@ -286,6 +348,16 @@ GameState ModeMenuStateManager::Update(float dt) {
 			break;
         }
         case GameEnded: {
+			RENDERING(facebook)->hide = false;
+			RENDERING(twitter)->hide = false;
+			BUTTON(facebook)->enabled = true;
+			BUTTON(twitter)->enabled = true;
+			//if (!swarmEnabled())
+			if (true) {
+				BUTTON(enableSwarmContainer)->enabled = true;
+				TEXT_RENDERING(enableSwarm)->hide = false;
+			}
+
             // ask player's name if needed
             if (isCurrentScoreAHighOne()) {
                 nameInputAPI->show();
@@ -404,4 +476,11 @@ void ModeMenuStateManager::LateExit() {
 
 	TEXT_RENDERING(eDifficulty)->hide=true;
 	BUTTON(bDifficulty)->enabled = false;
+
+	BUTTON(facebook)->enabled = false;
+	BUTTON(twitter)->enabled = false;
+	BUTTON(enableSwarmContainer)->enabled = false;
+	RENDERING(facebook)->hide = true;
+	RENDERING(twitter)->hide = true;
+	TEXT_RENDERING(enableSwarm)->hide = true;
 }
