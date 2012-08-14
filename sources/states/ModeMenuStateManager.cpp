@@ -40,10 +40,11 @@
 #include "DepthLayer.h"
 #include "GridSystem.h"
 
-ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, NameInputAPI* pNameInputAPI, SuccessManager* sMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI) {
+ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, NameInputAPI* pNameInputAPI, SuccessManager* sMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, CommunicationAPI* comAPI) {
 	storage = storag;
     successAPI = sAPI;
 	successMgr = sMgr;
+	communicationAPI = comAPI;
 	nameInputAPI = pNameInputAPI;
 	localizeAPI = lAPI;
 	difficulty = 1;
@@ -352,8 +353,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 			RENDERING(twitter)->hide = false;
 			BUTTON(facebook)->enabled = true;
 			BUTTON(twitter)->enabled = true;
-			//if (!swarmEnabled())
-			if (true) {
+			if (!communicationAPI->swarmInstalled()) {
 				BUTTON(enableSwarmContainer)->enabled = true;
 				TEXT_RENDERING(enableSwarm)->hide = false;
 			}

@@ -19,6 +19,7 @@
 #pragma once
 
 #include "api/NameInputAPI.h"
+#include "api/CommunicationAPI.h"
 #include "SuccessManager.h"
 #include "states/GameStateManager.h"
 #include "Game.h"
@@ -28,7 +29,7 @@ class HelpStateManager;
 
 class ModeMenuStateManager : public GameStateManager {
 	public:
-		ModeMenuStateManager(StorageAPI* storag, NameInputAPI* nameInputAPI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI);
+		ModeMenuStateManager(StorageAPI* storag, NameInputAPI* nameInputAPI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, CommunicationAPI* comAPI);
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
@@ -53,6 +54,7 @@ class ModeMenuStateManager : public GameStateManager {
 
 	private:
 		StorageAPI* storage;
+		CommunicationAPI* communicationAPI;
 		NameInputAPI* nameInputAPI;
         SuccessAPI* successAPI;
 		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle;

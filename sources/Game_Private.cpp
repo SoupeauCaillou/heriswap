@@ -47,7 +47,7 @@
 #include "GameState.h"
 
 
-PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad) {
+PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad, CommunicationAPI* comAPI) {
      mode = Normal;
      mode2Manager[Normal] = new NormalGameModeManager(game,successMgr);
      mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game,successMgr);
@@ -66,7 +66,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      state2Manager[Pause] = new PauseStateManager(lAPI);
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
      state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI, sAPI);
-     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successMgr,lAPI, sAPI);
+     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successMgr,lAPI, sAPI, comAPI);
      state2Manager[Help] = new HelpStateManager(lAPI);
      state2Manager[Ads] = new AdsStateManager(ad, storage, successMgr);
 

@@ -43,12 +43,12 @@ LOCAL_SRC_FILES := \
 	../sources/states/PauseStateManager.cpp \
 	../sources/states/SpawnGameStateManager.cpp \
 	../sources/states/UserInputGameStateManager.cpp \
-	../sources/states/CountDownStateManager.cpp \
 	../sources/modes/GameModeManager.cpp \
 	../sources/modes/TilesAttackModeManager.cpp \
 	../sources/modes/InGameUiHelper.cpp \
 	../sources/modes/NormalModeManager.cpp \
-    ../sources/api/android/StorageAPIAndroidImpl.cpp 
+    ../sources/api/android/StorageAPIAndroidImpl.cpp
+    ../sources/api/android/CommunicationAPIAndroidImpl.cpp
 
 LOCAL_STATIC_LIBRARIES := sac png tremor
 LOCAL_LDLIBS := -lGLESv2 -lGLESv1_CM -lEGL -llog -lz

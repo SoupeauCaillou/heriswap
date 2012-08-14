@@ -48,6 +48,7 @@
 #include "api/linux/ExitAPILinuxImpl.h"
 
 #include "api/linux/StorageAPILinuxImpl.h"
+#include "api/linux/CommunicationAPILinuxImpl.h"
 
 #include "systems/TextRenderingSystem.h"
 #include "systems/ButtonSystem.h"
@@ -138,7 +139,7 @@ int main(int argc, char** argv) {
 
 	NameInputAPILinuxImpl* nameInput = new NameInputAPILinuxImpl();
 
-	Game game(new AssetAPILinuxImpl(), storage, nameInput, new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl());
+	Game game(new AssetAPILinuxImpl(), storage, nameInput, new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl(), new CommunicationAPILinuxImpl());
 
 	theRenderingSystem.opengles2 = true;
 	//theSoundSystem.init();

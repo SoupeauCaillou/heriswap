@@ -31,28 +31,9 @@
 #include "api/StorageAPI.h"
 #include "api/AdAPI.h"
 #include "api/ExitAPI.h"
+#include "api/CommunicationAPI.h"
 
 class NameInputAPI;
-
-class ScoreStorage {
-	public:
-		struct Score {
-			unsigned int points, level;
-			float time;
-			std::string name;
-		};
-
-		virtual bool initTable() = 0;
-		virtual void submitScore(Score scr, int mode, int diff) = 0;
-		virtual	bool request(std::string s, void* res, int (*callbackP)(void*,int,char**,char**)) = 0;
-		virtual bool soundEnable(bool switchIt) = 0;
-		virtual void saveOpt(std::string opt, std::string name) = 0;
-		virtual std::vector<std::string> getName(std::string& result) = 0;
-
-		#ifdef ANDROID
-		virtual void openfeintLB(int mode) = 0;
-		#endif
-};
 
 class SuccessAPI {
 	public:
@@ -68,7 +49,7 @@ class SuccessAPI {
 class PrivateData;
 class Game {
 	public:
-		Game(AssetAPI* asset, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad, ExitAPI* exAPI);
+		Game(AssetAPI* asset, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI);
         ~Game();
         void sacInit(int windowW, int windowH);
 		void init(const uint8_t* in = 0, int size = 0);

@@ -111,7 +111,7 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-Game::Game(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad, ExitAPI* exAPI) {
+Game::Game(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI) {
 	asset = ast;
 	successAPI = sAPI;
 	exitAPI = exAPI;
@@ -120,7 +120,7 @@ Game::Game(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI
 	EntityManager::CreateInstance();
 
 	/* create before system so it cannot use any of them (use Setup instead) */
-	datas = new PrivateData(this, storage, inputUI, new SuccessManager(sAPI), lAPI, sAPI, ad);
+	datas = new PrivateData(this, storage, inputUI, new SuccessManager(sAPI), lAPI, sAPI, ad, comAPI);
 
 	/* create systems singleton */
 	TransformationSystem::CreateInstance();
