@@ -47,7 +47,7 @@ LOCAL_SRC_FILES := \
 	../sources/modes/TilesAttackModeManager.cpp \
 	../sources/modes/InGameUiHelper.cpp \
 	../sources/modes/NormalModeManager.cpp \
-    ../sources/api/android/StorageAPIAndroidImpl.cpp
+    ../sources/api/android/StorageAPIAndroidImpl.cpp \
     ../sources/api/android/CommunicationAPIAndroidImpl.cpp
 
 LOCAL_STATIC_LIBRARIES := sac png tremor

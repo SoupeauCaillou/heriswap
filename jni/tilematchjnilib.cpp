@@ -43,6 +43,7 @@
 #include "sac/api/android/AdAPIAndroidImpl.h"
 #include "sac/api/android/ExitAPIAndroidImpl.h"
 
+#include "api/android/CommunicationAPIAndroidImpl.h"
 #include "api/android/StorageAPIAndroidImpl.h"
 
 #include <png.h>
@@ -82,6 +83,7 @@ struct JNIEnvDependantContext {
 
 struct GameThreadJNIEnvCtx : JNIEnvDependantContext {
 	NameInputAPIAndroidImpl nameInput;
+    CommunicationAPIAndroidImpl communication;
     StorageAPIAndroidImpl storage;
 	LocalizeAPIAndroidImpl localize;
     AdAPIAndroidImpl ad;
@@ -95,6 +97,7 @@ struct GameThreadJNIEnvCtx : JNIEnvDependantContext {
 		assetManager = env->NewGlobalRef(assetMgr);
 
 		nameInput.init(env);
+	    communication.init(env);
 	    storage.init(env);
 		localize.init(env);
 	    ad.init(env);
@@ -109,6 +112,7 @@ struct GameThreadJNIEnvCtx : JNIEnvDependantContext {
 	void uninit(JNIEnv* pEnv) {
 		if (env == pEnv) {
 			nameInput.uninit();
+		    communication.uninit();
 		    storage.uninit();
 			localize.uninit();
 		    ad.uninit();
@@ -194,7 +198,8 @@ JNIEXPORT jlong JNICALL Java_net_damsy_soupeaucaillou_heriswap_HeriswapJNILib_cr
 		&hld->success,
 		&hld->gameThreadJNICtx.localize,
 		&hld->gameThreadJNICtx.ad,
-		&hld->gameThreadJNICtx.exitAPI);
+		&hld->gameThreadJNICtx.exitAPI,
+		&hld->gameThreadJNICtx.communication);
 
 	hld->openGLESVersion = openglesVersion;
 	theRenderingSystem.assetAPI = &hld->renderThreadJNICtx.asset;

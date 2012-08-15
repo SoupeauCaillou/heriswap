@@ -21,11 +21,21 @@
 #include "../CommunicationAPI.h"
 #include <jni.h>
 
-class CommunicationAPIAndroidImpl : public Communication API {
+class CommunicationAPIAndroidImpl : public CommunicationAPI {
     public:
-        bool swarmInstalled() { };
-		void shareFacebook() { };
-		void shareTwitter() { };
+         CommunicationAPIAndroidImpl();
+        ~CommunicationAPIAndroidImpl();
+        void init(JNIEnv* env);
+        void uninit();
 
-        JNIEnv* env;
+        bool swarmInstalled();
+		void shareFacebook();
+		void shareTwitter();
+
+    private:
+        class CommunicationAPIAndroidImplDatas;
+        CommunicationAPIAndroidImplDatas* datas;
+
+	public :
+		JNIEnv* env;
 };
