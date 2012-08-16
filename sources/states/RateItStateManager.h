@@ -18,30 +18,22 @@
 */
 #pragma once
 
-enum GameState {
-     Spawn,
-     UserInput,
-     Delete,
-     Fall,
-     LevelChanged,
-     Pause,
-     Unpause,
-     MainMenu,
-     ModeMenu,
-     ScoreBoard,
-     EndMenu,
-     Background,
-     LogoToBlackState,
-     ModeMenuToBlackState,
-     AdsToBlackState,
-     BlackToLogoState,
-     BlackToMainMenu,
-     BlackToSpawn,
-     GameToBlack,
-     BlackToModeMenu,
-     Logo,
-     Help,
-     Ads,
-     RateIt,
-     ExitState
+#include "states/GameStateManager.h"
+#include "Game.h"
+#include "AnimedActor.h"
+
+class RateItStateManager : public GameStateManager {
+	public:
+		RateItStateManager(LocalizeAPI* lAPI) : localizeAPI(lAPI) { };
+		void Setup();
+		void Enter();
+		GameState Update(float dt);
+		void Exit();
+
+		Entity title, menufg, menubg;
+
+	private:
+		Entity bouton[3], boutonContainer[3];
+
+		LocalizeAPI* localizeAPI;
 };

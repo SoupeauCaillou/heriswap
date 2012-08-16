@@ -23,7 +23,7 @@
 #include "SuccessManager.h"
 #include "states/GameStateManager.h"
 #include "Game.h"
-#include "AnimedEntity.h"
+#include "AnimedActor.h"
 
 class HelpStateManager;
 

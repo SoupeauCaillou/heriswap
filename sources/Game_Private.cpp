@@ -42,6 +42,7 @@
 #include "states/LogoStateManager.h"
 #include "states/HelpStateManager.h"
 #include "states/AdsStateManager.h"
+#include "states/RateItStateManager.h"
 
 #include "DepthLayer.h"
 #include "GameState.h"
@@ -69,6 +70,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successMgr,lAPI, sAPI, comAPI);
      state2Manager[Help] = new HelpStateManager(lAPI);
      state2Manager[Ads] = new AdsStateManager(ad, storage, successMgr);
+     state2Manager[RateIt] = new RateItStateManager(lAPI);
 
      state2Manager[BlackToLogoState] = new FadeGameStateManager(0.2f, FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
      state2Manager[LogoToBlackState] = new FadeGameStateManager(0.3f, FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);
@@ -102,9 +104,12 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      ADD_COMPONENT(soundButton, Button);
      BUTTON(soundButton)->overSize = 1.3;
      ADD_COMPONENT(soundButton, Rendering);
-     if (storage->soundEnable(false)) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on");
-     else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
      ADD_COMPONENT(soundButton, Sound);
+     if (storage->soundEnable(false))
+		RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on");
+     else
+		RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
+
 
      ADD_COMPONENT(openfeint, Transformation);
      TRANSFORM(openfeint)->z = DL_MainMenuUITxt;
@@ -145,9 +150,12 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
 
      MainMenuGameStateManager* mainmenu = static_cast<MainMenuGameStateManager*> (state2Manager[MainMenu]);
      ModeMenuStateManager* modemenu = static_cast<ModeMenuStateManager*> (state2Manager[ModeMenu]);
+     RateItStateManager* rateIt = static_cast<RateItStateManager*> (state2Manager[RateIt]);
      modemenu->menufg = mainmenu->menufg;
      modemenu->menubg = mainmenu->menubg;
      modemenu->herisson = mainmenu->herisson;
+     rateIt->menufg = mainmenu->menufg;
+     rateIt->menubg = mainmenu->menubg;
 
      menu = theEntityManager.CreateEntity();
      ADD_COMPONENT(menu, Music);

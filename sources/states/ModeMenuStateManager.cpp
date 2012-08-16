@@ -391,6 +391,12 @@ GameState ModeMenuStateManager::Update(float dt) {
                 submitScore(playerName);
                 LoadScore(modeMgr->GetMode(), difficulty);
                 gameOverState = NoGame;
+                if (MathUtil::RandomInt(1) == 0) {
+					TRANSFORM(herisson->actor.e)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herisson->actor.e)->size.X;
+					TEXT_RENDERING(title)->hide = true;
+					this->LateExit();
+					return RateIt;
+				}
             }
             break;
         }
@@ -465,22 +471,22 @@ void ModeMenuStateManager::LateExit() {
 		TEXT_RENDERING(scoresPoints[i])->hide = true;
 		TEXT_RENDERING(scoresLevel[i])->hide = true;
 	}
-	RENDERING(menubg)->hide = true;
-	RENDERING(menufg)->hide = true;
-	RENDERING(fond)->hide = true;
-	gameOverState = NoGame;
 	BUTTON(back)->enabled = false;
 	BUTTON(playButton)->enabled = false;
-	TEXT_RENDERING(scoreTitle)->hide = true;
-	RENDERING(herisson->actor.e)->hide = true;
-
 	TEXT_RENDERING(eDifficulty)->hide=true;
 	BUTTON(bDifficulty)->enabled = false;
-
 	BUTTON(facebook)->enabled = false;
 	BUTTON(twitter)->enabled = false;
 	BUTTON(enableSwarmContainer)->enabled = false;
 	RENDERING(facebook)->hide = true;
 	RENDERING(twitter)->hide = true;
 	TEXT_RENDERING(enableSwarm)->hide = true;
+
+	gameOverState = NoGame;
+
+	RENDERING(menubg)->hide = true;
+	RENDERING(menufg)->hide = true;
+	RENDERING(fond)->hide = true;
+	TEXT_RENDERING(scoreTitle)->hide = true;
+	RENDERING(herisson->actor.e)->hide = true;
 }

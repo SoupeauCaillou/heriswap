@@ -20,7 +20,7 @@
 
 #include "states/GameStateManager.h"
 #include "modes/GameModeManager.h"
-#include "AnimedEntity.h"
+#include "AnimedActor.h"
 #include "Game.h"
 
 class MainMenuGameStateManager : public GameStateManager {
@@ -39,7 +39,7 @@ class MainMenuGameStateManager : public GameStateManager {
 	private:
 		Entity bStart[2];
 		Entity quitButton[2];
-		
+
 		LocalizeAPI* localizeAPI;
         SuccessAPI* successAPI;
 };
