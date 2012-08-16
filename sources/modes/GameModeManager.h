@@ -22,7 +22,7 @@
 
 #include "Game.h"
 #include "InGameUiHelper.h"
-#include "AnimedEntity.h"
+#include "AnimedActor.h"
 #include "SuccessManager.h"
 
 enum GameMode {
@@ -59,7 +59,7 @@ class GameModeManager {
 		virtual void Exit();
 		// to be called to toggle pause mode display
 		virtual void TogglePauseDisplay(bool paused);
-		
+
 		#ifdef DEBUG
 		void toggleDebugDisplay();
 		bool _debug;
