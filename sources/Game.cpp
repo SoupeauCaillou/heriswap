@@ -194,6 +194,7 @@ void Game::sacInit(int windowW, int windowH) {
 
 	theRenderingSystem.init();
 
+	theRenderingSystem.loadEffectFile("desaturate.fs");
 	/*
 	theRenderingSystem.loadAtlas("sprites");
 	theRenderingSystem.loadAtlas("animals");
@@ -372,7 +373,7 @@ void Game::tick(float dt) {
 		if (datas->mode == Normal) {
 			std::vector<Entity>& leavesInHelpCombination = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->leavesInHelpCombination;
 			for ( std::vector<Entity>::reverse_iterator it = leavesInHelpCombination.rbegin(); it != leavesInHelpCombination.rend(); ++it) {
-				RENDERING(*it)->desaturate = false;
+				RENDERING(*it)->effectRef = DefaultEffectRef;
 			}
 			leavesInHelpCombination.clear();
 		}
@@ -384,12 +385,12 @@ void Game::tick(float dt) {
 		if (datas->mode == Normal) {
 			std::vector<Entity> leaves = theGridSystem.RetrieveAllEntityWithComponent();
 			for (unsigned int i = 0; i < leaves.size(); i++)
-				RENDERING(leaves[i])->desaturate = true;
+				RENDERING(leaves[i])->effectRef = theRenderingSystem.loadEffectFile("desaturate.fs");
 
 			std::vector < std::vector<Entity> > c = theGridSystem.GetSwapCombinations();
 			int i = MathUtil::RandomInt(c.size());
 			for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
-				RENDERING(*it)->desaturate = false;
+				RENDERING(*it)->effectRef = DefaultEffectRef;
 			}
 		}
 	}

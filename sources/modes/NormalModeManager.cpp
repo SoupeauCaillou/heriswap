@@ -107,7 +107,7 @@ void NormalGameModeManager::ShowOneCombination() {
 	std::vector < std::vector<Entity> > c = theGridSystem.GetSwapCombinations();
 	int i = MathUtil::RandomInt(c.size());
 	for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
-		RENDERING(*it)->desaturate = true;
+		RENDERING(*it)->effectRef = theRenderingSystem.loadEffectFile("desaturate.fs");
 		leavesInHelpCombination.push_back(*it);
 	}
 }
