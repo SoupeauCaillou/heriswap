@@ -3,7 +3,11 @@ cmake_minimum_required(VERSION 2.8)
 project(TILEMATCH)
 
 SET(CMAKE_C_FLAGS "-O0 -g -W -Wall")
+if (EMSCRIPTEN_BUILD)
+SET(CMAKE_CXX_FLAGS "-O0 -W -Wall -DDEBUG")
+else ()
 SET(CMAKE_CXX_FLAGS "-O0 -g -W -Wall -DDEBUG -DDATADIR=\\\"${CMAKE_SOURCE_DIR}/assets/\\\"")
+endif()
 
 add_subdirectory(sources)
 

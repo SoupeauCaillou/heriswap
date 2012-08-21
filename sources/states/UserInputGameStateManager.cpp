@@ -18,11 +18,6 @@
 */
 #include "UserInputGameStateManager.h"
 
-#ifndef ANDROID
-#include <GL/glew.h>
-#include <GL/glfw.h>
-#endif
-
 #include "base/Log.h"
 #include "base/TouchInputManager.h"
 #include "base/EntityManager.h"

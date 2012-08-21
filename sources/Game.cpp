@@ -730,7 +730,7 @@ float Game::cellTypeToRotation(int type) {
 }
 
 void updateFps(float dt) {
-    #define COUNT 250
+    #define COUNT 2500
     static int frameCount = 0;
     static float accum = 0, t = 0;
     frameCount++;

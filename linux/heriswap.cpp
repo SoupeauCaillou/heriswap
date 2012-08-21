@@ -76,24 +76,32 @@ class MouseNativeTouchState: public NativeTouchState {
 	public:
 		bool isTouching(Vector2* windowCoords) const {
 			#ifdef EMSCRIPTEN
-				bool down = false;
+			 static bool down = false;
 			  SDL_Event event;
 			  while (SDL_PollEvent(&event)) {
 			    switch(event.type) {
 			      case SDL_MOUSEMOTION: {
-			        //SDL_MouseMotionEvent *m = (SDL_MouseMotionEvent*)&event;
-			        //SDL_GetMouseState(&x, &y);
+			       	SDL_MouseMotionEvent *m = (SDL_MouseMotionEvent*)&event;
+			        SDL_GetMouseState(&windowCoords->X, &windowCoords->Y);
 			        break;
 			      }
 			      case SDL_MOUSEBUTTONDOWN: {
 			      	// SDL_GetMouseState(&x, &y);
 			        SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent*)&event;
-			        windowCoords->X = m->x;
-					windowCoords->Y = m->y;
-			        down = true;
+			        if (m->button == SDL_BUTTON_LEFT) {
+				        windowCoords->X = m->x;
+						windowCoords->Y = m->y;
+				        down = true;
+				        LOGI("Mouse down (%f %f)", windowCoords->X, windowCoords->Y);
+			        }
 			        break;
 			      }
 			      case SDL_MOUSEBUTTONUP: {
+				    SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent*)&event;
+			        if (m->button == SDL_BUTTON_LEFT) {
+				    	down = false;
+				    	LOGI("Mouse up");
+			        }
 			        break;
 			      }
 			    }

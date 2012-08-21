@@ -19,14 +19,16 @@
 #include "StorageAPILinuxImpl.h"
 #include <string>
 #include <sstream>
+#ifndef EMSCRIPTEN
 #include <sqlite3.h>
+#endif
 #include "base/Log.h"
 #include "Callback.h"
 #include "../../modes/GameModeManager.h"
 #include <sys/stat.h>
 #include <sys/types.h>
 
-
+#ifndef EMSCRIPTEN
 static bool request(const std::string& dbPath, std::string s, void* res, int (*callbackP)(void*,int,char**,char**)) {
     sqlite3 *db;
     char *zErrMsg = 0;
@@ -50,8 +52,10 @@ static bool request(const std::string& dbPath, std::string s, void* res, int (*c
     sqlite3_close(db);
     return true;
 }
+#endif
 
 void StorageAPILinuxImpl::init() {
+	#ifndef EMSCRIPTEN
 	std::stringstream ss;
 	char * pPath = getenv ("XDG_DATA_HOME");
 	if (pPath) {
@@ -98,17 +102,20 @@ void StorageAPILinuxImpl::init() {
             request(dbPath, "UPDATE info SET value='2' where opt='gameb4Ads'",0, 0);
         }
     }
+    #endif
 }
 
 void StorageAPILinuxImpl::submitScore(Score scr, int mode, int diff) {
+	#ifndef EMSCRIPTEN
     std::stringstream tmp;
     tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << mode<<","<<diff<<","<<scr.points<<","<<scr.time<<","<<scr.level<<")";
     request(dbPath, tmp.str().c_str(), 0, 0);
+    #endif
 }
 
 std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(int mode, int difficulty) {
     std::vector<StorageAPI::Score> result;
-
+	#ifndef EMSCRIPTEN
     std::stringstream tmp;
     tmp << "select * from score where mode= "<< mode << " and difficulty=" << difficulty;
     if (mode==Normal)
@@ -116,10 +123,12 @@ std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(int mode, int di
     else
         tmp << " order by time asc limit 5";
     request(dbPath, tmp.str().c_str(), &result, callbackScore);
+    #endif
     return result;
 }
 
 bool StorageAPILinuxImpl::soundEnable(bool switchIt) {
+	#ifndef EMSCRIPTEN
     std::string s;
     request(dbPath, "select value from info where opt like 'sound'", &s, 0);
     if (switchIt) {
@@ -128,28 +137,45 @@ bool StorageAPILinuxImpl::soundEnable(bool switchIt) {
         LOGI("switched to !%s", s.c_str());
     }
     return (s == "on");
+    #else
+    return false;
+    #endif
 }
 
 int StorageAPILinuxImpl::getGameCountBeforeNextAd() {
+	#ifndef EMSCRIPTEN
     std::string s;
     request(dbPath, "select value from info where opt='gameb4Ads'", &s, 0);
     return std::atoi(s.c_str());
+    #else
+    return 0;
+   	#endif
 }
 
 void StorageAPILinuxImpl::setGameCountBeforeNextAd(int c) {
+	#ifndef EMSCRIPTEN
     std::stringstream s;
     s << "update info set value='" << c << "' where opt='gameb4Ads'";
     request(dbPath, s.str(),0, 0);
+    #endif
 }
 
 int StorageAPILinuxImpl::getSavedGamePointsSum() {
+	#ifndef EMSCRIPTEN
     std::string s = "";
     request(dbPath, "select sum(points) from score", &s, 0);
     return atoi(s.c_str());
+    #else
+    return 0;
+    #endif
 }
 
 bool StorageAPILinuxImpl::everyModesPlayed() {
+	#ifndef EMSCRIPTEN
     int s = 0;
     request(dbPath, "select distinct difficulty,mode from score", &s, callbackResultSize);
     return (s==4);
+    #else
+    return false;
+    #endif
 }
