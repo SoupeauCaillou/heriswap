@@ -16,7 +16,7 @@ if (EMSCRIPTEN_BUILD)
 	target_link_libraries(heriswap.bc heri sac GLEW glfw openal sqlite3  vorbisfile vorbis z png)
 	add_custom_command(TARGET heriswap.bc
 		POST_BUILD
-		COMMAND EMCC_DEBUG=1 emcc -s WARN_ON_UNDEFINED_SYMBOLS=1 -O1 --llvm-lto 0 ${CMAKE_BINARY_DIR}/linux/heriswap.bc -o /tmp/heriswap.html --preload-file assets
+		COMMAND EMCC_DEBUG=1 emcc -s WARN_ON_UNDEFINED_SYMBOLS=1 -O2 --llvm-lto 1 ${CMAKE_BINARY_DIR}/linux/heriswap.bc -o /tmp/heriswap.html --preload-file assets
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR} 
 		COMMENT "Building emscripten HTML")	
 else ()

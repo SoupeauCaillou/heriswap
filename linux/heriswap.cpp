@@ -271,7 +271,7 @@ int main(int argc, char** argv) {
 	Vector2* reso = &reso16_10;
 	
 #ifdef EMSCRIPTEN
-	__log_enabled = false;
+	__log_enabled = true;
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		return 1;
 	}

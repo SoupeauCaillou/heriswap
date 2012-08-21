@@ -1,4 +1,5 @@
 SET(EMSCRIPTEN_BUILD 1)
+SET(EMSCRIPTEN_PATH /home/pierre-eric/perso/emscripten)
 SET(CMAKE_C_COMPILER   /home/pierre-eric/perso/emscripten/emcc)
 SET(CMAKE_CXX_COMPILER /home/pierre-eric/perso/emscripten/emcc)
 SET(CMAKE_C_FLAGS "-O0 -g -DDEBUG -DEMSCRIPTEN")
