@@ -117,8 +117,10 @@ static Entity cellUnderFinger(const Vector2& pos, bool preferInCombi) {
 }
 
 static Entity moveToCell(Entity original, const Vector2& move, float threshold) {
+#ifdef ANDROID
 	if (move.LengthSquared() < threshold)
 		return 0;
+#endif
 
 	int i = GRID(original)->i;
 	int j = GRID(original)->j;
