@@ -71,26 +71,31 @@
 
 Game* game;
 NameInputAPILinuxImpl* nameInput;
+Entity globalFTW = 0;
 
 class MouseNativeTouchState: public NativeTouchState {
 	public:
 		bool isTouching(Vector2* windowCoords) const {
 			#ifdef EMSCRIPTEN
 			 static bool down = false;
+			 static Vector2 position;
 			  SDL_Event event;
 			  while (SDL_PollEvent(&event)) {
 			    switch(event.type) {
 			      case SDL_MOUSEMOTION: {
 			       	SDL_MouseMotionEvent *m = (SDL_MouseMotionEvent*)&event;
-			        SDL_GetMouseState(&windowCoords->X, &windowCoords->Y);
+			       	int x,y;
+			        SDL_GetMouseState(&x, &y);
+			        position.X = x;
+			        position.Y = y;
 			        break;
 			      }
 			      case SDL_MOUSEBUTTONDOWN: {
 			      	// SDL_GetMouseState(&x, &y);
 			        SDL_MouseButtonEvent *m = (SDL_MouseButtonEvent*)&event;
 			        if (m->button == SDL_BUTTON_LEFT) {
-				        windowCoords->X = m->x;
-						windowCoords->Y = m->y;
+				        // windowCoords->X = m->x;
+						// windowCoords->Y = m->y;
 				        down = true;
 				        LOGI("Mouse down (%f %f)", windowCoords->X, windowCoords->Y);
 			        }
@@ -104,8 +109,42 @@ class MouseNativeTouchState: public NativeTouchState {
 			        }
 			        break;
 			      }
+			      case SDL_KEYDOWN: {	
+			      	if (globalFTW == 0)
+						break;
+
+					if (!TEXT_RENDERING(globalFTW)->hide) {
+						char c;
+						switch (event.key.keysym.sym) {
+							case SDLK_BACKSPACE: 
+								if (!TEXT_RENDERING(nameInput->nameEdit)->hide) {
+									std::string& text = TEXT_RENDERING(nameInput->nameEdit)->text;
+									if (text.length() > 0) {
+										text.resize(text.length() - 1);
+									}
+								}
+								break;
+							case SDLK_RETURN: 
+								if (!TEXT_RENDERING(nameInput->nameEdit)->hide) {
+									nameInput->textIsReady = true;
+								}
+								break;
+							default:
+								c = event.key.keysym.sym;
+						}
+						
+						if (isalnum(c) || c == ' ') {
+							if (TEXT_RENDERING(globalFTW)->text.length() > 10)
+								break;
+							// filter out all unsupported keystrokes
+							TEXT_RENDERING(globalFTW)->text.push_back((char)c);
+						}
+					}
+				    break;
+			      }
 			    }
 			   }
+			   *windowCoords = position;
 			return down;
 			#else
 			int x,y;
@@ -117,7 +156,6 @@ class MouseNativeTouchState: public NativeTouchState {
 		}
 };
 
-Entity globalFTW = 0;
 #ifndef EMSCRIPTEN
 void GLFWCALL myCharCallback( int c, int action ) {
 	if (globalFTW == 0)
@@ -233,7 +271,7 @@ int main(int argc, char** argv) {
 	Vector2* reso = &reso16_10;
 	
 #ifdef EMSCRIPTEN
-	__log_enabled = true;
+	__log_enabled = false;
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		return 1;
 	}
