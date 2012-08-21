@@ -17,5 +17,6 @@ void main()
 	rot[3] = vec4(0.0, 0.0, 0.0, 1.0);
 	gl_Position = uMvp * rot * vec4(aPosition, 1.0);
 	uvVarying = uvScaleOffset.zw + aTexCoord * uvScaleOffset.xy;
+	uvVarying.y = 1.0 - uvVarying.y;
 }
 
