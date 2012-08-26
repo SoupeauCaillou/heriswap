@@ -517,6 +517,10 @@ public class HeriswapJNILib {
 		return Swarm.isLoggedIn();
 	}
 
+	static public void swarmRegistering() {
+		Swarm.init(HeriswapActivity.activity, HeriswapSecret.Swarm_gameID, HeriswapSecret.Swarm_gameKey);
+	}
+
 	static public void shareFacebook() {
 		//Intent sharingIntent = new Intent(Intent.ACTION_SEND);
 		//sharingIntent.setType("plain/text");
