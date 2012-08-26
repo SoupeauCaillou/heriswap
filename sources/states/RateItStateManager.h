@@ -18,13 +18,16 @@
 */
 #pragma once
 
+#include "api/CommunicationAPI.h"
+
 #include "states/GameStateManager.h"
+
 #include "Game.h"
 #include "AnimedActor.h"
 
 class RateItStateManager : public GameStateManager {
 	public:
-		RateItStateManager(LocalizeAPI* lAPI) : localizeAPI(lAPI) { };
+		RateItStateManager(LocalizeAPI* lAPI, CommunicationAPI* cAPI) : localizeAPI(lAPI), communicationAPI(cAPI) { };
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
@@ -33,7 +36,7 @@ class RateItStateManager : public GameStateManager {
 		Entity title, menufg, menubg;
 
 	private:
-		Entity bouton[3], boutonContainer[3];
-
+		Entity boutonText[3], boutonContainer[3];
+		CommunicationAPI* communicationAPI;
 		LocalizeAPI* localizeAPI;
 };

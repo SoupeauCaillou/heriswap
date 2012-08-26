@@ -24,7 +24,6 @@
 
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
-#include "systems/MorphingSystem.h"
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/ContainerSystem.h"
@@ -37,17 +36,13 @@ void RateItStateManager::Setup() {
 
 	//Creating text entities
 	for (int i = 0; i < 3; i++) {
-		bouton[i] = theTextRenderingSystem.CreateEntity();
+		boutonText[i] = theTextRenderingSystem.CreateEntity();
 
-		TRANSFORM(bouton[i])->z = DL_MainMenuUITxt;
-		TEXT_RENDERING(bouton[i])->hide = true;
-		TEXT_RENDERING(bouton[i])->positioning = TextRenderingComponent::LEFT;
-		TEXT_RENDERING(bouton[i])->color = green;
-		TEXT_RENDERING(bouton[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
-		ADD_COMPONENT(bouton[i], Morphing);
-	    TypedMorphElement<float>* sizeMorph = new TypedMorphElement<float>(&TEXT_RENDERING(bouton[i])->charHeight, TEXT_RENDERING(bouton[i])->charHeight, PlacementHelper::GimpHeightToScreen(54));
-	    MORPHING(bouton[i])->elements.push_back(sizeMorph);
-	    MORPHING(bouton[i])->timing = 0.2;
+		TRANSFORM(boutonText[i])->z = DL_MainMenuUITxt;
+		TEXT_RENDERING(boutonText[i])->hide = true;
+		TEXT_RENDERING(boutonText[i])->positioning = TextRenderingComponent::LEFT;
+		TEXT_RENDERING(boutonText[i])->color = green;
+		TEXT_RENDERING(boutonText[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
 
 	    boutonContainer[i] = theEntityManager.CreateEntity();
 	    ADD_COMPONENT(boutonContainer[i], Transformation);
@@ -57,24 +52,19 @@ void RateItStateManager::Setup() {
 	    ADD_COMPONENT(boutonContainer[i], Rendering);
 	    RENDERING(boutonContainer[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
 	    RENDERING(boutonContainer[i])->color.a = 0.5;
-
-
-		TEXT_RENDERING(bouton[i])->charHeight = PlacementHelper::GimpHeightToScreen(54);
-		TEXT_RENDERING(bouton[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
 		ADD_COMPONENT(boutonContainer[i], Sound);
 		ADD_COMPONENT(boutonContainer[i], Button);
 		BUTTON(boutonContainer[i])->enabled = false;
-
 	}
-	TEXT_RENDERING(bouton[0])->text = localizeAPI->text("mode_1", "Rate it");
-	TRANSFORM(bouton[0])->position.X = PlacementHelper::GimpXToScreen(75);
-	TRANSFORM(bouton[0])->position.Y = TRANSFORM(boutonContainer[0])->position.Y = PlacementHelper::GimpYToScreen(156);
-	TEXT_RENDERING(bouton[1])->text = localizeAPI->text("mode_2", "Later");
-	TRANSFORM(bouton[1])->position.X = PlacementHelper::GimpXToScreen(75);
-	TRANSFORM(bouton[1])->position.Y = TRANSFORM(boutonContainer[1])->position.Y = PlacementHelper::GimpYToScreen(156+183);
-	TEXT_RENDERING(bouton[2])->text = localizeAPI->text("mode_2", "No thanks");
-	TRANSFORM(bouton[2])->position.X = PlacementHelper::GimpXToScreen(75);
-	TRANSFORM(bouton[2])->position.Y = TRANSFORM(boutonContainer[2])->position.Y = PlacementHelper::GimpYToScreen(156+2*183);
+	TEXT_RENDERING(boutonText[0])->text = localizeAPI->text("mode_1", "Rate it");
+	TRANSFORM(boutonText[0])->position.X = PlacementHelper::GimpXToScreen(75);
+	TRANSFORM(boutonText[0])->position.Y = TRANSFORM(boutonContainer[0])->position.Y = PlacementHelper::GimpYToScreen(156);
+	TEXT_RENDERING(boutonText[1])->text = localizeAPI->text("mode_2", "Later");
+	TRANSFORM(boutonText[1])->position.X = PlacementHelper::GimpXToScreen(75);
+	TRANSFORM(boutonText[1])->position.Y = TRANSFORM(boutonContainer[1])->position.Y = PlacementHelper::GimpYToScreen(156+183);
+	TEXT_RENDERING(boutonText[2])->text = localizeAPI->text("mode_2", "No thanks");
+	TRANSFORM(boutonText[2])->position.X = PlacementHelper::GimpXToScreen(75);
+	TRANSFORM(boutonText[2])->position.Y = TRANSFORM(boutonContainer[2])->position.Y = PlacementHelper::GimpYToScreen(156+2*183);
 }
 
 void RateItStateManager::Enter() {
@@ -82,7 +72,7 @@ void RateItStateManager::Enter() {
 
 	for (int i=0; i<3; i++) {
 		RENDERING(boutonContainer[i])->hide = false;
-		TEXT_RENDERING(bouton[i])->hide = false;
+		TEXT_RENDERING(boutonText[i])->hide = false;
 		BUTTON(boutonContainer[i])->enabled = true;
 	}
 
@@ -92,11 +82,17 @@ void RateItStateManager::Enter() {
 }
 
 GameState RateItStateManager::Update(float dt) {
+	//want to rate
 	if (BUTTON(boutonContainer[0])->clicked) {
+		SOUND(boutonContainer[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		return ModeMenu;
+	//will rate later
 	} else if(BUTTON(boutonContainer[1])->clicked){
+		SOUND(boutonContainer[1])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		return ModeMenu;
+	//won't never rate
 	} else if(BUTTON(boutonContainer[2])->clicked){
+		SOUND(boutonContainer[2])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 		return ModeMenu;
 	}
 	return RateIt;
@@ -106,7 +102,7 @@ void RateItStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
 	for (int i=0; i<3; i++) {
-		TEXT_RENDERING(bouton[i])->hide = true;
+		TEXT_RENDERING(boutonText[i])->hide = true;
 		RENDERING(boutonContainer[i])->hide = true;
 		BUTTON(boutonContainer[i])->enabled = false;
 	}
