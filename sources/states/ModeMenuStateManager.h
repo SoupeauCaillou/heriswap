@@ -57,7 +57,7 @@ class ModeMenuStateManager : public GameStateManager {
 		CommunicationAPI* communicationAPI;
 		NameInputAPI* nameInputAPI;
         SuccessAPI* successAPI;
-		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle;
+		Entity playText, playContainer, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle;
 		Entity yourScore, fond;
 		std::string playerName;
 		SuccessManager* successMgr;

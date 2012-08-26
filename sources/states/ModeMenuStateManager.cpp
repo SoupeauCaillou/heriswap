@@ -111,26 +111,26 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(scoreTitle)->hide = true;
 
 	// play text
-	play = theEntityManager.CreateEntity();
-	ADD_COMPONENT(play, Transformation);
-	TRANSFORM(play)->position = Vector2(0, PlacementHelper::GimpYToScreen(275));
-	TRANSFORM(play)->z = DL_MainMenuUITxt;
-	ADD_COMPONENT(play, TextRendering);
-	TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Start");
-	TEXT_RENDERING(play)->positioning = TextRenderingComponent::CENTER;
-	TEXT_RENDERING(play)->color = green;
-	TEXT_RENDERING(play)->fontName = "typo";
-	TEXT_RENDERING(play)->charHeight = PlacementHelper::GimpHeightToScreen(100);
-	TEXT_RENDERING(play)->hide = true;
+	playText = theEntityManager.CreateEntity();
+	ADD_COMPONENT(playText, Transformation);
+	TRANSFORM(playText)->position = Vector2(0, PlacementHelper::GimpYToScreen(275));
+	TRANSFORM(playText)->z = DL_MainMenuUITxt;
+	ADD_COMPONENT(playText, TextRendering);
+	TEXT_RENDERING(playText)->text = localizeAPI->text("jouer", "Start");
+	TEXT_RENDERING(playText)->positioning = TextRenderingComponent::CENTER;
+	TEXT_RENDERING(playText)->color = green;
+	TEXT_RENDERING(playText)->fontName = "typo";
+	TEXT_RENDERING(playText)->charHeight = PlacementHelper::GimpHeightToScreen(100);
+	TEXT_RENDERING(playText)->hide = true;
 	// play button
-	playButton = theEntityManager.CreateEntity();
-	ADD_COMPONENT(playButton, Transformation);
-	ADD_COMPONENT(playButton, Container);
-	CONTAINER(playButton)->entities.push_back(play);
-	CONTAINER(playButton)->includeChildren = true;
-	ADD_COMPONENT(playButton, Button);
-	ADD_COMPONENT(playButton, Sound);
-	BUTTON(playButton)->enabled = false;
+	playContainer = theEntityManager.CreateEntity();
+	ADD_COMPONENT(playContainer, Transformation);
+	ADD_COMPONENT(playContainer, Container);
+	CONTAINER(playContainer)->entities.push_back(playText);
+	CONTAINER(playContainer)->includeChildren = true;
+	ADD_COMPONENT(playContainer, Button);
+	ADD_COMPONENT(playContainer, Sound);
+	BUTTON(playContainer)->enabled = false;
 
 	//difficulty text
 	eDifficulty = theTextRenderingSystem.CreateEntity();
@@ -182,7 +182,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(twitter)->size = Vector2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
 	TRANSFORM(twitter)->z = DL_MainMenuUITxt;
 
-	// enable swarm text
+	// enableSwarm text
 	enableSwarm = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(enableSwarm)->z = DL_MainMenuUITxt;
 	TRANSFORM(enableSwarm)->position = Vector2(0, PlacementHelper::GimpYToScreen(1100));
@@ -192,7 +192,7 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(enableSwarm)->color = green;
 	TEXT_RENDERING(enableSwarm)->text = "Enable swarm to see online scores";
 
-	// enable swarm container
+	// enableSwarm container
 	enableSwarmContainer = theEntityManager.CreateEntity();
 	ADD_COMPONENT(enableSwarmContainer, Transformation);
 	ADD_COMPONENT(enableSwarmContainer, Container);
@@ -290,20 +290,20 @@ void ModeMenuStateManager::Enter() {
 	successMgr->sHardScore(storage);
 
 	BUTTON(back)->enabled = true;
-	BUTTON(playButton)->enabled = true;
+	BUTTON(playContainer)->enabled = true;
 
     difficulty = (theGridSystem.GridSize == 8) ? 1 : 0;
 
 	LoadScore(modeMgr->GetMode(), difficulty);
 
 
-	TEXT_RENDERING(play)->hide = false;
+	TEXT_RENDERING(playText)->hide = false;
 	RENDERING(back)->hide = false;
 	RENDERING(menubg)->hide = false;
 	TEXT_RENDERING(title)->hide = false;
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
-	TEXT_RENDERING(play)->text = (gameOverState != NoGame) ? localizeAPI->text("rejouer", "Restart") : localizeAPI->text("jouer", "Play");
+	TEXT_RENDERING(playText)->text = (gameOverState != NoGame) ? localizeAPI->text("rejouer", "Restart") : localizeAPI->text("jouer", "Play");
 	TEXT_RENDERING(scoreTitle)->hide = false;
 	TEXT_RENDERING(eDifficulty)->hide=false;
 	BUTTON(bDifficulty)->enabled = true;
@@ -349,6 +349,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 			break;
         }
         case GameEnded: {
+			//show twitter, fb, und so weiter
 			RENDERING(facebook)->hide = false;
 			RENDERING(twitter)->hide = false;
 			BUTTON(facebook)->enabled = true;
@@ -391,7 +392,7 @@ GameState ModeMenuStateManager::Update(float dt) {
                 submitScore(playerName);
                 LoadScore(modeMgr->GetMode(), difficulty);
                 gameOverState = NoGame;
-                if (MathUtil::RandomInt(1) == 0) {
+                if (MathUtil::RandomInt(3) == 0) {
 					TRANSFORM(herisson->actor.e)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herisson->actor.e)->size.X;
 					TEXT_RENDERING(title)->hide = true;
 					this->LateExit();
@@ -411,38 +412,58 @@ GameState ModeMenuStateManager::Update(float dt) {
 		RENDERING(herissonActor)->hide = true;
 	}
 
-	//difficulty button
-	if (gameOverState != AskingPlayerName && BUTTON(bDifficulty)->clicked) {
-		difficulty++;
-		if (difficulty==2) difficulty=0;
-		LoadScore(modeMgr->GetMode(), difficulty);
-		if (difficulty==0)
-			TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
-		else
-			TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Hard") + " }";
+	if (gameOverState != AskingPlayerName) {
+		//difficulty button
+		if (BUTTON(bDifficulty)->clicked) {
+			SOUND(bDifficulty)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
+			difficulty++;
+			if (difficulty==2) difficulty=0;
+			LoadScore(modeMgr->GetMode(), difficulty);
+			if (difficulty==0)
+				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
+			else
+				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Hard") + " }";
 
-		TEXT_RENDERING(play)->text = localizeAPI->text("jouer", "Play");
-	}
-
-	if (gameOverState != AskingPlayerName && BUTTON(playButton)->clicked) {
-		SOUND(playButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-		RENDERING(herisson->actor.e)->hide = true;
-		TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
-		TEXT_RENDERING(title)->hide = true;
-
-		if (storage->savedScores(modeMgr->GetMode(), difficulty).size() == 0) {
-			// show help
-			helpMgr->mode = modeMgr->GetMode();
-			helpMgr->oldState = BlackToSpawn;
-			this->LateExit();
-			return Help;
-		} else {
-			return ModeMenuToBlackState;
+			TEXT_RENDERING(playText)->text = localizeAPI->text("jouer", "Play");
 		}
-	} if (gameOverState != AskingPlayerName && (BUTTON(back)->clicked || pleaseGoBack)) {
-        pleaseGoBack = false;
-		SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-		return MainMenu;
+
+		//new game button
+		else if (BUTTON(playContainer)->clicked) {
+			SOUND(playContainer)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
+			RENDERING(herisson->actor.e)->hide = true;
+			TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
+			TEXT_RENDERING(title)->hide = true;
+
+			if (storage->savedScores(modeMgr->GetMode(), difficulty).size() == 0) {
+				// show help
+				helpMgr->mode = modeMgr->GetMode();
+				helpMgr->oldState = BlackToSpawn;
+				this->LateExit();
+				return Help;
+			} else {
+				return ModeMenuToBlackState;
+			}
+		}
+
+		//back button
+		else if (BUTTON(back)->clicked || pleaseGoBack) {
+			pleaseGoBack = false;
+			SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
+			return MainMenu;
+		}
+
+		//facebook button
+		else if (BUTTON(facebook)->clicked) {
+			communicationAPI->shareFacebook();
+		}
+		//twitter button
+		else if (BUTTON(twitter)->clicked) {
+			communicationAPI->shareTwitter();
+		}
+		//enableSwarm button
+		else if (BUTTON(enableSwarmContainer)->clicked) {
+			communicationAPI->swarmRegistering();
+		}
 	}
 	return ModeMenu;
 }
@@ -464,7 +485,7 @@ void ModeMenuStateManager::Exit() {
 void ModeMenuStateManager::LateExit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	TEXT_RENDERING(yourScore)->hide = true;
-	TEXT_RENDERING(play)->hide = true;
+	TEXT_RENDERING(playText)->hide = true;
 	RENDERING(back)->hide = true;
 	for (int i=0;i<5;i++) {
 		TEXT_RENDERING(scoresName[i])->hide = true;
@@ -472,7 +493,7 @@ void ModeMenuStateManager::LateExit() {
 		TEXT_RENDERING(scoresLevel[i])->hide = true;
 	}
 	BUTTON(back)->enabled = false;
-	BUTTON(playButton)->enabled = false;
+	BUTTON(playContainer)->enabled = false;
 	TEXT_RENDERING(eDifficulty)->hide=true;
 	BUTTON(bDifficulty)->enabled = false;
 	BUTTON(facebook)->enabled = false;
