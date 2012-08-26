@@ -28,7 +28,7 @@ import java.util.Queue;
 import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command;
 import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command.Type;
 import android.content.ContentValues;
-import android.content.Intent;
+//import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -513,7 +513,7 @@ public class HeriswapJNILib {
 	// -------------------------------------------------------------------------
 	// CommunicationAPI
 	// -------------------------------------------------------------------------
-	static public boolean swarmEnabled() {
+/*	static public boolean swarmEnabled() {
 		return Swarm.isLoggedIn();
 	}
 
@@ -527,14 +527,13 @@ public class HeriswapJNILib {
 
 	static public void shareTwitter() {
 	//	String message = "Text I wan't to share.";
-/*		Intent share = new Intent(Intent.ACTION_SEND);
+		Intent share = new Intent(Intent.ACTION_SEND);
 		share.setType("text/plain");
 		share.putExtra(Intent.EXTRA_TEXT, message);
 
 		startActivity(Intent.createChooser(share, "Title of the dialog the system will open"));
-		*/
 	}
-
+*/
 	// -------------------------------------------------------------------------
 	// MusicAPI
 	// -------------------------------------------------------------------------
