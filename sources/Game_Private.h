@@ -58,7 +58,7 @@ class PrivateData {
 
      Entity cursor;
 
-     Entity soundButton, openfeint;
+     Entity soundButton, socialGamNet;
      Entity musicMenu[2], musicStress1[2], musicStress2[2], music[8];
      Entity menu;
      struct {

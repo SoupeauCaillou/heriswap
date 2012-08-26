@@ -55,7 +55,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      storage = storagee;
 
      soundButton = theEntityManager.CreateEntity();
-     openfeint = theEntityManager.CreateEntity();
+     socialGamNet = theEntityManager.CreateEntity();
 
      state = BlackToLogoState;
 
@@ -70,7 +70,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successMgr,lAPI, sAPI, comAPI);
      state2Manager[Help] = new HelpStateManager(lAPI);
      state2Manager[Ads] = new AdsStateManager(ad, storage, successMgr);
-     state2Manager[RateIt] = new RateItStateManager(lAPI);
+     state2Manager[RateIt] = new RateItStateManager(lAPI, comAPI);
 
      state2Manager[BlackToLogoState] = new FadeGameStateManager(0.2f, FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
      state2Manager[LogoToBlackState] = new FadeGameStateManager(0.3f, FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);
@@ -111,14 +111,14 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
 		RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
 
 
-     ADD_COMPONENT(openfeint, Transformation);
-     TRANSFORM(openfeint)->z = DL_MainMenuUITxt;
-     TRANSFORM(openfeint)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
-     TransformationSystem::setPosition(TRANSFORM(openfeint), Vector2(0 - PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
-     ADD_COMPONENT(openfeint, Button);
-     BUTTON(openfeint)->overSize = 1.3;
-     ADD_COMPONENT(openfeint, Rendering);
-     RENDERING(openfeint)->texture = theRenderingSystem.loadTextureFile("openfeint");
+     ADD_COMPONENT(socialGamNet, Transformation);
+     TRANSFORM(socialGamNet)->z = DL_MainMenuUITxt;
+     TRANSFORM(socialGamNet)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
+     TransformationSystem::setPosition(TRANSFORM(socialGamNet), Vector2(0 - PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
+     ADD_COMPONENT(socialGamNet, Button);
+     BUTTON(socialGamNet)->overSize = 1.3;
+     ADD_COMPONENT(socialGamNet, Rendering);
+     RENDERING(socialGamNet)->texture = theRenderingSystem.loadTextureFile("socialGamNet");
 
      for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)
          it->second->Setup();

@@ -436,8 +436,8 @@ void Game::tick(float dt) {
 		#else
 		bool ofHidden = true;
     	#endif
-		RENDERING(datas->openfeint)->hide = ofHidden;
-		BUTTON(datas->openfeint)->enabled = !RENDERING(datas->openfeint)->hide;
+		RENDERING(datas->socialGamNet)->hide = ofHidden;
+		BUTTON(datas->socialGamNet)->enabled = !RENDERING(datas->socialGamNet)->hide;
 	}
 
     // background (unconditionnal) update of state managers
@@ -460,8 +460,8 @@ void Game::tick(float dt) {
             RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
         }
 	}
-	//if openfeint is clicked
-	if (BUTTON(datas->openfeint)->clicked){
+	//if socialGamNet is clicked
+	if (BUTTON(datas->socialGamNet)->clicked){
 		if (datas->state == ModeMenu) {
 			int d = (static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]))->getDifficulty();
 			successAPI->openLeaderboard(datas->mode, d);
