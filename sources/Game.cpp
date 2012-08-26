@@ -264,13 +264,14 @@ void Game::setMode() {
 	}
 }
 
-void Game::toggleShowCombi(bool forcedesactivate) {
+void Game::toggleShowCombi(bool enabled) {
 	static bool activated;
 	static std::vector<Entity> marks;
 	//on switch le bool
 	activated = !activated;
-	if (forcedesactivate) activated = false;
-	if (datas->state != UserInput) activated = false;
+	if (!enabled || (datas->state != UserInput))
+		activated = false;
+
 	if (activated) {
 		LOGI("Affiche magique de la triche !") ;
 		//j=0 : vertical
@@ -367,13 +368,17 @@ void Game::tick(float dt) {
 
 	//quand c'est plus au joueur de jouer, on supprime les marquages sur les feuilles
 	if (datas->state != UserInput) {
-		toggleShowCombi(true);
+		toggleShowCombi(false);
 		if (datas->mode == Normal) {
 			std::vector<Entity>& leavesInHelpCombination = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->leavesInHelpCombination;
-			for ( std::vector<Entity>::reverse_iterator it = leavesInHelpCombination.rbegin(); it != leavesInHelpCombination.rend(); ++it) {
-				RENDERING(*it)->desaturate = false;
+			if (!leavesInHelpCombination.empty()) {
+				std::vector<Entity> leaves = theGridSystem.RetrieveAllEntityWithComponent();
+				for ( std::vector<Entity>::reverse_iterator it = leaves.rbegin(); it != leaves.rend(); ++it) {
+					RENDERING(*it)->desaturate = false;
+				}
+
+				leavesInHelpCombination.clear();
 			}
-			leavesInHelpCombination.clear();
 		}
 	}
 
@@ -381,17 +386,8 @@ void Game::tick(float dt) {
 	if (percentDone >= 1) {
 		newState = GameToBlack;
 		//show combinations which remain in score attack
-		if (datas->mode == Normal) {
-			std::vector<Entity> leaves = theGridSystem.RetrieveAllEntityWithComponent();
-			for (unsigned int i = 0; i < leaves.size(); i++)
-				RENDERING(leaves[i])->desaturate = true;
-
-			std::vector < std::vector<Entity> > c = theGridSystem.GetSwapCombinations();
-			int i = MathUtil::RandomInt(c.size());
-			for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
-				RENDERING(*it)->desaturate = false;
-			}
-		}
+		if (datas->mode == Normal)
+			theGridSystem.ShowOneCombination();
 	}
 
 	//ne pas changer la grille si fin de niveau/jeu

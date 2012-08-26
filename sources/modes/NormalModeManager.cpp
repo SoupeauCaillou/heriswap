@@ -98,17 +98,8 @@ void NormalGameModeManager::GameUpdate(float dt) {
 	successMgr->gameDuration += dt;
 
 	if (helpAvailable && BUTTON(herisson)->clicked) {
-		//ShowOneCombination();
+		leavesInHelpCombination = theGridSystem.ShowOneCombination();
 		helpAvailable = false;
-	}
-}
-
-void NormalGameModeManager::ShowOneCombination() {
-	std::vector < std::vector<Entity> > c = theGridSystem.GetSwapCombinations();
-	int i = MathUtil::RandomInt(c.size());
-	for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
-		RENDERING(*it)->desaturate = true;
-		leavesInHelpCombination.push_back(*it);
 	}
 }
 

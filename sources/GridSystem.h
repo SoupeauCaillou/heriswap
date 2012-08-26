@@ -124,6 +124,9 @@ bool GridPosIsInCombination(int i, int j, int type, int* voisinsType);
 /* Clean the Grid from entities */
 void DeleteAll();
 
+/*Highlight a combination*/
+std::vector<Entity> ShowOneCombination();
+
 void print();
 
 int GridSize, Types;

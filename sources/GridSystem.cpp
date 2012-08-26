@@ -536,3 +536,21 @@ bool GridSystem::GridPosIsInCombination(int i, int j, int type, int* voisinsType
 
 	return res;
 }
+
+std::vector<Entity> GridSystem::ShowOneCombination() {
+	std::vector<Entity> highLightedCombi;
+
+	//desaturate everything
+	std::vector<Entity> leaves = RetrieveAllEntityWithComponent();
+	for (unsigned int i = 0; i < leaves.size(); i++)
+		RENDERING(leaves[i])->desaturate = true;
+
+	//then resature one combi
+	std::vector < std::vector<Entity> > c = GetSwapCombinations();
+	int i = MathUtil::RandomInt(c.size());
+	for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
+		RENDERING(*it)->desaturate = false;
+		highLightedCombi.push_back(*it);
+	}
+	return highLightedCombi;
+}

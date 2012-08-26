@@ -55,7 +55,7 @@ class Game {
 		void init(const uint8_t* in = 0, int size = 0);
 		void tick(float dt);
 		void togglePause(bool activate);
-		void toggleShowCombi(bool forcedesactivate);
+		void toggleShowCombi(bool enabled);
         void backPressed();
 		void setMode();
 		int saveState(uint8_t** out);

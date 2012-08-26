@@ -244,7 +244,7 @@ int main(int argc, char** argv) {
 				if (!TEXT_RENDERING(nameInput->nameEdit)->hide) {
 					nameInput->textIsReady = true;
 				}
-				// game.toggleShowCombi(false);
+				// game.toggleShowCombi(true);
 				// timer = MAGICKEYTIME;
 			}
 			if (glfwGetKey( GLFW_KEY_BACKSPACE) && timer <= 0) {
