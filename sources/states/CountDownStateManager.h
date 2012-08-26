@@ -18,31 +18,21 @@
 */
 #pragma once
 
-enum GameState {
-     CountDown,
-     Spawn,
-     UserInput,
-     Delete,
-     Fall,
-     LevelChanged,
-     Pause,
-     Unpause,
-     MainMenu,
-     ModeMenu,
-     ScoreBoard,
-     EndMenu,
-     Background,
-     LogoToBlackState,
-     ModeMenuToBlackState,
-     AdsToBlackState,
-     BlackToLogoState,
-     BlackToMainMenu,
-     BlackToSpawn,
-     GameToBlack,
-     BlackToModeMenu,
-     Logo,
-     Help,
-     Ads,
-     RateIt,
-     ExitState
+#include "modes/GameModeManager.h"
+#include "states/GameStateManager.h"
+
+class CountDownStateManager : public GameStateManager {
+	public:
+
+	CountDownStateManager() { };
+	void Setup();
+	void Enter();
+	GameState Update(float dt);
+	void Exit();
+
+	GameMode mode;
+	private:
+		Entity counter;
+		Entity vorhang;
+		float timeRemaining;
 };

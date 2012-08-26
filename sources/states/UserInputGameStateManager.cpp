@@ -153,6 +153,10 @@ static void exchangeGridCoords(Entity a, Entity b) {
 }
 
 GameState UserInputGameStateManager::Update(float dt) {
+	if (newGame) {
+		newGame = false;
+		return CountDown;
+	}
 	successMgr->timeUserInputloop += dt;
 	successMgr->sWhatToDo(theTouchInputManager.wasTouched() && theTouchInputManager.isTouched(), dt);
 
@@ -246,9 +250,6 @@ GameState UserInputGameStateManager::Update(float dt) {
 						exchangeGridCoords(currentCell, swappedCell);
 						TRANSFORM(currentCell)->position = posB;
 						TRANSFORM(swappedCell)->position = posA;
-
-						//game has started
-						newGame = false;
 						return Delete;
 					}
 				}

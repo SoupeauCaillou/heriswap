@@ -29,6 +29,7 @@
 #include "modes/TilesAttackModeManager.h"
 
 #include "states/GameStateManager.h"
+#include "states/CountDownStateManager.h"
 #include "states/SpawnGameStateManager.h"
 #include "states/UserInputGameStateManager.h"
 #include "states/DeleteGameStateManager.h"
@@ -59,6 +60,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
 
      state = BlackToLogoState;
 
+     state2Manager[CountDown] = new CountDownStateManager();
      state2Manager[Spawn] = new SpawnGameStateManager(successMgr);
      state2Manager[UserInput] = new UserInputGameStateManager(successMgr);
      state2Manager[Delete] = new DeleteGameStateManager(successMgr);
