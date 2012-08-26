@@ -29,6 +29,7 @@ class CommunicationAPIAndroidImpl : public CommunicationAPI {
         void uninit();
 
         bool swarmInstalled();
+        void swarmRegistering();
 		void shareFacebook();
 		void shareTwitter();
 

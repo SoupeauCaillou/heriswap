@@ -24,7 +24,12 @@
 class CommunicationAPI {
     public:
         virtual bool swarmInstalled() = 0;
+        virtual void swarmRegistering() = 0;
 		virtual void shareFacebook() = 0;
 		virtual void shareTwitter() = 0;
+
+		virtual void rateItNow() = 0;
+		virtual void rateItLater() = 0;
+		virtual void rateItNever() = 0;
 };
 

@@ -75,6 +75,10 @@ bool CommunicationAPIAndroidImpl::swarmInstalled() {
 	return false;
 }
 
+void CommunicationAPIAndroidImpl::swarmRegistering() {
+	//env->CallStaticBooleanMethod(datas->cls, datas->swarmRegistering);
+}
+
 void CommunicationAPIAndroidImpl::shareFacebook() {
 	//env->CallStaticBooleanMethod(datas->cls, datas->shareFacebook);
 	LOGI("share facebook !");
