@@ -68,6 +68,8 @@
     <None Include="assets\desaturate.fs" />
     <None Include="po\fr.po" />
     <None Include="sources\states\CountDownStateManager.h" />
+    <None Include="assets\default_vbo.vs" />
+    <None Include="assets\default_no_alpha.fs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -82,7 +84,6 @@
     <Compile Include="sources\states\UserInputGameStateManager.cpp" />
     <Compile Include="sources\Game.cpp" />
     <Compile Include="sources\GridSystem.cpp" />
-    <Compile Include="sources\tilematch-linux.cpp" />
     <Compile Include="tests\TestGridSystem.cpp" />
     <Compile Include="tests\tests.cpp" />
     <Compile Include="jni\tilematchjnilib.cpp" />
@@ -105,8 +106,10 @@
     <Compile Include="tests\TestNormalModeManager.cpp" />
     <Compile Include="tests\TestTilesAttackModeManager.cpp" />
     <Compile Include="sources\states\CountDownStateManager.cpp" />
+    <Compile Include="linux\heriswap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="sources\api\android\" />
+    <Folder Include="linux\" />
   </ItemGroup>
 </Project>

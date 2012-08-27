@@ -7,8 +7,8 @@ CMakeCache.txt
 CMakeFiles
 Makefile
 cmake_install.cmake
-sources/tilematch
-tilematch_tests
+linux/heriswap
+heriswap_tests
 scores.txt
 tilematch.pidb
 tilematch.userprefs

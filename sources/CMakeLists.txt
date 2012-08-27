@@ -9,6 +9,4 @@ file(
         *.cpp *.h modes/*.cpp modes/*.h states/*.h states/*.cpp api/*.h api/linux/*.h api/linux/*.cpp
 )
 
-add_executable(tilematch ${source_files})
-
-target_link_libraries(tilematch sac GLEW glfw openal sqlite3  vorbisfile vorbis z)
+add_library(heri ${source_files})

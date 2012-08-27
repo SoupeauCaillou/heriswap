@@ -18,11 +18,6 @@
 */
 #include "UserInputGameStateManager.h"
 
-#ifndef ANDROID
-#include <GL/glew.h>
-#include <GL/glfw.h>
-#endif
-
 #include "base/Log.h"
 #include "base/TouchInputManager.h"
 #include "base/EntityManager.h"
@@ -122,8 +117,10 @@ static Entity cellUnderFinger(const Vector2& pos, bool preferInCombi) {
 }
 
 static Entity moveToCell(Entity original, const Vector2& move, float threshold) {
+#ifdef ANDROID
 	if (move.LengthSquared() < threshold)
 		return 0;
+#endif
 
 	int i = GRID(original)->i;
 	int j = GRID(original)->j;

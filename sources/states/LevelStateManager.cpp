@@ -141,7 +141,7 @@ void LevelStateManager::Enter() {
 			if (rc->texture == branch || rc->texture == pause || rc->texture == sound1 || rc->texture == sound2) {
 				continue;
 			}
-			rc->desaturate = true;
+			rc->effectRef = theRenderingSystem.loadEffectFile("desaturate.fs");
 		}
 	}
 
@@ -193,7 +193,7 @@ GameState LevelStateManager::Update(float dt) {
 		//on modifie le herisson
 		TRANSFORM(modeMgr->herisson)->position.X = modeMgr->position(modeMgr->time);
 		RENDERING(modeMgr->herisson)->color.a = 1;
-		RENDERING(modeMgr->herisson)->desaturate = false;
+		RENDERING(modeMgr->herisson)->effectRef = DefaultEffectRef;
 		//on genere les nouvelles feuilles
 		modeMgr->generateLeaves(0, theGridSystem.Types);
 		for (unsigned int i=0; i<modeMgr->branchLeaves.size(); i++) {
@@ -246,6 +246,6 @@ void LevelStateManager::Exit() {
 
 	std::vector<Entity> ent = theRenderingSystem.RetrieveAllEntityWithComponent();
 	for (unsigned int i=0; i<ent.size(); i++) {
-		RENDERING(ent[i])->desaturate = false;
+		RENDERING(ent[i])->effectRef = DefaultEffectRef;
 	}
 }
