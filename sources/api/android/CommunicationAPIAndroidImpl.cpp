@@ -56,7 +56,7 @@ void CommunicationAPIAndroidImpl::init(JNIEnv* pEnv) {
 	env = pEnv;
 
     datas->cls = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib"));
-    datas->swarmInstalled = jniMethodLookup(env, datas->cls, "swarmInstalled", "(Z)V");
+    datas->swarmInstalled = jniMethodLookup(env, datas->cls, "swarmEnabled", "()Z");
     datas->shareFacebook = jniMethodLookup(env, datas->cls, "shareFacebook", "()V");
     datas->shareTwitter = jniMethodLookup(env, datas->cls, "shareTwitter", "()V");
 

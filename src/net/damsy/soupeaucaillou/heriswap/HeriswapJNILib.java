@@ -61,18 +61,18 @@ public class HeriswapJNILib {
 	public static native void initFromRenderThread(AssetManager mgr, long game, int width,
 			int height);
 
-	public static native void initFromGameThread(AssetManager mgr, long game, byte[] state);
+	public static native void initFromGameThread(AssetManager mgr, long game, byte[] state); 
 
 	public static native void uninitFromRenderThread(long game);
 
 	public static native void uninitFromGameThread(long game);
 
 	public static native void step(long game);
-
-	public static native void resetTimestep(long game);
+ 
+	public static native void resetTimestep(long game); 
 
 	public static native void render(long game);
-
+ 
 	public static native void pause(long game);
 
 	public static native void back(long game);
@@ -513,7 +513,7 @@ public class HeriswapJNILib {
 	// -------------------------------------------------------------------------
 	// CommunicationAPI
 	// -------------------------------------------------------------------------
-/*	static public boolean swarmEnabled() {
+	static public boolean swarmEnabled() {
 		return Swarm.isLoggedIn();
 	}
 
@@ -531,13 +531,13 @@ public class HeriswapJNILib {
 
 	static public void shareTwitter() {
 	//	String message = "Text I wan't to share.";
-		Intent share = new Intent(Intent.ACTION_SEND);
+		/*Intent share = new Intent(Intent.ACTION_SEND);
 		share.setType("text/plain");
 		share.putExtra(Intent.EXTRA_TEXT, message);
 
-		startActivity(Intent.createChooser(share, "Title of the dialog the system will open"));
+		startActivity(Intent.createChooser(share, "Title of the dialog the system will open"));*/
 	}
-*/
+
 	// -------------------------------------------------------------------------
 	// MusicAPI
 	// -------------------------------------------------------------------------
