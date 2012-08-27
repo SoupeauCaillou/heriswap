@@ -53,7 +53,7 @@ class ModeMenuStateManager : public GameStateManager {
         } gameOverState;
 
 	private:
-		StorageAPI* storage;
+		StorageAPI* storageAPI;
 		CommunicationAPI* communicationAPI;
 		NameInputAPI* nameInputAPI;
         SuccessAPI* successAPI;

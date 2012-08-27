@@ -40,7 +40,7 @@
 #include "DepthLayer.h"
 
 ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, NameInputAPI* pNameInputAPI, SuccessManager* sMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, CommunicationAPI* comAPI) {
-	storage = storag;
+	storageAPI = storag;
     successAPI = sAPI;
 	successMgr = sMgr;
 	communicationAPI = comAPI;
@@ -234,7 +234,7 @@ void ModeMenuStateManager::Setup() {
 
 void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 	/*getting scores*/
-	std::vector<StorageAPI::Score> entries = storage->savedScores(mode, (int)dif);
+	std::vector<StorageAPI::Score> entries = storageAPI->savedScores(mode, (int)dif);
 
 	/* treatment*/
 	bool alreadyRed = false;
@@ -286,7 +286,7 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 void ModeMenuStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
     pleaseGoBack = false;
-	successMgr->sHardScore(storage);
+	successMgr->sHardScore(storageAPI);
 
 	BUTTON(back)->enabled = true;
 	BUTTON(playContainer)->enabled = true;
@@ -327,11 +327,11 @@ void ModeMenuStateManager::submitScore(const std::string& playerName) {
     } else {
      entry.level = 1;
     }
-    storage->submitScore(entry, m, (int)difficulty);
+    storageAPI->submitScore(entry, m, (int)difficulty);
 }
 
 bool ModeMenuStateManager::isCurrentScoreAHighOne() {
-    std::vector<StorageAPI::Score> entries = storage->savedScores(modeMgr->GetMode(), (int)difficulty);
+    std::vector<StorageAPI::Score> entries = storageAPI->savedScores(modeMgr->GetMode(), (int)difficulty);
 
     int s = entries.size();
     if (s < 5)
@@ -380,15 +380,15 @@ GameState ModeMenuStateManager::Update(float dt) {
                 a << std::fixed << ((int)(modeMgr->time*10))/10.f << " s";
             }
             TEXT_RENDERING(yourScore)->text = a.str();
-            successMgr->sTestEverything(storage);
+            successMgr->sTestEverything(storageAPI);
             break;
         }
         case AskingPlayerName: {
             if (nameInputAPI->done(playerName)) {
                 if (modeMgr->GetMode()==Normal)
-					successMgr->sBTAC(storage, difficulty, modeMgr->points);
+					successMgr->sBTAC(storageAPI, difficulty, modeMgr->points);
 				else
-					successMgr->sBTAM(storage, difficulty, modeMgr->time);
+					successMgr->sBTAM(storageAPI, difficulty, modeMgr->time);
                 nameInputAPI->hide();
                 submitScore(playerName);
                 LoadScore(modeMgr->GetMode(), difficulty);
@@ -437,7 +437,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 			TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
 			TEXT_RENDERING(title)->hide = true;
 
-			if (storage->savedScores(modeMgr->GetMode(), (int)difficulty).size() == 0) {
+			if (storageAPI->savedScores(modeMgr->GetMode(), (int)difficulty).size() == 0) {
 				// show help
 				helpMgr->mode = modeMgr->GetMode();
 				helpMgr->oldState = BlackToSpawn;
