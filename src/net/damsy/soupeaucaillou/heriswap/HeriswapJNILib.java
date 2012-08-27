@@ -37,6 +37,7 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 //import android.util.Log;
+import android.util.Log;
 import android.view.View;
 
 import com.chartboost.sdk.ChartBoost;
@@ -420,12 +421,13 @@ public class HeriswapJNILib {
 
 
 	static public void openLeaderboard(int mode, int difficulty) {
+		Log.i(HeriswapActivity.Tag, "openleaderbord: " + mode + "," + difficulty);
 		if (mode >= 1 && mode <= 2 && difficulty >= 0 && difficulty <= 1) {
 			//Dashboard.openLeaderboard();
 
 			SwarmLeaderboard.GotLeaderboardCB callback = new SwarmLeaderboard.GotLeaderboardCB() {
 			    public void gotLeaderboard(SwarmLeaderboard leaderboard) {
-
+ 
 			    	if (leaderboard != null) {
 			    		leaderboard.showLeaderboard();
 			        }

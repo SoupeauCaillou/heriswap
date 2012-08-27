@@ -120,7 +120,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      ADD_COMPONENT(socialGamNet, Button);
      BUTTON(socialGamNet)->overSize = 1.3;
      ADD_COMPONENT(socialGamNet, Rendering);
-     // RENDERING(socialGamNet)->texture = theRenderingSystem.loadTextureFile("socialGamNet");
+     RENDERING(socialGamNet)->texture = theRenderingSystem.loadTextureFile("swarm_icon");
 
      for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)
          it->second->Setup();
