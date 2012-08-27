@@ -412,15 +412,8 @@ void Game::tick(float dt) {
 		togglePause(false);
 
 	}
-
-	//il faut mettre à jour le niveau si on level up
-	if (newState == LevelChanged) {
-		static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel =
-			(static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]))->currentLevel();
-	}
-
     //si on a change d'etat
-     if (newState != datas->state) {
+     else if (newState != datas->state) {
 		stateChanged(datas->state, newState);
 
 		if (newState == ExitState)
