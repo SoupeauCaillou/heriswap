@@ -90,7 +90,6 @@ static public final String Tag = "HeriswapJ";
       //Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON CREATE");
         activity = this;
         ofHasBeenShown = adHasBeenShown = adWaitingAdDisplay = false;
-		Swarm.init(this, HeriswapSecret.Swarm_gameID, HeriswapSecret.Swarm_gameKey);
 
         ChartBoost _cb = ChartBoost.getSharedChartBoost(this);
         _cb.setAppId(HeriswapSecret.CB_appId);

@@ -21,6 +21,8 @@ package net.damsy.soupeaucaillou.heriswap;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.swarmconnect.Swarm;
+
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 //import android.opengl.GLU;
@@ -150,8 +152,15 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-    	  String extensions = gl.glGetString(GL10.GL_EXTENSIONS);
-    	  Log.i("H", "Extensions supported: " + extensions);
+    	HeriswapActivity.activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Swarm.init(HeriswapActivity.activity, HeriswapSecret.Swarm_gameID, HeriswapSecret.Swarm_gameKey);				
+			}
+		});
+
+    	String extensions = gl.glGetString(GL10.GL_EXTENSIONS);
+    	Log.i("H", "Extensions supported: " + extensions);
     	if (HeriswapActivity.game == 0) {
     		// Log.i("HeriswapActivity.Tag", "Activity LifeCycle ##### Game instance creation (onSurfaceCreated)");
     		initDone = false;

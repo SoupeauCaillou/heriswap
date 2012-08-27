@@ -422,7 +422,7 @@ public class HeriswapJNILib {
 
 	static public void openLeaderboard(int mode, int difficulty) {
 		Log.i(HeriswapActivity.Tag, "openleaderbord: " + mode + "," + difficulty);
-		if (mode >= 1 && mode <= 2 && difficulty >= 0 && difficulty <= 1) {
+		if (mode >= 1 && mode <= 2 && difficulty >= 0 && difficulty <= 2) {
 			//Dashboard.openLeaderboard();
 
 			SwarmLeaderboard.GotLeaderboardCB callback = new SwarmLeaderboard.GotLeaderboardCB() {
@@ -434,7 +434,7 @@ public class HeriswapJNILib {
 			    }
 			};
 
-			SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[2 * (mode - 1) + difficulty], callback);
+			SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[3 * (mode - 1) + difficulty], callback);
 		}
 	}
 
