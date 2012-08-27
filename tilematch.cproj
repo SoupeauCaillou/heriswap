@@ -70,6 +70,9 @@
     <None Include="assets\default_vbo.vs" />
     <None Include="assets\default_no_alpha.fs" />
     <None Include="sources\AnimedActor.h" />
+    <None Include="sources\api\android\CommunicationAPIAndroidImpl.h" />
+    <None Include="sources\api\linux\CommunicationAPILinuxImpl.h" />
+    <None Include="sources\api\CommunicationAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -107,6 +110,7 @@
     <Compile Include="sources\states\CountDownStateManager.cpp" />
     <Compile Include="linux\heriswap.cpp" />
     <Compile Include="sources\AnimedActor.cpp" />
+    <Compile Include="sources\api\android\CommunicationAPIAndroidImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="sources\api\android\" />
