@@ -88,3 +88,8 @@ void CommunicationAPIAndroidImpl::shareTwitter() {
 	//env->CallStaticBooleanMethod(datas->cls, datas->shareTwitter);
 	LOGI("share twitter !");
 }
+
+
+void CommunicationAPIAndroidImpl::rateItNow(){}
+void CommunicationAPIAndroidImpl::rateItLater(){}
+void CommunicationAPIAndroidImpl::rateItNever(){}

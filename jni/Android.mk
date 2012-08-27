@@ -29,9 +29,10 @@ LOCAL_SRC_FILES := \
    ../sources/Jukebox.cpp \
    ../sources/CombinationMark.cpp \
    ../sources/TwitchSystem.cpp \
-	../sources/AnimedEntity.cpp \
+	../sources/AnimedActor.cpp \
 	../sources/states/AdsStateManager.cpp \
 	../sources/states/BackgroundManager.cpp \
+	../sources/states/CountDownStateManager.cpp \
 	../sources/states/DeleteGameStateManager.cpp \
 	../sources/states/FadeStateManager.cpp	\
 	../sources/states/FallGameStateManager.cpp \
@@ -41,6 +42,7 @@ LOCAL_SRC_FILES := \
 	../sources/states/MainMenuGameStateManager.cpp \
 	../sources/states/ModeMenuStateManager.cpp \
 	../sources/states/PauseStateManager.cpp \
+	../sources/states/RateItStateManager.cpp \
 	../sources/states/SpawnGameStateManager.cpp \
 	../sources/states/UserInputGameStateManager.cpp \
 	../sources/modes/GameModeManager.cpp \

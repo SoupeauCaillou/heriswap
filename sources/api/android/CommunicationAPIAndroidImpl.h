@@ -32,6 +32,10 @@ class CommunicationAPIAndroidImpl : public CommunicationAPI {
         void swarmRegistering();
 		void shareFacebook();
 		void shareTwitter();
+		
+		void rateItNow();
+		void rateItLater();
+		void rateItNever();
 
     private:
         class CommunicationAPIAndroidImplDatas;

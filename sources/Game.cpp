@@ -318,8 +318,8 @@ void Game::backPressed() {
         togglePause(true);
         #endif
     }
-}
-
+}   
+    
 void Game::togglePause(bool activate) {
 	if (activate && datas->state != Pause && pausableState(datas->state)) {
 		stopInGameMusics();
@@ -451,7 +451,7 @@ void Game::tick(float dt) {
         } else {
             RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
         }
-	}
+	} 
 	//if socialGamNet is clicked
 	if (BUTTON(datas->socialGamNet)->clicked){
 		if (datas->state == ModeMenu) {
