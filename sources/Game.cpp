@@ -461,8 +461,8 @@ void Game::tick(float dt) {
 	//if socialGamNet is clicked
 	if (BUTTON(datas->socialGamNet)->clicked){
 		if (datas->state == ModeMenu) {
-			int d = (static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]))->getDifficulty();
-			successAPI->openLeaderboard(datas->mode, d);
+			Difficulty diff = (static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]))->difficulty;
+			successAPI->openLeaderboard(datas->mode, diff);
 		} else {
 			successAPI->openDashboard();
 		}

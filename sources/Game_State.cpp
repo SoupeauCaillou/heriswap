@@ -18,6 +18,7 @@
 */
 #include "Game.h"
 #include "Game_Private.h"
+#include "GridSystem.h"
 
 #include "systems/ScrollingSystem.h"
 #include "systems/MorphingSystem.h"
@@ -46,8 +47,8 @@ void Game::stopInGameMusics() {
 
 void Game::setupGameProp() {
 	//update anim times
-	int difficulty = theGridSystem.difficulty();
-	if (difficulty == 0 || difficulty == 1) {
+	Difficulty difficulty = theGridSystem.sizeToDifficulty();
+	if (difficulty == DifficultyEasy || difficulty == DifficultyMedium) {
 		ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.6;
 		ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.14;
 		ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.14;
@@ -64,7 +65,7 @@ void Game::setupGameProp() {
 	}
 
 
-	 std::vector<StorageAPI::Score> entries = datas->storage->savedScores(datas->mode, theGridSystem.difficulty());
+	 std::vector<StorageAPI::Score> entries = datas->storage->savedScores(datas->mode, theGridSystem.sizeToDifficulty());
 	 datas->bestScores.clear();
 	 datas->bestScores.reserve(entries.size());
 	 for (int i=0; i<entries.size(); i++) {

@@ -51,9 +51,9 @@ void TilesAttackGameModeManager::Enter() {
 	succNoGridReset=false;
 	pts.clear();
 	pts.push_back(Vector2(0,0));
-	if (theGridSystem.difficulty() == 0)
+	if (theGridSystem.sizeToDifficulty() == DifficultyEasy)
 		limit = 30;
-	else if (theGridSystem.difficulty() == 1)
+	else if (theGridSystem.sizeToDifficulty() == DifficultyMedium)
 		limit = 50;
 	else
 		limit = 100;

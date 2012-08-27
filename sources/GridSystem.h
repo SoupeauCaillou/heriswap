@@ -22,6 +22,11 @@
 #include <base/EntityManager.h>
 #include <base/Vector2.h>
 
+enum Difficulty {
+	DifficultyEasy = 0,
+	DifficultyMedium,
+	DifficultyHard
+};
 
 struct Feuille {
 	int X, Y;
@@ -129,7 +134,11 @@ std::vector<Entity> ShowOneCombination();
 
 void print();
 
-int difficulty();
+Difficulty sizeToDifficulty();
+
+int difficultyToSize(Difficulty diff);
+
+Difficulty nextDifficulty(Difficulty diff);
 
 int GridSize, Types;
 int nbmin;

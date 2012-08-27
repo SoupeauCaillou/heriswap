@@ -24,6 +24,7 @@
 #include "states/GameStateManager.h"
 #include "Game.h"
 #include "AnimedActor.h"
+#include "GridSystem.h"
 
 class HelpStateManager;
 
@@ -36,10 +37,9 @@ class ModeMenuStateManager : public GameStateManager {
 		void Exit();
         void LateExit();
 
-		void LoadScore(int mode, int dif);
+		void LoadScore(int mode, Difficulty dif);
 
-		int getDifficulty() const { return difficulty; }
-
+		Difficulty difficulty;
 		Entity title, menufg, menubg;
 		AnimatedActor* herisson;
 
@@ -63,7 +63,6 @@ class ModeMenuStateManager : public GameStateManager {
 		SuccessManager* successMgr;
 		LocalizeAPI* localizeAPI;
 
-		int difficulty;
 		Entity eDifficulty, bDifficulty;
 
 		Entity facebook, twitter, enableSwarm, enableSwarmContainer;

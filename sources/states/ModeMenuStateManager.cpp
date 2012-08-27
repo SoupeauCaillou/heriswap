@@ -38,7 +38,6 @@
 #include "states/HelpStateManager.h"
 
 #include "DepthLayer.h"
-#include "GridSystem.h"
 
 ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, NameInputAPI* pNameInputAPI, SuccessManager* sMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, CommunicationAPI* comAPI) {
 	storage = storag;
@@ -47,7 +46,7 @@ ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, NameInputAPI* pNa
 	communicationAPI = comAPI;
 	nameInputAPI = pNameInputAPI;
 	localizeAPI = lAPI;
-	difficulty = 1;
+	difficulty = DifficultyEasy;
     gameOverState = NoGame;
 }
 
@@ -233,9 +232,9 @@ void ModeMenuStateManager::Setup() {
 	RENDERING(fond)->color.a = 0.5;
 }
 
-void ModeMenuStateManager::LoadScore(int mode, int dif) {
+void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 	/*getting scores*/
-	std::vector<StorageAPI::Score> entries = storage->savedScores(mode, dif);
+	std::vector<StorageAPI::Score> entries = storage->savedScores(mode, (int)dif);
 
 	/* treatment*/
 	bool alreadyRed = false;
@@ -292,7 +291,7 @@ void ModeMenuStateManager::Enter() {
 	BUTTON(back)->enabled = true;
 	BUTTON(playContainer)->enabled = true;
 
-    difficulty = theGridSystem.difficulty();
+    difficulty = theGridSystem.sizeToDifficulty();
 
 	LoadScore(modeMgr->GetMode(), difficulty);
 
@@ -308,9 +307,9 @@ void ModeMenuStateManager::Enter() {
 	TEXT_RENDERING(eDifficulty)->hide=false;
 	BUTTON(bDifficulty)->enabled = true;
 
-    if (difficulty == 0)
+    if (difficulty == DifficultyEasy)
         TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
-    else if (difficulty == 1)
+    else if (difficulty == DifficultyMedium)
         TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Medium") + " }";
     else
         TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
@@ -328,11 +327,11 @@ void ModeMenuStateManager::submitScore(const std::string& playerName) {
     } else {
      entry.level = 1;
     }
-    storage->submitScore(entry, m, difficulty);
+    storage->submitScore(entry, m, (int)difficulty);
 }
 
 bool ModeMenuStateManager::isCurrentScoreAHighOne() {
-    std::vector<StorageAPI::Score> entries = storage->savedScores(modeMgr->GetMode(), difficulty);
+    std::vector<StorageAPI::Score> entries = storage->savedScores(modeMgr->GetMode(), (int)difficulty);
 
     int s = entries.size();
     if (s < 5)
@@ -418,18 +417,17 @@ GameState ModeMenuStateManager::Update(float dt) {
 		//difficulty button
 		if (BUTTON(bDifficulty)->clicked) {
 			SOUND(bDifficulty)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-			difficulty++;
-			if (difficulty == 3)
-				difficulty = 0;
-			LoadScore(modeMgr->GetMode(), difficulty);
-			if (difficulty == 0)
+			difficulty = theGridSystem.nextDifficulty(difficulty);
+
+			if (difficulty == DifficultyEasy)
 				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
-			else if (difficulty == 1)
+			else if (difficulty == DifficultyMedium)
 				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Medium") + " }";
 			else
 				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
 
 			TEXT_RENDERING(playText)->text = localizeAPI->text("jouer", "Play");
+			LoadScore(modeMgr->GetMode(), difficulty);
 		}
 
 		//new game button
@@ -439,7 +437,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 			TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
 			TEXT_RENDERING(title)->hide = true;
 
-			if (storage->savedScores(modeMgr->GetMode(), difficulty).size() == 0) {
+			if (storage->savedScores(modeMgr->GetMode(), (int)difficulty).size() == 0) {
 				// show help
 				helpMgr->mode = modeMgr->GetMode();
 				helpMgr->oldState = BlackToSpawn;
@@ -474,17 +472,15 @@ GameState ModeMenuStateManager::Update(float dt) {
 }
 
 void ModeMenuStateManager::Exit() {
+	theGridSystem.GridSize = theGridSystem.difficultyToSize(difficulty);
 	switch (difficulty) {
-		case 0:
-			theGridSystem.GridSize = 5;
+		case DifficultyEasy:
 			theGridSystem.Types = 5;
 			break;
-		case 1:
-			theGridSystem.GridSize = 7;
+		case DifficultyMedium:
 			theGridSystem.Types = 7;
 			break;
-		case 2:
-			theGridSystem.GridSize = 8;
+		case DifficultyHard:
 			theGridSystem.Types = 8;
 			break;
 	}

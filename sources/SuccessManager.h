@@ -29,7 +29,7 @@ class SuccessManager {
 		SuccessManager(SuccessAPI* sAPI);
 		~SuccessManager() {};
 
-		void NewGame(int difficulty);
+		void NewGame(Difficulty difficulty);
 
 
 		//success only in "hard" difficulty

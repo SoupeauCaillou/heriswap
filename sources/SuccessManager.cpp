@@ -65,8 +65,8 @@ SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	gameDuration = 0;
 }
 
-void SuccessManager::NewGame(int difficulty) {
-	hardMode = difficulty;
+void SuccessManager::NewGame(Difficulty difficulty) {
+	hardMode = (difficulty == DifficultyHard);
 
 	gridResetted = false;
 
