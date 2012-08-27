@@ -98,11 +98,13 @@ BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c, int group) {
 
 	int idx = MathUtil::RandomInt(textures[group].size());
 	RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile(textures[group][idx]);
-	RENDERING(c->e)->color = Color(1, 1, 1, MathUtil::RandomFloatInRange(0.6, 0.9));
+	RENDERING(c->e)->color = Color(1,1,1, MathUtil::RandomFloatInRange(0.6, 0.9));
+	RENDERING(c->e)->hide = false;
 	TRANSFORM(c->e)->size = Vector2(width, width / ratio);
 	c->visible = false;
 	c->speed = cloudSpeed[group].random();
 	c->group = group;
+	
 	return c;
 }
 
@@ -123,7 +125,6 @@ void BackgroundManager::BackgroundUpdate(float dt) {
 
 		TransformationComponent* tc = TRANSFORM(c->e);
 		tc->position.X += (skySpeed + c->speed) * dt;
-
 		if (!theRenderingSystem.isEntityVisible(c->e)) {
 			if (c->visible)
 				initCloud(c, c->group);
