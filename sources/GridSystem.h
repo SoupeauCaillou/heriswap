@@ -22,6 +22,11 @@
 #include <base/EntityManager.h>
 #include <base/Vector2.h>
 
+enum Difficulty {
+	DifficultyEasy = 0,
+	DifficultyMedium,
+	DifficultyHard
+};
 
 struct Feuille {
 	int X, Y;
@@ -124,7 +129,16 @@ bool GridPosIsInCombination(int i, int j, int type, int* voisinsType);
 /* Clean the Grid from entities */
 void DeleteAll();
 
+/*Highlight a combination*/
+std::vector<Entity> ShowOneCombination();
+
 void print();
+
+Difficulty sizeToDifficulty();
+
+int difficultyToSize(Difficulty diff);
+
+Difficulty nextDifficulty(Difficulty diff);
 
 int GridSize, Types;
 int nbmin;

@@ -98,17 +98,8 @@ void NormalGameModeManager::GameUpdate(float dt) {
 	successMgr->gameDuration += dt;
 
 	if (helpAvailable && BUTTON(herisson)->clicked) {
-		ShowOneCombination();
+		leavesInHelpCombination = theGridSystem.ShowOneCombination();
 		helpAvailable = false;
-	}
-}
-
-void NormalGameModeManager::ShowOneCombination() {
-	std::vector < std::vector<Entity> > c = theGridSystem.GetSwapCombinations();
-	int i = MathUtil::RandomInt(c.size());
-	for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
-		RENDERING(*it)->effectRef = theRenderingSystem.loadEffectFile("desaturate.fs");
-		leavesInHelpCombination.push_back(*it);
 	}
 }
 
@@ -200,7 +191,9 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
     float newPos = GameModeManager::position(time - timeGain(count, time));
     // update herisson and decor at the same time.
     levelMoveDuration = deleteDuration + spawnDuration;
-    if (theGridSystem.GridSize == 5) levelMoveDuration *= 2;
+    if (theGridSystem.sizeToDifficulty() != DifficultyHard)
+		levelMoveDuration *= 2;
+
     nextHerissonSpeed = (newPos - currentPos) / levelMoveDuration;
 
     SCROLLING(decor1er)->speed = MathUtil::Max(0.0f, -nextHerissonSpeed);

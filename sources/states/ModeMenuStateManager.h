@@ -19,52 +19,55 @@
 #pragma once
 
 #include "api/NameInputAPI.h"
+#include "api/CommunicationAPI.h"
 #include "SuccessManager.h"
 #include "states/GameStateManager.h"
 #include "Game.h"
-#include "AnimedEntity.h"
+#include "AnimedActor.h"
+#include "GridSystem.h"
 
 class HelpStateManager;
 
 class ModeMenuStateManager : public GameStateManager {
 	public:
-		ModeMenuStateManager(StorageAPI* storag, NameInputAPI* nameInputAPI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI);
+		ModeMenuStateManager(StorageAPI* storag, NameInputAPI* nameInputAPI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, CommunicationAPI* comAPI);
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
 		void Exit();
         void LateExit();
 
-		void LoadScore(int mode, int dif);
-		
-		int getDifficulty() const { return difficulty; }
+		void LoadScore(int mode, Difficulty dif);
 
+		Difficulty difficulty;
 		Entity title, menufg, menubg;
 		AnimatedActor* herisson;
 
         bool pleaseGoBack;
         HelpStateManager* helpMgr;
-	private:
-		StorageAPI* storage;
-		NameInputAPI* nameInputAPI;
-        SuccessAPI* successAPI;
-		Entity play, playButton, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle;
-		Entity yourScore, fond;
-		std::string playerName;
-		SuccessManager* successMgr;
-		LocalizeAPI* localizeAPI;
 
-		//variables for perso mode
-		int difficulty;
-		Entity eDifficulty, bDifficulty;
-
-        void submitScore(const std::string& playerName);
-        bool isCurrentScoreAHighOne();
-    public:
         enum GameOverState {
             NoGame,
             GameEnded,
             AskingPlayerName
         } gameOverState;
+
+	private:
+		StorageAPI* storageAPI;
+		CommunicationAPI* communicationAPI;
+		NameInputAPI* nameInputAPI;
+        SuccessAPI* successAPI;
+		Entity playText, playContainer, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle;
+		Entity yourScore, fond;
+		std::string playerName;
+		SuccessManager* successMgr;
+		LocalizeAPI* localizeAPI;
+
+		Entity eDifficulty, bDifficulty;
+
+		Entity facebook, twitter, enableSwarm, enableSwarmContainer;
+
+        void submitScore(const std::string& playerName);
+        bool isCurrentScoreAHighOne();
 
 };

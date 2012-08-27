@@ -31,13 +31,12 @@ class UserInputGameStateManager : public GameStateManager {
 		void BackgroundUpdate(float dt);
 		void Exit();
 
-		void setAnimSpeed();
-
+		Entity swapAnimation;
 		//for count down in 2nd mode
 		bool newGame;
 	private:
 		// datas
-		Entity eSwapper, dragged;
+		Entity dragged;
 		bool dragStarted;
 		int originI, originJ;
 		int swapI, swapJ;

@@ -18,24 +18,25 @@
 */
 #pragma once
 
-#include "GameStateManager.h"
-#include "SuccessManager.h"
-#include "GridSystem.h"
+#include "../CommunicationAPI.h"
+#include <jni.h>
 
-class SpawnGameStateManager : public GameStateManager {
-	public:
-		SpawnGameStateManager(SuccessManager* smgr);
-		void Setup();
-		void Enter();
-		GameState Update(float dt);
-		GameState NextState(bool recheckEveryone);
-		void Exit();
-		void removeEntitiesInCombination();
+class CommunicationAPIAndroidImpl : public CommunicationAPI {
+    public:
+         CommunicationAPIAndroidImpl();
+        ~CommunicationAPIAndroidImpl();
+        void init(JNIEnv* env);
+        void uninit();
 
-		Entity haveToAddLeavesInGrid, replaceGrid;
-	private:
-		// datas
-		std::vector<Feuille> newLeaves;
+        bool swarmInstalled();
+        void swarmRegistering();
+		void shareFacebook();
+		void shareTwitter();
 
-		SuccessManager* successMgr;
+    private:
+        class CommunicationAPIAndroidImplDatas;
+        CommunicationAPIAndroidImplDatas* datas;
+
+	public :
+		JNIEnv* env;
 };

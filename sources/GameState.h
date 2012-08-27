@@ -43,5 +43,6 @@ enum GameState {
      Logo,
      Help,
      Ads,
+     RateIt,
      ExitState
 };

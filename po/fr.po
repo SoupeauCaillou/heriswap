@@ -44,6 +44,9 @@ msgstr "Rejouer"
 msgid "Easy"
 msgstr "Débutant"
 
+msgid "Medium"
+msgstr "Moyen"
+
 #: sources/states/ModeMenuStateManager.cpp:251
 #: sources/states/ModeMenuStateManager.cpp:344
 msgid "Hard"

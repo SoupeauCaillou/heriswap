@@ -70,6 +70,7 @@
     <None Include="sources\states\CountDownStateManager.h" />
     <None Include="assets\default_vbo.vs" />
     <None Include="assets\default_no_alpha.fs" />
+    <None Include="sources\AnimedActor.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -107,6 +108,7 @@
     <Compile Include="tests\TestTilesAttackModeManager.cpp" />
     <Compile Include="sources\states\CountDownStateManager.cpp" />
     <Compile Include="linux\heriswap.cpp" />
+    <Compile Include="sources\AnimedActor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="sources\api\android\" />

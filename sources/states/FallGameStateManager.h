@@ -32,10 +32,8 @@ class FallGameStateManager : public GameStateManager {
 	GameState Update(float dt);
 	void Exit();
 
-	void setAnimSpeed();
-
+	Entity fallAnimation;
 	private:
 		// datas
-		Entity eFall;
 		std::vector<CellFall> falling;
 };

@@ -43,19 +43,20 @@
 #include "states/LogoStateManager.h"
 #include "states/HelpStateManager.h"
 #include "states/AdsStateManager.h"
+#include "states/RateItStateManager.h"
 
 #include "DepthLayer.h"
 #include "GameState.h"
 
 
-PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad) {
+PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad, CommunicationAPI* comAPI) {
      mode = Normal;
      mode2Manager[Normal] = new NormalGameModeManager(game,successMgr);
      mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game,successMgr);
      storage = storagee;
 
      soundButton = theEntityManager.CreateEntity();
-     openfeint = theEntityManager.CreateEntity();
+     socialGamNet = theEntityManager.CreateEntity();
 
      state = BlackToLogoState;
 
@@ -68,9 +69,10 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      state2Manager[Pause] = new PauseStateManager(lAPI);
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
      state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI, sAPI);
-     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successMgr,lAPI, sAPI);
+     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successMgr,lAPI, sAPI, comAPI);
      state2Manager[Help] = new HelpStateManager(lAPI);
      state2Manager[Ads] = new AdsStateManager(ad, storage, successMgr);
+     state2Manager[RateIt] = new RateItStateManager(lAPI, comAPI);
 
      state2Manager[BlackToLogoState] = new FadeGameStateManager(0.2f, FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
      state2Manager[LogoToBlackState] = new FadeGameStateManager(0.3f, FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);
@@ -104,18 +106,21 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      ADD_COMPONENT(soundButton, Button);
      BUTTON(soundButton)->overSize = 1.3;
      ADD_COMPONENT(soundButton, Rendering);
-     if (storage->soundEnable(false)) RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on");
-     else RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
      ADD_COMPONENT(soundButton, Sound);
+     if (storage->soundEnable(false))
+		RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on");
+     else
+		RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
 
-     ADD_COMPONENT(openfeint, Transformation);
-     TRANSFORM(openfeint)->z = DL_MainMenuUITxt;
-     TRANSFORM(openfeint)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
-     TransformationSystem::setPosition(TRANSFORM(openfeint), Vector2(0 - PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
-     ADD_COMPONENT(openfeint, Button);
-     BUTTON(openfeint)->overSize = 1.3;
-     ADD_COMPONENT(openfeint, Rendering);
-     RENDERING(openfeint)->texture = theRenderingSystem.loadTextureFile("openfeint");
+
+     ADD_COMPONENT(socialGamNet, Transformation);
+     TRANSFORM(socialGamNet)->z = DL_MainMenuUITxt;
+     TRANSFORM(socialGamNet)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
+     TransformationSystem::setPosition(TRANSFORM(socialGamNet), Vector2(0 - PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
+     ADD_COMPONENT(socialGamNet, Button);
+     BUTTON(socialGamNet)->overSize = 1.3;
+     ADD_COMPONENT(socialGamNet, Rendering);
+     RENDERING(socialGamNet)->texture = theRenderingSystem.loadTextureFile("socialGamNet");
 
      for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)
          it->second->Setup();
@@ -147,9 +152,12 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
 
      MainMenuGameStateManager* mainmenu = static_cast<MainMenuGameStateManager*> (state2Manager[MainMenu]);
      ModeMenuStateManager* modemenu = static_cast<ModeMenuStateManager*> (state2Manager[ModeMenu]);
+     RateItStateManager* rateIt = static_cast<RateItStateManager*> (state2Manager[RateIt]);
      modemenu->menufg = mainmenu->menufg;
      modemenu->menubg = mainmenu->menubg;
      modemenu->herisson = mainmenu->herisson;
+     rateIt->menufg = mainmenu->menufg;
+     rateIt->menubg = mainmenu->menubg;
 
      menu = theEntityManager.CreateEntity();
      ADD_COMPONENT(menu, Music);

@@ -18,24 +18,25 @@
 */
 #pragma once
 
-#include "GameStateManager.h"
-#include "SuccessManager.h"
-#include "GridSystem.h"
+#include "api/CommunicationAPI.h"
 
-class SpawnGameStateManager : public GameStateManager {
+#include "states/GameStateManager.h"
+
+#include "Game.h"
+#include "AnimedActor.h"
+
+class RateItStateManager : public GameStateManager {
 	public:
-		SpawnGameStateManager(SuccessManager* smgr);
+		RateItStateManager(LocalizeAPI* lAPI, CommunicationAPI* cAPI) : localizeAPI(lAPI), communicationAPI(cAPI) { };
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
-		GameState NextState(bool recheckEveryone);
 		void Exit();
-		void removeEntitiesInCombination();
 
-		Entity haveToAddLeavesInGrid, replaceGrid;
+		Entity title, menufg, menubg;
+
 	private:
-		// datas
-		std::vector<Feuille> newLeaves;
-
-		SuccessManager* successMgr;
+		Entity boutonText[3], boutonContainer[3];
+		CommunicationAPI* communicationAPI;
+		LocalizeAPI* localizeAPI;
 };

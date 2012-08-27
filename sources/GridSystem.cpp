@@ -35,6 +35,38 @@ GridSystem::GridSystem() : ComponentSystemImpl<GridComponent>("Grid") {
 	nbmin=3;
 }
 
+Difficulty GridSystem::sizeToDifficulty() {
+	if (GridSize == 5)
+		return DifficultyEasy;
+	else if (GridSize == 7)
+		return DifficultyMedium;
+	else
+		return DifficultyHard;
+}
+
+int GridSystem::difficultyToSize(Difficulty diff) {
+	if (diff == DifficultyEasy)
+		return 5;
+	else if (diff == DifficultyMedium)
+		return 7;
+	else
+		return 8;
+}
+
+Difficulty GridSystem::nextDifficulty(Difficulty diff) {
+	switch (diff) {
+		case DifficultyEasy :
+			return DifficultyMedium;
+		case DifficultyMedium :
+			return DifficultyHard;
+		case DifficultyHard :
+			return DifficultyEasy;
+	}
+	//should never happen
+	return DifficultyEasy;
+}
+
+
 void GridSystem::print() {
 	for(int j=GridSize-1; j>=0; j--) {
 		for(int i=0; i<GridSize; i++) {
@@ -535,4 +567,22 @@ bool GridSystem::GridPosIsInCombination(int i, int j, int type, int* voisinsType
 		free(vType);
 
 	return res;
+}
+
+std::vector<Entity> GridSystem::ShowOneCombination() {
+	std::vector<Entity> highLightedCombi;
+
+	//desaturate everything
+	std::vector<Entity> leaves = RetrieveAllEntityWithComponent();
+	for (unsigned int i = 0; i < leaves.size(); i++)
+		RENDERING(leaves[i])->effectRef = theRenderingSystem.loadEffectFile("desaturate.fs");
+
+	//then resature one combi
+	std::vector < std::vector<Entity> > c = GetSwapCombinations();
+	int i = MathUtil::RandomInt(c.size());
+	for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
+		RENDERING(*it)->effectRef = DefaultEffectRef;
+		highLightedCombi.push_back(*it);
+	}
+	return highLightedCombi;
 }

@@ -18,24 +18,16 @@
 */
 #pragma once
 
-#include "GameStateManager.h"
-#include "SuccessManager.h"
-#include "GridSystem.h"
+#include "../CommunicationAPI.h"
 
-class SpawnGameStateManager : public GameStateManager {
-	public:
-		SpawnGameStateManager(SuccessManager* smgr);
-		void Setup();
-		void Enter();
-		GameState Update(float dt);
-		GameState NextState(bool recheckEveryone);
-		void Exit();
-		void removeEntitiesInCombination();
+class CommunicationAPILinuxImpl : public CommunicationAPI {
+    public:
+        bool swarmInstalled() { LOGI("please enable swarm !"); return false; }
+        void swarmRegistering() { LOGI("swarm activated"); }
+		void shareFacebook() { LOGI("facebook share"); }
+		void shareTwitter() { LOGI("twitter share"); }
 
-		Entity haveToAddLeavesInGrid, replaceGrid;
-	private:
-		// datas
-		std::vector<Feuille> newLeaves;
-
-		SuccessManager* successMgr;
+		void rateItNow() { ; }
+		void rateItLater() { ; }
+		void rateItNever() { ; }
 };

@@ -33,11 +33,9 @@ class DeleteGameStateManager : public GameStateManager {
 		GameState Update(float dt);
 		void Exit();
 
-		void setAnimSpeed();
+		Entity deleteAnimation;
 	private:
-
 		// datas
-		Entity eRemove;
 		std::vector<Combinais> removing;
         std::vector<Entity> littleLeavesDeleted;
 		SuccessManager* successMgr;

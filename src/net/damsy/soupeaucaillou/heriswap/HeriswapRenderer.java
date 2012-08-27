@@ -23,10 +23,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
+//import android.opengl.GLU;
 import android.util.Log;
-
-import com.openfeint.api.OpenFeint;
 
 public class HeriswapRenderer implements GLSurfaceView.Renderer {   
 	AssetManager asset; 
@@ -68,7 +66,9 @@ public class HeriswapRenderer implements GLSurfaceView.Renderer {
     	  
     	gameThread = new Thread(new Runnable() {
 			public void run() {
-				OpenFeint.login();
+				//OpenFeint.login();
+				//a changer !!!!!!!!!!!!!!!!!!!!!!!!!
+				
 				HeriswapActivity.runGameLoop = true;
 				HeriswapJNILib.initFromGameThread(asset, HeriswapActivity.game, HeriswapActivity.savedState);
 				// force gc before starting game

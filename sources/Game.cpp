@@ -112,7 +112,7 @@ float Game::CellContentScale() {
 	return scale;
 }
 
-Game::Game(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad, ExitAPI* exAPI) {
+Game::Game(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI) {
 	asset = ast;
 	successAPI = sAPI;
 	exitAPI = exAPI;
@@ -121,7 +121,7 @@ Game::Game(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI
 	EntityManager::CreateInstance();
 
 	/* create before system so it cannot use any of them (use Setup instead) */
-	datas = new PrivateData(this, storage, inputUI, new SuccessManager(sAPI), lAPI, sAPI, ad);
+	datas = new PrivateData(this, storage, inputUI, new SuccessManager(sAPI), lAPI, sAPI, ad, comAPI);
 
 	/* create systems singleton */
 	TransformationSystem::CreateInstance();
@@ -265,13 +265,14 @@ void Game::setMode() {
 	}
 }
 
-void Game::toggleShowCombi(bool forcedesactivate) {
+void Game::toggleShowCombi(bool enabled) {
 	static bool activated;
 	static std::vector<Entity> marks;
 	//on switch le bool
 	activated = !activated;
-	if (forcedesactivate) activated = false;
-	if (datas->state != UserInput) activated = false;
+	if (!enabled || (datas->state != UserInput))
+		activated = false;
+
 	if (activated) {
 		LOGI("Affiche magique de la triche !") ;
 		//j=0 : vertical
@@ -368,13 +369,17 @@ void Game::tick(float dt) {
 
 	//quand c'est plus au joueur de jouer, on supprime les marquages sur les feuilles
 	if (datas->state != UserInput) {
-		toggleShowCombi(true);
+		toggleShowCombi(false);
 		if (datas->mode == Normal) {
 			std::vector<Entity>& leavesInHelpCombination = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->leavesInHelpCombination;
-			for ( std::vector<Entity>::reverse_iterator it = leavesInHelpCombination.rbegin(); it != leavesInHelpCombination.rend(); ++it) {
-				RENDERING(*it)->effectRef = DefaultEffectRef;
+			if (!leavesInHelpCombination.empty()) {
+				std::vector<Entity> leaves = theGridSystem.RetrieveAllEntityWithComponent();
+				for ( std::vector<Entity>::reverse_iterator it = leaves.rbegin(); it != leaves.rend(); ++it) {
+					RENDERING(*it)->effectRef = DefaultEffectRef;
+				}
+
+				leavesInHelpCombination.clear();
 			}
-			leavesInHelpCombination.clear();
 		}
 	}
 
@@ -382,17 +387,8 @@ void Game::tick(float dt) {
 	if (percentDone >= 1) {
 		newState = GameToBlack;
 		//show combinations which remain in score attack
-		if (datas->mode == Normal) {
-			std::vector<Entity> leaves = theGridSystem.RetrieveAllEntityWithComponent();
-			for (unsigned int i = 0; i < leaves.size(); i++)
-				RENDERING(leaves[i])->effectRef = theRenderingSystem.loadEffectFile("desaturate.fs");
-
-			std::vector < std::vector<Entity> > c = theGridSystem.GetSwapCombinations();
-			int i = MathUtil::RandomInt(c.size());
-			for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
-				RENDERING(*it)->effectRef = DefaultEffectRef;
-			}
-		}
+		if (datas->mode == Normal)
+			theGridSystem.ShowOneCombination();
 	}
 
 	//ne pas changer la grille si fin de niveau/jeu
@@ -439,8 +435,8 @@ void Game::tick(float dt) {
 		#else
 		bool ofHidden = true;
     	#endif
-		RENDERING(datas->openfeint)->hide = ofHidden;
-		BUTTON(datas->openfeint)->enabled = !RENDERING(datas->openfeint)->hide;
+		RENDERING(datas->socialGamNet)->hide = ofHidden;
+		BUTTON(datas->socialGamNet)->enabled = !RENDERING(datas->socialGamNet)->hide;
 	}
 
     // background (unconditionnal) update of state managers
@@ -463,13 +459,13 @@ void Game::tick(float dt) {
             RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
         }
 	}
-	//if openfeint is clicked
-	if (BUTTON(datas->openfeint)->clicked){
+	//if socialGamNet is clicked
+	if (BUTTON(datas->socialGamNet)->clicked){
 		if (datas->state == ModeMenu) {
-			int d = (static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]))->getDifficulty();
-			successAPI->openfeintLB(datas->mode, d);
+			Difficulty diff = (static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]))->difficulty;
+			successAPI->openLeaderboard(datas->mode, diff);
 		} else {
-			successAPI->openfeintSuccess();
+			successAPI->openDashboard();
 		}
 	}
 

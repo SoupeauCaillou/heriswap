@@ -16,7 +16,7 @@
 	You should have received a copy of the GNU General Public License
 	along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "AnimedEntity.h"
+#include "AnimedActor.h"
 
 #include <sstream>
 

@@ -22,11 +22,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 
 import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command;
 import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command.Type;
 import android.content.ContentValues;
+//import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -38,12 +40,10 @@ import android.media.AudioTrack;
 import android.view.View;
 
 import com.chartboost.sdk.ChartBoost;
-import com.openfeint.api.OpenFeint;
-import com.openfeint.api.resource.Achievement;
-import com.openfeint.api.resource.Leaderboard;
-import com.openfeint.api.resource.Score;
-import com.openfeint.api.resource.User;
-import com.openfeint.api.ui.Dashboard;
+
+import com.swarmconnect.Swarm;
+import com.swarmconnect.SwarmAchievement;
+import com.swarmconnect.SwarmLeaderboard;
 
 public class HeriswapJNILib {
 	static {
@@ -62,7 +62,7 @@ public class HeriswapJNILib {
 			int height);
 
 	public static native void initFromGameThread(AssetManager mgr, long game, byte[] state);
-	
+
 	public static native void uninitFromRenderThread(long game);
 
 	public static native void uninitFromGameThread(long game);
@@ -91,9 +91,9 @@ public class HeriswapJNILib {
 	// -------------------------------------------------------------------------
 	static public boolean showAd() {
 		ChartBoost _cb = ChartBoost.getSharedChartBoost(HeriswapActivity.activity);
-		
+
 		int adProviderSelection = -1;
-		
+
 		boolean gsReady = false; //GSSDK.getSharedInstance().isAdReady();
 		boolean cbReady = _cb.hasCachedInterstitial();
 
@@ -103,8 +103,8 @@ public class HeriswapJNILib {
 			adProviderSelection = 0;
 		} else if (cbReady) {
 			adProviderSelection = 1;
-		}    
-		 
+		}
+
 		if (adProviderSelection == 0) {
 			HeriswapActivity.adHasBeenShown = true;
 			/* HeriswapActivity.activity.runOnUiThread(new Runnable() {
@@ -148,7 +148,7 @@ public class HeriswapJNILib {
 			return null;
 		}
 	}
- 
+
 	// -------------------------------------------------------------------------
 	// SoundAPI
 	// -------------------------------------------------------------------------
@@ -159,7 +159,7 @@ public class HeriswapJNILib {
 			//NOLOGLog.e(HeriswapActivity.Tag, "Unable to load sound: " + assetPath);
 			return -1;
 		}
-	} 
+	}
 
 	static public boolean playSound(int soundID, float volume) {
 		if (soundID < 0)
@@ -167,7 +167,6 @@ public class HeriswapJNILib {
 		return HeriswapActivity.soundPool.play(soundID, 0.5f * volume,
 				0.5f * volume, 0, 0, 1.0f) != 0;
 	}
-
 	// -------------------------------------------------------------------------
 	// StorageAPI
 	// -------------------------------------------------------------------------
@@ -223,11 +222,8 @@ public class HeriswapJNILib {
 		return count;
 	}
 
-	static final String[] boards = new String[] { "1188517", "1188507",
-			"1188537", "1188527" };
-
-	static public void submitScore(final int mode, int difficulty, int points,
-			int level, float time, String name) {
+	static public void submitScore(final int mode, final int difficulty, final int points,
+			final int level, final float time, final String name) {
 		SQLiteDatabase db = HeriswapActivity.scoreOpenHelper
 				.getWritableDatabase();
 		ContentValues v = new ContentValues();
@@ -242,10 +238,31 @@ public class HeriswapJNILib {
 		db.close();
 
 		// retrieve Leaderboard
-		final Leaderboard l = new Leaderboard(boards[2 * (mode - 1)
-				+ difficulty]);
 		//NOLOGLog.i(HeriswapActivity.Tag, "leaderboard id: " + boards[2 * (mode - 1) + difficulty]);
 
+
+		SwarmLeaderboard.GotLeaderboardCB callback = new SwarmLeaderboard.GotLeaderboardCB() {
+		    public void gotLeaderboard(SwarmLeaderboard leaderboard) {
+
+		    		if (leaderboard != null) {
+		    			//que si meilleur score
+
+		    			//leaderboard.getScoreForUser(Swarm.user, truc);
+		    			if (true) {
+		    				if (mode == 1)
+		    					leaderboard.submitScore(points);
+		    				else
+		    					leaderboard.submitScore(time);
+		    			}
+		        	}
+		        }
+		    };
+		if (!Swarm.isLoggedIn())
+			Swarm.init(HeriswapActivity.activity, HeriswapSecret.Swarm_gameID, HeriswapSecret.Swarm_gameKey);
+
+		SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[2 * (mode - 1) + difficulty], callback);
+
+		/*
 		// Build score object
 		final Score s;
 		if (mode == 1)
@@ -253,6 +270,8 @@ public class HeriswapJNILib {
 		else
 			s = new Score((long) (time * 1000),
 					(float) ((int) (time * 100) / 100.f) + "s");
+
+//		final Leaderboard l = new Leaderboard(boards[2 * (mode - 1)	+ difficulty]);
 
 		// Callback called by OF on score querying
 		final Score.SubmitToCB scCB = new Score.SubmitToCB() {
@@ -307,7 +326,7 @@ public class HeriswapJNILib {
 						super.onFailure(exceptionMessage);
 						s.submitTo(l, scCB);
 					}
-				});
+				});*/
 	}
 
 	static public int getScores(int mode, int difficulty, int[] points,
@@ -344,11 +363,29 @@ public class HeriswapJNILib {
 	// -------------------------------------------------------------------------
 	// SuccessAPI
 	// -------------------------------------------------------------------------
-	static public void unlockAchievement(int id) {
-		if (!OpenFeint.isNetworkConnected()) {
+	static public void unlockAchievement(int idS) {
+		//if (!OpenFeint.isNetworkConnected()) {
+		if (!Swarm.isLoggedIn()) {
 			return;
 		}
-		
+		final int id = idS;
+
+		SwarmAchievement.GotAchievementsMapCB callback = new SwarmAchievement.GotAchievementsMapCB() {
+			@Override
+			public void gotMap(Map<Integer, SwarmAchievement> achievements) {
+		        SwarmAchievement achievement = achievements.get(id);
+		        // No need to unlock more than once...
+		        if (achievement != null && achievement.unlocked == false) {
+		            achievement.unlock();
+		        }
+			}
+		};
+		SwarmAchievement.getAchievementsMap(callback);
+
+		//final SwarmAchievement ach = new SwarmAchievement();
+		//SwarmAchievement.GotAchievementsListCB loadC = new SwarmAchievement.GotAchievementsListCB() {
+		//}
+		/*
 		final Achievement achv = new Achievement(Integer.toString(id));
 		Achievement.LoadCB loadCb = new Achievement.LoadCB() {
 			@Override
@@ -378,17 +415,30 @@ public class HeriswapJNILib {
 
 		};
 
-		achv.load(loadCb);
+		achv.load(loadCb);*/
 	}
 
-	static public void openfeintLeaderboard(int mode, int difficulty) {
+
+	static public void openLeaderboard(int mode, int difficulty) {
 		if (mode >= 1 && mode <= 2 && difficulty >= 0 && difficulty <= 1) {
-			Dashboard.openLeaderboard(boards[2 * (mode - 1) + difficulty]);
+			//Dashboard.openLeaderboard();
+
+			SwarmLeaderboard.GotLeaderboardCB callback = new SwarmLeaderboard.GotLeaderboardCB() {
+			    public void gotLeaderboard(SwarmLeaderboard leaderboard) {
+
+			    	if (leaderboard != null) {
+			    		leaderboard.showLeaderboard();
+			        }
+			    }
+			};
+
+			SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[2 * (mode - 1) + difficulty], callback);
 		}
 	}
 
-	static public void openfeintSuccess() {
-		Dashboard.open();
+	static public void openDashboard() {
+		//Dashboard.open();
+		Swarm.showDashboard();
 	}
 
 	// -------------------------------------------------------------------------
@@ -460,6 +510,34 @@ public class HeriswapJNILib {
 		}
 	}
 
+	// -------------------------------------------------------------------------
+	// CommunicationAPI
+	// -------------------------------------------------------------------------
+/*	static public boolean swarmEnabled() {
+		return Swarm.isLoggedIn();
+	}
+
+	static public void swarmRegistering() {
+		Swarm.init(HeriswapActivity.activity, HeriswapSecret.Swarm_gameID, HeriswapSecret.Swarm_gameKey);
+	}
+
+	static public void shareFacebook() {
+		//Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+		//sharingIntent.setType("plain/text");
+		//sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "This is the text that will be shared.");
+		//startActivity(Intent.createChooser(sharingIntent,"Share using"));
+
+	}
+
+	static public void shareTwitter() {
+	//	String message = "Text I wan't to share.";
+		Intent share = new Intent(Intent.ACTION_SEND);
+		share.setType("text/plain");
+		share.putExtra(Intent.EXTRA_TEXT, message);
+
+		startActivity(Intent.createChooser(share, "Title of the dialog the system will open"));
+	}
+*/
 	// -------------------------------------------------------------------------
 	// MusicAPI
 	// -------------------------------------------------------------------------
@@ -540,7 +618,7 @@ public class HeriswapJNILib {
 								cmd = writePendings.poll();
 							}
 						}
-						
+
 							if (cmd != null && running) {
 								switch (cmd.type) {
 								case Buffer: {
@@ -599,7 +677,7 @@ public class HeriswapJNILib {
 					}
 					writePendings.clear();
 					track.stop();
-					
+
 					track.flush();
 					synchronized (DumbAndroid.audioTrackPool) {
 						DumbAndroid.audioTrackPool.add(track);
@@ -729,7 +807,7 @@ public class HeriswapJNILib {
 			}
 			dumb.track.notify();
 		}
-	} 
+	}
 
 	static public int getPosition(Object o) {
 		DumbAndroid dumb = (DumbAndroid) o;
@@ -742,7 +820,7 @@ public class HeriswapJNILib {
 	static public void setPosition(Object o, int pos) {
 
 	}
- 
+
 	static public void setVolume(Object o, float v) {
 		DumbAndroid dumb = (DumbAndroid) o;
 		//Log.w(HeriswapActivity.Tag, " set volume : " + dumb.toString() + " => " + v);
@@ -766,7 +844,7 @@ public class HeriswapJNILib {
 			dumb.track.stop();
 			dumb.track.notify();
 		}
-		
+
 		//NOLOGLog.i(HeriswapActivity.Tag,"Delete (delayed) track: " + dumb.track.toString());
 	}
 

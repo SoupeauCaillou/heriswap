@@ -31,50 +31,31 @@
 #include "api/StorageAPI.h"
 #include "api/AdAPI.h"
 #include "api/ExitAPI.h"
+#include "api/CommunicationAPI.h"
 
 class NameInputAPI;
-
-class ScoreStorage {
-	public:
-		struct Score {
-			unsigned int points, level;
-			float time;
-			std::string name;
-		};
-
-		virtual bool initTable() = 0;
-		virtual void submitScore(Score scr, int mode, int diff) = 0;
-		virtual	bool request(std::string s, void* res, int (*callbackP)(void*,int,char**,char**)) = 0;
-		virtual bool soundEnable(bool switchIt) = 0;
-		virtual void saveOpt(std::string opt, std::string name) = 0;
-		virtual std::vector<std::string> getName(std::string& result) = 0;
-
-		#ifdef ANDROID
-		virtual void openfeintLB(int mode) = 0;
-		#endif
-};
 
 class SuccessAPI {
 	public:
 		virtual void successCompleted(const char* description, unsigned long successId) {
 			LOGI("Success completed '%s': %lu", description, successId);
 		}
-        virtual void openfeintLB(int mode, int diff) {
+        virtual void openLeaderboard(int mode, int diff) {
 	        mode=mode; diff=diff;
         }
-        virtual void openfeintSuccess() {}
+        virtual void openDashboard() {}
 };
 
 class PrivateData;
 class Game {
 	public:
-		Game(AssetAPI* asset, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad, ExitAPI* exAPI);
+		Game(AssetAPI* asset, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI);
         ~Game();
         void sacInit(int windowW, int windowH);
 		void init(const uint8_t* in = 0, int size = 0);
 		void tick(float dt);
 		void togglePause(bool activate);
-		void toggleShowCombi(bool forcedesactivate);
+		void toggleShowCombi(bool enabled);
         void backPressed();
 		void setMode();
 		int saveState(uint8_t** out);
@@ -94,7 +75,7 @@ class Game {
 		void bench(bool active, float updateDuration, float dt);
 		void stopInGameMusics();
 		bool shouldPlayPiano();
-		
+
 		void setupGameProp();
 
 	PrivateData* datas;
