@@ -20,6 +20,9 @@
 #include "Game_Private.h"
 
 #include "systems/ScrollingSystem.h"
+#include "systems/MorphingSystem.h"
+#include "systems/ADSRSystem.h"
+
 #include "states/ModeMenuStateManager.h"
 #include "states/MainMenuGameStateManager.h"
 #include "states/LevelStateManager.h"
@@ -31,7 +34,6 @@
 
 #include "modes/TilesAttackModeManager.h"
 #include "modes/NormalModeManager.h"
-#include "systems/MorphingSystem.h"
 
 void Game::stopInGameMusics() {
 	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Stop;
@@ -44,12 +46,25 @@ void Game::stopInGameMusics() {
 
 void Game::setupGameProp() {
 	//update anim times
-     static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete])->setAnimSpeed();
-     static_cast<FallGameStateManager*> (datas->state2Manager[Fall])->setAnimSpeed();
-     static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn])->setAnimSpeed();
-	 static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->setAnimSpeed();
+	int difficulty = theGridSystem.difficulty();
+	if (difficulty == 0 || difficulty == 1) {
+		ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.6;
+		ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.14;
+		ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.14;
+		ADSR((static_cast<FallGameStateManager*> (datas->state2Manager[Fall]))->fallAnimation)->attackTiming = 0.30;
+		ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->haveToAddLeavesInGrid)->attackTiming = 0.40;
+		ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 1.;
+	} else {
+		ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.3;
+		ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.07;
+		ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.07;
+		ADSR((static_cast<FallGameStateManager*> (datas->state2Manager[Fall]))->fallAnimation)->attackTiming = 0.15;
+		ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->haveToAddLeavesInGrid)->attackTiming = 0.40;
+		ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 1.;
+	}
 
-	 std::vector<StorageAPI::Score> entries = datas->storage->savedScores(datas->mode, (theGridSystem.GridSize == 5 ? 0 : 1));
+
+	 std::vector<StorageAPI::Score> entries = datas->storage->savedScores(datas->mode, theGridSystem.difficulty());
 	 datas->bestScores.clear();
 	 datas->bestScores.reserve(entries.size());
 	 for (int i=0; i<entries.size(); i++) {

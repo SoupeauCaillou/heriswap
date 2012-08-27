@@ -129,6 +129,8 @@ std::vector<Entity> ShowOneCombination();
 
 void print();
 
+int difficulty();
+
 int GridSize, Types;
 int nbmin;
 };

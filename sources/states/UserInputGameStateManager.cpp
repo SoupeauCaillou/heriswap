@@ -42,26 +42,18 @@ static void activateADSR(Entity e, float a, float s);
 static void diffToGridCoords(const Vector2& c, int* i, int* j);
 
 
-void UserInputGameStateManager::setAnimSpeed() {
-	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
-
-	ADSR(eSwapper)->idleValue = 0;
-	ADSR(eSwapper)->attackValue = 1.0;
-	ADSR(eSwapper)->attackTiming = 0.07 * difficulty;
-	ADSR(eSwapper)->decayTiming = 0;
-	ADSR(eSwapper)->sustainValue = 1.0;
-	ADSR(eSwapper)->releaseTiming = 0.07 * difficulty;
-}
-
 void UserInputGameStateManager::Setup() {
-	eSwapper = theEntityManager.CreateEntity();
-	ADD_COMPONENT(eSwapper, ADSR);
+	swapAnimation = theEntityManager.CreateEntity();
+	ADD_COMPONENT(swapAnimation, ADSR);
 
-	ADD_COMPONENT(eSwapper, Sound);
+	ADD_COMPONENT(swapAnimation, Sound);
 	originI = originJ = -1;
     swapI = swapJ = 0;
 
-	setAnimSpeed();
+	ADSR(swapAnimation)->idleValue = 0;
+	ADSR(swapAnimation)->attackValue = 1.0;
+	ADSR(swapAnimation)->decayTiming = 0;
+	ADSR(swapAnimation)->sustainValue = 1.0;
 
 	rollback = theEntityManager.CreateEntity();
 	ADD_COMPONENT(rollback, Morphing);
@@ -73,8 +65,8 @@ void UserInputGameStateManager::Setup() {
 void UserInputGameStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	dragged = 0;
-	ADSR(eSwapper)->active = false;
-	ADSR(eSwapper)->activationTime = 0;
+	ADSR(swapAnimation)->active = false;
+	ADSR(swapAnimation)->activationTime = 0;
 	originI = originJ = -1;
 	dragged = 0;
 
@@ -241,7 +233,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 						MORPHING(rollback)->elements.push_back(new TypedMorphElement<Vector2>(
 							&TRANSFORM(swappedCell)->position, TRANSFORM(swappedCell)->position, posB));
 						MORPHING(rollback)->active = true;
-						SOUND(eSwapper)->sound = theSoundSystem.loadSoundFile("audio/son_descend.ogg");
+						SOUND(swapAnimation)->sound = theSoundSystem.loadSoundFile("audio/son_descend.ogg");
 					} else {
 						GRID(currentCell)->checkedH  = false;
 						GRID(currentCell)->checkedV = false;
@@ -272,13 +264,13 @@ void UserInputGameStateManager::BackgroundUpdate(float dt __attribute__((unused)
 		}
 	}
 
-	if (ADSR(eSwapper)->activationTime >= 0 && originI >= 0 && originJ >= 0) {
+	if (ADSR(swapAnimation)->activationTime >= 0 && originI >= 0 && originJ >= 0) {
 
 		Vector2 pos1 = Game::GridCoordsToPosition(originI, originJ, theGridSystem.GridSize);
 		Vector2 pos2 = Game::GridCoordsToPosition(originI + swapI, originJ + swapJ, theGridSystem.GridSize);
 
-		Vector2 interp1 = MathUtil::Lerp(pos1, pos2, ADSR(eSwapper)->value);
-		Vector2 interp2 = MathUtil::Lerp(pos2, pos1, ADSR(eSwapper)->value);
+		Vector2 interp1 = MathUtil::Lerp(pos1, pos2, ADSR(swapAnimation)->value);
+		Vector2 interp2 = MathUtil::Lerp(pos2, pos1, ADSR(swapAnimation)->value);
 
 		Entity e1 = theGridSystem.GetOnPos(originI,originJ);
 		Entity e2 = theGridSystem.GetOnPos(originI + swapI,originJ + swapJ);

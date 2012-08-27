@@ -43,24 +43,6 @@ SpawnGameStateManager::SpawnGameStateManager(SuccessManager* smgr){
 	successMgr = smgr;
 }
 
-void SpawnGameStateManager::setAnimSpeed() {
-	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
-
-	ADSR(haveToAddLeavesInGrid)->idleValue = 0;
-	ADSR(haveToAddLeavesInGrid)->attackValue = 1.0;
-	ADSR(haveToAddLeavesInGrid)->attackTiming = difficulty*0.2;
-	ADSR(haveToAddLeavesInGrid)->decayTiming = 0;
-	ADSR(haveToAddLeavesInGrid)->sustainValue = 1.0;
-	ADSR(haveToAddLeavesInGrid)->releaseTiming = 0;
-
-	ADSR(replaceGrid)->idleValue = 0;
-	ADSR(replaceGrid)->attackValue = 1.0;
-	ADSR(replaceGrid)->attackTiming = difficulty*0.5;
-	ADSR(replaceGrid)->decayTiming = 0;
-	ADSR(replaceGrid)->sustainValue = 1.0;
-	ADSR(replaceGrid)->releaseTiming = 0;
-}
-
 void SpawnGameStateManager::Setup() {
 	haveToAddLeavesInGrid = theEntityManager.CreateEntity();
 	ADD_COMPONENT(haveToAddLeavesInGrid, ADSR);
@@ -68,7 +50,17 @@ void SpawnGameStateManager::Setup() {
 	replaceGrid = theEntityManager.CreateEntity();
 	ADD_COMPONENT(replaceGrid, ADSR);
 
-	setAnimSpeed();
+	ADSR(haveToAddLeavesInGrid)->idleValue = 0;
+	ADSR(haveToAddLeavesInGrid)->attackValue = 1.0;
+	ADSR(haveToAddLeavesInGrid)->decayTiming = 0;
+	ADSR(haveToAddLeavesInGrid)->sustainValue = 1.0;
+	ADSR(haveToAddLeavesInGrid)->releaseTiming = 0;
+
+	ADSR(replaceGrid)->idleValue = 0;
+	ADSR(replaceGrid)->attackValue = 1.0;
+	ADSR(replaceGrid)->decayTiming = 0;
+	ADSR(replaceGrid)->sustainValue = 1.0;
+	ADSR(replaceGrid)->releaseTiming = 0;
 }
 
 //oldState = ModeMenu or LevelChanged or Delete

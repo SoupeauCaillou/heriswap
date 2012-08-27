@@ -29,27 +29,20 @@
 #include "CombinationMark.h"
 
 FallGameStateManager::FallGameStateManager() {
-
-}
-
-void FallGameStateManager::setAnimSpeed() {
-	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
-
-	ADSR(eFall)->idleValue = 0;
-	ADSR(eFall)->attackValue = 1.0;
-	ADSR(eFall)->attackTiming = difficulty*.15;
-	ADSR(eFall)->decayTiming = 0;
-	ADSR(eFall)->sustainValue = 1.0;
-	ADSR(eFall)->releaseTiming = 0;
-	ADSR(eFall)->attackMode = Quadratic;
-	ADSR(eFall)->decayMode = Quadratic;
-	ADSR(eFall)->releaseMode = Quadratic;
 }
 
 void FallGameStateManager::Setup() {
-	eFall = theEntityManager.CreateEntity();
-	ADD_COMPONENT(eFall, ADSR);
-	setAnimSpeed();
+	fallAnimation = theEntityManager.CreateEntity();
+	ADD_COMPONENT(fallAnimation, ADSR);
+
+	ADSR(fallAnimation)->idleValue = 0;
+	ADSR(fallAnimation)->attackValue = 1.0;
+	ADSR(fallAnimation)->decayTiming = 0;
+	ADSR(fallAnimation)->sustainValue = 1.0;
+	ADSR(fallAnimation)->releaseTiming = 0;
+	ADSR(fallAnimation)->attackMode = Quadratic;
+	ADSR(fallAnimation)->decayMode = Quadratic;
+	ADSR(fallAnimation)->releaseMode = Quadratic;
 }
 
 void FallGameStateManager::Enter() {
@@ -87,7 +80,7 @@ void FallGameStateManager::Enter() {
 }
 
 GameState FallGameStateManager::Update(float dt) {
-	ADSRComponent* transition = ADSR(eFall);
+	ADSRComponent* transition = ADSR(fallAnimation);
 	if (!falling.empty()) {
 		transition->active = true;
 		for(std::vector<CellFall>::iterator it=falling.begin(); it!=falling.end(); ++it) {
@@ -115,7 +108,7 @@ GameState FallGameStateManager::Update(float dt) {
 
 void FallGameStateManager::Exit() {
 	falling.clear();
-	ADSR(eFall)->active = false;
+	ADSR(fallAnimation)->active = false;
 
 	LOGI("%s", __PRETTY_FUNCTION__);
 }

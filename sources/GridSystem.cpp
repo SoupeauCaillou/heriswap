@@ -35,6 +35,16 @@ GridSystem::GridSystem() : ComponentSystemImpl<GridComponent>("Grid") {
 	nbmin=3;
 }
 
+int GridSystem::difficulty() {
+	if (GridSize == 5)
+		return 0;
+	else if (GridSize == 7)
+		return 1;
+	else if (GridSize == 8)
+		return 2;
+	return -1;
+}
+
 void GridSystem::print() {
 	for(int j=GridSize-1; j>=0; j--) {
 		for(int i=0; i<GridSize; i++) {

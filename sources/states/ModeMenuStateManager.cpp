@@ -238,7 +238,7 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 	std::vector<StorageAPI::Score> entries = storage->savedScores(mode, dif);
 
 	/* treatment*/
-	bool alreadyGreen = false;
+	bool alreadyRed = false;
 	for (unsigned int i=0; i<5; i++) {
 		TextRenderingComponent* trcN = TEXT_RENDERING(scoresName[i]);
 		TextRenderingComponent* trcP = TEXT_RENDERING(scoresPoints[i]);
@@ -264,14 +264,14 @@ void ModeMenuStateManager::LoadScore(int mode, int dif) {
 			if (mode==Normal) {
 				trcL->hide = false;
 			}
-			if (!alreadyGreen && gameOverState == AskingPlayerName &&
+			if (!alreadyRed && gameOverState == AskingPlayerName &&
 			 ((mode==Normal && (unsigned int)entries[i].points == modeMgr->points)
 			  || (mode==TilesAttack && MathUtil::Abs(entries[i].time-modeMgr->time)<0.01f))
 			   && entries[i].name == playerName) {
 				trcN->color = Color(1.0f,0.f,0.f);
 				trcP->color = Color(1.0f,0.f,0.f);
 				trcL->color = Color(1.0f,0.f,0.f);
-				alreadyGreen = true;
+				alreadyRed = true;
 			} else {
 				trcN->color = trcP->color = trcL->color = Color(3.0/255.0, 99.0/255, 71.0/255);
 			}
@@ -292,7 +292,7 @@ void ModeMenuStateManager::Enter() {
 	BUTTON(back)->enabled = true;
 	BUTTON(playContainer)->enabled = true;
 
-    difficulty = (theGridSystem.GridSize == 8) ? 1 : 0;
+    difficulty = theGridSystem.difficulty();
 
 	LoadScore(modeMgr->GetMode(), difficulty);
 
@@ -308,10 +308,12 @@ void ModeMenuStateManager::Enter() {
 	TEXT_RENDERING(eDifficulty)->hide=false;
 	BUTTON(bDifficulty)->enabled = true;
 
-    if (difficulty==0)
+    if (difficulty == 0)
         TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
+    else if (difficulty == 1)
+        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Medium") + " }";
     else
-        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Hard") + " }";
+        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
@@ -417,12 +419,15 @@ GameState ModeMenuStateManager::Update(float dt) {
 		if (BUTTON(bDifficulty)->clicked) {
 			SOUND(bDifficulty)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 			difficulty++;
-			if (difficulty==2) difficulty=0;
+			if (difficulty == 3)
+				difficulty = 0;
 			LoadScore(modeMgr->GetMode(), difficulty);
-			if (difficulty==0)
+			if (difficulty == 0)
 				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
+			else if (difficulty == 1)
+				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Medium") + " }";
 			else
-				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Hard") + " }";
+				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
 
 			TEXT_RENDERING(playText)->text = localizeAPI->text("jouer", "Play");
 		}
@@ -475,6 +480,10 @@ void ModeMenuStateManager::Exit() {
 			theGridSystem.Types = 5;
 			break;
 		case 1:
+			theGridSystem.GridSize = 7;
+			theGridSystem.Types = 7;
+			break;
+		case 2:
 			theGridSystem.GridSize = 8;
 			theGridSystem.Types = 8;
 			break;

@@ -33,23 +33,16 @@ DeleteGameStateManager::DeleteGameStateManager(SuccessManager* sMgr) : successMg
 	modeMgr=0;
 }
 
-void DeleteGameStateManager::setAnimSpeed() {
-	int difficulty = (theGridSystem.GridSize!=8)+1; //1 : normal, 2 : easy
-
-	ADSR(eRemove)->idleValue = 0;
-	ADSR(eRemove)->attackValue = 1.0;
-	ADSR(eRemove)->attackTiming = difficulty*0.3;
-	ADSR(eRemove)->decayTiming = 0.;
-	ADSR(eRemove)->sustainValue = 1.0;
-	ADSR(eRemove)->releaseTiming = 0;
-}
-
 void DeleteGameStateManager::Setup() {
-	eRemove = theEntityManager.CreateEntity();
-	ADD_COMPONENT(eRemove, ADSR);
-	ADD_COMPONENT(eRemove, Sound);
+	deleteAnimation = theEntityManager.CreateEntity();
+	ADD_COMPONENT(deleteAnimation, ADSR);
+	ADD_COMPONENT(deleteAnimation, Sound);
 
-	setAnimSpeed();
+	ADSR(deleteAnimation)->idleValue = 0;
+	ADSR(deleteAnimation)->attackValue = 1.0;
+	ADSR(deleteAnimation)->decayTiming = 0.;
+	ADSR(deleteAnimation)->sustainValue = 1.0;
+	ADSR(deleteAnimation)->releaseTiming = 0;
 }
 
 void DeleteGameStateManager::Enter() {
@@ -71,12 +64,12 @@ void DeleteGameStateManager::Enter() {
 
 			successMgr->s6InARow(it->points.size());
 	    }
-    	SOUND(eRemove)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg");
+    	SOUND(deleteAnimation)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg");
 	}
 }
 
 GameState DeleteGameStateManager::Update(float dt __attribute__((unused))) {
-	ADSRComponent* transitionSuppr = ADSR(eRemove);
+	ADSRComponent* transitionSuppr = ADSR(deleteAnimation);
 	if (!removing.empty()) {
 		transitionSuppr->active = true;
         Vector2 cellSize = Vector2(Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale() * (1 - transitionSuppr->value));
@@ -108,7 +101,7 @@ GameState DeleteGameStateManager::Update(float dt __attribute__((unused))) {
 }
 
 void DeleteGameStateManager::Exit() {
-	ADSR(eRemove)->active = false;
+	ADSR(deleteAnimation)->active = false;
 	removing.clear();
 	LOGI("%s", __PRETTY_FUNCTION__);
 }

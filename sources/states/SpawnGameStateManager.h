@@ -30,12 +30,11 @@ class SpawnGameStateManager : public GameStateManager {
 		GameState Update(float dt);
 		GameState NextState(bool recheckEveryone);
 		void Exit();
-		void setAnimSpeed();
 		void removeEntitiesInCombination();
 
+		Entity haveToAddLeavesInGrid, replaceGrid;
 	private:
 		// datas
-		Entity haveToAddLeavesInGrid, replaceGrid;
 		std::vector<Feuille> newLeaves;
 
 		SuccessManager* successMgr;

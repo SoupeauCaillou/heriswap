@@ -51,10 +51,12 @@ void TilesAttackGameModeManager::Enter() {
 	succNoGridReset=false;
 	pts.clear();
 	pts.push_back(Vector2(0,0));
-	if (theGridSystem.GridSize == 8)
-		limit = 100;
-	else
+	if (theGridSystem.difficulty() == 0)
 		limit = 30;
+	else if (theGridSystem.difficulty() == 1)
+		limit = 50;
+	else
+		limit = 100;
 	pts.push_back(Vector2(limit,1));//need limit leaves to end game
 
 	generateLeaves(0, 8);
@@ -102,7 +104,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	}
 
 	updateHerisson(dt, leavesDone, 0);
-	
+
 #ifdef DEBUG
 	if (_debug) {
 		for(int i=0; i<8; i++) {
