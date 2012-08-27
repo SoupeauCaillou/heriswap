@@ -9,6 +9,7 @@
 	<string name="jouer">Start</string>
 	<string name="rejouer">Restart</string>
 	<string name="diff_1">Easy</string>
+	<string name="diff_3">Medium</string>
 	<string name="diff_2">Hard</string>
 	<string name="lvl">lvl</string>
 	<string name="lvlcap">Lvl</string>

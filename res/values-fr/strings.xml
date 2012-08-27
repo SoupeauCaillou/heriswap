@@ -9,7 +9,8 @@
 	<string name="jouer">Jouer</string>
 	<string name="rejouer">Rejouer</string>
 	<string name="diff_1">Débutant</string>
-	<string name="diff_2">Confirmé</string>
+	<string name="diff_2">Moyen</string>
+	<string name="diff_3">Confirmé</string>
 	<string name="lvl">niv</string>
 	<string name="lvlcap">Niv</string>
 	<string name="enter_name">Saisir votre nom</string>
