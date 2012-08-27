@@ -257,10 +257,21 @@ static void updateAndRenderLoop() {
 
 #else
 static void updateAndRender() {
-	SDL_PumpEvents();
-	game->tick(DT);
-	theRenderingSystem.render();
-	//SDL_GL_SwapBuffers( );
+       static float prevTime = TimeUtil::getTime();
+       static float leftOver = 0;
+       float t = TimeUtil::getTime();
+       float dt = t - prevTime + leftOver;
+        SDL_PumpEvents();
+       game->tick(dt);
+       /*
+       while (dt > DT) {
+               game->tick(DT);
+               dt -= DT;
+       }*/
+       leftOver = 0;
+        theRenderingSystem.render();
+        //SDL_GL_SwapBuffers( );
+       prevTime = t;
 }
 
 #endif
@@ -268,12 +279,16 @@ static void updateAndRender() {
 extern bool __log_enabled;
 int main(int argc, char** argv) {
 	Vector2 reso16_9(394, 700);
+#ifdef EMSCRIPTEN
+	Vector2 reso16_10(300, 480);
+#else
 	Vector2 reso16_10(430, 700);
+#endif
 	Vector2* reso = &reso16_10;
 	
 #ifdef EMSCRIPTEN
 	__log_enabled = true;
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
 		return 1;
 	}
 	
