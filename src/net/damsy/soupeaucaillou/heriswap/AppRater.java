@@ -30,7 +30,7 @@ public class AppRater {
 		try {
 			if (cursor.getCount() > 0) {
 				cursor.moveToFirst();
-				pleaseShow = (cursor.getInt(0) >= 1);
+				pleaseShow = (cursor.getInt(0) >= 10);
 			}
 		} catch (Exception exc) {
 
@@ -80,6 +80,7 @@ public class AppRater {
         b2.setText("Remind me later");
         b2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+            	editor.putLong("launch_count", 0);
                 dialog.dismiss();
             }
         });
