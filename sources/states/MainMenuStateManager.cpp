@@ -77,6 +77,9 @@ void MainMenuGameStateManager::Setup() {
 		ADD_COMPONENT(bStart[i], Sound);
 		ADD_COMPONENT(bStart[i], Button);
 		BUTTON(bStart[i])->enabled = false;
+		
+		TEXT_RENDERING(eStart[i])->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
+		TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9;
 	}
 
 	menubg = theEntityManager.CreateEntity();
