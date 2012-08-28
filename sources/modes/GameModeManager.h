@@ -27,7 +27,8 @@
 
 enum GameMode {
 	Normal = 1,
-	TilesAttack
+	TilesAttack,
+	RandomNameToBeChanged
 };
 
 class GameModeManager {
