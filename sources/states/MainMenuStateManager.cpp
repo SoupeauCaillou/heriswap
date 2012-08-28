@@ -61,7 +61,7 @@ void MainMenuGameStateManager::Setup() {
 		TRANSFORM(eStart[i])->position.X = PlacementHelper::GimpXToScreen(75);
 		TRANSFORM(eStart[i])->position.Y = TRANSFORM(bStart[i])->position.Y = PlacementHelper::GimpYToScreen(156+i*183);
 	}
-	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Score race");
+	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Score race is a very long text we'll try to fit in a box");
 	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2", "Time attack");
 	TEXT_RENDERING(eStart[2])->text = localizeAPI->text("mode_3", "RandomNameToBeChanged");
 
@@ -77,10 +77,17 @@ void MainMenuGameStateManager::Setup() {
 		ADD_COMPONENT(bStart[i], Sound);
 		ADD_COMPONENT(bStart[i], Button);
 		BUTTON(bStart[i])->enabled = false;
-		
-		TEXT_RENDERING(eStart[i])->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
-		TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9;
 	}
+	
+	//// TEMP TEST CODE
+	TEXT_RENDERING(eStart[0])->flags |= TextRenderingComponent::MultiLineBit;
+	TRANSFORM(eStart[0])->position.X = 0;
+	TRANSFORM(eStart[0])->size = TRANSFORM(bStart[0])->size;
+	TRANSFORM(eStart[0])->size.Y *= 4;
+	
+	TEXT_RENDERING(eStart[2])->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
+	TRANSFORM(eStart[2])->size = TRANSFORM(bStart[2])->size * 0.9;
+	////
 
 	menubg = theEntityManager.CreateEntity();
 	ADD_COMPONENT(menubg, Transformation);
