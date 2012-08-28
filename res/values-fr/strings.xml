@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="languages">fr</string>
 	<string name="reprendre">Reprendre</string>
 	<string name="aide">Aide</string>
 	<string name="abandonner">Abandonner</string>
 	<string name="mode_1">Course au score</string>
-	<string name="mode_2">Contre la montre</string>
+	<string name="mode_2">Course à la montre</string>
 	<string name="score">Meilleurs scores :</string>
 	<string name="jouer">Jouer</string>
 	<string name="rejouer">Rejouer</string>
@@ -13,7 +14,7 @@
 	<string name="diff_3">Confirmé</string>
 	<string name="lvl">niv</string>
 	<string name="lvlcap">Niv</string>
-	<string name="enter_name">Saisir votre nom</string>
+	<string name="enter_name">Saisissez votre nom</string>
 	<string name="save_name">Enregistrer</string>
 	<string name="congrats">Nouveau meilleur score !</string>
 	<string name="reuse_name">Ou un de la liste :</string>

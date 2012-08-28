@@ -56,13 +56,13 @@ void RateItStateManager::Setup() {
 		ADD_COMPONENT(boutonContainer[i], Button);
 		BUTTON(boutonContainer[i])->enabled = false;
 	}
-	TEXT_RENDERING(boutonText[0])->text = localizeAPI->text("mode_1", "Rate it");
+	TEXT_RENDERING(boutonText[0])->text = localizeAPI->text("rate_now", "Rate it");
 	TRANSFORM(boutonText[0])->position.X = PlacementHelper::GimpXToScreen(75);
 	TRANSFORM(boutonText[0])->position.Y = TRANSFORM(boutonContainer[0])->position.Y = PlacementHelper::GimpYToScreen(156);
-	TEXT_RENDERING(boutonText[1])->text = localizeAPI->text("mode_2", "Later");
+	TEXT_RENDERING(boutonText[1])->text = localizeAPI->text("rate_later", "Later");
 	TRANSFORM(boutonText[1])->position.X = PlacementHelper::GimpXToScreen(75);
 	TRANSFORM(boutonText[1])->position.Y = TRANSFORM(boutonContainer[1])->position.Y = PlacementHelper::GimpYToScreen(156+183);
-	TEXT_RENDERING(boutonText[2])->text = localizeAPI->text("mode_2", "No thanks");
+	TEXT_RENDERING(boutonText[2])->text = localizeAPI->text("rate_never", "No thanks");
 	TRANSFORM(boutonText[2])->position.X = PlacementHelper::GimpXToScreen(75);
 	TRANSFORM(boutonText[2])->position.Y = TRANSFORM(boutonContainer[2])->position.Y = PlacementHelper::GimpYToScreen(156+2*183);
 }
@@ -85,14 +85,17 @@ GameState RateItStateManager::Update(float dt) {
 	//want to rate
 	if (BUTTON(boutonContainer[0])->clicked) {
 		SOUND(boutonContainer[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
+		communicationAPI->rateItNow();
 		return ModeMenu;
 	//will rate later
 	} else if(BUTTON(boutonContainer[1])->clicked){
 		SOUND(boutonContainer[1])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
+		communicationAPI->rateItLater();
 		return ModeMenu;
 	//won't never rate
 	} else if(BUTTON(boutonContainer[2])->clicked){
 		SOUND(boutonContainer[2])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
+		communicationAPI->rateItNever();
 		return ModeMenu;
 	}
 	return RateIt;

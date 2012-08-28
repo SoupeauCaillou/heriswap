@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="languages">it</string>
 	<string name="reprendre">Riprendi</string>
 	<string name="aide">Aiuto</string>
-	<string name="abandonner">Aiuto</string>
+	<string name="abandonner">aaaa</string>
 	<string name="mode_1">Corsa al punteggio</string>
 	<string name="mode_2">Contro il tempo</string>
 	<string name="score">Punteggi migliori :</string>

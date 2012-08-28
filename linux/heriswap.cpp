@@ -110,14 +110,14 @@ class MouseNativeTouchState: public NativeTouchState {
 			        }
 			        break;
 			      }
-			      case SDL_KEYDOWN: {	
+			      case SDL_KEYDOWN: {
 			      	if (globalFTW == 0)
 						break;
 
 					if (!TEXT_RENDERING(globalFTW)->hide) {
 						char c;
 						switch (event.key.keysym.sym) {
-							case SDLK_BACKSPACE: 
+							case SDLK_BACKSPACE:
 								if (!TEXT_RENDERING(nameInput->nameEdit)->hide) {
 									std::string& text = TEXT_RENDERING(nameInput->nameEdit)->text;
 									if (text.length() > 0) {
@@ -125,7 +125,7 @@ class MouseNativeTouchState: public NativeTouchState {
 									}
 								}
 								break;
-							case SDLK_RETURN: 
+							case SDLK_RETURN:
 								if (!TEXT_RENDERING(nameInput->nameEdit)->hide) {
 									nameInput->textIsReady = true;
 								}
@@ -133,7 +133,7 @@ class MouseNativeTouchState: public NativeTouchState {
 							default:
 								c = event.key.keysym.sym;
 						}
-						
+
 						if (isalnum(c) || c == ' ') {
 							if (TEXT_RENDERING(globalFTW)->text.length() > 10)
 								break;
@@ -285,13 +285,13 @@ int main(int argc, char** argv) {
 	Vector2 reso16_10(430, 700);
 #endif
 	Vector2* reso = &reso16_10;
-	
+
 #ifdef EMSCRIPTEN
 	__log_enabled = true;
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
 		return 1;
 	}
-	
+
 	SDL_Surface *ecran = SDL_SetVideoMode(reso->X, reso->Y, 16, SDL_OPENGL ); /* Double Buffering */
 #else
 	if (!glfwInit())
@@ -333,7 +333,7 @@ int main(int argc, char** argv) {
 	game = new Game(new AssetAPILinuxImpl(), storage, nameInput, new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl(), new CommunicationAPILinuxImpl());
 
 	theRenderingSystem.opengles2 = true;
-	//theSoundSystem.init();
+	theSoundSystem.init();
 	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());
 	MusicAPILinuxOpenALImpl* openal = new MusicAPILinuxOpenALImpl();
     theMusicSystem.musicAPI = openal;

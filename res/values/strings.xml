@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="languages">en</string>
 	<string name="reprendre">Continue</string>
 	<string name="aide">Help</string>
 	<string name="abandonner">Quit</string>

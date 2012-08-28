@@ -31,8 +31,12 @@ struct CommunicationAPIAndroidImpl::CommunicationAPIAndroidImplDatas {
     jclass cls;
 
     jmethodID swarmInstalled;
+    jmethodID swarmRegistering;
     jmethodID shareFacebook;
     jmethodID shareTwitter;
+    jmethodID rateItNow;
+    jmethodID rateItLater;
+    jmethodID rateItNever;
 
     bool initialized;
 };
@@ -57,8 +61,12 @@ void CommunicationAPIAndroidImpl::init(JNIEnv* pEnv) {
 
     datas->cls = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib"));
     datas->swarmInstalled = jniMethodLookup(env, datas->cls, "swarmEnabled", "()Z");
+    datas->swarmRegistering = jniMethodLookup(env, datas->cls, "swarmRegistering", "()V");
     datas->shareFacebook = jniMethodLookup(env, datas->cls, "shareFacebook", "()V");
     datas->shareTwitter = jniMethodLookup(env, datas->cls, "shareTwitter", "()V");
+    datas->rateItNow = jniMethodLookup(env, datas->cls, "rateItNow", "()V");
+    datas->rateItLater = jniMethodLookup(env, datas->cls, "rateItLater", "()V");
+    datas->rateItNever = jniMethodLookup(env, datas->cls, "rateItNever", "()V");
 
     datas->initialized = true;
 }
@@ -71,25 +79,32 @@ void CommunicationAPIAndroidImpl::uninit() {
 }
 
 bool CommunicationAPIAndroidImpl::swarmInstalled() {
-	//return env->CallStaticBooleanMethod(datas->cls, datas->swarmInstalled);
-	return false;
+	return env->CallStaticBooleanMethod(datas->cls, datas->swarmInstalled);
 }
 
 void CommunicationAPIAndroidImpl::swarmRegistering() {
-	//env->CallStaticBooleanMethod(datas->cls, datas->swarmRegistering);
+	env->CallStaticBooleanMethod(datas->cls, datas->swarmRegistering);
 }
 
 void CommunicationAPIAndroidImpl::shareFacebook() {
-	//env->CallStaticBooleanMethod(datas->cls, datas->shareFacebook);
 	LOGI("share facebook !");
+	env->CallStaticBooleanMethod(datas->cls, datas->shareFacebook);
 }
 
 void CommunicationAPIAndroidImpl::shareTwitter() {
-	//env->CallStaticBooleanMethod(datas->cls, datas->shareTwitter);
 	LOGI("share twitter !");
+	env->CallStaticBooleanMethod(datas->cls, datas->shareTwitter);
 }
 
 
-void CommunicationAPIAndroidImpl::rateItNow(){}
-void CommunicationAPIAndroidImpl::rateItLater(){}
-void CommunicationAPIAndroidImpl::rateItNever(){}
+void CommunicationAPIAndroidImpl::rateItNow(){
+	env->CallStaticBooleanMethod(datas->cls, datas->rateItNow);
+}
+
+void CommunicationAPIAndroidImpl::rateItLater(){
+	env->CallStaticBooleanMethod(datas->cls, datas->rateItLater);
+}
+
+void CommunicationAPIAndroidImpl::rateItNever(){
+	env->CallStaticBooleanMethod(datas->cls, datas->rateItNever);
+}
