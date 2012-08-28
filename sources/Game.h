@@ -41,7 +41,7 @@ class SuccessAPI {
 			LOGI("Success completed '%s': %lu", description, successId);
 		}
         virtual void openLeaderboard(int mode, int diff) {
-	        mode=mode; diff=diff;
+			LOGI("Openleaderboard mode=%d, diff=%d", mode, diff);
         }
         virtual void openDashboard() {}
 };
