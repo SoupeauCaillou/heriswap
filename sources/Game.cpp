@@ -52,6 +52,7 @@
 
 #include "modes/NormalModeManager.h"
 #include "modes/TilesAttackModeManager.h"
+#include "modes/RandomNameToBeChangedModeManager.h"
 
 #include "DepthLayer.h"
 #include "GridSystem.h"
@@ -361,9 +362,9 @@ void Game::tick(float dt) {
     if (datas->state != CountDown && static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame == false) {
 		//updating game if playing
 		if (datas->mode == Normal && newState == UserInput) {
-			datas->mode2Manager[Normal]->GameUpdate(dt);
-	    } else if (datas->mode == TilesAttack && inGameState(datas->state)) {
-			datas->mode2Manager[TilesAttack]->GameUpdate(dt);
+			datas->mode2Manager[datas->mode]->GameUpdate(dt);
+	    } else if (datas->mode != Normal && inGameState(datas->state)) {
+			datas->mode2Manager[datas->mode]->GameUpdate(dt);
 		}
 	}
 
@@ -399,6 +400,11 @@ void Game::tick(float dt) {
 				newState = LevelChanged;
 			}
 		// si on a fini (contre la montre), on remplit pas la grille et on quitte direct
+		} else if (datas->mode == RandomNameToBeChanged) {
+			RandomNameToBeChangedGameModeManager* m = static_cast<RandomNameToBeChangedGameModeManager*> (datas->mode2Manager[RandomNameToBeChanged]);
+			if (m->GameProgressPercent() == 1) {
+				newState = GameToBlack;
+			}
 		} else {
 			TilesAttackGameModeManager* m = static_cast<TilesAttackGameModeManager*> (datas->mode2Manager[TilesAttack]);
 			if (m->GameProgressPercent() == 1) {

@@ -27,6 +27,7 @@
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
 #include "modes/TilesAttackModeManager.h"
+#include "modes/RandomNameToBeChangedModeManager.h"
 
 #include "states/StateManager.h"
 #include "states/CountDownStateManager.h"
@@ -51,8 +52,9 @@
 
 PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad, CommunicationAPI* comAPI) {
      mode = Normal;
-     mode2Manager[Normal] = new NormalGameModeManager(game,successMgr);
-     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game,successMgr);
+     mode2Manager[Normal] = new NormalGameModeManager(game, successMgr);
+     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game, successMgr);
+     mode2Manager[RandomNameToBeChanged] = new RandomNameToBeChangedGameModeManager(game, successMgr);
      storage = storagee;
 
      soundButton = theEntityManager.CreateEntity();

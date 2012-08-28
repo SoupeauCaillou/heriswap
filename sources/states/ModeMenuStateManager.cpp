@@ -247,7 +247,7 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 			trcP->hide = false;
 			std::stringstream a;
 			a.precision(1);
-			if (mode==Normal) {
+			if (mode==Normal || mode==RandomNameToBeChanged) {
 				a << std::fixed << entries[i].points;
 				trcP->isANumber = true;
 			} else {
@@ -263,9 +263,11 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 			if (mode==Normal) {
 				trcL->hide = false;
 			}
+			//highlight the just-played score if it is in the top 5
 			if (!alreadyRed && gameOverState == AskingPlayerName &&
 			 ((mode==Normal && (unsigned int)entries[i].points == modeMgr->points)
-			  || (mode==TilesAttack && MathUtil::Abs(entries[i].time-modeMgr->time)<0.01f))
+			  || (mode==TilesAttack && MathUtil::Abs(entries[i].time-modeMgr->time)<0.01f)
+			  || (mode==RandomNameToBeChanged && (unsigned int)entries[i].points == modeMgr->points))
 			   && entries[i].name == playerName) {
 				trcN->color = Color(1.0f,0.f,0.f);
 				trcP->color = Color(1.0f,0.f,0.f);
@@ -337,7 +339,7 @@ bool ModeMenuStateManager::isCurrentScoreAHighOne() {
     if (s < 5)
         return true;
 
-    if (modeMgr->GetMode() == Normal) {
+    if (modeMgr->GetMode() == Normal || modeMgr->GetMode() == RandomNameToBeChanged) {
         return modeMgr->points > (unsigned int)entries[s - 1].points;
     } else {
         return modeMgr->time < entries[s - 1].time;
@@ -376,7 +378,9 @@ GameState ModeMenuStateManager::Update(float dt) {
             a.precision(1);
             if (modeMgr->GetMode()==Normal) {
                 a << modeMgr->points << " : "<< localizeAPI->text("lvl", "lvl") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
-            } else {
+            } else if (modeMgr->GetMode()==RandomNameToBeChanged) {
+                a << modeMgr->points;
+			} else {
                 a << std::fixed << ((int)(modeMgr->time*10))/10.f << " s";
             }
             TEXT_RENDERING(yourScore)->text = a.str();
@@ -387,18 +391,12 @@ GameState ModeMenuStateManager::Update(float dt) {
             if (nameInputAPI->done(playerName)) {
                 if (modeMgr->GetMode()==Normal)
 					successMgr->sBTAC(storageAPI, difficulty, modeMgr->points);
-				else
+				else if (modeMgr->GetMode()==TilesAttack)
 					successMgr->sBTAM(storageAPI, difficulty, modeMgr->time);
                 nameInputAPI->hide();
                 submitScore(playerName);
                 LoadScore(modeMgr->GetMode(), difficulty);
                 gameOverState = NoGame;
-                if (MathUtil::RandomInt(3) == 0) {
-					TRANSFORM(herisson->actor.e)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herisson->actor.e)->size.X;
-					TEXT_RENDERING(title)->hide = true;
-					this->LateExit();
-					return RateIt;
-				}
             }
             break;
         }

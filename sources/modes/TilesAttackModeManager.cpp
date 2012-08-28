@@ -54,9 +54,9 @@ void TilesAttackGameModeManager::Enter() {
 	if (theGridSystem.sizeToDifficulty() == DifficultyEasy)
 		limit = 30;
 	else if (theGridSystem.sizeToDifficulty() == DifficultyMedium)
-		limit = 50;
-	else
 		limit = 100;
+	else
+		limit = 1000;
 	pts.push_back(Vector2(limit,1));//need limit leaves to end game
 
 	generateLeaves(0, 8);

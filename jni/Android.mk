@@ -33,22 +33,23 @@ LOCAL_SRC_FILES := \
 	../sources/states/AdsStateManager.cpp \
 	../sources/states/BackgroundManager.cpp \
 	../sources/states/CountDownStateManager.cpp \
-	../sources/states/DeleteGameStateManager.cpp \
+	../sources/states/DeleteStateManager.cpp \
 	../sources/states/FadeStateManager.cpp	\
-	../sources/states/FallGameStateManager.cpp \
+	../sources/states/FallStateManager.cpp \
 	../sources/states/HelpStateManager.cpp \
 	../sources/states/LevelStateManager.cpp \
 	../sources/states/LogoStateManager.cpp \
-	../sources/states/MainMenuGameStateManager.cpp \
+	../sources/states/MainMenuStateManager.cpp \
 	../sources/states/ModeMenuStateManager.cpp \
 	../sources/states/PauseStateManager.cpp \
 	../sources/states/RateItStateManager.cpp \
-	../sources/states/SpawnGameStateManager.cpp \
-	../sources/states/UserInputGameStateManager.cpp \
+	../sources/states/SpawnStateManager.cpp \
+	../sources/states/UserInputStateManager.cpp \
 	../sources/modes/GameModeManager.cpp \
-	../sources/modes/TilesAttackModeManager.cpp \
-	../sources/modes/InGameUiHelper.cpp \
 	../sources/modes/NormalModeManager.cpp \
+	../sources/modes/TilesAttackModeManager.cpp \
+	../sources/modes/RandomNameToBeChangedModeManager.cpp \
+	../sources/modes/InGameUiHelper.cpp \
     ../sources/api/android/StorageAPIAndroidImpl.cpp \
     ../sources/api/android/CommunicationAPIAndroidImpl.cpp
 

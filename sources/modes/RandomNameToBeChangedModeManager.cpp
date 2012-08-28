@@ -45,18 +45,13 @@ void RandomNameToBeChangedGameModeManager::Setup() {
 
 void RandomNameToBeChangedGameModeManager::Enter() {
 	time = 0;
+	limit = 300;
 	leavesDone = 0;
 	points = 0;
 	bonus = MathUtil::RandomInt(theGridSystem.Types);
-	succNoGridReset=false;
 	pts.clear();
 	pts.push_back(Vector2(0,0));
-	if (theGridSystem.sizeToDifficulty() == DifficultyEasy)
-		limit = 30;
-	else if (theGridSystem.sizeToDifficulty() == DifficultyMedium)
-		limit = 50;
-	else
-		limit = 100;
+
 	pts.push_back(Vector2(limit,1));//need limit leaves to end game
 
 	generateLeaves(0, 8);
@@ -66,18 +61,15 @@ void RandomNameToBeChangedGameModeManager::Enter() {
 
 void RandomNameToBeChangedGameModeManager::Exit() {
 	//if we didn't give up
-	if (leavesDone >= limit) {
-		successMgr->sFastAndFinish(time);
-		successMgr->sResetGrid();
-	}
 	GameModeManager::Exit();
 }
 
 void RandomNameToBeChangedGameModeManager::GameUpdate(float dt) {
 	time+=dt;
 }
+
 float RandomNameToBeChangedGameModeManager::GameProgressPercent() {
-	return MathUtil::Min(1.0f*leavesDone/limit, 1.0f);;
+	return MathUtil::Min(1.0f, (float)time/limit);
 }
 
 void RandomNameToBeChangedGameModeManager::UiUpdate(float dt) {
@@ -85,25 +77,11 @@ void RandomNameToBeChangedGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	if (leavesDone>limit)
-		a << std::fixed << (unsigned)0;
-	else
-		a << std::fixed << limit - leavesDone;
-
-	TEXT_RENDERING(uiHelper.smallLevel)->text = a.str();
-	}
-	//Temps
-	{
-	std::stringstream a;
-	int minute = ((int)time)/60;
-	int seconde= ((int)time)%60;
-	int tenthsec = (time - minute * 60 - seconde) * 10;
-	if (minute) a << minute << ':';
-	a << std::setw(2) << std::setfill('0') << seconde << '.' << std::setw(1) << tenthsec << " s";
+	a << std::fixed << points;
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
 
-	updateHerisson(dt, leavesDone, 0);
+	updateHerisson(dt, time, 0);
 
 #ifdef DEBUG
 	if (_debug) {
@@ -156,9 +134,6 @@ void RandomNameToBeChangedGameModeManager::ScoreCalc(int nb, unsigned int type) 
 		deleteLeaves(~0b0, levelToLeaveToDelete(6*8, limit, nb, leavesDone));
 		leavesDone+=nb;
 	}
-	successMgr->sRainbow(type);
-
-	successMgr->sBonusToExcess(type, bonus, nb);
 }
 
 void RandomNameToBeChangedGameModeManager::TogglePauseDisplay(bool paused) {
