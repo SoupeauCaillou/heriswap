@@ -28,6 +28,8 @@ import java.util.Queue;
 import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command;
 import net.damsy.soupeaucaillou.heriswap.HeriswapJNILib.DumbAndroid.Command.Type;
 import android.content.ContentValues;
+import android.content.Intent;
+import android.content.SharedPreferences;
 //import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
@@ -36,6 +38,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.net.Uri;
 //import android.util.Log;
 import android.util.Log;
 import android.view.View;
@@ -538,6 +541,50 @@ public class HeriswapJNILib {
 		share.putExtra(Intent.EXTRA_TEXT, message);
 
 		startActivity(Intent.createChooser(share, "Title of the dialog the system will open"));*/
+	}
+	
+	static public boolean mustShowRateDialog() {
+		SharedPreferences prefs = HeriswapActivity.activity.getSharedPreferences("apprater", 0);
+		if (prefs.getBoolean("dontshowagain", false))
+			return false;
+		if (prefs.getLong("launch_count", 0) < 10)
+			return false;
+		
+		SQLiteDatabase db = HeriswapActivity.scoreOpenHelper
+				.getReadableDatabase();
+		Cursor cursor = db.rawQuery("select count (*) from score", null);
+		try {
+			if (cursor.getCount() > 0) {
+				cursor.moveToFirst();
+				if (cursor.getInt(0) >= 10)
+					return true;
+			}
+		} catch (Exception exc) {
+
+		} finally {
+			cursor.close();
+		}
+		return false;
+	}
+	
+	private final static String APP_PNAME = "net.damsy.soupeaucaillou.heriswap";
+	static public void rateItNow() {
+		HeriswapActivity.activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
+		rateItNever();
+	}
+	
+	static public void rateItLater() {
+		SharedPreferences prefs = HeriswapActivity.activity.getSharedPreferences("apprater", 0);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putLong("launch_count", 0);
+		editor.commit();
+	}
+
+	static public void rateItNever() {
+		SharedPreferences prefs = HeriswapActivity.activity.getSharedPreferences("apprater", 0);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putBoolean("dontshowagain", true);
+		editor.commit();
 	}
 
 	// -------------------------------------------------------------------------

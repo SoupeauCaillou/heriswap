@@ -201,6 +201,12 @@ static public final String Tag = "HeriswapJ";
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+        
+        SharedPreferences prefs = HeriswapActivity.activity.getSharedPreferences("apprater", 0);
+        long newValue = prefs.getLong("launch_count", 0) + 1;
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong("launch_count", newValue);
+        editor.commit();
     }
 
     @Override
