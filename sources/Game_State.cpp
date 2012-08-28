@@ -116,6 +116,8 @@ void Game::stateChanged(GameState oldState, GameState newState) {
      } else if (newState == LevelChanged) {
         static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel =
         static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->getSmallLevelEntity();
+        static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel =
+			(static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]))->currentLevel();
         stopInGameMusics();
      //back button to main
      } else if( newState == MainMenu && oldState == ModeMenu) {
