@@ -19,7 +19,7 @@
 #pragma once
 
 #include "modes/GameModeManager.h"
-#include "states/GameStateManager.h"
+#include "StateManager.h"
 
 class LocalizeAPI;
 
@@ -34,7 +34,7 @@ class HelpStateManager : public GameStateManager {
 
 	GameState oldState;
 	GameMode mode;
-	
+
 	private:
 		LocalizeAPI* localize;
 		Entity background, bg2;
@@ -46,7 +46,7 @@ class HelpStateManager : public GameStateManager {
 		Entity difficulty[2];
 		Entity leaveLeft;
 		Entity bonus;
-		
+
 		enum State {
 			HowToPlay,
 			Objective

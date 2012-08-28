@@ -40,15 +40,15 @@
 #include "systems/ScrollingSystem.h"
 #include "systems/MorphingSystem.h"
 
-#include "states/GameStateManager.h"
+#include "states/StateManager.h"
 #include "states/BackgroundManager.h"
 #include "states/LevelStateManager.h"
 #include "states/ModeMenuStateManager.h"
 #include "states/PauseStateManager.h"
-#include "states/MainMenuGameStateManager.h"
+#include "states/MainMenuStateManager.h"
 #include "states/FadeStateManager.h"
 #include "states/CountDownStateManager.h"
-#include "states/UserInputGameStateManager.h"
+#include "states/UserInputStateManager.h"
 
 #include "modes/NormalModeManager.h"
 #include "modes/TilesAttackModeManager.h"
@@ -318,8 +318,8 @@ void Game::backPressed() {
         togglePause(true);
         #endif
     }
-}   
-    
+}
+
 void Game::togglePause(bool activate) {
 	if (activate && datas->state != Pause && pausableState(datas->state)) {
 		stopInGameMusics();
@@ -451,7 +451,7 @@ void Game::tick(float dt) {
         } else {
             RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
         }
-	} 
+	}
 	//if socialGamNet is clicked
 	if (BUTTON(datas->socialGamNet)->clicked){
 		if (datas->state == ModeMenu) {

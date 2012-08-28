@@ -23,7 +23,7 @@
 
 #include <base/Interval.h>
 
-#include "GameStateManager.h"
+#include "StateManager.h"
 
 class BackgroundManager : public GameStateManager {
 	public:

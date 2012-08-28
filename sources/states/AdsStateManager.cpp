@@ -30,7 +30,7 @@
 #include "systems/SoundSystem.h"
 
 #include "modes/GameModeManager.h"
-#include "states/GameStateManager.h"
+#include "StateManager.h"
 #include "base/TimeUtil.h"
 
 #include "DepthLayer.h"
@@ -57,14 +57,14 @@ void AdsStateManager::Enter() {
  	}
 
 	float timeSinceLAstAd = TimeUtil::getTime() - lastAdTime;
-	
+
 	// postpone ad if previous ad was shown less than 30sec ago
 	if (gameb4Ads <= 0 && timeSinceLAstAd < 30) {
 		gameb4Ads = 1;
 	}
 
 	if (gameb4Ads==0 || timeSinceLAstAd > 150) {
-		if (adAPI->showAd()) {	
+		if (adAPI->showAd()) {
 			BUTTON(eAds)->enabled = true;
 	        gameb4Ads = 0;
 	        lastAdTime = TimeUtil::getTime();

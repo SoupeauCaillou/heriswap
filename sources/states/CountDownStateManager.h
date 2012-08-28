@@ -19,7 +19,7 @@
 #pragma once
 
 #include "modes/GameModeManager.h"
-#include "states/GameStateManager.h"
+#include "states/StateManager.h"
 
 class CountDownStateManager : public GameStateManager {
 	public:

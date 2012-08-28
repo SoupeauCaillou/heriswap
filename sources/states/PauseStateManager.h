@@ -19,7 +19,7 @@
 #pragma once
 
 #include "states/HelpStateManager.h"
-#include "states/GameStateManager.h"
+#include "StateManager.h"
 
 #include "modes/GameModeManager.h"
 

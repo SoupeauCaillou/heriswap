@@ -20,7 +20,7 @@
 
 #include "api/CommunicationAPI.h"
 
-#include "states/GameStateManager.h"
+#include "StateManager.h"
 
 #include "Game.h"
 #include "AnimedActor.h"

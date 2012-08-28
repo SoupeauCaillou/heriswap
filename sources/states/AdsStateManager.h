@@ -19,7 +19,7 @@
 #pragma once
 
 #include "Game.h"
-#include "GameStateManager.h"
+#include "StateManager.h"
 #include "SuccessManager.h"
 
 class AdsStateManager : public GameStateManager {

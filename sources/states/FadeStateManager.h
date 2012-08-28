@@ -18,7 +18,7 @@
 */
 #pragma once
 
-#include "GameStateManager.h"
+#include "StateManager.h"
 
 enum FadeType {
 	FadeIn,

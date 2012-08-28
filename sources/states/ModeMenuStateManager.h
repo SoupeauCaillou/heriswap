@@ -21,7 +21,7 @@
 #include "api/NameInputAPI.h"
 #include "api/CommunicationAPI.h"
 #include "SuccessManager.h"
-#include "states/GameStateManager.h"
+#include "states/StateManager.h"
 #include "Game.h"
 #include "AnimedActor.h"
 #include "GridSystem.h"

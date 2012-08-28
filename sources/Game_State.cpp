@@ -25,12 +25,12 @@
 #include "systems/ADSRSystem.h"
 
 #include "states/ModeMenuStateManager.h"
-#include "states/MainMenuGameStateManager.h"
+#include "states/MainMenuStateManager.h"
 #include "states/LevelStateManager.h"
-#include "states/DeleteGameStateManager.h"
-#include "states/UserInputGameStateManager.h"
-#include "states/SpawnGameStateManager.h"
-#include "states/FallGameStateManager.h"
+#include "states/DeleteStateManager.h"
+#include "states/UserInputStateManager.h"
+#include "states/SpawnStateManager.h"
+#include "states/FallStateManager.h"
 #include "states/HelpStateManager.h"
 
 #include "modes/TilesAttackModeManager.h"

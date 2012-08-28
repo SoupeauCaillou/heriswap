@@ -20,7 +20,7 @@
 
 #include <vector>
 
-#include "GameStateManager.h"
+#include "StateManager.h"
 #include "modes/NormalModeManager.h"
 
 typedef struct FeuilleOrientee {

@@ -18,7 +18,7 @@
 */
 #pragma once
 
-#include "GameStateManager.h"
+#include "StateManager.h"
 
 class LogoStateManager : public GameStateManager {
 	public:
@@ -32,7 +32,7 @@ class LogoStateManager : public GameStateManager {
 		GameState following;
 		Entity logo, animLogo, logobg;
 		float duration;
-		
+
 		enum LogoStep {
 			LogoStep1,
 			LogoStep2,
