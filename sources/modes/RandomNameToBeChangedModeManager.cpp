@@ -125,15 +125,17 @@ int RandomNameToBeChangedGameModeManager::levelToLeaveToDelete(int leavesMaxSize
 }
 
 void RandomNameToBeChangedGameModeManager::ScoreCalc(int nb, unsigned int type) {
+	int p = (10 * nb * nb * nb) / 6;
 	if (type == bonus) {
-		points += 10*2*nb*nb*nb/6;
+		p *= 2;
 		deleteLeaves(~0b0, levelToLeaveToDelete(6*8, limit, 2*nb, leavesDone));
 		leavesDone+=2*nb;
 	} else {
-		points += 10*nb*nb*nb/6;
 		deleteLeaves(~0b0, levelToLeaveToDelete(6*8, limit, nb, leavesDone));
 		leavesDone+=nb;
 	}
+	p *= (theGridSystem.sizeToDifficulty() + 1);
+	points += p;
 }
 
 void RandomNameToBeChangedGameModeManager::TogglePauseDisplay(bool paused) {

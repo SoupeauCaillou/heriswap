@@ -32,14 +32,12 @@
     <None Include="sources\modes\GameModeManager.h" />
     <None Include="sources\modes\NormalModeManager.h" />
     <None Include="sources\states\BackgroundManager.h" />
-    <None Include="sources\states\DeleteGameStateManager.h" />
     <None Include="sources\states\FadeStateManager.h" />
     <None Include="sources\states\FallGameStateManager.h" />
     <None Include="sources\states\GameStateManager.h" />
     <None Include="sources\states\LevelStateManager.h" />
     <None Include="sources\states\PauseStateManager.h" />
     <None Include="sources\states\SpawnGameStateManager.h" />
-    <None Include="sources\states\UserInputGameStateManager.h" />
     <None Include="sources\DepthLayer.h" />
     <None Include="sources\Game.h" />
     <None Include="sources\GridSystem.h" />
@@ -79,17 +77,16 @@
     <None Include="sources\states\SpawnStateManager.h" />
     <None Include="sources\states\StateManager.h" />
     <None Include="sources\states\UserInputStateManager.h" />
+    <None Include="sources\modes\RandomNameToBeChangedModeManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
     <Compile Include="sources\states\BackgroundManager.cpp" />
-    <Compile Include="sources\states\DeleteGameStateManager.cpp" />
     <Compile Include="sources\states\FadeStateManager.cpp" />
     <Compile Include="sources\states\FallGameStateManager.cpp" />
     <Compile Include="sources\states\LevelStateManager.cpp" />
     <Compile Include="sources\states\PauseStateManager.cpp" />
     <Compile Include="sources\states\SpawnGameStateManager.cpp" />
-    <Compile Include="sources\states\UserInputGameStateManager.cpp" />
     <Compile Include="sources\Game.cpp" />
     <Compile Include="sources\GridSystem.cpp" />
     <Compile Include="tests\TestGridSystem.cpp" />
@@ -122,6 +119,7 @@
     <Compile Include="sources\states\RateItStateManager.cpp" />
     <Compile Include="sources\states\SpawnStateManager.cpp" />
     <Compile Include="sources\states\UserInputStateManager.cpp" />
+    <Compile Include="sources\modes\RandomNameToBeChangedModeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="sources\api\android\" />
