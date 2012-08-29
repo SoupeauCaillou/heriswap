@@ -30,15 +30,14 @@
 INSTANCE_IMPL(GridSystem);
 
 GridSystem::GridSystem() : ComponentSystemImpl<GridComponent>("Grid") {
-	GridSize=8;
-	Types=8;
-	nbmin=3;
+	GridSize = Types = 8;
+	nbmin = 3;
 }
 
 Difficulty GridSystem::sizeToDifficulty() {
 	if (GridSize == 5)
 		return DifficultyEasy;
-	else if (GridSize == 7)
+	else if (GridSize == 6)
 		return DifficultyMedium;
 	else
 		return DifficultyHard;
@@ -48,7 +47,7 @@ int GridSystem::difficultyToSize(Difficulty diff) {
 	if (diff == DifficultyEasy)
 		return 5;
 	else if (diff == DifficultyMedium)
-		return 7;
+		return 6;
 	else
 		return 8;
 }

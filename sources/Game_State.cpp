@@ -58,7 +58,7 @@ void Game::setupGameProp() {
 
 	//update anim times
 	Difficulty difficulty = theGridSystem.sizeToDifficulty();
-	if (difficulty == DifficultyEasy || difficulty == DifficultyMedium) {
+	if (difficulty == DifficultyEasy) {
 		ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.6;
 		ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.14;
 		ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.14;
