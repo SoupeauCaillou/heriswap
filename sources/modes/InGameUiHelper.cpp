@@ -48,7 +48,7 @@ void InGameUiHelper::build() {
 	TEXT_RENDERING(smallLevel)->fontName = "gdtypo";
 	TEXT_RENDERING(smallLevel)->charHeight = PlacementHelper::GimpHeightToScreen(232-150);
 	TEXT_RENDERING(smallLevel)->positioning = TextRenderingComponent::CENTER;
-	TEXT_RENDERING(smallLevel)->isANumber = true;
+	TEXT_RENDERING(smallLevel)->flags |= TextRenderingComponent::IsANumberBit;
 
 	pauseButton = theEntityManager.CreateEntity();
 	ADD_COMPONENT(pauseButton, Transformation);
@@ -71,7 +71,7 @@ void InGameUiHelper::build() {
 	TEXT_RENDERING(scoreProgress)->fontName = "typo";
 	TEXT_RENDERING(scoreProgress)->charHeight = PlacementHelper::GimpHeightToScreen(47);
 	TEXT_RENDERING(scoreProgress)->positioning = TextRenderingComponent::CENTER;
-	TEXT_RENDERING(scoreProgress)->isANumber = true;
+	TEXT_RENDERING(scoreProgress)->flags |= TextRenderingComponent::IsANumberBit;
 
 	built = true;
 }

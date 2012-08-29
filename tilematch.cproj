@@ -37,7 +37,6 @@
     <None Include="sources\states\FallGameStateManager.h" />
     <None Include="sources\states\GameStateManager.h" />
     <None Include="sources\states\LevelStateManager.h" />
-    <None Include="sources\states\MainMenuGameStateManager.h" />
     <None Include="sources\states\PauseStateManager.h" />
     <None Include="sources\states\SpawnGameStateManager.h" />
     <None Include="sources\states\UserInputGameStateManager.h" />
@@ -73,6 +72,13 @@
     <None Include="sources\api\android\CommunicationAPIAndroidImpl.h" />
     <None Include="sources\api\linux\CommunicationAPILinuxImpl.h" />
     <None Include="sources\api\CommunicationAPI.h" />
+    <None Include="sources\states\DeleteStateManager.h" />
+    <None Include="sources\states\FallStateManager.h" />
+    <None Include="sources\states\MainMenuStateManager.h" />
+    <None Include="sources\states\RateItStateManager.h" />
+    <None Include="sources\states\SpawnStateManager.h" />
+    <None Include="sources\states\StateManager.h" />
+    <None Include="sources\states\UserInputStateManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -81,7 +87,6 @@
     <Compile Include="sources\states\FadeStateManager.cpp" />
     <Compile Include="sources\states\FallGameStateManager.cpp" />
     <Compile Include="sources\states\LevelStateManager.cpp" />
-    <Compile Include="sources\states\MainMenuGameStateManager.cpp" />
     <Compile Include="sources\states\PauseStateManager.cpp" />
     <Compile Include="sources\states\SpawnGameStateManager.cpp" />
     <Compile Include="sources\states\UserInputGameStateManager.cpp" />
@@ -111,6 +116,12 @@
     <Compile Include="linux\heriswap.cpp" />
     <Compile Include="sources\AnimedActor.cpp" />
     <Compile Include="sources\api\android\CommunicationAPIAndroidImpl.cpp" />
+    <Compile Include="sources\states\DeleteStateManager.cpp" />
+    <Compile Include="sources\states\FallStateManager.cpp" />
+    <Compile Include="sources\states\MainMenuStateManager.cpp" />
+    <Compile Include="sources\states\RateItStateManager.cpp" />
+    <Compile Include="sources\states\SpawnStateManager.cpp" />
+    <Compile Include="sources\states\UserInputStateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="sources\api\android\" />

@@ -70,7 +70,7 @@ void ModeMenuStateManager::Setup() {
 		TEXT_RENDERING(scoresName[i])->charHeight =
 			TEXT_RENDERING(scoresPoints[i])->charHeight =
 				TEXT_RENDERING(scoresLevel[i])->charHeight = PlacementHelper::GimpHeightToScreen(45);
-		TEXT_RENDERING(scoresPoints[i])->isANumber = true;
+		TEXT_RENDERING(scoresPoints[i])->flags |= TextRenderingComponent::IsANumberBit;
 		TEXT_RENDERING(scoresName[i])->positioning = TextRenderingComponent::LEFT;
 		TEXT_RENDERING(scoresPoints[i])->positioning = TextRenderingComponent::RIGHT;
 		TEXT_RENDERING(scoresLevel[i])->positioning = TextRenderingComponent::LEFT;
@@ -249,10 +249,10 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 			a.precision(1);
 			if (mode==Normal || mode==RandomNameToBeChanged) {
 				a << std::fixed << entries[i].points;
-				trcP->isANumber = true;
+				trcP->flags |= TextRenderingComponent::IsANumberBit;
 			} else {
 				a << std::fixed << entries[i].time << " s";
-				trcP->isANumber = false;
+				trcP->flags &= ~TextRenderingComponent::IsANumberBit;
 			}
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
