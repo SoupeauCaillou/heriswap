@@ -352,6 +352,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 			break;
         }
         case GameEnded: {
+			#ifdef ANDROID
 			//show twitter, fb, und so weiter
 			RENDERING(facebook)->hide = false;
 			RENDERING(twitter)->hide = false;
@@ -361,6 +362,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 				BUTTON(enableSwarmContainer)->enabled = true;
 				TEXT_RENDERING(enableSwarm)->hide = false;
 			}
+			#endif
 
             // ask player's name if needed
             if (isCurrentScoreAHighOne()) {
