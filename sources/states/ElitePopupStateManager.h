@@ -18,32 +18,23 @@
 */
 #pragma once
 
-enum GameState {
-     CountDown,
-     Spawn,
-     UserInput,
-     Delete,
-     Fall,
-     LevelChanged,
-     Pause,
-     Unpause,
-     MainMenu,
-     ModeMenu,
-     ScoreBoard,
-     EndMenu,
-     Background,
-     LogoToBlackState,
-     ModeMenuToBlackState,
-     AdsToBlackState,
-     BlackToLogoState,
-     BlackToMainMenu,
-     BlackToSpawn,
-     GameToBlack,
-     BlackToModeMenu,
-     Logo,
-     Help,
-     Ads,
-     RateIt,
-     ExitState,
-     ElitePopup
+#include "Game.h"
+#include "StateManager.h"
+#include "SuccessManager.h"
+
+class NormalGameModeManager;
+
+class ElitePopupStateManager : public GameStateManager {
+	public:
+
+	ElitePopupStateManager(NormalGameModeManager* nmg) { normalGameModeManager = nmg; };
+	void Setup();
+	void Enter();
+	GameState Update(float dt);
+	void Exit();
+
+	private:
+		NormalGameModeManager* normalGameModeManager;
+		Entity background, text;
+		Entity eButton[2], eText[2];
 };

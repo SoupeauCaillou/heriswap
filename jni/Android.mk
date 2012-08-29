@@ -34,6 +34,7 @@ LOCAL_SRC_FILES := \
 	../sources/states/BackgroundManager.cpp \
 	../sources/states/CountDownStateManager.cpp \
 	../sources/states/DeleteStateManager.cpp \
+	../sources/states/ElitePopupStateManager.cpp \
 	../sources/states/FadeStateManager.cpp	\
 	../sources/states/FallStateManager.cpp \
 	../sources/states/HelpStateManager.cpp \

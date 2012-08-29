@@ -45,6 +45,7 @@
 #include "states/HelpStateManager.h"
 #include "states/AdsStateManager.h"
 #include "states/RateItStateManager.h"
+#include "states/ElitePopupStateManager.h"
 
 #include "DepthLayer.h"
 #include "GameState.h"
@@ -75,6 +76,7 @@ PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI
      state2Manager[Help] = new HelpStateManager(lAPI);
      state2Manager[Ads] = new AdsStateManager(ad, storage, successMgr);
      state2Manager[RateIt] = new RateItStateManager(lAPI, comAPI);
+     state2Manager[ElitePopup] = new ElitePopupStateManager(static_cast<NormalGameModeManager*>(mode2Manager[Normal]));
 
      state2Manager[BlackToLogoState] = new FadeGameStateManager(0.2f, FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
      state2Manager[LogoToBlackState] = new FadeGameStateManager(0.3f, FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);

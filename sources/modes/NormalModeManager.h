@@ -44,6 +44,7 @@ class NormalGameModeManager : public GameModeManager {
 
 		void Reset();
 
+		void changeLevel(int newLevel) { level = newLevel; }
 		int currentLevel() const { return level; }
 
         int saveInternalState(uint8_t** out);

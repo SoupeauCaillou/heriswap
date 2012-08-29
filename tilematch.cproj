@@ -34,7 +34,6 @@
     <None Include="sources\states\BackgroundManager.h" />
     <None Include="sources\states\FadeStateManager.h" />
     <None Include="sources\states\FallGameStateManager.h" />
-    <None Include="sources\states\GameStateManager.h" />
     <None Include="sources\states\LevelStateManager.h" />
     <None Include="sources\states\PauseStateManager.h" />
     <None Include="sources\states\SpawnGameStateManager.h" />
@@ -78,6 +77,7 @@
     <None Include="sources\states\StateManager.h" />
     <None Include="sources\states\UserInputStateManager.h" />
     <None Include="sources\modes\RandomNameToBeChangedModeManager.h" />
+    <None Include="sources\states\ElitePopupStateManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -120,6 +120,7 @@
     <Compile Include="sources\states\SpawnStateManager.cpp" />
     <Compile Include="sources\states\UserInputStateManager.cpp" />
     <Compile Include="sources\modes\RandomNameToBeChangedModeManager.cpp" />
+    <Compile Include="sources\states\ElitePopupStateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="sources\api\android\" />
