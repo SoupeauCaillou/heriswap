@@ -22,10 +22,11 @@
 #include <base/EntityManager.h>
 #include <base/Vector2.h>
 
+//medium is after hard because it would have ruined ppl's score using the game before adding the medium difficulty on android
 enum Difficulty {
 	DifficultyEasy = 0,
-	DifficultyMedium,
-	DifficultyHard
+	DifficultyMedium = 2,
+	DifficultyHard = 1
 };
 
 struct Feuille {
