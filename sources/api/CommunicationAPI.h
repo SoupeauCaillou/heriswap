@@ -28,7 +28,7 @@ class CommunicationAPI {
 		virtual void shareFacebook() = 0;
 		virtual void shareTwitter() = 0;
 
-		virtual bool rateItDone() { return false; };
+		virtual bool mustShowRateDialog() { return true; };
 		virtual void rateItNow() = 0;
 		virtual void rateItLater() = 0;
 		virtual void rateItNever() = 0;

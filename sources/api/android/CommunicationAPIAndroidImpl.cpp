@@ -34,7 +34,7 @@ struct CommunicationAPIAndroidImpl::CommunicationAPIAndroidImplDatas {
     jmethodID swarmRegistering;
     jmethodID shareFacebook;
     jmethodID shareTwitter;
-    jmethodID rateItDone;
+    jmethodID mustShowRateDialog;
     jmethodID rateItNow;
     jmethodID rateItLater;
     jmethodID rateItNever;
@@ -65,7 +65,7 @@ void CommunicationAPIAndroidImpl::init(JNIEnv* pEnv) {
     datas->swarmRegistering = jniMethodLookup(env, datas->cls, "swarmRegistering", "(II)V");
     datas->shareFacebook = jniMethodLookup(env, datas->cls, "shareFacebook", "()V");
     datas->shareTwitter = jniMethodLookup(env, datas->cls, "shareTwitter", "()V");
-    datas->rateItDone = jniMethodLookup(env, datas->cls, "rateItDone", "()Z");
+    datas->mustShowRateDialog = jniMethodLookup(env, datas->cls, "mustShowRateDialog", "()Z");
     datas->rateItNow = jniMethodLookup(env, datas->cls, "rateItNow", "()V");
     datas->rateItLater = jniMethodLookup(env, datas->cls, "rateItLater", "()V");
     datas->rateItNever = jniMethodLookup(env, datas->cls, "rateItNever", "()V");
@@ -99,8 +99,8 @@ void CommunicationAPIAndroidImpl::shareTwitter() {
 }
 
 
-bool CommunicationAPIAndroidImpl::rateItDone(){
-	return env->CallStaticBooleanMethod(datas->cls, datas->rateItDone);
+bool CommunicationAPIAndroidImpl::mustShowRateDialog(){
+	return env->CallStaticBooleanMethod(datas->cls, datas->mustShowRateDialog);
 }
 
 void CommunicationAPIAndroidImpl::rateItNow(){

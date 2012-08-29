@@ -362,7 +362,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 				BUTTON(enableSwarmContainer)->enabled = true;
 				TEXT_RENDERING(enableSwarm)->hide = false;
 			}
-			if (!communicationAPI->rateItDone()) {
+			if (communicationAPI->mustShowRateDialog()) {
 				TRANSFORM(herisson->actor.e)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herisson->actor.e)->size.X;
 				TEXT_RENDERING(title)->hide = true;
 				this->LateExit();
@@ -472,6 +472,8 @@ GameState ModeMenuStateManager::Update(float dt) {
 		//enableSwarm button
 		else if (BUTTON(enableSwarmContainer)->clicked) {
 			communicationAPI->swarmRegistering(modeMgr->GetMode(), theGridSystem.sizeToDifficulty());
+			TEXT_RENDERING(enableSwarm)->hide = true;
+			BUTTON(enableSwarmContainer)->enabled = false;
 		}
 	}
 	return ModeMenu;

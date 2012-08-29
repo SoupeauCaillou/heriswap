@@ -33,7 +33,7 @@ class CommunicationAPIAndroidImpl : public CommunicationAPI {
 		void shareFacebook();
 		void shareTwitter();
 
-		bool rateItDone();
+		bool mustShowRateDialog();
 		void rateItNow();
 		void rateItLater();
 		void rateItNever();
