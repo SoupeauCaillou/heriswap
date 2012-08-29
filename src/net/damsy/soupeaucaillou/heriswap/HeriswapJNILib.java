@@ -65,18 +65,18 @@ public class HeriswapJNILib {
 	public static native void initFromRenderThread(AssetManager mgr, long game, int width,
 			int height);
 
-	public static native void initFromGameThread(AssetManager mgr, long game, byte[] state); 
+	public static native void initFromGameThread(AssetManager mgr, long game, byte[] state);
 
 	public static native void uninitFromRenderThread(long game);
 
 	public static native void uninitFromGameThread(long game);
 
 	public static native void step(long game);
- 
-	public static native void resetTimestep(long game); 
+
+	public static native void resetTimestep(long game);
 
 	public static native void render(long game);
- 
+
 	public static native void pause(long game);
 
 	public static native void back(long game);
@@ -430,7 +430,7 @@ public class HeriswapJNILib {
 
 			SwarmLeaderboard.GotLeaderboardCB callback = new SwarmLeaderboard.GotLeaderboardCB() {
 			    public void gotLeaderboard(SwarmLeaderboard leaderboard) {
- 
+
 			    	if (leaderboard != null) {
 			    		leaderboard.showLeaderboard();
 			        }
@@ -522,8 +522,8 @@ public class HeriswapJNILib {
 		return Swarm.isLoggedIn();
 	}
 
-	static public void swarmRegistering() {
-		Swarm.init(HeriswapActivity.activity, HeriswapSecret.Swarm_gameID, HeriswapSecret.Swarm_gameKey);
+	static public void swarmRegistering(int mode, int difficulty) {
+		openLeaderboard(mode, difficulty);
 	}
 
 	static public void shareFacebook() {
@@ -542,14 +542,14 @@ public class HeriswapJNILib {
 
 		startActivity(Intent.createChooser(share, "Title of the dialog the system will open"));*/
 	}
-	
+
 	static public boolean mustShowRateDialog() {
 		SharedPreferences prefs = HeriswapActivity.activity.getSharedPreferences("apprater", 0);
 		if (prefs.getBoolean("dontshowagain", false))
 			return false;
 		if (prefs.getLong("launch_count", 0) < 10)
 			return false;
-		
+
 		SQLiteDatabase db = HeriswapActivity.scoreOpenHelper
 				.getReadableDatabase();
 		Cursor cursor = db.rawQuery("select count (*) from score", null);
@@ -566,13 +566,13 @@ public class HeriswapJNILib {
 		}
 		return false;
 	}
-	
+
 	private final static String APP_PNAME = "net.damsy.soupeaucaillou.heriswap";
 	static public void rateItNow() {
 		HeriswapActivity.activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
 		rateItNever();
 	}
-	
+
 	static public void rateItLater() {
 		SharedPreferences prefs = HeriswapActivity.activity.getSharedPreferences("apprater", 0);
 		SharedPreferences.Editor editor = prefs.edit();

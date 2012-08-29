@@ -465,7 +465,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 		}
 		//enableSwarm button
 		else if (BUTTON(enableSwarmContainer)->clicked) {
-			communicationAPI->swarmRegistering();
+			communicationAPI->swarmRegistering(modeMgr->GetMode(), theGridSystem.sizeToDifficulty());
 		}
 	}
 	return ModeMenu;

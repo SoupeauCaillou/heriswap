@@ -61,7 +61,7 @@ void CommunicationAPIAndroidImpl::init(JNIEnv* pEnv) {
 
     datas->cls = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib"));
     datas->swarmInstalled = jniMethodLookup(env, datas->cls, "swarmEnabled", "()Z");
-    datas->swarmRegistering = jniMethodLookup(env, datas->cls, "swarmRegistering", "()V");
+    datas->swarmRegistering = jniMethodLookup(env, datas->cls, "swarmRegistering", "(II)V");
     datas->shareFacebook = jniMethodLookup(env, datas->cls, "shareFacebook", "()V");
     datas->shareTwitter = jniMethodLookup(env, datas->cls, "shareTwitter", "()V");
     datas->rateItNow = jniMethodLookup(env, datas->cls, "rateItNow", "()V");
@@ -82,8 +82,8 @@ bool CommunicationAPIAndroidImpl::swarmInstalled() {
 	return env->CallStaticBooleanMethod(datas->cls, datas->swarmInstalled);
 }
 
-void CommunicationAPIAndroidImpl::swarmRegistering() {
-	env->CallStaticBooleanMethod(datas->cls, datas->swarmRegistering);
+void CommunicationAPIAndroidImpl::swarmRegistering(int mode, int difficulty) {
+	env->CallStaticBooleanMethod(datas->cls, datas->swarmRegistering, mode, difficulty);
 }
 
 void CommunicationAPIAndroidImpl::shareFacebook() {

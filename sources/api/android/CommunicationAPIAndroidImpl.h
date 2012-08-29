@@ -29,10 +29,10 @@ class CommunicationAPIAndroidImpl : public CommunicationAPI {
         void uninit();
 
         bool swarmInstalled();
-        void swarmRegistering();
+        void swarmRegistering(int mode, int difficulty);
 		void shareFacebook();
 		void shareTwitter();
-		
+
 		void rateItNow();
 		void rateItLater();
 		void rateItNever();
