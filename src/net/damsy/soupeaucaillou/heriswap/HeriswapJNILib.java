@@ -568,6 +568,11 @@ public class HeriswapJNILib {
 	}
 
 	private final static String APP_PNAME = "net.damsy.soupeaucaillou.heriswap";
+
+	static public boolean rateItDone() {
+		return false; //to do
+	}
+
 	static public void rateItNow() {
 		HeriswapActivity.activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
 		rateItNever();

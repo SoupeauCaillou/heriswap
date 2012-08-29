@@ -189,7 +189,7 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(enableSwarm)->hide = true;
 	TEXT_RENDERING(enableSwarm)->charHeight = PlacementHelper::GimpHeightToScreen(45);
 	TEXT_RENDERING(enableSwarm)->color = green;
-	TEXT_RENDERING(enableSwarm)->text = "Enable swarm to see online scores";
+	TEXT_RENDERING(enableSwarm)->text = localizeAPI->text("enable_swarm", "Enable swarm to see online scores");
 
 	// enableSwarm container
 	enableSwarmContainer = theEntityManager.CreateEntity();
@@ -362,6 +362,12 @@ GameState ModeMenuStateManager::Update(float dt) {
 				BUTTON(enableSwarmContainer)->enabled = true;
 				TEXT_RENDERING(enableSwarm)->hide = false;
 			}
+			if (!communicationAPI->rateItDone()) {
+				TRANSFORM(herisson->actor.e)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herisson->actor.e)->size.X;
+				TEXT_RENDERING(title)->hide = true;
+				this->LateExit();
+				return RateIt;
+			}
 			#endif
 
             // ask player's name if needed
@@ -473,17 +479,8 @@ GameState ModeMenuStateManager::Update(float dt) {
 
 void ModeMenuStateManager::Exit() {
 	theGridSystem.GridSize = theGridSystem.difficultyToSize(difficulty);
-	switch (difficulty) {
-		case DifficultyEasy:
-			theGridSystem.Types = 5;
-			break;
-		case DifficultyMedium:
-			theGridSystem.Types = 7;
-			break;
-		case DifficultyHard:
-			theGridSystem.Types = 8;
-			break;
-	}
+	theGridSystem.Types = theGridSystem.GridSize;
+
 	successMgr->NewGame(difficulty);
 }
 

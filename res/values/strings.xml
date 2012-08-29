@@ -24,6 +24,10 @@
 	<string name="objective">Goal</string>
 	<string name="level">Level</string>
 	<string name="leave_left">leaves left</string>
+	<string name="enable_swarm">Enable swarm to see online scores</string>
 	<string name="quitter">Exit</string>
 	<string name="rate_it">If you enjoy using Heriswap, please take a moment to rate it. Thanks for your support!</string>
+	<string name="rate_now">Rate it !</string>
+	<string name="rate_later">Later</string>
+	<string name="rate_never">Never</string>
 </resources>
