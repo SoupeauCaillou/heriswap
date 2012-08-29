@@ -80,13 +80,13 @@ void MainMenuGameStateManager::Setup() {
 	}
 	
 	//// TEMP TEST CODE
-	TEXT_RENDERING(eStart[0])->flags |= TextRenderingComponent::MultiLineBit;
-	TRANSFORM(eStart[0])->position.X = 0;
-	TRANSFORM(eStart[0])->size = TRANSFORM(bStart[0])->size;
-	TRANSFORM(eStart[0])->size.Y *= 4;
+	//TEXT_RENDERING(eStart[0])->flags |= TextRenderingComponent::MultiLineBit;
+	//TRANSFORM(eStart[0])->position.X = 0;
+	//TRANSFORM(eStart[0])->size = TRANSFORM(bStart[0])->size;
+	//TRANSFORM(eStart[0])->size.Y *= 4;
 	
-	TEXT_RENDERING(eStart[2])->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
-	TRANSFORM(eStart[2])->size = TRANSFORM(bStart[2])->size * 0.9;
+	//TEXT_RENDERING(eStart[2])->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
+	//TRANSFORM(eStart[2])->size = TRANSFORM(bStart[2])->size * 0.9;
 	////
 
 	menubg = theEntityManager.CreateEntity();
