@@ -32,7 +32,7 @@
 
 
 void PauseStateManager::Setup() {
-	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
+	const Color green("green");
 
 	//Restart Text
 	eRestart = theTextRenderingSystem.CreateEntity();

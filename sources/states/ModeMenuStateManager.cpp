@@ -51,7 +51,7 @@ ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, NameInputAPI* pNa
 }
 
 void ModeMenuStateManager::Setup() {
-	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
+	const Color green("green");
 
 	//Creating text entities
 	for (int i=0; i<5; i++) {

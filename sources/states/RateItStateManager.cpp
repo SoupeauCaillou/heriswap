@@ -32,8 +32,6 @@
 #include "DepthLayer.h"
 
 void RateItStateManager::Setup() {
-	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
-
 	//Creating text entities
 	for (int i = 0; i < 3; i++) {
 		boutonText[i] = theTextRenderingSystem.CreateEntity();
@@ -41,7 +39,7 @@ void RateItStateManager::Setup() {
 		TRANSFORM(boutonText[i])->z = DL_MainMenuUITxt;
 		TEXT_RENDERING(boutonText[i])->hide = true;
 		TEXT_RENDERING(boutonText[i])->positioning = TextRenderingComponent::LEFT;
-		TEXT_RENDERING(boutonText[i])->color = green;
+		TEXT_RENDERING(boutonText[i])->color = Color("green");
 		TEXT_RENDERING(boutonText[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
 
 	    boutonContainer[i] = theEntityManager.CreateEntity();

@@ -30,8 +30,8 @@
 #include "DepthLayer.h"
 
 void HelpStateManager::Setup() {
-	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
-
+	const Color green("green");
+	
 	background = theEntityManager.CreateEntity();
 	ADD_COMPONENT(background, Rendering);
 	ADD_COMPONENT(background, Transformation);

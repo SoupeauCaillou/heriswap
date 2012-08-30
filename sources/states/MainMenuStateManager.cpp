@@ -33,8 +33,8 @@
 #include "DepthLayer.h"
 
 void MainMenuGameStateManager::Setup() {
-	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
-
+	const Color green("green");
+	
 	//Creating text entities
 	for (int i=0; i<3; i++) {
 		eStart[i] = theTextRenderingSystem.CreateEntity();

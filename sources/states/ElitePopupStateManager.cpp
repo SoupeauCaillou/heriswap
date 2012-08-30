@@ -32,8 +32,7 @@
 #include "DepthLayer.h"
 
 void ElitePopupStateManager::Setup() {
-	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
-	
+	const Color green("green");	
 	background = theEntityManager.CreateEntity();
 	ADD_COMPONENT(background, Transformation);
 	TRANSFORM(background)->size = Vector2(PlacementHelper::GimpWidthToScreen(712), PlacementHelper::GimpHeightToScreen(720));

@@ -217,6 +217,8 @@ void Game::sacInit(int windowW, int windowH) {
 }
 
 void Game::init(const uint8_t* in, int size) {
+	Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
+	
     if (in && size) {
         in = loadEntitySystemState(in, size);
     }
