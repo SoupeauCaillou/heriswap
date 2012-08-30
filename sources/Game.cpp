@@ -218,7 +218,7 @@ void Game::sacInit(int windowW, int windowH) {
 
 void Game::init(const uint8_t* in, int size) {
 	Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
-	
+
     if (in && size) {
         in = loadEntitySystemState(in, size);
     }
@@ -261,7 +261,7 @@ void Game::setMode() {
 	datas->state2Manager[ModeMenu]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[Spawn]->modeMgr = datas->mode2Manager[datas->mode];
 	static_cast<CountDownStateManager*> (datas->state2Manager[CountDown])->mode = datas->mode;
-	if (datas->mode == Normal) {
+	if (datas->mode == Normal || datas->mode == RandomNameToBeChanged) {
 		static_cast<FadeGameStateManager*> (datas->state2Manager[GameToBlack])->duration = 4.0f;
 	} else {
 		static_cast<FadeGameStateManager*> (datas->state2Manager[GameToBlack])->duration = 0.5f;
@@ -354,12 +354,6 @@ void Game::tick(float dt) {
     // update state
     newState = datas->state2Manager[datas->state]->Update(dt);
 
-	//get the game progress
-	float percentDone = 0;
-	if (inGameState(datas->state)) {
-		percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent();
-	}
-
     //update only if game has really begun (after countdown)
     if (datas->state != CountDown && static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame == false) {
 		//updating game if playing
@@ -385,33 +379,26 @@ void Game::tick(float dt) {
 			}
 		}
 	}
+	//get the game progress
+	float percentDone = 0;
+	if (inGameState(datas->state)) {
+		percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent();
+	}
 
 	//game ended
 	if (percentDone >= 1) {
 		newState = GameToBlack;
-		//show combinations which remain in score attack
-		if (datas->mode == Normal)
+		//show one combination which remain
+		if (datas->mode != TilesAttack) {
 			theGridSystem.ShowOneCombination();
+		}
 	}
 
 	//ne pas changer la grille si fin de niveau/jeu
-	if (datas->state == UserInput) {
-		if (datas->mode == Normal) {
-			NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]);
-			if (m->LevelUp()) {
-				newState = LevelChanged;
-			}
-		// si on a fini (contre la montre), on remplit pas la grille et on quitte direct
-		} else if (datas->mode == RandomNameToBeChanged) {
-			RandomNameToBeChangedGameModeManager* m = static_cast<RandomNameToBeChangedGameModeManager*> (datas->mode2Manager[RandomNameToBeChanged]);
-			if (m->GameProgressPercent() == 1) {
-				newState = GameToBlack;
-			}
-		} else {
-			TilesAttackGameModeManager* m = static_cast<TilesAttackGameModeManager*> (datas->mode2Manager[TilesAttack]);
-			if (m->GameProgressPercent() == 1) {
-				newState = GameToBlack;
-			}
+	if (datas->state == UserInput && datas->mode == Normal) {
+		NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]);
+		if (m->LevelUp()) {
+			newState = LevelChanged;
 		}
 	}
 
