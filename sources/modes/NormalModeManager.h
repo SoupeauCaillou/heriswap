@@ -44,7 +44,7 @@ class NormalGameModeManager : public GameModeManager {
 
 		void Reset();
 
-		void changeLevel(int newLevel) { level = newLevel; }
+		void changeLevel(int newLevel);
 		int currentLevel() const { return level; }
 
         int saveInternalState(uint8_t** out);
@@ -57,6 +57,8 @@ class NormalGameModeManager : public GameModeManager {
 		static int levelToLeaveToDelete(int type, int nb, int maxRemain, int done, int leftOnBranchOfSameType);
 
 	private:
+		void startLevel(int lvl);
+		
 		unsigned int level;
 		int remain[8];
 		bool helpAvailable;

@@ -224,6 +224,32 @@ void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 
 }
 
+void NormalGameModeManager::startLevel(int lvl) {
+	level = lvl;
+	
+	LOGI("New level: %d", lvl);
+
+	for (int i=0;i<theGridSystem.Types;i++)
+		remain[i] = 2+level;
+
+	helpAvailable = true;
+	
+	for (int i=0;i<theGridSystem.Types;i++)
+		remain[i] = 2+level;
+		
+	// put hedgehog back on first animation position
+	c->ind = 0;
+	bonus = MathUtil::RandomInt(theGridSystem.Types);
+	LoadHerissonTexture(bonus+1);
+	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
+	SCROLLING(decor1er)->speed = 0;
+}
+
+void NormalGameModeManager::changeLevel(int lvl) {
+	startLevel(lvl);
+	uiHelper.game->setupGameProp();
+}
+
 bool NormalGameModeManager::LevelUp() {
 	int match = 1, i=0;
 	while (match && i<theGridSystem.Types) {
@@ -235,25 +261,9 @@ bool NormalGameModeManager::LevelUp() {
 	if (match) {
 		successMgr->sLevel1For2K(level, points);
 
-		level++;
-
-		successMgr->sLevel10(level);
-
 		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
-
-		LOGI("Level up to level %d", level);
-
-		helpAvailable = true;
-
-		for (int i=0;i<theGridSystem.Types;i++)
-			remain[i] = 2+level;
-
-		//reput hedgehog on first animation position
-		c->ind = 0;
-		bonus = MathUtil::RandomInt(theGridSystem.Types);
-		LoadHerissonTexture(bonus+1);
-		RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
-		SCROLLING(decor1er)->speed = 0;
+		
+		startLevel(level+1);
 	}
 	return match;
 }

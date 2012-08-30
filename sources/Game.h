@@ -68,6 +68,7 @@ class Game {
 		static std::string cellTypeToTextureNameAndRotation(int type, float* rotation);
 		static float cellTypeToRotation(int type);
 
+		void setupGameProp();
 	private:
 		void loadFont(const std::string& name);
         const uint8_t* loadEntitySystemState(const uint8_t* in, int size);
@@ -76,7 +77,7 @@ class Game {
 		void stopInGameMusics();
 		bool shouldPlayPiano();
 
-		void setupGameProp();
+		
 
 	PrivateData* datas;
 	AssetAPI* asset;
