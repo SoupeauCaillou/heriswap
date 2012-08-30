@@ -107,6 +107,8 @@ class GameModeManager {
 		//hérisson
 		AnimatedActor* c;
 		StorageAPI* storageAPI;
+		void createAndAddLeave(int type, const Vector2& position, float rotation);
+
 	private:
 		std::vector<Render> posBranch;
 		void fillVec();

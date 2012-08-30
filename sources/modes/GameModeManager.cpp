@@ -205,6 +205,25 @@ void GameModeManager::TogglePauseDisplay(bool paused) {
     RENDERING(uiHelper.pauseButton)->hide = paused;
 }
 
+void GameModeManager::createAndAddLeave(int type, const Vector2& position, float rotation) {
+	Entity e = theEntityManager.CreateEntity();
+	ADD_COMPONENT(e, Transformation);
+	ADD_COMPONENT(e, Rendering);
+    ADD_COMPONENT(e, Twitch);
+	RENDERING(e)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, 0));
+	RENDERING(e)->hide = false;
+	TRANSFORM(e)->size.X = TRANSFORM(e)->size.Y = Game::CellSize(8) * Game::CellContentScale();
+
+	TRANSFORM(e)->position = position;
+	TRANSFORM(e)->rotation = rotation;
+
+	TRANSFORM(e)->z = MathUtil::Lerp(DL_LeafMin, DL_LeafMax, MathUtil::RandomFloat());
+	BranchLeaf bl;
+	bl.e = e;
+	bl.type=type;
+	branchLeaves.push_back(bl);
+}
+
 void GameModeManager::generateLeaves(int* nb, int type) {
 	for (unsigned int az=0;az<branchLeaves.size();az++)
 		theEntityManager.DeleteEntity(branchLeaves[az].e);
@@ -214,26 +233,13 @@ void GameModeManager::generateLeaves(int* nb, int type) {
 
     for (int j=0;j<type;j++) {
 	    for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
-			Entity e = theEntityManager.CreateEntity();
-			ADD_COMPONENT(e, Transformation);
-			ADD_COMPONENT(e, Rendering);
-            ADD_COMPONENT(e, Twitch);
-			RENDERING(e)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(j, 0));
-			RENDERING(e)->hide = false;
-			TRANSFORM(e)->size.X = TRANSFORM(e)->size.Y = Game::CellSize(8) * Game::CellContentScale();
-
-			int rand = MathUtil::RandomInt(posBranch.size());
-			TRANSFORM(e)->position = posBranch[rand].v;
-			TRANSFORM(e)->position.X -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenWidth*0.5;
-			TRANSFORM(e)->rotation = posBranch[rand].rot;
+		    int rand = MathUtil::RandomInt(posBranch.size());
+			Vector2 pos = posBranch[rand].v;
+			pos.X -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenWidth*0.5;
+			
+			createAndAddLeave(j, pos, posBranch[rand].rot);
 
 			posBranch.erase(posBranch.begin()+rand);
-
-			TRANSFORM(e)->z = MathUtil::Lerp(DL_LeafMin, DL_LeafMax, MathUtil::RandomFloat());
-			BranchLeaf bl;
-			bl.e = e;
-			bl.type=j;
-			branchLeaves.push_back(bl);
 		}
 	}
 	//shuffle pour éviter que les mêmes couleurs soient à coté dans la liste :

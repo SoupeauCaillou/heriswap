@@ -40,13 +40,11 @@ class RandomNameToBeChangedGameModeManager : public GameModeManager {
 		GameMode GetMode() { return RandomNameToBeChanged; };
 
 		void ScoreCalc(int nb, unsigned int type);
-
-		static int levelToLeaveToDelete(int leavesMaxSize, int limit, int nb, int leavesDone);
-
 		int saveInternalState(uint8_t** out);
         const uint8_t* restoreInternalState(const uint8_t* in, int size);
 	private:
 		unsigned int leavesDone;
 		bool succNoGridReset;
+		float spawn;
 };
 
