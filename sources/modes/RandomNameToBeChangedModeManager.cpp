@@ -45,7 +45,7 @@ void RandomNameToBeChangedGameModeManager::Setup() {
 
 void RandomNameToBeChangedGameModeManager::Enter() {
 	time = 0;
-	limit = 300;
+	limit = 100;
 	leavesDone = 0;
 	points = 0;
 	bonus = MathUtil::RandomInt(theGridSystem.Types);
