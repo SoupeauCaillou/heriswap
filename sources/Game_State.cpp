@@ -100,7 +100,7 @@ void Game::stateChanged(GameState oldState, GameState newState) {
      } else if (oldState == MainMenu && newState == ModeMenu) {
          datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
          //reference title into mode menu from main menu
-         static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode-1];
+         static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode];
          setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
      //end game
      } else if (newState == BlackToModeMenu) {

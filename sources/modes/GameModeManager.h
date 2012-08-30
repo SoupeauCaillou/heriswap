@@ -26,7 +26,7 @@
 #include "SuccessManager.h"
 
 enum GameMode {
-	Normal = 1,
+	Normal = 0,
 	TilesAttack,
 	RandomNameToBeChanged
 };

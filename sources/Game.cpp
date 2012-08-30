@@ -698,7 +698,7 @@ void Game::loadGameState(const uint8_t* in, int size) {
 
     MainMenuGameStateManager* mgsm = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]);
     static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title =
-    	mgsm->modeTitleToReset = mgsm->eStart[datas->mode-1];
+    	mgsm->modeTitleToReset = mgsm->eStart[datas->mode];
 
 	setupGameProp();
 

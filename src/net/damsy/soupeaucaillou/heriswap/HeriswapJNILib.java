@@ -242,7 +242,7 @@ public class HeriswapJNILib {
 		db.close();
 
 		// retrieve Leaderboard
-		//NOLOGLog.i(HeriswapActivity.Tag, "leaderboard id: " + boards[2 * (mode - 1) + difficulty]);
+		//NOLOGLog.i(HeriswapActivity.Tag, "leaderboard id: " + boards[2 * mode + difficulty]);
 
 
 		SwarmLeaderboard.GotLeaderboardCB callback = new SwarmLeaderboard.GotLeaderboardCB() {
@@ -253,7 +253,7 @@ public class HeriswapJNILib {
 
 		    			//leaderboard.getScoreForUser(Swarm.user, truc);
 		    			if (true) {
-		    				if (mode == 1)
+		    				if (mode == 0 || mode == 2)
 		    					leaderboard.submitScore(points);
 		    				else
 		    					leaderboard.submitScore(time);
@@ -261,76 +261,10 @@ public class HeriswapJNILib {
 		        	}
 		        }
 		    };
-		if (!Swarm.isLoggedIn())
-			Swarm.init(HeriswapActivity.activity, HeriswapSecret.Swarm_gameID, HeriswapSecret.Swarm_gameKey);
+		//if (!Swarm.isLoggedIn())
+		//Swarm.init(HeriswapActivity.activity, HeriswapSecret.Swarm_gameID, HeriswapSecret.Swarm_gameKey);
 
-		SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[2 * (mode - 1) + difficulty], callback);
-
-		/*
-		// Build score object
-		final Score s;
-		if (mode == 1)
-			s = new Score((long) points, null);
-		else
-			s = new Score((long) (time * 1000),
-					(float) ((int) (time * 100) / 100.f) + "s");
-
-//		final Leaderboard l = new Leaderboard(boards[2 * (mode - 1)	+ difficulty]);
-
-		// Callback called by OF on score querying
-		final Score.SubmitToCB scCB = new Score.SubmitToCB() {
-			@Override
-			public void onSuccess(boolean newHighScore) {
-				//NOLOGLog.i(HeriswapActivity.Tag, "score posting successfull");
-
-			}
-
-			@Override
-			public void onFailure(String exceptionMessage) {
-				//NOLOGLog.i(HeriswapActivity.Tag, "score posting failure : "+ exceptionMessage);
-			}
-
-			@Override
-			public void onBlobUploadSuccess() {
-			}
-
-			@Override
-			public void onBlobUploadFailure(String exceptionMessage) {
-			}
-		};
-
-		User user = OpenFeint.getCurrentUser();
-
-		if (user == null) {
-			return;
-		}
-
-		// Retrieve user best score
-		l.getUserScore(OpenFeint.getCurrentUser(),
-				new Leaderboard.GetUserScoreCB() {
-					@Override
-					public void onSuccess(Score best) {
-						boolean send = false;
-						if (best == null) {
-							send = true;
-						} else if (mode == 1) {
-							send = (best.score < s.score);
-						} else {
-							send = (best.score > s.score);
-						}
-						if (send) {
-							s.submitTo(l, scCB);
-						} else {
-							//NOLOGLog.w(HeriswapActivity.Tag,"Inferior score not submitted to OF");
-						}
-					}
-
-					@Override
-					public void onFailure(String exceptionMessage) {
-						super.onFailure(exceptionMessage);
-						s.submitTo(l, scCB);
-					}
-				});*/
+		SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[2 * mode + difficulty], callback);
 	}
 
 	static public int getScores(int mode, int difficulty, int[] points,
@@ -338,7 +272,7 @@ public class HeriswapJNILib {
 		SQLiteDatabase db = HeriswapActivity.scoreOpenHelper
 				.getWritableDatabase();
 		Cursor cursor = null;
-		if (mode == 1) {
+		if (mode == 0 || mode == 2) {
 			cursor = db.query("score", new String[] { "name", "points", "time",
 					"level" }, "mode='" + mode + "' and difficulty='"
 					+ difficulty + "'", null, null, null, "points desc");
@@ -368,10 +302,9 @@ public class HeriswapJNILib {
 	// SuccessAPI
 	// -------------------------------------------------------------------------
 	static public void unlockAchievement(int idS) {
-		//if (!OpenFeint.isNetworkConnected()) {
-		if (!Swarm.isLoggedIn()) {
-			return;
-		}
+		//if(!Swarm.isLoggedIn()) {
+		//	return;
+		//}
 		final int id = idS;
 
 		SwarmAchievement.GotAchievementsMapCB callback = new SwarmAchievement.GotAchievementsMapCB() {
@@ -385,49 +318,12 @@ public class HeriswapJNILib {
 			}
 		};
 		SwarmAchievement.getAchievementsMap(callback);
-
-		//final SwarmAchievement ach = new SwarmAchievement();
-		//SwarmAchievement.GotAchievementsListCB loadC = new SwarmAchievement.GotAchievementsListCB() {
-		//}
-		/*
-		final Achievement achv = new Achievement(Integer.toString(id));
-		Achievement.LoadCB loadCb = new Achievement.LoadCB() {
-			@Override
-			public void onSuccess() {
-				if (!achv.isUnlocked) {
-					achv.unlock(new Achievement.UnlockCB() {
-
-						@Override
-						public void onSuccess(boolean newUnlock) {
-							//NOLOGLog.i(HeriswapActivity.Tag,"Achievement unlock successful");
-						}
-					});
-				}
-			}
-
-			@Override
-			public void onFailure(String exceptionMessage) {
-				super.onFailure(exceptionMessage);
-				achv.unlock(new Achievement.UnlockCB() {
-
-					@Override
-					public void onSuccess(boolean newUnlock) {
-						//NOLOGLog.i(HeriswapActivity.Tag,"Achievement unlock successful");
-					}
-				});
-			}
-
-		};
-
-		achv.load(loadCb);*/
 	}
 
 
 	static public void openLeaderboard(int mode, int difficulty) {
 		Log.i(HeriswapActivity.Tag, "openleaderbord: " + mode + "," + difficulty);
-		if (mode >= 1 && mode <= 2 && difficulty >= 0 && difficulty <= 2) {
-			//Dashboard.openLeaderboard();
-
+		if (mode >= 0 && mode <= 2 && difficulty >= 0 && difficulty <= 2) {
 			SwarmLeaderboard.GotLeaderboardCB callback = new SwarmLeaderboard.GotLeaderboardCB() {
 			    public void gotLeaderboard(SwarmLeaderboard leaderboard) {
 
@@ -437,12 +333,11 @@ public class HeriswapJNILib {
 			    }
 			};
 
-			SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[3 * (mode - 1) + difficulty], callback);
+			SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[3 * mode + difficulty], callback);
 		}
 	}
 
 	static public void openDashboard() {
-		//Dashboard.open();
 		Swarm.showDashboard();
 	}
 

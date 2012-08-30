@@ -218,7 +218,7 @@ void MainMenuGameStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
 	for (int i = 0; i < 3; i++) {
-		if (i!=choosenGameMode-1) TEXT_RENDERING(eStart[i])->hide = true;
+		if (i!=choosenGameMode) TEXT_RENDERING(eStart[i])->hide = true;
 		RENDERING(bStart[i])->hide = true;
 		BUTTON(bStart[i])->enabled = false;
 	}
@@ -226,8 +226,8 @@ void MainMenuGameStateManager::Exit() {
 	if (modeTitleToReset) {
 		theMorphingSystem.reverse(MORPHING(modeTitleToReset));
 	}
-    MORPHING(eStart[choosenGameMode-1])->active = true;
-    modeTitleToReset = eStart[choosenGameMode-1];
+    MORPHING(eStart[choosenGameMode])->active = true;
+    modeTitleToReset = eStart[choosenGameMode];
 
     herisson->actor.speed = 4.5f;
 
