@@ -674,7 +674,7 @@ void Game::loadGameState(const uint8_t* in, int size) {
     memcpy(&datas->mode, in, sizeof(datas->mode));
     in += sizeof(datas->mode);
     memcpy(&theGridSystem.GridSize, in, sizeof(theGridSystem.GridSize));
-    theGridSystem.Types = theGridSystem.GridSize;
+    theGridSystem.Types = theGridSystem.GridSize; //utiliser gridParamFromDifficulty nn ?
     in += sizeof(theGridSystem.GridSize);
 
     datas->mode2Manager[datas->mode]->Enter();
