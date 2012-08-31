@@ -52,6 +52,15 @@ int GridSystem::difficultyToSize(Difficulty diff) {
 		return 8;
 }
 
+void GridSystem::setGridFromDifficulty(Difficulty diff) {
+	if (diff == DifficultyEasy)
+		GridSize = Types = 5;
+	else if (diff == DifficultyMedium)
+		GridSize = Types = 6;
+	else
+		GridSize = Types = 8;
+}
+
 Difficulty GridSystem::nextDifficulty(Difficulty diff) {
 	switch (diff) {
 		case DifficultyEasy :

@@ -100,7 +100,7 @@ void LevelStateManager::Setup() {
 void LevelStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	Color blue = Color(164.0/255.0, 164.0/255, 164.0/255);
-	
+
 	levelState = Start;
 	std::stringstream a;
 	a << currentLevel;
@@ -157,7 +157,7 @@ GameState LevelStateManager::Update(float dt) {
 		ADSR(eGrid)->active = true;
 		levelState = GridHided;
 	}
-	
+
 	float alpha = 1 - ADSR(eGrid)->value;
 	std::vector<Entity> entities = theGridSystem.RetrieveAllEntityWithComponent();
 	for (std::vector<Entity>::iterator it = entities.begin(); it != entities.end(); ++it ) {
@@ -214,7 +214,7 @@ GameState LevelStateManager::Update(float dt) {
 
 	//level animation ended - back to game
 	if (levelState == BigScoreMoving && duration > 10) {
-		if (currentLevel == 10 && theGridSystem.sizeToDifficulty() != DifficultyHard) {
+		if (currentLevel == 2 && theGridSystem.sizeToDifficulty() != DifficultyHard) {
 			return ElitePopup;
 		}
 		return Spawn;

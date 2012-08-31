@@ -139,6 +139,8 @@ Difficulty sizeToDifficulty();
 
 int difficultyToSize(Difficulty diff);
 
+void setGridFromDifficulty(Difficulty diff);
+
 Difficulty nextDifficulty(Difficulty diff);
 
 int GridSize, Types;

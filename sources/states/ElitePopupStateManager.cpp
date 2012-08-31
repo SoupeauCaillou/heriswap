@@ -98,9 +98,7 @@ void ElitePopupStateManager::Enter() {
 GameState ElitePopupStateManager::Update(float dt) {
 	if (BUTTON(eButton[0])->clicked) {
 		LOGW("Change difficulty");
-		theGridSystem.GridSize = theGridSystem.difficultyToSize(
-			theGridSystem.nextDifficulty(theGridSystem.sizeToDifficulty()));
-		theGridSystem.Types = theGridSystem.GridSize;
+		theGridSystem.setGridFromDifficulty(theGridSystem.nextDifficulty(theGridSystem.sizeToDifficulty()));
 		normalGameModeManager->changeLevel(1);
 		return Spawn;
 	}

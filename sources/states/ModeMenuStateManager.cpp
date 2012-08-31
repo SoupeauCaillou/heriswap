@@ -480,8 +480,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 }
 
 void ModeMenuStateManager::Exit() {
-	theGridSystem.GridSize = theGridSystem.difficultyToSize(difficulty);
-	theGridSystem.Types = theGridSystem.GridSize;
+	theGridSystem.setGridFromDifficulty(difficulty);
 
 	successMgr->NewGame(difficulty);
 }
