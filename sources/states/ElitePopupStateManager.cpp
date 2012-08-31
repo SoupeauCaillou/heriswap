@@ -32,7 +32,7 @@
 #include "DepthLayer.h"
 
 void ElitePopupStateManager::Setup() {
-	const Color green("green");	
+	const Color green("green");
 	background = theEntityManager.CreateEntity();
 	ADD_COMPONENT(background, Transformation);
 	TRANSFORM(background)->size = Vector2(PlacementHelper::GimpWidthToScreen(712), PlacementHelper::GimpHeightToScreen(720));
@@ -41,7 +41,7 @@ void ElitePopupStateManager::Setup() {
 	ADD_COMPONENT(background, Rendering);
 	RENDERING(background)->texture = theRenderingSystem.loadTextureFile("fond_menu_mode");
 	RENDERING(background)->color.a = 0.5;
-	
+
 	text = theEntityManager.CreateEntity();
 	ADD_COMPONENT(text, Transformation);
 	TRANSFORM(text)->position = TRANSFORM(background)->position;
@@ -79,7 +79,7 @@ void ElitePopupStateManager::Setup() {
 		TRANSFORM(eText[i])->position.X = PlacementHelper::GimpXToScreen(75);
 		TRANSFORM(eText[i])->position.Y = TRANSFORM(eButton[i])->position.Y = PlacementHelper::GimpYToScreen(850+i*183);
 	}
-	
+
 	TEXT_RENDERING(text)->text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sagittis. Phasellus sem dolor, adipiscing at facilisis ut, adipiscing in lorem. Suspendisse sed cursus urna. Nullam sit amet elit arcu. Ut hendrerit dictum lacus sed elementum.";
 	TEXT_RENDERING(eText[0])->text = "Increase difficulty";
 	TEXT_RENDERING(eText[1])->text = "No, keep it easy";
@@ -100,6 +100,7 @@ GameState ElitePopupStateManager::Update(float dt) {
 		LOGW("Change difficulty");
 		theGridSystem.GridSize = theGridSystem.difficultyToSize(
 			theGridSystem.nextDifficulty(theGridSystem.sizeToDifficulty()));
+		theGridSystem.Types = theGridSystem.GridSize;
 		normalGameModeManager->changeLevel(1);
 		return Spawn;
 	}

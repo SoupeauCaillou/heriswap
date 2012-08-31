@@ -206,7 +206,7 @@ void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	int p = (10 * level * nb * nb * nb) / 6;
 	if (type == bonus) p *= 2;
 	p *= (theGridSystem.sizeToDifficulty() + 1);
-	
+
 	points += p;
 
 	deleteLeaves(type, levelToLeaveToDelete(type, nb, level+2, level+2 - remain[type], countBranchLeavesOfType(type)));
@@ -226,17 +226,15 @@ void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 
 void NormalGameModeManager::startLevel(int lvl) {
 	level = lvl;
-	
+
 	LOGI("New level: %d", lvl);
 
 	for (int i=0;i<theGridSystem.Types;i++)
 		remain[i] = 2+level;
 
 	helpAvailable = true;
-	
-	for (int i=0;i<theGridSystem.Types;i++)
-		remain[i] = 2+level;
-		
+
+
 	// put hedgehog back on first animation position
 	c->ind = 0;
 	bonus = MathUtil::RandomInt(theGridSystem.Types);
@@ -247,6 +245,7 @@ void NormalGameModeManager::startLevel(int lvl) {
 
 void NormalGameModeManager::changeLevel(int lvl) {
 	startLevel(lvl);
+	generateLeaves(0, theGridSystem.Types);
 	uiHelper.game->setupGameProp();
 }
 
@@ -262,7 +261,7 @@ bool NormalGameModeManager::LevelUp() {
 		successMgr->sLevel1For2K(level, points);
 
 		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
-		
+
 		startLevel(level+1);
 	}
 	return match;
