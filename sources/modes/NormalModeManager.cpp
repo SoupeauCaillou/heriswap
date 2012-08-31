@@ -40,7 +40,7 @@
 #define DECOR2_SPEED 1.6
 #define DECOR1_SPEED 1
 
-NormalGameModeManager::NormalGameModeManager(Game* game, SuccessManager* SuccessMgr) : GameModeManager(game,SuccessMgr) {
+NormalGameModeManager::NormalGameModeManager(Game* game, SuccessManager* SuccessMgr, StorageAPI* sAPI) : GameModeManager(game,SuccessMgr, sAPI) {
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(15,0.125));
 	pts.push_back(Vector2(25,0.25));
@@ -119,7 +119,7 @@ void NormalGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << points;
+	a << storageAPI->getMyRank(points, Normal, theGridSystem.sizeToDifficulty()) << ". " << std::fixed << points;
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
 

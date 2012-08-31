@@ -33,7 +33,7 @@
 #include "CombinationMark.h"
 #include "GridSystem.h"
 
-RandomNameToBeChangedGameModeManager::RandomNameToBeChangedGameModeManager(Game* game, SuccessManager* successMgr) : GameModeManager(game, successMgr) {
+RandomNameToBeChangedGameModeManager::RandomNameToBeChangedGameModeManager(Game* game, SuccessManager* successMgr, StorageAPI* sAPI) : GameModeManager(game, successMgr, sAPI) {
 }
 
 RandomNameToBeChangedGameModeManager::~RandomNameToBeChangedGameModeManager() {
@@ -77,7 +77,7 @@ void RandomNameToBeChangedGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << std::fixed << points;
+	a << storageAPI->getMyRank(points, RandomNameToBeChanged, theGridSystem.sizeToDifficulty()) << ". " << std::fixed << points;
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
 

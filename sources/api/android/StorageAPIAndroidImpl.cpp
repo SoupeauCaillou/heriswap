@@ -37,7 +37,7 @@ struct StorageAPIAndroidImpl::StorageAPIAndroidImplDatas {
     jmethodID submitScore;
     jmethodID getScores;
     jmethodID getModePlayedCount;
-    
+
     bool initialized;
 };
 
@@ -58,7 +58,7 @@ void StorageAPIAndroidImpl::init(JNIEnv* pEnv) {
 		LOGW("StorageAPI not properly uninitialized");
 	}
 	env = pEnv;
-	
+
     datas->cls = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib"));
     datas->soundEnable = jniMethodLookup(env, datas->cls, "soundEnable", "(Z)Z");
     datas->getGameCountBeforeNextAd = jniMethodLookup(env, datas->cls, "getGameCountBeforeNextAd", "()I");
@@ -67,7 +67,8 @@ void StorageAPIAndroidImpl::init(JNIEnv* pEnv) {
     datas->submitScore = jniMethodLookup(env, datas->cls, "submitScore", "(IIIIFLjava/lang/String;)V");
     datas->getScores = jniMethodLookup(env, datas->cls, "getScores", "(II[I[I[F[Ljava/lang/String;)I");
     datas->getModePlayedCount = jniMethodLookup(env, datas->cls, "getModePlayedCount", "()I");
-    
+    datas->getMyRank = jniMethodLookup(env, datas->cls, "getMyRank", "(FII)I");
+
     datas->initialized = true;
 }
 
@@ -140,4 +141,8 @@ int StorageAPIAndroidImpl::getSavedGamePointsSum() {
 
 bool StorageAPIAndroidImpl::everyModesPlayed() {
     return (env->CallStaticIntMethod(datas->cls, datas->getModePlayedCount) == 4);
+}
+
+int StorageAPIAndroidImpl::getMyRank(float score, GameMode mode, Difficulty difficulty) {
+	return env->CallStaticIntMethod(datas->cls, datas->getMyRank, score, (int)mode, (int)difficulty);
 }

@@ -234,7 +234,7 @@ void ModeMenuStateManager::Setup() {
 
 void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 	/*getting scores*/
-	std::vector<StorageAPI::Score> entries = storageAPI->savedScores(mode, (int)dif);
+	std::vector<StorageAPI::Score> entries = storageAPI->savedScores(mode, dif);
 
 	/* treatment*/
 	bool alreadyRed = false;
@@ -329,11 +329,11 @@ void ModeMenuStateManager::submitScore(const std::string& playerName) {
     } else {
      entry.level = 1;
     }
-    storageAPI->submitScore(entry, m, (int)difficulty);
+    storageAPI->submitScore(entry, m, difficulty);
 }
 
 bool ModeMenuStateManager::isCurrentScoreAHighOne() {
-    std::vector<StorageAPI::Score> entries = storageAPI->savedScores(modeMgr->GetMode(), (int)difficulty);
+    std::vector<StorageAPI::Score> entries = storageAPI->savedScores(modeMgr->GetMode(), difficulty);
 
     int s = entries.size();
     if (s < 5)
@@ -443,7 +443,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 			TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
 			TEXT_RENDERING(title)->hide = true;
 
-			if (storageAPI->savedScores(modeMgr->GetMode(), (int)difficulty).size() == 0) {
+			if (storageAPI->savedScores(modeMgr->GetMode(), difficulty).size() == 0) {
 				// show help
 				helpMgr->mode = modeMgr->GetMode();
 				helpMgr->oldState = BlackToSpawn;

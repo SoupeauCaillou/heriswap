@@ -52,9 +52,10 @@ static float finalHerissonPosition(Entity herisson) {
     return PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5;
 }
 
-GameModeManager::GameModeManager(Game* game, SuccessManager* sMgr) {
+GameModeManager::GameModeManager(Game* game, SuccessManager* sMgr, StorageAPI* sAPI) {
 	uiHelper.game = game;
 	successMgr = sMgr;
+	storageAPI = sAPI;
 }
 
 

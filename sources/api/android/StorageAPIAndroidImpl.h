@@ -27,13 +27,14 @@ class StorageAPIAndroidImpl : public StorageAPI {
         ~StorageAPIAndroidImpl();
         void init(JNIEnv* env);
         void uninit();
-        void submitScore(Score scr, int mode, int diff);
-        std::vector<Score> savedScores(int mode, int difficulty);
+        void submitScore(Score scr, GameMode mode, Difficulty diff);
+        std::vector<Score> savedScores(GameMode mode, Difficulty difficulty);
         bool soundEnable(bool switchIt);
         int getGameCountBeforeNextAd();
         void setGameCountBeforeNextAd(int c);
         int getSavedGamePointsSum();
         bool everyModesPlayed();
+        int getMyRank(float score, GameMode mode, Difficulty difficulty);
 
     private:
         class StorageAPIAndroidImplDatas;

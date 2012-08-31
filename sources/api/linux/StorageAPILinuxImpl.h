@@ -23,14 +23,15 @@
 class StorageAPILinuxImpl : public StorageAPI {
     public:
         void init();
-        void submitScore(Score scr, int mode, int diff);
-        std::vector<Score> savedScores(int mode, int difficulty);
+        void submitScore(Score scr, GameMode mode, Difficulty difficulty);
+        std::vector<Score> savedScores(GameMode mode, Difficulty difficulty);
         bool soundEnable(bool switchIt);
         int getGameCountBeforeNextAd();
         void setGameCountBeforeNextAd(int c);
         int getSavedGamePointsSum();
         bool everyModesPlayed();
-        
+        int getMyRank(float score, GameMode mode, Difficulty difficulty);
+
     private:
     	std::string dbPath;
 };

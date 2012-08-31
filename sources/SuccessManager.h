@@ -92,11 +92,11 @@ class SuccessManager {
 		bool bTestEverything;
 
 		//success Beat them all (classic) (Get a better score than 5 current top scores in classic gamemode)
-		void sBTAC(StorageAPI* storage, int difficulty, unsigned int points);
+		void sBTAC(StorageAPI* storage, Difficulty difficulty, unsigned int points);
 		bool bBTAC;
 
 		//success Beat them all (MODE2) (Get a better score than 5 current top scores in MODE2 gamemode)
-		void sBTAM(StorageAPI* storage, int difficulty, float time);
+		void sBTAM(StorageAPI* storage, Difficulty difficulty, float time);
 		bool bBTAM;
 
 		//success 666 Loser ! (Lose 3 classic game at level 6 in a row)

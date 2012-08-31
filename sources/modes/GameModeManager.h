@@ -20,6 +20,7 @@
 
 #include <base/EntityManager.h>
 
+#include "api/StorageAPI.h"
 #include "Game.h"
 #include "InGameUiHelper.h"
 #include "AnimedActor.h"
@@ -42,7 +43,7 @@ class GameModeManager {
 			float rot;
 		};
 
-		GameModeManager(Game* game, SuccessManager* successMgr);
+		GameModeManager(Game* game, SuccessManager* successMgr, StorageAPI* sAPI);
 
 		virtual ~GameModeManager() {}
 
@@ -105,6 +106,7 @@ class GameModeManager {
 		SuccessManager* successMgr;
 		//hérisson
 		AnimatedActor* c;
+		StorageAPI* storageAPI;
 	private:
 		std::vector<Render> posBranch;
 		void fillVec();

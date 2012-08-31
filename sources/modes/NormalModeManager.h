@@ -23,7 +23,7 @@
 
 class NormalGameModeManager : public GameModeManager {
 	public:
-		NormalGameModeManager(Game* game, SuccessManager* SuccessMgr);
+		NormalGameModeManager(Game* game, SuccessManager* SuccessMgr, StorageAPI* sAPI);
 		~NormalGameModeManager();
 
 		void Setup();
@@ -58,7 +58,7 @@ class NormalGameModeManager : public GameModeManager {
 
 	private:
 		void startLevel(int lvl);
-		
+
 		unsigned int level;
 		int remain[8];
 		bool helpAvailable;

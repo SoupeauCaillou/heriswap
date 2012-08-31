@@ -53,9 +53,9 @@
 
 PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad, CommunicationAPI* comAPI) {
      mode = Normal;
-     mode2Manager[Normal] = new NormalGameModeManager(game, successMgr);
-     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game, successMgr);
-     mode2Manager[RandomNameToBeChanged] = new RandomNameToBeChangedGameModeManager(game, successMgr);
+     mode2Manager[Normal] = new NormalGameModeManager(game, successMgr, storagee);
+     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game, successMgr, storagee);
+     mode2Manager[RandomNameToBeChanged] = new RandomNameToBeChangedGameModeManager(game, successMgr, storagee);
      storage = storagee;
 
      soundButton = theEntityManager.CreateEntity();

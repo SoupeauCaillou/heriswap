@@ -209,7 +209,7 @@ void SuccessManager::sTestEverything(StorageAPI* str) {
 	}
 }
 
-void SuccessManager::sBTAC(StorageAPI* storage, int difficulty, unsigned int points) {
+void SuccessManager::sBTAC(StorageAPI* storage, Difficulty difficulty, unsigned int points) {
 	if (!bBTAC) {
 	    std::vector<StorageAPI::Score> entries = storage->savedScores(1, difficulty);
 		int s = entries.size();
@@ -220,7 +220,7 @@ void SuccessManager::sBTAC(StorageAPI* storage, int difficulty, unsigned int poi
 	}
 }
 
-void SuccessManager::sBTAM(StorageAPI* storage, int difficulty, float time) {
+void SuccessManager::sBTAM(StorageAPI* storage, Difficulty difficulty, float time) {
 	if (!bBTAM) {
 		std::vector<StorageAPI::Score> entries = storage->savedScores(2, difficulty);
 		int s = entries.size();

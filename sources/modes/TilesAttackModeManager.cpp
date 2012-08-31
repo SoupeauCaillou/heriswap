@@ -33,7 +33,7 @@
 #include "CombinationMark.h"
 #include "GridSystem.h"
 
-TilesAttackGameModeManager::TilesAttackGameModeManager(Game* game, SuccessManager* successMgr) : GameModeManager(game, successMgr) {
+TilesAttackGameModeManager::TilesAttackGameModeManager(Game* game, SuccessManager* successMgr, StorageAPI* sAPI) : GameModeManager(game, successMgr, sAPI) {
 }
 
 TilesAttackGameModeManager::~TilesAttackGameModeManager() {
@@ -95,6 +95,8 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	//Temps
 	{
 	std::stringstream a;
+	a << storageAPI->getMyRank(time, TilesAttack, theGridSystem.sizeToDifficulty()) << ". ";
+
 	int minute = ((int)time)/60;
 	int seconde= ((int)time)%60;
 	int tenthsec = (time - minute * 60 - seconde) * 10;

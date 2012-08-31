@@ -104,20 +104,19 @@ void StorageAPILinuxImpl::init() {
     }
     #endif
 }
-
-void StorageAPILinuxImpl::submitScore(Score scr, int mode, int diff) {
+void StorageAPILinuxImpl::submitScore(Score scr, GameMode mode, Difficulty diff) {
 	#ifndef EMSCRIPTEN
     std::stringstream tmp;
-    tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << mode<<","<<diff<<","<<scr.points<<","<<scr.time<<","<<scr.level<<")";
+    tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << (int)mode <<","<< (int)diff<<","<<scr.points<<","<<scr.time<<","<<scr.level<<")";
     request(dbPath, tmp.str().c_str(), 0, 0);
     #endif
 }
 
-std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(int mode, int difficulty) {
+std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(GameMode mode, Difficulty difficulty) {
     std::vector<StorageAPI::Score> result;
 	#ifndef EMSCRIPTEN
     std::stringstream tmp;
-    tmp << "select * from score where mode= "<< mode << " and difficulty=" << difficulty;
+    tmp << "select * from score where mode= "<< (int)mode << " and difficulty=" << (int)difficulty;
     if (mode==Normal || mode==RandomNameToBeChanged)
         tmp << " order by points desc limit 5";
     else
@@ -177,5 +176,23 @@ bool StorageAPILinuxImpl::everyModesPlayed() {
     return (s==4);
     #else
     return false;
+    #endif
+}
+
+int StorageAPILinuxImpl::getMyRank(float score, GameMode mode, Difficulty difficulty) {
+	#ifndef EMSCRIPTEN
+    std::vector<Score> entries = savedScores(mode, difficulty);
+
+	int i = 0;
+    if (mode != TilesAttack) {
+		while (i < entries.size() && (int)score <= entries[i].points)
+			i++;
+	} else {
+		while (i < entries.size() && score > entries[i].time)
+			i++;
+	}
+	return i+1;
+    #else
+    return 0;
     #endif
 }
