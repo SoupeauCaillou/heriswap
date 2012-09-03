@@ -18,133 +18,82 @@
 */
 package net.damsy.soupeaucaillou.heriswap;
 
+import net.damsy.soupeaucaillou.SacActivity;
+import net.damsy.soupeaucaillou.heriswap.api.NameInputAPI;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.opengl.GLSurfaceView;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.PowerManager;
-// import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
-import com.chartboost.sdk.ChartBoost;
-import com.chartboost.sdk.ChartBoostDelegate;
+public class HeriswapActivity extends SacActivity {
+	static {
+        System.loadLibrary("heriswap");
+    }
+	
+	@Override
+	public boolean canShowAppRater() {
+		SQLiteDatabase db = HeriswapActivity.scoreOpenHelper
+				.getReadableDatabase();
+		Cursor cursor = db.rawQuery("select count (*) from score", null);
+		try {
+			if (cursor.getCount() > 0) {
+				cursor.moveToFirst();
+				if (cursor.getInt(0) >= 10)
+					return true;
+			}
+		} catch (Exception exc) {
 
-import com.swarmconnect.Swarm;
-import com.swarmconnect.SwarmActivity;
-
-public class HeriswapActivity extends SwarmActivity {
-static public final String Tag = "HeriswapJ";
-	// public static List<Achievement> achievements = null;
-	// public static List<Leaderboard> leaderboards = null;
-
+		} finally {
+			cursor.close();
+		}
+		return false;
+	}
+	
+	@Override
+	public int[] getSwarmBoards() {
+		return HeriswapSecret.boardsSwarm;
+	}
+	
+	@Override
+	public int getSwarmGameID() {
+		return HeriswapSecret.Swarm_gameID;
+	}
+	
+	@Override
+	public String getSwarmGameKey() {
+		return HeriswapSecret.Swarm_gameKey;
+	}
+	
+	@Override
+	public String getBundleKey() {
+		return TILEMATCH_BUNDLE_KEY;
+	}
+	
+	static public final String Tag = "HeriswapJ";
 	static final String TILEMATCH_BUNDLE_KEY = "plop";
-	static public long game = 0 ;
-	static public Object mutex;
-	static public byte[] savedState;
-	static public int openGLESVersion = 2;
+	
 	byte[] renderingSystemState;
-	static public SoundPool soundPool;
-	static public boolean isRunning;
-	static public boolean requestPausedFromJava, backPressed;
+	
 	static public HeriswapStorage.OptionsOpenHelper optionsOpenHelper;
 	static public HeriswapStorage.ScoreOpenHelper scoreOpenHelper;
 	static public View playerNameInputView;
 	static public EditText nameEdit;
 	static public String playerName;
-	static public boolean nameReady;
-	static public Resources res;
+
 	static public SharedPreferences preferences;
 	static public Button[] oldName;
-	static public boolean adHasBeenShown, ofHasBeenShown, adWaitingAdDisplay;
-	static public boolean runGameLoop;
-
-	static public HeriswapActivity activity;
-	PowerManager.WakeLock wl;
-	HeriswapRenderer renderer;
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		/*if (resultCode == GSSDK.GS_ACTIVITY_RESULT) {
-			// notify blocked
-			//NOLOGLog.w(HeriswapActivity.Tag, "Ad hidden");
-			adHasBeenShown = true;
-		}*/
-		ofHasBeenShown = false;
-	}
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON CREATE");
-        activity = this;
-        ofHasBeenShown = adHasBeenShown = adWaitingAdDisplay = false;
-
-        ChartBoost _cb = ChartBoost.getSharedChartBoost(this);
-        _cb.setAppId(HeriswapSecret.CB_appId);
-        _cb.setAppSignature(HeriswapSecret.CB_AppSignature);
-        _cb.install();
-        _cb.setDelegate(new ChartBoostDelegate() {
-        	@Override
-        	public void didCloseInterstitial(View interstitialView) {
-        		super.didCloseInterstitial(interstitialView);
-        		adWaitingAdDisplay = false;
-        		adHasBeenShown = true;
-        	}
-
-        	@Override
-        	public void didFailToLoadInterstitial() {
-        		super.didFailToLoadInterstitial();
-        		adWaitingAdDisplay = false;
-        		adHasBeenShown = true;
-        	}
-
-        	@Override
-        	public boolean shouldDisplayInterstitial(View interstitialView) {
-        		if (adWaitingAdDisplay && interstitialView != null) {
-        			adWaitingAdDisplay = false;
-        			return true;
-        		} else {
-        			return false;
-        		}
-        	}
-		});
-
-        _cb.cacheInterstitial();
-
-        preferences = getSharedPreferences("HeriswapPref", 0);
-
-        mutex = new Object();
-
-        getWindow().setFlags(LayoutParams.FLAG_FULLSCREEN,
-    			LayoutParams.FLAG_FULLSCREEN);
-
-        setContentView(R.layout.main);
-        res = getResources();
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.parent_frame);
-        mGLView = (GLSurfaceView) findViewById(R.id.surfaceviewclass);
-
-        synchronized (mGLView) {
-        	mGLView.setEGLContextClientVersion(2);
-        	HeriswapActivity.openGLESVersion = 2;
-        	renderer = new HeriswapRenderer(getAssets());
-            mGLView.setRenderer(renderer);
-		}
-
-        mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        // rl.addView(mGLView);
         playerNameInputView = findViewById(R.id.enter_name);
         nameEdit = (EditText) findViewById(R.id.player_name_input);
         rl.bringChildToFront(playerNameInputView);
@@ -158,7 +107,7 @@ static public final String Tag = "HeriswapJ";
 				//NOLOGLog.i(HeriswapActivity.Tag, "Player name: '" + playerName + "'");
 				if (playerName != null && playerName.length() > 0) {
 					playerNameInputView.setVisibility(View.GONE);
-					HeriswapActivity.nameReady = true;
+					NameInputAPI.nameReady = true;
 					// hide keyboard
 					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 					mgr.hideSoftInputFromWindow(nameEdit.getWindowToken(), 0);
@@ -174,7 +123,7 @@ static public final String Tag = "HeriswapJ";
 				public void onClick(View v) {
 	        		playerName = ((Button)v).getText().toString();
 	        		playerNameInputView.setVisibility(View.GONE);
-					HeriswapActivity.nameReady = true;
+	        		NameInputAPI.nameReady = true;
 					// hide keyboard
 					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 					mgr.hideSoftInputFromWindow(nameEdit.getWindowToken(), 0);
@@ -184,139 +133,10 @@ static public final String Tag = "HeriswapJ";
 
         HeriswapActivity.scoreOpenHelper = new HeriswapStorage.ScoreOpenHelper(this);
         HeriswapActivity.optionsOpenHelper = new HeriswapStorage.OptionsOpenHelper(this);
-        HeriswapActivity.soundPool = new SoundPool(8, AudioManager.STREAM_MUSIC, 0);
-
-        AppRater.app_launched(this, (int)(mGLView.getWidth() * 0.9));
-
-        if (savedInstanceState != null) {
-	        HeriswapActivity.savedState = savedInstanceState.getByteArray(TILEMATCH_BUNDLE_KEY);
-	        if (HeriswapActivity.savedState != null) {
-	        	//NOLOGLog.i(HeriswapActivity.Tag, "State restored from app bundle");
-	        } else {
-	        	//NOLOGLog.i(HeriswapActivity.Tag, "WTF?");
-	        }
-        } else {
-        	//NOLOGLog.i(HeriswapActivity.Tag, "savedInstanceState is null");
-        }
-
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
-        
-        SharedPreferences prefs = HeriswapActivity.activity.getSharedPreferences("apprater", 0);
-        long newValue = prefs.getLong("launch_count", 0) + 1;
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong("launch_count", newValue);
-        editor.commit();
     }
-
-    @Override
-    protected void onPause() {
-    	//Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON PAUSE");
-    	synchronized (mGLView) {
-	       	if (renderer != null) {
-	       		// must be done before super.pause()
-	       		mGLView.onPause();
-	       	}
-	    }
-        if (wl != null)
-        	wl.release();
-        HeriswapActivity.requestPausedFromJava = true;
-
-        if (HeriswapActivity.game != 0) {
-	        // TilematchActivity.isRunning = false;
-        	HeriswapActivity.runGameLoop = false; // prevent step being called again
-	        synchronized (HeriswapActivity.mutex) {
-	        	// HeriswapJNILib.invalidateTextures(HeriswapActivity.game);
-			}
-        }
-        Swarm.setInactive(this);
-        //OpenFeint.onPause();
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-    	ChartBoost.getSharedChartBoost(this);
-//Log.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON RESUME");
-    	ofHasBeenShown  = false;
-        super.onResume();
-        if (wl != null)
-        	wl.acquire();
-        HeriswapJNILib.resetTimestep(HeriswapActivity.game);
-        HeriswapActivity.requestPausedFromJava = false;
-        isRunning = true;
-
-        synchronized (mGLView) {
-        	if (renderer != null) {
-        		mGLView.onResume();
-        	}
-        }
-
-        //OpenFeint.onResume();
-        Swarm.setActive(this);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-    	//NOLOGLog.i(HeriswapActivity.Tag, "Activity LifeCycle ##### ON SAVE INSTANCE");
-    	if (HeriswapActivity.game == 0)
-    		return;
-    	/* save current state; we'll be used only if app get killed */
-    	synchronized (HeriswapActivity.mutex) {
-    		//NOLOGLog.i(HeriswapActivity.Tag, "Save state!");
-	    	byte[] savedState = HeriswapJNILib.serialiazeState(HeriswapActivity.game);
-	    	if (savedState != null) {
-	    		outState.putByteArray(TILEMATCH_BUNDLE_KEY, savedState);
-	    	}
-	    	//NOLOGLog.i(HeriswapActivity.Tag, "State saved");
-    	}
-    	super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-    	int action = event.getAction();
-
-    	if (game != 0) {
-	    	if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_MOVE) {
-	    		HeriswapJNILib.handleInputEvent(game, event.getAction(), event.getX(), event.getY());
-	    		return true;
-	    	}
-    	}
-
-    	return super.onTouchEvent(event);
-    }
-
-    @Override
-    public void onBackPressed() {
-    	HeriswapActivity.backPressed = true;
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-    	if (keyCode == KeyEvent.KEYCODE_MENU) {
-    		HeriswapActivity.backPressed = true;
-    		// TilematchJNILib.pause(game);
-    	}
-    	return super.onKeyUp(keyCode, event);
-    }
-
-    public static GLSurfaceView mGLView;
-
+	
     private String filterPlayerName(String name) {
     	String n = name.trim();
     	return n.replaceAll("[^a-zA-Z0-9 ]"," ").substring(0, Math.min(11, n.length()));
-    }
-
-    static {
-        System.loadLibrary("heriswap");
-    }
-
-    @Override
-    protected void onDestroy() {
-    	super.onDestroy();
-    	//OpenFeint.onExit();
-    	Swarm.logOut();
-    	//Log.i(HeriswapActivity.Tag, "Activity destroyed");
     }
 }
