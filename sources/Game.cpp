@@ -386,7 +386,7 @@ void Game::tick(float dt) {
 	}
 
 	//game ended
-	if (percentDone >= 1) {
+	if (datas->state == UserInput && percentDone >= 1) {
 		newState = GameToBlack;
 		//show one combination which remain
 		if (datas->mode != TilesAttack) {
