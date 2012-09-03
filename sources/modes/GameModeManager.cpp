@@ -45,7 +45,7 @@
 
 
 static float initialHerissonPosition(Entity herisson) {
-    return -PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(herisson)->size.X * 0.;
+    return -PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.25;
 }
 
 static float finalHerissonPosition(Entity herisson) {
