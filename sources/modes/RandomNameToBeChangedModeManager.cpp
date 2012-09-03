@@ -41,6 +41,14 @@ RandomNameToBeChangedGameModeManager::~RandomNameToBeChangedGameModeManager() {
 
 void RandomNameToBeChangedGameModeManager::Setup() {
 	GameModeManager::Setup();
+	
+	validBranchPos.clear();
+	#include "PositionFeuilles.h"
+	for (int i=0; i<8*6; i++) {
+		Vector2 v(PlacementHelper::GimpXToScreen(pos[3*i]), PlacementHelper::GimpYToScreen(pos[3*i+1]));
+		Render truc = {v, MathUtil::ToRadians(pos[3*i+2])};
+		validBranchPos.push_back(truc);
+	}
 }
 #define RATE 1
 void RandomNameToBeChangedGameModeManager::Enter() {
@@ -54,11 +62,11 @@ void RandomNameToBeChangedGameModeManager::Enter() {
 
 	pts.push_back(Vector2(limit,1));//need limit leaves to end game
 
-	generateLeaves(0, 8);
+	generateLeaves(0, 0);
 
 	GameModeManager::Enter();
 	
-    spawn = MathUtil::RandomFloat() * RATE;
+    spawn = 0;//MathUtil::RandomFloat() * RATE;
 }
 
 void RandomNameToBeChangedGameModeManager::Exit() {
@@ -69,10 +77,35 @@ void RandomNameToBeChangedGameModeManager::Exit() {
 void RandomNameToBeChangedGameModeManager::GameUpdate(float dt) {
 	time+=dt;
 	
-	spawn += dt;
-	while (spawn >= RATE) {
-		
-		
+	spawn += dt * RATE;
+	while (spawn >= 1) {
+		if (branchLeaves.size() < 48) {
+			int rand = 0, i;
+			do {
+				rand = MathUtil::RandomIntInRange(0, validBranchPos.size());
+				for (i=0; i<branchLeaves.size(); i++) {
+					if (Vector2::Distance(TRANSFORM(branchLeaves[i].e)->position, validBranchPos[rand].v)
+						<  0.01) {
+					break;
+						}
+				}
+			} while (i != branchLeaves.size());
+			Entity e = createAndAddLeave(MathUtil::RandomInt(8), validBranchPos[rand].v, validBranchPos[rand].rot);
+			leaveGrowing.push_back(e);
+			TRANSFORM(e)->size *= 0.1;
+		}
+		spawn -= 1;
+	}
+	
+	float growth = MathUtil::RandomFloatInRange(0.2f, 1.0f);
+	for (int i=0; i<leaveGrowing.size(); i++) {
+		Entity e = leaveGrowing[i];
+		TRANSFORM(e)->size = TRANSFORM(e)->size + TRANSFORM(e)->size * growth * dt;
+		if (TRANSFORM(e)->size.X > Game::CellSize(8) * Game::CellContentScale()) {
+			TRANSFORM(e)->size.X = TRANSFORM(e)->size.Y = Game::CellSize(8) * Game::CellContentScale();
+			leaveGrowing.erase(leaveGrowing.begin() + i);
+			i--;
+		}
 	}
 }
 

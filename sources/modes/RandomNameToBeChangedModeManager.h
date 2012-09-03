@@ -46,5 +46,7 @@ class RandomNameToBeChangedGameModeManager : public GameModeManager {
 		unsigned int leavesDone;
 		bool succNoGridReset;
 		float spawn;
+		std::vector<Render> validBranchPos;
+		std::vector<Entity> leaveGrowing;
 };
 

@@ -106,9 +106,10 @@ class GameModeManager {
 		SuccessManager* successMgr;
 		//hérisson
 		AnimatedActor* c;
-		StorageAPI* storageAPI;
-		void createAndAddLeave(int type, const Vector2& position, float rotation);
 
+		StorageAPI* storageAPI;
+		
+		Entity createAndAddLeave(int type, const Vector2& position, float rotation);
 	private:
 		std::vector<Render> posBranch;
 		void fillVec();

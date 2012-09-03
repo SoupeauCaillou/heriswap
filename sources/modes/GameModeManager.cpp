@@ -205,7 +205,7 @@ void GameModeManager::TogglePauseDisplay(bool paused) {
     RENDERING(uiHelper.pauseButton)->hide = paused;
 }
 
-void GameModeManager::createAndAddLeave(int type, const Vector2& position, float rotation) {
+Entity GameModeManager::createAndAddLeave(int type, const Vector2& position, float rotation) {
 	Entity e = theEntityManager.CreateEntity();
 	ADD_COMPONENT(e, Transformation);
 	ADD_COMPONENT(e, Rendering);
@@ -222,6 +222,7 @@ void GameModeManager::createAndAddLeave(int type, const Vector2& position, float
 	bl.e = e;
 	bl.type=type;
 	branchLeaves.push_back(bl);
+	return e;
 }
 
 void GameModeManager::generateLeaves(int* nb, int type) {

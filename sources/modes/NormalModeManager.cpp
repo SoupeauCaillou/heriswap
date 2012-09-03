@@ -199,7 +199,6 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
     SCROLLING(decor1er)->speed = MathUtil::Max(0.0f, -nextHerissonSpeed);
     // SCROLLING(decor2nd)->speed.X = nextHerissonSpeed * DECOR2_SPEED;
     // SCROLLING(sky)->speed.X = nextHerissonSpeed * SKY_SPEED;
-
 }
 
 void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
