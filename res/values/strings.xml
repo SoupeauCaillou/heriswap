@@ -6,7 +6,8 @@
 	<string name="abandonner">Quit</string>
 	<string name="mode_1">Score race</string>
 	<string name="mode_2">Time attack</string>
-	<string name="mode_3">MODE3</string><string name="score">Highscores:</string>
+	<string name="mode_3">100 seconds</string>
+	<string name="score">Highscores:</string>
 	<string name="jouer">Start</string>
 	<string name="rejouer">Restart</string>
 	<string name="diff_1">Easy</string>
@@ -30,5 +31,4 @@
 	<string name="rate_now">Rate it !</string>
 	<string name="rate_later">Later</string>
 	<string name="rate_never">Never</string>
-	
 </resources>

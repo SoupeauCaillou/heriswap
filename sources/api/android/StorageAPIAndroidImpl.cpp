@@ -67,7 +67,6 @@ void StorageAPIAndroidImpl::init(JNIEnv* pEnv) {
     datas->submitScore = jniMethodLookup(env, datas->cls, "submitScore", "(IIIIFLjava/lang/String;)V");
     datas->getScores = jniMethodLookup(env, datas->cls, "getScores", "(II[I[I[F[Ljava/lang/String;)I");
     datas->getModePlayedCount = jniMethodLookup(env, datas->cls, "getModePlayedCount", "()I");
-    datas->getMyRank = jniMethodLookup(env, datas->cls, "getMyRank", "(FII)I");
 
     datas->initialized = true;
 }
@@ -79,12 +78,12 @@ void StorageAPIAndroidImpl::uninit() {
 	}
 }
 
-void StorageAPIAndroidImpl::submitScore(Score scr, int mode, int diff) {
+void StorageAPIAndroidImpl::submitScore(Score scr, GameMode mode, Difficulty diff) {
     jstring name = env->NewStringUTF(scr.name.c_str());
-    env->CallStaticVoidMethod(datas->cls, datas->submitScore, mode, diff, scr.points, scr.level, scr.time, name);
+    env->CallStaticVoidMethod(datas->cls, datas->submitScore, (int)mode, (int)diff, scr.points, scr.level, scr.time, name);
 }
 
-std::vector<StorageAPI::Score> StorageAPIAndroidImpl::savedScores(int mode, int difficulty) {
+std::vector<StorageAPI::Score> StorageAPIAndroidImpl::savedScores(GameMode mode, Difficulty difficulty) {
     std::vector<StorageAPI::Score> sav;
 
     // build arrays params
@@ -102,7 +101,7 @@ std::vector<StorageAPI::Score> StorageAPIAndroidImpl::savedScores(int mode, int 
     env->SetIntArrayRegion(points, 0, 5, idummy);
     env->SetIntArrayRegion(levels, 0, 5, idummy);
     env->SetFloatArrayRegion(times, 0, 5, fdummy);
-    int count = env->CallStaticIntMethod(datas->cls, datas->getScores, mode, difficulty, points, levels, times, names);
+    int count = env->CallStaticIntMethod(datas->cls, datas->getScores, (int)mode, (int)difficulty, points, levels, times, names);
 
     for (int i=0; i<count; i++) {
         StorageAPI::Score s;
@@ -143,6 +142,16 @@ bool StorageAPIAndroidImpl::everyModesPlayed() {
     return (env->CallStaticIntMethod(datas->cls, datas->getModePlayedCount) == 4);
 }
 
-int StorageAPIAndroidImpl::getMyRank(float score, GameMode mode, Difficulty difficulty) {
-	return env->CallStaticIntMethod(datas->cls, datas->getMyRank, score, (int)mode, (int)difficulty);
+int StorageAPIAndroidImpl::getMyRank(float score, StorageAPI::GameMode mode, Difficulty difficulty) {
+    std::vector<StorageAPI::Score> entries = savedScores(mode, difficulty);
+
+	int i = 0;
+    if (mode != 1) {
+		while (i < entries.size() && (int)score <= entries[i].points)
+			i++;
+	} else {
+		while (i < entries.size() && score > entries[i].time)
+			i++;
+	}
+	return i+1;
 }
