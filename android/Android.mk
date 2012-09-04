@@ -51,7 +51,8 @@ LOCAL_SRC_FILES := \
 	../sources/modes/RandomNameToBeChangedModeManager.cpp \
 	../sources/modes/InGameUiHelper.cpp \
     ../sources/api/android/StorageAPIAndroidImpl.cpp \
-    ../sources/api/android/CommunicationAPIAndroidImpl.cpp
+    ../sources/api/android/CommunicationAPIAndroidImpl.cpp \
+    ../sac/android/sacjnilib.cpp
 
 LOCAL_STATIC_LIBRARIES := sac png tremor
 LOCAL_LDLIBS := -lGLESv2 -lGLESv1_CM -lEGL -llog -lz

@@ -47,11 +47,11 @@ public class HeriswapActivity extends SacActivity {
 				if (cursor.getInt(0) >= 10)
 					return true;
 			}
-		} catch (Exception exc) {
+		} catch (Exception exc) { 
 
 		} finally {
 			cursor.close();
-		}
+		} 
 		return false;
 	}
 	

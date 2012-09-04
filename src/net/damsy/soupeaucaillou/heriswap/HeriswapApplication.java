@@ -25,6 +25,6 @@ public class HeriswapApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
+  
 	}
 }
