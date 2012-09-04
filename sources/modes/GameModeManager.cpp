@@ -218,16 +218,13 @@ Entity GameModeManager::createAndAddLeave(int type, const Vector2& position, flo
 	TRANSFORM(e)->rotation = rotation;
 
 	TRANSFORM(e)->z = MathUtil::Lerp(DL_LeafMin, DL_LeafMax, MathUtil::RandomFloat());
-	BranchLeaf bl;
-	bl.e = e;
-	bl.type=type;
-	branchLeaves.push_back(bl);
+
 	return e;
 }
 
 void GameModeManager::generateLeaves(int* nb, int type) {
-	for (unsigned int az=0;az<branchLeaves.size();az++)
-		theEntityManager.DeleteEntity(branchLeaves[az].e);
+	for (unsigned int i=0;i<branchLeaves.size();i++)
+		theEntityManager.DeleteEntity(branchLeaves[i].e);
 
 	branchLeaves.clear();
 	fillVec();
@@ -237,8 +234,11 @@ void GameModeManager::generateLeaves(int* nb, int type) {
 		    int rand = MathUtil::RandomInt(posBranch.size());
 			Vector2 pos = posBranch[rand].v;
 			pos.X -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenWidth*0.5;
-			
-			createAndAddLeave(j, pos, posBranch[rand].rot);
+
+			BranchLeaf bl;
+			bl.e = createAndAddLeave(j, pos, posBranch[rand].rot);
+			bl.type = j;
+			branchLeaves.push_back(bl);
 
 			posBranch.erase(posBranch.begin()+rand);
 		}

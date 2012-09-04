@@ -39,11 +39,17 @@ class RandomNameToBeChangedGameModeManager : public GameModeManager {
 
 		GameMode GetMode() { return RandomNameToBeChanged; };
 
+void squall();
+
 		void ScoreCalc(int nb, unsigned int type);
 		int saveInternalState(uint8_t** out);
         const uint8_t* restoreInternalState(const uint8_t* in, int size);
 	private:
 
 		std::vector<Render> validBranchPos;
+
+		bool squallGo;
+		float squallDuration;
+		std::vector<Entity> squallLeaves;
 };
 

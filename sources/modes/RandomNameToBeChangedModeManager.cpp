@@ -27,6 +27,8 @@
 #include "systems/ContainerSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
+#include "systems/TransformationSystem.h"
+#include "systems/PhysicsSystem.h"
 
 #include "DepthLayer.h"
 #include "Game.h"
@@ -49,12 +51,25 @@ void RandomNameToBeChangedGameModeManager::Setup() {
 		Render truc = {v, MathUtil::ToRadians(pos[3*i+2])};
 		validBranchPos.push_back(truc);
 	}
+
+	for (int i = 0; i < 100;  i++) {
+		squallLeaves.push_back(GameModeManager::createAndAddLeave(bonus, Vector2(0, 0), MathUtil::RandomFloat(7)));
+		Entity e = squallLeaves[i];
+
+		ADD_COMPONENT(e, Physics);
+		PHYSICS(e)->mass = MathUtil::RandomFloatInRange(1.f, 10.f);
+		PHYSICS(e)->gravity = Vector2(0,0*-10.f);
+
+		RENDERING(e)->hide = true;
+	}
 }
 #define RATE 1
 void RandomNameToBeChangedGameModeManager::Enter() {
 	time = 0;
 	limit = 100;
 	points = 0;
+	squallGo = false;
+	squallDuration = 0.f;
 	bonus = MathUtil::RandomInt(theGridSystem.Types);
 	pts.clear();
 	pts.push_back(Vector2(0,0));
@@ -63,7 +78,36 @@ void RandomNameToBeChangedGameModeManager::Enter() {
 
 	generateLeaves(0, 8);
 
+	for (unsigned int i = 0; i < squallLeaves.size();  i++)
+		RENDERING(squallLeaves[i])->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(bonus, &TRANSFORM(squallLeaves[i])->rotation));
+
 	GameModeManager::Enter();
+}
+
+void RandomNameToBeChangedGameModeManager::squall() {
+	squallGo = true;
+	float minX = PlacementHelper::ScreenWidth/2.+1;
+	float maxX = PlacementHelper::ScreenWidth/2.+3;
+
+	float minY = PlacementHelper::GimpYToScreen(1000);
+	float maxY = -PlacementHelper::ScreenHeight/2.;
+	for (unsigned int i = 0; i < squallLeaves.size();  i++) {
+
+		Entity  e = squallLeaves[i];
+		TRANSFORM(e)->position = Vector2(MathUtil::RandomFloatInRange(minX, maxX), MathUtil::RandomFloatInRange(minY, maxY));
+		RENDERING(e)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(bonus, &TRANSFORM(e)->rotation));
+		RENDERING(e)->hide = false;
+
+		Force force;
+		force.vector = Vector2(-45, 0);
+		force.point =  Vector2( 0, TRANSFORM(e)->size.Y/2.);
+
+		std::pair<Force, float> f (force, 1.);
+		PHYSICS(e)->forces.push_back(f);
+		PHYSICS(e)->mass = MathUtil::RandomFloatInRange(1.f, 10.f); // go update (dumb PhysicsSystem!)
+	}
+	//herisson's Y. He'll change his bonus behind this leaf
+	TRANSFORM(squallLeaves[0])->position = Vector2(MathUtil::RandomFloatInRange(minX, maxX), PlacementHelper::GimpYToScreen(1028));
 }
 
 void RandomNameToBeChangedGameModeManager::Exit() {
@@ -72,13 +116,50 @@ void RandomNameToBeChangedGameModeManager::Exit() {
 
 void RandomNameToBeChangedGameModeManager::GameUpdate(float dt) {
 	time+=dt;
+	//squall is running...
+	if (squallGo) {
+		squallDuration += dt;
+		//if the central leaf is next to the herisson, change his bonus
+		if (TRANSFORM(squallLeaves[0])->position.X <= TRANSFORM(herisson)->position.X) {
+			LoadHerissonTexture(bonus+1);
+			RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
+		}
+		//make the tree leaves grow ...
+		for (unsigned int i = 0; i < branchLeaves.size(); i++) {
+			TRANSFORM(branchLeaves[i].e)->size =
+				Vector2(Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min(squallDuration, 1.f));
+		}
+		//check if every leaves has gone...
+		bool ended = true;
+		for (unsigned int i = 0 ; i < squallLeaves.size() ; i++) {
+			if (TRANSFORM(squallLeaves[i])->position.X >= -PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(squallLeaves[i])->size.X)
+				ended = false;
+		}
+		//YES : stop the squall, keep playing !
+		if (ended) {
+			squallGo = false;
+			squallDuration = 0.f;
+			for (unsigned int i = 0; i < squallLeaves.size(); i++) {
+				RENDERING(squallLeaves[i])->hide = true;
+				PHYSICS(squallLeaves[i])->linearVelocity = Vector2::Zero;
+				PHYSICS(squallLeaves[i])->angularVelocity = 0.f;
+				PHYSICS(squallLeaves[i])->mass = 0.f; // stop update (dumb PhysicsSystem!)
+			}
 
-	if (branchLeaves.size() == 0) {
-		//recreate the tree + change the bonus
-		generateLeaves(0, 8);
-		bonus = MathUtil::RandomInt(theGridSystem.Types);
-	    LoadHerissonTexture(bonus+1);
-		RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
+
+		}
+	} else {
+		//oh noes, no longer leaf on tree ! Give me new one
+		if (branchLeaves.size() == 0) {
+			//Ok, but first u'll have a new bonus
+			bonus = MathUtil::RandomInt(theGridSystem.Types);
+			//And leaves aren't magic, they need to grow ... be patient.
+			generateLeaves(0, 8);
+			for (unsigned int i = 0; i < branchLeaves.size(); i++)
+				TRANSFORM(branchLeaves[i].e)->size = Vector2::Zero;
+			//The squall will make them grow
+			squall();
+		}
 	}
 
 }
