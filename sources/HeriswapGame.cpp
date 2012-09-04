@@ -136,7 +136,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
 
 	theRenderingSystem.loadEffectFile("desaturate.fs");
 	theRenderingSystem.loadAtlas("sprites", true);
-    theRenderingSystem.loadAtlas("logo");
+	theRenderingSystem.loadAtlas("logo");
 	theRenderingSystem.loadAtlas("alphabet", true);
     theRenderingSystem.loadAtlas("decor1");
     theRenderingSystem.loadAtlas("decor2");
@@ -146,7 +146,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     theRenderingSystem.loadAtlas("nuages");
     theRenderingSystem.loadAtlas("help");
 
-	// init font
+    // init font
 	loadFont(asset, "typo");
 	loadFont(asset, "gdtypo");
 	

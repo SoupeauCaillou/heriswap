@@ -345,15 +345,14 @@ int main(int argc, char** argv) {
     theMusicSystem.init();
     soundAPI->init();
 
-    game->sacInit(reso->X,reso->Y);
+	game->sacInit(reso->X,reso->Y);
+	game->init(state, size);
 
 #ifndef EMSCRIPTEN
     setlocale( LC_ALL, "" );
 	loc->init();
 	glfwSetCharCallback(myCharCallback);
 #endif
-
-	game->init(state, size);
 
 	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
 	// name input entities
