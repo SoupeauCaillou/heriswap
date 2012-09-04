@@ -29,7 +29,6 @@
 
 #include "modes/GameModeManager.h"
 
-#include "Game.h"
 #include "DepthLayer.h"
 #include "TwitchSystem.h"
 #include "CombinationMark.h"
@@ -103,7 +102,7 @@ void SpawnGameStateManager::removeEntitiesInCombination() {
 			} while (theGridSystem.GridPosIsInCombination(c[i].points[j].X, c[i].points[j].Y, type, 0) && iter < 100);
 			GRID(e)->type = type;
 			RenderingComponent* rc = RENDERING(e);
-			rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, &TRANSFORM(e)->rotation));
+			rc->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(type, &TRANSFORM(e)->rotation));
 		}
 		ite++;
 	} while((!c.empty() || !theGridSystem.StillCombinations()) && ite<100);
@@ -124,7 +123,7 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
                 }
 				TransformationComponent* tc = TRANSFORM(it->entity);
 				//leaves grow up from 0 to fixed size
-				float s = Game::CellSize(theGridSystem.GridSize);
+				float s = HeriswapGame::CellSize(theGridSystem.GridSize);
 				if (ADSR(haveToAddLeavesInGrid)->value == 1){
 					tc->size = Vector2(s*0.1, s);
 					gc->i = it->X;
@@ -144,7 +143,7 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
         std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
         //les feuilles disparaissent (taille tend vers 0)
         for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
-            Vector2 cellSize = Vector2(Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale() * (1 - ADSR(replaceGrid)->value));
+            Vector2 cellSize = Vector2(HeriswapGame::CellSize(theGridSystem.GridSize) * HeriswapGame::CellContentScale() * (1 - ADSR(replaceGrid)->value));
             ADSR(*it)->idleValue = cellSize.X;
         }
         //les feuilles ont disparu, on les supprime et on remplit avec de nouvelles feuilles
@@ -253,18 +252,18 @@ static Entity createCell(Feuille& f, bool assignGridPos) {
 	ADD_COMPONENT(e, Grid);
     ADD_COMPONENT(e, Twitch);
 
-	TRANSFORM(e)->position = Game::GridCoordsToPosition(f.X, f.Y, theGridSystem.GridSize);
+	TRANSFORM(e)->position = HeriswapGame::GridCoordsToPosition(f.X, f.Y, theGridSystem.GridSize);
 	TRANSFORM(e)->z = DL_Cell;
 	RenderingComponent* rc = RENDERING(e);
 	rc->hide = false;
 
 	TRANSFORM(e)->size = Vector2(0.0f);
-	ADSR(e)->idleValue = Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale();
+	ADSR(e)->idleValue = HeriswapGame::CellSize(theGridSystem.GridSize) * HeriswapGame::CellContentScale();
 	GRID(e)->type = f.type;
 	if (assignGridPos) {
 		GRID(e)->i = f.X;
 		GRID(e)->j = f.Y;
 	}
-	rc->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(f.type, &TRANSFORM(e)->rotation));
+	rc->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(f.type, &TRANSFORM(e)->rotation));
 	return e;
 }

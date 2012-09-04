@@ -23,7 +23,7 @@
 
 class RandomNameToBeChangedGameModeManager : public GameModeManager {
 	public:
-		RandomNameToBeChangedGameModeManager(Game* game, SuccessManager* successMgr, StorageAPI* sAPI);
+		RandomNameToBeChangedGameModeManager(HeriswapGame* game, SuccessManager* successMgr, StorageAPI* sAPI);
 		~RandomNameToBeChangedGameModeManager();
 		void Setup();
 		void Enter();

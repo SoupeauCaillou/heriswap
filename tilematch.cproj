@@ -36,7 +36,6 @@
     <None Include="sources\states\LevelStateManager.h" />
     <None Include="sources\states\PauseStateManager.h" />
     <None Include="sources\DepthLayer.h" />
-    <None Include="sources\Game.h" />
     <None Include="sources\GridSystem.h" />
     <None Include="sources\modes\InGameUiHelper.h" />
     <None Include="sources\TwitchSystem.h" />
@@ -75,6 +74,8 @@
     <None Include="sources\states\ElitePopupStateManager.h" />
     <None Include="android\Android.mk" />
     <None Include="android\Application.mk" />
+    <None Include="sources\HeriswapGame.h" />
+    <None Include="sources\api\linux\Callback.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -82,7 +83,6 @@
     <Compile Include="sources\states\FadeStateManager.cpp" />
     <Compile Include="sources\states\LevelStateManager.cpp" />
     <Compile Include="sources\states\PauseStateManager.cpp" />
-    <Compile Include="sources\Game.cpp" />
     <Compile Include="sources\GridSystem.cpp" />
     <Compile Include="tests\TestGridSystem.cpp" />
     <Compile Include="tests\tests.cpp" />
@@ -115,7 +115,9 @@
     <Compile Include="sources\states\UserInputStateManager.cpp" />
     <Compile Include="sources\modes\RandomNameToBeChangedModeManager.cpp" />
     <Compile Include="sources\states\ElitePopupStateManager.cpp" />
-    <Compile Include="android\tilematchjnilib.cpp" />
+    <Compile Include="android\heriswap.cpp" />
+    <Compile Include="sources\HeriswapGame.cpp" />
+    <Compile Include="sources\api\linux\Callback.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="sources\api\android\" />

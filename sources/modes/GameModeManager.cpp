@@ -52,7 +52,7 @@ static float finalHerissonPosition(Entity herisson) {
     return PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5;
 }
 
-GameModeManager::GameModeManager(Game* game, SuccessManager* sMgr, StorageAPI* sAPI) {
+GameModeManager::GameModeManager(HeriswapGame* game, SuccessManager* sMgr, StorageAPI* sAPI) {
 	uiHelper.game = game;
 	successMgr = sMgr;
 	storageAPI = sAPI;
@@ -151,7 +151,7 @@ void GameModeManager::Setup() {
 		debugEntities[2*i] = theEntityManager.CreateEntity();
 		ADD_COMPONENT(debugEntities[2*i], Rendering);
 		ADD_COMPONENT(debugEntities[2*i], Transformation);
-		RENDERING(debugEntities[2*i])->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(i, 0));
+		RENDERING(debugEntities[2*i])->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(i, 0));
 		TransformationSystem::setPosition(TRANSFORM(debugEntities[2*i]), Vector2(PlacementHelper::GimpXToScreen(0) + i * PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpYToScreen(1280)), TransformationSystem::SW);
 		TRANSFORM(debugEntities[2*i])->z = DL_DebugLayer;
 		TRANSFORM(debugEntities[2*i])->size = Vector2(PlacementHelper::GimpWidthToScreen(80));
@@ -210,9 +210,9 @@ Entity GameModeManager::createAndAddLeave(int type, const Vector2& position, flo
 	ADD_COMPONENT(e, Transformation);
 	ADD_COMPONENT(e, Rendering);
     ADD_COMPONENT(e, Twitch);
-	RENDERING(e)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(type, 0));
+	RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(type, 0));
 	RENDERING(e)->hide = false;
-	TRANSFORM(e)->size.X = TRANSFORM(e)->size.Y = Game::CellSize(8) * Game::CellContentScale();
+	TRANSFORM(e)->size.X = TRANSFORM(e)->size.Y = HeriswapGame::CellSize(8) * HeriswapGame::CellContentScale();
 
 	TRANSFORM(e)->position = position;
 	TRANSFORM(e)->rotation = rotation;

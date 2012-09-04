@@ -26,7 +26,6 @@
 #include "systems/RenderingSystem.h"
 #include "systems/SoundSystem.h"
 
-#include "Game.h"
 #include "DepthLayer.h"
 
 LogoStateManager::LogoStateManager(GameState _following) : following(_following) {}

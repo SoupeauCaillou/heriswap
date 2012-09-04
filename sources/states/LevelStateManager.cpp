@@ -35,7 +35,6 @@
 #include "DepthLayer.h"
 #include "CombinationMark.h"
 #include "GridSystem.h"
-#include "Game.h"
 
 void LevelStateManager::Setup() {
 	eGrid = theEntityManager.CreateEntity();
@@ -204,7 +203,7 @@ GameState LevelStateManager::Update(float dt) {
 		levelState = BigScoreMoving;
 		//if leaves created, make them grow !
 		for (unsigned int i=0; i<modeMgr->branchLeaves.size(); i++) {
-			TRANSFORM(modeMgr->branchLeaves[i].e)->size = Vector2(Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f));
+			TRANSFORM(modeMgr->branchLeaves[i].e)->size = Vector2(HeriswapGame::CellSize(8) * HeriswapGame::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f));
 		}
 		RENDERING(eSnowBranch)->color.a = 1-(duration-6)/(10-6);
 		RENDERING(eSnowGround)->color.a = 1-(duration-6)/(10-6.f);
@@ -237,7 +236,7 @@ void LevelStateManager::Exit() {
 		delete mc->elements[i];
 	}
 	for (unsigned int i=0; i<modeMgr->branchLeaves.size(); i++) {
-		TRANSFORM(modeMgr->branchLeaves[i].e)->size = Vector2(Game::CellSize(8) * Game::CellContentScale());
+		TRANSFORM(modeMgr->branchLeaves[i].e)->size = Vector2(HeriswapGame::CellSize(8) * HeriswapGame::CellContentScale());
 	}
 	mc->elements.clear();
 	// hide big level

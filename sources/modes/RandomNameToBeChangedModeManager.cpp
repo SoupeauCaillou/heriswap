@@ -29,11 +29,10 @@
 #include "systems/TextRenderingSystem.h"
 
 #include "DepthLayer.h"
-#include "Game.h"
 #include "CombinationMark.h"
 #include "GridSystem.h"
 
-RandomNameToBeChangedGameModeManager::RandomNameToBeChangedGameModeManager(Game* game, SuccessManager* successMgr, StorageAPI* sAPI) : GameModeManager(game, successMgr, sAPI) {
+RandomNameToBeChangedGameModeManager::RandomNameToBeChangedGameModeManager(HeriswapGame* game, SuccessManager* successMgr, StorageAPI* sAPI) : GameModeManager(game, successMgr, sAPI) {
 }
 
 RandomNameToBeChangedGameModeManager::~RandomNameToBeChangedGameModeManager() {

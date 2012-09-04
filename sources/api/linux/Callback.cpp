@@ -22,7 +22,7 @@
 #include <sstream>
 #include <iostream>
 #include <vector>
-#include "Game.h"
+#include "HeriswapGame.h"
 
 int callback(void *save, int argc, char **argv, char **azColName){
 	std::string *sav = static_cast<std::string*>(save);

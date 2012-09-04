@@ -18,7 +18,7 @@
 */
 #pragma once
 
-#include "Game.h"
+#include "HeriswapGame.h"
 #include "GameState.h"
 
 class GameModeManager;

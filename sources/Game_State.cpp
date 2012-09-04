@@ -16,7 +16,7 @@
 	You should have received a copy of the GNU General Public License
 	along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "Game.h"
+#include "HeriswapGame.h"
 #include "Game_Private.h"
 #include "GridSystem.h"
 
@@ -36,7 +36,7 @@
 #include "modes/TilesAttackModeManager.h"
 #include "modes/NormalModeManager.h"
 
-void Game::stopInGameMusics() {
+void HeriswapGame::stopInGameMusics() {
 	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Stop;
 	MUSIC(datas->inGameMusic.accessoryTrack)->control = MusicComponent::Stop;
 	MUSIC(datas->inGameMusic.stressTrack)->control = MusicComponent::Stop;
@@ -45,7 +45,7 @@ void Game::stopInGameMusics() {
     }
 }
 
-void Game::setupGameProp() {
+void HeriswapGame::setupGameProp() {
 	if (datas->mode == RandomNameToBeChanged) {
 		ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.1;
 		ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.01;
@@ -84,7 +84,7 @@ void Game::setupGameProp() {
 	 datas->scoreboardRankInSight = entries.size();
 }
 
-void Game::stateChanged(GameState oldState, GameState newState) {
+void HeriswapGame::stateChanged(GameState oldState, GameState newState) {
     if (newState == Unpause) {
         togglePause(false);
     //pressing "give up" button

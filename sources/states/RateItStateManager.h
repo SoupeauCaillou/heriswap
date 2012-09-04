@@ -22,7 +22,6 @@
 
 #include "StateManager.h"
 
-#include "Game.h"
 #include "AnimedActor.h"
 
 class RateItStateManager : public GameStateManager {

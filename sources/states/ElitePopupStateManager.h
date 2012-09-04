@@ -18,7 +18,6 @@
 */
 #pragma once
 
-#include "Game.h"
 #include "StateManager.h"
 #include "SuccessManager.h"
 

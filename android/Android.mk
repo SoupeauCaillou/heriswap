@@ -19,8 +19,8 @@ LOCAL_CXXFLAGS := -DANDROID_NDK -DDEBUG \
 				-I$(LOCAL_PATH)/../sac/libs/
 
 LOCAL_SRC_FILES := \
-    tilematchjnilib.cpp \
-    ../sources/Game.cpp \
+    heriswap.cpp \
+    ../sources/HeriswapGame.cpp \
     ../sources/Game_State.cpp \
     ../sources/Game_Private.cpp \
 	../sources/GridSystem.cpp \

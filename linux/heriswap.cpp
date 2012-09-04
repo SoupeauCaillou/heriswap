@@ -60,7 +60,7 @@
 #include "base/PlacementHelper.h"
 #include "DepthLayer.h"
 
-#include "Game.h"
+#include "HeriswapGame.h"
 
 #ifndef EMSCRIPTEN
 #include <locale.h>
@@ -70,7 +70,7 @@
 #define DT 1/60.
 #define MAGICKEYTIME 0.15
 
-Game* game;
+HeriswapGame* game;
 NameInputAPILinuxImpl* nameInput;
 Entity globalFTW = 0;
 
@@ -330,7 +330,7 @@ int main(int argc, char** argv) {
 
 	nameInput = new NameInputAPILinuxImpl();
 
-	game = new Game(new AssetAPILinuxImpl(), storage, nameInput, new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl(), new CommunicationAPILinuxImpl());
+	game = new HeriswapGame(new AssetAPILinuxImpl(), storage, nameInput, new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl(), new CommunicationAPILinuxImpl());
 
 	theRenderingSystem.opengles2 = true;
 	theSoundSystem.init();

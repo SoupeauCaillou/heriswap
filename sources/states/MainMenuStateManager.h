@@ -21,7 +21,6 @@
 #include "StateManager.h"
 #include "modes/GameModeManager.h"
 #include "AnimedActor.h"
-#include "Game.h"
 
 class MainMenuGameStateManager : public GameStateManager {
 	public:

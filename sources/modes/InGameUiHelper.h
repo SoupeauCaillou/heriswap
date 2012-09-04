@@ -20,7 +20,7 @@
 
 #include <base/EntityManager.h>
 
-#include "Game.h"
+#include "HeriswapGame.h"
 
 class InGameUiHelper {
 	public:
@@ -35,7 +35,7 @@ class InGameUiHelper {
 	Entity smallLevel;
 	Entity pauseButton;
 	Entity scoreProgress;
-	Game* game;
+	HeriswapGame* game;
 	private:
 		bool built;
 };

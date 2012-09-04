@@ -33,14 +33,13 @@
 #include "systems/MusicSystem.h"
 
 #include "CombinationMark.h"
-#include "Game.h"
 #include "GridSystem.h"
 
 #define SKY_SPEED 2.3
 #define DECOR2_SPEED 1.6
 #define DECOR1_SPEED 1
 
-NormalGameModeManager::NormalGameModeManager(Game* game, SuccessManager* SuccessMgr, StorageAPI* sAPI) : GameModeManager(game,SuccessMgr, sAPI) {
+NormalGameModeManager::NormalGameModeManager(HeriswapGame* game, SuccessManager* SuccessMgr, StorageAPI* sAPI) : GameModeManager(game,SuccessMgr, sAPI) {
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(15,0.125));
 	pts.push_back(Vector2(25,0.25));

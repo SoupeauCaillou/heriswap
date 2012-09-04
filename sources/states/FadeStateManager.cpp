@@ -25,7 +25,6 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ADSRSystem.h"
 
-#include "Game.h"
 #include "DepthLayer.h"
 
 FadeGameStateManager::FadeGameStateManager(float d, FadeType fade, GameState whoAmI, GameState whoIsNext, GameStateManager* enter, GameStateManager* exitD):
