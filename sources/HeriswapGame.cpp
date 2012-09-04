@@ -405,9 +405,9 @@ void HeriswapGame::tick(float dt) {
 	    if ((pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause) || datas->state == BlackToSpawn) { //si on joue
 	    	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Start;
 	    	MUSIC(datas->inGameMusic.masterTrack)->volume = 1;
-	    	MUSIC(datas->inGameMusic.stressTrack)->control = MusicComponent::Start;
+	    	MUSIC(datas->inGameMusic.stressTrack)->control = (datas->mode == Normal) ? MusicComponent::Start : MusicComponent::Stop;
 	        if (MUSIC(datas->inGameMusic.masterTrack)->music == InvalidMusicRef) {
-		        MUSIC(datas->inGameMusic.stressTrack)->music = theMusicSystem.loadMusicFile("audio/F.ogg");
+		        MUSIC(datas->inGameMusic.stressTrack)->music = (datas->mode == Normal) ? theMusicSystem.loadMusicFile("audio/F.ogg") : InvalidMusicRef;
 	            std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);
 	            LOGW("New music picked for 'music' field (%lu):", musics.size());
 	            for (unsigned i=0; i<musics.size(); i++) {
@@ -428,8 +428,7 @@ void HeriswapGame::tick(float dt) {
 	        }
 	        // if master track has looped, choose next songs to play
 	        else if (MUSIC(datas->inGameMusic.masterTrack)->loopNext == InvalidMusicRef) {
-		        MUSIC(datas->inGameMusic.stressTrack)->loopNext = theMusicSystem.loadMusicFile("audio/F.ogg");
-
+				MUSIC(datas->inGameMusic.stressTrack)->loopNext = (datas->mode == Normal) ? theMusicSystem.loadMusicFile("audio/F.ogg") : InvalidMusicRef;
 		        std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);
 		        LOGW("New music picked for 'loopNext' field (%lu):", musics.size());
 	            for (unsigned i=0; i<musics.size(); i++) {
@@ -450,7 +449,7 @@ void HeriswapGame::tick(float dt) {
 		        	a = MUSIC(datas->inGameMusic.masterTrack)->loopNext;
 	        	}
 	        }
-	        MUSIC(datas->inGameMusic.stressTrack)->volume = ADSR(datas->inGameMusic.stressTrack)->value;
+	        MUSIC(datas->inGameMusic.stressTrack)->volume = (datas->mode == Normal) ? ADSR(datas->inGameMusic.stressTrack)->value : 0;
 	        MUSIC(datas->menu)->control = MusicComponent::Stop;
 
 	    } else if (datas->state == MainMenu || datas->state == ModeMenu) { //dans les menus
