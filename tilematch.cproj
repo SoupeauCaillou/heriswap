@@ -32,7 +32,6 @@
     <None Include="sources\modes\GameModeManager.h" />
     <None Include="sources\modes\NormalModeManager.h" />
     <None Include="sources\states\BackgroundManager.h" />
-    <None Include="sources\states\DeleteGameStateManager.h" />
     <None Include="sources\states\FadeStateManager.h" />
     <None Include="sources\states\LevelStateManager.h" />
     <None Include="sources\states\PauseStateManager.h" />
@@ -81,7 +80,6 @@
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
     <Compile Include="sources\states\BackgroundManager.cpp" />
-    <Compile Include="sources\states\DeleteGameStateManager.cpp" />
     <Compile Include="sources\states\FadeStateManager.cpp" />
     <Compile Include="sources\states\LevelStateManager.cpp" />
     <Compile Include="sources\states\PauseStateManager.cpp" />
