@@ -29,11 +29,10 @@
 #include "systems/TextRenderingSystem.h"
 
 #include "DepthLayer.h"
-#include "Game.h"
 #include "CombinationMark.h"
 #include "GridSystem.h"
 
-TilesAttackGameModeManager::TilesAttackGameModeManager(Game* game, SuccessManager* successMgr, StorageAPI* sAPI) : GameModeManager(game, successMgr, sAPI) {
+TilesAttackGameModeManager::TilesAttackGameModeManager(HeriswapGame* game, SuccessManager* successMgr, StorageAPI* sAPI) : GameModeManager(game, successMgr, sAPI) {
 }
 
 TilesAttackGameModeManager::~TilesAttackGameModeManager() {
@@ -56,7 +55,7 @@ void TilesAttackGameModeManager::Enter() {
 	else if (theGridSystem.sizeToDifficulty() == DifficultyMedium)
 		limit = 100;
 	else
-		limit = 1000;
+		limit = 100;
 	pts.push_back(Vector2(limit,1));//need limit leaves to end game
 
 	generateLeaves(0, 8);
@@ -95,7 +94,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	//Temps
 	{
 	std::stringstream a;
-	a << storageAPI->getMyRank(time, TilesAttack, theGridSystem.sizeToDifficulty()) << ". ";
+	// a << storageAPI->getMyRank(time, TilesAttack, theGridSystem.sizeToDifficulty()) << ". ";
 
 	int minute = ((int)time)/60;
 	int seconde= ((int)time)%60;

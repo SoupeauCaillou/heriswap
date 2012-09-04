@@ -29,7 +29,6 @@
 #include "systems/ButtonSystem.h"
 
 #include "DepthLayer.h"
-#include "Game.h"
 
 InGameUiHelper::InGameUiHelper() : built(false) {
 

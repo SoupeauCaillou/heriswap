@@ -16,7 +16,7 @@
 	You should have received a copy of the GNU General Public License
 	along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "Game.h"
+#include "HeriswapGame.h"
 #include "Game_Private.h"
 
 #include <base/PlacementHelper.h>
@@ -51,7 +51,7 @@
 #include "GameState.h"
 
 
-PrivateData::PrivateData(Game* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad, CommunicationAPI* comAPI) {
+PrivateData::PrivateData(HeriswapGame* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad, CommunicationAPI* comAPI) {
      mode = Normal;
      mode2Manager[Normal] = new NormalGameModeManager(game, successMgr, storagee);
      mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game, successMgr, storagee);

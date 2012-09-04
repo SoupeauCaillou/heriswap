@@ -28,7 +28,6 @@
 #include "systems/ADSRSystem.h"
 #include "systems/RenderingSystem.h"
 
-#include "Game.h"
 #include "DepthLayer.h"
 
 #define CAMERASPEED -1.f

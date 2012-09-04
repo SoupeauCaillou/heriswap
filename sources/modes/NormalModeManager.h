@@ -23,7 +23,7 @@
 
 class NormalGameModeManager : public GameModeManager {
 	public:
-		NormalGameModeManager(Game* game, SuccessManager* SuccessMgr, StorageAPI* sAPI);
+		NormalGameModeManager(HeriswapGame* game, SuccessManager* SuccessMgr, StorageAPI* sAPI);
 		~NormalGameModeManager();
 
 		void Setup();

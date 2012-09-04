@@ -56,7 +56,7 @@
 
 #include "DepthLayer.h"
 #include "GridSystem.h"
-#include "Game.h"
+#include "HeriswapGame.h"
 #include "TwitchSystem.h"
 #include "CombinationMark.h"
 #include "Game_Private.h"
@@ -95,7 +95,7 @@ static const float size = (10 - 2 * offset) / 8;
 static void updateFps(float dt);
 
 // grid: [48, 302] -> [752, 1006]  in gimp
-Vector2 Game::GridCoordsToPosition(int i, int j, int gridSize) {
+Vector2 HeriswapGame::GridCoordsToPosition(int i, int j, int gridSize) {
 	float startX = PlacementHelper::GimpXToScreen(48);
 	float startY = PlacementHelper::GimpYToScreen(1006);
 	float size = PlacementHelper::GimpWidthToScreen((752 - 48) / gridSize);
@@ -105,103 +105,40 @@ Vector2 Game::GridCoordsToPosition(int i, int j, int gridSize) {
 		startY + (j + 0.5) * size);
 }
 
-float Game::CellSize(int gridSize) {
+float HeriswapGame::CellSize(int gridSize) {
 	return PlacementHelper::GimpWidthToScreen((752 - 48) / gridSize);
 }
 
-float Game::CellContentScale() {
+float HeriswapGame::CellContentScale() {
 	return scale;
 }
 
-Game::Game(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI) {
+HeriswapGame::HeriswapGame(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI) : Game() {
 	asset = ast;
 	successAPI = sAPI;
 	exitAPI = exAPI;
-
-	/* create EntityManager */
-	EntityManager::CreateInstance();
-
-	/* create before system so it cannot use any of them (use Setup instead) */
-	datas = new PrivateData(this, storage, inputUI, new SuccessManager(sAPI), lAPI, sAPI, ad, comAPI);
-
-	/* create systems singleton */
-	TransformationSystem::CreateInstance();
-	RenderingSystem::CreateInstance();
-	SoundSystem::CreateInstance();
-    MusicSystem::CreateInstance();
+	
 	GridSystem::CreateInstance();
-	ADSRSystem::CreateInstance();
-	ButtonSystem::CreateInstance();
-	TextRenderingSystem::CreateInstance();
-	ContainerSystem::CreateInstance();
-	PhysicsSystem::CreateInstance();
-    ParticuleSystem::CreateInstance();
-    ScrollingSystem::CreateInstance();
-    MorphingSystem::CreateInstance();
-    TwitchSystem::CreateInstance();
+	TwitchSystem::CreateInstance();
+
+	datas = new PrivateData(this, storage, inputUI, new SuccessManager(sAPI), lAPI, sAPI, ad, comAPI);
 }
 
-Game::~Game() {
-    LOGW("Delete game instance %p", this);
-    theEntityManager.deleteAllEntities();
-    EntityManager::DestroyInstance();
-
-    TransformationSystem::DestroyInstance();
-    RenderingSystem::DestroyInstance();
-    SoundSystem::DestroyInstance();
-    MusicSystem::DestroyInstance();
-    GridSystem::DestroyInstance();
-    ADSRSystem::DestroyInstance();
-    ButtonSystem::DestroyInstance();
-    TextRenderingSystem::DestroyInstance();
-    ContainerSystem::DestroyInstance();
-    PhysicsSystem::DestroyInstance();
-    ParticuleSystem::DestroyInstance();
-    ScrollingSystem::DestroyInstance();
-    MorphingSystem::DestroyInstance();
-    TwitchSystem::DestroyInstance();
+HeriswapGame::~HeriswapGame() {
+	GridSystem::DestroyInstance();
+	TwitchSystem::DestroyInstance();
 
     delete datas;
 }
 
-void Game::loadFont(const std::string& name) {
-	FileBuffer file = asset->loadAsset(name + ".desc");
-	std::stringstream sfont;
-	sfont << std::string((char*)file.data, file.size);
-	std::string line;
-	std::map<unsigned char, float> h2wratio;
-	while (getline(sfont, line)) {
-		if (line[0] == '#')
-			continue;
-		int c, w, h;
-		sscanf(line.c_str(), "%d,%d,%d", &c, &w, &h);
-		h2wratio[c] = (float)w / h;
-	}
-	delete[] file.data;
-	h2wratio[' '] = h2wratio['a'];
-	theTextRenderingSystem.registerFont(name, h2wratio);
-}
+void HeriswapGame::sacInit(int windowW, int windowH) {
+	Game::sacInit(windowW, windowH);
 
-void Game::sacInit(int windowW, int windowH) {
-	PlacementHelper::ScreenHeight = 10;
-    PlacementHelper::ScreenWidth = PlacementHelper::ScreenHeight * windowW / (float)windowH;
-    PlacementHelper::WindowWidth = windowW;
-    PlacementHelper::WindowHeight = windowH;
-    PlacementHelper::GimpWidth = 800.0f;
-    PlacementHelper::GimpHeight = 1280.0f;
-
-	theRenderingSystem.setWindowSize(windowW, windowH, PlacementHelper::ScreenWidth, PlacementHelper::ScreenHeight);
-	theTouchInputManager.init(Vector2(PlacementHelper::ScreenWidth, PlacementHelper::ScreenHeight), Vector2(windowW, windowH));
-
-	theRenderingSystem.init();
+	Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
 
 	theRenderingSystem.loadEffectFile("desaturate.fs");
-	/*
-	theRenderingSystem.loadAtlas("sprites");
-	theRenderingSystem.loadAtlas("animals");
-	*/
-    theRenderingSystem.loadAtlas("sprites", true);
-    theRenderingSystem.loadAtlas("logo");
+	theRenderingSystem.loadAtlas("sprites", true);
+	theRenderingSystem.loadAtlas("logo");
 	theRenderingSystem.loadAtlas("alphabet", true);
     theRenderingSystem.loadAtlas("decor1");
     theRenderingSystem.loadAtlas("decor2");
@@ -211,14 +148,12 @@ void Game::sacInit(int windowW, int windowH) {
     theRenderingSystem.loadAtlas("nuages");
     theRenderingSystem.loadAtlas("help");
 
-	// init font
-	loadFont("typo");
-	loadFont("gdtypo");
+    // init font
+	loadFont(asset, "typo");
+	loadFont(asset, "gdtypo");
 }
 
-void Game::init(const uint8_t* in, int size) {
-	Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
-
+void HeriswapGame::init(const uint8_t* in, int size) {	
     if (in && size) {
         in = loadEntitySystemState(in, size);
     }
@@ -253,10 +188,9 @@ void Game::init(const uint8_t* in, int size) {
         loadGameState(in, size);
     }
     datas->state2Manager[datas->state]->Enter();
-
 }
 
-void Game::setMode() {
+void HeriswapGame::setMode() {
 	datas->state2Manager[Delete]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[ModeMenu]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[Spawn]->modeMgr = datas->mode2Manager[datas->mode];
@@ -268,7 +202,7 @@ void Game::setMode() {
 	}
 }
 
-void Game::toggleShowCombi(bool enabled) {
+void HeriswapGame::toggleShowCombi(bool enabled) {
 	static bool activated;
 	static std::vector<Entity> marks;
 	//on switch le bool
@@ -310,7 +244,7 @@ void Game::toggleShowCombi(bool enabled) {
 
 }
 
-void Game::backPressed() {
+void HeriswapGame::backPressed() {
     if (datas->state == ModeMenu) {
         // go back to main menu
         (static_cast<ModeMenuStateManager*>(datas->state2Manager[ModeMenu]))->pleaseGoBack = true;
@@ -323,7 +257,7 @@ void Game::backPressed() {
     }
 }
 
-void Game::togglePause(bool activate) {
+void HeriswapGame::togglePause(bool activate) {
 	if (activate && datas->state != Pause && pausableState(datas->state)) {
 		stopInGameMusics();
         // pause
@@ -343,14 +277,13 @@ void Game::togglePause(bool activate) {
 	}
 }
 
-void Game::tick(float dt) {
+void HeriswapGame::tick(float dt) {
 	float updateDuration = TimeUtil::getTime();
 	GameState newState;
 
     updateFps(dt);
 
 	theTouchInputManager.Update(dt);
-
     // update state
     newState = datas->state2Manager[datas->state]->Update(dt);
 
@@ -552,10 +485,10 @@ void Game::tick(float dt) {
 
 	//bench settings
 	updateDuration = TimeUtil::getTime()-updateDuration;
-	bench(true, updateDuration, dt);
+	bench(false, updateDuration, dt);
 }
 
-void Game::bench(bool active, float updateDuration, float dt) {
+void HeriswapGame::bench(bool active, float updateDuration, float dt) {
 	if (active) {
 		static float benchAccum = 0;
 		benchAccum += dt;
@@ -583,15 +516,15 @@ void Game::bench(bool active, float updateDuration, float dt) {
 				RENDERING(it->second)->hide = false;
 				x += width;
 
-				// LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
+				LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
 			}
 
-			// LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
+			LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
 			benchAccum = 0;
 		}
 	}
 }
-int Game::saveState(uint8_t** out) {
+int HeriswapGame::saveState(uint8_t** out) {
 	if (datas->state == Help) {
 		datas->state2Manager[datas->state]->Exit();
 		datas->state = static_cast<HelpStateManager*>(datas->state2Manager[datas->state])->oldState;//Pause;
@@ -650,7 +583,7 @@ int Game::saveState(uint8_t** out) {
 	return finalSize;
 }
 
-const uint8_t* Game::loadEntitySystemState(const uint8_t* in, int size) {
+const uint8_t* HeriswapGame::loadEntitySystemState(const uint8_t* in, int size) {
 	/* restore Game fields */
 	int eSize, sSize, index=0;
 	memcpy(&eSize, &in[index], sizeof(eSize));
@@ -666,7 +599,7 @@ const uint8_t* Game::loadEntitySystemState(const uint8_t* in, int size) {
     return &in[index];
 }
 
-void Game::loadGameState(const uint8_t* in, int size) {
+void HeriswapGame::loadGameState(const uint8_t* in, int size) {
     /* restore Game fields */
     memcpy(&datas->stateBeforePause, in, sizeof(datas->stateBeforePause));
     datas->state = datas->stateBeforePause;
@@ -707,7 +640,7 @@ static float rotations[] = {
 	-MathUtil::PiOver4
 };
 
-std::string Game::cellTypeToTextureNameAndRotation(int type, float* rotation) {
+std::string HeriswapGame::cellTypeToTextureNameAndRotation(int type, float* rotation) {
 	if (rotation)
 		*rotation = rotations[type];
 
@@ -716,7 +649,7 @@ std::string Game::cellTypeToTextureNameAndRotation(int type, float* rotation) {
 	return s.str();
 }
 
-float Game::cellTypeToRotation(int type) {
+float HeriswapGame::cellTypeToRotation(int type) {
 	return rotations[type];
 }
 
@@ -734,7 +667,7 @@ void updateFps(float dt) {
      }
 }
 
-bool Game::shouldPlayPiano() {
+bool HeriswapGame::shouldPlayPiano() {
 	// are we near to beat the next score ?
 	if (datas->scoreboardRankInSight == 0 || datas->mode != Normal)
 		return false;

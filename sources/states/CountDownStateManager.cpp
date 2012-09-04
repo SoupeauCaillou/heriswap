@@ -24,7 +24,6 @@
 
 #include "systems/TextRenderingSystem.h"
 
-#include "Game.h"
 #include "DepthLayer.h"
 
 void CountDownStateManager::Setup() {

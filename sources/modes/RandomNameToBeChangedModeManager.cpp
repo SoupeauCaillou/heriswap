@@ -31,11 +31,10 @@
 #include "systems/PhysicsSystem.h"
 
 #include "DepthLayer.h"
-#include "Game.h"
 #include "CombinationMark.h"
 #include "GridSystem.h"
 
-RandomNameToBeChangedGameModeManager::RandomNameToBeChangedGameModeManager(Game* game, SuccessManager* successMgr, StorageAPI* sAPI) : GameModeManager(game, successMgr, sAPI) {
+RandomNameToBeChangedGameModeManager::RandomNameToBeChangedGameModeManager(HeriswapGame* game, SuccessManager* successMgr, StorageAPI* sAPI) : GameModeManager(game, successMgr, sAPI) {
 }
 
 RandomNameToBeChangedGameModeManager::~RandomNameToBeChangedGameModeManager() {
@@ -173,7 +172,8 @@ void RandomNameToBeChangedGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << storageAPI->getMyRank(points, RandomNameToBeChanged, theGridSystem.sizeToDifficulty()) << ". " << std::fixed << points;
+	// a << storageAPI->getMyRank(points, RandomNameToBeChanged, theGridSystem.sizeToDifficulty()) << ". ";
+	a << std::fixed << points;
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
 
@@ -193,15 +193,15 @@ void RandomNameToBeChangedGameModeManager::UiUpdate(float dt) {
 }
 
 void RandomNameToBeChangedGameModeManager::ScoreCalc(int nb, unsigned int type) {
-	int p = (10 * nb * nb * nb) / 6;
 	if (type == bonus) {
-		p *= 2;
-		deleteLeaves(~0b0, MathUtil::Min((int)branchLeaves.size(), 2*nb));
+		points += 10*2*nb*nb*nb/6;
+		deleteLeaves(~0b0, levelToLeaveToDelete(6*8, limit, 2*nb, leavesDone));
+		leavesDone+=2*nb;
 	} else {
-		deleteLeaves(~0b0, MathUtil::Min((int)branchLeaves.size(), nb));
+		points += 10*nb*nb*nb/6;
+		deleteLeaves(~0b0, levelToLeaveToDelete(6*8, limit, nb, leavesDone));
+		leavesDone+=nb;
 	}
-	p *= (theGridSystem.sizeToDifficulty() + 1);
-	points += p;
 }
 
 void RandomNameToBeChangedGameModeManager::TogglePauseDisplay(bool paused) {

@@ -26,7 +26,6 @@
 #include "systems/ButtonSystem.h"
 #include "systems/SoundSystem.h"
 
-#include "Game.h"
 #include "DepthLayer.h"
 
 void HelpStateManager::Setup() {

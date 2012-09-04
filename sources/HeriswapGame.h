@@ -18,6 +18,8 @@
 */
 #pragma once
 
+#include "base/Game.h"
+
 #include <string>
 #include <vector>
 
@@ -32,26 +34,15 @@
 #include "api/AdAPI.h"
 #include "api/ExitAPI.h"
 #include "api/CommunicationAPI.h"
+#include "api/SuccessAPI.h"
 
 class NameInputAPI;
 
-class SuccessAPI {
-	public:
-		virtual void successCompleted(const char* description, unsigned long successId) {
-			LOGI("Success completed '%s': %lu", description, successId);
-		}
-        virtual void openLeaderboard(int mode, int diff) {
-			LOGI("Openleaderboard mode=%d, diff=%d", mode, diff);
-        }
-        virtual void openDashboard() {}
-};
-
 class PrivateData;
-class Game {
+class HeriswapGame : public Game {
 	public:
-		Game(AssetAPI* asset, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI);
-        ~Game();
-        void sacInit(int windowW, int windowH);
+		HeriswapGame(AssetAPI* asset, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI);
+        ~HeriswapGame();
 		void init(const uint8_t* in = 0, int size = 0);
 		void tick(float dt);
 		void togglePause(bool activate);
@@ -59,7 +50,8 @@ class Game {
         void backPressed();
 		void setMode();
 		int saveState(uint8_t** out);
-
+		void sacInit(int windowW, int windowH);
+		
         void stateChanged(GameState from, GameState to);
 
 		static Vector2 GridCoordsToPosition(int i, int j, int s);
@@ -70,7 +62,6 @@ class Game {
 
 		void setupGameProp();
 	private:
-		void loadFont(const std::string& name);
         const uint8_t* loadEntitySystemState(const uint8_t* in, int size);
         void loadGameState(const uint8_t* in, int size);
 		void bench(bool active, float updateDuration, float dt);

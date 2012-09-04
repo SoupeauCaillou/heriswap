@@ -21,7 +21,7 @@
 #include <vector>
 
 #include "GridSystem.h"
-#include "Game.h"
+#include "HeriswapGame.h"
 
 class SuccessManager {
 	public :

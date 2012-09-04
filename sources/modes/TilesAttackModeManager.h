@@ -23,7 +23,7 @@
 
 class TilesAttackGameModeManager : public GameModeManager {
 	public:
-		TilesAttackGameModeManager(Game* game, SuccessManager* successMgr, StorageAPI* sAPI);
+		TilesAttackGameModeManager(HeriswapGame* game, SuccessManager* successMgr, StorageAPI* sAPI);
 		~TilesAttackGameModeManager();
 		void Setup();
 		void Enter();

@@ -33,14 +33,13 @@
 #include "systems/MusicSystem.h"
 
 #include "CombinationMark.h"
-#include "Game.h"
 #include "GridSystem.h"
 
 #define SKY_SPEED 2.3
 #define DECOR2_SPEED 1.6
 #define DECOR1_SPEED 1
 
-NormalGameModeManager::NormalGameModeManager(Game* game, SuccessManager* SuccessMgr, StorageAPI* sAPI) : GameModeManager(game,SuccessMgr, sAPI) {
+NormalGameModeManager::NormalGameModeManager(HeriswapGame* game, SuccessManager* SuccessMgr, StorageAPI* sAPI) : GameModeManager(game,SuccessMgr, sAPI) {
 	pts.push_back(Vector2(0,0));
 	pts.push_back(Vector2(15,0.125));
 	pts.push_back(Vector2(25,0.25));
@@ -119,7 +118,8 @@ void NormalGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << storageAPI->getMyRank(points, Normal, theGridSystem.sizeToDifficulty()) << ". " << std::fixed << points;
+	// a << storageAPI->getMyRank(points, Normal, theGridSystem.sizeToDifficulty()) << ". ";
+	a << std::fixed << points;
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
 
@@ -202,11 +202,10 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
 }
 
 void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
-	int p = (10 * level * nb * nb * nb) / 6;
-	if (type == bonus) p *= 2;
-	p *= (theGridSystem.sizeToDifficulty() + 1);
-
-	points += p;
+	if (type == bonus)
+		points += 10*level*2*nb*nb*nb/6;
+	else
+		points += 10*level*nb*nb*nb/6;
 
 	deleteLeaves(type, levelToLeaveToDelete(type, nb, level+2, level+2 - remain[type], countBranchLeavesOfType(type)));
 	remain[type] -= nb;

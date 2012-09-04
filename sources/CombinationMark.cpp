@@ -23,7 +23,7 @@
 #include "TwitchSystem.h"
 #include "systems/TransformationSystem.h"
 #include "GridSystem.h"
-#include "Game.h"
+#include "HeriswapGame.h"
 
 void markCellInCombination(Entity e);
         void clearCellInCombination(Entity e);
@@ -46,5 +46,5 @@ void CombinationMark::clearCellInCombination(Entity e) {
 	TWITCH(e)->speed = 0;
 
     // restore proper orientation
-    TRANSFORM(e)->rotation = Game::cellTypeToRotation(GRID(e)->type);
+    TRANSFORM(e)->rotation = HeriswapGame::cellTypeToRotation(GRID(e)->type);
 }

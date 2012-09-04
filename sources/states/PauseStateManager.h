@@ -23,8 +23,6 @@
 
 #include "modes/GameModeManager.h"
 
-#include "Game.h"
-
 class PauseStateManager : public GameStateManager {
 	public:
 

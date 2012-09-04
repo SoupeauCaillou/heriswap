@@ -59,7 +59,7 @@ void StorageAPIAndroidImpl::init(JNIEnv* pEnv) {
 	}
 	env = pEnv;
 
-    datas->cls = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/heriswap/HeriswapJNILib"));
+    datas->cls = (jclass)env->NewGlobalRef(env->FindClass("net/damsy/soupeaucaillou/heriswap/api/StorageAPI"));
     datas->soundEnable = jniMethodLookup(env, datas->cls, "soundEnable", "(Z)Z");
     datas->getGameCountBeforeNextAd = jniMethodLookup(env, datas->cls, "getGameCountBeforeNextAd", "()I");
     datas->setGameCountBeforeNextAd = jniMethodLookup(env, datas->cls, "setGameCountBeforeNextAd", "(I)V");

@@ -21,7 +21,7 @@
 #include <base/EntityManager.h>
 
 #include "api/StorageAPI.h"
-#include "Game.h"
+#include "HeriswapGame.h"
 #include "InGameUiHelper.h"
 #include "AnimedActor.h"
 #include "SuccessManager.h"
@@ -43,7 +43,7 @@ class GameModeManager {
 			float rot;
 		};
 
-		GameModeManager(Game* game, SuccessManager* successMgr, StorageAPI* sAPI);
+		GameModeManager(HeriswapGame* game, SuccessManager* successMgr, StorageAPI* sAPI);
 
 		virtual ~GameModeManager() {}
 

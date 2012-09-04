@@ -27,7 +27,6 @@
 
 #include "TwitchSystem.h"
 #include "CombinationMark.h"
-#include "Game.h"
 
 DeleteGameStateManager::DeleteGameStateManager(SuccessManager* sMgr) : successMgr(sMgr) {
 	modeMgr=0;
@@ -72,14 +71,14 @@ GameState DeleteGameStateManager::Update(float dt __attribute__((unused))) {
 	ADSRComponent* transitionSuppr = ADSR(deleteAnimation);
 	if (!removing.empty()) {
 		transitionSuppr->active = true;
-        Vector2 cellSize = Vector2(Game::CellSize(theGridSystem.GridSize) * Game::CellContentScale() * (1 - transitionSuppr->value));
+        Vector2 cellSize = Vector2(HeriswapGame::CellSize(theGridSystem.GridSize) * HeriswapGame::CellContentScale() * (1 - transitionSuppr->value));
     	for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
     		if (transitionSuppr->value == transitionSuppr->sustainValue) {
     			modeMgr->ScoreCalc(it->points.size(), it->type);
 			}
     		for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
     			Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
-    			//  TRANSFORM(e)->rotation = Game::cellTypeToRotation(it->type) + (1 - transitionSuppr->value) * MathUtil::TwoPi;
+    			//  TRANSFORM(e)->rotation = HeriswapGame::cellTypeToRotation(it->type) + (1 - transitionSuppr->value) * MathUtil::TwoPi;
     			ADSR(e)->idleValue = cellSize.X;
     			if (transitionSuppr->value == transitionSuppr->sustainValue) {
     				if (e)

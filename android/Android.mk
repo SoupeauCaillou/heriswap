@@ -19,8 +19,8 @@ LOCAL_CXXFLAGS := -DANDROID_NDK -DDEBUG \
 				-I$(LOCAL_PATH)/../sac/libs/
 
 LOCAL_SRC_FILES := \
-    tilematchjnilib.cpp \
-    ../sources/Game.cpp \
+    heriswap.cpp \
+    ../sources/HeriswapGame.cpp \
     ../sources/Game_State.cpp \
     ../sources/Game_Private.cpp \
 	../sources/GridSystem.cpp \
@@ -51,7 +51,8 @@ LOCAL_SRC_FILES := \
 	../sources/modes/RandomNameToBeChangedModeManager.cpp \
 	../sources/modes/InGameUiHelper.cpp \
     ../sources/api/android/StorageAPIAndroidImpl.cpp \
-    ../sources/api/android/CommunicationAPIAndroidImpl.cpp
+    ../sources/api/android/CommunicationAPIAndroidImpl.cpp \
+    ../sac/android/sacjnilib.cpp
 
 LOCAL_STATIC_LIBRARIES := sac png tremor
 LOCAL_LDLIBS := -lGLESv2 -lGLESv1_CM -lEGL -llog -lz

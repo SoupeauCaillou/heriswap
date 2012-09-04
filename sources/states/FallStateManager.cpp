@@ -24,7 +24,6 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ADSRSystem.h"
 
-#include "Game.h"
 #include "GridSystem.h"
 #include "CombinationMark.h"
 
@@ -85,8 +84,8 @@ GameState FallGameStateManager::Update(float dt) {
 		transition->active = true;
 		for(std::vector<CellFall>::iterator it=falling.begin(); it!=falling.end(); ++it) {
 			const CellFall& f = *it;
-			Vector2 targetPos = Game::GridCoordsToPosition(f.x, f.toY,theGridSystem.GridSize);
-			Vector2 originPos = Game::GridCoordsToPosition(f.x, f.fromY,theGridSystem.GridSize);
+			Vector2 targetPos = HeriswapGame::GridCoordsToPosition(f.x, f.toY,theGridSystem.GridSize);
+			Vector2 originPos = HeriswapGame::GridCoordsToPosition(f.x, f.fromY,theGridSystem.GridSize);
 			GRID(f.e)->checkedH = GRID(f.e)->checkedV = false;
 			TRANSFORM(f.e)->position = MathUtil::Lerp(originPos, targetPos, transition->value);
 			if (transition->value == 1.) {
