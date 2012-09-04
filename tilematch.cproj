@@ -70,12 +70,12 @@
     <None Include="sources\states\SpawnStateManager.h" />
     <None Include="sources\states\StateManager.h" />
     <None Include="sources\states\UserInputStateManager.h" />
-    <None Include="sources\modes\RandomNameToBeChangedModeManager.h" />
     <None Include="sources\states\ElitePopupStateManager.h" />
     <None Include="android\Android.mk" />
     <None Include="android\Application.mk" />
     <None Include="sources\HeriswapGame.h" />
     <None Include="sources\api\linux\Callback.h" />
+    <None Include="sources\modes\Go100SecondsModeManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sources\modes\NormalModeManager.cpp" />
@@ -118,6 +118,7 @@
     <Compile Include="android\heriswap.cpp" />
     <Compile Include="sources\HeriswapGame.cpp" />
     <Compile Include="sources\api\linux\Callback.cpp" />
+    <Compile Include="sources\modes\Go100SecondsModeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="sources\api\android\" />

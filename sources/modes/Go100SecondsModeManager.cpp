@@ -234,5 +234,8 @@ int Go100SecondsGameModeManager::saveInternalState(uint8_t** out) {
 
 const uint8_t* Go100SecondsGameModeManager::restoreInternalState(const uint8_t* in, int size) {
     in = GameModeManager::restoreInternalState(in, size);
+    
+    TRANSFORM(herisson)->position.X = GameModeManager::position(time);
+    
     return in;
 }
