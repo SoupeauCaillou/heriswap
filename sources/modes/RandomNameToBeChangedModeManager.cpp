@@ -41,7 +41,7 @@ RandomNameToBeChangedGameModeManager::~RandomNameToBeChangedGameModeManager() {
 
 void RandomNameToBeChangedGameModeManager::Setup() {
 	GameModeManager::Setup();
-	
+
 	validBranchPos.clear();
 	#include "PositionFeuilles.h"
 	for (int i=0; i<8*6; i++) {
@@ -54,7 +54,6 @@ void RandomNameToBeChangedGameModeManager::Setup() {
 void RandomNameToBeChangedGameModeManager::Enter() {
 	time = 0;
 	limit = 100;
-	leavesDone = 0;
 	points = 0;
 	bonus = MathUtil::RandomInt(theGridSystem.Types);
 	pts.clear();
@@ -62,51 +61,26 @@ void RandomNameToBeChangedGameModeManager::Enter() {
 
 	pts.push_back(Vector2(limit,1));//need limit leaves to end game
 
-	generateLeaves(0, 0);
+	generateLeaves(0, 8);
 
 	GameModeManager::Enter();
-	
-    spawn = 0;//MathUtil::RandomFloat() * RATE;
 }
 
 void RandomNameToBeChangedGameModeManager::Exit() {
-	//if we didn't give up
 	GameModeManager::Exit();
 }
 
 void RandomNameToBeChangedGameModeManager::GameUpdate(float dt) {
 	time+=dt;
-	
-	spawn += dt * RATE;
-	while (spawn >= 1) {
-		if (branchLeaves.size() < 48) {
-			int rand = 0, i;
-			do {
-				rand = MathUtil::RandomIntInRange(0, validBranchPos.size());
-				for (i=0; i<branchLeaves.size(); i++) {
-					if (Vector2::Distance(TRANSFORM(branchLeaves[i].e)->position, validBranchPos[rand].v)
-						<  0.01) {
-					break;
-						}
-				}
-			} while (i != branchLeaves.size());
-			Entity e = createAndAddLeave(MathUtil::RandomInt(8), validBranchPos[rand].v, validBranchPos[rand].rot);
-			leaveGrowing.push_back(e);
-			TRANSFORM(e)->size *= 0.1;
-		}
-		spawn -= 1;
+
+	if (branchLeaves.size() == 0) {
+		//recreate the tree + change the bonus
+		generateLeaves(0, 8);
+		bonus = MathUtil::RandomInt(theGridSystem.Types);
+	    LoadHerissonTexture(bonus+1);
+		RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 	}
-	
-	float growth = MathUtil::RandomFloatInRange(0.2f, 1.0f);
-	for (int i=0; i<leaveGrowing.size(); i++) {
-		Entity e = leaveGrowing[i];
-		TRANSFORM(e)->size = TRANSFORM(e)->size + TRANSFORM(e)->size * growth * dt;
-		if (TRANSFORM(e)->size.X > Game::CellSize(8) * Game::CellContentScale()) {
-			TRANSFORM(e)->size.X = TRANSFORM(e)->size.Y = Game::CellSize(8) * Game::CellContentScale();
-			leaveGrowing.erase(leaveGrowing.begin() + i);
-			i--;
-		}
-	}
+
 }
 
 float RandomNameToBeChangedGameModeManager::GameProgressPercent() {
@@ -129,9 +103,6 @@ void RandomNameToBeChangedGameModeManager::UiUpdate(float dt) {
 		for(int i=0; i<8; i++) {
 			std::stringstream text;
 			text << countBranchLeavesOfType(i);
-			if (i == 7) {
-				text << ":" << leavesDone;
-			}
 			TEXT_RENDERING(debugEntities[2*i+1])->text = text.str();
 			TEXT_RENDERING(debugEntities[2*i+1])->hide = false;
 			TEXT_RENDERING(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
@@ -144,11 +115,9 @@ void RandomNameToBeChangedGameModeManager::ScoreCalc(int nb, unsigned int type) 
 	int p = (10 * nb * nb * nb) / 6;
 	if (type == bonus) {
 		p *= 2;
-		deleteLeaves(~0b0, MathUtil::Min((int)branchLeaves.size(), nb));
-		leavesDone+=2*nb;
+		deleteLeaves(~0b0, MathUtil::Min((int)branchLeaves.size(), 2*nb));
 	} else {
 		deleteLeaves(~0b0, MathUtil::Min((int)branchLeaves.size(), nb));
-		leavesDone+=nb;
 	}
 	p *= (theGridSystem.sizeToDifficulty() + 1);
 	points += p;
@@ -158,11 +127,11 @@ void RandomNameToBeChangedGameModeManager::TogglePauseDisplay(bool paused) {
 	GameModeManager::TogglePauseDisplay(paused);
 }
 
-void RandomNameToBeChangedGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
+void RandomNameToBeChangedGameModeManager::WillScore(int count, int type, std::vector<Entity>& LeavesToDelete) {
     int nb = MathUtil::Min((int)branchLeaves.size(), count);
     for (unsigned int i=0; nb>0 && i<branchLeaves.size(); i++) {
 		CombinationMark::markCellInCombination(branchLeaves[i].e);
-        out.push_back(branchLeaves[i].e);
+        LeavesToDelete.push_back(branchLeaves[i].e);
         nb--;
     }
 }
@@ -170,17 +139,14 @@ void RandomNameToBeChangedGameModeManager::WillScore(int count, int type, std::v
 int RandomNameToBeChangedGameModeManager::saveInternalState(uint8_t** out) {
     uint8_t* tmp;
     int parent = GameModeManager::saveInternalState(&tmp);
-    int s = sizeof(leavesDone);
-    uint8_t* ptr = *out = new uint8_t[parent + s];
+    uint8_t* ptr = *out = new uint8_t[parent];
     ptr = (uint8_t*) mempcpy(ptr, tmp, parent);
-    ptr = (uint8_t*) mempcpy(ptr, &leavesDone, sizeof(leavesDone));
 
     delete[] tmp;
-    return (parent + s);
+    return (parent);
 }
 
 const uint8_t* RandomNameToBeChangedGameModeManager::restoreInternalState(const uint8_t* in, int size) {
     in = GameModeManager::restoreInternalState(in, size);
-    memcpy(&leavesDone, in, sizeof(leavesDone)); in += sizeof(leavesDone);
     return in;
 }

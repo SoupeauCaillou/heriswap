@@ -43,10 +43,7 @@ class RandomNameToBeChangedGameModeManager : public GameModeManager {
 		int saveInternalState(uint8_t** out);
         const uint8_t* restoreInternalState(const uint8_t* in, int size);
 	private:
-		unsigned int leavesDone;
-		bool succNoGridReset;
-		float spawn;
+
 		std::vector<Render> validBranchPos;
-		std::vector<Entity> leaveGrowing;
 };
 
