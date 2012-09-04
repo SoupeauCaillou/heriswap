@@ -202,11 +202,10 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
 }
 
 void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
-	int p = (10 * level * nb * nb * nb) / 6;
-	if (type == bonus) p *= 2;
-	p *= (theGridSystem.sizeToDifficulty() + 1);
-
-	points += p;
+	if (type == bonus)
+		points += 10*level*2*nb*nb*nb/6;
+	else
+		points += 10*level*nb*nb*nb/6;
 
 	deleteLeaves(type, levelToLeaveToDelete(type, nb, level+2, level+2 - remain[type], countBranchLeavesOfType(type)));
 	remain[type] -= nb;
