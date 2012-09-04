@@ -153,12 +153,13 @@ void ModeMenuStateManager::Setup() {
 	// your score
 	yourScore = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
-	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(250),PlacementHelper::GimpYToScreen(1242));
+	TRANSFORM(yourScore)->position = Vector2(PlacementHelper::GimpXToScreen(0),PlacementHelper::GimpYToScreen(1242));
 	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(yourScore)->hide = true;
 	TEXT_RENDERING(yourScore)->charHeight = PlacementHelper::GimpHeightToScreen(56);
 	TEXT_RENDERING(yourScore)->color = green;
 
+#if 0
 	// facebook button
 	facebook = theEntityManager.CreateEntity();
 	ADD_COMPONENT(facebook, Transformation);
@@ -180,6 +181,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(twitter)->position = Vector2(PlacementHelper::GimpXToScreen(600),PlacementHelper::GimpYToScreen(1242));
 	TRANSFORM(twitter)->size = Vector2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
 	TRANSFORM(twitter)->z = DL_MainMenuUITxt;
+#endif
 
 	// enableSwarm text
 	enableSwarm = theTextRenderingSystem.CreateEntity();
@@ -352,12 +354,13 @@ GameState ModeMenuStateManager::Update(float dt) {
 			break;
         }
         case GameEnded: {
-			#ifdef ANDROID
+			#if 0
 			//show twitter, fb, und so weiter
 			RENDERING(facebook)->hide = false;
 			RENDERING(twitter)->hide = false;
 			BUTTON(facebook)->enabled = true;
 			BUTTON(twitter)->enabled = true;
+			#endif
 			if (!communicationAPI->swarmInstalled()) {
 				BUTTON(enableSwarmContainer)->enabled = true;
 				TEXT_RENDERING(enableSwarm)->hide = false;
@@ -368,7 +371,6 @@ GameState ModeMenuStateManager::Update(float dt) {
 				this->LateExit();
 				return RateIt;
 			}
-			#endif
 
             // ask player's name if needed
             if (isCurrentScoreAHighOne()) {
@@ -460,7 +462,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 			SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 			return MainMenu;
 		}
-
+#if 0
 		//facebook button
 		else if (BUTTON(facebook)->clicked) {
 			communicationAPI->shareFacebook();
@@ -469,6 +471,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 		else if (BUTTON(twitter)->clicked) {
 			communicationAPI->shareTwitter();
 		}
+#endif
 		//enableSwarm button
 		else if (BUTTON(enableSwarmContainer)->clicked) {
 			communicationAPI->swarmRegistering(modeMgr->GetMode(), theGridSystem.sizeToDifficulty());
@@ -499,11 +502,13 @@ void ModeMenuStateManager::LateExit() {
 	BUTTON(playContainer)->enabled = false;
 	TEXT_RENDERING(eDifficulty)->hide=true;
 	BUTTON(bDifficulty)->enabled = false;
+#if 0
 	BUTTON(facebook)->enabled = false;
 	BUTTON(twitter)->enabled = false;
-	BUTTON(enableSwarmContainer)->enabled = false;
 	RENDERING(facebook)->hide = true;
 	RENDERING(twitter)->hide = true;
+#endif
+	BUTTON(enableSwarmContainer)->enabled = false;
 	TEXT_RENDERING(enableSwarm)->hide = true;
 
 	gameOverState = NoGame;

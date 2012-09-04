@@ -63,8 +63,10 @@ class ModeMenuStateManager : public GameStateManager {
 		LocalizeAPI* localizeAPI;
 
 		Entity eDifficulty, bDifficulty;
-
-		Entity facebook, twitter, enableSwarm, enableSwarmContainer;
+#if 0
+		Entity facebook, twitter
+#endif
+		Entity enableSwarm, enableSwarmContainer;
 
         void submitScore(const std::string& playerName);
         bool isCurrentScoreAHighOne();
