@@ -28,7 +28,7 @@ public class StorageAPI {
 				return enabled;
 			}
 		}
-
+  
 		static public int getGameCountBeforeNextAd() {
 			return HeriswapActivity.preferences.getInt(GameCountBeforeAds, 10);
 		}

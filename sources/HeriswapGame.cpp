@@ -284,7 +284,6 @@ void HeriswapGame::tick(float dt) {
     updateFps(dt);
 
 	theTouchInputManager.Update(dt);
-
     // update state
     newState = datas->state2Manager[datas->state]->Update(dt);
 
@@ -393,7 +392,9 @@ void HeriswapGame::tick(float dt) {
 
     //updating HUD if playing
 	if (inGameState(newState) && newState != LevelChanged) {
+		LOGW("%d => %.3f s", __LINE__, TimeUtil::getTime() - updateDuration);
 		datas->mode2Manager[datas->mode]->UiUpdate(dt);
+		LOGW("%d => %.3f s", __LINE__, TimeUtil::getTime() - updateDuration);
 	}
 
     if (theTouchInputManager.wasTouched() && theMusicSystem.isMuted() && !theSoundSystem.mute) {
@@ -486,7 +487,7 @@ void HeriswapGame::tick(float dt) {
 
 	//bench settings
 	updateDuration = TimeUtil::getTime()-updateDuration;
-	bench(true, updateDuration, dt);
+	bench(false, updateDuration, dt);
 }
 
 void HeriswapGame::bench(bool active, float updateDuration, float dt) {
@@ -517,10 +518,10 @@ void HeriswapGame::bench(bool active, float updateDuration, float dt) {
 				RENDERING(it->second)->hide = false;
 				x += width;
 
-				// LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
+				LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
 			}
 
-			// LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
+			LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
 			benchAccum = 0;
 		}
 	}

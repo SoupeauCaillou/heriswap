@@ -118,7 +118,8 @@ void NormalGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << storageAPI->getMyRank(points, Normal, theGridSystem.sizeToDifficulty()) << ". " << std::fixed << points;
+	// a << storageAPI->getMyRank(points, Normal, theGridSystem.sizeToDifficulty()) << ". ";
+	a << std::fixed << points;
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
 
