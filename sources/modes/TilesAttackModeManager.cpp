@@ -190,5 +190,8 @@ int TilesAttackGameModeManager::saveInternalState(uint8_t** out) {
 const uint8_t* TilesAttackGameModeManager::restoreInternalState(const uint8_t* in, int size) {
     in = GameModeManager::restoreInternalState(in, size);
     memcpy(&leavesDone, in, sizeof(leavesDone)); in += sizeof(leavesDone);
+    
+    TRANSFORM(herisson)->position.X = GameModeManager::position(leavesDone);
+    
     return in;
 }
