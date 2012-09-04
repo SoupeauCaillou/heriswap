@@ -12,6 +12,6 @@ heriswap_tests
 scores.txt
 tilematch.pidb
 tilematch.userprefs
-src/net/damsy/soupeaucaillou/heriswap/HeriswapSecret.java
+HeriswapSecret.java
 *.jar
 *.o
