@@ -18,6 +18,8 @@
 */
 #pragma once
 
+#include "api/LocalizeAPI.h"
+
 #include "Game.h"
 #include "StateManager.h"
 #include "SuccessManager.h"
@@ -27,13 +29,14 @@ class NormalGameModeManager;
 class ElitePopupStateManager : public GameStateManager {
 	public:
 
-	ElitePopupStateManager(NormalGameModeManager* nmg) { normalGameModeManager = nmg; };
+	ElitePopupStateManager(NormalGameModeManager* nmg, LocalizeAPI* lAPI) { normalGameModeManager = nmg; localizeAPI = lAPI; };
 	void Setup();
 	void Enter();
 	GameState Update(float dt);
 	void Exit();
 
 	private:
+		LocalizeAPI* localizeAPI;
 		NormalGameModeManager* normalGameModeManager;
 		Entity background, text;
 		Entity eButton[2], eText[2];
