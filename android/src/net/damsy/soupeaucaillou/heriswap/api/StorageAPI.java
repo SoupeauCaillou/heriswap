@@ -76,7 +76,7 @@ public class StorageAPI {
 					.getWritableDatabase();
 			ContentValues v = new ContentValues();
 			v.put("name", name);
-			v.put("mode", mode);
+			v.put("mode", mode + 1);
 			v.put("difficulty", difficulty);
 			v.put("points", points);
 			v.put("time", time);
@@ -118,11 +118,11 @@ public class StorageAPI {
 			Cursor cursor = null;
 			if (mode == 0 || mode == 2) {
 				cursor = db.query("score", new String[] { "name", "points", "time",
-						"level" }, "mode='" + mode + "' and difficulty='"
+						"level" }, "mode='" + (mode+1) + "' and difficulty='"
 						+ difficulty + "'", null, null, null, "points desc");
 			} else {
 				cursor = db.query("score", new String[] { "name", "points", "time",
-						"level" }, "mode='" + mode + "' and difficulty='"
+						"level" }, "mode='" + (mode+1) + "' and difficulty='"
 						+ difficulty + "'", null, null, null, "time asc");
 			}
 			int maxResult = Math.min(5, cursor.getCount());
