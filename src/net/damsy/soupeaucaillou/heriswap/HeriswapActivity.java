@@ -77,6 +77,7 @@ public class HeriswapActivity extends SacActivity {
 	
 	static public final String Tag = "HeriswapJ";
 	static final String TILEMATCH_BUNDLE_KEY = "plop";
+	static public final String HERISWAP_SHARED_PREF = "HeriswapPref";
 	
 	byte[] renderingSystemState;
 	
@@ -86,7 +87,7 @@ public class HeriswapActivity extends SacActivity {
 	static public EditText nameEdit;
 	static public String playerName;
 
-	static public SharedPreferences preferences;
+	public SharedPreferences preferences;
 	static public Button[] oldName;
 
 	@Override

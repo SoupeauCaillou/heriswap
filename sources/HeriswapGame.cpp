@@ -392,9 +392,7 @@ void HeriswapGame::tick(float dt) {
 
     //updating HUD if playing
 	if (inGameState(newState) && newState != LevelChanged) {
-		LOGW("%d => %.3f s", __LINE__, TimeUtil::getTime() - updateDuration);
 		datas->mode2Manager[datas->mode]->UiUpdate(dt);
-		LOGW("%d => %.3f s", __LINE__, TimeUtil::getTime() - updateDuration);
 	}
 
     if (theTouchInputManager.wasTouched() && theMusicSystem.isMuted() && !theSoundSystem.mute) {

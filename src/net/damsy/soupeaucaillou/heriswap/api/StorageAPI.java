@@ -1,8 +1,10 @@
 package net.damsy.soupeaucaillou.heriswap.api;
 
+import net.damsy.soupeaucaillou.SacJNILib;
 import net.damsy.soupeaucaillou.heriswap.HeriswapActivity;
 import net.damsy.soupeaucaillou.heriswap.HeriswapSecret;
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,10 +19,11 @@ public class StorageAPI {
 		static final String GameCountBeforeAds = "GameCountBeforeAds";
 
 		static public boolean soundEnable(boolean switchIt) {
-			boolean enabled = HeriswapActivity.preferences.getBoolean(
+			SharedPreferences preferences = SacJNILib.activity.getSharedPreferences(HeriswapActivity.HERISWAP_SHARED_PREF, 0); 
+			boolean enabled = preferences.getBoolean(
 					SoundEnabledPref, true);
 			if (switchIt) {
-				Editor ed = HeriswapActivity.preferences.edit();
+				Editor ed = preferences.edit();
 				ed.putBoolean(SoundEnabledPref, !enabled);
 				ed.commit();
 				return !enabled;
@@ -30,11 +33,13 @@ public class StorageAPI {
 		}
   
 		static public int getGameCountBeforeNextAd() {
-			return HeriswapActivity.preferences.getInt(GameCountBeforeAds, 10);
+			SharedPreferences preferences = SacJNILib.activity.getSharedPreferences(HeriswapActivity.HERISWAP_SHARED_PREF, 0);
+			return preferences.getInt(GameCountBeforeAds, 10);
 		}
 
 		static public void setGameCountBeforeNextAd(int value) {
-			Editor ed = HeriswapActivity.preferences.edit();
+			SharedPreferences preferences = SacJNILib.activity.getSharedPreferences(HeriswapActivity.HERISWAP_SHARED_PREF, 0);
+			Editor ed = preferences.edit();
 			ed.putInt(GameCountBeforeAds, value);
 			ed.commit();
 		}

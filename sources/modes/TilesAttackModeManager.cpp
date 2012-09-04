@@ -94,7 +94,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	//Temps
 	{
 	std::stringstream a;
-	a << storageAPI->getMyRank(time, TilesAttack, theGridSystem.sizeToDifficulty()) << ". ";
+	// a << storageAPI->getMyRank(time, TilesAttack, theGridSystem.sizeToDifficulty()) << ". ";
 
 	int minute = ((int)time)/60;
 	int seconde= ((int)time)%60;
