@@ -30,7 +30,6 @@ class StorageAPILinuxImpl : public StorageAPI {
         void setGameCountBeforeNextAd(int c);
         int getSavedGamePointsSum();
         bool everyModesPlayed();
-        int getMyRank(float score, GameMode mode, Difficulty difficulty);
 
     private:
     	std::string dbPath;

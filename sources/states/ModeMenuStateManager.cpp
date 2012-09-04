@@ -249,7 +249,7 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 			trcP->hide = false;
 			std::stringstream a;
 			a.precision(1);
-			if (mode==Normal || mode==RandomNameToBeChanged) {
+			if (mode==Normal || mode==Go100Seconds) {
 				a << std::fixed << entries[i].points;
 				trcP->flags |= TextRenderingComponent::IsANumberBit;
 			} else {
@@ -269,7 +269,7 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 			if (!alreadyRed && gameOverState == AskingPlayerName &&
 			 ((mode==Normal && (unsigned int)entries[i].points == modeMgr->points)
 			  || (mode==TilesAttack && MathUtil::Abs(entries[i].time-modeMgr->time)<0.01f)
-			  || (mode==RandomNameToBeChanged && (unsigned int)entries[i].points == modeMgr->points))
+			  || (mode==Go100Seconds && (unsigned int)entries[i].points == modeMgr->points))
 			   && entries[i].name == playerName) {
 				trcN->color = Color(1.0f,0.f,0.f);
 				trcP->color = Color(1.0f,0.f,0.f);
@@ -352,7 +352,7 @@ bool ModeMenuStateManager::isCurrentScoreAHighOne() {
     if (s < 5)
         return true;
 
-    if (modeMgr->GetMode() == Normal || modeMgr->GetMode() == RandomNameToBeChanged) {
+    if (modeMgr->GetMode() == Normal || modeMgr->GetMode() == Go100Seconds) {
         return modeMgr->points > (unsigned int)entries[s - 1].points;
     } else {
         return modeMgr->time < entries[s - 1].time;
@@ -393,7 +393,7 @@ GameState ModeMenuStateManager::Update(float dt) {
             a.precision(1);
             if (modeMgr->GetMode()==Normal) {
                 a << modeMgr->points << " : "<< localizeAPI->text("lvl", "lvl") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
-            } else if (modeMgr->GetMode()==RandomNameToBeChanged) {
+            } else if (modeMgr->GetMode()==Go100Seconds) {
                 a << modeMgr->points;
 			} else {
                 a << std::fixed << ((int)(modeMgr->time*10))/10.f << " s";

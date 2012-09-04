@@ -34,7 +34,7 @@
 
 void MainMenuGameStateManager::Setup() {
 	const Color green("green");
-	
+
 	//Creating text entities
 	for (int i=0; i<3; i++) {
 		eStart[i] = theTextRenderingSystem.CreateEntity();
@@ -61,9 +61,9 @@ void MainMenuGameStateManager::Setup() {
 		TRANSFORM(eStart[i])->position.X = PlacementHelper::GimpXToScreen(75);
 		TRANSFORM(eStart[i])->position.Y = TRANSFORM(bStart[i])->position.Y = PlacementHelper::GimpYToScreen(156+i*183);
 	}
-	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Score race is a very long text we'll try to fit in a box");
+	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Score race");
 	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2", "Time attack");
-	TEXT_RENDERING(eStart[2])->text = localizeAPI->text("mode_3", "RandomNameToBeChanged");
+	TEXT_RENDERING(eStart[2])->text = localizeAPI->text("mode_3", "100 seconds");
 
 
 	//Containers properties
@@ -203,7 +203,7 @@ GameState MainMenuGameStateManager::Update(float dt) {
 		}
 		if(BUTTON(bStart[2])->clicked){
 			choosenGameMode = TilesAttack;
-			choosenGameMode = RandomNameToBeChanged;
+			choosenGameMode = Go100Seconds;
 			SOUND(bStart[2])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 			return ModeMenu;
 		}

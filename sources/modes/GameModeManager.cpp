@@ -397,3 +397,15 @@ int GameModeManager::countBranchLeavesOfType(int t) const {
 	}
 	return count;
 }
+
+unsigned int GameModeManager::getMyRank(float score, GameMode mode, std::vector<StorageAPI::Score> entries) {
+	unsigned int i = 0;
+    if (mode != TilesAttack) {
+		while (i < entries.size() && (int)score <= entries[i].points)
+			i++;
+	} else {
+		while (i < entries.size() && score > entries[i].time)
+			i++;
+	}
+	return i+1;
+}

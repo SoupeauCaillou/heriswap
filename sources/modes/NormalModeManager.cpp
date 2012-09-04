@@ -68,6 +68,10 @@ void NormalGameModeManager::Enter() {
 
 	generateLeaves(0, theGridSystem.Types);
 
+	scores = storageAPI->savedScores(Normal, theGridSystem.sizeToDifficulty());
+	rank = GameModeManager::getMyRank((float)points, Normal, scores);;
+
+
 	GameModeManager::Enter();
 }
 
@@ -118,7 +122,7 @@ void NormalGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	// a << storageAPI->getMyRank(points, Normal, theGridSystem.sizeToDifficulty()) << ". ";
+	a << rank << ". ";
 	a << std::fixed << points;
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}
@@ -220,10 +224,14 @@ void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 
 	successMgr->sExterminaScore(points);
 
+	//update rank
+	rank = GameModeManager::getMyRank((float)points, Normal, scores);
+
 }
 
 void NormalGameModeManager::startLevel(int lvl) {
 	level = lvl;
+
 
 	LOGI("New level: %d", lvl);
 
@@ -234,6 +242,8 @@ void NormalGameModeManager::startLevel(int lvl) {
 		helpAvailable = true;
 	}
 
+	scores = storageAPI->savedScores(Normal, theGridSystem.sizeToDifficulty());
+	rank = GameModeManager::getMyRank((float)points, Normal, scores);
 
 	// put hedgehog back on first animation position
 	c->ind = 0;

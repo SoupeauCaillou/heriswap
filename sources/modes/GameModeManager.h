@@ -29,7 +29,7 @@
 enum GameMode {
 	Normal = 0,
 	TilesAttack,
-	RandomNameToBeChanged
+	Go100Seconds
 };
 
 class GameModeManager {
@@ -86,6 +86,9 @@ class GameModeManager {
 		void LoadHerissonTexture(int type);
 		void updateHerisson(float dt, float obj, float herissonSpeed);
 		void deleteLeaves(unsigned int type, int nb);
+		Entity createAndAddLeave(int type, const Vector2& position, float rotation);
+
+		unsigned int getMyRank(float score, GameMode mode, std::vector<StorageAPI::Score> entries);
 
 	public:
 		// game params
@@ -108,8 +111,12 @@ class GameModeManager {
 		AnimatedActor* c;
 
 		StorageAPI* storageAPI;
-		
-		Entity createAndAddLeave(int type, const Vector2& position, float rotation);
+
+		//for rank calculation
+		std::vector<StorageAPI::Score> scores;
+		unsigned int rank;
+
+
 	private:
 		std::vector<Render> posBranch;
 		void fillVec();

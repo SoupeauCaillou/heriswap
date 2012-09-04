@@ -34,7 +34,6 @@ class StorageAPIAndroidImpl : public StorageAPI {
         void setGameCountBeforeNextAd(int c);
         int getSavedGamePointsSum();
         bool everyModesPlayed();
-        int getMyRank(float score, GameMode mode, Difficulty difficulty);
 
     private:
         class StorageAPIAndroidImplDatas;

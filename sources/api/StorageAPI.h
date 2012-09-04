@@ -41,5 +41,4 @@ class StorageAPI {
         virtual void setGameCountBeforeNextAd(int c) = 0;
         virtual int getSavedGamePointsSum() = 0;
         virtual bool everyModesPlayed() = 0;
-        virtual int getMyRank(float score, GameMode mode, Difficulty difficulty) = 0;
 };

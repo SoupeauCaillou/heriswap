@@ -141,17 +141,3 @@ int StorageAPIAndroidImpl::getSavedGamePointsSum() {
 bool StorageAPIAndroidImpl::everyModesPlayed() {
     return (env->CallStaticIntMethod(datas->cls, datas->getModePlayedCount) == 4);
 }
-
-int StorageAPIAndroidImpl::getMyRank(float score, StorageAPI::GameMode mode, Difficulty difficulty) {
-    std::vector<StorageAPI::Score> entries = savedScores(mode, difficulty);
-
-	int i = 0;
-    if (mode != 1) {
-		while (i < entries.size() && (int)score <= entries[i].points)
-			i++;
-	} else {
-		while (i < entries.size() && score > entries[i].time)
-			i++;
-	}
-	return i+1;
-}

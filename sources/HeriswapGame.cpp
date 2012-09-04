@@ -52,7 +52,7 @@
 
 #include "modes/NormalModeManager.h"
 #include "modes/TilesAttackModeManager.h"
-#include "modes/RandomNameToBeChangedModeManager.h"
+#include "modes/Go100SecondsModeManager.h"
 
 #include "DepthLayer.h"
 #include "GridSystem.h"
@@ -195,7 +195,7 @@ void HeriswapGame::setMode() {
 	datas->state2Manager[ModeMenu]->modeMgr = datas->mode2Manager[datas->mode];
 	datas->state2Manager[Spawn]->modeMgr = datas->mode2Manager[datas->mode];
 	static_cast<CountDownStateManager*> (datas->state2Manager[CountDown])->mode = datas->mode;
-	if (datas->mode == Normal || datas->mode == RandomNameToBeChanged) {
+	if (datas->mode == Normal || datas->mode == Go100Seconds) {
 		static_cast<FadeGameStateManager*> (datas->state2Manager[GameToBlack])->duration = 4.0f;
 	} else {
 		static_cast<FadeGameStateManager*> (datas->state2Manager[GameToBlack])->duration = 0.5f;

@@ -60,6 +60,9 @@ void TilesAttackGameModeManager::Enter() {
 
 	generateLeaves(0, 8);
 
+	scores = storageAPI->savedScores(Normal, theGridSystem.sizeToDifficulty());
+	rank = GameModeManager::getMyRank(time, TilesAttack, scores);;
+
 	GameModeManager::Enter();
 }
 
@@ -94,7 +97,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	//Temps
 	{
 	std::stringstream a;
-	// a << storageAPI->getMyRank(time, TilesAttack, theGridSystem.sizeToDifficulty()) << ". ";
+	a << rank << ". ";
 
 	int minute = ((int)time)/60;
 	int seconde= ((int)time)%60;
@@ -160,6 +163,10 @@ void TilesAttackGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	successMgr->sRainbow(type);
 
 	successMgr->sBonusToExcess(type, bonus, nb);
+
+	//update rank
+	rank = GameModeManager::getMyRank((float)points, Normal, scores);
+
 }
 
 void TilesAttackGameModeManager::TogglePauseDisplay(bool paused) {

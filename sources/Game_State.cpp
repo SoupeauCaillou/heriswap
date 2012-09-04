@@ -46,7 +46,7 @@ void HeriswapGame::stopInGameMusics() {
 }
 
 void HeriswapGame::setupGameProp() {
-	if (datas->mode == RandomNameToBeChanged) {
+	if (datas->mode == Go100Seconds) {
 		ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.2;
 		ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.03;
 		ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.03;

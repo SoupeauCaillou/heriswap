@@ -120,7 +120,7 @@ std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(GameMode mode, D
 	if  (difficulty != SelectAllDifficulty)
 		tmp << " and difficulty=" << (int)difficulty;
 
-    if (mode==Normal || mode==RandomNameToBeChanged)
+    if (mode==Normal || mode==Go100Seconds)
         tmp << " order by points desc limit 5";
     else
         tmp << " order by time asc limit 5";
@@ -179,23 +179,5 @@ bool StorageAPILinuxImpl::everyModesPlayed() {
     return (s==4);
     #else
     return false;
-    #endif
-}
-
-int StorageAPILinuxImpl::getMyRank(float score, GameMode mode, Difficulty difficulty) {
-	#ifndef EMSCRIPTEN
-    std::vector<Score> entries = savedScores(mode, difficulty);
-
-	int i = 0;
-    if (mode != TilesAttack) {
-		while (i < entries.size() && (int)score <= entries[i].points)
-			i++;
-	} else {
-		while (i < entries.size() && score > entries[i].time)
-			i++;
-	}
-	return i+1;
-    #else
-    return 0;
     #endif
 }
