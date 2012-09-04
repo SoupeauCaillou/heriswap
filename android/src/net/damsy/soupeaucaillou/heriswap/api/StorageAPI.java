@@ -19,7 +19,7 @@ public class StorageAPI {
 		static final String GameCountBeforeAds = "GameCountBeforeAds";
 
 		static public boolean soundEnable(boolean switchIt) {
-			SharedPreferences preferences = SacJNILib.activity.getSharedPreferences(HeriswapActivity.HERISWAP_SHARED_PREF, 0); 
+		 	SharedPreferences preferences = SacJNILib.activity.getSharedPreferences(HeriswapActivity.HERISWAP_SHARED_PREF, 0); 
 			boolean enabled = preferences.getBoolean(
 					SoundEnabledPref, true);
 			if (switchIt) {
