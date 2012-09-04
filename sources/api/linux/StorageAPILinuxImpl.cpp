@@ -116,7 +116,10 @@ std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(GameMode mode, D
     std::vector<StorageAPI::Score> result;
 	#ifndef EMSCRIPTEN
     std::stringstream tmp;
-    tmp << "select * from score where mode= "<< (int)mode << " and difficulty=" << (int)difficulty;
+		tmp << "select * from score where mode= "<< (int)mode;
+	if  (difficulty != SelectAllDifficulty)
+		tmp << " and difficulty=" << (int)difficulty;
+
     if (mode==Normal || mode==RandomNameToBeChanged)
         tmp << " order by points desc limit 5";
     else

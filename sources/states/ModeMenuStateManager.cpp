@@ -293,7 +293,18 @@ void ModeMenuStateManager::Enter() {
 	BUTTON(back)->enabled = true;
 	BUTTON(playContainer)->enabled = true;
 
-    difficulty = theGridSystem.sizeToDifficulty();
+	//first launch : set an easiest diff
+    if (gameOverState == NoGame) {
+		std::vector<StorageAPI::Score> entries = storageAPI->savedScores(modeMgr->GetMode(), SelectAllDifficulty);
+		if  (entries.size() == 0)
+			difficulty = DifficultyEasy;
+		else if  (entries.size() < 5)
+			difficulty = DifficultyMedium;
+		else
+			difficulty = DifficultyHard;
+	} else {
+		difficulty = theGridSystem.sizeToDifficulty();
+	}
 
 	LoadScore(modeMgr->GetMode(), difficulty);
 

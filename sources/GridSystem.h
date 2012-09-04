@@ -24,6 +24,7 @@
 
 //medium is after hard because it would have ruined ppl's score using the game before adding the medium difficulty on android
 enum Difficulty {
+	SelectAllDifficulty = -1,
 	DifficultyEasy = 0,
 	DifficultyMedium = 2,
 	DifficultyHard = 1
