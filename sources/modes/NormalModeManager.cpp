@@ -231,7 +231,9 @@ void NormalGameModeManager::startLevel(int lvl) {
 	for (int i=0;i<theGridSystem.Types;i++)
 		remain[i] = 2+level;
 
-	helpAvailable = true;
+	if (level < 10)  {
+		helpAvailable = true;
+	}
 
 
 	// put hedgehog back on first animation position
