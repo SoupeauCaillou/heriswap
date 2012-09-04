@@ -193,15 +193,13 @@ void RandomNameToBeChangedGameModeManager::UiUpdate(float dt) {
 }
 
 void RandomNameToBeChangedGameModeManager::ScoreCalc(int nb, unsigned int type) {
-	if (type == bonus) {
+	/*if (type == bonus) {
 		points += 10*2*nb*nb*nb/6;
 		deleteLeaves(~0b0, levelToLeaveToDelete(6*8, limit, 2*nb, leavesDone));
-		leavesDone+=2*nb;
 	} else {
 		points += 10*nb*nb*nb/6;
 		deleteLeaves(~0b0, levelToLeaveToDelete(6*8, limit, nb, leavesDone));
-		leavesDone+=nb;
-	}
+	}*/
 }
 
 void RandomNameToBeChangedGameModeManager::TogglePauseDisplay(bool paused) {
