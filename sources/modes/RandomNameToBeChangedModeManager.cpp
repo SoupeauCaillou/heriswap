@@ -78,7 +78,7 @@ void RandomNameToBeChangedGameModeManager::Enter() {
 	generateLeaves(0, 8);
 
 	for (unsigned int i = 0; i < squallLeaves.size();  i++)
-		RENDERING(squallLeaves[i])->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(bonus, &TRANSFORM(squallLeaves[i])->rotation));
+		RENDERING(squallLeaves[i])->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(bonus, &TRANSFORM(squallLeaves[i])->rotation));
 
 	GameModeManager::Enter();
 }
@@ -94,7 +94,7 @@ void RandomNameToBeChangedGameModeManager::squall() {
 
 		Entity  e = squallLeaves[i];
 		TRANSFORM(e)->position = Vector2(MathUtil::RandomFloatInRange(minX, maxX), MathUtil::RandomFloatInRange(minY, maxY));
-		RENDERING(e)->texture = theRenderingSystem.loadTextureFile(Game::cellTypeToTextureNameAndRotation(bonus, &TRANSFORM(e)->rotation));
+		RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(bonus, &TRANSFORM(e)->rotation));
 		RENDERING(e)->hide = false;
 
 		Force force;
@@ -126,7 +126,7 @@ void RandomNameToBeChangedGameModeManager::GameUpdate(float dt) {
 		//make the tree leaves grow ...
 		for (unsigned int i = 0; i < branchLeaves.size(); i++) {
 			TRANSFORM(branchLeaves[i].e)->size =
-				Vector2(Game::CellSize(8) * Game::CellContentScale() * MathUtil::Min(squallDuration, 1.f));
+				Vector2(HeriswapGame::CellSize(8) * HeriswapGame::CellContentScale() * MathUtil::Min(squallDuration, 1.f));
 		}
 		//check if every leaves has gone...
 		bool ended = true;
@@ -195,12 +195,10 @@ void RandomNameToBeChangedGameModeManager::UiUpdate(float dt) {
 void RandomNameToBeChangedGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	if (type == bonus) {
 		points += 10*2*nb*nb*nb/6;
-		deleteLeaves(~0b0, levelToLeaveToDelete(6*8, limit, 2*nb, leavesDone));
-		leavesDone+=2*nb;
+		deleteLeaves(~0b0, 2*nb);
 	} else {
 		points += 10*nb*nb*nb/6;
-		deleteLeaves(~0b0, levelToLeaveToDelete(6*8, limit, nb, leavesDone));
-		leavesDone+=nb;
+		deleteLeaves(~0b0, nb);
 	}
 }
 

@@ -376,12 +376,6 @@ GameState ModeMenuStateManager::Update(float dt) {
 				BUTTON(enableSwarmContainer)->enabled = true;
 				TEXT_RENDERING(enableSwarm)->hide = false;
 			}
-			if (communicationAPI->mustShowRateDialog()) {
-				TRANSFORM(herisson->actor.e)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herisson->actor.e)->size.X;
-				TEXT_RENDERING(title)->hide = true;
-				this->LateExit();
-				return RateIt;
-			}
 
             // ask player's name if needed
             if (isCurrentScoreAHighOne()) {
@@ -418,6 +412,13 @@ GameState ModeMenuStateManager::Update(float dt) {
                 submitScore(playerName);
                 LoadScore(modeMgr->GetMode(), difficulty);
                 gameOverState = NoGame;
+
+				if (communicationAPI->mustShowRateDialog()) {
+					TRANSFORM(herisson->actor.e)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herisson->actor.e)->size.X;
+					TEXT_RENDERING(title)->hide = true;
+					this->LateExit();
+					return RateIt;
+				}
             }
             break;
         }
