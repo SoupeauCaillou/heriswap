@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -92,6 +93,7 @@ public class HeriswapActivity extends SacActivity {
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
+		Log.i(HeriswapActivity.Tag, "-> onCreate [" + savedInstanceState);
         super.onCreate(savedInstanceState);
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.parent_frame);

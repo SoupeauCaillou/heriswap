@@ -302,5 +302,11 @@ const uint8_t* NormalGameModeManager::restoreInternalState(const uint8_t* in, in
     in = GameModeManager::restoreInternalState(in, size);
     memcpy(&level, in, sizeof(level)); in += sizeof(level);
     memcpy(&remain[0], in, sizeof(remain)); in += sizeof(remain);
+    
+    TRANSFORM(herisson)->position.X = GameModeManager::position(time);
+    MUSIC(stressTrack)->volume = 0;
+    ADSR(stressTrack)->active = false;
+    ADSR(stressTrack)->value = 0;
+    
     return in;
 }
