@@ -50,7 +50,8 @@ class HeriswapGame : public Game {
         void backPressed();
 		void setMode();
 		int saveState(uint8_t** out);
-
+		void sacInit(int windowW, int windowH);
+		
         void stateChanged(GameState from, GameState to);
 
 		static Vector2 GridCoordsToPosition(int i, int j, int s);

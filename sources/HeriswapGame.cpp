@@ -131,7 +131,9 @@ HeriswapGame::~HeriswapGame() {
     delete datas;
 }
 
-void HeriswapGame::init(const uint8_t* in, int size) {
+void HeriswapGame::sacInit(int windowW, int windowH) {
+	Game::sacInit(windowW, windowH);
+
 	Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
 
 	theRenderingSystem.loadEffectFile("desaturate.fs");
@@ -149,7 +151,9 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     // init font
 	loadFont(asset, "typo");
 	loadFont(asset, "gdtypo");
-	
+}
+
+void HeriswapGame::init(const uint8_t* in, int size) {	
     if (in && size) {
         in = loadEntitySystemState(in, size);
     }

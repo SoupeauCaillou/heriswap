@@ -28,8 +28,8 @@ class HeriswapGameThreadJNIEnvCtx : public GameThreadJNIEnvCtx {
     StorageAPIAndroidImpl storage;
     
     void init(JNIEnv* pEnv, jobject assetMgr) {
-	    communication.init(env);
-	    storage.init(env);
+	    communication.init(pEnv);
+	    storage.init(pEnv);
 	    GameThreadJNIEnvCtx::init(pEnv, assetMgr);
     }
     
