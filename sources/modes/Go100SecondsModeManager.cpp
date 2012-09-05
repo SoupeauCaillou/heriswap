@@ -83,6 +83,8 @@ void Go100SecondsGameModeManager::Enter() {
 	scores = storageAPI->savedScores(Normal, theGridSystem.sizeToDifficulty());
 	rank = GameModeManager::getMyRank(time, Go100Seconds, scores);
 
+	TEXT_RENDERING(uiHelper.scoreProgress)->flags |= TextRenderingComponent::IsANumberBit;
+
 	GameModeManager::Enter();
 }
 
@@ -177,7 +179,8 @@ void Go100SecondsGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	a << rank << ". ";
+	//~not enable currently
+	//~a << rank << ". ";
 	a << std::fixed << points;
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}

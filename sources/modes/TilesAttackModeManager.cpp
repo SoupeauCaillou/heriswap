@@ -63,6 +63,8 @@ void TilesAttackGameModeManager::Enter() {
 	scores = storageAPI->savedScores(Normal, theGridSystem.sizeToDifficulty());
 	rank = GameModeManager::getMyRank(time, TilesAttack, scores);;
 
+	TEXT_RENDERING(uiHelper.scoreProgress)->flags &= ~TextRenderingComponent::IsANumberBit;
+
 	GameModeManager::Enter();
 }
 
@@ -97,7 +99,9 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	//Temps
 	{
 	std::stringstream a;
-	a << rank << ". ";
+
+	//~not enable currently
+	//~a << rank << ". ";
 
 	int minute = ((int)time)/60;
 	int seconde= ((int)time)%60;
@@ -197,8 +201,8 @@ int TilesAttackGameModeManager::saveInternalState(uint8_t** out) {
 const uint8_t* TilesAttackGameModeManager::restoreInternalState(const uint8_t* in, int size) {
     in = GameModeManager::restoreInternalState(in, size);
     memcpy(&leavesDone, in, sizeof(leavesDone)); in += sizeof(leavesDone);
-    
+
     TRANSFORM(herisson)->position.X = GameModeManager::position(leavesDone);
-    
+
     return in;
 }
