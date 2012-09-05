@@ -48,7 +48,7 @@ LOCAL_SRC_FILES := \
 	../sources/modes/GameModeManager.cpp \
 	../sources/modes/NormalModeManager.cpp \
 	../sources/modes/TilesAttackModeManager.cpp \
-	../sources/modes/RandomNameToBeChangedModeManager.cpp \
+	../sources/modes/Go100SecondsModeManager.cpp \
 	../sources/modes/InGameUiHelper.cpp \
     ../sources/api/android/StorageAPIAndroidImpl.cpp \
     ../sources/api/android/CommunicationAPIAndroidImpl.cpp \
