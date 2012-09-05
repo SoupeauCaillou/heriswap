@@ -197,10 +197,10 @@ void Go100SecondsGameModeManager::UiUpdate(float dt) {
 
 void Go100SecondsGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	if (type == bonus) {
-		points += 10*2*nb*nb*nb/6;
+		points += 2*10*nb*nb*nb*nb;
 		deleteLeaves(~0b0, 2*nb);
 	} else {
-		points += 10*nb*nb*nb/6;
+		points += 10*nb*nb*nb*nb;
 		deleteLeaves(~0b0, nb);
 	}
 
@@ -234,8 +234,8 @@ int Go100SecondsGameModeManager::saveInternalState(uint8_t** out) {
 
 const uint8_t* Go100SecondsGameModeManager::restoreInternalState(const uint8_t* in, int size) {
     in = GameModeManager::restoreInternalState(in, size);
-    
+
     TRANSFORM(herisson)->position.X = GameModeManager::position(time);
-    
+
     return in;
 }
