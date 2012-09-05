@@ -298,7 +298,7 @@ void ModeMenuStateManager::Enter() {
 	//first launch : set an easiest diff
     if (gameOverState == NoGame) {
 		std::vector<StorageAPI::Score> entries = storageAPI->savedScores(modeMgr->GetMode(), SelectAllDifficulty);
-		if  (entries.size() == 0)
+		if  (entries.size() <= 1)
 			difficulty = DifficultyEasy;
 		else if  (entries.size() < 5)
 			difficulty = DifficultyMedium;
