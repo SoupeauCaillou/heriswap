@@ -578,9 +578,11 @@ bool GridSystem::GridPosIsInCombination(int i, int j, int type, int* voisinsType
 }
 
 std::vector<Entity> GridSystem::ShowOneCombination() {
+	LOGW("Show one 1 combi");
 	std::vector<Entity> highLightedCombi;
 	//desaturate everything
 	std::vector<Entity> leaves = RetrieveAllEntityWithComponent();
+	LOGW("Desaturate %d leaves", leaves.size());
 	for (unsigned int i = 0; i < leaves.size(); i++)
 		RENDERING(leaves[i])->effectRef = theRenderingSystem.loadEffectFile("desaturate.fs");
 
@@ -588,6 +590,7 @@ std::vector<Entity> GridSystem::ShowOneCombination() {
 	std::vector < std::vector<Entity> > c = GetSwapCombinations();
 	int i = MathUtil::RandomInt(c.size());
 	for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
+		LOGW("Apply DefaultEffect to entity: %u", *it);
 		RENDERING(*it)->effectRef = DefaultEffectRef;
 		highLightedCombi.push_back(*it);
 	}

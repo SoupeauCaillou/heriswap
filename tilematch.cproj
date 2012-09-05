@@ -113,7 +113,6 @@
     <Compile Include="sources\states\RateItStateManager.cpp" />
     <Compile Include="sources\states\SpawnStateManager.cpp" />
     <Compile Include="sources\states\UserInputStateManager.cpp" />
-    <Compile Include="sources\modes\RandomNameToBeChangedModeManager.cpp" />
     <Compile Include="sources\states\ElitePopupStateManager.cpp" />
     <Compile Include="android\heriswap.cpp" />
     <Compile Include="sources\HeriswapGame.cpp" />
