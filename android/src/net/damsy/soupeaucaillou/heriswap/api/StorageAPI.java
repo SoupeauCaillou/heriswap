@@ -8,9 +8,11 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.swarmconnect.Swarm;
 import com.swarmconnect.SwarmLeaderboard;
+import com.swarmconnect.SwarmLeaderboardScore;
 
 public class StorageAPI {
 	// -------------------------------------------------------------------------
@@ -70,6 +72,42 @@ public class StorageAPI {
 			cursor.close();
 			return count;
 		}
+		
+		static private float bestLocalTimeForModeAndDifficulty(SQLiteDatabase db, final int mode, final int difficulty) {
+			Cursor cursor = null;
+			try {
+				cursor = db.query("score", new String[] { "time" }, "mode='" + (mode+1) + "' and difficulty='"
+				+ difficulty + "'", null, null, null, "time asc");
+				if (cursor.getCount() > 0) {
+					cursor.moveToFirst();
+					return cursor.getFloat(0);
+				}
+			} catch (Exception exc) {
+				Log.e("Sac", "Exception accessing db: ", exc);
+			
+			} finally {
+				cursor.close();
+			}
+			return 0;
+		}
+		
+		static private int bestLocalScoreForModeAndDifficulty(SQLiteDatabase db, final int mode, final int difficulty) {
+			Cursor cursor = null;
+			try {
+				cursor = db.query("score", new String[] { "points" }, "mode='" + (mode+1) + "' and difficulty='"
+						+ difficulty + "'", null, null, null, "points desc");
+				if (cursor.getCount() > 0) {
+					cursor.moveToFirst();
+					return cursor.getInt(0);
+				}
+			} catch (Exception exc) {
+				Log.e("Sac", "Exception accessing db: ", exc);
+			
+			} finally {
+				cursor.close();
+			}
+			return 0;
+		}
 
 		static public void submitScore(final int mode, final int difficulty, final int points,
 				final int level, final float time, final String name) {
@@ -83,28 +121,54 @@ public class StorageAPI {
 			v.put("time", time);
 			v.put("level", level);
 			db.insert("score", null, v);
+			
+			Log.i("Sac", "Submit score: " + mode + ", diff: " + difficulty + ", pts: " + points + ", time : " + time);
+
+			
+			final float bestTime = Math.min(time, bestLocalTimeForModeAndDifficulty(db, mode, difficulty));
+			final int bestScore = Math.max(points, bestLocalScoreForModeAndDifficulty(db, mode, difficulty));
+			Log.i("Sac", "Best time: "+ bestTime + ", bestScore: " + bestScore);
 
 			db.close();
 
-			// retrieve Leaderboard
-			//NOLOGLog.i(HeriswapActivity.Tag, "leaderboard id: " + boards[2 * mode + difficulty]);
-
 			if (!Swarm.isInitialized() || !Swarm.isEnabled())
 				return;
+			if (!Swarm.isLoggedIn())
+				return;
+			
+			Log.i("Sac", "Swarn is initialized go!");
+			
 
 			SwarmLeaderboard.GotLeaderboardCB callback = new SwarmLeaderboard.GotLeaderboardCB() {
-			    public void gotLeaderboard(SwarmLeaderboard leaderboard) {
-
-			    		if (leaderboard != null) {
-			    			//que si meilleur score
-
-			    			//leaderboard.getScoreForUser(Swarm.user, truc);
-			    			if (true) {
-			    				if (mode == 0 || mode == 2)
-			    					leaderboard.submitScore(points);
-			    				else
-			    					leaderboard.submitScore(time);
+				@Override
+			    public void gotLeaderboard(final SwarmLeaderboard leaderboard) {
+			    	if (leaderboard != null) {
+			    		Log.i("Sac", "Got leaderboard");
+			    		leaderboard.getScoreForUser(Swarm.user, new SwarmLeaderboard.GotScoreCB() {
+									
+			    			@Override
+			    			public void gotScore(SwarmLeaderboardScore arg0) {
+			    				Log.i("Sac", "Got bestscore: " + arg0);
+			    				boolean submit = true;
+			    				if (arg0 != null) {
+			    					if ((mode == 0 || mode == 2) && arg0.score >= bestScore) {
+			    						submit = false;
+			    					} else if (mode == 1 && arg0.score <= bestTime) {
+			    						submit = false;
+			    					}
+			    				}
+			    				if (submit) {
+			    					Log.i("Sac", "Submit: " + (mode == 1 ? bestTime : bestScore) + " to ldb " + leaderboard.name);
+			    					leaderboard.submitScore(mode == 1 ? bestTime : bestScore, null, new SwarmLeaderboard.SubmitScoreCB() {
+										@Override
+										public void scoreSubmitted(int arg0) {
+											Log.i("Sac", "Score submitted result : " + arg0);
+										}
+										
+									});
+			    				}
 			    			}
+			    			});
 			        	}
 			        }
 			    };
