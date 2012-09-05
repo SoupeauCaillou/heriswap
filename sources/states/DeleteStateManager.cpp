@@ -47,6 +47,7 @@ void DeleteGameStateManager::Setup() {
 void DeleteGameStateManager::Enter() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 
+	littleLeavesDeleted.clear();
 	removing = theGridSystem.LookForCombination(true,true);
 	if (!removing.empty()) {
 		successMgr->sDoubleInOne(removing);
@@ -65,7 +66,6 @@ void DeleteGameStateManager::Enter() {
 	    }
     	SOUND(deleteAnimation)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg");
 	}
-	littleLeavesDeleted.clear();
 }
 
 GameState DeleteGameStateManager::Update(float dt __attribute__((unused))) {
