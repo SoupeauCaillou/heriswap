@@ -9,6 +9,7 @@ import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.swarmconnect.Swarm;
 import com.swarmconnect.SwarmLeaderboard;
 
 public class StorageAPI {
@@ -88,6 +89,8 @@ public class StorageAPI {
 			// retrieve Leaderboard
 			//NOLOGLog.i(HeriswapActivity.Tag, "leaderboard id: " + boards[2 * mode + difficulty]);
 
+			if (!Swarm.isInitialized() || !Swarm.isEnabled())
+				return;
 
 			SwarmLeaderboard.GotLeaderboardCB callback = new SwarmLeaderboard.GotLeaderboardCB() {
 			    public void gotLeaderboard(SwarmLeaderboard leaderboard) {
@@ -108,7 +111,7 @@ public class StorageAPI {
 			//if (!Swarm.isLoggedIn())
 			//Swarm.init(HeriswapActivity.activity, HeriswapSecret.Swarm_gameID, HeriswapSecret.Swarm_gameKey);
 
-			SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[2 * mode + difficulty], callback);
+			SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[3 * mode + difficulty], callback);
 		}
 
 		static public int getScores(int mode, int difficulty, int[] points,
