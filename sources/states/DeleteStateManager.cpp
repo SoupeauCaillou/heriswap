@@ -65,6 +65,7 @@ void DeleteGameStateManager::Enter() {
 	    }
     	SOUND(deleteAnimation)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg");
 	}
+	littleLeavesDeleted.clear();
 }
 
 GameState DeleteGameStateManager::Update(float dt __attribute__((unused))) {

@@ -579,7 +579,6 @@ bool GridSystem::GridPosIsInCombination(int i, int j, int type, int* voisinsType
 
 std::vector<Entity> GridSystem::ShowOneCombination() {
 	std::vector<Entity> highLightedCombi;
-
 	//desaturate everything
 	std::vector<Entity> leaves = RetrieveAllEntityWithComponent();
 	for (unsigned int i = 0; i < leaves.size(); i++)
@@ -592,5 +591,6 @@ std::vector<Entity> GridSystem::ShowOneCombination() {
 		RENDERING(*it)->effectRef = DefaultEffectRef;
 		highLightedCombi.push_back(*it);
 	}
+
 	return highLightedCombi;
 }
