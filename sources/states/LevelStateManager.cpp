@@ -213,7 +213,7 @@ GameState LevelStateManager::Update(float dt) {
 
 	//level animation ended - back to game
 	if (levelState == BigScoreMoving && duration > 10) {
-		if (currentLevel == 2 && theGridSystem.sizeToDifficulty() != DifficultyHard) {
+		if (currentLevel == 10 && theGridSystem.sizeToDifficulty() != DifficultyHard) {
 			return ElitePopup;
 		}
 		return Spawn;
