@@ -35,6 +35,7 @@ class RateItStateManager : public GameStateManager {
 		Entity title, menufg, menubg;
 
 	private:
+		Entity textToRead, textToReadContainer;
 		Entity boutonText[3], boutonContainer[3];
 		LocalizeAPI* localizeAPI;
 		CommunicationAPI* communicationAPI;
