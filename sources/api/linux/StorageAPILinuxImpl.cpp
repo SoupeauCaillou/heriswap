@@ -176,7 +176,7 @@ bool StorageAPILinuxImpl::everyModesPlayed() {
 	#ifndef EMSCRIPTEN
     int s = 0;
     request(dbPath, "select distinct difficulty,mode from score", &s, callbackResultSize);
-    return (s==4);
+    return (s==6);
     #else
     return false;
     #endif

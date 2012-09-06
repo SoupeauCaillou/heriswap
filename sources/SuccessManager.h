@@ -58,15 +58,15 @@ class SuccessManager {
 		float gameDuration;
 		bool bTakeYourTime;
 
-		//success Exterminascore (Start from scratch and skyrocket up to 100k in a row !)
+		//success Exterminascore (Start from scratch and skyrocket up to 100k in a ScoreRace row !)
 		void sExterminaScore(int points);
 		bool bExterminaScore;
 
-		//success 1k points for level 1 (Get 1000 points without levelling in normal mode)
+		//success 1k points for level 1 (Get 2000 points without levelling in ScoreRace mode)
 		void sLevel1For2K(int level, int points);
 		bool bLevel1For2K;
 
-		//success Level 10 (Reach level 10 in normal mode)
+		//success Level 10 (Reach level 10 in ScoreRace mode)
 		void sLevel10(int level);
 		bool bLevel10;
 
