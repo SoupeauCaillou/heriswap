@@ -102,13 +102,14 @@ void HelpStateManager::Setup() {
 	for (int i=0; i<2; i++) {
     	difficulty[i] = theEntityManager.CreateEntity();
     	ADD_COMPONENT(difficulty[i], Transformation);
-		TransformationSystem::setPosition(TRANSFORM(difficulty[i]), Vector2(PlacementHelper::GimpXToScreen(218 + i*360), PlacementHelper::GimpYToScreen(385)), TransformationSystem::C);
+		TransformationSystem::setPosition(TRANSFORM(difficulty[i]), Vector2(PlacementHelper::GimpXToScreen(220 + i*360), PlacementHelper::GimpYToScreen(388)), TransformationSystem::C);
 		TRANSFORM(difficulty[i])->z = DL_HelpText;
 		ADD_COMPONENT(difficulty[i], TextRendering);
 		TEXT_RENDERING(difficulty[i])->hide = true;
 		TEXT_RENDERING(difficulty[i])->positioning = TextRenderingComponent::RIGHT;
 		TEXT_RENDERING(difficulty[i])->color = green;
-		TEXT_RENDERING(difficulty[i])->charHeight = PlacementHelper::GimpHeightToScreen(45);
+		TEXT_RENDERING(difficulty[i])->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
+		TEXT_RENDERING(difficulty[i])->charHeight = PlacementHelper::GimpHeightToScreen(55);
 		TEXT_RENDERING(difficulty[i])->text = ((i==0) ? localize->text("diff_1", "Easy") : localize->text("diff_2", "Hard")) + ":";
 	}
 	

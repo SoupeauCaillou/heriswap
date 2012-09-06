@@ -85,9 +85,10 @@ void MainMenuGameStateManager::Setup() {
 	//TRANSFORM(eStart[0])->size = TRANSFORM(bStart[0])->size;
 	//TRANSFORM(eStart[0])->size.Y *= 4;
 
-	//TEXT_RENDERING(eStart[2])->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
-	//TRANSFORM(eStart[2])->size = TRANSFORM(bStart[2])->size * 0.9;
-	////
+	for (int i=0; i<3; i++) {
+		TEXT_RENDERING(eStart[i])->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
+		TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9;
+	}
 
 	menubg = theEntityManager.CreateEntity();
 	ADD_COMPONENT(menubg, Transformation);
