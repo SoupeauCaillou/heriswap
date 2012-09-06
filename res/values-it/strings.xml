@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="languages">it</string>
-	<string name="reprendre">Riprendi</string>
-	<string name="aide">Aiuto</string>
-	<string name="abandonner">aaaa</string>
+	<string name="continue">Riprendi</string>
+	<string name="help">Aiuto</string>
+	<string name="give_up"></string>
 	<string name="mode_1">Corsa al punteggio</string>
 	<string name="mode_2">Contro il tempo</string>
+	<string name="mode_3">100 secondi</string>
 	<string name="score">Punteggi migliori :</string>
-	<string name="jouer">Gioca</string>
-	<string name="rejouer">Rigioca</string>
+	<string name="play">Gioca</string>
+	<string name="restart">Rigioca</string>
 	<string name="diff_1">Debuttante</string>
 	<string name="diff_2">Medio</string>
 	<string name="diff_3">Confermato</string>
@@ -24,6 +25,13 @@
 	<string name="objective">obiettivo</string>
 	<string name="level">livello</string>
 	<string name="leave_left">foglie restanti</string>
-	<string name="quitter">Esci</string>
-	<string name="rate_it">Se ti è piaciuto Heriswap, spenderesti qualche secondo per lasciare una valutazione o un commento? grazie in anticipo.</string>
+	<string name="quit">Esci</string>
+	<string name="please_rate_it">Se ti è piaciuto Heriswap, spenderesti qualche secondo per lasciare una valutazione o un commento? grazie in anticipo.</string>
+	<string name="rate_now">valutare</string>
+	<string name="rate_later">Piu tardi</string>
+	<string name="rate_never">No, grazie</string>
+	<string name="get_swarm">Attivare Swarm per confrontare vostro punteggio con altri giocatori !</string>
+	<string name="change_difficulty">Sei molto forti, quindi, che ne dici aumentare un po la difficolta?</string>
+	<string name="change_difficulty_yes">Andiamo, piu difficile !</string>
+	<string name="change_difficulty_no">No, grazie</string>
 </resources>

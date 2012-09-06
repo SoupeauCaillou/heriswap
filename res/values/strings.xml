@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="languages">en</string>
-	<string name="reprendre">Continue</string>
-	<string name="aide">Help</string>
-	<string name="abandonner">Quit</string>
+	<string name="continue">Continue</string>
+	<string name="help">Help</string>
+	<string name="give_up">Quit</string>
 	<string name="mode_1">Score race</string>
 	<string name="mode_2">Time attack</string>
 	<string name="mode_3">100 seconds</string>
 	<string name="score">Highscores:</string>
-	<string name="jouer">Start</string>
-	<string name="rejouer">Restart</string>
+	<string name="play">Start</string>
+	<string name="restart">Restart</string>
 	<string name="diff_1">Easy</string>
 	<string name="diff_2">Medium</string>
 	<string name="diff_3">Hard</string>
@@ -25,10 +25,13 @@
 	<string name="objective">Goal</string>
 	<string name="level">Level</string>
 	<string name="leave_left">leaves left</string>
-	<string name="enable_swarm">Enable swarm to see online scores</string>
-	<string name="quitter">Exit</string>
-	<string name="rate_it">If you enjoy using Heriswap, please take a moment to rate it. Thanks for your support!</string>
-	<string name="rate_now">Rate it !</string>
+	<string name="quit">Exit</string>
+	<string name="please_rate_it">If you enjoy using Heriswap, please take a moment to rate it. Thanks for your support!</string>
+	<string name="rate_now">Right now</string>
 	<string name="rate_later">Later</string>
-	<string name="rate_never">Never</string>
+	<string name="rate_never">No thanks</string>
+	<string name="get_swarm">Get Swarm (blue icon) and compare your score with others players !</string>
+	<string name="change_difficulty">You seem to be very good. It might be more interesting for you to increase the difficulty for more challenge !</string>
+	<string name="change_difficulty_yes">Increase difficulty</string>
+	<string name="change_difficulty_no">No,keep it easy</string>
 </resources>

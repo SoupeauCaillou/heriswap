@@ -115,7 +115,7 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(playText)->position = Vector2(0, PlacementHelper::GimpYToScreen(275));
 	TRANSFORM(playText)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(playText, TextRendering);
-	TEXT_RENDERING(playText)->text = localizeAPI->text("jouer", "Start");
+	TEXT_RENDERING(playText)->text = localizeAPI->text("play", "Start");
 	TEXT_RENDERING(playText)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(playText)->color = green;
 	TEXT_RENDERING(playText)->fontName = "typo";
@@ -191,7 +191,7 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(enableSwarm)->hide = true;
 	TEXT_RENDERING(enableSwarm)->charHeight = PlacementHelper::GimpHeightToScreen(45);
 	TEXT_RENDERING(enableSwarm)->color = green;
-	TEXT_RENDERING(enableSwarm)->text = localizeAPI->text("enable_swarm", "Enable swarm to see online scores");
+	TEXT_RENDERING(enableSwarm)->text = localizeAPI->text("get_swarm", "Enable swarm to see online scores");
 
 	// enableSwarm container
 	enableSwarmContainer = theEntityManager.CreateEntity();
@@ -317,7 +317,7 @@ void ModeMenuStateManager::Enter() {
 	TEXT_RENDERING(title)->hide = false;
 	RENDERING(menufg)->hide = false;
 	RENDERING(fond)->hide = false;
-	TEXT_RENDERING(playText)->text = (gameOverState != NoGame) ? localizeAPI->text("rejouer", "Restart") : localizeAPI->text("jouer", "Play");
+	TEXT_RENDERING(playText)->text = (gameOverState != NoGame) ? localizeAPI->text("restart", "Restart") : localizeAPI->text("play", "Play");
 	TEXT_RENDERING(scoreTitle)->hide = false;
 	TEXT_RENDERING(eDifficulty)->hide=false;
 	BUTTON(bDifficulty)->enabled = true;

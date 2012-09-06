@@ -69,18 +69,17 @@ void ElitePopupStateManager::Setup() {
 	    eButton[i] = theEntityManager.CreateEntity();
 	    ADD_COMPONENT(eButton[i], Transformation);
 	    TRANSFORM(eButton[i])->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
-	    TRANSFORM(eButton[i])->position.X = 0;
 	    TRANSFORM(eButton[i])->z = DL_MainMenuUIBg;
 	    ADD_COMPONENT(eButton[i], Rendering);
 	    RENDERING(eButton[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
 	    RENDERING(eButton[i])->color.a = 0.5;
 	    ADD_COMPONENT(eButton[i], Button);
 
-		TRANSFORM(eText[i])->position.X = 0;
+		TRANSFORM(eText[i])->position.X = TRANSFORM(eButton[i])->position.X = 0;
 		TRANSFORM(eText[i])->position.Y = TRANSFORM(eButton[i])->position.Y = PlacementHelper::GimpYToScreen(850+i*183);
 	}
 
-	TEXT_RENDERING(text)->text = localizeAPI->text("change_difficulty", 
+	TEXT_RENDERING(text)->text = localizeAPI->text("change_difficulty",
 	"You seem really good.\nWould you like to start a new game with increased difficulty ?");
 	//"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sagittis. Phasellus sem dolor, adipiscing at facilisis ut, adipiscing in lorem. Suspendisse sed cursus urna. Nullam sit amet elit arcu. Ut hendrerit dictum lacus sed elementum.");
 	TEXT_RENDERING(eText[0])->text = localizeAPI->text("change_difficulty_yes", "Increase difficulty");
