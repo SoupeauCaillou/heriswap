@@ -446,7 +446,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 			else
 				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
 
-			TEXT_RENDERING(playText)->text = localizeAPI->text("jouer", "Play");
+			TEXT_RENDERING(playText)->text = localizeAPI->text("play", "Play");
 			LoadScore(modeMgr->GetMode(), difficulty);
 		}
 

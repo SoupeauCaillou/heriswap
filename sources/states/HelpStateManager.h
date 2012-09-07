@@ -26,7 +26,7 @@ class LocalizeAPI;
 class HelpStateManager : public GameStateManager {
 	public:
 
-	HelpStateManager(LocalizeAPI* l) : localize(l) { };
+	HelpStateManager(LocalizeAPI* l) : localizeAPI(l) { };
 	void Setup();
 	void Enter();
 	GameState Update(float dt);
@@ -36,7 +36,7 @@ class HelpStateManager : public GameStateManager {
 	GameMode mode;
 
 	private:
-		LocalizeAPI* localize;
+		LocalizeAPI* localizeAPI;
 		Entity background, bg2;
 		// howtoplay
 		Entity title[2];

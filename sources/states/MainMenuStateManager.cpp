@@ -131,7 +131,7 @@ void MainMenuGameStateManager::Setup() {
 	TRANSFORM(quitButton[0])->z = DL_MainMenuUITxt;
 	TRANSFORM(quitButton[0])->position = Vector2(0, PlacementHelper::GimpYToScreen(1215));
 	ADD_COMPONENT(quitButton[0], TextRendering);
-	TEXT_RENDERING(quitButton[0])->text = " " + localizeAPI->text("quitter", "Exit") + " ";
+	TEXT_RENDERING(quitButton[0])->text = " " + localizeAPI->text("quit", "Exit") + " ";
 	TEXT_RENDERING(quitButton[0])->hide = true;
 	TEXT_RENDERING(quitButton[0])->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(quitButton[0])->color = green;
