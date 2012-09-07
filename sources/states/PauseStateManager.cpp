@@ -40,7 +40,7 @@ void PauseStateManager::Setup() {
 	TRANSFORM(eRestart)->z = DL_PauseUIFg;
 	TEXT_RENDERING(eRestart)->color = green;
 	TEXT_RENDERING(eRestart)->charHeight = PlacementHelper::GimpHeightToScreen(75);
-	TEXT_RENDERING(eRestart)->text = localizeAPI->text("continue", "Continue");
+	TEXT_RENDERING(eRestart)->text = localizeAPI->text("continue_", "Continue");
 	TEXT_RENDERING(eRestart)->hide = true;
 	TEXT_RENDERING(eRestart)->positioning = TextRenderingComponent::LEFT;
 	TRANSFORM(eRestart)->position = Vector2(PlacementHelper::GimpXToScreen(150),PlacementHelper::GimpYToScreen(300));
