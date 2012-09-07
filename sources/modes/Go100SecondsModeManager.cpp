@@ -201,14 +201,14 @@ void Go100SecondsGameModeManager::UiUpdate(float dt) {
 }
 
 void Go100SecondsGameModeManager::ScoreCalc(int nb, unsigned int type) {
+	float score = 10*nb*nb*nb*nb*(theGridSystem.sizeToDifficulty()+1);
 	if (type == bonus) {
-		points += 2*10*nb*nb*nb*nb;
+		score *= 2;
 		deleteLeaves(~0b0, 2*nb);
 	} else {
-		points += 10*nb*nb*nb*nb;
 		deleteLeaves(~0b0, nb);
 	}
-
+	points += score;
 	//update rank
 	rank = GameModeManager::getMyRank((float)points, Normal, scores);
 
