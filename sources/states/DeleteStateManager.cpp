@@ -88,8 +88,9 @@ GameState DeleteGameStateManager::Update(float dt __attribute__((unused))) {
     			}
     		}
     	}
+    	Vector2 littleLeavesSize = Vector2(HeriswapGame::CellSize(8) * HeriswapGame::CellContentScale() * (1 - transitionSuppr->value));
         for (unsigned int i=0; i<littleLeavesDeleted.size(); i++) {
-            TRANSFORM(littleLeavesDeleted[i])->size = cellSize;
+            TRANSFORM(littleLeavesDeleted[i])->size = littleLeavesSize;
         }
     	if (transitionSuppr->value  == transitionSuppr->sustainValue) {
     		return Fall;
