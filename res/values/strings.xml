@@ -31,7 +31,7 @@
 	<string name="rate_later">"Later"</string>
 	<string name="rate_never">"No thanks"</string>
 	<string name="get_swarm">"Get Swarm (blue icon) and compare your score with others players !"</string>
-	<string name="change_difficulty">"You seem to be very good. It might be more interesting for you to increase the difficulty for more challenge !"</string>
+	<string name="change_difficulty">"You seem really good.\nWould you like to start a new game with increased difficulty ?"</string>
 	<string name="change_difficulty_yes">"Increase difficulty"</string>
 	<string name="change_difficulty_no">"No,keep it easy"</string>
 </resources>
