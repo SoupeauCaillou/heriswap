@@ -61,7 +61,8 @@ public class StorageAPI {
 				return 0;
 			}
 		} finally {
-			cursor.close();
+			if (cursor != null)
+				cursor.close();
 		}
 	}
 
@@ -90,7 +91,8 @@ public class StorageAPI {
 			Log.e("Sac", "Exception accessing db: ", exc);
 
 		} finally {
-			cursor.close();
+			if (cursor != null)
+				cursor.close();
 		}
 		return 0;
 	}
@@ -110,7 +112,8 @@ public class StorageAPI {
 			Log.e("Sac", "Exception accessing db: ", exc);
 
 		} finally {
-			cursor.close();
+			if (cursor != null)
+				cursor.close();
 		}
 		return 0;
 	}
