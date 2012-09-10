@@ -52,7 +52,7 @@ void Go100SecondsGameModeManager::Setup() {
 	}
 
 	for (int i = 0; i < 100;  i++) {
-		squallLeaves.push_back(GameModeManager::createAndAddLeave(bonus, Vector2(0, 0), MathUtil::RandomFloat(7)));
+		squallLeaves.push_back(GameModeManager::createAndAddLeave(0, Vector2(0, 0), MathUtil::RandomFloat(7)));
 		Entity e = squallLeaves[i];
 
 		ADD_COMPONENT(e, Physics);
