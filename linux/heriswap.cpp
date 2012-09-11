@@ -61,6 +61,7 @@
 #include "DepthLayer.h"
 
 #include "HeriswapGame.h"
+#include "base/Profiler.h"
 
 #ifndef EMSCRIPTEN
 #include <locale.h>
@@ -394,6 +395,12 @@ int main(int argc, char** argv) {
 	updateAndRenderLoop();
 #else
 	emscripten_set_main_loop(updateAndRender, 60);
+#endif
+
+#ifdef ENABLE_PROFILING
+	std::stringstream a;
+	a << "/tmp/heriswap_prof_" << getpid() << ".json";
+	saveToFile(a.str());
 #endif
 
 	return 0;

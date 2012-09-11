@@ -6,7 +6,7 @@ SET(CMAKE_C_FLAGS "-O0 -g -W -Wall")
 if (EMSCRIPTEN_BUILD)
 SET(CMAKE_CXX_FLAGS "-O0 -W -Wall -DDEBUG")
 else ()
-SET(CMAKE_CXX_FLAGS "-O0 -g -W -Wall -DDEBUG -DDATADIR=\\\"${CMAKE_SOURCE_DIR}/assets/\\\"")
+SET(CMAKE_CXX_FLAGS "-O0 -g -W -Wall -DDEBUG -DENABLE_PROFILING -DDATADIR=\\\"${CMAKE_SOURCE_DIR}/assets/\\\"")
 endif()
 
 add_subdirectory(sources)
