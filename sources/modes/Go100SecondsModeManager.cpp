@@ -201,7 +201,13 @@ void Go100SecondsGameModeManager::UiUpdate(float dt) {
 }
 
 void Go100SecondsGameModeManager::ScoreCalc(int nb, unsigned int type) {
-	float score = 10*nb*nb*nb*nb*(theGridSystem.sizeToDifficulty()+1);
+	int diff = theGridSystem.sizeToDifficulty();
+
+	//because medium=2 and hard=1 so switch them
+	if (diff>0)
+		diff = 2/diff;
+
+	float score = 10*nb*nb*nb*nb*diff;
 	if (type == bonus) {
 		score *= 2;
 		deleteLeaves(~0b0, 2*nb);
