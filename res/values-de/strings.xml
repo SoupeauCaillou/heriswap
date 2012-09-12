@@ -30,8 +30,8 @@
 	<string name="rate_now">"Rate das !"</string>
 	<string name="rate_later">"Später"</string>
 	<string name="rate_never">"Nein danke"</string>
-	<string name="get_swarm">""</string>
-	<string name="change_difficulty">""</string>
-	<string name="change_difficulty_yes">""</string>
+	<string name="get_swarm">"Get Swarm (blue icon) and compare your score with others players !"</string>
+	<string name="change_difficulty">"You seem really good.nWould you like to start a new game with increased difficulty ?"</string>
+	<string name="change_difficulty_yes">"Increase difficulty"</string>
 	<string name="change_difficulty_no">"Nein danke"</string>
 </resources>
