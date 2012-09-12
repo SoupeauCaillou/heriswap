@@ -245,11 +245,23 @@ void HeriswapGame::toggleShowCombi(bool enabled) {
 }
 
 void HeriswapGame::backPressed() {
+#ifdef ENABLE_PROFILING
+	std::stringstream a;
+	#ifdef ANDROID
+	a << "/sdcard/heriswap_prof.json";
+	#else
+	a << "/tmp/heriswap_prof_" << getpid() << ".json";
+	#endif
+	LOGI("Trying to save profiler info to: '%s'", a.str().c_str());
+	saveToFile(a.str());
+	LOGI("Done");
+	return;
+#endif
     if (datas->state == ModeMenu) {
         // go back to main menu
         (static_cast<ModeMenuStateManager*>(datas->state2Manager[ModeMenu]))->pleaseGoBack = true;
     } else if (pausableState(datas->state)) {
-	    #ifdef DEBUG
+	    #if defined(DEBUG)
 	    datas->mode2Manager[datas->mode]->toggleDebugDisplay();
 	    #else
         togglePause(true);
@@ -278,6 +290,7 @@ void HeriswapGame::togglePause(bool activate) {
 }
 
 void HeriswapGame::tick(float dt) {
+	PROFILE("Game", "Tick", BeginEvent);
 	float updateDuration = TimeUtil::getTime();
 	GameState newState;
 
@@ -465,6 +478,8 @@ void HeriswapGame::tick(float dt) {
 	        }
 	    }
     }
+
+	PROFILE("Game", "Tick", EndEvent);
 
     // systems update
 	theADSRSystem.Update(dt);

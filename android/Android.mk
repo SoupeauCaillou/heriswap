@@ -10,7 +10,7 @@ LOCAL_CFLAGS := -DANDROID_NDK \
                 -DDISABLE_IMPORTGL \
 				-I$(LOCAL_PATH)/..
 
-LOCAL_CXXFLAGS := -DANDROID_NDK -DDEBUG \
+LOCAL_CXXFLAGS := -DANDROID_NDK -DDEBUG -DENABLE_PROFILING \
                 -DDISABLE_IMPORTGL \
             -I$(LOCAL_PATH)/../sources \
 				-I$(LOCAL_PATH)/.. \
@@ -54,7 +54,7 @@ LOCAL_SRC_FILES := \
     ../sources/api/android/CommunicationAPIAndroidImpl.cpp \
     ../sac/android/sacjnilib.cpp
 
-LOCAL_STATIC_LIBRARIES := sac png tremor
+LOCAL_STATIC_LIBRARIES := sac png tremor jsoncpp
 LOCAL_LDLIBS := -lGLESv2 -lGLESv1_CM -lEGL -llog -lz
 
 include $(BUILD_SHARED_LIBRARY)
@@ -62,5 +62,6 @@ include $(BUILD_SHARED_LIBRARY)
 include $(APP_DIR)/../sac/build/android/Android.mk
 include $(APP_DIR)/../sac/libs/build/android/tremor/Android.mk
 include $(APP_DIR)/../sac/libs/build/android/libpng/Android.mk
+include $(APP_DIR)/../sac/libs/build/android/jsoncpp/Android.mk
 
 $(call import-module,android/native_app_glue)

@@ -274,6 +274,8 @@ bool NormalGameModeManager::LevelUp() {
 
 		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
 
+		PROFILE("NormalGameModeManager", "changeLevel", InstantEvent);
+		
 		startLevel(level+1);
 	}
 	return match;

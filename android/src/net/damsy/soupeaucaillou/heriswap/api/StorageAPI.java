@@ -117,7 +117,7 @@ public class StorageAPI {
 		}
 		return 0;
 	}
-
+   
 	static public void ensureBestLocalScoresAreOnSwarm() {
 		SQLiteDatabase db = HeriswapActivity.scoreOpenHelper
 				.getWritableDatabase();

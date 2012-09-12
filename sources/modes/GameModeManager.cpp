@@ -169,6 +169,8 @@ void GameModeManager::Setup() {
 }
 
 void GameModeManager::Enter() {
+	PROFILE("GameModeManager", "Enter", InstantEvent);
+	
 	RENDERING(herisson)->hide = false;
 	RENDERING(herisson)->color.a = 1;
 	RENDERING(branch)->hide = false;
@@ -196,6 +198,7 @@ void GameModeManager::Exit() {
 	}
 	branchLeaves.clear();
     theGridSystem.DeleteAll();
+    PROFILE("GameModeManager", "Exit", InstantEvent);
 }
 
 void GameModeManager::TogglePauseDisplay(bool paused) {
