@@ -43,11 +43,6 @@ class PrivateData {
         PrivateData(HeriswapGame* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad, CommunicationAPI* com);
         ~PrivateData();
         void Setup();
-
-     //bench data
-     std::map<std::string, Entity> benchTimeSystem;
-     Entity benchTotalTime, targetTime;
-
      GameState state, stateBeforePause;
      bool stateBeforePauseNeedEnter;
      Entity sky, decord2nd, decord1er;

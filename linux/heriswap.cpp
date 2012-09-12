@@ -180,6 +180,7 @@ static void updateAndRenderLoop() {
 
 	time = TimeUtil::getTime();
 
+	bool backIsDown = false;
 	int frames = 0;
 	float nextfps = time + 5;
 	while(running) {
@@ -221,13 +222,20 @@ static void updateAndRenderLoop() {
 				// timer = MAGICKEYTIME;
 			}
 			if (glfwGetKey( GLFW_KEY_BACKSPACE)) {
-				// game.backPressed();
-				if (!TEXT_RENDERING(nameInput->nameEdit)->hide) {
-					std::string& text = TEXT_RENDERING(nameInput->nameEdit)->text;
-					if (text.length() > 0) {
-						text.resize(text.length() - 1);
+				if (!backIsDown) {
+					backIsDown = true;
+					// game.backPressed();
+					if (!TEXT_RENDERING(nameInput->nameEdit)->hide) {
+						std::string& text = TEXT_RENDERING(nameInput->nameEdit)->text;
+						if (text.length() > 0) {
+							text.resize(text.length() - 1);
+						}
+					} else {
+						game->backPressed();
 					}
 				}
+			} else {
+				backIsDown = false;
 			}
 			if (glfwGetKey( GLFW_KEY_LSHIFT)) {
 				uint8_t* state = 0;
@@ -395,12 +403,6 @@ int main(int argc, char** argv) {
 	updateAndRenderLoop();
 #else
 	emscripten_set_main_loop(updateAndRender, 60);
-#endif
-
-#ifdef ENABLE_PROFILING
-	std::stringstream a;
-	a << "/tmp/heriswap_prof_" << getpid() << ".json";
-	saveToFile(a.str());
 #endif
 
 	return 0;

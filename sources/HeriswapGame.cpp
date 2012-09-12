@@ -245,18 +245,8 @@ void HeriswapGame::toggleShowCombi(bool enabled) {
 }
 
 void HeriswapGame::backPressed() {
-#ifdef ENABLE_PROFILING
-	std::stringstream a;
-	#ifdef ANDROID
-	a << "/sdcard/heriswap_prof.json";
-	#else
-	a << "/tmp/heriswap_prof_" << getpid() << ".json";
-	#endif
-	LOGI("Trying to save profiler info to: '%s'", a.str().c_str());
-	saveToFile(a.str());
-	LOGI("Done");
-	return;
-#endif
+	Game::backPressed();
+
     if (datas->state == ModeMenu) {
         // go back to main menu
         (static_cast<ModeMenuStateManager*>(datas->state2Manager[ModeMenu]))->pleaseGoBack = true;
@@ -291,7 +281,6 @@ void HeriswapGame::togglePause(bool activate) {
 
 void HeriswapGame::tick(float dt) {
 	PROFILE("Game", "Tick", BeginEvent);
-	float updateDuration = TimeUtil::getTime();
 	GameState newState;
 
     updateFps(dt);
@@ -496,48 +485,8 @@ void HeriswapGame::tick(float dt) {
     theMusicSystem.Update(dt);
     theTransformationSystem.Update(dt);
 	theRenderingSystem.Update(dt);
-
-	//bench settings
-	updateDuration = TimeUtil::getTime()-updateDuration;
-	bench(false, updateDuration, dt);
 }
 
-void HeriswapGame::bench(bool active, float updateDuration, float dt) {
-	if (active) {
-		static float benchAccum = 0;
-		benchAccum += dt;
-		if (benchAccum>=1 && (updateDuration > 0) && !RENDERING(datas->benchTotalTime)->hide) {
-			// draw update duration
-			if (updateDuration > 1.0/60) {
-				RENDERING(datas->benchTotalTime)->color = Color(1.0, 0,0, 1);
-			} else {
-				RENDERING(datas->benchTotalTime)->color = Color(0.0, 1.0,0,1);
-			}
-			float frameWidth = MathUtil::Min(updateDuration / (1.f/60), 1.0f) * 10;
-			TRANSFORM(datas->benchTotalTime)->size.X = frameWidth;
-			TRANSFORM(datas->benchTotalTime)->position.X = -5 + frameWidth * 0.5;
-
-			// for each system adjust rectangle size/position to time spent
-			float timeSpentInSystems = 0;
-			float x = -5;
-			for (std::map<std::string, Entity>::iterator it=datas->benchTimeSystem.begin();
-					it != datas->benchTimeSystem.end(); ++it) {
-				float timeSpent = ComponentSystem::Named(it->first)->timeSpent;
-				timeSpentInSystems += timeSpent;
-				float width = 10 * (timeSpent / updateDuration);
-				TRANSFORM(it->second)->size.X = width;
-				TRANSFORM(it->second)->position.X = x + width * 0.5;
-				RENDERING(it->second)->hide = false;
-				x += width;
-
-				LOGI("%s: %.3f s", it->first.c_str(), timeSpent);
-			}
-
-			LOGI("temps passe dans les systemes : %f sur %f total (%f %) (théorique : dt=%f)\n", timeSpentInSystems, updateDuration, 100*timeSpentInSystems/updateDuration, dt);
-			benchAccum = 0;
-		}
-	}
-}
 int HeriswapGame::saveState(uint8_t** out) {
 	if (datas->state == Help) {
 		datas->state2Manager[datas->state]->Exit();

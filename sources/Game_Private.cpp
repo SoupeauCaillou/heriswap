@@ -132,26 +132,6 @@ PrivateData::PrivateData(HeriswapGame* game, StorageAPI* storagee, NameInputAPI*
      for(std::map<GameMode, GameModeManager*>::iterator it=mode2Manager.begin(); it!=mode2Manager.end(); ++it)
          it->second->Setup();
 
-     float benchPos = - 4.75;
-     benchTotalTime = theEntityManager.CreateEntity();
-     ADD_COMPONENT(benchTotalTime, Rendering);
-     ADD_COMPONENT(benchTotalTime, Transformation);
-     TRANSFORM(benchTotalTime)->position = Vector2(0,benchPos);
-     TRANSFORM(benchTotalTime)->size = Vector2(10,0.5);
-     TRANSFORM(benchTotalTime)->z = DL_Benchmark;
-
-     std::vector<std::string> allSystems = ComponentSystem::registeredSystemNames();
-     for (unsigned int i = 0; i < allSystems.size() ; i ++) {
-         Entity b = theEntityManager.CreateEntity();
-         ADD_COMPONENT(b, Rendering);
-         ADD_COMPONENT(b, Transformation);
-         TRANSFORM(b)->position = Vector2(0, benchPos);
-         TRANSFORM(b)->size = Vector2(.8,0.4);
-         TRANSFORM(b)->z = DL_Benchmark;
-         RENDERING(b)->color = (i % 2) ? Color(0.1, 0.1, 0.1,0.5):Color(0.8,0.8,0.8,0.5);
-         RENDERING(b)->hide = true;
-         benchTimeSystem[allSystems[i]] = b;
-     }
      bg->cloudStartX = Interval<float>(8.0,15.0);
 
      MainMenuGameStateManager* mainmenu = static_cast<MainMenuGameStateManager*> (state2Manager[MainMenu]);
