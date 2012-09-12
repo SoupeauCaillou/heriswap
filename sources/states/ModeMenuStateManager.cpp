@@ -148,8 +148,7 @@ void ModeMenuStateManager::Setup() {
 	CONTAINER(bDifficulty)->includeChildren = true;
 	ADD_COMPONENT(bDifficulty, Button);
 	ADD_COMPONENT(bDifficulty, Sound);
-	BUTTON(bDifficulty)->enabled = false;
-
+	
 	// your score
 	yourScore = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
@@ -201,27 +200,6 @@ void ModeMenuStateManager::Setup() {
 	CONTAINER(enableSwarmContainer)->includeChildren = true;
 	ADD_COMPONENT(enableSwarmContainer, Button);
 	BUTTON(enableSwarmContainer)->enabled = false;
-
-	//difficulty text
-	eDifficulty = theTextRenderingSystem.CreateEntity();
-	TRANSFORM(eDifficulty)->z = DL_MainMenuUITxt;
-	TRANSFORM(eDifficulty)->position = Vector2(0, PlacementHelper::GimpYToScreen(375));
-	TEXT_RENDERING(eDifficulty)->positioning = TextRenderingComponent::CENTER;
-	TEXT_RENDERING(eDifficulty)->hide = true;
-	TEXT_RENDERING(eDifficulty)->charHeight = PlacementHelper::GimpHeightToScreen(45);
-	TEXT_RENDERING(eDifficulty)->color = green;
-
-	//difficulty container
-	bDifficulty = theEntityManager.CreateEntity();
-	ADD_COMPONENT(bDifficulty, Transformation);
-	ADD_COMPONENT(bDifficulty, Container);
-	CONTAINER(bDifficulty)->entities.push_back(eDifficulty);
-	CONTAINER(bDifficulty)->includeChildren = true;
-	ADD_COMPONENT(bDifficulty, Button);
-	ADD_COMPONENT(bDifficulty, Sound);
-	BUTTON(bDifficulty)->enabled = false;
-
-
 
 	// fond
 	fond = theEntityManager.CreateEntity();
@@ -328,6 +306,10 @@ void ModeMenuStateManager::Enter() {
         TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Medium") + " }";
     else
         TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
+        
+    CONTAINER(playContainer)->enable = 
+    	CONTAINER(bDifficulty)->enable =
+    	CONTAINER(enableSwarmContainer)->enable = true;
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
@@ -498,6 +480,10 @@ void ModeMenuStateManager::Exit() {
 	theGridSystem.setGridFromDifficulty(difficulty);
 
 	successMgr->NewGame(difficulty);
+
+    CONTAINER(playContainer)->enable = 
+    	CONTAINER(bDifficulty)->enable =
+    	CONTAINER(enableSwarmContainer)->enable = false;
 }
 
 void ModeMenuStateManager::LateExit() {
