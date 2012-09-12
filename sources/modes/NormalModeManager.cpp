@@ -55,6 +55,7 @@ void NormalGameModeManager::Setup() {
 }
 
 void NormalGameModeManager::Enter() {
+	PROFILE("NormalGameModeManager", "Enter", BeginEvent);
 	limit = 45;
 	time = 0;
 	points = 0;
@@ -72,7 +73,7 @@ void NormalGameModeManager::Enter() {
 	rank = GameModeManager::getMyRank((float)points, Normal, scores);;
 
 	TEXT_RENDERING(uiHelper.scoreProgress)->flags |= TextRenderingComponent::IsANumberBit;
-
+	PROFILE("NormalGameModeManager", "Enter", EndEvent);
 	GameModeManager::Enter();
 }
 

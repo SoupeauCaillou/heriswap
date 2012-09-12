@@ -120,7 +120,7 @@ public class StorageAPI {
    
 	static public void ensureBestLocalScoresAreOnSwarm() {
 		SQLiteDatabase db = HeriswapActivity.scoreOpenHelper
-				.getWritableDatabase();
+				.getReadableDatabase();
 
 		for (int _mode = 0; _mode < 3; _mode++) {
 			for (int _diff = 0; _diff < 3; _diff++) {
@@ -129,7 +129,7 @@ public class StorageAPI {
 				final float best = (mode == 1) ? bestLocalTimeForModeAndDifficulty(
 						db, mode, diff) : bestLocalScoreForModeAndDifficulty(
 						db, mode, diff);
-						
+				 		
 				if (best <= 0)
 					continue;
 

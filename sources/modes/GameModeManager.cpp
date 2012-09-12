@@ -169,7 +169,7 @@ void GameModeManager::Setup() {
 }
 
 void GameModeManager::Enter() {
-	PROFILE("GameModeManager", "Enter", InstantEvent);
+	PROFILE("GameModeManager", "Enter", BeginEvent);
 	
 	RENDERING(herisson)->hide = false;
 	RENDERING(herisson)->color.a = 1;
@@ -182,6 +182,7 @@ void GameModeManager::Enter() {
     theGridSystem.HideAll(false);
     TRANSFORM(herisson)->position.X = initialHerissonPosition(herisson);
     RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
+    PROFILE("GameModeManager", "Enter", EndEvent);
 }
 
 void GameModeManager::Exit() {
