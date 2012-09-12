@@ -24,7 +24,6 @@
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/TextRenderingSystem.h"
-#include "systems/ContainerSystem.h"
 #include "systems/SoundSystem.h"
 #include "systems/ButtonSystem.h"
 

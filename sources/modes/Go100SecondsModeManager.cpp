@@ -24,7 +24,6 @@
 #include <base/PlacementHelper.h>
 #include <base/MathUtil.h>
 
-#include "systems/ContainerSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/TransformationSystem.h"
