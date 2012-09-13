@@ -24,7 +24,7 @@ class StorageAPILinuxImpl : public StorageAPI {
     public:
         void init();
         void submitScore(Score scr, GameMode mode, Difficulty difficulty);
-        std::vector<Score> savedScores(GameMode mode, Difficulty difficulty);
+        std::vector<Score> savedScores(GameMode mode, Difficulty difficulty, float& avg);
         bool soundEnable(bool switchIt);
         int getGameCountBeforeNextAd();
         void setGameCountBeforeNextAd(int c);

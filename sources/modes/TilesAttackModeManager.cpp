@@ -59,9 +59,6 @@ void TilesAttackGameModeManager::Enter() {
 
 	generateLeaves(0, 8);
 
-	scores = storageAPI->savedScores(Normal, theGridSystem.sizeToDifficulty());
-	rank = GameModeManager::getMyRank(time, TilesAttack, scores);;
-
 	TEXT_RENDERING(uiHelper.scoreProgress)->flags &= ~TextRenderingComponent::IsANumberBit;
 
 	GameModeManager::Enter();
@@ -166,10 +163,6 @@ void TilesAttackGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	successMgr->sRainbow(type);
 
 	successMgr->sBonusToExcess(type, bonus, nb);
-
-	//update rank
-	rank = GameModeManager::getMyRank((float)points, Normal, scores);
-
 }
 
 void TilesAttackGameModeManager::TogglePauseDisplay(bool paused) {

@@ -68,9 +68,6 @@ void NormalGameModeManager::Enter() {
 
 	generateLeaves(0, theGridSystem.Types);
 
-	scores = storageAPI->savedScores(Normal, theGridSystem.sizeToDifficulty());
-	rank = GameModeManager::getMyRank((float)points, Normal, scores);;
-
 	TEXT_RENDERING(uiHelper.scoreProgress)->flags |= TextRenderingComponent::IsANumberBit;
 	PROFILE("NormalGameModeManager", "Enter", EndEvent);
 	GameModeManager::Enter();
@@ -225,10 +222,6 @@ void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	successMgr->sBonusToExcess(type, bonus, nb);
 
 	successMgr->sExterminaScore(points);
-
-	//update rank
-	rank = GameModeManager::getMyRank((float)points, Normal, scores);
-
 }
 
 void NormalGameModeManager::startLevel(int lvl) {
@@ -243,9 +236,6 @@ void NormalGameModeManager::startLevel(int lvl) {
 	if (level < 10)  {
 		helpAvailable = true;
 	}
-
-	scores = storageAPI->savedScores(Normal, theGridSystem.sizeToDifficulty());
-	rank = GameModeManager::getMyRank((float)points, Normal, scores);
 
 	// put hedgehog back on first animation position
 	c->ind = 0;

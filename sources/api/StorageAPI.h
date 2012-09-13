@@ -35,7 +35,7 @@ class StorageAPI {
         };
 
         virtual void submitScore(Score scr, GameMode mode, Difficulty diff) = 0;
-        virtual std::vector<Score> savedScores(GameMode mode, Difficulty difficulty) = 0;
+        virtual std::vector<Score> savedScores(GameMode mode, Difficulty difficulty, float& average) = 0;
         virtual bool soundEnable(bool switchIt) = 0;
         virtual int getGameCountBeforeNextAd() = 0;
         virtual void setGameCountBeforeNextAd(int c) = 0;

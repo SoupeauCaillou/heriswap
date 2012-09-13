@@ -34,4 +34,5 @@
 	<string name="change_difficulty">"You seem really good.nWould you like to start a new game with increased difficulty ?"</string>
 	<string name="change_difficulty_yes">"Increase difficulty"</string>
 	<string name="change_difficulty_no">"No,keep it easy"</string>
+	<string name="average_score">"Recent scores avg:"</string>
 </resources>

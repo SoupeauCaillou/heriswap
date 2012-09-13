@@ -75,7 +75,8 @@ void HeriswapGame::setupGameProp() {
 	}
 
 
-	 std::vector<StorageAPI::Score> entries = datas->storage->savedScores(datas->mode, theGridSystem.sizeToDifficulty());
+	float avg;
+	 std::vector<StorageAPI::Score> entries = datas->storage->savedScores(datas->mode, theGridSystem.sizeToDifficulty(), avg);
 	 datas->bestScores.clear();
 	 datas->bestScores.reserve(entries.size());
 	 for (int i=0; i<entries.size(); i++) {

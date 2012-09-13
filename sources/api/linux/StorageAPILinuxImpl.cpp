@@ -112,7 +112,7 @@ void StorageAPILinuxImpl::submitScore(Score scr, GameMode mode, Difficulty diff)
     #endif
 }
 
-std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(GameMode mode, Difficulty difficulty) {
+std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(GameMode mode, Difficulty difficulty, float& avg) {
     std::vector<StorageAPI::Score> result;
 	#ifndef EMSCRIPTEN
     std::stringstream tmp;
@@ -125,6 +125,7 @@ std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(GameMode mode, D
     else
         tmp << " order by time asc limit 5";
     request(dbPath, tmp.str().c_str(), &result, callbackScore);
+   	avg = -1;
     #endif
     return result;
 }

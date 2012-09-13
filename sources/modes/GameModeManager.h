@@ -88,8 +88,6 @@ class GameModeManager {
 		void deleteLeaves(unsigned int type, int nb);
 		Entity createAndAddLeave(int type, const Vector2& position, float rotation);
 
-		unsigned int getMyRank(float score, GameMode mode, std::vector<StorageAPI::Score> entries);
-
 	public:
 		// game params
 		float time;
@@ -111,12 +109,6 @@ class GameModeManager {
 		AnimatedActor* c;
 
 		StorageAPI* storageAPI;
-
-		//for rank calculation
-		std::vector<StorageAPI::Score> scores;
-		unsigned int rank;
-
-
 	private:
 		std::vector<Render> posBranch;
 		void fillVec();

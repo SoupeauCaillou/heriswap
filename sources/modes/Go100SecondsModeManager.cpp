@@ -79,9 +79,6 @@ void Go100SecondsGameModeManager::Enter() {
 	for (unsigned int i = 0; i < squallLeaves.size();  i++)
 		RENDERING(squallLeaves[i])->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(bonus, &TRANSFORM(squallLeaves[i])->rotation));
 
-	scores = storageAPI->savedScores(Normal, theGridSystem.sizeToDifficulty());
-	rank = GameModeManager::getMyRank(time, Go100Seconds, scores);
-
 	TEXT_RENDERING(uiHelper.scoreProgress)->flags |= TextRenderingComponent::IsANumberBit;
 
 	GameModeManager::Enter();
@@ -214,8 +211,6 @@ void Go100SecondsGameModeManager::ScoreCalc(int nb, unsigned int type) {
 		deleteLeaves(~0b0, nb);
 	}
 	points += score;
-	//update rank
-	rank = GameModeManager::getMyRank((float)points, Normal, scores);
 
 }
 

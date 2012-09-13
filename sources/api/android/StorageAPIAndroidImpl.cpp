@@ -83,13 +83,13 @@ void StorageAPIAndroidImpl::submitScore(Score scr, GameMode mode, Difficulty dif
     env->CallStaticVoidMethod(datas->cls, datas->submitScore, (int)mode, (int)diff, scr.points, scr.level, scr.time, name);
 }
 
-std::vector<StorageAPI::Score> StorageAPIAndroidImpl::savedScores(GameMode mode, Difficulty difficulty) {
+std::vector<StorageAPI::Score> StorageAPIAndroidImpl::savedScores(GameMode mode, Difficulty difficulty, float& average) {
     std::vector<StorageAPI::Score> sav;
 
     // build arrays params
     jintArray points = env->NewIntArray(5);
     jintArray levels = env->NewIntArray(5);
-    jfloatArray times = env->NewFloatArray(5);
+    jfloatArray times = env->NewFloatArray(6);
     jobjectArray names = env->NewObjectArray(5, env->FindClass("java/lang/String"), env->NewStringUTF(""));
 
     jint idummy[5];
@@ -118,6 +118,8 @@ std::vector<StorageAPI::Score> StorageAPIAndroidImpl::savedScores(GameMode mode,
         }
         sav.push_back(s);
     }
+    
+    env->GetFloatArrayRegion(times, 5, 1, &average);
 
     return sav;
 }

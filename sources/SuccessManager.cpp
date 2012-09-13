@@ -211,7 +211,8 @@ void SuccessManager::sTestEverything(StorageAPI* str) {
 
 void SuccessManager::sBTAC(StorageAPI* storage, Difficulty difficulty, unsigned int points) {
 	if (!bBTAC) {
-	    std::vector<StorageAPI::Score> entries = storage->savedScores(1, difficulty);
+		float avg;
+	    std::vector<StorageAPI::Score> entries = storage->savedScores(1, difficulty, avg);
 		int s = entries.size();
 		if (s >= 5 && (int)points > entries[0].points) {
 			successAPI->successCompleted("Beat them all (score race)", 3436);
@@ -222,7 +223,8 @@ void SuccessManager::sBTAC(StorageAPI* storage, Difficulty difficulty, unsigned 
 
 void SuccessManager::sBTAM(StorageAPI* storage, Difficulty difficulty, float time) {
 	if (!bBTAM) {
-		std::vector<StorageAPI::Score> entries = storage->savedScores(2, difficulty);
+		float avg;
+		std::vector<StorageAPI::Score> entries = storage->savedScores(2, difficulty, avg);
 		int s = entries.size();
 		if (s >= 5 && time < entries[0].time) {
 			successAPI->successCompleted("Beat them all (time attack)", 3428);

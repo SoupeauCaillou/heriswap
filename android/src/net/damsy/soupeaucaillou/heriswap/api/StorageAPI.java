@@ -63,6 +63,7 @@ public class StorageAPI {
 		} finally {
 			if (cursor != null)
 				cursor.close();
+			//db.close();
 		}
 	}
 
@@ -71,8 +72,11 @@ public class StorageAPI {
 				.getReadableDatabase();
 		Cursor cursor = db.rawQuery(
 				"select distinct difficulty,mode from score", null);
+		if (cursor == null)
+			return 0;
 		int count = cursor.getCount();
 		cursor.close();
+		// db.close();
 		return count;
 	}
 
@@ -184,6 +188,7 @@ public class StorageAPI {
 						HeriswapSecret.boardsSwarm[3 * mode + diff], callback);
 			}
 		}
+		//db.close();
 	}
 
 	static public void submitScore(final int mode, final int difficulty,
@@ -203,7 +208,7 @@ public class StorageAPI {
 		Log.i("Sac", "Submit score: " + mode + ", diff: " + difficulty
 				+ ", pts: " + points + ", time : " + time);
 
-		db.close();
+		// db.close();
 
 		if (!Swarm.isInitialized() || !Swarm.isEnabled())
 			return;
@@ -252,12 +257,12 @@ public class StorageAPI {
 
 		SwarmLeaderboard.getLeaderboardById(HeriswapSecret.boardsSwarm[3 * mode
 				+ difficulty], callback);
-	}
+	} 
 
 	static public int getScores(int mode, int difficulty, int[] points,
 			int[] levels, float[] times, String[] names) {
 		SQLiteDatabase db = HeriswapActivity.scoreOpenHelper
-				.getWritableDatabase();
+				.getReadableDatabase();
 		Cursor cursor = null;
 		String selection = "mode='" + (mode + 1) + "'";
 		if (difficulty >= 0) {
@@ -278,13 +283,37 @@ public class StorageAPI {
 			levels[i] = cursor.getInt(cursor.getColumnIndex("level"));
 			times[i] = cursor.getFloat(cursor.getColumnIndex("time"));
 			names[i] = cursor.getString(cursor.getColumnIndex("name"));
-
+ 
 			// NOLOGLog.i(HeriswapActivity.Tag, points[i] + ", " + levels[i] +
 			// ", "+ times[i] + ", " + names[i] + ".");
 			cursor.moveToNext();
 		}
 		cursor.close();
-		db.close();
+		
+		String request = null;
+		if (mode == 0 || mode == 2) {			
+			request = "select avg(points)";
+		} else {
+			request = "select avg(time)";
+		}
+		request = request + "from score where mode='" + (mode+1) + "' and difficulty='" + difficulty + "' order by rowid desc limit 5";
+		cursor = db.rawQuery(request, null);
+		times[5] = -1;
+		if (cursor != null) {
+			if (cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			times[5] = cursor.getFloat(0);
+			Log.i("hhh", "Avg : " + times[5]);
+			cursor.close();
+			} else {
+				Log.i("hhh", "Avg : no result");	
+			}
+		} else {
+			Log.i("hhh", "Arg cursor is null");
+		}
+		
+		
+		// db.close();
 		return maxResult;
 	}
 }
