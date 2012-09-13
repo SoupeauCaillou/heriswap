@@ -182,14 +182,26 @@ void ModeMenuStateManager::Setup() {
 	TRANSFORM(twitter)->z = DL_MainMenuUITxt;
 #endif
 
+	// fond
+	fond = theEntityManager.CreateEntity();
+	ADD_COMPONENT(fond, Transformation);
+	TRANSFORM(fond)->size = Vector2(PlacementHelper::GimpWidthToScreen(712), PlacementHelper::GimpHeightToScreen(1124));
+	TRANSFORM(fond)->z = DL_MainMenuUIBg;
+	TransformationSystem::setPosition(TRANSFORM(fond), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(24)), TransformationSystem::NW);
+	ADD_COMPONENT(fond, Rendering);
+	RENDERING(fond)->texture = theRenderingSystem.loadTextureFile("fond_menu_mode");
+	RENDERING(fond)->color.a = 0.5;
+
 	// enableSwarm text
 	enableSwarm = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(enableSwarm)->z = DL_MainMenuUITxt;
-	TRANSFORM(enableSwarm)->position = Vector2(0, PlacementHelper::GimpYToScreen(1100));
+	TRANSFORM(enableSwarm)->position = Vector2(0, PlacementHelper::GimpYToScreen(1160));
+	TRANSFORM(enableSwarm)->size = Vector2(PlacementHelper::GimpWidthToScreen(460), 0);
 	TEXT_RENDERING(enableSwarm)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(enableSwarm)->hide = true;
-	TEXT_RENDERING(enableSwarm)->charHeight = PlacementHelper::GimpHeightToScreen(45);
+	TEXT_RENDERING(enableSwarm)->charHeight = PlacementHelper::GimpHeightToScreen(40);
 	TEXT_RENDERING(enableSwarm)->color = green;
+	TEXT_RENDERING(enableSwarm)->flags |= TextRenderingComponent::MultiLineBit;
 	TEXT_RENDERING(enableSwarm)->text = localizeAPI->text("get_swarm", "Enable swarm to see online scores");
 
 	// enableSwarm container
@@ -200,16 +212,6 @@ void ModeMenuStateManager::Setup() {
 	CONTAINER(enableSwarmContainer)->includeChildren = true;
 	ADD_COMPONENT(enableSwarmContainer, Button);
 	BUTTON(enableSwarmContainer)->enabled = false;
-
-	// fond
-	fond = theEntityManager.CreateEntity();
-	ADD_COMPONENT(fond, Transformation);
-	TRANSFORM(fond)->size = Vector2(PlacementHelper::GimpWidthToScreen(712), PlacementHelper::GimpHeightToScreen(1124));
-	TRANSFORM(fond)->z = DL_MainMenuUIBg;
-	TransformationSystem::setPosition(TRANSFORM(fond), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(24)), TransformationSystem::NW);
-	ADD_COMPONENT(fond, Rendering);
-	RENDERING(fond)->texture = theRenderingSystem.loadTextureFile("fond_menu_mode");
-	RENDERING(fond)->color.a = 0.5;
 }
 
 void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
@@ -307,9 +309,8 @@ void ModeMenuStateManager::Enter() {
     else
         TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
         
-    CONTAINER(playContainer)->enable = 
-    	CONTAINER(bDifficulty)->enable =
-    	CONTAINER(enableSwarmContainer)->enable = true;
+    CONTAINER(playContainer)->enable = CONTAINER(bDifficulty)->enable = true;
+    CONTAINER(enableSwarmContainer)->enable = true;
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
