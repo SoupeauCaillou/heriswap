@@ -34,12 +34,12 @@ void RateItStateManager::Setup() {
     //Creating text entities
     textToReadContainer = theEntityManager.CreateEntity();
     ADD_COMPONENT(textToReadContainer, Transformation);
-    TRANSFORM(textToReadContainer)->size = Vector2(PlacementHelper::GimpWidthToScreen(712), PlacementHelper::GimpHeightToScreen(450));
+    TRANSFORM(textToReadContainer)->size = Vector2(PlacementHelper::GimpWidthToScreen(712), PlacementHelper::GimpHeightToScreen(500));
     TRANSFORM(textToReadContainer)->z = DL_MainMenuUIBg;
     ADD_COMPONENT(textToReadContainer, Rendering);
-    RENDERING(textToReadContainer)->texture = theRenderingSystem.loadTextureFile("fond_bouton");
+    RENDERING(textToReadContainer)->texture = theRenderingSystem.loadTextureFile("fond_menu_mode");
     RENDERING(textToReadContainer)->color.a = 0.5;
-    TransformationSystem::setPosition(TRANSFORM(textToReadContainer), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(80)), TransformationSystem::NW);
+    TransformationSystem::setPosition(TRANSFORM(textToReadContainer), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(40)), TransformationSystem::NW);
 
     textToRead = theTextRenderingSystem.CreateEntity();
     TRANSFORM(textToRead)->z = DL_MainMenuUITxt;
@@ -52,7 +52,7 @@ void RateItStateManager::Setup() {
     TEXT_RENDERING(textToRead)->charHeight = PlacementHelper::GimpHeightToScreen(55);
     TEXT_RENDERING(textToRead)->text = localizeAPI->text("rate_it", "Si vous aimez Heriswap, pourriez vous prendre quelques secondes pour laisser une évaluation ou un commentaire ? Merci d\'avance !");
     TEXT_RENDERING(textToRead)->flags |= TextRenderingComponent::MultiLineBit;
-    TransformationSystem::setPosition(TRANSFORM(textToRead), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(80)), TransformationSystem::NW);
+    TransformationSystem::setPosition(TRANSFORM(textToRead), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(25)), TransformationSystem::NW);
 
     TRANSFORM(textToRead)->position.X = TRANSFORM(textToReadContainer)->position.X = 0;
 
