@@ -50,7 +50,7 @@ void RateItStateManager::Setup() {
     TEXT_RENDERING(textToRead)->positioning = TextRenderingComponent::LEFT;
     TEXT_RENDERING(textToRead)->color = Color("green");
     TEXT_RENDERING(textToRead)->charHeight = PlacementHelper::GimpHeightToScreen(55);
-    TEXT_RENDERING(textToRead)->text = localizeAPI->text("rate_it", "Si vous aimez Heriswap, pourriez vous prendre quelques secondes pour laisser une évaluation ou un commentaire ? Merci d\'avance !");
+    TEXT_RENDERING(textToRead)->text = localizeAPI->text("please_rate_it", "Si vous aimez Heriswap, pourriez vous prendre quelques secondes pour laisser une évaluation ou un commentaire ? Merci d\'avance !");
     TEXT_RENDERING(textToRead)->flags |= TextRenderingComponent::MultiLineBit;
     TransformationSystem::setPosition(TRANSFORM(textToRead), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(25)), TransformationSystem::NW);
 
