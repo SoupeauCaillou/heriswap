@@ -211,7 +211,7 @@ public class StorageAPI {
 			return;
 
 		Log.i("Sac", "Swarn is initialized go!");
-
+   
 		SwarmLeaderboard.GotLeaderboardCB callback = new SwarmLeaderboard.GotLeaderboardCB() {
 			@Override
 			public void gotLeaderboard(final SwarmLeaderboard leaderboard) {
@@ -259,14 +259,16 @@ public class StorageAPI {
 		SQLiteDatabase db = HeriswapActivity.scoreOpenHelper
 				.getWritableDatabase();
 		Cursor cursor = null;
-		if (mode == 0 || mode == 2) {
+		String selection = "mode='" + (mode + 1) + "'";
+		if (difficulty >= 0) {
+			selection = selection + " and difficulty='" + difficulty + "'";
+		}
+		if (mode == 0 || mode == 2) {			
 			cursor = db.query("score", new String[] { "name", "points", "time",
-					"level" }, "mode='" + (mode + 1) + "' and difficulty='"
-					+ difficulty + "'", null, null, null, "points desc");
+					"level" }, selection, null, null, null, "points desc");
 		} else {
 			cursor = db.query("score", new String[] { "name", "points", "time",
-					"level" }, "mode='" + (mode + 1) + "' and difficulty='"
-					+ difficulty + "'", null, null, null, "time asc");
+					"level" }, selection, null, null, null, "time asc");
 		}
 		int maxResult = Math.min(5, cursor.getCount());
 		cursor.moveToFirst();
