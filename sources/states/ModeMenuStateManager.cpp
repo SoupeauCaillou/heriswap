@@ -342,7 +342,14 @@ void ModeMenuStateManager::Enter() {
         TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
         
     CONTAINER(playContainer)->enable = CONTAINER(bDifficulty)->enable = true;
-    CONTAINER(enableSwarmContainer)->enable = true;
+    
+    if (gameOverState == NoGame) {
+		if (!communicationAPI->swarmInstalled()) {
+			BUTTON(enableSwarmContainer)->enabled = true;
+			TEXT_RENDERING(enableSwarm)->hide = false;
+			CONTAINER(enableSwarmContainer)->enable = true;
+    	}
+    }
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
@@ -388,11 +395,6 @@ GameState ModeMenuStateManager::Update(float dt) {
 			BUTTON(facebook)->enabled = true;
 			BUTTON(twitter)->enabled = true;
 			#endif
-			if (!communicationAPI->swarmInstalled()) {
-				BUTTON(enableSwarmContainer)->enabled = true;
-				TEXT_RENDERING(enableSwarm)->hide = false;
-			}
-
             // ask player's name if needed
             if (isCurrentScoreAHighOne()) {
                 nameInputAPI->show();
