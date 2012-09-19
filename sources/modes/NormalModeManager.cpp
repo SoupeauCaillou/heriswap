@@ -172,8 +172,14 @@ int NormalGameModeManager::levelToLeaveToDelete(int type, int nb, int initialLea
 	}
 }
 
-static float timeGain(int nb, float time) {
-	return MathUtil::Min(time, 2.f*nb/theGridSystem.GridSize);
+static float timeGain(int nb, int level, float time) {
+	if (level < 20) {
+	    // = 0.75sec average in hard 
+	    return MathUtil::Min(time, 2.f*nb/theGridSystem.GridSize);
+	} else {
+	    // = 0.19 sec average in hard
+	    return MathUtil::Min(time, 0.5f*nb/theGridSystem.GridSize);
+	}
 }
 
 void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
@@ -191,7 +197,7 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& 
     float spawnDuration = 0.2;
     // herisson distance
     float currentPos = TRANSFORM(herisson)->position.X;
-    float newPos = GameModeManager::position(time - timeGain(count, time));
+    float newPos = GameModeManager::position(time - timeGain(count, level, time));
     // update herisson and decor at the same time.
     levelMoveDuration = deleteDuration + spawnDuration;
     if (theGridSystem.sizeToDifficulty() != DifficultyHard)
@@ -212,7 +218,7 @@ void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 
 	deleteLeaves(type, levelToLeaveToDelete(type, nb, level+2, level+2 - remain[type], countBranchLeavesOfType(type)));
 	remain[type] -= nb;
-	time -= timeGain(nb, time);
+	time -= timeGain(nb, level, time);
 
 	if (remain[type]<0)
 		remain[type]=0;
