@@ -241,6 +241,8 @@ void NormalGameModeManager::startLevel(int lvl) {
 
 	if (level < 10)  {
 		helpAvailable = true;
+	} else {
+		helpAvailable = false;
 	}
 
 	// put hedgehog back on first animation position
