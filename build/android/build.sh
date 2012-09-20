@@ -30,10 +30,11 @@ if [ "$ichoix" -gt 0 ] && [ "$ichoix" -lt 5 ]; then
 	echo "Optimize ? (ndk-build -j and only one ARM version build ?) (Y/n) ?"
 	read optimize
 	
-	echo "ndk-build -j in $PWD"
 	if [ "$optimize" = "n" ]; then
+		echo "ndk-build in $PWD"
 		$PATH_ndk/ndk-build NDK_APPLICATION_MK=android/Application.mk
 	else
+		echo "ndk-build -j in $PWD"
 		$PATH_ndk/ndk-build -j APP_ABI=armeabi-v7a NDK_APPLICATION_MK=android/Application.mk
 	fi
 fi
