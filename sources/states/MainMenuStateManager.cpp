@@ -158,7 +158,7 @@ void MainMenuGameStateManager::Enter() {
 
 	RENDERING(herisson->actor.e)->hide = false;
 
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 3; i++) {
 		RENDERING(bStart[i])->hide = false;
 		TEXT_RENDERING(eStart[i])->hide = false;
 		BUTTON(bStart[i])->enabled = true;
