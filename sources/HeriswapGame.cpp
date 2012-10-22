@@ -397,7 +397,7 @@ void HeriswapGame::tick(float dt) {
 		datas->mode2Manager[datas->mode]->UiUpdate(dt);
 	}
 
-    if (theTouchInputManager.wasTouched() && theMusicSystem.isMuted() && !theSoundSystem.mute) {
+    if (theTouchInputManager.wasTouched(0) && theMusicSystem.isMuted() && !theSoundSystem.mute) {
         // restore music
         theMusicSystem.toggleMute(false);
     }

@@ -77,7 +77,9 @@ Entity globalFTW = 0;
 
 class MouseNativeTouchState: public NativeTouchState {
 	public:
-		bool isTouching(Vector2* windowCoords) const {
+		int maxTouchingCount() { return 1; }
+
+		bool isTouching(int index, Vector2* windowCoords) const {
 			#ifdef EMSCRIPTEN
 			 static bool down = false;
 			 static Vector2 position;
@@ -341,7 +343,6 @@ int main(int argc, char** argv) {
 
 	game = new HeriswapGame(new AssetAPILinuxImpl(), storage, nameInput, new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl(), new CommunicationAPILinuxImpl());
 
-	theRenderingSystem.opengles2 = true;
 	theSoundSystem.init();
 	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());
 	MusicAPILinuxOpenALImpl* openal = new MusicAPILinuxOpenALImpl();

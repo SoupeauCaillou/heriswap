@@ -83,7 +83,6 @@ void MainMenuGameStateManager::Setup() {
 	//TRANSFORM(eStart[0])->position.X = 0;
 	//TRANSFORM(eStart[0])->size = TRANSFORM(bStart[0])->size;
 	//TRANSFORM(eStart[0])->size.Y *= 4;
-
 	for (int i=0; i<3; i++) {
 		TEXT_RENDERING(eStart[i])->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
 		TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9;
@@ -159,7 +158,7 @@ void MainMenuGameStateManager::Enter() {
 
 	RENDERING(herisson->actor.e)->hide = false;
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 2; i++) {
 		RENDERING(bStart[i])->hide = false;
 		TEXT_RENDERING(eStart[i])->hide = false;
 		BUTTON(bStart[i])->enabled = true;

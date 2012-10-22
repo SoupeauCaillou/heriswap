@@ -140,7 +140,7 @@ void HelpStateManager::Enter() {
 }
 
 GameState HelpStateManager::Update(float dt) {
-	if (!theTouchInputManager.isTouched() && theTouchInputManager.wasTouched()) {
+	if (!theTouchInputManager.isTouched(0) && theTouchInputManager.wasTouched(0)) {
 		if (state == HowToPlay) {
 			if (mode == Normal) {
 				RENDERING(bg2)->texture = theRenderingSystem.loadTextureFile("bg_help_obj_score");
