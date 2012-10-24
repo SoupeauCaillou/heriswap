@@ -23,7 +23,6 @@
 static void initGrid(char* type, int size)
 {
 	GridSystem::CreateInstance();
-	theGridSystem.Clear();
 	theGridSystem.GridSize = size;
 	theGridSystem.nbmin = 3;
 	for(int j=size-1; j>=0; j--) {

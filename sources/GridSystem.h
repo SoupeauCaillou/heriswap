@@ -56,11 +56,11 @@ struct GridComponent {
 		checkedV = false;
 		checkedH = false;
 	}
-	PERSISTENT_PROP int i;
-	PERSISTENT_PROP int j;
-	PERSISTENT_PROP int type;
-	RUNTIME_PROP bool checkedV;
-	RUNTIME_PROP bool checkedH;
+	int i;
+	int j;
+	int type;
+	bool checkedV;
+	bool checkedH;
 };
 
 #define theGridSystem GridSystem::GetInstance()

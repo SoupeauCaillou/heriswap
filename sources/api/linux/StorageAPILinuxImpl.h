@@ -33,4 +33,7 @@ class StorageAPILinuxImpl : public StorageAPI {
 
     private:
     	std::string dbPath;
+#ifdef EMSCRIPTEN
+	Score scores[3][3][5];
+#endif
 };

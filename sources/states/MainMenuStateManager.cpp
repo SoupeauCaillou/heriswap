@@ -83,7 +83,6 @@ void MainMenuGameStateManager::Setup() {
 	//TRANSFORM(eStart[0])->position.X = 0;
 	//TRANSFORM(eStart[0])->size = TRANSFORM(bStart[0])->size;
 	//TRANSFORM(eStart[0])->size.Y *= 4;
-
 	for (int i=0; i<3; i++) {
 		TEXT_RENDERING(eStart[i])->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
 		TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9;

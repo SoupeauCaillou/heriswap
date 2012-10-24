@@ -109,7 +109,23 @@ void StorageAPILinuxImpl::submitScore(Score scr, GameMode mode, Difficulty diff)
     std::stringstream tmp;
     tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << (int)mode <<","<< (int)diff<<","<<scr.points<<","<<scr.time<<","<<scr.level<<")";
     request(dbPath, tmp.str().c_str(), 0, 0);
-    #endif
+    #else
+	for (int i=0; i<5; i++) {
+		bool replace = false;
+		if (mode==Normal || mode==RandomNameToBeChanged) {
+			replace = (scores[mode][diff][i].points == 0 || scr.points > scores[mode][diff][i].points);
+		} else {
+			replace = (scores[mode][diff][i].time <= 0 || scr.time < scores[mode][diff][i].time);
+		}
+		if (replace) {
+			for (int j=4; j>i; j--) {
+				scores[mode][diff][j] = scores[mode][diff][j-1];
+			}
+			scores[mode][diff][i] = scr;
+			break;
+		}
+	}
+	#endif
 }
 
 std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(GameMode mode, Difficulty difficulty, float& avg) {
@@ -125,8 +141,24 @@ std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(GameMode mode, D
     else
         tmp << " order by time asc limit 5";
     request(dbPath, tmp.str().c_str(), &result, callbackScore);
-   	avg = -1;
-    #endif
+   #else
+	for (int i=0; i<5; i++) {
+		if (mode==Normal || mode==RandomNameToBeChanged) {
+			if (scores[mode][difficulty][i].points == 0) {
+				break;
+			} else {
+				result.push_back(scores[mode][difficulty][i]);
+			}
+		} else {
+			if (scores[mode][difficulty][i].time <= 0) {
+				break;
+			} else {
+				result.push_back(scores[mode][difficulty][i]);
+			}
+		}
+	}
+	#endif
+	avg = -1;
     return result;
 }
 

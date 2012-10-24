@@ -32,6 +32,10 @@ INSTANCE_IMPL(GridSystem);
 GridSystem::GridSystem() : ComponentSystemImpl<GridComponent>("Grid") {
 	GridSize = Types = 8;
 	nbmin = 3;
+	GridComponent a;
+    componentSerializer.add(new Property(OFFSET(i, a), sizeof(int)));
+    componentSerializer.add(new Property(OFFSET(j, a), sizeof(int)));
+    componentSerializer.add(new Property(OFFSET(type, a), sizeof(int)));
 }
 
 Difficulty GridSystem::sizeToDifficulty() {

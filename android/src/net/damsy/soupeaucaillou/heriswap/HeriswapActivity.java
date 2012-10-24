@@ -18,8 +18,13 @@
 */
 package net.damsy.soupeaucaillou.heriswap;
 
+import com.swarmconnect.Swarm;
+import com.swarmconnect.SwarmActiveUser;
+import com.swarmconnect.delegates.SwarmLoginListener;
+
 import net.damsy.soupeaucaillou.SacActivity;
 import net.damsy.soupeaucaillou.heriswap.api.NameInputAPI;
+import net.damsy.soupeaucaillou.heriswap.api.StorageAPI;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -76,6 +81,26 @@ public class HeriswapActivity extends SacActivity {
 		return TILEMATCH_BUNDLE_KEY;
 	}
 	
+	@Override
+	public String getCharboostAppId() {
+		return HeriswapSecret.CB_appId;
+	}
+
+	@Override
+	public String getCharboostAppSignature() {
+		return HeriswapSecret.CB_AppSignature;
+	}
+	
+	@Override
+	public int getGLViewId() {
+		return R.id.surfaceviewclass;
+	}
+	
+	@Override
+	public int getLayoutId() {
+		return R.layout.main;
+	}
+	
 	static public final String Tag = "HeriswapJ";
 	static final String TILEMATCH_BUNDLE_KEY = "plop";
 	static public final String HERISWAP_SHARED_PREF = "HeriswapPref";
@@ -95,6 +120,24 @@ public class HeriswapActivity extends SacActivity {
     protected void onCreate(Bundle savedInstanceState) {
 		Log.i(HeriswapActivity.Tag, "-> onCreate [" + savedInstanceState);
         super.onCreate(savedInstanceState);
+        Swarm.addLoginListener(new SwarmLoginListener() {
+			@Override
+			public void userLoggedOut() {
+			}
+			
+			@Override
+			public void userLoggedIn(SwarmActiveUser arg0) {
+				StorageAPI.ensureBestLocalScoresAreOnSwarm();
+			}
+			
+			@Override
+			public void loginStarted() {
+			}
+			
+			@Override
+			public void loginCanceled() {
+			}
+		});
 
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.parent_frame);
         playerNameInputView = findViewById(R.id.enter_name);

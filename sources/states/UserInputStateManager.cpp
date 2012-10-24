@@ -146,7 +146,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 		return CountDown;
 	}
 	successMgr->timeUserInputloop += dt;
-	successMgr->sWhatToDo(theTouchInputManager.wasTouched() && theTouchInputManager.isTouched(), dt);
+	successMgr->sWhatToDo(theTouchInputManager.wasTouched(0) && theTouchInputManager.isTouched(0), dt);
 
 	if (MORPHING(rollback)->active) {
 		return UserInput;
@@ -154,9 +154,9 @@ GameState UserInputGameStateManager::Update(float dt) {
 
 	if (!currentCell) {
 		// beginning of drag
-		if (!theTouchInputManager.wasTouched() &&
-			theTouchInputManager.isTouched()) {
-			const Vector2& pos = theTouchInputManager.getTouchLastPosition();
+		if (!theTouchInputManager.wasTouched(0) &&
+			theTouchInputManager.isTouched(0)) {
+			const Vector2& pos = theTouchInputManager.getTouchLastPosition(0);
 			currentCell = cellUnderFinger(pos, true);
 
 			if (currentCell) {
@@ -165,11 +165,11 @@ GameState UserInputGameStateManager::Update(float dt) {
 		}
 	} else {
 		const Vector2 posA = HeriswapGame::GridCoordsToPosition(GRID(currentCell)->i, GRID(currentCell)->j,theGridSystem.GridSize);
-		const Vector2& pos = theTouchInputManager.getTouchLastPosition();
+		const Vector2& pos = theTouchInputManager.getTouchLastPosition(0);
 		// compute move
 		Vector2 move = pos - posA;
 
-		if (theTouchInputManager.isTouched()) {
+		if (theTouchInputManager.isTouched(0)) {
 			// swap cell on axis
 			Entity c = moveToCell(currentCell, move, TRANSFORM(currentCell)->size.X * 0.01);
 
