@@ -41,11 +41,11 @@ class LevelStateManager : public GameStateManager {
 
 		int currentLevel;
 		Entity smallLevel;
+		Entity eBigLevel;
 
 	private:
 		Entity eGrid;
 		std::vector<FeuilleOrientee> feuilles;
-		Entity eBigLevel;
 		Entity eSnowEmitter;
 		Entity eSnowBranch;
 		Entity eSnowGround;

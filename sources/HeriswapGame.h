@@ -51,9 +51,11 @@ class HeriswapGame : public Game {
 		void setMode();
 		int saveState(uint8_t** out);
 		void sacInit(int windowW, int windowH);
-		
+
         void stateChanged(GameState from, GameState to);
 
+		static bool inGameState(GameState state);
+		static bool pausableState(GameState state);
 		static Vector2 GridCoordsToPosition(int i, int j, int s);
 		static float CellSize(int s);
 		static float CellContentScale();
@@ -67,7 +69,7 @@ class HeriswapGame : public Game {
 		void stopInGameMusics();
 		bool shouldPlayPiano();
 
-		
+
 
 	PrivateData* datas;
 	AssetAPI* asset;

@@ -170,7 +170,7 @@ void GameModeManager::Setup() {
 
 void GameModeManager::Enter() {
 	PROFILE("GameModeManager", "Enter", BeginEvent);
-	
+
 	RENDERING(herisson)->hide = false;
 	RENDERING(herisson)->color.a = 1;
 	RENDERING(branch)->hide = false;
@@ -204,6 +204,7 @@ void GameModeManager::Exit() {
 
 void GameModeManager::TogglePauseDisplay(bool paused) {
 	theGridSystem.HideAll(paused);
+	//hide levelbig score
 
     BUTTON(uiHelper.pauseButton)->enabled=!paused;;
     RENDERING(uiHelper.pauseButton)->hide = paused;
@@ -338,7 +339,6 @@ void GameModeManager::updateHerisson(float dt, float obj, float herissonSpeed) {
 	} else {
 		RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
 	}
-	uiHelper.update(dt);
 }
 
 int GameModeManager::saveInternalState(uint8_t** out) {

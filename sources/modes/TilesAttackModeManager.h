@@ -27,7 +27,7 @@ class TilesAttackGameModeManager : public GameModeManager {
 		~TilesAttackGameModeManager();
 		void Setup();
 		void Enter();
-		void GameUpdate(float dt);
+		void GameUpdate(float dt, GameState state);
 		float GameProgressPercent();
 		void UiUpdate(float dt);
 		void Exit();

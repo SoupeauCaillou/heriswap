@@ -116,7 +116,14 @@ void Go100SecondsGameModeManager::Exit() {
 	GameModeManager::Exit();
 }
 
-void Go100SecondsGameModeManager::GameUpdate(float dt) {
+void Go100SecondsGameModeManager::GameUpdate(float dt, GameState state) {
+	//update UI (pause button, etc)
+	if (HeriswapGame::pausableState(state))
+	    uiHelper.update(dt);
+
+	if (!HeriswapGame::inGameState(state))
+	    return;
+
 	time+=dt;
 	//squall is running...
 	if (squallGo) {
@@ -200,7 +207,7 @@ void Go100SecondsGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	Difficulty diff = theGridSystem.sizeToDifficulty();
 
 	float score = 10 * nb * nb * nb * nb;
-	
+
 	switch (diff) {
 		case DifficultyEasy: break;
 		case DifficultyMedium: score *= 2; break;
@@ -208,7 +215,7 @@ void Go100SecondsGameModeManager::ScoreCalc(int nb, unsigned int type) {
 		default:
 			LOGE("Unhandled difficulty: %d", diff);
 	}
-	
+
 	if (type == bonus) {
 		score *= 2;
 		deleteLeaves(~0b0, 2*nb);

@@ -61,7 +61,7 @@
 #include "CombinationMark.h"
 #include "Game_Private.h"
 
-static bool inGameState(GameState state) {
+bool HeriswapGame::inGameState(GameState state) {
 	switch (state) {
 		case Spawn:
 		case UserInput:
@@ -74,7 +74,7 @@ static bool inGameState(GameState state) {
 	}
 }
 
-static bool pausableState(GameState state) {
+bool HeriswapGame::pausableState(GameState state) {
 	switch (state) {
 		case Spawn:
 		case UserInput:
@@ -117,7 +117,7 @@ HeriswapGame::HeriswapGame(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inp
 	asset = ast;
 	successAPI = sAPI;
 	exitAPI = exAPI;
-	
+
 	GridSystem::CreateInstance();
 	TwitchSystem::CreateInstance();
 
@@ -153,7 +153,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
 	loadFont(asset, "gdtypo");
 }
 
-void HeriswapGame::init(const uint8_t* in, int size) {	
+void HeriswapGame::init(const uint8_t* in, int size) {
     if (in && size) {
         in = loadEntitySystemState(in, size);
     }
@@ -262,15 +262,18 @@ void HeriswapGame::backPressed() {
 void HeriswapGame::togglePause(bool activate) {
 	if (activate && datas->state != Pause && pausableState(datas->state)) {
 		stopInGameMusics();
-        // pause
+		// pause
 		datas->stateBeforePause = datas->state;
 		datas->stateBeforePauseNeedEnter = false;
-		datas->state = Pause;
+		datas->state = datas->newState = Pause;
 		static_cast<PauseStateManager*> (datas->state2Manager[Pause])->mode = datas->mode;
+		TEXT_RENDERING(static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->eBigLevel)->hide = true;
         datas->mode2Manager[datas->mode]->TogglePauseDisplay(true);
 		datas->state2Manager[datas->state]->Enter();
+
 	} else if (!activate) {
         // unpause
+		TEXT_RENDERING(static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->eBigLevel)->hide = false;
         datas->mode2Manager[datas->mode]->TogglePauseDisplay(false);
 		datas->state2Manager[datas->state]->Exit();
         datas->state = datas->stateBeforePause;
@@ -281,23 +284,18 @@ void HeriswapGame::togglePause(bool activate) {
 
 void HeriswapGame::tick(float dt) {
 	PROFILE("Game", "Tick", BeginEvent);
-	GameState newState;
 
     updateFps(dt);
 
 	theTouchInputManager.Update(dt);
     // update state
-    newState = datas->state2Manager[datas->state]->Update(dt);
+    datas->newState = datas->state2Manager[datas->state]->Update(dt);
 
     //update only if game has really begun (after countdown)
     if (datas->state != CountDown && static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame == false) {
-		//updating game if playing
-		if (datas->mode == Normal && newState == UserInput) {
-			datas->mode2Manager[datas->mode]->GameUpdate(dt);
-	    } else if (datas->mode != Normal && inGameState(datas->state)) {
-			datas->mode2Manager[datas->mode]->GameUpdate(dt);
-		}
-	}
+		//updating gamemode
+		datas->mode2Manager[datas->mode]->GameUpdate(dt, datas->state);
+    }
 
 	//quand c'est plus au joueur de jouer, on supprime les marquages sur les feuilles
 	if (datas->state != UserInput) {
@@ -322,7 +320,7 @@ void HeriswapGame::tick(float dt) {
 
 	//game ended
 	if (datas->state == UserInput && percentDone >= 1) {
-		newState = GameToBlack;
+		datas->newState = GameToBlack;
 		//show one combination which remain
 		if (datas->mode != TilesAttack) {
 			theGridSystem.ShowOneCombination();
@@ -333,24 +331,24 @@ void HeriswapGame::tick(float dt) {
 	if (datas->state == UserInput && datas->mode == Normal) {
 		NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]);
 		if (m->LevelUp()) {
-			newState = LevelChanged;
+			datas->newState = LevelChanged;
 		}
 	}
 
 	//si on est passé de pause à quelque chose different de pause, on desactive la pause
-	if (datas->state == Pause && newState == Unpause) {
+	if (datas->state == Pause && datas->newState == Unpause) {
 		togglePause(false);
 
 	}
     //si on a change d'etat
-     else if (newState != datas->state) {
-		stateChanged(datas->state, newState);
+     else if (datas->newState != datas->state) {
+		stateChanged(datas->state, datas->newState);
 
-		if (newState == ExitState)
+		if (datas->newState == ExitState)
 			return;
 
 		datas->state2Manager[datas->state]->Exit();
-		datas->state = newState;
+		datas->state = datas->newState;
 		datas->state2Manager[datas->state]->Enter();
 
 		#ifdef ANDROID
@@ -393,7 +391,7 @@ void HeriswapGame::tick(float dt) {
 	}
 
     //updating HUD if playing
-	if (inGameState(newState) && newState != LevelChanged) {
+	if (inGameState(datas->newState) && datas->newState != LevelChanged) {
 		datas->mode2Manager[datas->mode]->UiUpdate(dt);
 	}
 
@@ -404,7 +402,8 @@ void HeriswapGame::tick(float dt) {
 
     //update music
     if (!theMusicSystem.isMuted()) {
-	    if ((pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause) || datas->state == BlackToSpawn) { //si on joue
+	    //si on est en jeu et/ou  fin de musiques, charger de nouvelles musiques
+	    if ((pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause) || datas->state == BlackToSpawn) {
 	    	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Start;
 	    	MUSIC(datas->inGameMusic.masterTrack)->volume = 1;
 	    	MUSIC(datas->inGameMusic.stressTrack)->control = (datas->mode == Normal) ? MusicComponent::Start : MusicComponent::Stop;

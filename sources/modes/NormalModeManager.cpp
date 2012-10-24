@@ -90,17 +90,25 @@ void NormalGameModeManager::TogglePauseDisplay(bool paused) {
 	GameModeManager::TogglePauseDisplay(paused);
 }
 
-void NormalGameModeManager::GameUpdate(float dt) {
-#ifdef DEBUG
+void NormalGameModeManager::GameUpdate(float dt, GameState state) {
+    #ifdef DEBUG
 	// no time update when debug shown
 	if (!_debug)
-#endif
+    #endif
+	//update UI (pause button, etc)
+	if (HeriswapGame::pausableState(state))
+	    uiHelper.update(dt);
+
+	if (state != UserInput)
+	    return;
+
+
 	time += dt;
 	successMgr->gameDuration += dt;
 
 	if (helpAvailable && BUTTON(herisson)->clicked) {
-		leavesInHelpCombination = theGridSystem.ShowOneCombination();
-		helpAvailable = false;
+	    leavesInHelpCombination = theGridSystem.ShowOneCombination();
+	    helpAvailable = false;
 	}
 }
 
@@ -174,7 +182,7 @@ int NormalGameModeManager::levelToLeaveToDelete(int type, int nb, int initialLea
 
 static float timeGain(int nb, int level, float time) {
 	if (level < 20) {
-	    // = 0.75sec average in hard 
+	    // = 0.75sec average in hard
 	    return MathUtil::Min(time, 2.f*nb/theGridSystem.GridSize);
 	} else {
 	    // = 0.19 sec average in hard
@@ -273,7 +281,7 @@ bool NormalGameModeManager::LevelUp() {
 		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
 
 		PROFILE("NormalGameModeManager", "changeLevel", InstantEvent);
-		
+
 		startLevel(level+1);
 	}
 	return match;
@@ -295,7 +303,7 @@ int NormalGameModeManager::saveInternalState(uint8_t** out) {
     ptr = (uint8_t*) mempcpy(ptr, tmp, parent);
     ptr = (uint8_t*) mempcpy(ptr, &level, sizeof(level));
     ptr = (uint8_t*) mempcpy(ptr, &remain[0], sizeof(remain));
-    
+
     TRANSFORM(herisson)->position.X = GameModeManager::position(time);
 
     delete[] tmp;

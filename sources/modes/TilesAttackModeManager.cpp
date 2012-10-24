@@ -73,7 +73,14 @@ void TilesAttackGameModeManager::Exit() {
 	GameModeManager::Exit();
 }
 
-void TilesAttackGameModeManager::GameUpdate(float dt) {
+void TilesAttackGameModeManager::GameUpdate(float dt, GameState state) {
+	//update UI (pause button, etc)
+	if (HeriswapGame::pausableState(state))
+	    uiHelper.update(dt);
+
+	if (!HeriswapGame::inGameState(state))
+	    return;
+
 	time+=dt;
 }
 float TilesAttackGameModeManager::GameProgressPercent() {
