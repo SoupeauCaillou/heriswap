@@ -251,13 +251,13 @@ GameState UserInputGameStateManager::Update(float dt) {
 }
 
 void UserInputGameStateManager::BackgroundUpdate(float dt __attribute__((unused))) {
-    const float y = HeriswapGame::CellSize(theGridSystem.GridSize, 0).Y; 
 	for(int i=0; i<theGridSystem.GridSize; i++) {
 		for(int j=0; j<theGridSystem.GridSize; j++) {
 			Entity e = theGridSystem.GetOnPos(i,j);
 			if (e) {
-				TRANSFORM(e)->size.X = ADSR(e)->value;
-                TRANSFORM(e)->size.Y = y;
+				Vector2 size = HeriswapGame::CellSize(theGridSystem.GridSize, GRID(e)->type); 
+				float scale = ADSR(e)->value / size.X;
+				TRANSFORM(e)->size = size * scale;
 			}
 		}
 	}
