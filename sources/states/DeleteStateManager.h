@@ -23,6 +23,7 @@
 #include "StateManager.h"
 #include "GridSystem.h"
 #include "SuccessManager.h"
+#include "../modes/GameModeManager.h"
 
 class DeleteGameStateManager : public GameStateManager {
 	public:
@@ -37,6 +38,6 @@ class DeleteGameStateManager : public GameStateManager {
 	private:
 		// datas
 		std::vector<Combinais> removing;
-        std::vector<Entity> littleLeavesDeleted;
+        std::vector<GameModeManager::BranchLeaf> littleLeavesDeleted;
 		SuccessManager* successMgr;
 };

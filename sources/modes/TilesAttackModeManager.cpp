@@ -176,11 +176,11 @@ void TilesAttackGameModeManager::TogglePauseDisplay(bool paused) {
 	GameModeManager::TogglePauseDisplay(paused);
 }
 
-void TilesAttackGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
+void TilesAttackGameModeManager::WillScore(int count, int type, std::vector<BranchLeaf>& out) {
     int nb = levelToLeaveToDelete(48, limit, (type == bonus ? count * 2 : count), leavesDone);
     for (unsigned int i=0; nb>0 && i<branchLeaves.size(); i++) {
 		CombinationMark::markCellInCombination(branchLeaves[i].e);
-        out.push_back(branchLeaves[i].e);
+        out.push_back(branchLeaves[i]);
         nb--;
     }
 }

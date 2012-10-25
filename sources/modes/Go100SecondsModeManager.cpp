@@ -230,11 +230,11 @@ void Go100SecondsGameModeManager::TogglePauseDisplay(bool paused) {
 	GameModeManager::TogglePauseDisplay(paused);
 }
 
-void Go100SecondsGameModeManager::WillScore(int count, int type, std::vector<Entity>& LeavesToDelete) {
+void Go100SecondsGameModeManager::WillScore(int count, int type, std::vector<BranchLeaf>& LeavesToDelete) {
     int nb = MathUtil::Min((int)branchLeaves.size(), count);
     for (unsigned int i=0; nb>0 && i<branchLeaves.size(); i++) {
 		CombinationMark::markCellInCombination(branchLeaves[i].e);
-        LeavesToDelete.push_back(branchLeaves[i].e);
+        LeavesToDelete.push_back(branchLeaves[i]);
         nb--;
     }
 }

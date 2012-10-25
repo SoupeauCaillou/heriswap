@@ -35,7 +35,7 @@ class TilesAttackGameModeManager : public GameModeManager {
 
 		bool LevelUp() { return false; };
 
-		void WillScore(int count, int type, std::vector<Entity>& out);
+		void WillScore(int count, int type, std::vector<BranchLeaf>& out);
 
 		GameMode GetMode() { return TilesAttack; };
 

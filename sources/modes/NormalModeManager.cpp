@@ -190,12 +190,12 @@ static float timeGain(int nb, int level, float time) {
 	}
 }
 
-void NormalGameModeManager::WillScore(int count, int type, std::vector<Entity>& out) {
+void NormalGameModeManager::WillScore(int count, int type, std::vector<BranchLeaf>& out) {
     int nb = levelToLeaveToDelete(type, count, level+2, level+2 - remain[type], countBranchLeavesOfType(type));
     for (unsigned int i=0; nb>0 && i<branchLeaves.size(); i++) {
         if (type == branchLeaves[i].type) {
             CombinationMark::markCellInCombination(branchLeaves[i].e);
-            out.push_back(branchLeaves[i].e);
+            out.push_back(branchLeaves[i]);
             nb--;
         }
     }
