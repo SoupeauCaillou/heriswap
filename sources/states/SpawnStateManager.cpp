@@ -123,13 +123,13 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
                 }
 				TransformationComponent* tc = TRANSFORM(it->entity);
 				//leaves grow up from 0 to fixed size
-				float s = HeriswapGame::CellSize(theGridSystem.GridSize);
+				Vector2 s = HeriswapGame::CellSize(theGridSystem.GridSize, gc->type);
 				if (ADSR(haveToAddLeavesInGrid)->value == 1){
-					tc->size = Vector2(s*0.1, s);
+					tc->size = Vector2(s.X * 0.1, s.Y);
 					gc->i = it->X;
 					gc->j = it->Y;
 				} else {
-					tc->size = Vector2(s * ADSR(haveToAddLeavesInGrid)->value, s * ADSR(haveToAddLeavesInGrid)->value);
+					tc->size = s * ADSR(haveToAddLeavesInGrid)->value;
 				}
 			}
 		}
@@ -143,7 +143,7 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
         std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
         //les feuilles disparaissent (taille tend vers 0)
         for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
-            Vector2 cellSize = Vector2(HeriswapGame::CellSize(theGridSystem.GridSize) * HeriswapGame::CellContentScale() * (1 - ADSR(replaceGrid)->value));
+            Vector2 cellSize = HeriswapGame::CellSize(theGridSystem.GridSize, GRID(*it)->type) * HeriswapGame::CellContentScale() * (1 - ADSR(replaceGrid)->value);
             ADSR(*it)->idleValue = cellSize.X;
         }
         //les feuilles ont disparu, on les supprime et on remplit avec de nouvelles feuilles
@@ -258,7 +258,7 @@ static Entity createCell(Feuille& f, bool assignGridPos) {
 	rc->hide = false;
 
 	TRANSFORM(e)->size = Vector2(0.0f);
-	ADSR(e)->idleValue = HeriswapGame::CellSize(theGridSystem.GridSize) * HeriswapGame::CellContentScale();
+	ADSR(e)->idleValue = HeriswapGame::CellSize(theGridSystem.GridSize, f.type).X * HeriswapGame::CellContentScale();
 	GRID(e)->type = f.type;
 	if (assignGridPos) {
 		GRID(e)->i = f.X;

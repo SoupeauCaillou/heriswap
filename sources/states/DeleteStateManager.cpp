@@ -72,9 +72,9 @@ GameState DeleteGameStateManager::Update(float dt __attribute__((unused))) {
 	ADSRComponent* transitionSuppr = ADSR(deleteAnimation);
 	if (!removing.empty()) {
 		transitionSuppr->active = true;
-        Vector2 cellSize = Vector2(HeriswapGame::CellSize(theGridSystem.GridSize) * HeriswapGame::CellContentScale() * (1 - transitionSuppr->value));
-    	for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
-    		if (transitionSuppr->value == transitionSuppr->sustainValue) {
+        for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
+    	    const Vector2 cellSize = HeriswapGame::CellSize(theGridSystem.GridSize, it->type) * HeriswapGame::CellContentScale() * (1 - transitionSuppr->value);
+        	if (transitionSuppr->value == transitionSuppr->sustainValue) {
     			modeMgr->ScoreCalc(it->points.size(), it->type);
 			}
     		for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
@@ -88,8 +88,8 @@ GameState DeleteGameStateManager::Update(float dt __attribute__((unused))) {
     			}
     		}
     	}
-    	Vector2 littleLeavesSize = Vector2(HeriswapGame::CellSize(8) * HeriswapGame::CellContentScale() * (1 - transitionSuppr->value));
-        for (unsigned int i=0; i<littleLeavesDeleted.size(); i++) {
+    	for (unsigned int i=0; i<littleLeavesDeleted.size(); i++) {
+            const Vector2 littleLeavesSize = HeriswapGame::CellSize(8, 0 /*GRID(littleLeavesDeleted[i])->type*/) * HeriswapGame::CellContentScale() * (1 - transitionSuppr->value);
             TRANSFORM(littleLeavesDeleted[i])->size = littleLeavesSize;
         }
     	if (transitionSuppr->value  == transitionSuppr->sustainValue) {

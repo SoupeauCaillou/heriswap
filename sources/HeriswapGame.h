@@ -57,7 +57,7 @@ class HeriswapGame : public Game {
 		static bool inGameState(GameState state);
 		static bool pausableState(GameState state);
 		static Vector2 GridCoordsToPosition(int i, int j, int s);
-		static float CellSize(int s);
+		static Vector2 CellSize(int gridSize, int cellType);
 		static float CellContentScale();
 		static std::string cellTypeToTextureNameAndRotation(int type, float* rotation);
 		static float cellTypeToRotation(int type);

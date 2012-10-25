@@ -5,7 +5,7 @@
 	<string name="help">"Aide"</string>
 	<string name="give_up">"Abandonner"</string>
 	<string name="mode_1">"Course au score"</string>
-	<string name="mode_2">"Course à la montre"</string>
+	<string name="mode_2">"Contre la montre"</string>
 	<string name="mode_3">"100 secondes"</string>
 	<string name="score">"Meilleurs scores :"</string>
 	<string name="play">"Jouer"</string>

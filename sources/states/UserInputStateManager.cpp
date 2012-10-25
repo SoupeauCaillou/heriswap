@@ -84,7 +84,7 @@ static bool contains(const std::vector<Combinais>& combi, const GridComponent* g
 
 static Entity cellUnderFinger(const Vector2& pos, bool preferInCombi) {
 	std::vector<Combinais> combinaisons;// = theGridSystem.LookForCombination(false,false);
-	const float maxDist = HeriswapGame::CellSize(theGridSystem.GridSize);
+	const float maxDist = HeriswapGame::CellSize(theGridSystem.GridSize, 0).Y;
 
 	// 4 nearest
 	Entity e = 0;
@@ -251,11 +251,13 @@ GameState UserInputGameStateManager::Update(float dt) {
 }
 
 void UserInputGameStateManager::BackgroundUpdate(float dt __attribute__((unused))) {
+    const float y = HeriswapGame::CellSize(theGridSystem.GridSize, 0).Y; 
 	for(int i=0; i<theGridSystem.GridSize; i++) {
 		for(int j=0; j<theGridSystem.GridSize; j++) {
 			Entity e = theGridSystem.GetOnPos(i,j);
 			if (e) {
-				TRANSFORM(e)->size.X = TRANSFORM(e)->size.Y = ADSR(e)->value;
+				TRANSFORM(e)->size.X = ADSR(e)->value;
+                TRANSFORM(e)->size.Y = y;
 			}
 		}
 	}

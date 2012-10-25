@@ -58,16 +58,16 @@ BackgroundManager::BackgroundManager() {
 	cloudSpeed[1] = Interval<float>(-0.25, -0.13);
 	cloudSpeed[2] = Interval<float>(-0.1, -0.03);
 
-	textures[0].push_back("haut_0");
-	textures[0].push_back("haut_1");
-	textures[0].push_back("haut_2");
-	textures[1].push_back("moyen_0");
-	textures[1].push_back("moyen_1");
-	textures[2].push_back("bas_0");
-	textures[2].push_back("bas_1");
-	textures[2].push_back("bas_2");
-	textures[2].push_back("bas_3");
-	textures[2].push_back("bas_4");
+	textures[0].push_back("haut_0"); width2HeightRatio[0].push_back(138.0 / 260.0);
+	textures[0].push_back("haut_1"); width2HeightRatio[0].push_back(197.0 / 336.0);
+	textures[0].push_back("haut_2"); width2HeightRatio[0].push_back(208.0 / 413.0);
+	textures[1].push_back("moyen_0"); width2HeightRatio[1].push_back(126.0 / 292.0);
+	textures[1].push_back("moyen_1"); width2HeightRatio[1].push_back(101.0 / 201.0);
+	textures[2].push_back("bas_0"); width2HeightRatio[2].push_back(75.0 / 220.0);
+	textures[2].push_back("bas_1"); width2HeightRatio[2].push_back(117.0 / 231.0);
+	textures[2].push_back("bas_2"); width2HeightRatio[2].push_back(67.0 / 128.0);
+	textures[2].push_back("bas_3"); width2HeightRatio[2].push_back(91.0 / 181.0);
+	textures[2].push_back("bas_4"); width2HeightRatio[2].push_back(79.0 / 205.0);
 }
 
 

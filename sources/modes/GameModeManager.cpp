@@ -101,7 +101,7 @@ void GameModeManager::Setup() {
 	branch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(branch, Transformation);
 	TRANSFORM(branch)->z = DL_Branch;
-	TRANSFORM(branch)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(400.0));
+	TRANSFORM(branch)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpWidthToScreen(800) * 107.0 / 391.0);
 	TransformationSystem::setPosition(TRANSFORM(branch), Vector2(-PlacementHelper::ScreenWidth*0.5, PlacementHelper::GimpYToScreen(0)), TransformationSystem::NW);
 	ADD_COMPONENT(branch, Rendering);
 	RENDERING(branch)->hide = true;
@@ -217,7 +217,7 @@ Entity GameModeManager::createAndAddLeave(int type, const Vector2& position, flo
     ADD_COMPONENT(e, Twitch);
 	RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(type, 0));
 	RENDERING(e)->hide = false;
-	TRANSFORM(e)->size.X = TRANSFORM(e)->size.Y = HeriswapGame::CellSize(8) * HeriswapGame::CellContentScale();
+	TRANSFORM(e)->size = HeriswapGame::CellSize(8, type) * HeriswapGame::CellContentScale();
 
 	TRANSFORM(e)->position = position;
 	TRANSFORM(e)->rotation = rotation;

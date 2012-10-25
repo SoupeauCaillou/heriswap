@@ -95,7 +95,7 @@ void Go100SecondsGameModeManager::squall() {
 
 		Entity  e = squallLeaves[i];
 		TRANSFORM(e)->position = Vector2(MathUtil::RandomFloatInRange(minX, maxX), MathUtil::RandomFloatInRange(minY, maxY));
-		TRANSFORM(e)->size.X = TRANSFORM(e)->size.Y = HeriswapGame::CellSize(8) * HeriswapGame::CellContentScale() * MathUtil::RandomFloatInRange(0.35f,1.2f);
+		TRANSFORM(e)->size = HeriswapGame::CellSize(8, 0) * HeriswapGame::CellContentScale() * MathUtil::RandomFloatInRange(0.35f,1.2f);
 		RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(bonus, &TRANSFORM(e)->rotation));
 		RENDERING(e)->hide = false;
 
@@ -109,7 +109,7 @@ void Go100SecondsGameModeManager::squall() {
 	}
 	//herisson's Y. He'll change his bonus behind this leaf
 	TRANSFORM(squallLeaves[0])->position = Vector2(MathUtil::RandomFloatInRange(minX, maxX), PlacementHelper::GimpYToScreen(1028));
-	TRANSFORM(squallLeaves[0])->size.X = TRANSFORM(squallLeaves[0])->size.Y = HeriswapGame::CellSize(8) * HeriswapGame::CellContentScale();
+	TRANSFORM(squallLeaves[0])->size = HeriswapGame::CellSize(8, 0) * HeriswapGame::CellContentScale();
 }
 
 void Go100SecondsGameModeManager::Exit() {
@@ -136,7 +136,7 @@ void Go100SecondsGameModeManager::GameUpdate(float dt, GameState state) {
 		//make the tree leaves grow ...
 		for (unsigned int i = 0; i < branchLeaves.size(); i++) {
 			TRANSFORM(branchLeaves[i].e)->size =
-				Vector2(HeriswapGame::CellSize(8) * HeriswapGame::CellContentScale() * MathUtil::Min(squallDuration, 1.f));
+				HeriswapGame::CellSize(8, bonus) * HeriswapGame::CellContentScale() * MathUtil::Min(squallDuration, 1.f);
 		}
 		//check if every leaves has gone...
 		bool ended = true;

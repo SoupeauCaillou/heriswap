@@ -105,8 +105,28 @@ Vector2 HeriswapGame::GridCoordsToPosition(int i, int j, int gridSize) {
 		startY + (j + 0.5) * size);
 }
 
-float HeriswapGame::CellSize(int gridSize) {
-	return PlacementHelper::GimpWidthToScreen((752 - 48) / gridSize);
+Vector2 HeriswapGame::CellSize(int gridSize, int cellType) {
+	float y = PlacementHelper::GimpWidthToScreen((752 - 48) / gridSize);
+    float coeff = 1;
+    switch (cellType) {
+        case 0:
+        case 1:
+            coeff = 0.74 / 0.8;
+            break;
+        case 2:
+        case 3:
+            coeff = 0.62 / 0.8;
+            break;
+        case 4:
+        case 5:
+            coeff = 0.52 / 0.8;
+            break;
+        case 6:
+        case 7:
+            coeff = 0.38 / 0.8;
+            break;
+    }
+    return Vector2(y * coeff, y);
 }
 
 float HeriswapGame::CellContentScale() {

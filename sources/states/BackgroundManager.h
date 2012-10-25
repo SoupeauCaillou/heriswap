@@ -51,6 +51,7 @@ class BackgroundManager : public GameStateManager {
 		Interval<float> cloudSize[3];
 		Interval<float> cloudSpeed[3];
 		std::vector<std::string> textures[3];
+        std::vector<float> width2HeightRatio[3];
 
 };
 
