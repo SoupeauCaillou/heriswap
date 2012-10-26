@@ -10,7 +10,7 @@ LOCAL_CFLAGS := -DANDROID_NDK \
                 -DDISABLE_IMPORTGL \
 				-I$(LOCAL_PATH)/..
 
-LOCAL_CXXFLAGS := -DANDROID_NDK -DDEBUG \
+LOCAL_CXXFLAGS := -DANDROID_NDK \
                 -DDISABLE_IMPORTGL \
             -I$(LOCAL_PATH)/../sources \
 				-I$(LOCAL_PATH)/.. \
