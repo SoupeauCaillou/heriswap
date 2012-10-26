@@ -265,5 +265,24 @@ static Entity createCell(Feuille& f, bool assignGridPos) {
 		GRID(e)->j = f.Y;
 	}
 	rc->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(f.type, &TRANSFORM(e)->rotation));
+	rc->opaqueType = RenderingComponent::OPAQUE_CENTER;
+	switch (f.type) {
+		case 0:
+		case 1:
+			rc->opaqueSeparation = 42.0 / 74;
+			break;
+		case 2:
+		case 3:
+			rc->opaqueSeparation = 35.0 / 62;
+			break;
+		case 4:
+		case 5:
+			rc->opaqueSeparation = 27.0 / 52;
+			break;
+		case 6:
+		case 7:
+			rc->opaqueSeparation = 18.0 / 38;
+			break;
+	}
 	return e;
 }

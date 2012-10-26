@@ -96,6 +96,8 @@ void GameModeManager::Setup() {
 	c->frames=0;
 	c->actor.speed = 4.1;
 	RENDERING(herisson)->hide = true;
+	RENDERING(herisson)->opaqueType = RenderingComponent::OPAQUE_CENTER;
+	RENDERING(herisson)->opaqueSeparation = 60.0/114;
 	BUTTON(herisson)->enabled = false;
 
 	branch = theEntityManager.CreateEntity();
@@ -217,6 +219,26 @@ Entity GameModeManager::createAndAddLeave(int type, const Vector2& position, flo
     ADD_COMPONENT(e, Twitch);
 	RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(type, 0));
 	RENDERING(e)->hide = false;
+	RENDERING(e)->opaqueType = RenderingComponent::OPAQUE_CENTER;
+	switch (type) {
+		case 0:
+		case 1:
+			RENDERING(e)->opaqueSeparation = 42.0 / 74;
+			break;
+		case 2:
+		case 3:
+			RENDERING(e)->opaqueSeparation = 35.0 / 62;
+			break;
+		case 4:
+		case 5:
+			RENDERING(e)->opaqueSeparation = 27.0 / 52;
+			break;
+		case 6:
+		case 7:
+			RENDERING(e)->opaqueSeparation = 18.0 / 38;
+			break;
+	}
+	
 	TRANSFORM(e)->size = HeriswapGame::CellSize(8, type) * HeriswapGame::CellContentScale();
 
 	TRANSFORM(e)->position = position;

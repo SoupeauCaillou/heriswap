@@ -372,7 +372,7 @@ void HeriswapGame::tick(float dt) {
 		datas->state2Manager[datas->state]->Enter();
 
 		#ifdef ANDROID
-		bool ofHidden = (newState != MainMenu && newState != ModeMenu);
+		bool ofHidden = (datas->newState != MainMenu && datas->newState != ModeMenu);
 		#else
 		bool ofHidden = true;
     	#endif
@@ -642,7 +642,7 @@ void updateFps(float dt) {
     frameCount++;
     accum += dt;
     if (frameCount == COUNT) {
-         LOGI("%d frames: %.3f s - diff: %.3f s - ms per frame: %.3f", COUNT, accum, TimeUtil::getTime() - t, accum / COUNT);
+         LOGI("%d frames: %.3f s - diff: %.3f s - ms per frame: %.4f", COUNT, accum, TimeUtil::getTime() - t, accum / COUNT);
          t = TimeUtil::getTime();
          accum = 0;
          frameCount = 0;
