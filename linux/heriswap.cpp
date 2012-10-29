@@ -338,7 +338,6 @@ int main(int argc, char** argv) {
     storage->init();
 
 	LocalizeAPILinuxImpl* loc = new LocalizeAPILinuxImpl();
-
 	nameInput = new NameInputAPILinuxImpl();
 
 	game = new HeriswapGame(new AssetAPILinuxImpl(), storage, nameInput, new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl(), new CommunicationAPILinuxImpl());
@@ -356,13 +355,16 @@ int main(int argc, char** argv) {
     soundAPI->init();
 
 	game->sacInit(reso->X,reso->Y);
-	game->init(state, size);
 
 #ifndef EMSCRIPTEN
     setlocale( LC_ALL, "" );
 	loc->init();
 	glfwSetCharCallback(myCharCallback);
 #endif
+
+	game->init(state, size);
+
+
 
 	Color green = Color(3.0/255.0, 99.0/255, 71.0/255);
 	// name input entities
