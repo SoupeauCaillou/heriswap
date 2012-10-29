@@ -82,6 +82,8 @@ class GameModeManager {
 		void generateLeaves(int* nb, int type);
 
 		float position(float t);
+     
+        void showGameDecor(bool onlyBg);
 	protected:
 		void LoadHerissonTexture(int type);
 		void updateHerisson(float dt, float obj, float herissonSpeed);

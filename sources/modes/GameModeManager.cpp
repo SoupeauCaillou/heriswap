@@ -170,6 +170,23 @@ void GameModeManager::Setup() {
 	#endif
 }
 
+void GameModeManager::showGameDecor(bool onlyBg) {
+    // RENDERING(branch)->hide = false;
+    SCROLLING(decor2nd)->hide = false;
+    SCROLLING(decor1er)->hide = false;
+    
+    RENDERING(herisson)->hide = onlyBg;
+    RENDERING(branch)->hide = onlyBg;
+    if (onlyBg)
+        uiHelper.hide();
+    else
+        uiHelper.show();
+    // delete leaves
+    for (unsigned int az=0;az<branchLeaves.size();az++) {
+        RENDERING(branchLeaves[az].e)->hide = onlyBg;
+    }
+}
+
 void GameModeManager::Enter() {
 	PROFILE("GameModeManager", "Enter", BeginEvent);
 

@@ -37,15 +37,7 @@ class HelpStateManager : public GameStateManager {
 
 	private:
 		LocalizeAPI* localizeAPI;
-		Entity background, bg2;
-		// howtoplay
-		Entity title[2];
-		// mode1
-		Entity levelBig, levelSmall[3];
-		// objective/mode2
-		Entity difficulty[2];
-		Entity leaveLeft;
-		Entity bonus;
+		Entity title,text;
 
 		enum State {
 			HowToPlay,

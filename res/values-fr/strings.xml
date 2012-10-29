@@ -30,7 +30,7 @@
 	<string name="rate_now">"Évaluer !"</string>
 	<string name="rate_later">"Plus tard"</string>
 	<string name="rate_never">"Non merci"</string>
-	<string name="get_swarm">"Activez Swarm × pour comparer votre score avec les autres joueurs !"</string>
+	<string name="get_swarm">"Activez Swarm ×swarm_icon,1,1× pour comparer votre score avec les autres joueurs !"</string>
 	<string name="change_difficulty">"Vous êtes très bon; alors que diriez-vous d'augmenter un peu la difficulté ?!"</string>
 	<string name="change_difficulty_yes">"Allons-y, plus dur !"</string>
 	<string name="change_difficulty_no">"Non merci."</string>

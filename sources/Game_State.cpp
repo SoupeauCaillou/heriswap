@@ -138,7 +138,8 @@ void HeriswapGame::stateChanged(GameState oldState, GameState newState) {
         SCROLLING(datas->sky)->hide = false;
         RENDERING(datas->soundButton)->hide = false;
      } else if (newState == Help) {
-	     static_cast<HelpStateManager*> (datas->state2Manager[newState])->mode = datas->mode;
+	    static_cast<HelpStateManager*> (datas->state2Manager[newState])->mode = datas->mode;
+        datas->mode2Manager[datas->mode]->showGameDecor(true);
      } else if (newState == ExitState) {
 	     exitAPI->exitGame();
      } else if (newState == Spawn) {
@@ -151,5 +152,8 @@ void HeriswapGame::stateChanged(GameState oldState, GameState newState) {
 			    }
 		    }
 	 	}
+     }
+     if (oldState == Help) {
+        datas->mode2Manager[datas->mode]->showGameDecor(false);
      }
 }
