@@ -358,7 +358,7 @@ int main(int argc, char** argv) {
 	game->sacInit(reso->X,reso->Y);
 
 #ifndef EMSCRIPTEN
-    setlocale( LC_ALL, "" );
+    // setlocale( LC_ALL, "" );
 	loc->init();
 	glfwSetCharCallback(myCharCallback);
 #endif
