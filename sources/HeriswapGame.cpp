@@ -296,7 +296,8 @@ void HeriswapGame::togglePause(bool activate) {
 
 	} else if (!activate) {
         // unpause
-		TEXT_RENDERING(static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->eBigLevel)->hide = false;
+        if (datas->stateBeforePause == LevelChanged)
+		    TEXT_RENDERING(static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->eBigLevel)->hide = false;
         datas->mode2Manager[datas->mode]->TogglePauseDisplay(false);
 		datas->state2Manager[datas->state]->Exit();
         datas->state = datas->stateBeforePause;
