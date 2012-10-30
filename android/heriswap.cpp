@@ -55,6 +55,7 @@ GameHolder* GameHolder::build() {
 		&hld->gameThreadJNICtx->localize,
 		&hld->gameThreadJNICtx->ad,
 		&hld->gameThreadJNICtx->exitAPI,
-		&jniCtx->communication);
+		&jniCtx->communication,
+        &hld->gameThreadJNICtx->vibrateAPI);
 	return hld;
 };

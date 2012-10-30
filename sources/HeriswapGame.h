@@ -35,13 +35,14 @@
 #include "api/ExitAPI.h"
 #include "api/CommunicationAPI.h"
 #include "api/SuccessAPI.h"
+#include "api/VibrateAPI.h"
 
 class NameInputAPI;
 
 class PrivateData;
 class HeriswapGame : public Game {
 	public:
-		HeriswapGame(AssetAPI* asset, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI);
+		HeriswapGame(AssetAPI* asset, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI, VibrateAPI* vibAPI);
         ~HeriswapGame();
 		void init(const uint8_t* in = 0, int size = 0);
 		void tick(float dt);
@@ -75,4 +76,5 @@ class HeriswapGame : public Game {
 	AssetAPI* asset;
 	SuccessAPI* successAPI;
 	ExitAPI* exitAPI;
+    VibrateAPI* vibrateAPI;
 };

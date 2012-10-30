@@ -35,7 +35,7 @@
 	<string name="change_difficulty_yes">"Allons-y, plus dur !"</string>
 	<string name="change_difficulty_no">"Non merci."</string>
 	<string name="help_click_continue">"-toucher l'écran pour continuer-"</string>
-	<string name="help_click_play">"-toucher l'écran pour jouer"</string>
+	<string name="help_click_play">"-toucher l'écran pour jouer-"</string>
 	<string name="help_mode1_1">"L'objectif dans ce mode est de marquer le plus de points.\n\nLes points se gagnent en alignant au moins 3 feuilles ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1× identiques.\n\nCes combinaisons se créent en échangeant 2 feuilles ×feuille2,1,1× ×feuille3,1,1× voisines.\n\nLe jeu se joue en un temps limité.\n\n"</string>
 	<string name="help_mode1_2">"Le ×herisson_2_5,2,1.8× représente le temps restant et la partie se termine lorsqu'il arrive au bord droit de l'écran. Le type de ×feuille5,1,1× sur son dos rapporte plus de points.\n\nChaque combinaison réussie rapporte un peu de temps. Pour gagner beaucoup de temps, il faut terminer un niveau. Un niveau est terminé lorsque l'arbre est vide."</string>
 	<string name="help_mode2_1">"L'objectif est de supprimer toutes les ×feuille2,1,1× de l'arbre le plus vite possible.\n\nL'arbre se vide en alignant au moins 3 feuilles ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1× identiques.\n\nCes combinaisons se créent en échangeant 2 feuilles ×feuille2,1,1× ×feuille3,1,1× voisines.\n\n"</string>

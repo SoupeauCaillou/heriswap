@@ -50,6 +50,7 @@
 #include "api/linux/LocalizeAPILinuxImpl.h"
 #include "api/linux/NameInputAPILinuxImpl.h"
 #include "api/linux/ExitAPILinuxImpl.h"
+#include "api/linux/VibrateAPILinuxImpl.h"
 
 #include "api/linux/StorageAPILinuxImpl.h"
 #include "api/linux/CommunicationAPILinuxImpl.h"
@@ -340,7 +341,7 @@ int main(int argc, char** argv) {
 	LocalizeAPILinuxImpl* loc = new LocalizeAPILinuxImpl();
 	nameInput = new NameInputAPILinuxImpl();
 
-	game = new HeriswapGame(new AssetAPILinuxImpl(), storage, nameInput, new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl(), new CommunicationAPILinuxImpl());
+	game = new HeriswapGame(new AssetAPILinuxImpl(), storage, nameInput, new SuccessAPI(), loc, new AdAPI(), new ExitAPILinuxImpl(), new CommunicationAPILinuxImpl(), new VibrateAPILinuxImpl());
 
 	theSoundSystem.init();
 	theTouchInputManager.setNativeTouchStatePtr(new MouseNativeTouchState());

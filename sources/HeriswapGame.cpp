@@ -133,10 +133,11 @@ float HeriswapGame::CellContentScale() {
 	return scale;
 }
 
-HeriswapGame::HeriswapGame(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI) : Game() {
+HeriswapGame::HeriswapGame(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI, VibrateAPI* viAPI) : Game() {
 	asset = ast;
 	successAPI = sAPI;
 	exitAPI = exAPI;
+    vibrateAPI = viAPI;
 
 	GridSystem::CreateInstance();
 	TwitchSystem::CreateInstance();
@@ -167,6 +168,8 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     theRenderingSystem.loadAtlas("menu", true);
     theRenderingSystem.loadAtlas("nuages");
     theRenderingSystem.loadAtlas("help");
+    
+    theButtonSystem.vibrateAPI = vibrateAPI;
 
     // init font
 	loadFont(asset, "typo");
