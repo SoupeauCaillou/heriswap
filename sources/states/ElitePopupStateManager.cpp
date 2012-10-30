@@ -73,6 +73,7 @@ void ElitePopupStateManager::Setup() {
 	    RENDERING(eButton[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
 	    RENDERING(eButton[i])->color.a = 0.5;
 	    ADD_COMPONENT(eButton[i], Button);
+        BUTTON(eButton[i])->enabled = false;
 
 		TRANSFORM(eText[i])->position.X = TRANSFORM(eButton[i])->position.X = 0;
 		TRANSFORM(eText[i])->position.Y = TRANSFORM(eButton[i])->position.Y = PlacementHelper::GimpYToScreen(850+i*183);
@@ -113,6 +114,7 @@ void ElitePopupStateManager::Exit() {
 	TEXT_RENDERING(text)->hide = true;
 	for (int i=0; i<2; i++) {
 		RENDERING(eButton[i])->hide = true;
+        BUTTON(eButton[i])->enabled = false;
 		TEXT_RENDERING(eText[i])->hide = true;
 	}
 }
