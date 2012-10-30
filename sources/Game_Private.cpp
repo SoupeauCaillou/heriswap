@@ -108,6 +108,7 @@ PrivateData::PrivateData(HeriswapGame* game, StorageAPI* storagee, NameInputAPI*
      TRANSFORM(soundButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
      TransformationSystem::setPosition(TRANSFORM(soundButton), Vector2(0 + PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::E);
      ADD_COMPONENT(soundButton, Button);
+     BUTTON(soundButton)->enabled =true;
      BUTTON(soundButton)->overSize = 1.3;
      ADD_COMPONENT(soundButton, Rendering);
      ADD_COMPONENT(soundButton, Sound);
