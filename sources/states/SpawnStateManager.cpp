@@ -253,7 +253,7 @@ static Entity createCell(Feuille& f, bool assignGridPos) {
     ADD_COMPONENT(e, Twitch);
 
 	TRANSFORM(e)->position = HeriswapGame::GridCoordsToPosition(f.X, f.Y, theGridSystem.GridSize);
-	TRANSFORM(e)->z = DL_Cell;
+	TRANSFORM(e)->z = DL_Cell + MathUtil::RandomFloat() * 0.001;
 	RenderingComponent* rc = RENDERING(e);
 	rc->hide = false;
 
