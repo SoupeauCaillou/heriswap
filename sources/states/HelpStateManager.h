@@ -37,7 +37,7 @@ class HelpStateManager : public GameStateManager {
 
 	private:
 		LocalizeAPI* localizeAPI;
-		Entity title,text;
+		Entity title,text,postscriptum;
 
 		enum State {
 			HowToPlay,

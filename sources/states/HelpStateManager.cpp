@@ -52,6 +52,17 @@ void HelpStateManager::Setup() {
     TEXT_RENDERING(text)->flags |= TextRenderingComponent::MultiLineBit;
 	TEXT_RENDERING(text)->color = green;
 	TEXT_RENDERING(text)->charHeight = PlacementHelper::GimpHeightToScreen(55);
+
+    postscriptum = theEntityManager.CreateEntity();
+    ADD_COMPONENT(postscriptum, Transformation);
+    TRANSFORM(postscriptum)->position = Vector2(0, -PlacementHelper::ScreenHeight * 0.5 + 0.5*PlacementHelper::GimpHeightToScreen(40));
+    TRANSFORM(postscriptum)->z = DL_HelpText;
+    TRANSFORM(postscriptum)->size = Vector2(PlacementHelper::ScreenWidth * 0.9, PlacementHelper::ScreenHeight);
+    ADD_COMPONENT(postscriptum, TextRendering);
+    TEXT_RENDERING(postscriptum)->hide = true;
+    TEXT_RENDERING(postscriptum)->positioning = TextRenderingComponent::CENTER;
+    TEXT_RENDERING(postscriptum)->color = green;
+    TEXT_RENDERING(postscriptum)->charHeight = PlacementHelper::GimpHeightToScreen(40);
 }
 
 void HelpStateManager::Enter() {
@@ -62,32 +73,36 @@ void HelpStateManager::Enter() {
 	// setup how to play help page
     TEXT_RENDERING(text)->hide = false;
     TEXT_RENDERING(title)->hide = false;
+    TEXT_RENDERING(postscriptum)->hide =  false;
     if (mode == Normal) {
-        TEXT_RENDERING(text)->text = 
-            "L'objectif dans ce mode est de marquer le plus de points.\n\n"
-            "Les points se gagnent en alignant au moins 3 feuilles ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1× identiques.\n\n"
-            "Ces combinaisons se créent en échangeant 2 feuilles ×feuille2,1,1× ×feuille3,1,1× voisines.\n\n"
-            "Le jeu se joue en un temps limité.\n\n"
-            "Le ×herisson_2_5,2,1.8× représente le temps restant et la partie se termine"
-            " lorsqu'il arrive au bord droit de l'écran. "
-            "Le type de ×feuille5,1,1× sur son dos rapporte plus de points.\n\n"
-            "Chaque combinaison réussie rapporte un peu de temps. "
-            "Pour gagner beaucoup de temps, il faut terminer un niveau. "
-            "Un niveau est terminé lorsque l'arbre est vide.";
+        TEXT_RENDERING(text)->text = localizeAPI->text("help_mode1_1", "blabla");
         TEXT_RENDERING(title)->text = localizeAPI->text("mode_1", "Score race");
+        TEXT_RENDERING(postscriptum)->text = localizeAPI->text("help_click_continue", "Click to continue");
     } else if (mode == TilesAttack) {
         TEXT_RENDERING(title)->text = localizeAPI->text("mode_2", "Time attack");
-        TEXT_RENDERING(text)->text = "";
+        TEXT_RENDERING(text)->text = localizeAPI->text("help_mode2_1", "blabla");
+        TEXT_RENDERING(postscriptum)->text = localizeAPI->text("help_click_continue", "Click to continue");
     } else {
         TEXT_RENDERING(title)->text = localizeAPI->text("mode_3", "100 seconds");
-        TEXT_RENDERING(text)->text = "";
+        TEXT_RENDERING(text)->text = localizeAPI->text("help_mode3_1", "blabla");
+        TEXT_RENDERING(postscriptum)->text = localizeAPI->text("help_click_continue", "Click to continue");
     }
 }
 
 GameState HelpStateManager::Update(float dt) {
 	if (!theTouchInputManager.isTouched(0) && theTouchInputManager.wasTouched(0)) {
 		if (state == HowToPlay) {
+            if (mode == Normal) {
+                TEXT_RENDERING(text)->text = localizeAPI->text("help_mode1_2", "blabla");
+            } else if (mode == TilesAttack) {
+                TEXT_RENDERING(text)->text = localizeAPI->text("help_mode2_2", "blabla");
+            } else {
+                TEXT_RENDERING(text)->text = localizeAPI->text("help_mode3_2", "blabla");
+            }
+            
+            TEXT_RENDERING(postscriptum)->text = localizeAPI->text("help_click_play", "Click to play");
 			state = Objective;
+            
 		} else {
 			return oldState;
 		}
@@ -99,5 +114,6 @@ void HelpStateManager::Exit() {
 	LOGI("%s", __PRETTY_FUNCTION__);
 	TEXT_RENDERING(text)->hide = true;
     TEXT_RENDERING(title)->hide = true;
+    TEXT_RENDERING(postscriptum)->hide =  true;
     theRenderingSystem.unloadAtlas("help");
 }
