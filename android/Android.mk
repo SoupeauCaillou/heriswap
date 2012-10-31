@@ -51,7 +51,6 @@ LOCAL_SRC_FILES := \
 	../sources/modes/Go100SecondsModeManager.cpp \
 	../sources/modes/InGameUiHelper.cpp \
     ../sources/api/android/StorageAPIAndroidImpl.cpp \
-    ../sources/api/android/CommunicationAPIAndroidImpl.cpp \
     ../sac/android/sacjnilib.cpp
 
 LOCAL_STATIC_LIBRARIES := sac png tremor jsoncpp
