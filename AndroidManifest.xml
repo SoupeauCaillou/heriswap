@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.damsy.soupeaucaillou.heriswap"
-    android:versionCode="9"
-    android:versionName="1.0.8"
+    android:versionCode="1000"
+    android:versionName="1.0.9"
     android:installLocation="auto"
     >
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -30,11 +30,11 @@
             </intent-filter>
         </activity>
 
-		<activity android:name="com.swarmconnect.SwarmMainActivity"
-				android:configChanges="orientation|keyboardHidden"
-				android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-				android:windowSoftInputMode="stateHidden" />
-		<service android:name="com.swarmconnect.NotificationService" android:process=":swarm"/>
+	<activity android:name="com.swarmconnect.SwarmMainActivity"
+	    android:configChanges="orientation|keyboardHidden"
+	    android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+	    android:windowSoftInputMode="stateHidden" />
+	<service android:name="com.swarmconnect.NotificationService" android:process=":swarm"/>
 
 		<activity android:name="com.chartboost.sdk.CBDialogActivity"
 				android:configChanges="orientation|keyboard|keyboardHidden"

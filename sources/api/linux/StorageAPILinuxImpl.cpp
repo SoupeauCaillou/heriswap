@@ -112,7 +112,7 @@ void StorageAPILinuxImpl::submitScore(Score scr, GameMode mode, Difficulty diff)
     #else
 	for (int i=0; i<5; i++) {
 		bool replace = false;
-		if (mode==Normal || mode==RandomNameToBeChanged) {
+		if (mode==Normal || mode==Go100Seconds) {
 			replace = (scores[mode][diff][i].points == 0 || scr.points > scores[mode][diff][i].points);
 		} else {
 			replace = (scores[mode][diff][i].time <= 0 || scr.time < scores[mode][diff][i].time);
@@ -143,7 +143,7 @@ std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(GameMode mode, D
     request(dbPath, tmp.str().c_str(), &result, callbackScore);
    #else
 	for (int i=0; i<5; i++) {
-		if (mode==Normal || mode==RandomNameToBeChanged) {
+		if (mode==Normal || mode==Go100Seconds) {
 			if (scores[mode][difficulty][i].points == 0) {
 				break;
 			} else {
@@ -173,7 +173,7 @@ bool StorageAPILinuxImpl::soundEnable(bool switchIt) {
     }
     return (s == "on");
     #else
-    return false;
+    return true;
     #endif
 }
 

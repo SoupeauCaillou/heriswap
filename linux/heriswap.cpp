@@ -291,11 +291,7 @@ static void updateAndRender() {
 extern bool __log_enabled;
 int main(int argc, char** argv) {
 	Vector2 reso16_9(394, 700);
-#ifdef EMSCRIPTEN
-	Vector2 reso16_10(300, 480);
-#else
-	Vector2 reso16_10(430, 700);
-#endif
+	Vector2 reso16_10(480, 800);
 	Vector2* reso = &reso16_10;
 
 #ifdef EMSCRIPTEN
@@ -357,9 +353,8 @@ int main(int argc, char** argv) {
 
 	game->sacInit(reso->X,reso->Y);
 
-#ifndef EMSCRIPTEN
-    // setlocale( LC_ALL, "" );
 	loc->init();
+#ifndef EMSCRIPTEN
 	glfwSetCharCallback(myCharCallback);
 #endif
 
@@ -406,7 +401,7 @@ int main(int argc, char** argv) {
 #ifndef EMSCRIPTEN
 	updateAndRenderLoop();
 #else
-	emscripten_set_main_loop(updateAndRender, 60);
+	emscripten_set_main_loop(updateAndRender, 60, 0);
 #endif
 
 	return 0;
