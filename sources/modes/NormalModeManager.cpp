@@ -241,6 +241,7 @@ void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 void NormalGameModeManager::startLevel(int lvl) {
 	level = lvl;
 
+	successMgr->sLevel10(lvl);
 
 	LOGI("New level: %d", lvl);
 
