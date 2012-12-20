@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="languages">"en"</string>
 	<string name="continue_">"Continue"</string>
 	<string name="help">"Help"</string>
 	<string name="give_up">"Quit"</string>
@@ -37,10 +36,11 @@
 	<string name="average_score">"Recent scores avg:"</string>
 	<string name="help_click_continue">"-touch to continue-"</string>
 	<string name="help_click_play">"-touch to play-"</string>
-	<string name="help_mode1_1">"The goal is to score the most points.\n\nAligning at least 3 identical leaves ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1×.\n\nSwap 2 neighbouring leaves ×feuille2,1,1× ×feuille3,1,1× to create a combination and earn points.\n\nGame is time limited.\n\n"</string>
-	<string name="help_mode1_2">"The ×herisson_2_5,2,1.6× shows how much time is left, and the game is over when it reaches screen's right edge. Tap him to get a hint!\n\nThe ×feuille5,1,1× on its back scores bonus points.\n\nFor each successful combination extra time is added. The best way to earn lot of time is to complete a level. This is done by clearing the top branch of all its leaves."</string>
-	<string name="help_mode2_1">"The goal is to remove all the leaves ×feuille2,1,1× from the tree as fast as possible.\n\nThis is done by aligning at least 3 identical leaves ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1×.\n\nSwap 2 neighbouring leaves ×feuille2,1,1× ×feuille3,1,1× to create a combination.\n\n"</string>
+	<string name="help_general_1">"Align at least 3 identical leaves ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1×.\n\nSwap 2 neighbouring leaves ×feuille2,1,1× ×feuille3,1,1× to create a combination and earn points."</string>
+	<string name="help_general_2">"The ×herisson_2_5,2,1.6× shows how much time is left, and the game is over when it reaches screen's right edge.\n\nThe ×feuille5,1,1× on its back scores bonus points."</string>
+	<string name="help_mode1_1">"The goal is to score the most points.\n\nGame is time limited."</string>
+	<string name="help_mode1_2">"Tap him to get a hint!\n\nFor each successful combination extra time is added. The best way to earn lot of time is to complete a level. This is done by clearing the top branch of all its leaves."</string>
+	<string name="help_mode2_1">"The goal is to remove all the leaves ×feuille2,1,1× from the tree as fast as possible.\n\nThis is done by aligning at least 3 identical leaves ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1×.\n\nSwap 2 neighbouring leaves ×feuille2,1,1× ×feuille3,1,1× to create a combination."</string>
 	<string name="help_mode2_2">"The ×herisson_2_5,2,1.6× shows the progress. Game is finished when it reaches screen's right edge.\n\nEvery combination using bonus type leaves ×feuille5,1,1× score double."</string>
-	<string name="help_mode3_1">"The goal is to score the most points in exactly 100 seconds.\n\nThe goal is to score the most points.\n\nAligning at least 3 identical leaves ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1×.\n\nSwap 2 neighbouring leaves ×feuille2,1,1× ×feuille3,1,1× to create a combination and earn points.\n\n"</string>
-	<string name="help_mode3_2">"The ×herisson_2_5,2,1.6× shows how much time is left, and the game is over when it reaches screen's right edge.\n\nThe ×feuille5,1,1× on its back scores bonus points."</string>
+	<string name="help_mode3_1">"The goal is to score the most points in exactly 100 seconds."</string>
 </resources>

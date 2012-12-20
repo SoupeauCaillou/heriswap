@@ -39,7 +39,7 @@ void HelpStateManager::Setup() {
     TEXT_RENDERING(title)->positioning = TextRenderingComponent::CENTER;
     TEXT_RENDERING(title)->color = green;
     TEXT_RENDERING(title)->charHeight = PlacementHelper::GimpHeightToScreen(70);
- 
+
 	// title text + bg
 	text = theEntityManager.CreateEntity();
 	ADD_COMPONENT(text, Transformation);
@@ -51,7 +51,7 @@ void HelpStateManager::Setup() {
 	TEXT_RENDERING(text)->positioning = TextRenderingComponent::LEFT;
     TEXT_RENDERING(text)->flags |= TextRenderingComponent::MultiLineBit;
 	TEXT_RENDERING(text)->color = green;
-	TEXT_RENDERING(text)->charHeight = PlacementHelper::GimpHeightToScreen(55);
+	TEXT_RENDERING(text)->charHeight = PlacementHelper::GimpHeightToScreen(50);
 
     postscriptum = theEntityManager.CreateEntity();
     ADD_COMPONENT(postscriptum, Transformation);
@@ -75,7 +75,8 @@ void HelpStateManager::Enter() {
     TEXT_RENDERING(title)->hide = false;
     TEXT_RENDERING(postscriptum)->hide =  false;
     if (mode == Normal) {
-        TEXT_RENDERING(text)->text = localizeAPI->text("help_mode1_1", "blabla");
+        TEXT_RENDERING(text)->text = localizeAPI->text("help_mode1_1", "blabla") + "\n\n" +
+	localizeAPI->text("help_general_1", "blabla");
         TEXT_RENDERING(title)->text = localizeAPI->text("mode_1", "Score race");
         TEXT_RENDERING(postscriptum)->text = localizeAPI->text("help_click_continue", "Click to continue");
     } else if (mode == TilesAttack) {
@@ -84,7 +85,8 @@ void HelpStateManager::Enter() {
         TEXT_RENDERING(postscriptum)->text = localizeAPI->text("help_click_continue", "Click to continue");
     } else {
         TEXT_RENDERING(title)->text = localizeAPI->text("mode_3", "100 seconds");
-        TEXT_RENDERING(text)->text = localizeAPI->text("help_mode3_1", "blabla");
+        TEXT_RENDERING(text)->text = localizeAPI->text("help_mode3_1", "blabla") + "\n\n" +
+	localizeAPI->text("help_general_1", "blabla");
         TEXT_RENDERING(postscriptum)->text = localizeAPI->text("help_click_continue", "Click to continue");
     }
 }
@@ -93,16 +95,17 @@ GameState HelpStateManager::Update(float dt) {
 	if (!theTouchInputManager.isTouched(0) && theTouchInputManager.wasTouched(0)) {
 		if (state == HowToPlay) {
             if (mode == Normal) {
-                TEXT_RENDERING(text)->text = localizeAPI->text("help_mode1_2", "blabla");
+                TEXT_RENDERING(text)->text = localizeAPI->text("help_general_2", "blabla") + " " +
+                localizeAPI->text("help_mode1_2", "blabla");
             } else if (mode == TilesAttack) {
                 TEXT_RENDERING(text)->text = localizeAPI->text("help_mode2_2", "blabla");
             } else {
-                TEXT_RENDERING(text)->text = localizeAPI->text("help_mode3_2", "blabla");
+                TEXT_RENDERING(text)->text = localizeAPI->text("help_general_2", "blabla");
             }
-            
+
             TEXT_RENDERING(postscriptum)->text = localizeAPI->text("help_click_play", "Click to play");
 			state = Objective;
-            
+
 		} else {
 			return oldState;
 		}
