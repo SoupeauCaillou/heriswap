@@ -123,7 +123,7 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(average)->charHeight = PlacementHelper::GimpHeightToScreen(54);
 	TEXT_RENDERING(average)->hide = true;
 	TEXT_RENDERING(average)->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
-	
+
 	// play text
 	playText = theEntityManager.CreateEntity();
 	ADD_COMPONENT(playText, Transformation);
@@ -163,7 +163,7 @@ void ModeMenuStateManager::Setup() {
 	CONTAINER(bDifficulty)->includeChildren = true;
 	ADD_COMPONENT(bDifficulty, Button);
 	ADD_COMPONENT(bDifficulty, Sound);
-	
+
 	// your score
 	yourScore = theTextRenderingSystem.CreateEntity();
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
@@ -280,7 +280,7 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 			trcL->hide = true;
 		}
 	}
-	
+
 	if (avg > 0) {
 		std::stringstream a;
 		a.precision(1);
@@ -340,9 +340,10 @@ void ModeMenuStateManager::Enter() {
         TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Medium") + " }";
     else
         TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
-        
+
     CONTAINER(playContainer)->enable = CONTAINER(bDifficulty)->enable = true;
-    
+
+    #ifdef ANDROID
     if (gameOverState == NoGame) {
 		if (!communicationAPI->swarmInstalled()) {
 			BUTTON(enableSwarmContainer)->enabled = true;
@@ -350,6 +351,7 @@ void ModeMenuStateManager::Enter() {
 			CONTAINER(enableSwarmContainer)->enable = true;
     	}
     }
+    #endif
 }
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
@@ -518,7 +520,7 @@ void ModeMenuStateManager::Exit() {
 
 	successMgr->NewGame(difficulty);
 
-    CONTAINER(playContainer)->enable = 
+    CONTAINER(playContainer)->enable =
     	CONTAINER(bDifficulty)->enable =
     	CONTAINER(enableSwarmContainer)->enable = false;
 }
