@@ -2,7 +2,9 @@
 	"folders":
 	[
 		{
-			"path": "/home/gautier/code/c/sac/heriswap"
+            "path": ".",
+            "folder_exclude_patterns" : [".*"],
+            "file_exclude_patterns": [".*", "*.sln", "*.cproj*"]
 		}
 	]
 }

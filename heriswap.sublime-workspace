@@ -1,0 +1,286 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"scr",
+				"screenH"
+			],
+			[
+				"minS",
+				"minScaleY"
+			],
+			[
+				"max",
+				"maxScaleY"
+			],
+			[
+				"va",
+				"value_y"
+			],
+			[
+				"valu",
+				"value_ymin"
+			],
+			[
+				"value",
+				"value_y"
+			],
+			[
+				"poin",
+				"pointsList"
+			],
+			[
+				"I",
+				"IntersectionUtil"
+			],
+			[
+				"inc",
+				"include"
+			],
+			[
+				"x",
+				"x"
+			],
+			[
+				"TwEventM",
+				"TwEventMouseButtonGLFW"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/home/jordane/Dev/fond_ecran2/prototype.sublime-project",
+			"settings":
+			{
+				"buffer_size": 168,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 372.0,
+		"selected_items":
+		[
+			[
+				"pac",
+				"Package Control: List Packages"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/jordane/.config/sublime-text-2/Packages/Default/Default (Linux).sublime-keymap",
+		"/home/jordane/Dev/fond_ecran2/sac/systems/GraphSystem.h",
+		"/home/jordane/Documents/Documents/CV.tex",
+		"/home/jordane/Dev/fond_ecran/sources/PixelManager.cpp",
+		"/home/jordane/Dev/fond_ecran/.classpath",
+		"/home/jordane/Dev/fond_ecran2/sources/PrototypeGame.h",
+		"/home/jordane/Dev/fond_ecran2/sources/PixelManager.cpp",
+		"/home/jordane/Dev/fond_ecran2/sources/PrototypeGame.cpp",
+		"/home/jordane/untitlced.sch",
+		"/home/jordane/Dev/fond_ecran2/sources/PixelManager.h",
+		"/home/jordane/Dev/fond_ecran/sources/PrototypeGame.cpp",
+		"/home/jordane/Dev/fond_ecran2/sac/build/cmake/toolchains/linux.cmake",
+		"/home/jordane/Dev/fond_ecran2/sac/base/Game.h",
+		"/home/jordane/Dev/fond_ecran2/sac/base/Game.cpp",
+		"/home/jordane/Dev/fond_ecran2/sac/systems/GraphSystem.cpp",
+		"/home/jordane/Dev/fond_ecran2/sources/Makefile",
+		"/home/jordane/Dev/fond_ecran/sources/PrototypeGame.h",
+		"/home/jordane/Dev/fond_ecran/sources/PixelManager.h",
+		"/home/jordane/Dev/prototype/sources/PrototypeGame.h",
+		"/home/jordane/Dev/prototype/sac/systems/RenderingSystem.cpp",
+		"/home/jordane/Dev/prototype/sac/util/LevelEditor.h",
+		"/home/jordane/Dev/prototype/sac/util/LevelEditor.cpp",
+		"/home/jordane/Dev/sac_libs_dep/AntTweakBar/include/AntTweakBar.h",
+		"/home/jordane/Dev/shell-message-notifier/README",
+		"/home/jordane/Dev/prototype/CMakeLists.txt",
+		"/home/jordane/Dev/prototype/prototype.sublime-project"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"/home/jordane/Dev/fond_ecran2/sac",
+			"/home/jordane/Dev/prototype/sac",
+			"/home/jordane/Dev/prototype"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"\"'\");\n",
+			"SAC_ASSETS_DIR",
+			"renderThreadContext",
+			"}\n",
+			"Math",
+			"hide",
+			"DIVIDE",
+			"divide",
+			"Y",
+			"X",
+			"x",
+			"rand",
+			"vector2",
+			"TwEventCharGLFWPERSO",
+			"TwEventKeyGLFWPERSO",
+			"TwEventMouseWheelGLFWPERSO",
+			"TwEventMousePosGLFWPERSO",
+			"TwEventMouseButtonGLFWPERSO",
+			"buttonCallback",
+			"glfwSetMouseButtonCallback\nglfwSetMouseButtonCallback\nTwEventMouseButtonGLFW",
+			"glfwSetMouseButtonCallback\nglfwSetMouseButtonCallback\nGLFWmousewheelfun",
+			"glfwSetMouseButtonCallback\nglfwSetMouseButtonCallback\nglfwSetMouseButtonCallback",
+			"TwEventCharGLFW",
+			"TwEventKeyGLFW",
+			"TwEventMouseWheelGLFW",
+			"TwMouseMotion",
+			"TwEventMousePosGLFW",
+			"TwEventMouseButtonGLFW",
+			"TwEvent",
+			"TwMouse",
+			"TwKey",
+			"TwKeyTes",
+			"TwKeyPressed",
+			"sac_libs_"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"y",
+			"x",
+			"glm::vec2",
+			"_TwEventCharGLFW",
+			"_TwEventKeyGLFW",
+			"_TwEventMouseWheelGLFW",
+			"_TwEventMousePosGLFW",
+			"_TwEventMouseButtonGLFW"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/home/jordane/Dev/fond_ecran2/prototype.sublime-project",
+					"settings":
+					{
+						"buffer_size": 168,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								168,
+								168
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 148.0,
+	"status_bar_visible": true
+}
