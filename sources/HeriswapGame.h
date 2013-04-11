@@ -23,7 +23,7 @@
 #include <string>
 #include <vector>
 
-#include <base/MathUtil.h>
+#include <glm/glm.hpp>
 
 #include "systems/RenderingSystem.h"
 
@@ -42,23 +42,27 @@ class NameInputAPI;
 class PrivateData;
 class HeriswapGame : public Game {
 	public:
-		HeriswapGame(AssetAPI* asset, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* successAPI, LocalizeAPI* localizeAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI, VibrateAPI* vibAPI);
+		HeriswapGame();
         ~HeriswapGame();
+
+        bool wantsAPI(ContextAPI::Enum api) const;
+
+		void sacInit(int windowW, int windowH);
 		void init(const uint8_t* in = 0, int size = 0);
+		void quickInit();
 		void tick(float dt);
 		void togglePause(bool activate);
 		void toggleShowCombi(bool enabled);
         void backPressed();
 		void setMode();
 		int saveState(uint8_t** out);
-		void sacInit(int windowW, int windowH);
-
+		
         void stateChanged(GameState from, GameState to);
 
 		static bool inGameState(GameState state);
 		static bool pausableState(GameState state);
-		static Vector2 GridCoordsToPosition(int i, int j, int s);
-		static Vector2 CellSize(int gridSize, int cellType);
+		static glm::vec2 GridCoordsToPosition(int i, int j, int s);
+		static glm::vec2 CellSize(int gridSize, int cellType);
 		static float CellContentScale();
 		static std::string cellTypeToTextureNameAndRotation(int type, float* rotation);
 		static float cellTypeToRotation(int type);

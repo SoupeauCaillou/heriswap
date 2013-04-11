@@ -25,7 +25,7 @@
 
 typedef struct FeuilleOrientee {
 	Entity e;
-	Vector2 pos;
+	glm::vec2 pos;
 	int sens;
 } FeuilleOrientee;
 

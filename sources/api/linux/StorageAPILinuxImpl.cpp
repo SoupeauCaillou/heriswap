@@ -19,7 +19,7 @@
 #include "StorageAPILinuxImpl.h"
 #include <string>
 #include <sstream>
-#ifndef EMSCRIPTEN
+#ifndef SAC_EMSCRIPTEN
 #include <sqlite3.h>
 #endif
 #include "base/Log.h"
@@ -28,13 +28,13 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#ifndef EMSCRIPTEN
+#ifndef SAC_EMSCRIPTEN
 static bool request(const std::string& dbPath, std::string s, void* res, int (*callbackP)(void*,int,char**,char**)) {
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc = sqlite3_open(dbPath.c_str(), &db);
     if( rc ){
-        LOGI("Can't open database %s: %s\n", dbPath.c_str(), sqlite3_errmsg(db));
+        LOGI("Can't open database '" << dbPath.c_str() << "': '" << sqlite3_errmsg(db) << "'");
         sqlite3_close(db);
         return false;
     }
@@ -46,7 +46,7 @@ static bool request(const std::string& dbPath, std::string s, void* res, int (*c
         rc = sqlite3_exec(db, s.c_str(), callback, res, &zErrMsg);
 
     if( rc!=SQLITE_OK ){
-        LOGI("SQL error: %s (asked = %s)\n", zErrMsg, s.c_str());
+        LOGI("SQL error: '" << zErrMsg << "' (asked = '" << s.c_str() << "')");
         sqlite3_free(zErrMsg);
     }
     sqlite3_close(db);
@@ -55,7 +55,7 @@ static bool request(const std::string& dbPath, std::string s, void* res, int (*c
 #endif
 
 void StorageAPILinuxImpl::init() {
-	#ifndef EMSCRIPTEN
+	#ifndef SAC_EMSCRIPTEN
 	std::stringstream ss;
 	char * pPath = getenv ("XDG_DATA_HOME");
 	if (pPath) {
@@ -72,7 +72,7 @@ void StorageAPILinuxImpl::init() {
 	int st = stat(dbPath.c_str(), &statFolder);
 	if (st || (statFolder.st_mode & S_IFMT) != S_IFDIR) {
 		if (mkdir(dbPath.c_str(), S_IRWXU | S_IWGRP | S_IROTH)) {
-			std::cerr << "Failed to create : '%s'" <<  dbPath << std::endl;
+            LOGE("Failed to create : '" <<  dbPath <<  "'");
 			return;
 		}
 	}
@@ -105,7 +105,7 @@ void StorageAPILinuxImpl::init() {
     #endif
 }
 void StorageAPILinuxImpl::submitScore(Score scr, GameMode mode, Difficulty diff) {
-	#ifndef EMSCRIPTEN
+	#ifndef SAC_EMSCRIPTEN
     std::stringstream tmp;
     tmp << "INSERT INTO score VALUES ('" << scr.name <<"'," << (int)mode <<","<< (int)diff<<","<<scr.points<<","<<scr.time<<","<<scr.level<<")";
     request(dbPath, tmp.str().c_str(), 0, 0);
@@ -130,7 +130,7 @@ void StorageAPILinuxImpl::submitScore(Score scr, GameMode mode, Difficulty diff)
 
 std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(GameMode mode, Difficulty difficulty, float& avg) {
     std::vector<StorageAPI::Score> result;
-	#ifndef EMSCRIPTEN
+	#ifndef SAC_EMSCRIPTEN
     std::stringstream tmp;
 		tmp << "select * from score where mode= "<< (int)mode;
 	if  (difficulty != SelectAllDifficulty)
@@ -163,13 +163,13 @@ std::vector<StorageAPI::Score> StorageAPILinuxImpl::savedScores(GameMode mode, D
 }
 
 bool StorageAPILinuxImpl::soundEnable(bool switchIt) {
-	#ifndef EMSCRIPTEN
+	#ifndef SAC_EMSCRIPTEN
     std::string s;
     request(dbPath, "select value from info where opt like 'sound'", &s, 0);
     if (switchIt) {
         if (s=="on") request(dbPath, "UPDATE info SET value='off' where opt='sound'",0, 0);
         else request(dbPath, "UPDATE info SET value='on' where opt='sound'",0, 0);
-        LOGI("switched to !%s", s.c_str());
+        LOGI("switched to !'" << s.c_str() << "'");
     }
     return (s == "on");
     #else
@@ -178,7 +178,7 @@ bool StorageAPILinuxImpl::soundEnable(bool switchIt) {
 }
 
 int StorageAPILinuxImpl::getGameCountBeforeNextAd() {
-	#ifndef EMSCRIPTEN
+	#ifndef SAC_EMSCRIPTEN
     std::string s;
     request(dbPath, "select value from info where opt='gameb4Ads'", &s, 0);
     return std::atoi(s.c_str());
@@ -188,7 +188,7 @@ int StorageAPILinuxImpl::getGameCountBeforeNextAd() {
 }
 
 void StorageAPILinuxImpl::setGameCountBeforeNextAd(int c) {
-	#ifndef EMSCRIPTEN
+	#ifndef SAC_EMSCRIPTEN
     std::stringstream s;
     s << "update info set value='" << c << "' where opt='gameb4Ads'";
     request(dbPath, s.str(),0, 0);
@@ -196,7 +196,7 @@ void StorageAPILinuxImpl::setGameCountBeforeNextAd(int c) {
 }
 
 int StorageAPILinuxImpl::getSavedGamePointsSum() {
-	#ifndef EMSCRIPTEN
+	#ifndef SAC_EMSCRIPTEN
     std::string s = "";
     request(dbPath, "select sum(points) from score", &s, 0);
     return atoi(s.c_str());
@@ -206,7 +206,7 @@ int StorageAPILinuxImpl::getSavedGamePointsSum() {
 }
 
 bool StorageAPILinuxImpl::everyModesPlayed() {
-	#ifndef EMSCRIPTEN
+	#ifndef SAC_EMSCRIPTEN
     int s = 0;
     request(dbPath, "select distinct difficulty,mode from score", &s, callbackResultSize);
     return (s==6);

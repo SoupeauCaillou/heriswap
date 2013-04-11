@@ -22,7 +22,8 @@
 #include <sstream>
 
 #include <base/PlacementHelper.h>
-#include <base/MathUtil.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
 
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
@@ -45,20 +46,20 @@ void Go100SecondsGameModeManager::Setup() {
 	validBranchPos.clear();
 	#include "PositionFeuilles.h"
 	for (int i=0; i<8*6; i++) {
-		Vector2 v(PlacementHelper::GimpXToScreen(pos[3*i]), PlacementHelper::GimpYToScreen(pos[3*i+1]));
-		Render truc = {v, MathUtil::ToRadians(pos[3*i+2])};
+		glm::vec2 v(PlacementHelper::GimpXToScreen(pos[3*i]), PlacementHelper::GimpYToScreen(pos[3*i+1]));
+		Render truc = {v, glm::radians<float>(pos[3*i+2])};
 		validBranchPos.push_back(truc);
 	}
 
 	for (int i = 0; i < 100;  i++) {
-		squallLeaves.push_back(GameModeManager::createAndAddLeave(0, Vector2(0, 0), MathUtil::RandomFloat(7)));
+		squallLeaves.push_back(GameModeManager::createAndAddLeave(0, glm::vec2(0, 0), glm::linearRand(0.f, 7.f)));
 		Entity e = squallLeaves[i];
 
 		ADD_COMPONENT(e, Physics);
-		PHYSICS(e)->mass = MathUtil::RandomFloatInRange(1.f, 10.f);
-		PHYSICS(e)->gravity = Vector2(0,0*-10.f);
+		PHYSICS(e)->mass = glm::linearRand(1.f, 10.f);
+		PHYSICS(e)->gravity = glm::vec2(0 ,0*-10.f);
 
-		RENDERING(e)->hide = true;
+		RENDERING(e)->show = false;
 	}
 }
 #define RATE 1
@@ -68,11 +69,11 @@ void Go100SecondsGameModeManager::Enter() {
 	points = 0;
 	squallGo = false;
 	squallDuration = 0.f;
-	bonus = MathUtil::RandomInt(theGridSystem.Types);
+	bonus = glm::round(glm::linearRand(0.f, (float)theGridSystem.Types));
 	pts.clear();
-	pts.push_back(Vector2(0,0));
+	pts.push_back(glm::vec2(0.f, 0.f));
 
-	pts.push_back(Vector2(limit,1));//need limit leaves to end game
+	pts.push_back(glm::vec2(limit, 1.f));//need limit leaves to end game
 
 	generateLeaves(0, 8);
 
@@ -94,21 +95,21 @@ void Go100SecondsGameModeManager::squall() {
 	for (unsigned int i = 0; i < squallLeaves.size();  i++) {
 
 		Entity  e = squallLeaves[i];
-		TRANSFORM(e)->position = Vector2(MathUtil::RandomFloatInRange(minX, maxX), MathUtil::RandomFloatInRange(minY, maxY));
-		TRANSFORM(e)->size = HeriswapGame::CellSize(8, 0) * HeriswapGame::CellContentScale() * MathUtil::RandomFloatInRange(0.35f,1.2f);
+		TRANSFORM(e)->position = glm::vec2(glm::linearRand(minX, maxX), glm::linearRand(minY, maxY));
+		TRANSFORM(e)->size = HeriswapGame::CellSize(8, 0) * HeriswapGame::CellContentScale() * glm::linearRand(0.35f,1.2f);
 		RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(bonus, &TRANSFORM(e)->rotation));
-		RENDERING(e)->hide = false;
+		RENDERING(e)->show = true;
 
 		Force force;
-		force.vector = Vector2(-45, 0);
-		force.point =  Vector2( 0, MathUtil::RandomFloatInRange(TRANSFORM(e)->size.Y/48., TRANSFORM(e)->size.Y/2.));
+		force.vector = glm::vec2(-45, 0);
+		force.point =  glm::vec2( 0, glm::linearRand(TRANSFORM(e)->size.y/48.f, TRANSFORM(e)->size.y/2.f));
 
-		std::pair<Force, float> f (force, 1.);
+		std::pair<Force, float> f (force, 1.f);
 		PHYSICS(e)->forces.push_back(f);
-		PHYSICS(e)->mass = MathUtil::RandomFloatInRange(1.f, 10.f); // go update (dumb PhysicsSystem!)
+		PHYSICS(e)->mass = glm::linearRand(1.f, 10.f); // go update (dumb PhysicsSystem!)
 	}
 	//herisson's Y. He'll change his bonus behind this leaf
-	TRANSFORM(squallLeaves[0])->position = Vector2(MathUtil::RandomFloatInRange(minX, maxX), PlacementHelper::GimpYToScreen(1028));
+	TRANSFORM(squallLeaves[0])->position = glm::vec2(glm::linearRand(minX, maxX), PlacementHelper::GimpYToScreen(1028));
 	TRANSFORM(squallLeaves[0])->size = HeriswapGame::CellSize(8, 0) * HeriswapGame::CellContentScale();
 }
 
@@ -129,19 +130,19 @@ void Go100SecondsGameModeManager::GameUpdate(float dt, GameState state) {
 	if (squallGo) {
 		squallDuration += dt;
 		//if the central leaf is next to the herisson, change his bonus
-		if (TRANSFORM(squallLeaves[0])->position.X <= TRANSFORM(herisson)->position.X) {
+		if (TRANSFORM(squallLeaves[0])->position.x <= TRANSFORM(herisson)->position.x) {
 			LoadHerissonTexture(bonus+1);
 			RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 		}
 		//make the tree leaves grow ...
 		for (unsigned int i = 0; i < branchLeaves.size(); i++) {
 			TRANSFORM(branchLeaves[i].e)->size =
-				HeriswapGame::CellSize(8, bonus) * HeriswapGame::CellContentScale() * MathUtil::Min(squallDuration, 1.f);
+				HeriswapGame::CellSize(8, bonus) * HeriswapGame::CellContentScale() * glm::min(squallDuration, 1.f);
 		}
 		//check if every leaves has gone...
 		bool ended = true;
 		for (unsigned int i = 0 ; i < squallLeaves.size() ; i++) {
-			if (TRANSFORM(squallLeaves[i])->position.X >= -PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(squallLeaves[i])->size.X)
+			if (TRANSFORM(squallLeaves[i])->position.x >= -PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(squallLeaves[i])->size.x)
 				ended = false;
 		}
 		//YES : stop the squall, keep playing !
@@ -149,8 +150,8 @@ void Go100SecondsGameModeManager::GameUpdate(float dt, GameState state) {
 			squallGo = false;
 			squallDuration = 0.f;
 			for (unsigned int i = 0; i < squallLeaves.size(); i++) {
-				RENDERING(squallLeaves[i])->hide = true;
-				PHYSICS(squallLeaves[i])->linearVelocity = Vector2::Zero;
+				RENDERING(squallLeaves[i])->show = false;
+				PHYSICS(squallLeaves[i])->linearVelocity = glm::vec2(0.f);
 				PHYSICS(squallLeaves[i])->angularVelocity = 0.f;
 				PHYSICS(squallLeaves[i])->mass = 0.f; // stop update (dumb PhysicsSystem!)
 			}
@@ -161,11 +162,11 @@ void Go100SecondsGameModeManager::GameUpdate(float dt, GameState state) {
 		//oh noes, no longer leaf on tree ! Give me new one
 		if (branchLeaves.size() == 0) {
 			//Ok, but first u'll have a new bonus
-			bonus = MathUtil::RandomInt(theGridSystem.Types);
+			bonus = glm::round(glm::linearRand(0.f, (float)theGridSystem.Types));
 			//And leaves aren't magic, they need to grow ... be patient.
 			generateLeaves(0, 8);
 			for (unsigned int i = 0; i < branchLeaves.size(); i++)
-				TRANSFORM(branchLeaves[i].e)->size = Vector2::Zero;
+				TRANSFORM(branchLeaves[i].e)->size = glm::vec2(0.f);
 			//The squall will make them grow
 			squall();
 		}
@@ -174,7 +175,7 @@ void Go100SecondsGameModeManager::GameUpdate(float dt, GameState state) {
 }
 
 float Go100SecondsGameModeManager::GameProgressPercent() {
-	return MathUtil::Min(1.0f, (float)time/limit);
+	return glm::min(1.0f, (float)time/limit);
 }
 
 void Go100SecondsGameModeManager::UiUpdate(float dt) {
@@ -196,7 +197,7 @@ void Go100SecondsGameModeManager::UiUpdate(float dt) {
 			std::stringstream text;
 			text << countBranchLeavesOfType(i);
 			TEXT_RENDERING(debugEntities[2*i+1])->text = text.str();
-			TEXT_RENDERING(debugEntities[2*i+1])->hide = false;
+			TEXT_RENDERING(debugEntities[2*i+1])->show = true;
 			TEXT_RENDERING(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
 		}
 	}
@@ -213,7 +214,7 @@ void Go100SecondsGameModeManager::ScoreCalc(int nb, unsigned int type) {
 		case DifficultyMedium: score *= 2; break;
 		case DifficultyHard: score *= 4; break;
 		default:
-			LOGE("Unhandled difficulty: %d", diff);
+			LOGE("Unhandled difficulty: '" << diff << "'");
 	}
 
 	if (type == bonus) {
@@ -231,7 +232,7 @@ void Go100SecondsGameModeManager::TogglePauseDisplay(bool paused) {
 }
 
 void Go100SecondsGameModeManager::WillScore(int count, int type, std::vector<BranchLeaf>& LeavesToDelete) {
-    int nb = MathUtil::Min((int)branchLeaves.size(), count);
+    int nb = glm::min((int)branchLeaves.size(), count);
     for (unsigned int i=0; nb>0 && i<branchLeaves.size(); i++) {
 		CombinationMark::markCellInCombination(branchLeaves[i].e);
         LeavesToDelete.push_back(branchLeaves[i]);
@@ -252,7 +253,7 @@ int Go100SecondsGameModeManager::saveInternalState(uint8_t** out) {
 const uint8_t* Go100SecondsGameModeManager::restoreInternalState(const uint8_t* in, int size) {
     in = GameModeManager::restoreInternalState(in, size);
 
-    TRANSFORM(herisson)->position.X = GameModeManager::position(time);
+    TRANSFORM(herisson)->position.x = GameModeManager::position(time);
 
     return in;
 }

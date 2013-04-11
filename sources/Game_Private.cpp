@@ -21,8 +21,11 @@
 
 #include <base/PlacementHelper.h>
 
+#include <glm/glm.hpp>
+
 #include "systems/ButtonSystem.h"
 #include "systems/ADSRSystem.h"
+#include "systems/TransformationSystem.h"
 
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
@@ -51,12 +54,12 @@
 #include "GameState.h"
 
 
-PrivateData::PrivateData(HeriswapGame* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad, CommunicationAPI* comAPI) {
+PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManager* successMgr) {
      mode = Normal;
-     mode2Manager[Normal] = new NormalGameModeManager(game, successMgr, storagee);
-     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game, successMgr, storagee);
-     mode2Manager[Go100Seconds] = new Go100SecondsGameModeManager(game, successMgr, storagee);
-     storage = storagee;
+     mode2Manager[Normal] = new NormalGameModeManager(game, successMgr, context->storageAPI);
+     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game, successMgr, context->storageAPI);
+     mode2Manager[Go100Seconds] = new Go100SecondsGameModeManager(game, successMgr, context->storageAPI);
+     storage = context->storageAPI;
 
      soundButton = theEntityManager.CreateEntity();
      socialGamNet = theEntityManager.CreateEntity();
@@ -69,14 +72,14 @@ PrivateData::PrivateData(HeriswapGame* game, StorageAPI* storagee, NameInputAPI*
      state2Manager[Delete] = new DeleteGameStateManager(successMgr);
      state2Manager[Fall] = new FallGameStateManager();
      state2Manager[LevelChanged] = new LevelStateManager(static_cast<NormalGameModeManager*> (mode2Manager[Normal]));
-     state2Manager[Pause] = new PauseStateManager(lAPI);
+     state2Manager[Pause] = new PauseStateManager(context->localizeAPI);
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
-     state2Manager[MainMenu] = new MainMenuGameStateManager(lAPI, sAPI);
-     state2Manager[ModeMenu] = new ModeMenuStateManager(storage,inputUI,successMgr,lAPI, sAPI, comAPI);
-     state2Manager[Help] = new HelpStateManager(lAPI);
-     state2Manager[Ads] = new AdsStateManager(ad, storage, successMgr);
-     state2Manager[RateIt] = new RateItStateManager(lAPI, comAPI);
-     state2Manager[ElitePopup] = new ElitePopupStateManager(static_cast<NormalGameModeManager*>(mode2Manager[Normal]), lAPI);
+     state2Manager[MainMenu] = new MainMenuGameStateManager(context->localizeAPI, context->successAPI);
+     state2Manager[ModeMenu] = new ModeMenuStateManager(storage, context->nameInputAPI, successMgr, context->localizeAPI, context->successAPI, context->communicationAPI);
+     state2Manager[Help] = new HelpStateManager(context->localizeAPI);
+     state2Manager[Ads] = new AdsStateManager(context->adAPI, storage, successMgr);
+     state2Manager[RateIt] = new RateItStateManager(context->localizeAPI, context->communicationAPI);
+     state2Manager[ElitePopup] = new ElitePopupStateManager(static_cast<NormalGameModeManager*>(mode2Manager[Normal]), context->localizeAPI);
 
      state2Manager[BlackToLogoState] = new FadeGameStateManager(0.2f, FadeIn, BlackToLogoState, Logo, state2Manager[Logo], 0);
      state2Manager[LogoToBlackState] = new FadeGameStateManager(0.3f, FadeOut, LogoToBlackState, BlackToMainMenu, 0, state2Manager[Logo]);
@@ -105,8 +108,12 @@ PrivateData::PrivateData(HeriswapGame* game, StorageAPI* storagee, NameInputAPI*
 
      ADD_COMPONENT(soundButton, Transformation);
      TRANSFORM(soundButton)->z = DL_MainMenuUITxt;
-     TRANSFORM(soundButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
-     TransformationSystem::setPosition(TRANSFORM(soundButton), Vector2(0 + PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::E);
+     TRANSFORM(soundButton)->size = glm::vec2( (float)PlacementHelper::GimpWidthToScreen(100), 
+                                               (float)PlacementHelper::GimpHeightToScreen(95));
+     TransformationSystem::setPosition(TRANSFORM(soundButton), 
+                                       glm::vec2((float)(0 + PlacementHelper::GimpWidthToScreen(354)), 
+                                                 (float)PlacementHelper::GimpYToScreen(1215)), 
+                                       TransformationSystem::E);
      ADD_COMPONENT(soundButton, Button);
      BUTTON(soundButton)->enabled =true;
      BUTTON(soundButton)->overSize = 1.3;
@@ -120,8 +127,8 @@ PrivateData::PrivateData(HeriswapGame* game, StorageAPI* storagee, NameInputAPI*
 
      ADD_COMPONENT(socialGamNet, Transformation);
      TRANSFORM(socialGamNet)->z = DL_MainMenuUITxt;
-     TRANSFORM(socialGamNet)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
-     TransformationSystem::setPosition(TRANSFORM(socialGamNet), Vector2(0 - PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
+     TRANSFORM(socialGamNet)->size = glm::vec2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
+     TransformationSystem::setPosition(TRANSFORM(socialGamNet), glm::vec2(0 - PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
      ADD_COMPONENT(socialGamNet, Button);
      BUTTON(socialGamNet)->overSize = 1.3;
      ADD_COMPONENT(socialGamNet, Rendering);
@@ -146,7 +153,7 @@ PrivateData::PrivateData(HeriswapGame* game, StorageAPI* storagee, NameInputAPI*
 
      menu = theEntityManager.CreateEntity();
      ADD_COMPONENT(menu, Music);
-     MUSIC(menu)->control = MusicComponent::Start;
+     MUSIC(menu)->control = MusicControl::Play;
      MUSIC(menu)->loopAt = 64.0f;
 
      inGameMusic.masterTrack = theEntityManager.CreateEntity();

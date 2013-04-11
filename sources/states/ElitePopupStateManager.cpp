@@ -20,6 +20,8 @@
 #include "../modes/NormalModeManager.h"
 #include <sstream>
 
+#include <glm/glm.hpp>
+
 #include <base/PlacementHelper.h>
 #include <base/EntityManager.h>
 
@@ -34,9 +36,13 @@ void ElitePopupStateManager::Setup() {
 	const Color green("green");
 	background = theEntityManager.CreateEntity();
 	ADD_COMPONENT(background, Transformation);
-	TRANSFORM(background)->size = Vector2(PlacementHelper::GimpWidthToScreen(712), PlacementHelper::GimpHeightToScreen(450));
+	TRANSFORM(background)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(712), 
+											(float)PlacementHelper::GimpHeightToScreen(450));
 	TRANSFORM(background)->z = DL_MainMenuUIBg;
-	TransformationSystem::setPosition(TRANSFORM(background), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(236)), TransformationSystem::NW);
+	TransformationSystem::setPosition(TRANSFORM(background), 
+									  glm::vec2((float)PlacementHelper::GimpXToScreen(44), 
+									  			(float)PlacementHelper::GimpYToScreen(236)), 
+									  TransformationSystem::NW);
 	ADD_COMPONENT(background, Rendering);
 	RENDERING(background)->texture = theRenderingSystem.loadTextureFile("fond_menu_mode");
 	RENDERING(background)->color.a = 0.5;
@@ -45,29 +51,34 @@ void ElitePopupStateManager::Setup() {
 	ADD_COMPONENT(text, Transformation);
 	TRANSFORM(text)->position = TRANSFORM(background)->position;
 	TRANSFORM(text)->size = TRANSFORM(background)->size;
-	TRANSFORM(text)->size.X *= 0.9;
-	TRANSFORM(text)->size.Y = PlacementHelper::GimpHeightToScreen(147);
-	TransformationSystem::setPosition(TRANSFORM(text), Vector2(0, PlacementHelper::GimpYToScreen(236)), TransformationSystem::N);
+	TRANSFORM(text)->size.x *= 0.9f;
+	TRANSFORM(text)->size.y = (float)PlacementHelper::GimpHeightToScreen(147);
+	TransformationSystem::setPosition(TRANSFORM(text), 
+									  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(236)), 
+									  TransformationSystem::N);
 	TRANSFORM(text)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(text, TextRendering);
 	TEXT_RENDERING(text)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(text)->color = green;
-	TEXT_RENDERING(text)->hide = true;
+	TEXT_RENDERING(text)->show = false;
 	TEXT_RENDERING(text)->charHeight = PlacementHelper::GimpHeightToScreen(55);
 	TEXT_RENDERING(text)->flags |= TextRenderingComponent::MultiLineBit;
 
 	for (int i=0; i<2; i++) {
-		eText[i] = theTextRenderingSystem.CreateEntity();
+		eText[i] = theEntityManager.CreateEntity();
+		ADD_COMPONENT(eText[i], Transformation);
+		ADD_COMPONENT(eText[i], TextRendering);
 
 		TRANSFORM(eText[i])->z = DL_MainMenuUITxt;
-		TEXT_RENDERING(eText[i])->hide = true;
+		TEXT_RENDERING(eText[i])->show = false;
 		TEXT_RENDERING(eText[i])->positioning = TextRenderingComponent::CENTER;
 		TEXT_RENDERING(eText[i])->color = green;
 		TEXT_RENDERING(eText[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
 
 	    eButton[i] = theEntityManager.CreateEntity();
 	    ADD_COMPONENT(eButton[i], Transformation);
-	    TRANSFORM(eButton[i])->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
+	    TRANSFORM(eButton[i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(708), 
+	    										(float)PlacementHelper::GimpHeightToScreen(147));
 	    TRANSFORM(eButton[i])->z = DL_MainMenuUIBg;
 	    ADD_COMPONENT(eButton[i], Rendering);
 	    RENDERING(eButton[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
@@ -75,23 +86,25 @@ void ElitePopupStateManager::Setup() {
 	    ADD_COMPONENT(eButton[i], Button);
         BUTTON(eButton[i])->enabled = false;
 
-		TRANSFORM(eText[i])->position.X = TRANSFORM(eButton[i])->position.X = 0;
-		TRANSFORM(eText[i])->position.Y = TRANSFORM(eButton[i])->position.Y = PlacementHelper::GimpYToScreen(850+i*183);
+		TRANSFORM(eText[i])->position.x = TRANSFORM(eButton[i])->position.x = 0;
+		TRANSFORM(eText[i])->position.y = TRANSFORM(eButton[i])->position.y = PlacementHelper::GimpYToScreen(850+i*183);
 	}
-
-	TEXT_RENDERING(text)->text = localizeAPI->text("change_difficulty",
-	"You seem really good.\nWould you like to start a new game with increased difficulty ?");
-	//"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sagittis. Phasellus sem dolor, adipiscing at facilisis ut, adipiscing in lorem. Suspendisse sed cursus urna. Nullam sit amet elit arcu. Ut hendrerit dictum lacus sed elementum.");
-	TEXT_RENDERING(eText[0])->text = localizeAPI->text("change_difficulty_yes", "Increase difficulty");
-	TEXT_RENDERING(eText[1])->text = localizeAPI->text("change_difficulty_no", "No, keep it easy");
+	// TODO !
+	// TEXT_RENDERING(text)->text = localizeAPI->text("change_difficulty",
+	// "You seem really good.\nWould you like to start a new game with increased difficulty ?");
+	// TEXT_RENDERING(eText[0])->text = localizeAPI->text("change_difficulty_yes", "Increase difficulty");
+	// TEXT_RENDERING(eText[1])->text = localizeAPI->text("change_difficulty_no", "No, keep it easy");
+	TEXT_RENDERING(text)->text = localizeAPI->text("change_difficulty");
+	TEXT_RENDERING(eText[0])->text = localizeAPI->text("change_difficulty_yes");
+	TEXT_RENDERING(eText[1])->text = localizeAPI->text("change_difficulty_no");
 }
 
 void ElitePopupStateManager::Enter() {
-	RENDERING(background)->hide = false;
-	TEXT_RENDERING(text)->hide = false;
+	RENDERING(background)->show = true;
+	TEXT_RENDERING(text)->show = true;
 	for (int i=0; i<2; i++) {
-		RENDERING(eButton[i])->hide = false;
-		TEXT_RENDERING(eText[i])->hide = false;
+		RENDERING(eButton[i])->show = true;
+		TEXT_RENDERING(eText[i])->show = true;
 		BUTTON(eButton[i])->enabled = true;
 	}
 }
@@ -110,11 +123,11 @@ GameState ElitePopupStateManager::Update(float dt) {
 }
 
 void ElitePopupStateManager::Exit() {
-	RENDERING(background)->hide = true;
-	TEXT_RENDERING(text)->hide = true;
+	RENDERING(background)->show = false;
+	TEXT_RENDERING(text)->show = false;
 	for (int i=0; i<2; i++) {
-		RENDERING(eButton[i])->hide = true;
+		RENDERING(eButton[i])->show = false;
         BUTTON(eButton[i])->enabled = false;
-		TEXT_RENDERING(eText[i])->hide = true;
+		TEXT_RENDERING(eText[i])->show = false;
 	}
 }

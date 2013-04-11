@@ -20,7 +20,8 @@
 
 #include <vector>
 #include <base/EntityManager.h>
-#include <base/Vector2.h>
+#include <glm/glm.hpp>
+#include <systems/System.h>
 
 //medium is after hard because it would have ruined ppl's score using the game before adding the medium difficulty on android
 enum Difficulty {
@@ -37,7 +38,7 @@ struct Feuille {
 };
 
 struct Combinais {
-	std::vector<Vector2> points;
+	std::vector<glm::vec2> points;
 	int type;
 };
 
@@ -83,10 +84,10 @@ void ResetTest();
 std::vector<Combinais> MergeCombination(std::vector<Combinais> combinaisons);
 
 /* Return true if an element is in both vector */
-bool Intersec(std::vector<Vector2> v1, std::vector<Vector2> v2);
+bool Intersec(std::vector<glm::vec2> v1, std::vector<glm::vec2> v2);
 
 /* Return true if e is in v*/
-bool InVect(std::vector<Vector2> v, Vector2 e);
+bool InVect(std::vector<glm::vec2> v, glm::vec2 e);
 
 /* Merge 2 vector*/
 Combinais MergeVectors(Combinais c1, Combinais c2);
@@ -95,8 +96,8 @@ Combinais MergeVectors(Combinais c1, Combinais c2);
 std::vector<CellFall> TileFall();
 
 /* Returns points (x,y) which generate new Combi */
-std::vector<Vector2> LookForCombinationsOnSwitchVertical();
-std::vector<Vector2> LookForCombinationsOnSwitchHorizontal();
+std::vector<glm::vec2> LookForCombinationsOnSwitchVertical();
+std::vector<glm::vec2> LookForCombinationsOnSwitchHorizontal();
 
 /* Returns all potentials combinations */
 std::vector< std::vector<Entity> > GetSwapCombinations();
@@ -119,7 +120,7 @@ bool NewCombiOnSwitch(Entity a, int i, int j);
 void SetCheckInCombi(std::vector<Combinais> c);
 
 /* Hide the grid's entities (pause state) */
-void HideAll(bool activate);
+void ShowAll(bool activate);
 
 bool IsValidGridPosition(int i, int j) {
 	return (i>=0 && j>=0 && i<GridSize && j<GridSize);

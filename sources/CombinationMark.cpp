@@ -18,7 +18,8 @@
 */
 #include "CombinationMark.h"
 
-#include <base/MathUtil.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
 
 #include "TwitchSystem.h"
 #include "systems/TransformationSystem.h"
@@ -35,8 +36,8 @@ void CombinationMark::markCellInCombination(Entity e){
     float angle = TRANSFORM(e)->rotation;
     TWITCH(e)->minAngle = angle - 0.4;
     TWITCH(e)->maxAngle = angle + 0.4;
-    TWITCH(e)->variance = MathUtil::RandomFloat() * 0.2;
-    TWITCH(e)->speed = MathUtil::RandomFloatInRange(10, 15);
+    TWITCH(e)->variance = glm::linearRand(0.0f, 1.0f) * 0.2f;
+    TWITCH(e)->speed = glm::linearRand(10.0f, 15.0f);
 }
 
 void CombinationMark::clearCellInCombination(Entity e) {

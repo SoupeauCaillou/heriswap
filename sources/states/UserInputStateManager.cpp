@@ -18,6 +18,10 @@
 */
 #include "UserInputStateManager.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtx/norm.hpp>
+#include <glm/gtx/compatibility.hpp>
+
 #include "base/Log.h"
 #include "base/TouchInputManager.h"
 #include "base/EntityManager.h"
@@ -33,7 +37,7 @@
 #include "CombinationMark.h"
 
 static void activateADSR(Entity e, float a, float s);
-static void diffToGridCoords(const Vector2& c, int* i, int* j);
+static void diffToGridCoords(const glm::vec2& c, int* i, int* j);
 
 
 void UserInputGameStateManager::Setup() {
@@ -57,7 +61,7 @@ void UserInputGameStateManager::Setup() {
 }
 
 void UserInputGameStateManager::Enter() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 	dragged = 0;
 	ADSR(swapAnimation)->active = false;
 	ADSR(swapAnimation)->activationTime = 0;
@@ -74,17 +78,17 @@ void UserInputGameStateManager::Enter() {
 static bool contains(const std::vector<Combinais>& combi, const GridComponent* g) {
 	for (unsigned int i=0; i<combi.size(); i++) {
 		for (unsigned int j=0; j<combi[i].points.size(); j++) {
-			const Vector2& p = combi[i].points[j];
-			if (p.X == g->i && p.Y == g->j)
+			const glm::vec2& p = combi[i].points[j];
+			if (p.x == g->i && p.y == g->j)
 				return true;
 		}
 	}
 	return false;
 }
 
-static Entity cellUnderFinger(const Vector2& pos, bool preferInCombi) {
+static Entity cellUnderFinger(const glm::vec2& pos, bool preferInCombi) {
 	std::vector<Combinais> combinaisons;// = theGridSystem.LookForCombination(false,false);
-	const float maxDist = HeriswapGame::CellSize(theGridSystem.GridSize, 0).Y;
+	const float maxDist = HeriswapGame::CellSize(theGridSystem.GridSize, 0).y;
 
 	// 4 nearest
 	Entity e = 0;
@@ -93,7 +97,7 @@ static Entity cellUnderFinger(const Vector2& pos, bool preferInCombi) {
 
 	std::vector<Entity> leaves = theGridSystem.RetrieveAllEntityWithComponent();
 	for (std::vector<Entity>::iterator it=leaves.begin(); it!=leaves.end(); ++it) {
-		float sqdist = Vector2::DistanceSquared(pos, TRANSFORM(*it)->worldPosition);
+		float sqdist = glm::distance2(pos, TRANSFORM(*it)->worldPosition);
 		if (sqdist < maxDist) {
 			bool inCombi = contains(combinaisons, GRID(*it));
 
@@ -107,23 +111,23 @@ static Entity cellUnderFinger(const Vector2& pos, bool preferInCombi) {
 	return e;
 }
 
-static Entity moveToCell(Entity original, const Vector2& move, float threshold) {
+static Entity moveToCell(Entity original, const glm::vec2& move, float threshold) {
 #ifdef ANDROID
-	if (move.LengthSquared() < threshold)
+	if (glm::length2(move) < threshold)
 		return 0;
 #endif
 
 	int i = GRID(original)->i;
 	int j = GRID(original)->j;
 
-	if (MathUtil::Abs(move.X) > MathUtil::Abs(move.Y)) {
-		if (move.X < 0) {
+	if (glm::abs(move.x) > glm::abs(move.y)) {
+		if (move.x < 0) {
 			return theGridSystem.GetOnPos(i-1,j);
 		} else {
 			return theGridSystem.GetOnPos(i+1,j);
 		}
 	} else {
-		if (move.Y < 0) {
+		if (move.y < 0) {
 			return theGridSystem.GetOnPos(i,j-1);
 		} else {
 			return theGridSystem.GetOnPos(i,j+1);
@@ -156,7 +160,7 @@ GameState UserInputGameStateManager::Update(float dt) {
 		// beginning of drag
 		if (!theTouchInputManager.wasTouched(0) &&
 			theTouchInputManager.isTouched(0)) {
-			const Vector2& pos = theTouchInputManager.getTouchLastPosition(0);
+			const glm::vec2& pos = theTouchInputManager.getTouchLastPosition(0);
 			currentCell = cellUnderFinger(pos, true);
 
 			if (currentCell) {
@@ -164,14 +168,14 @@ GameState UserInputGameStateManager::Update(float dt) {
 			}
 		}
 	} else {
-		const Vector2 posA = HeriswapGame::GridCoordsToPosition(GRID(currentCell)->i, GRID(currentCell)->j,theGridSystem.GridSize);
-		const Vector2& pos = theTouchInputManager.getTouchLastPosition(0);
+		const glm::vec2 posA = HeriswapGame::GridCoordsToPosition(GRID(currentCell)->i, GRID(currentCell)->j,theGridSystem.GridSize);
+		const glm::vec2& pos = theTouchInputManager.getTouchLastPosition(0);
 		// compute move
-		Vector2 move = pos - posA;
+		glm::vec2 move = pos - posA;
 
 		if (theTouchInputManager.isTouched(0)) {
 			// swap cell on axis
-			Entity c = moveToCell(currentCell, move, TRANSFORM(currentCell)->size.X * 0.01);
+			Entity c = moveToCell(currentCell, move, TRANSFORM(currentCell)->size.x * 0.01);
 
 			// same cell, keep going
 			if (c && (!swappedCell || swappedCell == c)) {
@@ -180,10 +184,10 @@ GameState UserInputGameStateManager::Update(float dt) {
 				}
 				swappedCell = c;
 
-				const Vector2 posB = HeriswapGame::GridCoordsToPosition(GRID(swappedCell)->i, GRID(swappedCell)->j,theGridSystem.GridSize);
-				float t = MathUtil::Min(1.0f, move.Length());
-				TRANSFORM(currentCell)->position = MathUtil::Lerp(posA, posB, t);
-				TRANSFORM(swappedCell)->position = MathUtil::Lerp(posA, posB, 1 - t);
+				const glm::vec2 posB = HeriswapGame::GridCoordsToPosition(GRID(swappedCell)->i, GRID(swappedCell)->j,theGridSystem.GridSize);
+				float t = glm::min(1.0f, glm::length(move));
+				TRANSFORM(currentCell)->position = glm::lerp(posA, posB, t);
+				TRANSFORM(swappedCell)->position = glm::lerp(posA, posB, 1 - t);
 			} else {
 				if (swappedCell) {
 					CombinationMark::clearCellInCombination(swappedCell);
@@ -203,12 +207,12 @@ GameState UserInputGameStateManager::Update(float dt) {
 			if (swappedCell) {
 				CombinationMark::clearCellInCombination(swappedCell);
 
-				if (move.Length() < TRANSFORM(currentCell)->size.X * 0.5) {
+				if (glm::length(move) < TRANSFORM(currentCell)->size.x * 0.5) {
 					// restore position
 					TRANSFORM(currentCell)->position = posA;
 					TRANSFORM(swappedCell)->position = HeriswapGame::GridCoordsToPosition(GRID(swappedCell)->i, GRID(swappedCell)->j,theGridSystem.GridSize);
 				} else {
-					const Vector2 posB = HeriswapGame::GridCoordsToPosition(GRID(swappedCell)->i, GRID(swappedCell)->j,theGridSystem.GridSize);
+					const glm::vec2 posB = HeriswapGame::GridCoordsToPosition(GRID(swappedCell)->i, GRID(swappedCell)->j,theGridSystem.GridSize);
 
 					int typeA = GRID(currentCell)->type;
 					int typeB = GRID(swappedCell)->type;
@@ -224,9 +228,9 @@ GameState UserInputGameStateManager::Update(float dt) {
 					if (combinaisons.empty()) {
 						// cancel swap
 						theMorphingSystem.clear(MORPHING(rollback));
-						MORPHING(rollback)->elements.push_back(new TypedMorphElement<Vector2>(
+						MORPHING(rollback)->elements.push_back(new TypedMorphElement<glm::vec2>(
 							&TRANSFORM(currentCell)->position, TRANSFORM(currentCell)->position, posA));
-						MORPHING(rollback)->elements.push_back(new TypedMorphElement<Vector2>(
+						MORPHING(rollback)->elements.push_back(new TypedMorphElement<glm::vec2>(
 							&TRANSFORM(swappedCell)->position, TRANSFORM(swappedCell)->position, posB));
 						MORPHING(rollback)->active = true;
 						SOUND(swapAnimation)->sound = theSoundSystem.loadSoundFile("audio/son_descend.ogg");
@@ -255,8 +259,8 @@ void UserInputGameStateManager::BackgroundUpdate(float dt __attribute__((unused)
 		for(int j=0; j<theGridSystem.GridSize; j++) {
 			Entity e = theGridSystem.GetOnPos(i,j);
 			if (e) {
-				Vector2 size = HeriswapGame::CellSize(theGridSystem.GridSize, GRID(e)->type); 
-				float scale = ADSR(e)->value / size.X;
+				glm::vec2 size = HeriswapGame::CellSize(theGridSystem.GridSize, GRID(e)->type); 
+				float scale = ADSR(e)->value / size.x;
 				TRANSFORM(e)->size = size * scale;
 			}
 		}
@@ -264,11 +268,11 @@ void UserInputGameStateManager::BackgroundUpdate(float dt __attribute__((unused)
 
 	if (ADSR(swapAnimation)->activationTime >= 0 && originI >= 0 && originJ >= 0) {
 
-		Vector2 pos1 = HeriswapGame::GridCoordsToPosition(originI, originJ, theGridSystem.GridSize);
-		Vector2 pos2 = HeriswapGame::GridCoordsToPosition(originI + swapI, originJ + swapJ, theGridSystem.GridSize);
+		glm::vec2 pos1 = HeriswapGame::GridCoordsToPosition(originI, originJ, theGridSystem.GridSize);
+		glm::vec2 pos2 = HeriswapGame::GridCoordsToPosition(originI + swapI, originJ + swapJ, theGridSystem.GridSize);
 
-		Vector2 interp1 = MathUtil::Lerp(pos1, pos2, ADSR(swapAnimation)->value);
-		Vector2 interp2 = MathUtil::Lerp(pos2, pos1, ADSR(swapAnimation)->value);
+		glm::vec2 interp1 = glm::lerp(pos1, pos2, ADSR(swapAnimation)->value);
+		glm::vec2 interp2 = glm::lerp(pos2, pos1, ADSR(swapAnimation)->value);
 
 		Entity e1 = theGridSystem.GetOnPos(originI,originJ);
 		Entity e2 = theGridSystem.GetOnPos(originI + swapI,originJ + swapJ);
@@ -281,7 +285,7 @@ void UserInputGameStateManager::BackgroundUpdate(float dt __attribute__((unused)
 }
 
 void UserInputGameStateManager::Exit() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
     inCombinationCells.clear();
 
     successMgr->sLuckyLuke();
@@ -291,7 +295,7 @@ void UserInputGameStateManager::Exit() {
 static void activateADSR(Entity e, float a, float s) {
 	if (!e)
 		return;
-	float size = TRANSFORM(e)->size.X;
+	float size = TRANSFORM(e)->size.x;
 	ADSRComponent* ac = ADSR(e);
 	ac->idleValue = size;
 	ac->attackValue = size * a;
@@ -302,11 +306,11 @@ static void activateADSR(Entity e, float a, float s) {
 	ac->active = true;
 }
 
-void diffToGridCoords(const Vector2& c, int* i, int* j) {
+void diffToGridCoords(const glm::vec2& c, int* i, int* j) {
 	*i = *j = 0;
-	if (MathUtil::Abs(c.X) > MathUtil::Abs(c.Y)) {
-		*i = (c.X < 0) ? -1 : 1;
+	if (glm::abs(c.x) > glm::abs(c.y)) {
+		*i = (c.x < 0) ? -1 : 1;
 	} else {
-		*j = (c.Y < 0) ? -1 : 1;
+		*j = (c.y < 0) ? -1 : 1;
 	}
 }

@@ -20,6 +20,9 @@
 
 #include <sstream>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
+
 #include <base/PlacementHelper.h>
 #include <base/Interval.h>
 #include <base/EntityManager.h>
@@ -91,15 +94,15 @@ BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c, int group) {
 	float ratio = 1.67;
 
 	float width = cloudSize[group].random();
-	TRANSFORM(c->e)->position.X = cloudStartX.random();
-	TRANSFORM(c->e)->position.Y = cloudY[group].random();
+	TRANSFORM(c->e)->position.x = cloudStartX.random();
+	TRANSFORM(c->e)->position.y = cloudY[group].random();
 	TRANSFORM(c->e)->z = DL_Cloud;
 
-	int idx = MathUtil::RandomInt(textures[group].size());
+	int idx = glm::round(glm::linearRand(0.f, (float)textures[group].size()));
 	RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile(textures[group][idx]);
-	RENDERING(c->e)->color = Color(1,1,1, MathUtil::RandomFloatInRange(0.6, 0.9));
-	RENDERING(c->e)->hide = false;
-	TRANSFORM(c->e)->size = Vector2(width, width / ratio);
+	RENDERING(c->e)->color = Color(1,1,1, glm::linearRand(0.6f, 0.9f));
+	RENDERING(c->e)->show = true;
+	TRANSFORM(c->e)->size = glm::vec2(width, width / ratio);
 	c->visible = false;
 	c->speed = cloudSpeed[group].random();
 	c->group = group;
@@ -108,9 +111,9 @@ BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c, int group) {
 }
 
 void BackgroundManager::Enter() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
     for (int i=0; i<3; i++) {
-        RENDERING(clouds[i]->e)->hide = false;
+        RENDERING(clouds[i]->e)->show = true;
     }
 }
 
@@ -123,8 +126,8 @@ void BackgroundManager::BackgroundUpdate(float dt) {
 		Actor* c = *it;
 
 		TransformationComponent* tc = TRANSFORM(c->e);
-		tc->position.X += (skySpeed + c->speed) * dt;
-		if (!theRenderingSystem.isEntityVisible(c->e)) {
+		tc->position.x += (skySpeed + c->speed) * dt;
+		if (!theRenderingSystem.isVisible(c->e)) {
 			if (c->visible)
 				initCloud(c, c->group);
 		} else {
@@ -136,7 +139,7 @@ void BackgroundManager::BackgroundUpdate(float dt) {
 void BackgroundManager::switchAnim(AnimatedActor* a)
 {
 	a->frames++;
-	if (a->frames>=30/(MathUtil::Abs(a->actor.speed)+MathUtil::Abs(CAMERASPEED))) {
+	if (a->frames>=30/(glm::abs(a->actor.speed)+glm::abs(CAMERASPEED))) {
 		RENDERING(a->actor.e)->texture = theRenderingSystem.loadTextureFile(a->anim[a->ind]);
 		a->ind++;
 		if (a->ind==(int)a->anim.size()) a->ind = 0;
@@ -145,5 +148,5 @@ void BackgroundManager::switchAnim(AnimatedActor* a)
 }
 
 void BackgroundManager::Exit() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 }

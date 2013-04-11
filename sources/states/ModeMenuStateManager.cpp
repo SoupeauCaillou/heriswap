@@ -21,6 +21,8 @@
 #include <sstream>
 #include <fstream>
 
+#include <glm/glm.hpp>
+
 #include <base/EntityManager.h>
 #include <base/TouchInputManager.h>
 #include <base/PlacementHelper.h>
@@ -55,17 +57,25 @@ void ModeMenuStateManager::Setup() {
 
 	//Creating text entities
 	for (int i=0; i<5; i++) {
-		scoresName[i] = theTextRenderingSystem.CreateEntity();
-		scoresPoints[i] = theTextRenderingSystem.CreateEntity();
-		scoresLevel[i] = theTextRenderingSystem.CreateEntity();
+		scoresName[i] = theEntityManager.CreateEntity();
+		scoresPoints[i] = theEntityManager.CreateEntity();
+		scoresLevel[i] = theEntityManager.CreateEntity();
+
+		ADD_COMPONENT(scoresName[i], Transformation);
+		ADD_COMPONENT(scoresName[i], TextRendering);
+		ADD_COMPONENT(scoresPoints[i], Transformation);
+		ADD_COMPONENT(scoresPoints[i], TextRendering);
+		ADD_COMPONENT(scoresLevel[i], Transformation);
+		ADD_COMPONENT(scoresLevel[i], TextRendering);
+
 		TRANSFORM(scoresName[i])->z = TRANSFORM(scoresPoints[i])->z = TRANSFORM(scoresLevel[i])->z = DL_MainMenuUITxt;
 
-		TRANSFORM(scoresName[i])->position.Y =
-			TRANSFORM(scoresPoints[i])->position.Y =
-				TRANSFORM(scoresLevel[i])->position.Y = PlacementHelper::GimpYToScreen(605 + i * 95);
-		TRANSFORM(scoresName[i])->position.X = PlacementHelper::GimpXToScreen(92);
-		TRANSFORM(scoresPoints[i])->position.X = PlacementHelper::GimpXToScreen(552);
-		TRANSFORM(scoresLevel[i])->position.X = PlacementHelper::GimpXToScreen(590);
+		TRANSFORM(scoresName[i])->position.y =
+			TRANSFORM(scoresPoints[i])->position.y =
+				TRANSFORM(scoresLevel[i])->position.y = (float)PlacementHelper::GimpYToScreen(605 + i * 95);
+		TRANSFORM(scoresName[i])->position.x = (float)PlacementHelper::GimpXToScreen(92);
+		TRANSFORM(scoresPoints[i])->position.x = (float)PlacementHelper::GimpXToScreen(552);
+		TRANSFORM(scoresLevel[i])->position.x = (float)PlacementHelper::GimpXToScreen(590);
 
 		TEXT_RENDERING(scoresName[i])->charHeight =
 			TEXT_RENDERING(scoresPoints[i])->charHeight =
@@ -75,9 +85,9 @@ void ModeMenuStateManager::Setup() {
 		TEXT_RENDERING(scoresPoints[i])->positioning = TextRenderingComponent::RIGHT;
 		TEXT_RENDERING(scoresLevel[i])->positioning = TextRenderingComponent::LEFT;
 
-		TEXT_RENDERING(scoresName[i])->hide = true;
-		TEXT_RENDERING(scoresPoints[i])->hide = true;
-		TEXT_RENDERING(scoresLevel[i])->hide = true;
+		TEXT_RENDERING(scoresName[i])->show = false;
+		TEXT_RENDERING(scoresPoints[i])->show = false;
+		TEXT_RENDERING(scoresLevel[i])->show = false;
 
 		TEXT_RENDERING(scoresName[i])->color =
 			TEXT_RENDERING(scoresPoints[i])->color =
@@ -90,8 +100,12 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(back, Button);
     BUTTON(back)->overSize = 1.3;
 	ADD_COMPONENT(back, Sound);
-	TRANSFORM(back)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(75));
-	TransformationSystem::setPosition(TRANSFORM(back), Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(95)), TransformationSystem::W);
+	TRANSFORM(back)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(100), 
+									  (float)PlacementHelper::GimpHeightToScreen(75));
+	TransformationSystem::setPosition(TRANSFORM(back), 
+									  glm::vec2((float)PlacementHelper::GimpXToScreen(92),
+									  			(float)PlacementHelper::GimpYToScreen(95)), 
+									  TransformationSystem::W);
 	TRANSFORM(back)->z = DL_MainMenuUITxt;
 	RENDERING(back)->texture = theRenderingSystem.loadTextureFile("back");
 	BUTTON(back)->enabled = false;
@@ -99,21 +113,24 @@ void ModeMenuStateManager::Setup() {
 	// score title
 	scoreTitle = theEntityManager.CreateEntity();
 	ADD_COMPONENT(scoreTitle, Transformation);
-	TRANSFORM(scoreTitle)->position = Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(520));
+	TRANSFORM(scoreTitle)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(92), 
+												(float)PlacementHelper::GimpYToScreen(520));
 	TRANSFORM(scoreTitle)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(scoreTitle, TextRendering);
-	TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("score", "Highscores:");
+	// TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("score", "Highscores:");
+	TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("score");
 	TEXT_RENDERING(scoreTitle)->fontName = "typo";
 	TEXT_RENDERING(scoreTitle)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(scoreTitle)->color = green;
 	TEXT_RENDERING(scoreTitle)->charHeight = PlacementHelper::GimpHeightToScreen(54);
-	TEXT_RENDERING(scoreTitle)->hide = true;
+	TEXT_RENDERING(scoreTitle)->show = false;
 
 	// score title
 	average = theEntityManager.CreateEntity();
 	ADD_COMPONENT(average, Transformation);
-	TRANSFORM(average)->size.X = PlacementHelper::GimpWidthToScreen(620);
-	TRANSFORM(average)->position = Vector2(PlacementHelper::GimpXToScreen(92), PlacementHelper::GimpYToScreen(675 + 400));
+	TRANSFORM(average)->size.x = (float)PlacementHelper::GimpWidthToScreen(620);
+	TRANSFORM(average)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(92), 
+											 (float)PlacementHelper::GimpYToScreen(675 + 400));
 	TRANSFORM(average)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(average, TextRendering);
 	TEXT_RENDERING(average)->text = "";
@@ -121,21 +138,22 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(average)->positioning = TextRenderingComponent::LEFT;
 	TEXT_RENDERING(average)->color = green;
 	TEXT_RENDERING(average)->charHeight = PlacementHelper::GimpHeightToScreen(54);
-	TEXT_RENDERING(average)->hide = true;
+	TEXT_RENDERING(average)->show = false;
 	TEXT_RENDERING(average)->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
 
 	// play text
 	playText = theEntityManager.CreateEntity();
 	ADD_COMPONENT(playText, Transformation);
-	TRANSFORM(playText)->position = Vector2(0, PlacementHelper::GimpYToScreen(275));
+	TRANSFORM(playText)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(275));
 	TRANSFORM(playText)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(playText, TextRendering);
-	TEXT_RENDERING(playText)->text = localizeAPI->text("play", "Start");
+	// TEXT_RENDERING(playText)->text = localizeAPI->text("play", "Start");
+	TEXT_RENDERING(playText)->text = localizeAPI->text("play");
 	TEXT_RENDERING(playText)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(playText)->color = green;
 	TEXT_RENDERING(playText)->fontName = "typo";
 	TEXT_RENDERING(playText)->charHeight = PlacementHelper::GimpHeightToScreen(100);
-	TEXT_RENDERING(playText)->hide = true;
+	TEXT_RENDERING(playText)->show = false;
 	// play button
 	playContainer = theEntityManager.CreateEntity();
 	ADD_COMPONENT(playContainer, Transformation);
@@ -147,11 +165,13 @@ void ModeMenuStateManager::Setup() {
 	BUTTON(playContainer)->enabled = false;
 
 	//difficulty text
-	eDifficulty = theTextRenderingSystem.CreateEntity();
+	eDifficulty = theEntityManager.CreateEntity();
+	ADD_COMPONENT(eDifficulty, Transformation);
+	ADD_COMPONENT(eDifficulty, TextRendering);
 	TRANSFORM(eDifficulty)->z = DL_MainMenuUITxt;
-	TRANSFORM(eDifficulty)->position = Vector2(0, PlacementHelper::GimpYToScreen(375));
+	TRANSFORM(eDifficulty)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(375));
 	TEXT_RENDERING(eDifficulty)->positioning = TextRenderingComponent::CENTER;
-	TEXT_RENDERING(eDifficulty)->hide = true;
+	TEXT_RENDERING(eDifficulty)->show = false;
 	TEXT_RENDERING(eDifficulty)->charHeight = PlacementHelper::GimpHeightToScreen(45);
 	TEXT_RENDERING(eDifficulty)->color = green;
 
@@ -165,11 +185,13 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(bDifficulty, Sound);
 
 	// your score
-	yourScore = theTextRenderingSystem.CreateEntity();
+	yourScore = theEntityManager.CreateEntity();
+	ADD_COMPONENT(yourScore, Transformation);
+	ADD_COMPONENT(yourScore, TextRendering);
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
-	TRANSFORM(yourScore)->position = Vector2(0,PlacementHelper::GimpYToScreen(1215));
+	TRANSFORM(yourScore)->position = glm::vec2(0.f,(float)PlacementHelper::GimpYToScreen(1215));
 	TEXT_RENDERING(yourScore)->positioning = TextRenderingComponent::CENTER;
-	TEXT_RENDERING(yourScore)->hide = true;
+	TEXT_RENDERING(yourScore)->show = false;
 	TEXT_RENDERING(yourScore)->charHeight = PlacementHelper::GimpHeightToScreen(56);
 	TEXT_RENDERING(yourScore)->color = green;
 
@@ -181,8 +203,8 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(facebook, Button);
 	BUTTON(facebook)->enabled = false;
 	RENDERING(facebook)->texture = theRenderingSystem.loadTextureFile("facebook");
-	TRANSFORM(facebook)->position = Vector2(PlacementHelper::GimpXToScreen(500),PlacementHelper::GimpYToScreen(1242));
-	TRANSFORM(facebook)->size = Vector2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
+	TRANSFORM(facebook)->position = glm::vec2(PlacementHelper::GimpXToScreen(500),PlacementHelper::GimpYToScreen(1242));
+	TRANSFORM(facebook)->size = glm::vec2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
 	TRANSFORM(facebook)->z = DL_MainMenuUITxt;
 
 	// twitter button
@@ -192,32 +214,39 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(twitter, Button);
 	BUTTON(twitter)->enabled = false;
 	RENDERING(twitter)->texture = theRenderingSystem.loadTextureFile("twitter");
-	TRANSFORM(twitter)->position = Vector2(PlacementHelper::GimpXToScreen(600),PlacementHelper::GimpYToScreen(1242));
-	TRANSFORM(twitter)->size = Vector2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
+	TRANSFORM(twitter)->position = glm::vec2(PlacementHelper::GimpXToScreen(600),PlacementHelper::GimpYToScreen(1242));
+	TRANSFORM(twitter)->size = glm::vec2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
 	TRANSFORM(twitter)->z = DL_MainMenuUITxt;
 #endif
 
 	// fond
 	fond = theEntityManager.CreateEntity();
 	ADD_COMPONENT(fond, Transformation);
-	TRANSFORM(fond)->size = Vector2(PlacementHelper::GimpWidthToScreen(712), PlacementHelper::GimpHeightToScreen(1124));
+	TRANSFORM(fond)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(712), 
+									  (float)PlacementHelper::GimpHeightToScreen(1124));
 	TRANSFORM(fond)->z = DL_MainMenuUIBg;
-	TransformationSystem::setPosition(TRANSFORM(fond), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(24)), TransformationSystem::NW);
+	TransformationSystem::setPosition(TRANSFORM(fond), 
+									  glm::vec2((float)PlacementHelper::GimpXToScreen(44), 
+									  			(float)PlacementHelper::GimpYToScreen(24)), 
+									  TransformationSystem::NW);
 	ADD_COMPONENT(fond, Rendering);
 	RENDERING(fond)->texture = theRenderingSystem.loadTextureFile("fond_menu_mode");
 	RENDERING(fond)->color.a = 0.5;
 
 	// enableSwarm text
-	enableSwarm = theTextRenderingSystem.CreateEntity();
+	enableSwarm = theEntityManager.CreateEntity();
+	ADD_COMPONENT(enableSwarm, Transformation);
+	ADD_COMPONENT(enableSwarm, TextRendering);
 	TRANSFORM(enableSwarm)->z = DL_MainMenuUITxt;
-	TRANSFORM(enableSwarm)->position = Vector2(0, PlacementHelper::GimpYToScreen(1160));
-	TRANSFORM(enableSwarm)->size = Vector2(PlacementHelper::GimpWidthToScreen(460), 0);
+	TRANSFORM(enableSwarm)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1160));
+	TRANSFORM(enableSwarm)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(460), 0.f);
 	TEXT_RENDERING(enableSwarm)->positioning = TextRenderingComponent::CENTER;
-	TEXT_RENDERING(enableSwarm)->hide = true;
+	TEXT_RENDERING(enableSwarm)->show = false;
 	TEXT_RENDERING(enableSwarm)->charHeight = PlacementHelper::GimpHeightToScreen(40);
 	TEXT_RENDERING(enableSwarm)->color = green;
 	TEXT_RENDERING(enableSwarm)->flags |= TextRenderingComponent::MultiLineBit;
-	TEXT_RENDERING(enableSwarm)->text = localizeAPI->text("get_swarm", "Enable swarm to see online scores");
+	// TEXT_RENDERING(enableSwarm)->text = localizeAPI->text("get_swarm", "Enable swarm to see online scores");
+	TEXT_RENDERING(enableSwarm)->text = localizeAPI->text("get_swarm");
 
 	// enableSwarm container
 	enableSwarmContainer = theEntityManager.CreateEntity();
@@ -241,8 +270,8 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 		TextRenderingComponent* trcP = TEXT_RENDERING(scoresPoints[i]);
 		TextRenderingComponent* trcL = TEXT_RENDERING(scoresLevel[i]);
 		if (i < entries.size()) {
-			trcN->hide = false;
-			trcP->hide = false;
+			trcN->show = true;
+			trcP->show = true;
 			std::stringstream a;
 			a.precision(1);
 			if (mode==Normal || mode==Go100Seconds) {
@@ -255,16 +284,17 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
 
-			a.str(""); a<< std::fixed <<localizeAPI->text("lvl", "lvl") << " " <<entries[i].level;
+			// a.str(""); a<< std::fixed <<localizeAPI->text("lvl", "lvl") << " " <<entries[i].level;
+			a.str(""); a<< std::fixed <<localizeAPI->text("lvl") << " " <<entries[i].level;
 			trcL->text = a.str();
 			//affichage lvl
 			if (mode==Normal) {
-				trcL->hide = false;
+				trcL->show = true;
 			}
 			//highlight the just-played score if it is in the top 5
 			if (!alreadyRed && gameOverState == AskingPlayerName &&
 			 ((mode==Normal && (unsigned int)entries[i].points == modeMgr->points)
-			  || (mode==TilesAttack && MathUtil::Abs(entries[i].time-modeMgr->time)<0.01f)
+			  || (mode==TilesAttack && glm::abs(entries[i].time-modeMgr->time)<0.01f)
 			  || (mode==Go100Seconds && (unsigned int)entries[i].points == modeMgr->points))
 			   && entries[i].name == playerName) {
 				trcN->color = Color(1.0f,0.f,0.f);
@@ -275,31 +305,32 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 				trcN->color = trcP->color = trcL->color = Color(3.0/255.0, 99.0/255, 71.0/255);
 			}
 		} else {
-			trcP->hide = true;
-			trcN->hide = true;
-			trcL->hide = true;
+			trcP->show = false;
+			trcN->show = false;
+			trcL->show = false;
 		}
 	}
 
 	if (avg > 0) {
 		std::stringstream a;
 		a.precision(1);
-		a << localizeAPI->text("average_score", "Average score: ") << ' ';
+		// a << localizeAPI->text("average_score", "Average score: ") << ' ';
+		a << localizeAPI->text("average_score") << ' ';
 		if (mode==Normal || mode==Go100Seconds) {
 			a << (int)avg;
 		} else {
 			a << std::fixed << ((int)(avg*10))/10.f << " s";
 		}
 		TEXT_RENDERING(average)->text = a.str();
-		TEXT_RENDERING(average)->hide = false;
+		TEXT_RENDERING(average)->show = true;
 	} else {
-		TEXT_RENDERING(average)->hide = true;
+		TEXT_RENDERING(average)->show = false;
 	}
 }
 
 
 void ModeMenuStateManager::Enter() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'"<< __PRETTY_FUNCTION__ << "'");
     pleaseGoBack = false;
 	successMgr->sHardScore(storageAPI);
 
@@ -323,23 +354,31 @@ void ModeMenuStateManager::Enter() {
 	LoadScore(modeMgr->GetMode(), difficulty);
 
 
-	TEXT_RENDERING(playText)->hide = false;
-	RENDERING(back)->hide = false;
-	RENDERING(menubg)->hide = false;
-	TEXT_RENDERING(title)->hide = false;
-	RENDERING(menufg)->hide = false;
-	RENDERING(fond)->hide = false;
-	TEXT_RENDERING(playText)->text = (gameOverState != NoGame) ? localizeAPI->text("restart", "Restart") : localizeAPI->text("play", "Play");
-	TEXT_RENDERING(scoreTitle)->hide = false;
-	TEXT_RENDERING(eDifficulty)->hide=false;
+	TEXT_RENDERING(playText)->show = true;
+	RENDERING(back)->show = true;
+	RENDERING(menubg)->show = true;
+	TEXT_RENDERING(title)->show = true;
+	RENDERING(menufg)->show = true;
+	RENDERING(fond)->show = true;
+	// TEXT_RENDERING(playText)->text = (gameOverState != NoGame) ? localizeAPI->text("restart", "Restart") : localizeAPI->text("play", "Play");
+	TEXT_RENDERING(playText)->text = (gameOverState != NoGame) ? localizeAPI->text("restart") : localizeAPI->text("play");
+	TEXT_RENDERING(scoreTitle)->show = true;
+	TEXT_RENDERING(eDifficulty)->show = true;
 	BUTTON(bDifficulty)->enabled = true;
 
-    if (difficulty == DifficultyEasy)
-        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
+    // if (difficulty == DifficultyEasy)
+    //     TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
+    // else if (difficulty == DifficultyMedium)
+    //     TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Medium") + " }";
+    // else
+    //     TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
+
+	if (difficulty == DifficultyEasy)
+        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1") + " }";
     else if (difficulty == DifficultyMedium)
-        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Medium") + " }";
+        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2") + " }";
     else
-        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
+        TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3") + " }";
 
     CONTAINER(playContainer)->enable = CONTAINER(bDifficulty)->enable = true;
 
@@ -347,7 +386,7 @@ void ModeMenuStateManager::Enter() {
     if (gameOverState == NoGame) {
 		if (!communicationAPI->swarmInstalled()) {
 			BUTTON(enableSwarmContainer)->enabled = true;
-			TEXT_RENDERING(enableSwarm)->hide = false;
+			TEXT_RENDERING(enableSwarm)->show = true;
 			CONTAINER(enableSwarmContainer)->enable = true;
     	}
     }
@@ -408,11 +447,12 @@ GameState ModeMenuStateManager::Update(float dt) {
                 submitScore("rzehtrtyBg");
             }
 
-            TEXT_RENDERING(yourScore)->hide = false;
+            TEXT_RENDERING(yourScore)->show = true;
             std::stringstream a;
             a.precision(1);
             if (modeMgr->GetMode()==Normal) {
-                a << modeMgr->points << " : "<< localizeAPI->text("lvl", "lvl") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
+                // a << modeMgr->points << " : "<< localizeAPI->text("lvl", "lvl") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
+                a << modeMgr->points << " : "<< localizeAPI->text("lvl") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
             } else if (modeMgr->GetMode()==Go100Seconds) {
                 a << modeMgr->points;
 			} else {
@@ -434,8 +474,8 @@ GameState ModeMenuStateManager::Update(float dt) {
                 gameOverState = NoGame;
 
 				if (communicationAPI->mustShowRateDialog()) {
-					TRANSFORM(herisson->actor.e)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herisson->actor.e)->size.X;
-					TEXT_RENDERING(title)->hide = true;
+					TRANSFORM(herisson->actor.e)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(herisson->actor.e)->size.x;
+					TEXT_RENDERING(title)->show = false;
 					this->LateExit();
 					return RateIt;
 				}
@@ -446,11 +486,11 @@ GameState ModeMenuStateManager::Update(float dt) {
 
 	//herisson
 	Entity herissonActor=  herisson->actor.e;
-	if (TRANSFORM(herissonActor)->position.X < PlacementHelper::ScreenWidth+TRANSFORM(herissonActor)->size.X) {
-		TRANSFORM(herissonActor)->position.X += herisson->actor.speed*dt;
+	if (TRANSFORM(herissonActor)->position.x < PlacementHelper::ScreenWidth+TRANSFORM(herissonActor)->size.x) {
+		TRANSFORM(herissonActor)->position.x += herisson->actor.speed*dt;
 		updateAnim(herisson, dt);
 	} else {
-		RENDERING(herissonActor)->hide = true;
+		RENDERING(herissonActor)->show = false;
 	}
 
 	if (gameOverState != AskingPlayerName) {
@@ -460,13 +500,17 @@ GameState ModeMenuStateManager::Update(float dt) {
 			difficulty = theGridSystem.nextDifficulty(difficulty);
 
 			if (difficulty == DifficultyEasy)
-				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
+				// TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
+				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1") + " }";
 			else if (difficulty == DifficultyMedium)
-				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Medium") + " }";
+				// TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Medium") + " }";
+				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2") + " }";
 			else
-				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
+				// TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
+				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3") + " }";
 
-			TEXT_RENDERING(playText)->text = localizeAPI->text("play", "Play");
+			// TEXT_RENDERING(playText)->text = localizeAPI->text("play", "Play");
+			TEXT_RENDERING(playText)->text = localizeAPI->text("play");
 			LoadScore(modeMgr->GetMode(), difficulty);
 		}
 
@@ -474,9 +518,9 @@ GameState ModeMenuStateManager::Update(float dt) {
 		else if (BUTTON(playContainer)->clicked) {
 			float avg;
 			SOUND(playContainer)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-			RENDERING(herisson->actor.e)->hide = true;
-			TRANSFORM(herissonActor)->position.X = PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.X;
-			TEXT_RENDERING(title)->hide = true;
+			RENDERING(herisson->actor.e)->show = false;
+			TRANSFORM(herissonActor)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.x;
+			TEXT_RENDERING(title)->show = false;
 
 			if (storageAPI->savedScores(modeMgr->GetMode(), difficulty, avg).size() == 0) {
 				// show help
@@ -507,8 +551,9 @@ GameState ModeMenuStateManager::Update(float dt) {
 #endif
 		//enableSwarm button
 		else if (BUTTON(enableSwarmContainer)->clicked) {
-			communicationAPI->swarmRegistering(modeMgr->GetMode(), theGridSystem.sizeToDifficulty());
-			TEXT_RENDERING(enableSwarm)->hide = true;
+			// TODO !
+			// communicationAPI->swarmRegistering(modeMgr->GetMode(), theGridSystem.sizeToDifficulty());
+			TEXT_RENDERING(enableSwarm)->show = false;
 			BUTTON(enableSwarmContainer)->enabled = false;
 		}
 	}
@@ -526,18 +571,18 @@ void ModeMenuStateManager::Exit() {
 }
 
 void ModeMenuStateManager::LateExit() {
-	LOGI("%s", __PRETTY_FUNCTION__);
-	TEXT_RENDERING(yourScore)->hide = true;
-	TEXT_RENDERING(playText)->hide = true;
-	RENDERING(back)->hide = true;
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
+	TEXT_RENDERING(yourScore)->show = false;
+	TEXT_RENDERING(playText)->show = false;
+	RENDERING(back)->show = false;
 	for (int i=0;i<5;i++) {
-		TEXT_RENDERING(scoresName[i])->hide = true;
-		TEXT_RENDERING(scoresPoints[i])->hide = true;
-		TEXT_RENDERING(scoresLevel[i])->hide = true;
+		TEXT_RENDERING(scoresName[i])->show = false;
+		TEXT_RENDERING(scoresPoints[i])->show = false;
+		TEXT_RENDERING(scoresLevel[i])->show = false;
 	}
 	BUTTON(back)->enabled = false;
 	BUTTON(playContainer)->enabled = false;
-	TEXT_RENDERING(eDifficulty)->hide=true;
+	TEXT_RENDERING(eDifficulty)->show = false;
 	BUTTON(bDifficulty)->enabled = false;
 #if 0
 	BUTTON(facebook)->enabled = false;
@@ -546,14 +591,14 @@ void ModeMenuStateManager::LateExit() {
 	RENDERING(twitter)->hide = true;
 #endif
 	BUTTON(enableSwarmContainer)->enabled = false;
-	TEXT_RENDERING(enableSwarm)->hide = true;
+	TEXT_RENDERING(enableSwarm)->show = false;
 
 	gameOverState = NoGame;
 
-	RENDERING(menubg)->hide = true;
-	RENDERING(menufg)->hide = true;
-	RENDERING(fond)->hide = true;
-	TEXT_RENDERING(scoreTitle)->hide = true;
-	TEXT_RENDERING(average)->hide = true;
-	RENDERING(herisson->actor.e)->hide = true;
+	RENDERING(menubg)->show = false;
+	RENDERING(menufg)->show = false;
+	RENDERING(fond)->show = false;
+	TEXT_RENDERING(scoreTitle)->show = false;
+	TEXT_RENDERING(average)->show = false;
+	RENDERING(herisson->actor.e)->show = false;
 }

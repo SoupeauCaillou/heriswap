@@ -17,10 +17,11 @@
 	along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "Jukebox.h"
-#include "base/MathUtil.h"
+#include <glm/gtc/random.hpp>
 #include "base/Log.h"
 #include <algorithm>
 #include <assert.h>
+#include <cmath>
 
 enum Theme {
     C=0, D, I
@@ -46,14 +47,14 @@ static std::string accomp[] = {
 
 static void randomNumbersInRange(int fromIncl, int toIncl, int* out, int count, int incomp1, int incomp2) {
     bool i1Used = false, i2Used = false;
-    out[0] = MathUtil::RandomIntInRange(fromIncl, toIncl + 1);
+    out[0] = (int) std::floor(glm::linearRand(float(fromIncl), float(toIncl + 1)));
     if (out[0] == incomp1) i1Used = true;
     else if (out[0] == incomp2) i2Used = true;
     for (int i=1; i<count ;i++) {
         bool equalToPrevious;
         do {
             equalToPrevious = false;
-            out[i] = MathUtil::RandomIntInRange(fromIncl, toIncl + 1);
+            out[i] =(int) std::floor(glm::linearRand(float(fromIncl), float(toIncl + 1)));
             if (i1Used && out[i] == incomp2) {
 	            equalToPrevious = true;
             } else if (i2Used && out[i] == incomp1) {
@@ -78,15 +79,15 @@ static void build1SongComposition(std::vector<std::string>& selection) {
 
 static void build2SongsComposition(std::vector<std::string>& selection) {
     // theme (excl. I)
-    selection.push_back(themes[MathUtil::RandomInt(2)]);
+    selection.push_back(themes[(int) std::floor(glm::linearRand(0.0f, 2.99f))]);
     // accomp (excl. E)
-    selection.push_back(accomp[MathUtil::RandomInt(3)]);
+    selection.push_back(accomp[(int) std::floor(glm::linearRand(0.0f, 3.99f))]);
 }
 
 static void build3SongsComposition(std::vector<std::string>& selection) {
-	if (MathUtil::RandomInt(2)) {
+	if (std::floor(glm::linearRand(0.0f, 2.99f))) {
 	    // 1 theme (excl. I)
-	    selection.push_back(themes[MathUtil::RandomInt(2)]);
+	    selection.push_back(themes[(int) std::floor(glm::linearRand(0.0f, 2.99f))]);
 	    // 2 diff accomp
 	    int a[2];
 	    
@@ -101,12 +102,12 @@ static void build3SongsComposition(std::vector<std::string>& selection) {
 	    for (int i=0; i<2; i++)
 	        selection.push_back(themes[a[i]]);
 	    // 1 accomp
-		selection.push_back(accomp[MathUtil::RandomInt(E)]);
+		selection.push_back(accomp[(int) std::floor(glm::linearRand(0.0f, E + 0.99f))]);
 	}
 }
 
 static void build4SongsComposition(std::vector<std::string>& selection) {
-    if (MathUtil::RandomInt(2)) {
+    if (std::floor(glm::linearRand(0.0f, 2.99f))) {
         // 3 theme
         int t[3];
         randomNumbersInRange(0, 2, t, 3, -1, -1);
@@ -114,7 +115,7 @@ static void build4SongsComposition(std::vector<std::string>& selection) {
             selection.push_back(themes[t[i]]);
         }
         // 1 diff accomp (excl E)
-        selection.push_back(accomp[MathUtil::RandomInt(E)]);
+        selection.push_back(accomp[(int) std::floor(glm::linearRand(0.0f, E + 0.99f))]);
     } else {
         // 2 theme
         int t[2];
@@ -131,8 +132,6 @@ static void build4SongsComposition(std::vector<std::string>& selection) {
         }
     }
 }
-
-
 
 // A ou H
 // sinon 1+ thème et 1+ acc
@@ -175,7 +174,7 @@ struct IsNotIn {
 
 const std::vector<std::string>& Jukebox::pickNextSongs(int maxSongCount) {
     if (currentSelection.empty()) {
-	    int songCount  = MathUtil::RandomInt(maxSongCount) + 1;
+	    int songCount  = (int) std::floor(glm::linearRand(0.0f, maxSongCount + 0.99f)) + 1;
         initSelection(currentSelection, songCount);
     } else {
 	    int songCount = 0;
@@ -185,7 +184,7 @@ const std::vector<std::string>& Jukebox::pickNextSongs(int maxSongCount) {
 	    		break;
 	    	case 2: {
 	    		// bias toward 2 or 3
-	    		int r = MathUtil::RandomInt(5);
+	    		int r = (int) std::floor(glm::linearRand(0.0f, 5.99f));
 	    		if (r==0)
 	    			songCount = 1;
 	    		else if (r < 3)
@@ -195,7 +194,7 @@ const std::vector<std::string>& Jukebox::pickNextSongs(int maxSongCount) {
 	    		break;
 	    	}
 	    	default:
-	    		songCount = MathUtil::Min(maxSongCount, MathUtil::RandomIntInRange(currentSelection.size() - 1, currentSelection.size() + 2));
+	    		songCount = std::min(maxSongCount, (int) std::floor(glm::linearRand(currentSelection.size() - 1.0f, currentSelection.size() + 2.99f)));
 	    		break;
     	}
     

@@ -40,7 +40,7 @@ class CommunicationAPI;
 
 class PrivateData {
     public:
-        PrivateData(HeriswapGame* game, StorageAPI* storagee, NameInputAPI* inputUI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, AdAPI* ad, CommunicationAPI* com);
+        PrivateData(HeriswapGame* game, GameContext* context, SuccessManager* successMgr);
         ~PrivateData();
         void Setup();
      GameState state, stateBeforePause, newState;
@@ -48,7 +48,9 @@ class PrivateData {
      Entity sky, decord2nd, decord1er;
      std::map<GameState, GameStateManager*> state2Manager;
      std::map<GameMode, GameModeManager*> mode2Manager;
+     
      StorageAPI* storage;
+     
      GameMode mode;
 
      Entity cursor;

@@ -22,10 +22,11 @@
 #include <sstream>
 
 #include <base/PlacementHelper.h>
-#include <base/MathUtil.h>
+#include <glm/glm.hpp>
 
-#include "systems/ButtonSystem.h"
-#include "systems/TextRenderingSystem.h"
+#include <systems/ButtonSystem.h>
+#include <systems/TextRenderingSystem.h>
+#include <systems/TransformationSystem.h>
 
 #include "DepthLayer.h"
 #include "CombinationMark.h"
@@ -45,17 +46,17 @@ void TilesAttackGameModeManager::Enter() {
 	time = 0;
 	leavesDone = 0;
 	points = 0;
-	bonus = MathUtil::RandomInt(theGridSystem.Types);
+	bonus =  glm::round(glm::linearRand(0.f, (float)theGridSystem.Types));
 	succNoGridReset=false;
 	pts.clear();
-	pts.push_back(Vector2(0,0));
+	pts.push_back(glm::vec2(0, 0));
 	if (theGridSystem.sizeToDifficulty() == DifficultyEasy)
 		limit = 30;
 	else if (theGridSystem.sizeToDifficulty() == DifficultyMedium)
 		limit = 100;
 	else
 		limit = 100;
-	pts.push_back(Vector2(limit,1));//need limit leaves to end game
+	pts.push_back(glm::vec2(limit, 1));//need limit leaves to end game
 
 	generateLeaves(0, 8);
 
@@ -84,7 +85,7 @@ void TilesAttackGameModeManager::GameUpdate(float dt, GameState state) {
 	time+=dt;
 }
 float TilesAttackGameModeManager::GameProgressPercent() {
-	return MathUtil::Min(1.0f*leavesDone/limit, 1.0f);;
+	return glm::min(1.0f*leavesDone/limit, 1.0f);;
 }
 
 void TilesAttackGameModeManager::UiUpdate(float dt) {
@@ -125,7 +126,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 				text << ":" << leavesDone;
 			}
 			TEXT_RENDERING(debugEntities[2*i+1])->text = text.str();
-			TEXT_RENDERING(debugEntities[2*i+1])->hide = false;
+			TEXT_RENDERING(debugEntities[2*i+1])->show = true;
 			TEXT_RENDERING(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
 		}
 	}
@@ -193,7 +194,7 @@ int TilesAttackGameModeManager::saveInternalState(uint8_t** out) {
     ptr = (uint8_t*) mempcpy(ptr, tmp, parent);
     ptr = (uint8_t*) mempcpy(ptr, &leavesDone, sizeof(leavesDone));
 
-	TRANSFORM(herisson)->position.X = GameModeManager::position(leavesDone);
+	TRANSFORM(herisson)->position.x = GameModeManager::position(leavesDone);
 
     delete[] tmp;
     return (parent + s);
@@ -203,7 +204,7 @@ const uint8_t* TilesAttackGameModeManager::restoreInternalState(const uint8_t* i
     in = GameModeManager::restoreInternalState(in, size);
     memcpy(&leavesDone, in, sizeof(leavesDone)); in += sizeof(leavesDone);
 
-    TRANSFORM(herisson)->position.X = GameModeManager::position(leavesDone);
+    TRANSFORM(herisson)->position.x = GameModeManager::position(leavesDone);
 
     return in;
 }

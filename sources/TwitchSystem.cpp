@@ -19,7 +19,8 @@
 #include "TwitchSystem.h"
 
 #include <base/EntityManager.h>
-#include <base/MathUtil.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
 
 #include "systems/TransformationSystem.h"
 
@@ -39,14 +40,14 @@ void TwitchSystem::DoUpdate(float dt) {
 
         float target = (tc->target == TwitchComponent::MIN) ?
             (tc->minAngle + tc->currentVariance) : (tc->maxAngle + tc->currentVariance);
-        if (tc->speed * dt > MathUtil::Abs(target - trc->rotation)) {
+        if (tc->speed * dt > glm::abs(target - trc->rotation)) {
             trc->rotation = target;
 
             if (tc->target == TwitchComponent::MIN)
                 tc->target = TwitchComponent::MAX;
             else
                 tc->target = TwitchComponent::MIN;
-            tc->currentVariance = MathUtil::RandomFloatInRange(-tc->variance, tc->variance);
+            tc->currentVariance = glm::linearRand(-tc->variance, tc->variance);
         } else {
             float sign = target - trc->rotation;
             trc->rotation = trc->rotation + sign * tc->speed * dt;

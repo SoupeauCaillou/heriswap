@@ -20,7 +20,7 @@
 
 #include <iostream>
 
-#include <base/MathUtil.h>
+#include <glm/gtc/random.hpp>
 
 #include "systems/System.h"
 #include "systems/TransformationSystem.h"
@@ -33,9 +33,9 @@ GridSystem::GridSystem() : ComponentSystemImpl<GridComponent>("Grid") {
 	GridSize = Types = 8;
 	nbmin = 3;
 	GridComponent a;
-    componentSerializer.add(new Property(OFFSET(i, a), sizeof(int)));
-    componentSerializer.add(new Property(OFFSET(j, a), sizeof(int)));
-    componentSerializer.add(new Property(OFFSET(type, a), sizeof(int)));
+    componentSerializer.add(new Property<int>(OFFSET(i, a)));
+    componentSerializer.add(new Property<int>(OFFSET(j, a)));
+    componentSerializer.add(new Property<int>(OFFSET(type, a)));
 }
 
 Difficulty GridSystem::sizeToDifficulty() {
@@ -93,10 +93,10 @@ void GridSystem::print() {
 	}
 }
 
-void GridSystem::HideAll(bool activate) {
+void GridSystem::ShowAll(bool activate) {
 	for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
 		Entity e = (*it).first;
-		RENDERING(e)->hide = activate;
+		RENDERING(e)->show = activate;
 	}
 }
 
@@ -125,7 +125,7 @@ void GridSystem::ResetTest() {
 	}
 }
 
-bool GridSystem::Intersec(std::vector<Vector2> v1, std::vector<Vector2> v2){
+bool GridSystem::Intersec(std::vector<glm::vec2> v1, std::vector<glm::vec2> v2){
 	for ( size_t i = 0; i < v1.size(); ++i ) {
 		for ( size_t j = 0; j < v2.size(); ++j ) {
 			if (v1[i] == v2[j])
@@ -135,7 +135,7 @@ bool GridSystem::Intersec(std::vector<Vector2> v1, std::vector<Vector2> v2){
 	return false;
 }
 
-bool GridSystem::InVect(std::vector<Vector2> v1, Vector2 v2){
+bool GridSystem::InVect(std::vector<glm::vec2> v1, glm::vec2 v2){
 	for ( size_t i = 0; i < v1.size(); ++i ) {
 		if (v1[i] == v2)
 			return true;
@@ -195,7 +195,7 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool r
 					k=-2;
 				} else {
 					/*Useless to check them later : we already did it now*/
-					potential.points.push_back(Vector2(i,k));
+					potential.points.push_back(glm::vec2(i,k));
 					if (markAsChecked) GRID(next)->checkedV = true;
 					k--;
 				}
@@ -212,7 +212,7 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool r
 					k=GridSize;
 				} else {
 					if (markAsChecked) GRID(next)->checkedV = true;
-					potential.points.push_back(Vector2(i,k));
+					potential.points.push_back(glm::vec2(i,k));
 					k++;
 				}
 			}
@@ -243,7 +243,7 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool r
 				} else {
 					/*Useless to check them later : we already did it now*/
 					if (markAsChecked) GRID(next)->checkedH = true;
-					potential.points.push_back(Vector2(k,j));
+					potential.points.push_back(glm::vec2(k,j));
 					k--;
 				}
 			}
@@ -257,7 +257,7 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool r
 					k=(GridSize+1);
 				} else {
 					if (markAsChecked) GRID(next)->checkedH = true;
-					potential.points.push_back(Vector2(k,j));
+					potential.points.push_back(glm::vec2(k,j));
 					k++;
 				}
 			}
@@ -342,8 +342,8 @@ bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 
 void GridSystem::SetCheckInCombi(std::vector<Combinais> c) {
 	for (std::vector<Combinais>::reverse_iterator itc = c.rbegin(); itc != c.rend(); ++itc) {
-		for (std::vector<Vector2>::reverse_iterator it = itc->points.rbegin(); it != itc->points.rend(); ++it) {
-			GRID(GetOnPos(it->X, it->Y))->checkedV = GRID(GetOnPos(it->X,it->Y))->checkedH = false;
+		for (std::vector<glm::vec2>::reverse_iterator it = itc->points.rbegin(); it != itc->points.rend(); ++it) {
+			GRID(GetOnPos(it->x, it->y))->checkedV = GRID(GetOnPos(it->x,it->y))->checkedH = false;
 		}
 	}
 }
@@ -366,8 +366,8 @@ bool GridSystem::StillCombinations() {
 	return false;
 }
 
-std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchVertical() {
-	std::vector<Vector2> combin;
+std::vector<glm::vec2> GridSystem::LookForCombinationsOnSwitchVertical() {
+	std::vector<glm::vec2> combin;
 	for (int i=0; i<GridSize; i++) {
 		for (int j=0; j<GridSize-1; j++) {
 			Entity a = GetOnPos(i,j);
@@ -381,14 +381,14 @@ std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchVertical() {
 			|| (i>1 && GetOnPos(i-1,j+1) && GetOnPos(i-2,j+1) && GRID(a)->type == GRID(GetOnPos(i-1,j+1))->type && GRID(a)->type == GRID(GetOnPos(i-2,j+1))->type)
 			|| (i>0 && GetOnPos(i+1,j+1) && GetOnPos(i-1,j+1) &&     GRID(a)->type == GRID(GetOnPos(i-1,j+1))->type && GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type)
 			|| (i<GridSize-2 && GetOnPos(i+1,j+1) && GetOnPos(i+2,j+1) && GRID(a)->type == GRID(GetOnPos(i+2,j+1))->type && GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type))
-				combin.push_back(Vector2(i, j));
+				combin.push_back(glm::vec2(i, j));
 		}
 	}
 	return combin;
 }
 
-std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchHorizontal() {
-	std::vector<Vector2> combin;
+std::vector<glm::vec2> GridSystem::LookForCombinationsOnSwitchHorizontal() {
+	std::vector<glm::vec2> combin;
 	for (int i=0; i<GridSize-1; i++) {
 		for (int j=0; j<GridSize; j++) {
 			Entity a = GetOnPos(i,j);
@@ -401,7 +401,7 @@ std::vector<Vector2> GridSystem::LookForCombinationsOnSwitchHorizontal() {
 			|| (j>1 && GetOnPos(i+1,j-1) && GetOnPos(i+1,j-2) && GRID(a)->type == GRID(GetOnPos(i+1,j-1))->type &&  GRID(a)->type == GRID(GetOnPos(i+1,j-2))->type)
 			|| (j>0 && GetOnPos(i+1,j+1) && GetOnPos(i+1,j-1) &&     GRID(a)->type == GRID(GetOnPos(i+1,j-1))->type && GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type)
 			|| (j<GridSize-2 && GetOnPos(i+1,j+1) && GetOnPos(i+1,j+2) && GRID(a)->type == GRID(GetOnPos(i+1,j+2))->type &&  GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type))
-				combin.push_back(Vector2(i, j));
+				combin.push_back(glm::vec2(i, j));
 		}
 	}
 	return combin;
@@ -586,15 +586,15 @@ std::vector<Entity> GridSystem::ShowOneCombination() {
 	std::vector<Entity> highLightedCombi;
 	//desaturate everything
 	std::vector<Entity> leaves = RetrieveAllEntityWithComponent();
-	LOGW("Desaturate %d leaves", leaves.size());
+	LOGW("Desaturate '"<< leaves.size() << "' leaves");
 	for (unsigned int i = 0; i < leaves.size(); i++)
-		RENDERING(leaves[i])->effectRef = theRenderingSystem.loadEffectFile("desaturate.fs");
+		RENDERING(leaves[i])->effectRef = theRenderingSystem.effectLibrary.load("desaturate.fs");
 
 	//then resature one combi
 	std::vector < std::vector<Entity> > c = GetSwapCombinations();
-	int i = MathUtil::RandomInt(c.size());
+	int i = std::floor(glm::linearRand(0.0f, c.size()+0.99f));
 	for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
-		LOGW("Apply DefaultEffect to entity: %u", *it);
+		LOGW("Apply DefaultEffect to entity: '"<< *it << "'");
 		RENDERING(*it)->effectRef = DefaultEffectRef;
 		highLightedCombi.push_back(*it);
 	}

@@ -20,6 +20,9 @@
 
 #include <base/EntityManager.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtx/compatibility.hpp>
+
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/ADSRSystem.h"
@@ -45,7 +48,7 @@ void FallGameStateManager::Setup() {
 }
 
 void FallGameStateManager::Enter() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 	falling = theGridSystem.TileFall();
 
 	// Creation de la nouvelle grille
@@ -62,9 +65,9 @@ void FallGameStateManager::Enter() {
 	{
 		for ( std::vector<Combinais>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
 		{
-			for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
+			for ( std::vector<glm::vec2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV )
 			{
-                Entity e = theGridSystem.GetOnPos(itV->X, itV->Y);
+                Entity e = theGridSystem.GetOnPos(itV->x, itV->y);
                 CombinationMark::markCellInCombination(e);
 			}
 		}
@@ -84,21 +87,21 @@ GameState FallGameStateManager::Update(float dt) {
 		transition->active = true;
 		for(std::vector<CellFall>::iterator it=falling.begin(); it!=falling.end(); ++it) {
 			const CellFall& f = *it;
-			Vector2 targetPos = HeriswapGame::GridCoordsToPosition(f.x, f.toY,theGridSystem.GridSize);
-			Vector2 originPos = HeriswapGame::GridCoordsToPosition(f.x, f.fromY,theGridSystem.GridSize);
+			glm::vec2 targetPos = HeriswapGame::GridCoordsToPosition(f.x, f.toY,theGridSystem.GridSize);
+			glm::vec2 originPos = HeriswapGame::GridCoordsToPosition(f.x, f.fromY,theGridSystem.GridSize);
 			GRID(f.e)->checkedH = GRID(f.e)->checkedV = false;
-			TRANSFORM(f.e)->position = MathUtil::Lerp(originPos, targetPos, transition->value);
+			TRANSFORM(f.e)->position = glm::lerp(originPos, targetPos, transition->value);
 			if (transition->value == 1.) {
 				GRID(f.e)->j = f.toY;
 			}
 		}
 		if (transition->value == 1.) {
-			std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
+			std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false, true);
 			if (combinaisons.empty()) return Spawn;
 			else return Delete;
 		}
 	} else {
-		std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,true);
+		std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false, true);
 		if (combinaisons.empty()) return Spawn;
 		else return Delete;
 	}
@@ -109,5 +112,5 @@ void FallGameStateManager::Exit() {
 	falling.clear();
 	ADSR(fallAnimation)->active = false;
 
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 }

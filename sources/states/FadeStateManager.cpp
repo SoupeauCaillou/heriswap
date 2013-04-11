@@ -18,6 +18,8 @@
 */
 #include "FadeStateManager.h"
 
+#include <glm/glm.hpp>
+
 #include <base/TouchInputManager.h>
 #include <base/EntityManager.h>
 
@@ -35,9 +37,9 @@ void FadeGameStateManager::Setup() {
 	eFading = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eFading, Transformation);
 	ADD_COMPONENT(eFading, Rendering);
-	TRANSFORM(eFading)->position = Vector2(0,0);
-	TRANSFORM(eFading)->size = Vector2(10,20);
-	RENDERING(eFading)->hide = true;
+	TRANSFORM(eFading)->position = glm::vec2(0.f);
+	TRANSFORM(eFading)->size = glm::vec2(10.f, 20.f);
+	RENDERING(eFading)->show = false;
 	RENDERING(eFading)->color = Color(0,0,0);
 	TRANSFORM(eFading)->z = DL_Fading;
 
@@ -61,8 +63,8 @@ static void updateColor(Entity eFading, FadeType fading) {
 
 void FadeGameStateManager::Enter() {
 	stateActiveDuration = 0;
-	LOGW("Fade type: %d", fading);
-	RENDERING(eFading)->hide = false;
+	LOGW("Fade type: '" << fading << "'");
+	RENDERING(eFading)->show = true;
 	//update duration (can be changed)
 	ADSR(eFading)->attackTiming = duration;
 	ADSR(eFading)->active = true;
@@ -91,8 +93,8 @@ GameState FadeGameStateManager::Update(float dt) {
 }
 
 void FadeGameStateManager::Exit() {
-	LOGW("Duration : %.3f", stateActiveDuration);
-	RENDERING(eFading)->hide = true;
+	LOGW("Duration : '" << stateActiveDuration << "'");
+	RENDERING(eFading)->show = false;
 	ADSR(eFading)->active = false;
 
     if (exitDelegate)

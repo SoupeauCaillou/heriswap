@@ -23,6 +23,7 @@
 #include <base/PlacementHelper.h>
 
 #include "systems/TextRenderingSystem.h"
+#include "systems/TransformationSystem.h"
 
 #include "DepthLayer.h"
 
@@ -30,7 +31,7 @@ void CountDownStateManager::Setup() {
 	counter = theEntityManager.CreateEntity();
 	ADD_COMPONENT(counter, Transformation);
 	ADD_COMPONENT(counter, TextRendering);
-	TRANSFORM(counter)->position = Vector2(0, PlacementHelper::GimpYToScreen(650));
+	TRANSFORM(counter)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(650));
 	TEXT_RENDERING(counter)->color = Color(3.0/255.0, 99.0/255, 71.0/255);
 	TEXT_RENDERING(counter)->fontName = "gdtypo";
 	TEXT_RENDERING(counter)->positioning = TextRenderingComponent::CENTER;
@@ -41,16 +42,17 @@ void CountDownStateManager::Setup() {
 	ADD_COMPONENT(vorhang, Rendering);
 	ADD_COMPONENT(vorhang, Transformation);
 	TRANSFORM(vorhang)->z = DL_MainMenuBg;
-	TRANSFORM(vorhang)->size = Vector2(PlacementHelper::GimpWidth, PlacementHelper::GimpHeight);
+	TRANSFORM(vorhang)->size = glm::vec2( (float)PlacementHelper::GimpWidth, 
+										  (float)PlacementHelper::GimpHeight);
 	RENDERING(vorhang)->color = Color(0.f, 0.f, 0.f, 0.2f);
 }
 
 void CountDownStateManager::Enter() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 
 	if (mode != Normal) {
-		TEXT_RENDERING(counter)->hide = false;
-		RENDERING(vorhang)->hide = false;
+		TEXT_RENDERING(counter)->show = true;
+		RENDERING(vorhang)->show = true;
 	}
 	timeRemaining = 3.f;
 }
@@ -73,8 +75,8 @@ GameState CountDownStateManager::Update(float dt) {
 }
 
 void CountDownStateManager::Exit() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 
-	TEXT_RENDERING(counter)->hide = true;
-	RENDERING(vorhang)->hide = true;
+	TEXT_RENDERING(counter)->show = false;
+	RENDERING(vorhang)->show = false;
 }

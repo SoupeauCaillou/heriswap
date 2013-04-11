@@ -17,7 +17,7 @@
 	along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
-
+#ifdef SAC_ANDROID
 #include "../StorageAPI.h"
 #include <jni.h>
 
@@ -41,3 +41,5 @@ class StorageAPIAndroidImpl : public StorageAPI {
     public:
         JNIEnv* env;
 };
+
+#endif

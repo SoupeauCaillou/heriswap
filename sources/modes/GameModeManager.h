@@ -39,7 +39,7 @@ class GameModeManager {
 			unsigned int type;
 		};
 		struct Render {
-			Vector2 v;
+			glm::vec2 v;
 			float rot;
 		};
 
@@ -88,7 +88,7 @@ class GameModeManager {
 		void LoadHerissonTexture(int type);
 		void updateHerisson(float dt, float obj, float herissonSpeed);
 		void deleteLeaves(unsigned int type, int nb);
-		Entity createAndAddLeave(int type, const Vector2& position, float rotation);
+		Entity createAndAddLeave(int type, const glm::vec2& position, float rotation);
 
 	public:
 		// game params
@@ -104,7 +104,7 @@ class GameModeManager {
 	protected:
 		Entity branch;
 		Entity decor1er, decor2nd;
-		std::vector<Vector2> pts;
+		std::vector<glm::vec2> pts;
 
 		SuccessManager* successMgr;
 		//hérisson

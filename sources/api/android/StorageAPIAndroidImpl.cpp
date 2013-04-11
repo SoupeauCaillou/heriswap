@@ -16,6 +16,7 @@
 	You should have received a copy of the GNU General Public License
 	along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifdef SAC_ANDROID
 #include "StorageAPIAndroidImpl.h"
 #include "sac/base/Log.h"
 
@@ -143,3 +144,5 @@ int StorageAPIAndroidImpl::getSavedGamePointsSum() {
 bool StorageAPIAndroidImpl::everyModesPlayed() {
     return (env->CallStaticIntMethod(datas->cls, datas->getModePlayedCount) == 6);
 }
+
+#endif

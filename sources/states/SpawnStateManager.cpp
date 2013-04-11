@@ -20,6 +20,9 @@
 
 #include <sstream>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
+
 #include "base/EntityManager.h"
 
 #include "systems/TransformationSystem.h"
@@ -63,13 +66,13 @@ void SpawnGameStateManager::Setup() {
 
 //oldState = ModeMenu or LevelChanged or Delete
 void SpawnGameStateManager::Enter() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 
 	fillTheBlank(newLeaves);
 
 	//we need to create the whole grid (start game and level change)
 	if ((int)newLeaves.size() == theGridSystem.GridSize*theGridSystem.GridSize) {
-     	LOGI("create %u cells", newLeaves.size());
+     	LOGI("create '" << newLeaves.size() << "' cells");
 		for(unsigned int i=0; i<newLeaves.size(); i++) {
             if (newLeaves[i].entity == 0)
 			    newLeaves[i].entity = createCell(newLeaves[i], true);
@@ -93,13 +96,13 @@ void SpawnGameStateManager::removeEntitiesInCombination() {
 		c = theGridSystem.LookForCombination(false,true);
 		// change type from cells in combi
 		for(unsigned int i=0; i<c.size(); i++) {
-			int j = MathUtil::RandomInt(c[i].points.size());
-			Entity e = theGridSystem.GetOnPos(c[i].points[j].X, c[i].points[j].Y);
+			int j = glm::round(glm::linearRand(0.f, (float)c[i].points.size()));
+			Entity e = theGridSystem.GetOnPos(c[i].points[j].x, c[i].points[j].y);
 			int type, iter = 0;
 			do {
-				type = MathUtil::RandomInt(theGridSystem.Types);
+				type = glm::round(glm::linearRand(0.f, (float)theGridSystem.Types));
 				iter++;
-			} while (theGridSystem.GridPosIsInCombination(c[i].points[j].X, c[i].points[j].Y, type, 0) && iter < 100);
+			} while (theGridSystem.GridPosIsInCombination(c[i].points[j].x, c[i].points[j].y, type, 0) && iter < 100);
 			GRID(e)->type = type;
 			RenderingComponent* rc = RENDERING(e);
 			rc->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(type, &TRANSFORM(e)->rotation));
@@ -123,9 +126,9 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
                 }
 				TransformationComponent* tc = TRANSFORM(it->entity);
 				//leaves grow up from 0 to fixed size
-				Vector2 s = HeriswapGame::CellSize(theGridSystem.GridSize, gc->type);
+				glm::vec2 s = HeriswapGame::CellSize(theGridSystem.GridSize, gc->type);
 				if (ADSR(haveToAddLeavesInGrid)->value == 1){
-					tc->size = Vector2(s.X * 0.1, s.Y);
+					tc->size = glm::vec2(s.x * 0.1, s.y);
 					gc->i = it->X;
 					gc->j = it->Y;
 				} else {
@@ -143,14 +146,14 @@ GameState SpawnGameStateManager::Update(float dt __attribute__((unused))) {
         std::vector<Entity> feuilles = theGridSystem.RetrieveAllEntityWithComponent();
         //les feuilles disparaissent (taille tend vers 0)
         for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
-            Vector2 cellSize = HeriswapGame::CellSize(theGridSystem.GridSize, GRID(*it)->type) * HeriswapGame::CellContentScale() * (1 - ADSR(replaceGrid)->value);
-            ADSR(*it)->idleValue = cellSize.X;
+            glm::vec2 cellSize = HeriswapGame::CellSize(theGridSystem.GridSize, GRID(*it)->type) * HeriswapGame::CellContentScale() * (1 - ADSR(replaceGrid)->value);
+            ADSR(*it)->idleValue = cellSize.x;
         }
         //les feuilles ont disparu, on les supprime et on remplit avec de nouvelles feuilles
         if (ADSR(replaceGrid)->value == ADSR(replaceGrid)->sustainValue) {
 			theGridSystem.DeleteAll();
             fillTheBlank(newLeaves);
-            LOGI("nouvelle grille de %lu elements! ", newLeaves.size());
+            LOGI("nouvelle grille de '" << newLeaves.size() << "' elements! ");
             successMgr->gridResetted = true;
             ADSR(haveToAddLeavesInGrid)->activationTime = 0;
 			ADSR(haveToAddLeavesInGrid)->active = true;
@@ -192,7 +195,7 @@ GameState SpawnGameStateManager::NextState(bool recheckEveryoneInGrid) {
 }
 
 void SpawnGameStateManager::Exit() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 	newLeaves.clear();
 }
 
@@ -233,7 +236,7 @@ void fillTheBlank(std::vector<Feuille>& newLeaves)
 				//get a type which doesn't create a combi with its neighboors
 				int type, ite = 0;
 				do {
-					type = MathUtil::RandomInt(theGridSystem.Types);
+					type = glm::round(glm::linearRand(0.f, (float)theGridSystem.Types));
 					ite++;
 				} while (theGridSystem.GridPosIsInCombination(i, j, type, typeVoisins) && ite<5000);
 
@@ -245,7 +248,7 @@ void fillTheBlank(std::vector<Feuille>& newLeaves)
 }
 
 static Entity createCell(Feuille& f, bool assignGridPos) {
-	Entity e = theEntityManager.CreateEntity(EntityManager::Persistent);
+	Entity e = theEntityManager.CreateEntity("", EntityType::Persistent);
 	ADD_COMPONENT(e, Transformation);
 	ADD_COMPONENT(e, Rendering);
 	ADD_COMPONENT(e, ADSR);
@@ -253,35 +256,36 @@ static Entity createCell(Feuille& f, bool assignGridPos) {
     ADD_COMPONENT(e, Twitch);
 
 	TRANSFORM(e)->position = HeriswapGame::GridCoordsToPosition(f.X, f.Y, theGridSystem.GridSize);
-	TRANSFORM(e)->z = DL_Cell + MathUtil::RandomFloat() * 0.001;
+	TRANSFORM(e)->z = DL_Cell + glm::linearRand(0.f, 1.f) * 0.001;
 	RenderingComponent* rc = RENDERING(e);
-	rc->hide = false;
+	rc->show = true;
 
-	TRANSFORM(e)->size = Vector2(0.0f);
-	ADSR(e)->idleValue = HeriswapGame::CellSize(theGridSystem.GridSize, f.type).X * HeriswapGame::CellContentScale();
+	TRANSFORM(e)->size = glm::vec2(0.f);
+	ADSR(e)->idleValue = HeriswapGame::CellSize(theGridSystem.GridSize, f.type).x * HeriswapGame::CellContentScale();
 	GRID(e)->type = f.type;
 	if (assignGridPos) {
 		GRID(e)->i = f.X;
 		GRID(e)->j = f.Y;
 	}
 	rc->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(f.type, &TRANSFORM(e)->rotation));
-	rc->opaqueType = RenderingComponent::OPAQUE_CENTER;
+	// TODO !
+	rc->opaqueType = RenderingComponent::FULL_OPAQUE;
 	switch (f.type) {
 		case 0:
 		case 1:
-			rc->opaqueSeparation = 42.0 / 74;
+			// rc->opaqueSeparation = 42.0 / 74;
 			break;
 		case 2:
 		case 3:
-			rc->opaqueSeparation = 35.0 / 62;
+			// rc->opaqueSeparation = 35.0 / 62;
 			break;
 		case 4:
 		case 5:
-			rc->opaqueSeparation = 27.0 / 52;
+			// rc->opaqueSeparation = 27.0 / 52;
 			break;
 		case 6:
 		case 7:
-			rc->opaqueSeparation = 18.0 / 38;
+			// rc->opaqueSeparation = 18.0 / 38;
 			break;
 	}
 	return e;

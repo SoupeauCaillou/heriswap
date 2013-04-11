@@ -20,6 +20,8 @@
 
 #include <sstream>
 
+#include <glm/glm.hpp>
+
 #include <base/PlacementHelper.h>
 #include <base/EntityManager.h>
 
@@ -41,8 +43,10 @@ void AdsStateManager::Setup() {
 	RENDERING(eAds)->color = Color(0.f,0.f,0.f);
 	ADD_COMPONENT(eAds, Button);
 	TRANSFORM(eAds)->z = DL_Ads;
-	TRANSFORM(eAds)->size = Vector2(PlacementHelper::WindowWidth, PlacementHelper::WindowHeight);
-	TRANSFORM(eAds)->position = Vector2(PlacementHelper::GimpXToScreen(0),PlacementHelper::GimpYToScreen(0));
+	TRANSFORM(eAds)->size = glm::vec2((float)PlacementHelper::WindowWidth, 
+ 									  (float)PlacementHelper::WindowHeight);
+	TRANSFORM(eAds)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(0),
+										  (float)PlacementHelper::GimpYToScreen(0));
 	BUTTON(eAds)->enabled = false;
     lastAdTime = -30;
 }
@@ -50,12 +54,12 @@ void AdsStateManager::Setup() {
 void AdsStateManager::Enter() {
 	stateActiveDuration = 0;
 	gameb4Ads = storage->getGameCountBeforeNextAd();
- 	LOGI("%s : %d", __PRETTY_FUNCTION__, gameb4Ads);
+ 	LOGI("'" << __PRETTY_FUNCTION__ << "' : '" << gameb4Ads << "'");
  	if (gameb4Ads > 3) {
 	 	gameb4Ads = 3;
  	}
 
-	float timeSinceLAstAd = TimeUtil::getTime() - lastAdTime;
+	float timeSinceLAstAd = TimeUtil::GetTime() - lastAdTime;
 
 	// postpone ad if previous ad was shown less than 30sec ago
 	if (gameb4Ads <= 0 && timeSinceLAstAd < 30) {
@@ -66,12 +70,12 @@ void AdsStateManager::Enter() {
 		if (adAPI->showAd()) {
 			BUTTON(eAds)->enabled = true;
 	        gameb4Ads = 0;
-	        lastAdTime = TimeUtil::getTime();
+	        lastAdTime = TimeUtil::GetTime();
 		} else {
 			gameb4Ads = 1;
 		}
 	}
-	RENDERING(eAds)->hide = false;
+	RENDERING(eAds)->show = true;
 }
 
 GameState AdsStateManager::Update(float dt) {
@@ -83,7 +87,7 @@ GameState AdsStateManager::Update(float dt) {
 }
 
 void AdsStateManager::Exit() {
-	LOGI("%s : %.3f", __PRETTY_FUNCTION__, stateActiveDuration);
+	LOGI("'" << __PRETTY_FUNCTION__ << "' : '" << stateActiveDuration << "'");
 	BUTTON(eAds)->enabled = false;
 	if (gameb4Ads==0)
 		gameb4Ads=3;
@@ -93,5 +97,5 @@ void AdsStateManager::Exit() {
 
 void AdsStateManager::LateExit() {
 	LOGW("ici on cache pour de vrai");
-	RENDERING(eAds)->hide = true;
+	RENDERING(eAds)->show = false;
 }

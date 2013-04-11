@@ -21,6 +21,8 @@
 #include <base/PlacementHelper.h>
 #include <base/EntityManager.h>
 
+#include <glm/glm.hpp>
+
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/TextRenderingSystem.h"
@@ -39,7 +41,8 @@ void InGameUiHelper::build() {
 
 	smallLevel = theEntityManager.CreateEntity();
 	ADD_COMPONENT(smallLevel, Transformation);
-	TRANSFORM(smallLevel)->position = Vector2(PlacementHelper::GimpXToScreen(680), PlacementHelper::GimpYToScreen(188));
+	TRANSFORM(smallLevel)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(680), 
+												(float)PlacementHelper::GimpYToScreen(188));
 	TRANSFORM(smallLevel)->z = DL_Score;
 	ADD_COMPONENT(smallLevel, TextRendering);
 	TEXT_RENDERING(smallLevel)->color = Color(1, 1, 1);
@@ -50,8 +53,8 @@ void InGameUiHelper::build() {
 
 	pauseButton = theEntityManager.CreateEntity();
 	ADD_COMPONENT(pauseButton, Transformation);
-    TRANSFORM(pauseButton)->size = Vector2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
-    TransformationSystem::setPosition(TRANSFORM(pauseButton), Vector2(-PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
+    TRANSFORM(pauseButton)->size = glm::vec2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
+    TransformationSystem::setPosition(TRANSFORM(pauseButton), glm::vec2(-PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
     TRANSFORM(pauseButton)->z = DL_Score;
 	ADD_COMPONENT(pauseButton, Rendering);
 	RENDERING(pauseButton)->texture = theRenderingSystem.loadTextureFile("pause");
@@ -63,7 +66,7 @@ void InGameUiHelper::build() {
 	scoreProgress = theEntityManager.CreateEntity();
 	ADD_COMPONENT(scoreProgress, Transformation);
 	TRANSFORM(scoreProgress)->z = DL_Score;
-	TRANSFORM(scoreProgress)->position = Vector2(0, PlacementHelper::GimpYToScreen(1215));
+	TRANSFORM(scoreProgress)->position = glm::vec2(0, PlacementHelper::GimpYToScreen(1215));
 	ADD_COMPONENT(scoreProgress, TextRendering);
 	TEXT_RENDERING(scoreProgress)->color = Color(3.0/255, 99.0/255, 71.0/255);
 	TEXT_RENDERING(scoreProgress)->fontName = "typo";
@@ -78,9 +81,9 @@ void InGameUiHelper::show() {
 	if (!built)
 		return;
 
-	TEXT_RENDERING(smallLevel)->hide = false;
-	RENDERING(pauseButton)->hide = false;
-	TEXT_RENDERING(scoreProgress)->hide = false;
+	TEXT_RENDERING(smallLevel)->show = true;
+	RENDERING(pauseButton)->show = true;
+	TEXT_RENDERING(scoreProgress)->show = true;
 	BUTTON(pauseButton)->enabled=true;
 }
 
@@ -95,10 +98,10 @@ void InGameUiHelper::update(float dt) {
 void InGameUiHelper::hide() {
 	if (!built)
 		return;
-	TEXT_RENDERING(smallLevel)->hide = true;
-	RENDERING(pauseButton)->hide = true;
+	TEXT_RENDERING(smallLevel)->show = false;
+	RENDERING(pauseButton)->show = false;
 	BUTTON(pauseButton)->enabled = false;
-	TEXT_RENDERING(scoreProgress)->hide = true;
+	TEXT_RENDERING(scoreProgress)->show = false;
 }
 
 void InGameUiHelper::destroy() {

@@ -20,11 +20,13 @@
 
 #include <sstream>
 
-#include <base/MathUtil.h>
+#include <glm/glm.hpp>
+
 #include <base/PlacementHelper.h>
 
 #include "systems/ParticuleSystem.h"
 #include "systems/RenderingSystem.h"
+#include "systems/TransformationSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/MusicSystem.h"
 #include "systems/MorphingSystem.h"
@@ -35,6 +37,8 @@
 #include "DepthLayer.h"
 #include "CombinationMark.h"
 #include "GridSystem.h"
+
+#include <algorithm>
 
 void LevelStateManager::Setup() {
 	eGrid = theEntityManager.CreateEntity();
@@ -51,20 +55,22 @@ void LevelStateManager::Setup() {
 	eBigLevel = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eBigLevel, Transformation);
 	ADD_COMPONENT(eBigLevel, TextRendering);
-	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
+	TRANSFORM(eBigLevel)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(846));
 	TEXT_RENDERING(eBigLevel)->color = Color(1, 1, 1);
 	TEXT_RENDERING(eBigLevel)->fontName = "gdtypo";
 	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(350);
-	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
+	TRANSFORM(eBigLevel)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(846));
 	TEXT_RENDERING(eBigLevel)->positioning = TextRenderingComponent::CENTER;
 	ADD_COMPONENT(eBigLevel, Music);
     ADD_COMPONENT(eBigLevel, Morphing);
-	MUSIC(eBigLevel)->control = MusicComponent::Stop;
+	MUSIC(eBigLevel)->control = MusicControl::Stop;
 
 	eSnowEmitter = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSnowEmitter, Transformation);
-	TRANSFORM(eSnowEmitter)->size = Vector2(PlacementHelper::ScreenWidth, 0.5);
-	TransformationSystem::setPosition(TRANSFORM(eSnowEmitter), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::S);
+	TRANSFORM(eSnowEmitter)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 0.5f);
+	TransformationSystem::setPosition(TRANSFORM(eSnowEmitter), 
+									  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(0)), 
+									  TransformationSystem::S);
 	TRANSFORM(eSnowEmitter)->z = DL_Snow;
 	ADD_COMPONENT(eSnowEmitter, Particule);
 	PARTICULE(eSnowEmitter)->emissionRate = 0;
@@ -81,37 +87,44 @@ void LevelStateManager::Setup() {
 
 	eSnowBranch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSnowBranch, Transformation);
-	TRANSFORM(eSnowBranch)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpHeightToScreen(218));
-	TransformationSystem::setPosition(TRANSFORM(eSnowBranch), Vector2(-PlacementHelper::ScreenWidth*0.5, PlacementHelper::GimpYToScreen(0)), TransformationSystem::NW);
+	TRANSFORM(eSnowBranch)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(800),
+											 (float)PlacementHelper::GimpHeightToScreen(218));
+	TransformationSystem::setPosition(TRANSFORM(eSnowBranch), 
+									  glm::vec2((float)(-PlacementHelper::ScreenWidth*0.5), 
+									  			(float)PlacementHelper::GimpYToScreen(0)), 
+									  TransformationSystem::NW);
 	TRANSFORM(eSnowBranch)->z = DL_SnowBackground;
 	ADD_COMPONENT(eSnowBranch, Rendering);
 	RENDERING(eSnowBranch)->texture = theRenderingSystem.loadTextureFile("snow_branch");
 
 	eSnowGround = theEntityManager.CreateEntity();
 	ADD_COMPONENT(eSnowGround, Transformation);
-	TRANSFORM(eSnowGround)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(300));
-	TransformationSystem::setPosition(TRANSFORM(eSnowGround), Vector2(0, PlacementHelper::GimpYToScreen(1280)), TransformationSystem::S);
+	TRANSFORM(eSnowGround)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 
+											 (float)PlacementHelper::GimpHeightToScreen(300));
+	TransformationSystem::setPosition(TRANSFORM(eSnowGround), 
+									  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1280)), 
+									  TransformationSystem::S);
 	TRANSFORM(eSnowGround)->z = DL_SnowBackground;
 	ADD_COMPONENT(eSnowGround, Rendering);
 	RENDERING(eSnowGround)->texture = theRenderingSystem.loadTextureFile("snow_ground");
 }
 
 void LevelStateManager::Enter() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 	Color blue = Color(164.0/255.0, 164.0/255, 164.0/255);
 
 	levelState = Start;
 	std::stringstream a;
 	a << currentLevel;
 	TEXT_RENDERING(eBigLevel)->text = a.str();
-	TEXT_RENDERING(eBigLevel)->hide = false;
+	TEXT_RENDERING(eBigLevel)->show = true;
 	TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(300);
-	TRANSFORM(eBigLevel)->position = Vector2(0, PlacementHelper::GimpYToScreen(846));
+	TRANSFORM(eBigLevel)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(846));
 	TRANSFORM(eBigLevel)->z = DL_Score;
 
 	TEXT_RENDERING(eBigLevel)->color = blue;
 
-	MUSIC(eBigLevel)->control = MusicComponent::Start;
+	MUSIC(eBigLevel)->control = MusicControl::Play;
 	MORPHING(eBigLevel)->timing = 1;
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->color.a, 0, 1));
 	MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(smallLevel)->color.a, 1, 0));
@@ -121,8 +134,8 @@ void LevelStateManager::Enter() {
 	MORPHING(eBigLevel)->active = true;
 
 	PARTICULE(eSnowEmitter)->emissionRate = 50;
-	RENDERING(eSnowBranch)->hide = false;
-	RENDERING(eSnowGround)->hide = false;
+	RENDERING(eSnowBranch)->show = true;
+	RENDERING(eSnowGround)->show = true;
 
 	duration = 0;
 
@@ -140,7 +153,7 @@ void LevelStateManager::Enter() {
 			if (rc->texture == branch || rc->texture == pause || rc->texture == sound1 || rc->texture == sound2) {
 				continue;
 			}
-			rc->effectRef = theRenderingSystem.loadEffectFile("desaturate.fs");
+			rc->effectRef = theRenderingSystem.effectLibrary.load("desaturate.fs");
 		}
 	}
 
@@ -183,20 +196,20 @@ GameState LevelStateManager::Update(float dt) {
 		Color blue = Color(164.0/255.0, 164.0/255, 164.0/255);
 		mc->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->charHeight, TEXT_RENDERING(eBigLevel)->charHeight, TEXT_RENDERING(smallLevel)->charHeight));
 		// mc->elements.push_back(new TypedMorphElement<Color> (&TEXT_RENDERING(eBigLevel)->color, blue, Color(1,1,1,1)));
-		mc->elements.push_back(new TypedMorphElement<Vector2> (&TRANSFORM(eBigLevel)->position, TRANSFORM(eBigLevel)->position, TRANSFORM(smallLevel)->position));
+		mc->elements.push_back(new TypedMorphElement<glm::vec2> (&TRANSFORM(eBigLevel)->position, TRANSFORM(eBigLevel)->position, TRANSFORM(smallLevel)->position));
 		mc->active = true;
 		mc->activationTime = 0;
 		mc->timing = 0.5;
 
 		PARTICULE(eSnowEmitter)->emissionRate = 0;
 		//on modifie le herisson
-		TRANSFORM(modeMgr->herisson)->position.X = modeMgr->position(modeMgr->time);
+		TRANSFORM(modeMgr->herisson)->position.x = modeMgr->position(modeMgr->time);
 		RENDERING(modeMgr->herisson)->color.a = 1;
 		RENDERING(modeMgr->herisson)->effectRef = DefaultEffectRef;
 		//on genere les nouvelles feuilles
 		modeMgr->generateLeaves(0, theGridSystem.Types);
 		for (unsigned int i=0; i<modeMgr->branchLeaves.size(); i++) {
-			TRANSFORM(modeMgr->branchLeaves[i].e)->size =Vector2::Zero;
+			TRANSFORM(modeMgr->branchLeaves[i].e)->size =glm::vec2(0.f);
 		}
 	}
 	if (levelState == BigScoreBeganToMove || levelState == BigScoreMoving) {
@@ -204,7 +217,7 @@ GameState LevelStateManager::Update(float dt) {
 		//if leaves created, make them grow !
 		for (unsigned int i=0; i<modeMgr->branchLeaves.size(); i++) {
 			TRANSFORM(modeMgr->branchLeaves[i].e)->size = 
-                HeriswapGame::CellSize(8, modeMgr->branchLeaves[i].type) * HeriswapGame::CellContentScale() * MathUtil::Min((duration-6) / 4.f, 1.f);
+                HeriswapGame::CellSize(8, modeMgr->branchLeaves[i].type) * HeriswapGame::CellContentScale() * glm::min((duration-6) / 4.f, 1.f);
 		}
 		RENDERING(eSnowBranch)->color.a = 1-(duration-6)/(10-6);
 		RENDERING(eSnowGround)->color.a = 1-(duration-6)/(10-6.f);
@@ -227,10 +240,10 @@ void LevelStateManager::Exit() {
 	theGridSystem.DeleteAll();
 	ADSR(eGrid)->active = false;
 	feuilles.clear();
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 	PARTICULE(eSnowEmitter)->emissionRate = 0;
-	RENDERING(eSnowBranch)->hide = true;
-	RENDERING(eSnowGround)->hide = true;
+	RENDERING(eSnowBranch)->show = false;
+	RENDERING(eSnowGround)->show = false;
 
 	MorphingComponent* mc = MORPHING(eBigLevel);
 	for (unsigned int i=0; i<mc->elements.size(); i++) {
@@ -242,7 +255,7 @@ void LevelStateManager::Exit() {
 	}
 	mc->elements.clear();
 	// hide big level
-	TEXT_RENDERING(eBigLevel)->hide = true;
+	TEXT_RENDERING(eBigLevel)->show = false;
 	// show small level
 	TEXT_RENDERING(smallLevel)->text = TEXT_RENDERING(eBigLevel)->text;
 	TEXT_RENDERING(smallLevel)->color.a = 1;

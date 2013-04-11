@@ -20,7 +20,7 @@
 
 #include <sstream>
 
-#include <base/MathUtil.h>
+#include <cmath>
 
 #include "systems/RenderingSystem.h"
 
@@ -32,7 +32,7 @@ void updateAnim(AnimatedActor* a, float dt) {
 
 	a->timeElapsed = 0.f;
 	a->frames++;
-	if (a->frames>=30/(MathUtil::Abs(a->actor.speed))) {
+	if (a->frames>=30/(std::abs(a->actor.speed))) {
 		RENDERING(a->actor.e)->texture = theRenderingSystem.loadTextureFile(a->anim[a->ind]);
 		a->ind++;
 		if (a->ind == (int)a->anim.size()) a->ind = 0;

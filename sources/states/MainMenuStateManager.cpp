@@ -18,6 +18,8 @@
 */
 #include "MainMenuStateManager.h"
 
+#include <glm/glm.hpp>
+
 #include <base/EntityManager.h>
 #include <base/TouchInputManager.h>
 #include <base/PlacementHelper.h>
@@ -36,10 +38,12 @@ void MainMenuGameStateManager::Setup() {
 
 	//Creating text entities
 	for (int i=0; i<3; i++) {
-		eStart[i] = theTextRenderingSystem.CreateEntity();
+		eStart[i] = theEntityManager.CreateEntity();
+		ADD_COMPONENT(eStart[i], Transformation);
+		ADD_COMPONENT(eStart[i], TextRendering);
 
 		TRANSFORM(eStart[i])->z = DL_MainMenuUITxt;
-		TEXT_RENDERING(eStart[i])->hide = true;
+		TEXT_RENDERING(eStart[i])->show = false;
 		TEXT_RENDERING(eStart[i])->positioning = TextRenderingComponent::LEFT;
 		TEXT_RENDERING(eStart[i])->color = green;
 		TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
@@ -50,19 +54,23 @@ void MainMenuGameStateManager::Setup() {
 
 	    bStart[i] = theEntityManager.CreateEntity();
 	    ADD_COMPONENT(bStart[i], Transformation);
-	    TRANSFORM(bStart[i])->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
-	    TRANSFORM(bStart[i])->position.X = 0;
+	    TRANSFORM(bStart[i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(708), 
+	    									   (float)PlacementHelper::GimpHeightToScreen(147));
+	    TRANSFORM(bStart[i])->position.x = 0;
 	    TRANSFORM(bStart[i])->z = DL_MainMenuUIBg;
 	    ADD_COMPONENT(bStart[i], Rendering);
 	    RENDERING(bStart[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
 	    RENDERING(bStart[i])->color.a = 0.5;
 
-		TRANSFORM(eStart[i])->position.X = PlacementHelper::GimpXToScreen(75);
-		TRANSFORM(eStart[i])->position.Y = TRANSFORM(bStart[i])->position.Y = PlacementHelper::GimpYToScreen(156+i*183);
+		TRANSFORM(eStart[i])->position.x = (float)PlacementHelper::GimpXToScreen(75);
+		TRANSFORM(eStart[i])->position.y = TRANSFORM(bStart[i])->position.y = (float)PlacementHelper::GimpYToScreen(156+i*183);
 	}
-	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Score race");
-	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2", "Time attack");
-	TEXT_RENDERING(eStart[2])->text = localizeAPI->text("mode_3", "100 seconds");
+	// TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Score race");
+	// TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2", "Time attack");
+	// TEXT_RENDERING(eStart[2])->text = localizeAPI->text("mode_3", "100 seconds");
+	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1");
+	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2");
+	TEXT_RENDERING(eStart[2])->text = localizeAPI->text("mode_3");
 
 
 	//Containers properties
@@ -70,8 +78,9 @@ void MainMenuGameStateManager::Setup() {
 		TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(54);
 		float w = theTextRenderingSystem.computeTextRenderingComponentWidth(TEXT_RENDERING(eStart[i]));
 		TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
-		Vector2 target = Vector2(PlacementHelper::GimpXToScreen(700) - w ,PlacementHelper::GimpYToScreen(100));
-		TypedMorphElement<Vector2>* posMorph = new TypedMorphElement<Vector2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, target);
+		glm::vec2 target = glm::vec2((float)(PlacementHelper::GimpXToScreen(700) - w) ,
+									 (float)PlacementHelper::GimpYToScreen(100));
+		TypedMorphElement<glm::vec2>* posMorph = new TypedMorphElement<glm::vec2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, target);
         MORPHING(eStart[i])->elements.push_back(posMorph);
 		ADD_COMPONENT(bStart[i], Sound);
 		ADD_COMPONENT(bStart[i], Button);
@@ -80,35 +89,44 @@ void MainMenuGameStateManager::Setup() {
 
 	//// TEMP TEST CODE
 	//TEXT_RENDERING(eStart[0])->flags |= TextRenderingComponent::MultiLineBit;
-	//TRANSFORM(eStart[0])->position.X = 0;
+	//TRANSFORM(eStart[0])->position.x = 0;
 	//TRANSFORM(eStart[0])->size = TRANSFORM(bStart[0])->size;
-	//TRANSFORM(eStart[0])->size.Y *= 4;
+	//TRANSFORM(eStart[0])->size.y *= 4;
 	for (int i=0; i<3; i++) {
 		TEXT_RENDERING(eStart[i])->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
-		TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9;
+		TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9f;
 	}
 
 	menubg = theEntityManager.CreateEntity();
 	ADD_COMPONENT(menubg, Transformation);
-	TRANSFORM(menubg)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(570));
-	TransformationSystem::setPosition(TRANSFORM(menubg), Vector2(0, PlacementHelper::GimpYToScreen(542)), TransformationSystem::N);
+	TRANSFORM(menubg)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 
+										(float)PlacementHelper::GimpHeightToScreen(570));
+	TransformationSystem::setPosition(TRANSFORM(menubg), 
+									  glm::vec2(0.f, 
+									  		    (float)PlacementHelper::GimpYToScreen(542)), 
+									  TransformationSystem::N);
 	TRANSFORM(menubg)->z = DL_MainMenuBg;
 	ADD_COMPONENT(menubg, Rendering);
 	RENDERING(menubg)->texture = theRenderingSystem.loadTextureFile("2emeplan");
-	RENDERING(menubg)->hide = true;
-	RENDERING(menubg)->opaqueType = RenderingComponent::OPAQUE_UNDER;
-	RENDERING(menubg)->opaqueSeparation = 0.26;
+	RENDERING(menubg)->show = false;
+	// TODO !
+	RENDERING(menubg)->opaqueType = RenderingComponent::NON_OPAQUE;
+	// RENDERING(menubg)->opaqueSeparation = 0.26;
 
 	menufg = theEntityManager.CreateEntity();
 	ADD_COMPONENT(menufg, Transformation);
-	TRANSFORM(menufg)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(570));
-	TransformationSystem::setPosition(TRANSFORM(menufg), Vector2(0, PlacementHelper::GimpYToScreen(1280)), TransformationSystem::S);
+	TRANSFORM(menufg)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 
+										(float)PlacementHelper::GimpHeightToScreen(570));
+	TransformationSystem::setPosition(TRANSFORM(menufg), 
+									  glm::vec2(0.f, PlacementHelper::GimpYToScreen(1280)), 
+									  TransformationSystem::S);
 	TRANSFORM(menufg)->z = DL_MainMenuFg;
 	ADD_COMPONENT(menufg, Rendering);
 	RENDERING(menufg)->texture = theRenderingSystem.loadTextureFile("1erplan");
-	RENDERING(menufg)->hide = true;
-	RENDERING(menufg)->opaqueType = RenderingComponent::OPAQUE_UNDER;
-	RENDERING(menufg)->opaqueSeparation = (PlacementHelper::GimpHeightToScreen(1092) - PlacementHelper::GimpHeightToScreen(1280 - 570)) / TRANSFORM(menufg)->size.Y;
+	RENDERING(menufg)->show = false;
+	// TODO !
+	RENDERING(menufg)->opaqueType = RenderingComponent::NON_OPAQUE;
+	// RENDERING(menufg)->opaqueSeparation = (PlacementHelper::GimpHeightToScreen(1092) - PlacementHelper::GimpHeightToScreen(1280 - 570)) / TRANSFORM(menufg)->size.y;
 
 	herisson = new AnimatedActor();
 	herisson->frames=0;
@@ -119,18 +137,23 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(a, Rendering);
 	herisson->actor.e = a;
 	herisson->anim.clear();
-	loadHerissonTexture(MathUtil::RandomInt(8)+1, herisson);
-	herisson->actor.speed = MathUtil::RandomFloatInRange(2.0f,4.0f);
-	TRANSFORM(a)->size = Vector2(PlacementHelper::GimpWidthToScreen(310), PlacementHelper::GimpHeightToScreen(253))*MathUtil::RandomFloatInRange(.3f,1.f);
-	TransformationSystem::setPosition(TRANSFORM(a), Vector2(PlacementHelper::GimpXToScreen(-MathUtil::RandomInt(300))-TRANSFORM(a)->size.X, PlacementHelper::GimpYToScreen(MathUtil::RandomIntInRange(830,1150))), TransformationSystem::SW);
+	loadHerissonTexture(glm::round(glm::linearRand(0.f, 8.f))+1, herisson);
+	herisson->actor.speed = glm::linearRand(2.0f, 4.0f);
+	TRANSFORM(a)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), 
+								   (float)(PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f, 1.f));
+	TransformationSystem::setPosition(TRANSFORM(a), 
+									  glm::vec2((float)(PlacementHelper::GimpXToScreen(-glm::round(glm::linearRand(0.f, 300.f))) - TRANSFORM(a)->size.x), 
+									  			(float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f,1150.f)))), 
+									  TransformationSystem::SW);
 
 	quitButton[0] = theEntityManager.CreateEntity();
 	ADD_COMPONENT(quitButton[0], Transformation);
 	TRANSFORM(quitButton[0])->z = DL_MainMenuUITxt;
-	TRANSFORM(quitButton[0])->position = Vector2(0, PlacementHelper::GimpYToScreen(1215));
+	TRANSFORM(quitButton[0])->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1215));
 	ADD_COMPONENT(quitButton[0], TextRendering);
-	TEXT_RENDERING(quitButton[0])->text = " " + localizeAPI->text("quit", "Exit") + " ";
-	TEXT_RENDERING(quitButton[0])->hide = true;
+	// TEXT_RENDERING(quitButton[0])->text = " " + localizeAPI->text("quit", "Exit") + " ";
+	TEXT_RENDERING(quitButton[0])->text = " " + localizeAPI->text("quit") + " ";
+	TEXT_RENDERING(quitButton[0])->show = false;
 	TEXT_RENDERING(quitButton[0])->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(quitButton[0])->color = green;
 	TEXT_RENDERING(quitButton[0])->charHeight = PlacementHelper::GimpHeightToScreen(60);
@@ -139,8 +162,8 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(quitButton[1], Transformation);
 	float hhh = PlacementHelper::GimpHeightToScreen(95);
 	float www = hhh / 0.209; //theTextRenderingSystem.computeTextRenderingComponentWidth(TEXT_RENDERING(quitButton[0]));
-	TRANSFORM(quitButton[1])->size = Vector2(www, www * 0.209);
-	TRANSFORM(quitButton[1])->position = Vector2(0, PlacementHelper::GimpYToScreen(1215));
+	TRANSFORM(quitButton[1])->size = glm::vec2(www, www * 0.209);
+	TRANSFORM(quitButton[1])->position = glm::vec2(0, PlacementHelper::GimpYToScreen(1215));
 	TRANSFORM(quitButton[1])->z = DL_MainMenuUIBg;
 	ADD_COMPONENT(quitButton[1], Rendering);
 	RENDERING(quitButton[1])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
@@ -151,28 +174,28 @@ void MainMenuGameStateManager::Setup() {
 }
 
 void MainMenuGameStateManager::Enter() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 
 	// preload sound effect
 	theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 
-	RENDERING(herisson->actor.e)->hide = false;
+	RENDERING(herisson->actor.e)->show = true;
 
 	for (int i = 0; i < 3; i++) {
-		RENDERING(bStart[i])->hide = false;
-		TEXT_RENDERING(eStart[i])->hide = false;
+		RENDERING(bStart[i])->show = true;
+		TEXT_RENDERING(eStart[i])->show = true;
 		BUTTON(bStart[i])->enabled = true;
 	}
-	RENDERING(menubg)->hide = false;
-	RENDERING(menufg)->hide = false;
+	RENDERING(menubg)->show = true;
+	RENDERING(menufg)->show = true;
 
 	if (modeTitleToReset) {
 		theMorphingSystem.reverse(MORPHING(modeTitleToReset));
 		MORPHING(modeTitleToReset)->activationTime = 0;
 		MORPHING(modeTitleToReset)->active = true;
 	}
-	TEXT_RENDERING(quitButton[0])->hide = false;
-	RENDERING(quitButton[1])->hide = false;
+	TEXT_RENDERING(quitButton[0])->show = true;
+	RENDERING(quitButton[1])->show = true;
 	BUTTON(quitButton[1])->enabled = true;
 	choosenGameMode = Normal;
 }
@@ -180,14 +203,18 @@ void MainMenuGameStateManager::Enter() {
 GameState MainMenuGameStateManager::Update(float dt) {
 	Entity a = herisson->actor.e;
 	updateAnim(herisson, dt);
-	if (TRANSFORM(a)->position.X < PlacementHelper::GimpXToScreen(800)+TRANSFORM(a)->size.X) {
-		TRANSFORM(a)->position.X += herisson->actor.speed/8.*dt;
+	if (TRANSFORM(a)->position.x < PlacementHelper::GimpXToScreen(800)+TRANSFORM(a)->size.x) {
+		TRANSFORM(a)->position.x += herisson->actor.speed/8.*dt;
 	} else {
 		herisson->anim.clear();
-		loadHerissonTexture(MathUtil::RandomInt(8)+1, herisson);//random texture
-		herisson->actor.speed = MathUtil::RandomFloatInRange(2.0f,4.0f);//speed
-		TRANSFORM(a)->size = Vector2(PlacementHelper::GimpWidthToScreen(310), PlacementHelper::GimpHeightToScreen(253))*MathUtil::RandomFloatInRange(.3f,1.f);//size
-		TransformationSystem::setPosition(TRANSFORM(a), Vector2(PlacementHelper::GimpXToScreen(-MathUtil::RandomInt(300))-TRANSFORM(a)->size.X, PlacementHelper::GimpYToScreen(MathUtil::RandomIntInRange(830,1150))), TransformationSystem::SW);//offset
+		loadHerissonTexture(glm::round(glm::linearRand(0.f, 8.f))+1, herisson);//random texture
+		herisson->actor.speed = glm::linearRand(2.0f,4.0f);//speed
+		TRANSFORM(a)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), 
+									   (float)PlacementHelper::GimpHeightToScreen(253))*glm::linearRand(.3f,1.f);//size
+		TransformationSystem::setPosition(TRANSFORM(a), 
+										  glm::vec2((float)(PlacementHelper::GimpXToScreen(-glm::round(glm::linearRand(0.f, 300.f)))-TRANSFORM(a)->size.x), 
+										  			(float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f, 1150.f)))), 
+										  TransformationSystem::SW);//offset
 	}
 	if (!modeTitleToReset || (modeTitleToReset && !MORPHING(modeTitleToReset)->active)) {
 		if (BUTTON(bStart[0])->clicked) {
@@ -214,11 +241,11 @@ GameState MainMenuGameStateManager::Update(float dt) {
 }
 
 void MainMenuGameStateManager::Exit() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 
 	for (int i = 0; i < 3; i++) {
-		if (i!=choosenGameMode) TEXT_RENDERING(eStart[i])->hide = true;
-		RENDERING(bStart[i])->hide = true;
+		if (i!=choosenGameMode) TEXT_RENDERING(eStart[i])->show = false;
+		RENDERING(bStart[i])->show = false;
 		BUTTON(bStart[i])->enabled = false;
 	}
 
@@ -230,7 +257,7 @@ void MainMenuGameStateManager::Exit() {
 
     herisson->actor.speed = 4.5f;
 
-	TEXT_RENDERING(quitButton[0])->hide = true;
-	RENDERING(quitButton[1])->hide = true;
+	TEXT_RENDERING(quitButton[0])->show = false;
+	RENDERING(quitButton[1])->show = false;
 	BUTTON(quitButton[1])->enabled = false;
 }

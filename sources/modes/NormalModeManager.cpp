@@ -20,16 +20,17 @@
 
 #include <sstream>
 
-#include <base/Vector2.h>
-#include <base/MathUtil.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
 #include <base/PlacementHelper.h>
-#include <base/MathUtil.h>
+
 
 #include "systems/ScrollingSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/ADSRSystem.h"
 #include "systems/MusicSystem.h"
+#include "systems/TransformationSystem.h"
 
 #include "CombinationMark.h"
 #include "GridSystem.h"
@@ -39,11 +40,11 @@
 #define DECOR1_SPEED 1
 
 NormalGameModeManager::NormalGameModeManager(HeriswapGame* game, SuccessManager* SuccessMgr, StorageAPI* sAPI) : GameModeManager(game,SuccessMgr, sAPI) {
-	pts.push_back(Vector2(0,0));
-	pts.push_back(Vector2(15,0.125));
-	pts.push_back(Vector2(25,0.25));
-	pts.push_back(Vector2(35,0.5));
-	pts.push_back(Vector2(45,1));
+	pts.push_back(glm::vec2(0.f,0.f));
+	pts.push_back(glm::vec2(15.f,0.125f));
+	pts.push_back(glm::vec2(25.f,0.25f));
+	pts.push_back(glm::vec2(35.f,0.5f));
+	pts.push_back(glm::vec2(45.f,1.f));
 }
 
 NormalGameModeManager::~NormalGameModeManager() {
@@ -59,7 +60,7 @@ void NormalGameModeManager::Enter() {
 	time = 0;
 	points = 0;
 	level = 1;
-	bonus = MathUtil::RandomInt(theGridSystem.Types);
+	bonus = glm::round(glm::linearRand(0.f, (float)theGridSystem.Types));
 	for (int i=0;i<theGridSystem.Types;i++) remain[i]=3;
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
@@ -113,7 +114,7 @@ void NormalGameModeManager::GameUpdate(float dt, GameState state) {
 }
 
 float NormalGameModeManager::GameProgressPercent() {
-	return MathUtil::Min(1.0f, (float)time/limit);
+	return glm::min(1.0f, (float)time/limit);
 }
 
 
@@ -121,7 +122,7 @@ void NormalGameModeManager::UiUpdate(float dt) {
 	#define CLOCHETTE_TIME 35.0f
 	ADSR(stressTrack)->active = (time > CLOCHETTE_TIME);
     if (ADSR(stressTrack)->active) {
-        ADSR(stressTrack)->attackValue = ADSR(stressTrack)->sustainValue = MathUtil::Min((time - CLOCHETTE_TIME) / (limit - CLOCHETTE_TIME), 1.0f);
+        ADSR(stressTrack)->attackValue = ADSR(stressTrack)->sustainValue = glm::min((time - CLOCHETTE_TIME) / (limit - CLOCHETTE_TIME), 1.0f);
     }
 
 	//Score
@@ -158,7 +159,7 @@ void NormalGameModeManager::UiUpdate(float dt) {
 			std::stringstream text;
 			text << (int)remain[i] << "," << (int)(level+2) << "," <<  countBranchLeavesOfType(i);
 			TEXT_RENDERING(debugEntities[2*i+1])->text = text.str();
-			TEXT_RENDERING(debugEntities[2*i+1])->hide = false;
+			TEXT_RENDERING(debugEntities[2*i+1])->show = true;
 			TEXT_RENDERING(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
 		}
 	}
@@ -167,7 +168,7 @@ void NormalGameModeManager::UiUpdate(float dt) {
 
 #include <cmath>
 int NormalGameModeManager::levelToLeaveToDelete(int type, int nb, int initialLeaveCount, int removedLeave, int leftOnBranch) {
-	int leftForType = MathUtil::Max(0, initialLeaveCount - (removedLeave + nb));
+	int leftForType = glm::max(0, initialLeaveCount - (removedLeave + nb));
 	if (leftForType <= 3) {
 		assert (leftOnBranch >= leftForType);
 		return (leftOnBranch - leftForType);
@@ -183,10 +184,10 @@ int NormalGameModeManager::levelToLeaveToDelete(int type, int nb, int initialLea
 static float timeGain(int nb, int level, float time) {
 	if (level < 20) {
 	    // = 0.75sec average in hard
-	    return MathUtil::Min(time, 2.f*nb/theGridSystem.GridSize);
+	    return glm::min(time, 2.f*nb/theGridSystem.GridSize);
 	} else {
 	    // = 0.19 sec average in hard
-	    return MathUtil::Min(time, 0.5f*nb/theGridSystem.GridSize);
+	    return glm::min(time, 0.5f*nb/theGridSystem.GridSize);
 	}
 }
 
@@ -204,7 +205,7 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<BranchLea
     float deleteDuration = 0.3;
     float spawnDuration = 0.2;
     // herisson distance
-    float currentPos = TRANSFORM(herisson)->position.X;
+    float currentPos = TRANSFORM(herisson)->position.x;
     float newPos = GameModeManager::position(time - timeGain(count, level, time));
     // update herisson and decor at the same time.
     levelMoveDuration = deleteDuration + spawnDuration;
@@ -213,7 +214,7 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<BranchLea
 
     nextHerissonSpeed = (newPos - currentPos) / levelMoveDuration;
 
-    SCROLLING(decor1er)->speed = MathUtil::Max(0.0f, -nextHerissonSpeed);
+    SCROLLING(decor1er)->speed = glm::max(0.0f, -nextHerissonSpeed);
     // SCROLLING(decor2nd)->speed.X = nextHerissonSpeed * DECOR2_SPEED;
     // SCROLLING(sky)->speed.X = nextHerissonSpeed * SKY_SPEED;
 }
@@ -243,7 +244,7 @@ void NormalGameModeManager::startLevel(int lvl) {
 
 	successMgr->sLevel10(lvl);
 
-	LOGI("New level: %d", lvl);
+	LOGI("New level: '" << lvl << "'");
 
 	for (int i=0;i<theGridSystem.Types;i++)
 		remain[i] = 2+level;
@@ -256,7 +257,7 @@ void NormalGameModeManager::startLevel(int lvl) {
 
 	// put hedgehog back on first animation position
 	c->ind = 0;
-	bonus = MathUtil::RandomInt(theGridSystem.Types);
+	bonus = glm::round(glm::linearRand(0.f, (float)theGridSystem.Types));
 	LoadHerissonTexture(bonus+1);
 	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
 	SCROLLING(decor1er)->speed = 0;
@@ -279,7 +280,7 @@ bool NormalGameModeManager::LevelUp() {
 	if (match) {
 		successMgr->sLevel1For2K(level, points);
 
-		time -= MathUtil::Min(20*8.f/theGridSystem.GridSize,time);
+		time -= glm::min(20*8.f/theGridSystem.GridSize,time);
 
 		PROFILE("NormalGameModeManager", "changeLevel", InstantEvent);
 
@@ -305,7 +306,7 @@ int NormalGameModeManager::saveInternalState(uint8_t** out) {
     ptr = (uint8_t*) mempcpy(ptr, &level, sizeof(level));
     ptr = (uint8_t*) mempcpy(ptr, &remain[0], sizeof(remain));
 
-    TRANSFORM(herisson)->position.X = GameModeManager::position(time);
+    TRANSFORM(herisson)->position.x = GameModeManager::position(time);
 
     delete[] tmp;
     return (parent + s);
@@ -316,7 +317,7 @@ const uint8_t* NormalGameModeManager::restoreInternalState(const uint8_t* in, in
     memcpy(&level, in, sizeof(level)); in += sizeof(level);
     memcpy(&remain[0], in, sizeof(remain)); in += sizeof(remain);
 
-    TRANSFORM(herisson)->position.X = GameModeManager::position(time);
+    TRANSFORM(herisson)->position.x = GameModeManager::position(time);
     MUSIC(stressTrack)->volume = 0;
     ADSR(stressTrack)->active = false;
     ADSR(stressTrack)->value = 0;

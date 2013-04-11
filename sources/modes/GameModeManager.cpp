@@ -23,15 +23,17 @@
 #include <sstream>
 #include <fstream>
 
-#include "base/PlacementHelper.h"
+#include <base/PlacementHelper.h>
 
-#include "systems/TextRenderingSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/TransformationSystem.h"
-#include "systems/System.h"
-#include "systems/ScrollingSystem.h"
-#include "systems/ButtonSystem.h"
+#include <glm/glm.hpp>
+#include <glm/gtx/compatibility.hpp>
 
+#include <systems/TextRenderingSystem.h>
+#include <systems/RenderingSystem.h>
+#include <systems/TransformationSystem.h>
+#include <systems/System.h>
+#include <systems/ScrollingSystem.h>
+#include <systems/ButtonSystem.h>
 
 #include "DepthLayer.h"
 #include "TwitchSystem.h"
@@ -45,11 +47,11 @@
 
 
 static float initialHerissonPosition(Entity herisson) {
-    return -PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.25;
+    return -PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.x * 0.25;
 }
 
 static float finalHerissonPosition(Entity herisson) {
-    return PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.X * 0.5;
+    return PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.x * 0.5;
 }
 
 GameModeManager::GameModeManager(HeriswapGame* game, SuccessManager* sMgr, StorageAPI* sAPI) {
@@ -58,25 +60,26 @@ GameModeManager::GameModeManager(HeriswapGame* game, SuccessManager* sMgr, Stora
 	storageAPI = sAPI;
 }
 
-
 float GameModeManager::position(float t) {
 	float p = 0;
 
-	if (t<=pts[0].X) {
-		p = pts[0].Y;
+	if (t<=pts[0].x) {
+		p = pts[0].y;
 	} else {
 		unsigned int i;
 		for (i = 0; i<pts.size()-1; i++) {
-			if (t>pts[i].X && t<pts[i+1].X) {
-				p = MathUtil::Lerp(pts[i].Y, pts[i+1].Y, (t-pts[i].X)/(pts[i+1].X-pts[i].X));
+			if (t>pts[i].x && t<pts[i+1].x) {
+				p = glm::lerp(pts[i].y, pts[i+1].y, (t-pts[i].x)/(pts[i+1].x-pts[i].x));
 				break;
 			}
 		}
 		if (i == pts.size()-1) {
-			p = pts[pts.size()-1].Y;
+			p = pts[pts.size()-1].y;
 		}
 	}
-	return MathUtil::Lerp(initialHerissonPosition(herisson), finalHerissonPosition(herisson), p);
+	return glm::lerp(initialHerissonPosition(herisson), 
+					 finalHerissonPosition(herisson), 
+					 p);
 }
 
 void GameModeManager::LoadHerissonTexture(int type) {
@@ -89,59 +92,72 @@ void GameModeManager::Setup() {
 	ADD_COMPONENT(herisson, Rendering);
 	ADD_COMPONENT(herisson, Button);
 	TRANSFORM(herisson)->z = DL_Animal;
-	TRANSFORM(herisson)->size = Vector2(PlacementHelper::GimpWidthToScreen(142),PlacementHelper::GimpHeightToScreen(116));
-	TransformationSystem::setPosition(TRANSFORM(herisson), Vector2(0, PlacementHelper::GimpYToScreen(1028)), TransformationSystem::N);
+	TRANSFORM(herisson)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(142), 
+										  (float)PlacementHelper::GimpHeightToScreen(116));
+	TransformationSystem::setPosition(TRANSFORM(herisson), 
+									  glm::vec2(0.f, 
+									  (float)PlacementHelper::GimpYToScreen(1028)), 
+									  TransformationSystem::N);
 	c = new AnimatedActor();
 	c->actor.e = herisson;
 	c->frames=0;
 	c->actor.speed = 4.1;
-	RENDERING(herisson)->hide = true;
-	RENDERING(herisson)->opaqueType = RenderingComponent::OPAQUE_CENTER;
-	RENDERING(herisson)->opaqueSeparation = 60.0/114;
+	RENDERING(herisson)->show = false;
+	RENDERING(herisson)->opaqueType = RenderingComponent::FULL_OPAQUE;
+	// RENDERING(herisson)->opaqueSeparation = 60.0/114;
 	BUTTON(herisson)->enabled = false;
 
 	branch = theEntityManager.CreateEntity();
 	ADD_COMPONENT(branch, Transformation);
 	TRANSFORM(branch)->z = DL_Branch;
-	TRANSFORM(branch)->size = Vector2(PlacementHelper::GimpWidthToScreen(800), PlacementHelper::GimpWidthToScreen(800) * 107.0 / 391.0);
-	TransformationSystem::setPosition(TRANSFORM(branch), Vector2(-PlacementHelper::ScreenWidth*0.5, PlacementHelper::GimpYToScreen(0)), TransformationSystem::NW);
+	TRANSFORM(branch)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(800), 
+										(float)PlacementHelper::GimpWidthToScreen(800) * 107.0f / 391.0f);
+	TransformationSystem::setPosition(TRANSFORM(branch), 
+									  glm::vec2((float)-PlacementHelper::ScreenWidth*0.5f, (float)PlacementHelper::GimpYToScreen(0)), 
+									  TransformationSystem::NW);
 	ADD_COMPONENT(branch, Rendering);
-	RENDERING(branch)->hide = true;
+	RENDERING(branch)->show = true;
 	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche");
 
 	decor2nd = theEntityManager.CreateEntity();
 	ADD_COMPONENT(decor2nd, Transformation);
 	TRANSFORM(decor2nd)->z = DL_Decor2nd;
-	TRANSFORM(decor2nd)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(470));
-	TransformationSystem::setPosition(TRANSFORM(decor2nd), Vector2(0, PlacementHelper::GimpYToScreen(610)), TransformationSystem::N);
+	TRANSFORM(decor2nd)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 
+										  (float)PlacementHelper::GimpHeightToScreen(470));
+	TransformationSystem::setPosition(TRANSFORM(decor2nd), 
+									  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(610)), 
+									  TransformationSystem::N);
 	ADD_COMPONENT(decor2nd, Scrolling);
 	SCROLLING(decor2nd)->images.push_back("decor2nd_0");
 	SCROLLING(decor2nd)->images.push_back("decor2nd_3");
 	SCROLLING(decor2nd)->images.push_back("decor2nd_2");
 	SCROLLING(decor2nd)->images.push_back("decor2nd_1");
-	SCROLLING(decor2nd)->direction = Vector2::UnitX;
-	SCROLLING(decor2nd)->speed = 0.05;
-	SCROLLING(decor2nd)->displaySize = Vector2(TRANSFORM(decor2nd)->size.X * 1.01, TRANSFORM(decor2nd)->size.Y);
-	SCROLLING(decor2nd)->hide = true;
-	SCROLLING(decor2nd)->opaqueType = RenderingComponent::OPAQUE_UNDER;
-	SCROLLING(decor2nd)->opaqueSeparation = 0.40;
+	SCROLLING(decor2nd)->direction = glm::vec2(1.f, 0.f);
+	SCROLLING(decor2nd)->speed = 0.05f;
+	SCROLLING(decor2nd)->displaySize = glm::vec2(TRANSFORM(decor2nd)->size.x * 1.01f, TRANSFORM(decor2nd)->size.y);
+	SCROLLING(decor2nd)->show = false;
+	SCROLLING(decor2nd)->opaqueType = RenderingComponent::NON_OPAQUE;
+	// SCROLLING(decor2nd)->opaqueSeparation = 0.40;
 
 	decor1er = theEntityManager.CreateEntity();
 	ADD_COMPONENT(decor1er, Transformation);
 	TRANSFORM(decor1er)->z = DL_Decor1er;
-	TRANSFORM(decor1er)->size = Vector2(PlacementHelper::ScreenWidth, PlacementHelper::GimpHeightToScreen(300));
-	TransformationSystem::setPosition(TRANSFORM(decor1er), Vector2(0, PlacementHelper::GimpYToScreen(1280)), TransformationSystem::S);
+	TRANSFORM(decor1er)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 
+										  (float)PlacementHelper::GimpHeightToScreen(300));
+	TransformationSystem::setPosition(TRANSFORM(decor1er), 
+									  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1280)), 
+									  TransformationSystem::S);
 	ADD_COMPONENT(decor1er, Scrolling);
 	SCROLLING(decor1er)->images.push_back("decor1er_0");
 	SCROLLING(decor1er)->images.push_back("decor1er_1");
 	SCROLLING(decor1er)->images.push_back("decor1er_2");
 	SCROLLING(decor1er)->images.push_back("decor1er_3");
-	SCROLLING(decor1er)->direction = -Vector2::UnitX;
+	SCROLLING(decor1er)->direction = -glm::vec2(1.f, 0.f);
 	SCROLLING(decor1er)->speed = 0;
-	SCROLLING(decor1er)->displaySize = Vector2(TRANSFORM(decor1er)->size.X * 1.01, TRANSFORM(decor1er)->size.Y);
-	SCROLLING(decor1er)->hide = true;
-	SCROLLING(decor1er)->opaqueType = RenderingComponent::OPAQUE_UNDER;
-	SCROLLING(decor1er)->opaqueSeparation = 0.21;
+	SCROLLING(decor1er)->displaySize = glm::vec2(TRANSFORM(decor1er)->size.x * 1.01f, TRANSFORM(decor1er)->size.y);
+	SCROLLING(decor1er)->show = false;
+	SCROLLING(decor1er)->opaqueType = RenderingComponent::NON_OPAQUE;
+	// SCROLLING(decor1er)->opaqueSeparation = 0.21f;
 
 	fillVec();
 
@@ -154,9 +170,11 @@ void GameModeManager::Setup() {
 		ADD_COMPONENT(debugEntities[2*i], Rendering);
 		ADD_COMPONENT(debugEntities[2*i], Transformation);
 		RENDERING(debugEntities[2*i])->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(i, 0));
-		TransformationSystem::setPosition(TRANSFORM(debugEntities[2*i]), Vector2(PlacementHelper::GimpXToScreen(0) + i * PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpYToScreen(1280)), TransformationSystem::SW);
+		TransformationSystem::setPosition(TRANSFORM(debugEntities[2*i]), 
+										  glm::vec2((float)(PlacementHelper::GimpXToScreen(0) + i * PlacementHelper::GimpWidthToScreen(80)), (float)PlacementHelper::GimpYToScreen(1280)), 
+										  TransformationSystem::SW);
 		TRANSFORM(debugEntities[2*i])->z = DL_DebugLayer;
-		TRANSFORM(debugEntities[2*i])->size = Vector2(PlacementHelper::GimpWidthToScreen(80));
+		TRANSFORM(debugEntities[2*i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(80));
 
 		debugEntities[2*i + 1] = theEntityManager.CreateEntity();
 		ADD_COMPONENT(debugEntities[2*i + 1], TextRendering);
@@ -171,46 +189,46 @@ void GameModeManager::Setup() {
 }
 
 void GameModeManager::showGameDecor(bool onlyBg) {
-    // RENDERING(branch)->hide = false;
-    SCROLLING(decor2nd)->hide = false;
-    SCROLLING(decor1er)->hide = false;
+    // RENDERING(branch)->show = true;
+    SCROLLING(decor2nd)->show = true;
+    SCROLLING(decor1er)->show = true;
     
-    RENDERING(herisson)->hide = onlyBg;
-    RENDERING(branch)->hide = onlyBg;
-    if (onlyBg)
-        uiHelper.hide();
-    else
-        uiHelper.show();
+    RENDERING(herisson)->show = !onlyBg;
+    RENDERING(branch)->show = !onlyBg;
+    // if (onlyBg)
+    //     uiHelper.show();
+    // else
+    uiHelper.show();
     // delete leaves
     for (unsigned int az=0;az<branchLeaves.size();az++) {
-        RENDERING(branchLeaves[az].e)->hide = onlyBg;
+        RENDERING(branchLeaves[az].e)->show = !onlyBg;
     }
 }
 
 void GameModeManager::Enter() {
 	PROFILE("GameModeManager", "Enter", BeginEvent);
 
-	RENDERING(herisson)->hide = false;
+	RENDERING(herisson)->show = true;
 	RENDERING(herisson)->color.a = 1;
-	RENDERING(branch)->hide = false;
-	SCROLLING(decor2nd)->hide = false;
-	SCROLLING(decor1er)->hide = false;
+	RENDERING(branch)->show = true;
+	SCROLLING(decor2nd)->show = true;
+	SCROLLING(decor1er)->show = true;
     LoadHerissonTexture(bonus+1);
 
 	uiHelper.show();
-    theGridSystem.HideAll(false);
-    TRANSFORM(herisson)->position.X = initialHerissonPosition(herisson);
+    theGridSystem.ShowAll(true);
+    TRANSFORM(herisson)->position.x = initialHerissonPosition(herisson);
     RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
     PROFILE("GameModeManager", "Enter", EndEvent);
 }
 
 void GameModeManager::Exit() {
-	RENDERING(herisson)->hide = true;
-	RENDERING(branch)->hide = true;
-	SCROLLING(decor2nd)->hide = true;
-	SCROLLING(decor1er)->hide = true;
+	RENDERING(herisson)->show = false;
+	RENDERING(branch)->show = false;
+	SCROLLING(decor2nd)->show = false;
+	SCROLLING(decor1er)->show = false;
 
-	uiHelper.hide();
+	uiHelper.show();
 
 	// delete leaves
 	for (unsigned int az=0;az<branchLeaves.size();az++) {
@@ -222,37 +240,37 @@ void GameModeManager::Exit() {
 }
 
 void GameModeManager::TogglePauseDisplay(bool paused) {
-	theGridSystem.HideAll(paused);
-	//hide levelbig score
+	theGridSystem.ShowAll(!paused);
+	//show levelbig score
 
-    BUTTON(uiHelper.pauseButton)->enabled=!paused;;
-    RENDERING(uiHelper.pauseButton)->hide = paused;
+    BUTTON(uiHelper.pauseButton)->enabled = !paused;;
+    RENDERING(uiHelper.pauseButton)->show = !paused;
 }
 
-Entity GameModeManager::createAndAddLeave(int type, const Vector2& position, float rotation) {
+Entity GameModeManager::createAndAddLeave(int type, const glm::vec2& position, float rotation) {
 	Entity e = theEntityManager.CreateEntity();
 	ADD_COMPONENT(e, Transformation);
 	ADD_COMPONENT(e, Rendering);
     ADD_COMPONENT(e, Twitch);
 	RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(type, 0));
-	RENDERING(e)->hide = false;
-	RENDERING(e)->opaqueType = RenderingComponent::OPAQUE_CENTER;
+	RENDERING(e)->show = true;
+	RENDERING(e)->opaqueType = RenderingComponent::FULL_OPAQUE;
 	switch (type) {
 		case 0:
 		case 1:
-			RENDERING(e)->opaqueSeparation = 42.0 / 74;
+			// RENDERING(e)->opaqueSeparation = 42.0 / 74;
 			break;
 		case 2:
 		case 3:
-			RENDERING(e)->opaqueSeparation = 35.0 / 62;
+			// RENDERING(e)->opaqueSeparation = 35.0 / 62;
 			break;
 		case 4:
 		case 5:
-			RENDERING(e)->opaqueSeparation = 27.0 / 52;
+			// RENDERING(e)->opaqueSeparation = 27.0 / 52;
 			break;
 		case 6:
 		case 7:
-			RENDERING(e)->opaqueSeparation = 18.0 / 38;
+			// RENDERING(e)->opaqueSeparation = 18.0 / 38;
 			break;
 	}
 	
@@ -261,7 +279,7 @@ Entity GameModeManager::createAndAddLeave(int type, const Vector2& position, flo
 	TRANSFORM(e)->position = position;
 	TRANSFORM(e)->rotation = rotation;
 
-	TRANSFORM(e)->z = MathUtil::Lerp(DL_LeafMin, DL_LeafMax, MathUtil::RandomFloat());
+	TRANSFORM(e)->z = glm::lerp(DL_LeafMin, DL_LeafMax, glm::linearRand(0.f, 1.f));
 
 	return e;
 }
@@ -275,9 +293,9 @@ void GameModeManager::generateLeaves(int* nb, int type) {
 
     for (int j=0;j<type;j++) {
 	    for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
-		    int rand = MathUtil::RandomInt(posBranch.size());
-			Vector2 pos = posBranch[rand].v;
-			pos.X -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenWidth*0.5;
+		    int rand = glm::round(glm::linearRand(0.f, (float)posBranch.size()));
+			glm::vec2 pos = posBranch[rand].v;
+			pos.x -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenWidth*0.5;
 
 			BranchLeaf bl;
 			bl.e = createAndAddLeave(j, pos, posBranch[rand].rot);
@@ -322,7 +340,7 @@ void GameModeManager::fillVec() {
 	while ( getline( file, line ) ){
 		++count;
 		if (count>t) {
-			Vector2 v = Vector2::Zero;
+			glm::vec2 v = glm::vec2::Zero;
 			float r = 0.f;
 			sscanf(line.c_str(), "%f %f %f", &v.X, &v.Y, &r);
 			v.X =PlacementHelper::GimpXToScreen(v.X);
@@ -341,8 +359,9 @@ void GameModeManager::fillVec() {
 	posBranch.clear();
 	#include "PositionFeuilles.h"
 	for (int i=0; i<8*6; i++) {
-		Vector2 v(PlacementHelper::GimpXToScreen(pos[3*i]), PlacementHelper::GimpYToScreen(pos[3*i+1]));
-		Render truc = {v, MathUtil::ToRadians(pos[3*i+2])};
+		glm::vec2 v((float)PlacementHelper::GimpXToScreen(pos[3*i]), 
+					(float)PlacementHelper::GimpYToScreen(pos[3*i+1]));
+		Render truc = {v, glm::radians<float>(pos[3*i+2])};
 		posBranch.push_back(truc);
 	}
 #endif
@@ -351,27 +370,27 @@ void GameModeManager::fillVec() {
 void GameModeManager::updateHerisson(float dt, float obj, float herissonSpeed) {
 	// default herisson behavior: move to
 	TransformationComponent* tc = TRANSFORM(herisson);
-	float newPos = tc->position.X;
+	float newPos = tc->position.x;
 	if (herissonSpeed == 0) {
 		float targetPosX = position(obj);
-    	float distance = targetPosX - tc->position.X;
+    	float distance = targetPosX - tc->position.x;
 		if (distance != 0.f) {
 			herissonSpeed = (distance > 0) ? 1.0f : -1.0f;
 			if (distance < 0) {
-				newPos = MathUtil::Max(targetPosX, tc->position.X + herissonSpeed*dt);
+				newPos = glm::max(targetPosX, tc->position.x + herissonSpeed*dt);
 			} else {
-				newPos = MathUtil::Min(targetPosX, tc->position.X + herissonSpeed*dt);
+				newPos = glm::min(targetPosX, tc->position.x + herissonSpeed*dt);
 			}
 		}
 	} else {
-		newPos = tc->position.X + herissonSpeed * dt;
+		newPos = tc->position.x + herissonSpeed * dt;
 	}
 	//set animation speed
-	c->actor.speed = 15*(newPos - tc->position.X)/dt;
+	c->actor.speed = 15*(newPos - tc->position.x)/dt;
 	if (c->actor.speed < 1.4) c->actor.speed = 2.5;
 	if (c->actor.speed > 4.5) c->actor.speed = 4.5;
 
-	tc->position.X = newPos;
+	tc->position.x = newPos;
 
 	if (herissonSpeed > 0) {
 		updateAnim(c, dt);
@@ -427,8 +446,8 @@ const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int size
 void GameModeManager::toggleDebugDisplay() {
 	_debug = !_debug;
 	for(int i=0; i<8; i++) {
-		RENDERING(debugEntities[2*i])->hide = !_debug;
-		TEXT_RENDERING(debugEntities[2*i+1])->hide = !_debug;
+		RENDERING(debugEntities[2*i])->show = _debug;
+		TEXT_RENDERING(debugEntities[2*i+1])->show = _debug;
 	}
 }
 #endif

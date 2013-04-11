@@ -20,7 +20,10 @@
 
 #include <base/Log.h>
 #include <base/TouchInputManager.h>
-#include <base/MathUtil.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtx/constants.hpp>
+
 #include <base/EntityManager.h>
 #include <base/TimeUtil.h>
 #include <base/PlacementHelper.h>
@@ -95,17 +98,17 @@ static const float size = (10 - 2 * offset) / 8;
 static void updateFps(float dt);
 
 // grid: [48, 302] -> [752, 1006]  in gimp
-Vector2 HeriswapGame::GridCoordsToPosition(int i, int j, int gridSize) {
+glm::vec2 HeriswapGame::GridCoordsToPosition(int i, int j, int gridSize) {
 	float startX = PlacementHelper::GimpXToScreen(48);
 	float startY = PlacementHelper::GimpYToScreen(1006);
 	float size = PlacementHelper::GimpWidthToScreen((752 - 48) / gridSize);
 
-	return Vector2(
+	return glm::vec2(
 		startX + (i + 0.5) * size,
 		startY + (j + 0.5) * size);
 }
 
-Vector2 HeriswapGame::CellSize(int gridSize, int cellType) {
+glm::vec2 HeriswapGame::CellSize(int gridSize, int cellType) {
 	float y = PlacementHelper::GimpWidthToScreen((752 - 48) / gridSize);
     float coeff = 1;
     switch (cellType) {
@@ -126,23 +129,18 @@ Vector2 HeriswapGame::CellSize(int gridSize, int cellType) {
             coeff = 0.38 / 0.8;
             break;
     }
-    return Vector2(y * coeff, y);
+    return glm::vec2(y * coeff, y);
 }
 
 float HeriswapGame::CellContentScale() {
 	return scale;
 }
 
-HeriswapGame::HeriswapGame(AssetAPI* ast, StorageAPI* storage, NameInputAPI* inputUI, SuccessAPI* sAPI, LocalizeAPI* lAPI, AdAPI* ad, ExitAPI* exAPI, CommunicationAPI* comAPI, VibrateAPI* viAPI) : Game() {
-	asset = ast;
-	successAPI = sAPI;
-	exitAPI = exAPI;
-    vibrateAPI = viAPI;
-
+HeriswapGame::HeriswapGame() : Game() {
 	GridSystem::CreateInstance();
 	TwitchSystem::CreateInstance();
 
-	datas = new PrivateData(this, storage, inputUI, new SuccessManager(sAPI), lAPI, sAPI, ad, comAPI);
+	datas = new PrivateData(this, gameThreadContext, new SuccessManager(gameThreadContext->successAPI));
 }
 
 HeriswapGame::~HeriswapGame() {
@@ -152,12 +150,34 @@ HeriswapGame::~HeriswapGame() {
     delete datas;
 }
 
+bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
+    switch (api) {
+        case ContextAPI::Ad:
+        case ContextAPI::Asset:
+        case ContextAPI::Communication:
+        case ContextAPI::Localize:
+        case ContextAPI::Music:
+        case ContextAPI::NameInput:
+        case ContextAPI::Sound:
+        case ContextAPI::Storage:
+        case ContextAPI::Success:
+        case ContextAPI::Vibrate:
+            return true;
+        default:
+            return false;
+    }
+}
+
+void HeriswapGame::quickInit(){
+	
+}
+
 void HeriswapGame::sacInit(int windowW, int windowH) {
 	Game::sacInit(windowW, windowH);
 
 	Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
 
-	theRenderingSystem.loadEffectFile("desaturate.fs");
+	theRenderingSystem.effectLibrary.load("desaturate.fs");
 	theRenderingSystem.loadAtlas("sprites", true);
 	theRenderingSystem.loadAtlas("logo");
 	theRenderingSystem.loadAtlas("alphabet", true);
@@ -169,7 +189,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     theRenderingSystem.loadAtlas("nuages");
     theRenderingSystem.loadAtlas("help");
     
-    theButtonSystem.vibrateAPI = vibrateAPI;
+    theButtonSystem.vibrateAPI = gameThreadContext->vibrateAPI;
 
     // init font
 	loadFont(asset, "typo");
@@ -190,17 +210,17 @@ void HeriswapGame::init(const uint8_t* in, int size) {
 	datas->sky = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->sky, Transformation);
 	TRANSFORM(datas->sky)->z = DL_Sky;
-	TRANSFORM(datas->sky)->size = Vector2(bgElementWidth, (PlacementHelper::GimpWidthToScreen(800) * 833.0) / 808.0);
-	TransformationSystem::setPosition(TRANSFORM(datas->sky), Vector2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
+	TRANSFORM(datas->sky)->size = glm::vec2(bgElementWidth, (PlacementHelper::GimpWidthToScreen(800) * 833.0) / 808.0);
+	TransformationSystem::setPosition(TRANSFORM(datas->sky), glm::vec2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
 	ADD_COMPONENT(datas->sky, Scrolling);
 	SCROLLING(datas->sky)->images.push_back("ciel0");
 	SCROLLING(datas->sky)->images.push_back("ciel1");
 	SCROLLING(datas->sky)->images.push_back("ciel2");
 	SCROLLING(datas->sky)->images.push_back("ciel3");
-	SCROLLING(datas->sky)->direction = -Vector2::UnitX;
+	SCROLLING(datas->sky)->direction = -glm::vec2(1.0f, 0.0f);
 	SCROLLING(datas->sky)->speed = 0.1;
-	SCROLLING(datas->sky)->displaySize = Vector2(TRANSFORM(datas->sky)->size.X * 1.01, TRANSFORM(datas->sky)->size.Y);
-    SCROLLING(datas->sky)->hide = true;
+	SCROLLING(datas->sky)->displaySize = glm::vec2(TRANSFORM(datas->sky)->size.x * 1.01, TRANSFORM(datas->sky)->size.y);
+    SCROLLING(datas->sky)->show = false;
     SCROLLING(datas->sky)->opaqueType = RenderingComponent::FULL_OPAQUE;
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
 
@@ -238,17 +258,17 @@ void HeriswapGame::toggleShowCombi(bool enabled) {
 		//j=0 : vertical
 		//j=1 : h
 		for (int j=0;j<2;j++) {
-			std::vector<Vector2> combinaisons;
+			std::vector<glm::vec2> combinaisons;
 			if (j) combinaisons = theGridSystem.LookForCombinationsOnSwitchHorizontal();
 			else combinaisons = theGridSystem.LookForCombinationsOnSwitchVertical();
 			if (!combinaisons.empty())
 			{
-				for ( std::vector<Vector2>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
+				for ( std::vector<glm::vec2>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
 				{
-					CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->X, it->Y));
-					marks.push_back(theGridSystem.GetOnPos(it->X, it->Y));
-					CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->X+(j+1)/2, it->Y+(j+1)%2));
-					marks.push_back(theGridSystem.GetOnPos(it->X+(j+1)/2, it->Y+(j+1)%2));
+					CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->x, it->y));
+					marks.push_back(theGridSystem.GetOnPos(it->x, it->y));
+					CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->x+(j+1)/2, it->y+(j+1)%2));
+					marks.push_back(theGridSystem.GetOnPos(it->x+(j+1)/2, it->y+(j+1)%2));
 				}
 			}
 		}
@@ -290,14 +310,14 @@ void HeriswapGame::togglePause(bool activate) {
 		datas->stateBeforePauseNeedEnter = false;
 		datas->state = datas->newState = Pause;
 		static_cast<PauseStateManager*> (datas->state2Manager[Pause])->mode = datas->mode;
-		TEXT_RENDERING(static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->eBigLevel)->hide = true;
+		TEXT_RENDERING(static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->eBigLevel)->show = false;
         datas->mode2Manager[datas->mode]->TogglePauseDisplay(true);
 		datas->state2Manager[datas->state]->Enter();
 
 	} else if (!activate) {
         // unpause
         if (datas->stateBeforePause == LevelChanged)
-		    TEXT_RENDERING(static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->eBigLevel)->hide = false;
+		    TEXT_RENDERING(static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->eBigLevel)->show = true;
         datas->mode2Manager[datas->mode]->TogglePauseDisplay(false);
 		datas->state2Manager[datas->state]->Exit();
         datas->state = datas->stateBeforePause;
@@ -380,8 +400,8 @@ void HeriswapGame::tick(float dt) {
 		#else
 		bool ofHidden = true;
     	#endif
-		RENDERING(datas->socialGamNet)->hide = ofHidden;
-		BUTTON(datas->socialGamNet)->enabled = !RENDERING(datas->socialGamNet)->hide;
+		RENDERING(datas->socialGamNet)->show = !ofHidden;
+		BUTTON(datas->socialGamNet)->enabled = RENDERING(datas->socialGamNet)->show;
 	}
 
     // background (unconditionnal) update of state managers
@@ -428,15 +448,15 @@ void HeriswapGame::tick(float dt) {
     if (!theMusicSystem.isMuted()) {
 	    //si on est en jeu et/ou  fin de musiques, charger de nouvelles musiques
 	    if ((pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause) || datas->state == BlackToSpawn) {
-	    	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Start;
+	    	MUSIC(datas->inGameMusic.masterTrack)->control = MusicControl::Play;
 	    	MUSIC(datas->inGameMusic.masterTrack)->volume = 1;
-	    	MUSIC(datas->inGameMusic.stressTrack)->control = (datas->mode == Normal) ? MusicComponent::Start : MusicComponent::Stop;
+	    	MUSIC(datas->inGameMusic.stressTrack)->control = (datas->mode == Normal) ? MusicControl::Play : MusicControl::Stop;
 	        if (MUSIC(datas->inGameMusic.masterTrack)->music == InvalidMusicRef) {
 		        MUSIC(datas->inGameMusic.stressTrack)->music = (datas->mode == Normal) ? theMusicSystem.loadMusicFile("audio/F.ogg") : InvalidMusicRef;
 	            std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);
-	            LOGW("New music picked for 'music' field (%lu):", musics.size());
+	            LOGW("New music picked for 'music' field '" << musics.size() <<"' :");
 	            for (unsigned i=0; i<musics.size(); i++) {
-		            LOGW("(music)\t%s", musics[i].c_str());
+		            LOGW("(music)\t'" << musics[i].c_str() << "'");
 	            }
 
 	            MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
@@ -447,7 +467,7 @@ void HeriswapGame::tick(float dt) {
 	                 MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
 	                 mc->music = theMusicSystem.loadMusicFile(musics[i+1]);
 	                 mc->fadeIn = 1;
-	                 mc->control = MusicComponent::Start;
+	                 mc->control = MusicControl::Play;
 	                 mc->volume = 1;
 	            }
 	        }
@@ -455,9 +475,9 @@ void HeriswapGame::tick(float dt) {
 	        else if (MUSIC(datas->inGameMusic.masterTrack)->loopNext == InvalidMusicRef) {
 				MUSIC(datas->inGameMusic.stressTrack)->loopNext = (datas->mode == Normal) ? theMusicSystem.loadMusicFile("audio/F.ogg") : InvalidMusicRef;
 		        std::vector<std::string> musics = datas->jukebox.pickNextSongs(4);
-		        LOGW("New music picked for 'loopNext' field (%lu):", musics.size());
+		        LOGW("New music picked for 'loopNext' field '" << musics.size() << "' :");
 	            for (unsigned i=0; i<musics.size(); i++) {
-		            LOGW("(music)\t%s", musics[i].c_str());
+		            LOGW("(music)\t'" << musics[i].c_str() << "'");
 	            }
 
 		        MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile(musics[0]);
@@ -465,23 +485,23 @@ void HeriswapGame::tick(float dt) {
 		        for (i=0; i<musics.size() - 1; i++) {
 			        MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
 			        mc->loopNext = theMusicSystem.loadMusicFile(musics[i+1]);
-			        mc->control = MusicComponent::Start;
+			        mc->control = MusicControl::Play;
 				}
 	        } else {
 	        	static MusicRef a = MUSIC(datas->inGameMusic.masterTrack)->loopNext;
 	        	if (MUSIC(datas->inGameMusic.masterTrack)->loopNext != a) {
-		        	LOGI("music: master loopnext: %d", MUSIC(datas->inGameMusic.masterTrack)->loopNext);
+		        	LOGI("music: master loopnext: '" << MUSIC(datas->inGameMusic.masterTrack)->loopNext << "'");
 		        	a = MUSIC(datas->inGameMusic.masterTrack)->loopNext;
 	        	}
 	        }
 	        MUSIC(datas->inGameMusic.stressTrack)->volume = (datas->mode == Normal) ? ADSR(datas->inGameMusic.stressTrack)->value : 0;
-	        MUSIC(datas->menu)->control = MusicComponent::Stop;
+	        MUSIC(datas->menu)->control = MusicControl::Stop;
 
 	    } else if (datas->state == MainMenu || datas->state == ModeMenu) { //dans les menus
 	        if (MUSIC(datas->menu)->music == InvalidMusicRef) {
 	         	LOGW("Start Menu music");
 	            MUSIC(datas->menu)->music = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");
-	            MUSIC(datas->menu)->control = MusicComponent::Start;
+	            MUSIC(datas->menu)->control = MusicControl::Play;
 	            MUSIC(datas->menu)->volume = 1;
 	        }
 
@@ -521,7 +541,7 @@ int HeriswapGame::saveState(uint8_t** out) {
 	}
 	bool pausable = pausableState(datas->state);
 	if (!pausable) {
-		LOGI("Current state is '%d' -> nothing to save", datas->state);
+		LOGI("Current state is '" << datas->state << "' -> nothing to save");
 		return 0;
 	}
 
@@ -564,8 +584,8 @@ int HeriswapGame::saveState(uint8_t** out) {
     ptr = (uint8_t*)mempcpy(ptr, &theGridSystem.GridSize, sizeof(theGridSystem.GridSize));
     ptr = (uint8_t*)mempcpy(ptr, gamemode, gSize);
 
-	LOGI("%lu + %lu + %lu + %lu + %d + %d + %d -> %d (%p)",
-		sizeof(datas->stateBeforePause), sizeof(datas->mode), sizeof(eSize), sizeof(sSize), eSize, sSize, gSize, finalSize, *out);
+	LOGI("'" << sizeof(datas->stateBeforePause) << "' + '"<< sizeof(datas->mode) << "' + '" << sizeof(eSize) << "' + '" << sizeof(sSize) << "' + '" << eSize << "' + '" << sSize << "' + '" << gSize << "' -> '" << finalSize << "' ('" << *out << "')");
+
 	return finalSize;
 }
 
@@ -610,20 +630,20 @@ void HeriswapGame::loadGameState(const uint8_t* in, int size) {
 
 	setupGameProp();
 
-    RENDERING(datas->soundButton)->hide = false;
-    SCROLLING(datas->sky)->hide = false;
-    LOGW("RESTORED STATE: %d", datas->stateBeforePause);
+    RENDERING(datas->soundButton)->show = true;
+    SCROLLING(datas->sky)->show = true;
+    LOGW("RESTORED STATE: '" << datas->stateBeforePause << "'");
 }
 
 static float rotations[] = {
-	MathUtil::PiOver4,
-	-MathUtil::PiOver2,
-	0,
-	-3*MathUtil::PiOver4,
-	3*MathUtil::PiOver4,
-	MathUtil::PiOver2,
-	-MathUtil::Pi,
-	-MathUtil::PiOver4
+	glm::quarter_pi<float>(),
+	-glm::half_pi<float>(),
+	0.0f,
+	-3 * glm::quarter_pi<float>(),
+	3 * glm::quarter_pi<float>(),
+	glm::half_pi<float>(),
+	-glm::pi<float>(),
+	-glm::quarter_pi<float>()
 };
 
 std::string HeriswapGame::cellTypeToTextureNameAndRotation(int type, float* rotation) {
@@ -646,8 +666,8 @@ void updateFps(float dt) {
     frameCount++;
     accum += dt;
     if (frameCount == COUNT) {
-         LOGI("%d frames: %.3f s - diff: %.3f s - ms per frame: %.4f", COUNT, accum, TimeUtil::getTime() - t, accum / COUNT);
-         t = TimeUtil::getTime();
+         LOGI("'" << COUNT << "' frames: '" << accum << "' s - diff: '" << TimeUtil::GetTime() - t << "' s - ms per frame: '" << accum / COUNT << "'");
+         t = TimeUtil::GetTime();
          accum = 0;
          frameCount = 0;
      }
@@ -663,7 +683,7 @@ bool HeriswapGame::shouldPlayPiano() {
 	int score = datas->mode2Manager[datas->mode]->points;
 	float v = (score / (float)target);
 
-	LOGW("SCORE TARGET: %d (current: %d, rank: %d) -> %.2f", target, score, datas->scoreboardRankInSight, v);
+	LOGW("SCORE TARGET: '" << target << "' (current: '" << score << "', rank: '" << datas->scoreboardRankInSight << "') -> '" << v << "'");
 	if (v >= 0.95) {
 
 		// play piano

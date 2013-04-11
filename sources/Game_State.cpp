@@ -37,11 +37,11 @@
 #include "modes/NormalModeManager.h"
 
 void HeriswapGame::stopInGameMusics() {
-	MUSIC(datas->inGameMusic.masterTrack)->control = MusicComponent::Stop;
-	MUSIC(datas->inGameMusic.accessoryTrack)->control = MusicComponent::Stop;
-	MUSIC(datas->inGameMusic.stressTrack)->control = MusicComponent::Stop;
+	MUSIC(datas->inGameMusic.masterTrack)->control = MusicControl::Stop;
+	MUSIC(datas->inGameMusic.accessoryTrack)->control = MusicControl::Stop;
+	MUSIC(datas->inGameMusic.stressTrack)->control = MusicControl::Stop;
     for(int i=0; i<3; i++) {
- 	   MUSIC(datas->inGameMusic.secondaryTracks[i])->control = MusicComponent::Stop;
+ 	   MUSIC(datas->inGameMusic.secondaryTracks[i])->control = MusicControl::Stop;
     }
 }
 
@@ -91,7 +91,7 @@ void HeriswapGame::stateChanged(GameState oldState, GameState newState) {
     //pressing "give up" button
     } else if (oldState == Pause && newState == MainMenu) {
          LOGI("aborted. going to main menu");
-         RENDERING(datas->soundButton)->hide = false;
+         RENDERING(datas->soundButton)->show = true;
          datas->state2Manager[datas->stateBeforePause]->Exit();
          datas->mode2Manager[datas->mode]->Exit();
          newState = MainMenu;
@@ -105,7 +105,7 @@ void HeriswapGame::stateChanged(GameState oldState, GameState newState) {
          setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
      //end game
      } else if (newState == BlackToModeMenu) {
-        RENDERING(datas->soundButton)->hide = false;
+        RENDERING(datas->soundButton)->show = false;
         datas->mode2Manager[datas->mode]->Exit();
         stopInGameMusics();
      //end game, stop musics
@@ -121,7 +121,7 @@ void HeriswapGame::stateChanged(GameState oldState, GameState newState) {
 		// call Enter before starting fade-in
          datas->mode2Manager[datas->mode]->Enter();
          datas->mode2Manager[datas->mode]->UiUpdate(0);
-         MUSIC(datas->menu)->control = MusicComponent::Stop;
+         MUSIC(datas->menu)->control = MusicControl::Stop;
 
          setupGameProp();
      } else if (newState == LevelChanged) {
@@ -132,11 +132,11 @@ void HeriswapGame::stateChanged(GameState oldState, GameState newState) {
         stopInGameMusics();
      //back button to main
      } else if( newState == MainMenu && oldState == ModeMenu) {
-         RENDERING(datas->soundButton)->hide = false;
+         RENDERING(datas->soundButton)->show = true;
          datas->state2Manager[oldState]->LateExit();
      } else if (newState == BlackToMainMenu) {
-        SCROLLING(datas->sky)->hide = false;
-        RENDERING(datas->soundButton)->hide = false;
+        SCROLLING(datas->sky)->show = true;
+        RENDERING(datas->soundButton)->show = true;
      } else if (newState == Help) {
 	    static_cast<HelpStateManager*> (datas->state2Manager[newState])->mode = datas->mode;
         datas->mode2Manager[datas->mode]->showGameDecor(true);

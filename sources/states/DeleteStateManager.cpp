@@ -45,7 +45,7 @@ void DeleteGameStateManager::Setup() {
 }
 
 void DeleteGameStateManager::Enter() {
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 
 	littleLeavesDeleted.clear();
 	removing = theGridSystem.LookForCombination(true,true);
@@ -53,8 +53,8 @@ void DeleteGameStateManager::Enter() {
 		successMgr->sDoubleInOne(removing);
 		successMgr->sBimBamBoum(removing.size());
 	    for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
-	        for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
-	            Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
+	        for ( std::vector<glm::vec2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
+	            Entity e = theGridSystem.GetOnPos(itV->x,itV->y);
 	            TwitchComponent* tc = TWITCH(e);
 	            if (tc->speed == 0) {
 	                CombinationMark::markCellInCombination(e);
@@ -73,14 +73,14 @@ GameState DeleteGameStateManager::Update(float dt __attribute__((unused))) {
 	if (!removing.empty()) {
 		transitionSuppr->active = true;
         for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
-    	    const Vector2 cellSize = HeriswapGame::CellSize(theGridSystem.GridSize, it->type) * HeriswapGame::CellContentScale() * (1 - transitionSuppr->value);
+    	    const glm::vec2 cellSize = HeriswapGame::CellSize(theGridSystem.GridSize, it->type) * HeriswapGame::CellContentScale() * (1 - transitionSuppr->value);
         	if (transitionSuppr->value == transitionSuppr->sustainValue) {
     			modeMgr->ScoreCalc(it->points.size(), it->type);
 			}
-    		for ( std::vector<Vector2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
-    			Entity e = theGridSystem.GetOnPos(itV->X,itV->Y);
+    		for ( std::vector<glm::vec2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
+    			Entity e = theGridSystem.GetOnPos(itV->x,itV->y);
     			//  TRANSFORM(e)->rotation = HeriswapGame::cellTypeToRotation(it->type) + (1 - transitionSuppr->value) * MathUtil::TwoPi;
-    			ADSR(e)->idleValue = cellSize.X;
+    			ADSR(e)->idleValue = cellSize.x;
     			if (transitionSuppr->value == transitionSuppr->sustainValue) {
     				if (e)
     					theEntityManager.DeleteEntity(e);
@@ -89,7 +89,7 @@ GameState DeleteGameStateManager::Update(float dt __attribute__((unused))) {
     		}
     	}
     	for (unsigned int i=0; i<littleLeavesDeleted.size(); i++) {
-            const Vector2 littleLeavesSize = HeriswapGame::CellSize(8, littleLeavesDeleted[i].type) * HeriswapGame::CellContentScale() * (1 - transitionSuppr->value);
+            const glm::vec2 littleLeavesSize = HeriswapGame::CellSize(8, littleLeavesDeleted[i].type) * HeriswapGame::CellContentScale() * (1 - transitionSuppr->value);
             TRANSFORM(littleLeavesDeleted[i].e)->size = littleLeavesSize;
         }
     	if (transitionSuppr->value  == transitionSuppr->sustainValue) {
@@ -104,5 +104,5 @@ GameState DeleteGameStateManager::Update(float dt __attribute__((unused))) {
 void DeleteGameStateManager::Exit() {
 	ADSR(deleteAnimation)->active = false;
 	removing.clear();
-	LOGI("%s", __PRETTY_FUNCTION__);
+	LOGI("'" << __PRETTY_FUNCTION__ << "'");
 }

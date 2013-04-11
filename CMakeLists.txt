@@ -1,19 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.6)
 
-project(TILEMATCH)
+#set the name of the project...
+project(Heriswap)
 
-SET(CMAKE_C_FLAGS "-O0 -g -W -Wall")
-if (EMSCRIPTEN_BUILD)
-SET(CMAKE_CXX_FLAGS "-O2 -W -Wall")
-else ()
-SET(CMAKE_CXX_FLAGS "-O0 -g -W -Wall -DDEBUG -DENABLE_PROFILING -DDATADIR=\\\"${CMAKE_SOURCE_DIR}/assets/\\\"")
-endif()
+#and let the magic begin :-)
+include(sac/build/cmake/CMakeLists.txt)
 
-add_subdirectory(sources)
 
-add_subdirectory(linux)
-if (EMSCRIPTEN_BUILD)
-else ()
-add_subdirectory(tests)
-endif()
-add_subdirectory(sac/build/cmake)

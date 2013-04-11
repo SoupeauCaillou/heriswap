@@ -18,6 +18,8 @@
 */
 #include "RateItStateManager.h"
 
+#include <glm/glm.hpp>
+
 #include <base/EntityManager.h>
 #include <base/TouchInputManager.h>
 #include <base/PlacementHelper.h>
@@ -34,40 +36,54 @@ void RateItStateManager::Setup() {
     //Creating text entities
     textToReadContainer = theEntityManager.CreateEntity();
     ADD_COMPONENT(textToReadContainer, Transformation);
-    TRANSFORM(textToReadContainer)->size = Vector2(PlacementHelper::GimpWidthToScreen(712), PlacementHelper::GimpHeightToScreen(500));
+    TRANSFORM(textToReadContainer)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(712), 
+    												 (float)PlacementHelper::GimpHeightToScreen(500));
     TRANSFORM(textToReadContainer)->z = DL_MainMenuUIBg;
     ADD_COMPONENT(textToReadContainer, Rendering);
     RENDERING(textToReadContainer)->texture = theRenderingSystem.loadTextureFile("fond_menu_mode");
     RENDERING(textToReadContainer)->color.a = 0.5;
-    TransformationSystem::setPosition(TRANSFORM(textToReadContainer), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(40)), TransformationSystem::NW);
+    TransformationSystem::setPosition(TRANSFORM(textToReadContainer), 
+    								  glm::vec2((float)PlacementHelper::GimpXToScreen(44), 
+    								  			(float)PlacementHelper::GimpYToScreen(40)), 
+    								  TransformationSystem::NW);
 
-    textToRead = theTextRenderingSystem.CreateEntity();
+    textToRead = theEntityManager.CreateEntity();
+    ADD_COMPONENT(textToRead, Transformation);
+    ADD_COMPONENT(textToRead, TextRendering);
     TRANSFORM(textToRead)->z = DL_MainMenuUITxt;
     TRANSFORM(textToRead)->size = TRANSFORM(textToReadContainer)->size;
-    TRANSFORM(textToRead)->size.X *= 0.9;
-    TRANSFORM(textToRead)->size.Y = PlacementHelper::GimpHeightToScreen(147);
-    TEXT_RENDERING(textToRead)->hide = true;
+    TRANSFORM(textToRead)->size.x *= 0.9;
+    TRANSFORM(textToRead)->size.y = PlacementHelper::GimpHeightToScreen(147);
+    TEXT_RENDERING(textToRead)->show = false;
     TEXT_RENDERING(textToRead)->positioning = TextRenderingComponent::LEFT;
     TEXT_RENDERING(textToRead)->color = Color("green");
     TEXT_RENDERING(textToRead)->charHeight = PlacementHelper::GimpHeightToScreen(55);
-    TEXT_RENDERING(textToRead)->text = localizeAPI->text("please_rate_it", "Si vous aimez Heriswap, pourriez vous prendre quelques secondes pour laisser une évaluation ou un commentaire ? Merci d\'avance !");
+    // TEXT_RENDERING(textToRead)->text = localizeAPI->text("please_rate_it", "Si vous aimez Heriswap, pourriez vous prendre quelques secondes pour laisser une évaluation ou un commentaire ? Merci d\'avance !");
+    TEXT_RENDERING(textToRead)->text = localizeAPI->text("please_rate_it");
     TEXT_RENDERING(textToRead)->flags |= TextRenderingComponent::MultiLineBit;
-    TransformationSystem::setPosition(TRANSFORM(textToRead), Vector2(PlacementHelper::GimpXToScreen(44), PlacementHelper::GimpYToScreen(25)), TransformationSystem::NW);
+    TransformationSystem::setPosition(TRANSFORM(textToRead), 
+    								  glm::vec2((float)PlacementHelper::GimpXToScreen(44), 
+    								  			(float)PlacementHelper::GimpYToScreen(25)), 
+    								  TransformationSystem::NW);
 
-    TRANSFORM(textToRead)->position.X = TRANSFORM(textToReadContainer)->position.X = 0;
+    TRANSFORM(textToRead)->position.x = TRANSFORM(textToReadContainer)->position.x = 0;
 
     for (int i = 0; i < 3; i++) {
-	boutonText[i] = theTextRenderingSystem.CreateEntity();
+	boutonText[i] = theEntityManager.CreateEntity();
+
+	ADD_COMPONENT(boutonText[i], Transformation);
+	ADD_COMPONENT(boutonText[i], TextRendering);
 
 	TRANSFORM(boutonText[i])->z = DL_MainMenuUITxt;
-	TEXT_RENDERING(boutonText[i])->hide = true;
+	TEXT_RENDERING(boutonText[i])->show = false;
 	TEXT_RENDERING(boutonText[i])->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(boutonText[i])->color = Color("green");
 	TEXT_RENDERING(boutonText[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
 
 	boutonContainer[i] = theEntityManager.CreateEntity();
 	ADD_COMPONENT(boutonContainer[i], Transformation);
-	TRANSFORM(boutonContainer[i])->size = Vector2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(147));
+	TRANSFORM(boutonContainer[i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(708), 
+													(float)PlacementHelper::GimpHeightToScreen(147));
 	TRANSFORM(boutonContainer[i])->z = DL_MainMenuUIBg;
 	ADD_COMPONENT(boutonContainer[i], Rendering);
 	RENDERING(boutonContainer[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
@@ -76,26 +92,29 @@ void RateItStateManager::Setup() {
 	ADD_COMPONENT(boutonContainer[i], Button);
 	BUTTON(boutonContainer[i])->enabled = false;
 
-	TRANSFORM(boutonText[i])->position.X = TRANSFORM(boutonContainer[i])->position.X = 0;
-	TRANSFORM(boutonText[i])->position.Y = TRANSFORM(boutonContainer[i])->position.Y = PlacementHelper::GimpYToScreen(650 + i*183);
+	TRANSFORM(boutonText[i])->position.x = TRANSFORM(boutonContainer[i])->position.x = 0.f;
+	TRANSFORM(boutonText[i])->position.y = TRANSFORM(boutonContainer[i])->position.y = (float)PlacementHelper::GimpYToScreen(650 + i*183);
     }
-    TEXT_RENDERING(boutonText[0])->text = localizeAPI->text("rate_now", "Right now");
-    TEXT_RENDERING(boutonText[1])->text = localizeAPI->text("rate_later", "Later");
-    TEXT_RENDERING(boutonText[2])->text = localizeAPI->text("rate_never", "No thanks");
+    // TEXT_RENDERING(boutonText[0])->text = localizeAPI->text("rate_now", "Right now");
+    // TEXT_RENDERING(boutonText[1])->text = localizeAPI->text("rate_later", "Later");
+    // TEXT_RENDERING(boutonText[2])->text = localizeAPI->text("rate_never", "No thanks");
+    TEXT_RENDERING(boutonText[0])->text = localizeAPI->text("rate_now");
+    TEXT_RENDERING(boutonText[1])->text = localizeAPI->text("rate_later");
+    TEXT_RENDERING(boutonText[2])->text = localizeAPI->text("rate_never");
 }
 
 void RateItStateManager::Enter() {
-	LOGI("%s", __PRETTY_FUNCTION__);
-	RENDERING(textToReadContainer)->hide = false;
-	TEXT_RENDERING(textToRead)->hide = false;
+	LOGI(__PRETTY_FUNCTION__);
+	RENDERING(textToReadContainer)->show = true;
+	TEXT_RENDERING(textToRead)->show = true;
 	for (int i=0; i<3; i++) {
-		RENDERING(boutonContainer[i])->hide = false;
-		TEXT_RENDERING(boutonText[i])->hide = false;
+		RENDERING(boutonContainer[i])->show = true;
+		TEXT_RENDERING(boutonText[i])->show = true;
 		BUTTON(boutonContainer[i])->enabled = true;
 	}
 
-	RENDERING(menubg)->hide = false;
-	RENDERING(menufg)->hide = false;
+	RENDERING(menubg)->show = true;
+	RENDERING(menufg)->show = true;
 	//~RENDERING(fond)->hide = false;
 }
 
@@ -120,16 +139,16 @@ GameState RateItStateManager::Update(float dt) {
 }
 
 void RateItStateManager::Exit() {
-	LOGI("%s", __PRETTY_FUNCTION__);
-	RENDERING(textToReadContainer)->hide = true;
-	TEXT_RENDERING(textToRead)->hide = true;
+	LOGI(__PRETTY_FUNCTION__);
+	RENDERING(textToReadContainer)->show = false;
+	TEXT_RENDERING(textToRead)->show = false;
 	for (int i=0; i<3; i++) {
-		TEXT_RENDERING(boutonText[i])->hide = true;
-		RENDERING(boutonContainer[i])->hide = true;
+		TEXT_RENDERING(boutonText[i])->show = false;
+		RENDERING(boutonContainer[i])->show = false;
 		BUTTON(boutonContainer[i])->enabled = false;
 	}
 
-	RENDERING(menubg)->hide = true;
-	RENDERING(menufg)->hide = true;
+	RENDERING(menubg)->show = false;
+	RENDERING(menufg)->show = false;
 	//~RENDERING(fond)->hide = true;
 }
