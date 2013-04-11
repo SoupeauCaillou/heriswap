@@ -589,7 +589,7 @@ int HeriswapGame::saveState(uint8_t** out) {
 	return finalSize;
 }
 
-const uint8_t* HeriswapGame::loadEntitySystemState(const uint8_t* in, int size) {
+const uint8_t* HeriswapGame::loadEntitySystemState(const uint8_t* in, int) {
 	/* restore Game fields */
 	int eSize, sSize, index=0;
 	memcpy(&eSize, &in[index], sizeof(eSize));

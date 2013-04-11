@@ -193,7 +193,7 @@ GameState LevelStateManager::Update(float dt) {
 		}
 		mc->elements.clear();
 		// move big score to small score
-		Color blue = Color(164.0/255.0, 164.0/255, 164.0/255);
+		//Color blue = Color(164.0/255.0, 164.0/255, 164.0/255);
 		mc->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->charHeight, TEXT_RENDERING(eBigLevel)->charHeight, TEXT_RENDERING(smallLevel)->charHeight));
 		// mc->elements.push_back(new TypedMorphElement<Color> (&TEXT_RENDERING(eBigLevel)->color, blue, Color(1,1,1,1)));
 		mc->elements.push_back(new TypedMorphElement<glm::vec2> (&TRANSFORM(eBigLevel)->position, TRANSFORM(eBigLevel)->position, TRANSFORM(smallLevel)->position));

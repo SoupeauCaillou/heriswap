@@ -87,7 +87,7 @@ void InGameUiHelper::show() {
 	BUTTON(pauseButton)->enabled=true;
 }
 
-void InGameUiHelper::update(float dt) {
+void InGameUiHelper::update(float) {
 	// handle button
 	if (BUTTON(pauseButton)->clicked) {
 		SOUND(pauseButton)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");

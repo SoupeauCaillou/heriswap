@@ -417,7 +417,7 @@ int GameModeManager::saveInternalState(uint8_t** out) {
     return s;
 }
 
-const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int size) {
+const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int) {
     int index = 0;
     memcpy(&time, &in[index], sizeof(time)); index += sizeof(time);
     memcpy(&limit, &in[index], sizeof(limit)); index += sizeof(limit);
@@ -455,7 +455,7 @@ void GameModeManager::toggleDebugDisplay() {
 int GameModeManager::countBranchLeavesOfType(int t) const {
 	int count = 0;
 	for (unsigned int i=0; i<branchLeaves.size(); i++) {
-        count += (t == branchLeaves[i].type);
+        count += (t == (int)branchLeaves[i].type);
 	}
 	return count;
 }

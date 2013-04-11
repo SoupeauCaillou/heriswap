@@ -167,7 +167,7 @@ void NormalGameModeManager::UiUpdate(float dt) {
 }
 
 #include <cmath>
-int NormalGameModeManager::levelToLeaveToDelete(int type, int nb, int initialLeaveCount, int removedLeave, int leftOnBranch) {
+int NormalGameModeManager::levelToLeaveToDelete(int, int nb, int initialLeaveCount, int removedLeave, int leftOnBranch) {
 	int leftForType = glm::max(0, initialLeaveCount - (removedLeave + nb));
 	if (leftForType <= 3) {
 		assert (leftOnBranch >= leftForType);
@@ -194,7 +194,7 @@ static float timeGain(int nb, int level, float time) {
 void NormalGameModeManager::WillScore(int count, int type, std::vector<BranchLeaf>& out) {
     int nb = levelToLeaveToDelete(type, count, level+2, level+2 - remain[type], countBranchLeavesOfType(type));
     for (unsigned int i=0; nb>0 && i<branchLeaves.size(); i++) {
-        if (type == branchLeaves[i].type) {
+        if (type == (int)branchLeaves[i].type) {
             CombinationMark::markCellInCombination(branchLeaves[i].e);
             out.push_back(branchLeaves[i]);
             nb--;

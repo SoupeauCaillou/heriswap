@@ -106,7 +106,7 @@ void HelpStateManager::Enter() {
     }
 }
 
-GameState HelpStateManager::Update(float dt) {
+GameState HelpStateManager::Update(float) {
 	if (!theTouchInputManager.isTouched(0) && theTouchInputManager.wasTouched(0)) {
 		if (state == HowToPlay) {
             if (mode == Normal) {

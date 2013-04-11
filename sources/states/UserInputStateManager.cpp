@@ -36,10 +36,6 @@
 #include "GridSystem.h"
 #include "CombinationMark.h"
 
-static void activateADSR(Entity e, float a, float s);
-static void diffToGridCoords(const glm::vec2& c, int* i, int* j);
-
-
 void UserInputGameStateManager::Setup() {
 	swapAnimation = theEntityManager.CreateEntity();
 	ADD_COMPONENT(swapAnimation, ADSR);
@@ -86,7 +82,7 @@ static bool contains(const std::vector<Combinais>& combi, const GridComponent* g
 	return false;
 }
 
-static Entity cellUnderFinger(const glm::vec2& pos, bool preferInCombi) {
+static Entity cellUnderFinger(const glm::vec2& pos, bool) {
 	std::vector<Combinais> combinaisons;// = theGridSystem.LookForCombination(false,false);
 	const float maxDist = HeriswapGame::CellSize(theGridSystem.GridSize, 0).y;
 
@@ -111,7 +107,7 @@ static Entity cellUnderFinger(const glm::vec2& pos, bool preferInCombi) {
 	return e;
 }
 
-static Entity moveToCell(Entity original, const glm::vec2& move, float threshold) {
+static Entity moveToCell(Entity original, const glm::vec2& move, float) {
 #ifdef ANDROID
 	if (glm::length2(move) < threshold)
 		return 0;
@@ -290,27 +286,4 @@ void UserInputGameStateManager::Exit() {
 
     successMgr->sLuckyLuke();
     successMgr->sWhatToDo(false, 0.f);
-}
-
-static void activateADSR(Entity e, float a, float s) {
-	if (!e)
-		return;
-	float size = TRANSFORM(e)->size.x;
-	ADSRComponent* ac = ADSR(e);
-	ac->idleValue = size;
-	ac->attackValue = size * a;
-	ac->attackTiming = 0.1;
-	ac->decayTiming = 0.0;
-	ac->sustainValue = size * s;
-	ac->releaseTiming = 0.08;
-	ac->active = true;
-}
-
-void diffToGridCoords(const glm::vec2& c, int* i, int* j) {
-	*i = *j = 0;
-	if (glm::abs(c.x) > glm::abs(c.y)) {
-		*i = (c.x < 0) ? -1 : 1;
-	} else {
-		*j = (c.y < 0) ? -1 : 1;
-	}
 }

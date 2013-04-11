@@ -118,7 +118,7 @@ void RateItStateManager::Enter() {
 	//~RENDERING(fond)->hide = false;
 }
 
-GameState RateItStateManager::Update(float dt) {
+GameState RateItStateManager::Update(float) {
 	//want to rate
 	if (BUTTON(boutonContainer[0])->clicked) {
 		SOUND(boutonContainer[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");

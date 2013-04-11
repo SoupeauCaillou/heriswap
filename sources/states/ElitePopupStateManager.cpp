@@ -109,7 +109,7 @@ void ElitePopupStateManager::Enter() {
 	}
 }
 
-GameState ElitePopupStateManager::Update(float dt) {
+GameState ElitePopupStateManager::Update(float) {
 	if (BUTTON(eButton[0])->clicked) {
 		LOGW("Change difficulty");
 		theGridSystem.setGridFromDifficulty(theGridSystem.nextDifficulty(theGridSystem.sizeToDifficulty()));

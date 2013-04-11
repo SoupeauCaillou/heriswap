@@ -73,6 +73,8 @@ Difficulty GridSystem::nextDifficulty(Difficulty diff) {
 			return DifficultyHard;
 		case DifficultyHard :
 			return DifficultyEasy;
+		default:
+			break;
 	}
 	//should never happen
 	return DifficultyEasy;

@@ -24,7 +24,7 @@
 #include <vector>
 #include "HeriswapGame.h"
 
-int callback(void *save, int argc, char **argv, char **azColName){
+int callback(void *save, int , char **argv, char **){
 	std::string *sav = static_cast<std::string*>(save);
 	if (argv[0] != 0)
 		*sav = argv[0];
@@ -63,7 +63,7 @@ int callbackScore(void *save, int argc, char **argv, char **azColName){
 	return 0;
 }
 
-int callbackNames(void *save, int argc, char **argv, char **azColName){
+int callbackNames(void *save, int argc, char **argv, char **){
 	std::vector<std::string> *sav = static_cast<std::vector<std::string>*>(save);
 	for (int i=0; i<argc; i++) {
 		sav->push_back(argv[i]);
@@ -71,7 +71,7 @@ int callbackNames(void *save, int argc, char **argv, char **azColName){
 	return 0;
 }
 
-int callbackResultSize(void *save, int argc, char **argv, char **azColName){
+int callbackResultSize(void *save, int , char **, char **){
 	int *sav = static_cast<int*>(save);
 	(*sav)++;
 	return 0;
