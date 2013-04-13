@@ -174,8 +174,8 @@ void HeriswapGame::quickInit(){
 void HeriswapGame::sacInit(int windowW, int windowH) {
 	LOGI("SAC engine initialisation begins...")
 	Game::sacInit(windowW, windowH);
-	PlacementHelper::GimpWidth = 0;
-    PlacementHelper::GimpHeight = 0;
+	PlacementHelper::GimpWidth = 800;
+    PlacementHelper::GimpHeight = 1280;
 
 	Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
 
@@ -194,7 +194,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     theButtonSystem.vibrateAPI = gameThreadContext->vibrateAPI;
 
     // init font
-	loadFont(renderThreadContext->assetAPI, "alphabet");
+	loadFont(renderThreadContext->assetAPI, "typo");
 	// loadFont(renderThreadContext->assetAPI, "gdtypo");
 
 	// default camera
