@@ -98,7 +98,7 @@ BackgroundManager::Actor* BackgroundManager::initCloud(Actor* c, int group) {
 	TRANSFORM(c->e)->position.y = cloudY[group].random();
 	TRANSFORM(c->e)->z = DL_Cloud;
 
-	int idx = glm::round(glm::linearRand(0.f, (float)textures[group].size()));
+	int idx = glm::round(glm::linearRand(0.f, (float)(textures[group].size()-1)));
 	RENDERING(c->e)->texture = theRenderingSystem.loadTextureFile(textures[group][idx]);
 	RENDERING(c->e)->color = Color(1,1,1, glm::linearRand(0.6f, 0.9f));
 	RENDERING(c->e)->show = true;
