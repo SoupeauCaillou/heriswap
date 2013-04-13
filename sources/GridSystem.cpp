@@ -603,3 +603,9 @@ std::vector<Entity> GridSystem::ShowOneCombination() {
 
 	return highLightedCombi;
 }
+
+#if SAC_INGAME_EDITORS
+void GridSystem::addEntityPropertiesToBar(Entity entity, TwBar* bar) {
+}
+#endif
+

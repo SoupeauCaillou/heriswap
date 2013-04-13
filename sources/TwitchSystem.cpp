@@ -55,3 +55,8 @@ void TwitchSystem::DoUpdate(float dt) {
     }
 }
 
+#if SAC_INGAME_EDITORS
+void TwitchSystem::addEntityPropertiesToBar(Entity entity, TwBar* bar) {
+}
+#endif
+
