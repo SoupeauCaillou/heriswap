@@ -103,8 +103,6 @@ void GameModeManager::Setup() {
 	c->frames=0;
 	c->actor.speed = 4.1;
 	RENDERING(herisson)->show = false;
-	RENDERING(herisson)->opaqueType = RenderingComponent::FULL_OPAQUE;
-	// RENDERING(herisson)->opaqueSeparation = 60.0/114;
 	BUTTON(herisson)->enabled = false;
 
 	branch = theEntityManager.CreateEntity("branch");
