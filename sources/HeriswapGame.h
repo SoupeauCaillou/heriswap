@@ -74,10 +74,10 @@ class HeriswapGame : public Game {
 		void stopInGameMusics();
 		bool shouldPlayPiano();
 
-
+	Entity camera;
 
 	PrivateData* datas;
-	AssetAPI* asset;
+	
 	SuccessAPI* successAPI;
 	ExitAPI* exitAPI;
     VibrateAPI* vibrateAPI;

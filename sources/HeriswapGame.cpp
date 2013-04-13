@@ -42,6 +42,7 @@
 #include "systems/ParticuleSystem.h"
 #include "systems/ScrollingSystem.h"
 #include "systems/MorphingSystem.h"
+#include "systems/CameraSystem.h"
 
 #include "states/StateManager.h"
 #include "states/BackgroundManager.h"
@@ -139,8 +140,6 @@ float HeriswapGame::CellContentScale() {
 HeriswapGame::HeriswapGame() : Game() {
 	GridSystem::CreateInstance();
 	TwitchSystem::CreateInstance();
-
-	datas = new PrivateData(this, gameThreadContext, new SuccessManager(gameThreadContext->successAPI));
 }
 
 HeriswapGame::~HeriswapGame() {
@@ -173,7 +172,10 @@ void HeriswapGame::quickInit(){
 }
 
 void HeriswapGame::sacInit(int windowW, int windowH) {
+	LOGI("SAC engine initialisation begins...")
 	Game::sacInit(windowW, windowH);
+	PlacementHelper::GimpWidth = 0;
+    PlacementHelper::GimpHeight = 0;
 
 	Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
 
@@ -192,14 +194,32 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     theButtonSystem.vibrateAPI = gameThreadContext->vibrateAPI;
 
     // init font
-	loadFont(asset, "typo");
-	loadFont(asset, "gdtypo");
+	loadFont(renderThreadContext->assetAPI, "alphabet");
+	// loadFont(renderThreadContext->assetAPI, "gdtypo");
+
+	// default camera
+    camera = theEntityManager.CreateEntity("camera1");
+    ADD_COMPONENT(camera, Transformation);
+    TRANSFORM(camera)->size = glm::vec2(theRenderingSystem.screenW, theRenderingSystem.screenH);
+    TRANSFORM(camera)->position = glm::vec2(0, 0);
+    TRANSFORM(camera)->z = 1;
+    ADD_COMPONENT(camera, Camera);
+    CAMERA(camera)->enable = true;
+    CAMERA(camera)->order = 2;
+    CAMERA(camera)->id = 0;
+    CAMERA(camera)->clearColor = Color(125.0/255, 150./255.0, 0.);
+
+	LOGI("SAC engine initialisation done.")
 }
 
 void HeriswapGame::init(const uint8_t* in, int size) {
+	LOGI("HeriswapGame initialisation begins...")
     if (in && size) {
         in = loadEntitySystemState(in, size);
     }
+
+    SuccessManager *sm = new SuccessManager(gameThreadContext->successAPI);
+    datas = new PrivateData(this, gameThreadContext, sm);
 
 	datas->Setup();
 
@@ -210,8 +230,11 @@ void HeriswapGame::init(const uint8_t* in, int size) {
 	datas->sky = theEntityManager.CreateEntity();
 	ADD_COMPONENT(datas->sky, Transformation);
 	TRANSFORM(datas->sky)->z = DL_Sky;
-	TRANSFORM(datas->sky)->size = glm::vec2(bgElementWidth, (PlacementHelper::GimpWidthToScreen(800) * 833.0) / 808.0);
-	TransformationSystem::setPosition(TRANSFORM(datas->sky), glm::vec2(0, PlacementHelper::GimpYToScreen(0)), TransformationSystem::N);
+	TRANSFORM(datas->sky)->size = glm::vec2(bgElementWidth, 
+		                                    PlacementHelper::GimpWidthToScreen(800) * 833.0 / 808.0);
+	TransformationSystem::setPosition(TRANSFORM(datas->sky), 
+									  glm::vec2(0, PlacementHelper::GimpYToScreen(0)), 
+									  TransformationSystem::N);
 	ADD_COMPONENT(datas->sky, Scrolling);
 	SCROLLING(datas->sky)->images.push_back("ciel0");
 	SCROLLING(datas->sky)->images.push_back("ciel1");
@@ -219,7 +242,8 @@ void HeriswapGame::init(const uint8_t* in, int size) {
 	SCROLLING(datas->sky)->images.push_back("ciel3");
 	SCROLLING(datas->sky)->direction = -glm::vec2(1.0f, 0.0f);
 	SCROLLING(datas->sky)->speed = 0.1;
-	SCROLLING(datas->sky)->displaySize = glm::vec2(TRANSFORM(datas->sky)->size.x * 1.01, TRANSFORM(datas->sky)->size.y);
+	SCROLLING(datas->sky)->displaySize = glm::vec2(TRANSFORM(datas->sky)->size.x * 1.01, 
+												   TRANSFORM(datas->sky)->size.y);
     SCROLLING(datas->sky)->show = false;
     SCROLLING(datas->sky)->opaqueType = RenderingComponent::FULL_OPAQUE;
 	static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
@@ -231,6 +255,10 @@ void HeriswapGame::init(const uint8_t* in, int size) {
         loadGameState(in, size);
     }
     datas->state2Manager[datas->state]->Enter();
+
+    quickInit();
+
+    LOGI("HeriswapGame initialisation done.")
 }
 
 void HeriswapGame::setMode() {
