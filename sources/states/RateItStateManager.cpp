@@ -34,7 +34,7 @@
 
 void RateItStateManager::Setup() {
     //Creating text entities
-    textToReadContainer = theEntityManager.CreateEntity();
+    textToReadContainer = theEntityManager.CreateEntity("textToReadContainer");
     ADD_COMPONENT(textToReadContainer, Transformation);
     TRANSFORM(textToReadContainer)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(712), 
     												 (float)PlacementHelper::GimpHeightToScreen(500));
@@ -47,7 +47,7 @@ void RateItStateManager::Setup() {
     								  			(float)PlacementHelper::GimpYToScreen(40)), 
     								  TransformationSystem::NW);
 
-    textToRead = theEntityManager.CreateEntity();
+    textToRead = theEntityManager.CreateEntity("textToRead");
     ADD_COMPONENT(textToRead, Transformation);
     ADD_COMPONENT(textToRead, TextRendering);
     TRANSFORM(textToRead)->z = DL_MainMenuUITxt;
@@ -58,7 +58,6 @@ void RateItStateManager::Setup() {
     TEXT_RENDERING(textToRead)->positioning = TextRenderingComponent::LEFT;
     TEXT_RENDERING(textToRead)->color = Color("green");
     TEXT_RENDERING(textToRead)->charHeight = PlacementHelper::GimpHeightToScreen(55);
-    // TEXT_RENDERING(textToRead)->text = localizeAPI->text("please_rate_it", "Si vous aimez Heriswap, pourriez vous prendre quelques secondes pour laisser une évaluation ou un commentaire ? Merci d\'avance !");
     TEXT_RENDERING(textToRead)->text = localizeAPI->text("please_rate_it");
     TEXT_RENDERING(textToRead)->flags |= TextRenderingComponent::MultiLineBit;
     TransformationSystem::setPosition(TRANSFORM(textToRead), 
@@ -69,35 +68,37 @@ void RateItStateManager::Setup() {
     TRANSFORM(textToRead)->position.x = TRANSFORM(textToReadContainer)->position.x = 0;
 
     for (int i = 0; i < 3; i++) {
-	boutonText[i] = theEntityManager.CreateEntity();
+    	std::stringstream a;
+    	a.str("");
+    	a << "boutonText_" << i;
+		boutonText[i] = theEntityManager.CreateEntity(a.str());
 
-	ADD_COMPONENT(boutonText[i], Transformation);
-	ADD_COMPONENT(boutonText[i], TextRendering);
+		ADD_COMPONENT(boutonText[i], Transformation);
+		ADD_COMPONENT(boutonText[i], TextRendering);
 
-	TRANSFORM(boutonText[i])->z = DL_MainMenuUITxt;
-	TEXT_RENDERING(boutonText[i])->show = false;
-	TEXT_RENDERING(boutonText[i])->positioning = TextRenderingComponent::CENTER;
-	TEXT_RENDERING(boutonText[i])->color = Color("green");
-	TEXT_RENDERING(boutonText[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
+		TRANSFORM(boutonText[i])->z = DL_MainMenuUITxt;
+		TEXT_RENDERING(boutonText[i])->show = false;
+		TEXT_RENDERING(boutonText[i])->positioning = TextRenderingComponent::CENTER;
+		TEXT_RENDERING(boutonText[i])->color = Color("green");
+		TEXT_RENDERING(boutonText[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
 
-	boutonContainer[i] = theEntityManager.CreateEntity();
-	ADD_COMPONENT(boutonContainer[i], Transformation);
-	TRANSFORM(boutonContainer[i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(708), 
-													(float)PlacementHelper::GimpHeightToScreen(147));
-	TRANSFORM(boutonContainer[i])->z = DL_MainMenuUIBg;
-	ADD_COMPONENT(boutonContainer[i], Rendering);
-	RENDERING(boutonContainer[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
-	RENDERING(boutonContainer[i])->color.a = 0.5;
-	ADD_COMPONENT(boutonContainer[i], Sound);
-	ADD_COMPONENT(boutonContainer[i], Button);
-	BUTTON(boutonContainer[i])->enabled = false;
+		a.str("");
+    	a << "boutonContainer_" << i;
+		boutonContainer[i] = theEntityManager.CreateEntity(a.str());
+		ADD_COMPONENT(boutonContainer[i], Transformation);
+		TRANSFORM(boutonContainer[i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(708), 
+														(float)PlacementHelper::GimpHeightToScreen(147));
+		TRANSFORM(boutonContainer[i])->z = DL_MainMenuUIBg;
+		ADD_COMPONENT(boutonContainer[i], Rendering);
+		RENDERING(boutonContainer[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
+		RENDERING(boutonContainer[i])->color.a = 0.5;
+		ADD_COMPONENT(boutonContainer[i], Sound);
+		ADD_COMPONENT(boutonContainer[i], Button);
+		BUTTON(boutonContainer[i])->enabled = false;
 
-	TRANSFORM(boutonText[i])->position.x = TRANSFORM(boutonContainer[i])->position.x = 0.f;
-	TRANSFORM(boutonText[i])->position.y = TRANSFORM(boutonContainer[i])->position.y = (float)PlacementHelper::GimpYToScreen(650 + i*183);
+		TRANSFORM(boutonText[i])->position.x = TRANSFORM(boutonContainer[i])->position.x = 0.f;
+		TRANSFORM(boutonText[i])->position.y = TRANSFORM(boutonContainer[i])->position.y = (float)PlacementHelper::GimpYToScreen(650 + i*183);
     }
-    // TEXT_RENDERING(boutonText[0])->text = localizeAPI->text("rate_now", "Right now");
-    // TEXT_RENDERING(boutonText[1])->text = localizeAPI->text("rate_later", "Later");
-    // TEXT_RENDERING(boutonText[2])->text = localizeAPI->text("rate_never", "No thanks");
     TEXT_RENDERING(boutonText[0])->text = localizeAPI->text("rate_now");
     TEXT_RENDERING(boutonText[1])->text = localizeAPI->text("rate_later");
     TEXT_RENDERING(boutonText[2])->text = localizeAPI->text("rate_never");

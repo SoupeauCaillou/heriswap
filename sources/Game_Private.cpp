@@ -61,8 +61,8 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
      mode2Manager[Go100Seconds] = new Go100SecondsGameModeManager(game, successMgr, context->storageAPI);
      storage = context->storageAPI;
 
-     soundButton = theEntityManager.CreateEntity();
-     socialGamNet = theEntityManager.CreateEntity();
+     soundButton = theEntityManager.CreateEntity("soundButton");
+     socialGamNet = theEntityManager.CreateEntity("socialGamNet");
 
      state = BlackToLogoState;
 
@@ -151,28 +151,30 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
      rateIt->menufg = mainmenu->menufg;
      rateIt->menubg = mainmenu->menubg;
 
-     menu = theEntityManager.CreateEntity();
+     menu = theEntityManager.CreateEntity("menu");
      ADD_COMPONENT(menu, Music);
      MUSIC(menu)->control = MusicControl::Play;
      MUSIC(menu)->loopAt = 64.0f;
 
-     inGameMusic.masterTrack = theEntityManager.CreateEntity();
+     inGameMusic.masterTrack = theEntityManager.CreateEntity("masterTrack");
      ADD_COMPONENT(inGameMusic.masterTrack, Music);
      MUSIC(inGameMusic.masterTrack)->loopAt = 17.0f;
 
      for (int i=0; i<3; i++) {
-     	inGameMusic.secondaryTracks[i] = theEntityManager.CreateEntity();
+          std::stringstream a;
+          a << "" << "secondaryTracks_" << i;
+     	inGameMusic.secondaryTracks[i] = theEntityManager.CreateEntity(a.str());
      	ADD_COMPONENT(inGameMusic.secondaryTracks[i], Music);
      	MUSIC(inGameMusic.secondaryTracks[i])->loopAt = 17.0f;
      	MUSIC(inGameMusic.secondaryTracks[i])->master = MUSIC(inGameMusic.masterTrack);
      }
-     inGameMusic.accessoryTrack = theEntityManager.CreateEntity();
+     inGameMusic.accessoryTrack = theEntityManager.CreateEntity("accessoryTrack");
      ADD_COMPONENT(inGameMusic.accessoryTrack, Music);
      MUSIC(inGameMusic.accessoryTrack)->loopAt = 17.0f;
      MUSIC(inGameMusic.accessoryTrack)->master = MUSIC(inGameMusic.masterTrack);
      MUSIC(inGameMusic.accessoryTrack)->volume = 0.75;
 
-     inGameMusic.stressTrack = theEntityManager.CreateEntity();
+     inGameMusic.stressTrack = theEntityManager.CreateEntity("stressTrack");
      ADD_COMPONENT(inGameMusic.stressTrack, Music);
      MUSIC(inGameMusic.stressTrack)->loopAt = 17.0f;
      MUSIC(inGameMusic.stressTrack)->master = MUSIC(inGameMusic.masterTrack);

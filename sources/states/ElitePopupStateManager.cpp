@@ -34,7 +34,7 @@
 
 void ElitePopupStateManager::Setup() {
 	const Color green("green");
-	background = theEntityManager.CreateEntity();
+	background = theEntityManager.CreateEntity("background");
 	ADD_COMPONENT(background, Transformation);
 	TRANSFORM(background)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(712), 
 											(float)PlacementHelper::GimpHeightToScreen(450));
@@ -47,7 +47,7 @@ void ElitePopupStateManager::Setup() {
 	RENDERING(background)->texture = theRenderingSystem.loadTextureFile("fond_menu_mode");
 	RENDERING(background)->color.a = 0.5;
 
-	text = theEntityManager.CreateEntity();
+	text = theEntityManager.CreateEntity("text");
 	ADD_COMPONENT(text, Transformation);
 	TRANSFORM(text)->position = TRANSFORM(background)->position;
 	TRANSFORM(text)->size = TRANSFORM(background)->size;
@@ -65,7 +65,10 @@ void ElitePopupStateManager::Setup() {
 	TEXT_RENDERING(text)->flags |= TextRenderingComponent::MultiLineBit;
 
 	for (int i=0; i<2; i++) {
-		eText[i] = theEntityManager.CreateEntity();
+		std::stringstream a;
+		a.str("");
+		a << "eText_" << i;
+		eText[i] = theEntityManager.CreateEntity(a.str());
 		ADD_COMPONENT(eText[i], Transformation);
 		ADD_COMPONENT(eText[i], TextRendering);
 
@@ -75,7 +78,9 @@ void ElitePopupStateManager::Setup() {
 		TEXT_RENDERING(eText[i])->color = green;
 		TEXT_RENDERING(eText[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
 
-	    eButton[i] = theEntityManager.CreateEntity();
+		a.str("");
+		a << "eButton_" << i;
+	    eButton[i] = theEntityManager.CreateEntity(a.str());
 	    ADD_COMPONENT(eButton[i], Transformation);
 	    TRANSFORM(eButton[i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(708), 
 	    										(float)PlacementHelper::GimpHeightToScreen(147));
@@ -89,11 +94,6 @@ void ElitePopupStateManager::Setup() {
 		TRANSFORM(eText[i])->position.x = TRANSFORM(eButton[i])->position.x = 0;
 		TRANSFORM(eText[i])->position.y = TRANSFORM(eButton[i])->position.y = PlacementHelper::GimpYToScreen(850+i*183);
 	}
-	// TODO !
-	// TEXT_RENDERING(text)->text = localizeAPI->text("change_difficulty",
-	// "You seem really good.\nWould you like to start a new game with increased difficulty ?");
-	// TEXT_RENDERING(eText[0])->text = localizeAPI->text("change_difficulty_yes", "Increase difficulty");
-	// TEXT_RENDERING(eText[1])->text = localizeAPI->text("change_difficulty_no", "No, keep it easy");
 	TEXT_RENDERING(text)->text = localizeAPI->text("change_difficulty");
 	TEXT_RENDERING(eText[0])->text = localizeAPI->text("change_difficulty_yes");
 	TEXT_RENDERING(eText[1])->text = localizeAPI->text("change_difficulty_no");

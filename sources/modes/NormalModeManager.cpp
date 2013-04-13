@@ -60,7 +60,7 @@ void NormalGameModeManager::Enter() {
 	time = 0;
 	points = 0;
 	level = 1;
-	bonus = glm::round(glm::linearRand(0.f, (float)theGridSystem.Types));
+	bonus = glm::round(glm::linearRand(0.f, (float)(theGridSystem.Types-1)));
 	for (int i=0;i<theGridSystem.Types;i++) remain[i]=3;
 	nextHerissonSpeed = 1;
 	levelMoveDuration = 0;
@@ -257,7 +257,7 @@ void NormalGameModeManager::startLevel(int lvl) {
 
 	// put hedgehog back on first animation position
 	c->ind = 0;
-	bonus = glm::round(glm::linearRand(0.f, (float)theGridSystem.Types));
+	bonus = glm::round(glm::linearRand(0.f, (float)(theGridSystem.Types-1)));
 	LoadHerissonTexture(bonus+1);
 	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
 	SCROLLING(decor1er)->speed = 0;

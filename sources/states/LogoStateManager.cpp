@@ -33,8 +33,8 @@
 LogoStateManager::LogoStateManager(GameState _following) : following(_following) {}
 
 void LogoStateManager::Setup() {
-     logo = theEntityManager.CreateEntity();
-     logobg = theEntityManager.CreateEntity();
+     logo = theEntityManager.CreateEntity("logo");
+     logobg = theEntityManager.CreateEntity("logobg");
 
     ADD_COMPONENT(logo, Rendering);
      ADD_COMPONENT(logo, Transformation);
@@ -54,7 +54,7 @@ void LogoStateManager::Setup() {
 }
 
 void LogoStateManager::Enter() {
-	animLogo = theEntityManager.CreateEntity();
+	animLogo = theEntityManager.CreateEntity("animLogo");
 	ADD_COMPONENT(animLogo, Transformation);
 	TRANSFORM(animLogo)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(49), 
 										  (float)PlacementHelper::GimpWidthToScreen(40));

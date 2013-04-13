@@ -33,7 +33,7 @@
 void HelpStateManager::Setup() {
 	const Color green("green");
 
-    title = theEntityManager.CreateEntity();
+    title = theEntityManager.CreateEntity("title");
     ADD_COMPONENT(title, Transformation);
     TRANSFORM(title)->position = glm::vec2(0.f, (float)PlacementHelper::ScreenHeight * 0.4);
     TRANSFORM(title)->z = DL_HelpText;
@@ -44,7 +44,7 @@ void HelpStateManager::Setup() {
     TEXT_RENDERING(title)->charHeight = PlacementHelper::GimpHeightToScreen(70);
 
 	// title text + bg
-	text = theEntityManager.CreateEntity();
+	text = theEntityManager.CreateEntity("text");
 	ADD_COMPONENT(text, Transformation);
     TRANSFORM(text)->position = glm::vec2(0.f, (float)PlacementHelper::ScreenHeight * 0.3);
     TRANSFORM(text)->z = DL_HelpText;
@@ -57,7 +57,7 @@ void HelpStateManager::Setup() {
 	TEXT_RENDERING(text)->color = green;
 	TEXT_RENDERING(text)->charHeight = PlacementHelper::GimpHeightToScreen(50);
 
-    postscriptum = theEntityManager.CreateEntity();
+    postscriptum = theEntityManager.CreateEntity("postscriptum");
     ADD_COMPONENT(postscriptum, Transformation);
     TRANSFORM(postscriptum)->position = glm::vec2(0.f, (float)(-PlacementHelper::ScreenHeight * 0.5f + 0.5f * PlacementHelper::GimpHeightToScreen(40)));
     TRANSFORM(postscriptum)->z = DL_HelpText;

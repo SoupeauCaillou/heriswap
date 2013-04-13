@@ -34,7 +34,7 @@ FallGameStateManager::FallGameStateManager() {
 }
 
 void FallGameStateManager::Setup() {
-	fallAnimation = theEntityManager.CreateEntity();
+	fallAnimation = theEntityManager.CreateEntity("fallAnimation");
 	ADD_COMPONENT(fallAnimation, ADSR);
 
 	ADSR(fallAnimation)->idleValue = 0;

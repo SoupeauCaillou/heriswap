@@ -33,7 +33,7 @@ DeleteGameStateManager::DeleteGameStateManager(SuccessManager* sMgr) : successMg
 }
 
 void DeleteGameStateManager::Setup() {
-	deleteAnimation = theEntityManager.CreateEntity();
+	deleteAnimation = theEntityManager.CreateEntity("deleteAnimation");
 	ADD_COMPONENT(deleteAnimation, ADSR);
 	ADD_COMPONENT(deleteAnimation, Sound);
 

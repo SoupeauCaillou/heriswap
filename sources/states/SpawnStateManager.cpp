@@ -45,10 +45,10 @@ SpawnGameStateManager::SpawnGameStateManager(SuccessManager* smgr){
 }
 
 void SpawnGameStateManager::Setup() {
-	haveToAddLeavesInGrid = theEntityManager.CreateEntity();
+	haveToAddLeavesInGrid = theEntityManager.CreateEntity("haveToAddLeavesInGrid");
 	ADD_COMPONENT(haveToAddLeavesInGrid, ADSR);
 
-	replaceGrid = theEntityManager.CreateEntity();
+	replaceGrid = theEntityManager.CreateEntity("replaceGrid");
 	ADD_COMPONENT(replaceGrid, ADSR);
 
 	ADSR(haveToAddLeavesInGrid)->idleValue = 0;
@@ -248,7 +248,7 @@ void fillTheBlank(std::vector<Feuille>& newLeaves)
 }
 
 static Entity createCell(Feuille& f, bool assignGridPos) {
-	Entity e = theEntityManager.CreateEntity("", EntityType::Persistent);
+	Entity e = theEntityManager.CreateEntity("Cell", EntityType::Persistent);
 	ADD_COMPONENT(e, Transformation);
 	ADD_COMPONENT(e, Rendering);
 	ADD_COMPONENT(e, ADSR);

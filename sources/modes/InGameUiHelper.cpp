@@ -39,7 +39,7 @@ void InGameUiHelper::build() {
 	if (built)
 		return;
 
-	smallLevel = theEntityManager.CreateEntity();
+	smallLevel = theEntityManager.CreateEntity("smallLevel");
 	ADD_COMPONENT(smallLevel, Transformation);
 	TRANSFORM(smallLevel)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(680), 
 												(float)PlacementHelper::GimpYToScreen(188));
@@ -51,7 +51,7 @@ void InGameUiHelper::build() {
 	TEXT_RENDERING(smallLevel)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(smallLevel)->flags |= TextRenderingComponent::IsANumberBit;
 
-	pauseButton = theEntityManager.CreateEntity();
+	pauseButton = theEntityManager.CreateEntity("pauseButton");
 	ADD_COMPONENT(pauseButton, Transformation);
     TRANSFORM(pauseButton)->size = glm::vec2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
     TransformationSystem::setPosition(TRANSFORM(pauseButton), glm::vec2(-PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
@@ -63,7 +63,7 @@ void InGameUiHelper::build() {
     BUTTON(pauseButton)->overSize = 1.6;
 	BUTTON(pauseButton)->enabled = false;
 
-	scoreProgress = theEntityManager.CreateEntity();
+	scoreProgress = theEntityManager.CreateEntity("scoreProgress");
 	ADD_COMPONENT(scoreProgress, Transformation);
 	TRANSFORM(scoreProgress)->z = DL_Score;
 	TRANSFORM(scoreProgress)->position = glm::vec2(0, PlacementHelper::GimpYToScreen(1215));

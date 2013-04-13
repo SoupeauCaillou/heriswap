@@ -38,7 +38,10 @@ void MainMenuGameStateManager::Setup() {
 
 	//Creating text entities
 	for (int i=0; i<3; i++) {
-		eStart[i] = theEntityManager.CreateEntity();
+		std::stringstream a;
+		a.str("");
+		a << "eStart_" << i;
+		eStart[i] = theEntityManager.CreateEntity(a.str());
 		ADD_COMPONENT(eStart[i], Transformation);
 		ADD_COMPONENT(eStart[i], TextRendering);
 
@@ -52,7 +55,9 @@ void MainMenuGameStateManager::Setup() {
 	    MORPHING(eStart[i])->elements.push_back(sizeMorph);
 	    MORPHING(eStart[i])->timing = 0.2;
 
-	    bStart[i] = theEntityManager.CreateEntity();
+	    a.str("");
+	    a << "bStart_" << i;
+	    bStart[i] = theEntityManager.CreateEntity(a.str());
 	    ADD_COMPONENT(bStart[i], Transformation);
 	    TRANSFORM(bStart[i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(708), 
 	    									   (float)PlacementHelper::GimpHeightToScreen(147));
@@ -65,13 +70,9 @@ void MainMenuGameStateManager::Setup() {
 		TRANSFORM(eStart[i])->position.x = (float)PlacementHelper::GimpXToScreen(75);
 		TRANSFORM(eStart[i])->position.y = TRANSFORM(bStart[i])->position.y = (float)PlacementHelper::GimpYToScreen(156+i*183);
 	}
-	// TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1", "Score race");
-	// TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2", "Time attack");
-	// TEXT_RENDERING(eStart[2])->text = localizeAPI->text("mode_3", "100 seconds");
 	TEXT_RENDERING(eStart[0])->text = localizeAPI->text("mode_1");
 	TEXT_RENDERING(eStart[1])->text = localizeAPI->text("mode_2");
 	TEXT_RENDERING(eStart[2])->text = localizeAPI->text("mode_3");
-
 
 	//Containers properties
 	for (int i=0; i<3; i++) {
@@ -97,7 +98,7 @@ void MainMenuGameStateManager::Setup() {
 		TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9f;
 	}
 
-	menubg = theEntityManager.CreateEntity();
+	menubg = theEntityManager.CreateEntity("menubg");
 	ADD_COMPONENT(menubg, Transformation);
 	TRANSFORM(menubg)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 
 										(float)PlacementHelper::GimpHeightToScreen(570));
@@ -113,7 +114,7 @@ void MainMenuGameStateManager::Setup() {
 	RENDERING(menubg)->opaqueType = RenderingComponent::NON_OPAQUE;
 	// RENDERING(menubg)->opaqueSeparation = 0.26;
 
-	menufg = theEntityManager.CreateEntity();
+	menufg = theEntityManager.CreateEntity("menufg");
 	ADD_COMPONENT(menufg, Transformation);
 	TRANSFORM(menufg)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 
 										(float)PlacementHelper::GimpHeightToScreen(570));
@@ -131,7 +132,7 @@ void MainMenuGameStateManager::Setup() {
 	herisson = new AnimatedActor();
 	herisson->frames=0;
 	herisson->actor.speed = 4.1;
-	Entity a = theEntityManager.CreateEntity();
+	Entity a = theEntityManager.CreateEntity("herisson_actor");
 	ADD_COMPONENT(a, Transformation);
 	TRANSFORM(a)->z = DL_MainMenuHerisson;
 	ADD_COMPONENT(a, Rendering);
@@ -146,7 +147,7 @@ void MainMenuGameStateManager::Setup() {
 									  			(float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f,1150.f)))), 
 									  TransformationSystem::SW);
 
-	quitButton[0] = theEntityManager.CreateEntity();
+	quitButton[0] = theEntityManager.CreateEntity("quitButton_0");
 	ADD_COMPONENT(quitButton[0], Transformation);
 	TRANSFORM(quitButton[0])->z = DL_MainMenuUITxt;
 	TRANSFORM(quitButton[0])->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1215));
@@ -159,7 +160,7 @@ void MainMenuGameStateManager::Setup() {
 	TEXT_RENDERING(quitButton[0])->color = green;
 	TEXT_RENDERING(quitButton[0])->charHeight = PlacementHelper::GimpHeightToScreen(60);
 
-	quitButton[1] = theEntityManager.CreateEntity();
+	quitButton[1] = theEntityManager.CreateEntity("quitButton_1");
 	ADD_COMPONENT(quitButton[1], Transformation);
 	float hhh = PlacementHelper::GimpHeightToScreen(95);
 	float www = hhh / 0.209; //theTextRenderingSystem.computeTextRenderingComponentWidth(TEXT_RENDERING(quitButton[0]));
@@ -217,6 +218,7 @@ GameState MainMenuGameStateManager::Update(float dt) {
 										  			(float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f, 1150.f)))), 
 										  TransformationSystem::SW);//offset
 	}
+
 	if (!modeTitleToReset || (modeTitleToReset && !MORPHING(modeTitleToReset)->active)) {
 		if (BUTTON(bStart[0])->clicked) {
 			choosenGameMode = Normal;

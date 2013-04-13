@@ -87,7 +87,7 @@ void GameModeManager::LoadHerissonTexture(int type) {
 }
 
 void GameModeManager::Setup() {
-	herisson = theEntityManager.CreateEntity();
+	herisson = theEntityManager.CreateEntity("herisson");
 	ADD_COMPONENT(herisson, Transformation);
 	ADD_COMPONENT(herisson, Rendering);
 	ADD_COMPONENT(herisson, Button);
@@ -107,7 +107,7 @@ void GameModeManager::Setup() {
 	// RENDERING(herisson)->opaqueSeparation = 60.0/114;
 	BUTTON(herisson)->enabled = false;
 
-	branch = theEntityManager.CreateEntity();
+	branch = theEntityManager.CreateEntity("branch");
 	ADD_COMPONENT(branch, Transformation);
 	TRANSFORM(branch)->z = DL_Branch;
 	TRANSFORM(branch)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(800), 
@@ -119,7 +119,7 @@ void GameModeManager::Setup() {
 	RENDERING(branch)->show = true;
 	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche");
 
-	decor2nd = theEntityManager.CreateEntity();
+	decor2nd = theEntityManager.CreateEntity("decor2nd");
 	ADD_COMPONENT(decor2nd, Transformation);
 	TRANSFORM(decor2nd)->z = DL_Decor2nd;
 	TRANSFORM(decor2nd)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 
@@ -139,7 +139,7 @@ void GameModeManager::Setup() {
 	SCROLLING(decor2nd)->opaqueType = RenderingComponent::NON_OPAQUE;
 	// SCROLLING(decor2nd)->opaqueSeparation = 0.40;
 
-	decor1er = theEntityManager.CreateEntity();
+	decor1er = theEntityManager.CreateEntity("decor1er");
 	ADD_COMPONENT(decor1er, Transformation);
 	TRANSFORM(decor1er)->z = DL_Decor1er;
 	TRANSFORM(decor1er)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 
@@ -157,7 +157,6 @@ void GameModeManager::Setup() {
 	SCROLLING(decor1er)->displaySize = glm::vec2(TRANSFORM(decor1er)->size.x * 1.01f, TRANSFORM(decor1er)->size.y);
 	SCROLLING(decor1er)->show = false;
 	SCROLLING(decor1er)->opaqueType = RenderingComponent::NON_OPAQUE;
-	// SCROLLING(decor1er)->opaqueSeparation = 0.21f;
 
 	fillVec();
 
@@ -166,7 +165,10 @@ void GameModeManager::Setup() {
 	#ifdef DEBUG
 	_debug = false;
 	for(int i=0; i<8; i++) {
-		debugEntities[2*i] = theEntityManager.CreateEntity();
+		std::stringstream a;
+		a.str("");
+		a << "debugEntities_" << 2*i;
+		debugEntities[2*i] = theEntityManager.CreateEntity(a.str());
 		ADD_COMPONENT(debugEntities[2*i], Rendering);
 		ADD_COMPONENT(debugEntities[2*i], Transformation);
 		RENDERING(debugEntities[2*i])->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(i, 0));
@@ -176,7 +178,9 @@ void GameModeManager::Setup() {
 		TRANSFORM(debugEntities[2*i])->z = DL_DebugLayer;
 		TRANSFORM(debugEntities[2*i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(80));
 
-		debugEntities[2*i + 1] = theEntityManager.CreateEntity();
+		a.str("");
+		a << "debugEntities_" << 2*i+1;
+		debugEntities[2*i + 1] = theEntityManager.CreateEntity(a.str());
 		ADD_COMPONENT(debugEntities[2*i + 1], TextRendering);
 		TEXT_RENDERING(debugEntities[2*i + 1])->positioning = TextRenderingComponent::CENTER;
 		ADD_COMPONENT(debugEntities[2*i + 1], Transformation);
@@ -248,31 +252,13 @@ void GameModeManager::TogglePauseDisplay(bool paused) {
 }
 
 Entity GameModeManager::createAndAddLeave(int type, const glm::vec2& position, float rotation) {
-	Entity e = theEntityManager.CreateEntity();
+	Entity e = theEntityManager.CreateEntity("leave");
 	ADD_COMPONENT(e, Transformation);
 	ADD_COMPONENT(e, Rendering);
     ADD_COMPONENT(e, Twitch);
 	RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(type, 0));
 	RENDERING(e)->show = true;
 	RENDERING(e)->opaqueType = RenderingComponent::FULL_OPAQUE;
-	switch (type) {
-		case 0:
-		case 1:
-			// RENDERING(e)->opaqueSeparation = 42.0 / 74;
-			break;
-		case 2:
-		case 3:
-			// RENDERING(e)->opaqueSeparation = 35.0 / 62;
-			break;
-		case 4:
-		case 5:
-			// RENDERING(e)->opaqueSeparation = 27.0 / 52;
-			break;
-		case 6:
-		case 7:
-			// RENDERING(e)->opaqueSeparation = 18.0 / 38;
-			break;
-	}
 	
 	TRANSFORM(e)->size = HeriswapGame::CellSize(8, type) * HeriswapGame::CellContentScale();
 
@@ -293,7 +279,7 @@ void GameModeManager::generateLeaves(int* nb, int type) {
 
     for (int j=0;j<type;j++) {
 	    for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
-		    int rand = glm::round(glm::linearRand(0.f, (float)posBranch.size()-1));
+		    int rand = glm::round(glm::linearRand(0.f, (float)(posBranch.size()-1)));
 			glm::vec2 pos = posBranch[rand].v;
 			pos.x -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenWidth*0.5f;
 
@@ -331,31 +317,6 @@ void GameModeManager::deleteLeaves(unsigned int type, int nb) {
 }
 
 void GameModeManager::fillVec() {
-#if 0
-	int t;
-	std::ifstream file("position_feuilles.txt");
-	int count = 0;
-	std::string line;
-	posBranch.clear(); // a la place de swapper ...
-	while ( getline( file, line ) ){
-		++count;
-		if (count>t) {
-			glm::vec2 v = glm::vec2::Zero;
-			float r = 0.f;
-			sscanf(line.c_str(), "%f %f %f", &v.X, &v.Y, &r);
-			v.X =PlacementHelper::GimpXToScreen(v.X);
-			v.Y =PlacementHelper::GimpYToScreen(v.Y);
-			r =MathUtil::ToRadians(r);
-			Render truc = {v,r};
-			posBranch.push_back(truc);
-			t++;
-		}
-	}
-	while (count < t) {
-		posBranch.pop_back();
-		t--;
-	}
-#else
 	posBranch.clear();
 	#include "PositionFeuilles.h"
 	for (int i=0; i<8*6; i++) {
@@ -364,7 +325,6 @@ void GameModeManager::fillVec() {
 		Render truc = {v, glm::radians<float>(pos[3*i+2])};
 		posBranch.push_back(truc);
 	}
-#endif
 }
 
 void GameModeManager::updateHerisson(float dt, float obj, float herissonSpeed) {

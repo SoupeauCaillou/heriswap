@@ -46,7 +46,7 @@ void TilesAttackGameModeManager::Enter() {
 	time = 0;
 	leavesDone = 0;
 	points = 0;
-	bonus =  glm::round(glm::linearRand(0.f, (float)theGridSystem.Types));
+	bonus =  glm::round(glm::linearRand(0.f, (float)(theGridSystem.Types-1)));
 	succNoGridReset=false;
 	pts.clear();
 	pts.push_back(glm::vec2(0, 0));

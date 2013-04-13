@@ -57,9 +57,16 @@ void ModeMenuStateManager::Setup() {
 
 	//Creating text entities
 	for (int i=0; i<5; i++) {
-		scoresName[i] = theEntityManager.CreateEntity();
-		scoresPoints[i] = theEntityManager.CreateEntity();
-		scoresLevel[i] = theEntityManager.CreateEntity();
+		std::stringstream a;
+		a.str("");
+		a << "scoresName_" << i;
+		scoresName[i] = theEntityManager.CreateEntity(a.str());
+		a.str("");
+		a << "scoresPoints_" << i;
+		scoresPoints[i] = theEntityManager.CreateEntity(a.str());
+		a.str("");
+		a << "scoresLevel_" << i;
+		scoresLevel[i] = theEntityManager.CreateEntity(a.str());
 
 		ADD_COMPONENT(scoresName[i], Transformation);
 		ADD_COMPONENT(scoresName[i], TextRendering);
@@ -94,7 +101,7 @@ void ModeMenuStateManager::Setup() {
 				TEXT_RENDERING(scoresLevel[i])->color = green;
 	}
 	// back button
-	back = theEntityManager.CreateEntity();
+	back = theEntityManager.CreateEntity("back");
 	ADD_COMPONENT(back, Transformation);
 	ADD_COMPONENT(back, Rendering);
 	ADD_COMPONENT(back, Button);
@@ -111,13 +118,12 @@ void ModeMenuStateManager::Setup() {
 	BUTTON(back)->enabled = false;
 
 	// score title
-	scoreTitle = theEntityManager.CreateEntity();
+	scoreTitle = theEntityManager.CreateEntity("scoreTitle");
 	ADD_COMPONENT(scoreTitle, Transformation);
 	TRANSFORM(scoreTitle)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(92), 
 												(float)PlacementHelper::GimpYToScreen(520));
 	TRANSFORM(scoreTitle)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(scoreTitle, TextRendering);
-	// TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("score", "Highscores:");
 	TEXT_RENDERING(scoreTitle)->text = localizeAPI->text("score");
 	TEXT_RENDERING(scoreTitle)->fontName = "typo";
 	TEXT_RENDERING(scoreTitle)->positioning = TextRenderingComponent::LEFT;
@@ -126,7 +132,7 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(scoreTitle)->show = false;
 
 	// score title
-	average = theEntityManager.CreateEntity();
+	average = theEntityManager.CreateEntity("average");
 	ADD_COMPONENT(average, Transformation);
 	TRANSFORM(average)->size.x = (float)PlacementHelper::GimpWidthToScreen(620);
 	TRANSFORM(average)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(92), 
@@ -142,12 +148,11 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(average)->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
 
 	// play text
-	playText = theEntityManager.CreateEntity();
+	playText = theEntityManager.CreateEntity("playText");
 	ADD_COMPONENT(playText, Transformation);
 	TRANSFORM(playText)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(275));
 	TRANSFORM(playText)->z = DL_MainMenuUITxt;
 	ADD_COMPONENT(playText, TextRendering);
-	// TEXT_RENDERING(playText)->text = localizeAPI->text("play", "Start");
 	TEXT_RENDERING(playText)->text = localizeAPI->text("play");
 	TEXT_RENDERING(playText)->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(playText)->color = green;
@@ -155,7 +160,7 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(playText)->charHeight = PlacementHelper::GimpHeightToScreen(100);
 	TEXT_RENDERING(playText)->show = false;
 	// play button
-	playContainer = theEntityManager.CreateEntity();
+	playContainer = theEntityManager.CreateEntity("playContainer");
 	ADD_COMPONENT(playContainer, Transformation);
 	ADD_COMPONENT(playContainer, Container);
 	CONTAINER(playContainer)->entities.push_back(playText);
@@ -165,7 +170,7 @@ void ModeMenuStateManager::Setup() {
 	BUTTON(playContainer)->enabled = false;
 
 	//difficulty text
-	eDifficulty = theEntityManager.CreateEntity();
+	eDifficulty = theEntityManager.CreateEntity("eDifficulty");
 	ADD_COMPONENT(eDifficulty, Transformation);
 	ADD_COMPONENT(eDifficulty, TextRendering);
 	TRANSFORM(eDifficulty)->z = DL_MainMenuUITxt;
@@ -176,7 +181,7 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(eDifficulty)->color = green;
 
 	//difficulty container
-	bDifficulty = theEntityManager.CreateEntity();
+	bDifficulty = theEntityManager.CreateEntity("bDifficulty");
 	ADD_COMPONENT(bDifficulty, Transformation);
 	ADD_COMPONENT(bDifficulty, Container);
 	CONTAINER(bDifficulty)->entities.push_back(eDifficulty);
@@ -185,7 +190,7 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(bDifficulty, Sound);
 
 	// your score
-	yourScore = theEntityManager.CreateEntity();
+	yourScore = theEntityManager.CreateEntity("yourScore");
 	ADD_COMPONENT(yourScore, Transformation);
 	ADD_COMPONENT(yourScore, TextRendering);
 	TRANSFORM(yourScore)->z = DL_MainMenuUITxt;
@@ -195,32 +200,8 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(yourScore)->charHeight = PlacementHelper::GimpHeightToScreen(56);
 	TEXT_RENDERING(yourScore)->color = green;
 
-#if 0
-	// facebook button
-	facebook = theEntityManager.CreateEntity();
-	ADD_COMPONENT(facebook, Transformation);
-	ADD_COMPONENT(facebook, Rendering);
-	ADD_COMPONENT(facebook, Button);
-	BUTTON(facebook)->enabled = false;
-	RENDERING(facebook)->texture = theRenderingSystem.loadTextureFile("facebook");
-	TRANSFORM(facebook)->position = glm::vec2(PlacementHelper::GimpXToScreen(500),PlacementHelper::GimpYToScreen(1242));
-	TRANSFORM(facebook)->size = glm::vec2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
-	TRANSFORM(facebook)->z = DL_MainMenuUITxt;
-
-	// twitter button
-	twitter = theEntityManager.CreateEntity();
-	ADD_COMPONENT(twitter, Transformation);
-	ADD_COMPONENT(twitter, Rendering);
-	ADD_COMPONENT(twitter, Button);
-	BUTTON(twitter)->enabled = false;
-	RENDERING(twitter)->texture = theRenderingSystem.loadTextureFile("twitter");
-	TRANSFORM(twitter)->position = glm::vec2(PlacementHelper::GimpXToScreen(600),PlacementHelper::GimpYToScreen(1242));
-	TRANSFORM(twitter)->size = glm::vec2(PlacementHelper::GimpWidthToScreen(80), PlacementHelper::GimpHeightToScreen(80));
-	TRANSFORM(twitter)->z = DL_MainMenuUITxt;
-#endif
-
 	// fond
-	fond = theEntityManager.CreateEntity();
+	fond = theEntityManager.CreateEntity("fond");
 	ADD_COMPONENT(fond, Transformation);
 	TRANSFORM(fond)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(712), 
 									  (float)PlacementHelper::GimpHeightToScreen(1124));
@@ -234,7 +215,7 @@ void ModeMenuStateManager::Setup() {
 	RENDERING(fond)->color.a = 0.5;
 
 	// enableSwarm text
-	enableSwarm = theEntityManager.CreateEntity();
+	enableSwarm = theEntityManager.CreateEntity("enableSwarm");
 	ADD_COMPONENT(enableSwarm, Transformation);
 	ADD_COMPONENT(enableSwarm, TextRendering);
 	TRANSFORM(enableSwarm)->z = DL_MainMenuUITxt;
@@ -245,11 +226,10 @@ void ModeMenuStateManager::Setup() {
 	TEXT_RENDERING(enableSwarm)->charHeight = PlacementHelper::GimpHeightToScreen(40);
 	TEXT_RENDERING(enableSwarm)->color = green;
 	TEXT_RENDERING(enableSwarm)->flags |= TextRenderingComponent::MultiLineBit;
-	// TEXT_RENDERING(enableSwarm)->text = localizeAPI->text("get_swarm", "Enable swarm to see online scores");
 	TEXT_RENDERING(enableSwarm)->text = localizeAPI->text("get_swarm");
 
 	// enableSwarm container
-	enableSwarmContainer = theEntityManager.CreateEntity();
+	enableSwarmContainer = theEntityManager.CreateEntity("enableSwarmContainer");
 	ADD_COMPONENT(enableSwarmContainer, Transformation);
 	ADD_COMPONENT(enableSwarmContainer, Container);
 	CONTAINER(enableSwarmContainer)->entities.push_back(enableSwarm);

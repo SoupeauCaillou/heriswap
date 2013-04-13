@@ -28,7 +28,7 @@
 #include "DepthLayer.h"
 
 void CountDownStateManager::Setup() {
-	counter = theEntityManager.CreateEntity();
+	counter = theEntityManager.CreateEntity("counter");
 	ADD_COMPONENT(counter, Transformation);
 	ADD_COMPONENT(counter, TextRendering);
 	TRANSFORM(counter)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(650));
@@ -38,7 +38,7 @@ void CountDownStateManager::Setup() {
 	TEXT_RENDERING(counter)->charHeight = PlacementHelper::GimpHeightToScreen(300);
 	TRANSFORM(counter)->z = DL_MainMenuFg;
 
-	vorhang = theEntityManager.CreateEntity();
+	vorhang = theEntityManager.CreateEntity("vorhang");
 	ADD_COMPONENT(vorhang, Rendering);
 	ADD_COMPONENT(vorhang, Transformation);
 	TRANSFORM(vorhang)->z = DL_MainMenuBg;

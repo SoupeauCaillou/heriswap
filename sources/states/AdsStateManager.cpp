@@ -37,7 +37,7 @@
 #include "DepthLayer.h"
 
 void AdsStateManager::Setup() {
-	eAds = theEntityManager.CreateEntity();
+	eAds = theEntityManager.CreateEntity("eAds");
 	ADD_COMPONENT(eAds, Transformation);
 	ADD_COMPONENT(eAds, Rendering);
 	RENDERING(eAds)->color = Color(0.f,0.f,0.f);

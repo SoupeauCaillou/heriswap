@@ -37,7 +37,7 @@
 #include "CombinationMark.h"
 
 void UserInputGameStateManager::Setup() {
-	swapAnimation = theEntityManager.CreateEntity();
+	swapAnimation = theEntityManager.CreateEntity("swapAnimation");
 	ADD_COMPONENT(swapAnimation, ADSR);
 
 	ADD_COMPONENT(swapAnimation, Sound);
@@ -49,7 +49,7 @@ void UserInputGameStateManager::Setup() {
 	ADSR(swapAnimation)->decayTiming = 0;
 	ADSR(swapAnimation)->sustainValue = 1.0;
 
-	rollback = theEntityManager.CreateEntity();
+	rollback = theEntityManager.CreateEntity("rollback");
 	ADD_COMPONENT(rollback, Morphing);
 	MORPHING(rollback)->timing = 0.1;
 

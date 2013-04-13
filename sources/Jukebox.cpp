@@ -115,7 +115,7 @@ static void build4SongsComposition(std::vector<std::string>& selection) {
             selection.push_back(themes[t[i]]);
         }
         // 1 diff accomp (excl E)
-        selection.push_back(accomp[(int) glm::round(glm::linearRand(0.0f, (float)E))]);
+        selection.push_back(accomp[(int) glm::round(glm::linearRand(0.0f, (float)(E-1)))]);
     } else {
         // 2 theme
         int t[2];
@@ -174,7 +174,7 @@ struct IsNotIn {
 
 const std::vector<std::string>& Jukebox::pickNextSongs(int maxSongCount) {
     if (currentSelection.empty()) {
-	    int songCount  = (int) glm::round(glm::linearRand(0.0f, (float)(maxSongCount-1))) + 1;
+	    int songCount  = (int) glm::round(glm::linearRand(1.0f, (float)(maxSongCount)));
         initSelection(currentSelection, songCount);
     } else {
 	    int songCount = 0;

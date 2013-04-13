@@ -36,7 +36,7 @@ void PauseStateManager::Setup() {
 	const Color green("green");
 
 	//Restart Text
-	eRestart = theEntityManager.CreateEntity();
+	eRestart = theEntityManager.CreateEntity("eRestart");
 	ADD_COMPONENT(eRestart, Transformation);
 	ADD_COMPONENT(eRestart, TextRendering);
 	ADD_COMPONENT(eRestart, Rendering);
@@ -51,7 +51,7 @@ void PauseStateManager::Setup() {
 	TRANSFORM(eRestart)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(150),
 											  (float)PlacementHelper::GimpYToScreen(300));
 	//Restart button
-	bRestart = theEntityManager.CreateEntity();
+	bRestart = theEntityManager.CreateEntity("bRestart");
 	ADD_COMPONENT(bRestart, Transformation);
 	ADD_COMPONENT(bRestart, Button);
 	ADD_COMPONENT(bRestart, Rendering);
@@ -65,22 +65,20 @@ void PauseStateManager::Setup() {
 	BUTTON(bRestart)->enabled = false;
 
 	//Help Text
-	eHelp = theEntityManager.CreateEntity();
+	eHelp = theEntityManager.CreateEntity("eHelp");
 	ADD_COMPONENT(eHelp, Transformation);
 	ADD_COMPONENT(eHelp, TextRendering);
 	ADD_COMPONENT(eHelp, Rendering);
 	TRANSFORM(eHelp)->z = DL_PauseUIFg;
 	TEXT_RENDERING(eHelp)->color = green;
 	TEXT_RENDERING(eHelp)->charHeight = PlacementHelper::GimpHeightToScreen(75);
-	// TODO !
-	// TEXT_RENDERING(eHelp)->text = localizeAPI->text("help", "Help");
 	TEXT_RENDERING(eHelp)->text = localizeAPI->text("help");
 	TEXT_RENDERING(eHelp)->show = false;
 	TEXT_RENDERING(eHelp)->positioning = TextRenderingComponent::LEFT;
 	TRANSFORM(eHelp)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(150),
 										   (float)PlacementHelper::GimpYToScreen(500));
 	//Help button
-	bHelp = theEntityManager.CreateEntity();
+	bHelp = theEntityManager.CreateEntity("bHelp");
 	ADD_COMPONENT(bHelp, Transformation);
 	ADD_COMPONENT(bHelp, Button);
 	ADD_COMPONENT(bHelp, Rendering);
@@ -94,21 +92,19 @@ void PauseStateManager::Setup() {
 	BUTTON(bHelp)->enabled = false;
 
 	//Abort text
-	eAbort = theEntityManager.CreateEntity();
+	eAbort = theEntityManager.CreateEntity("eAbort");
 	ADD_COMPONENT(eAbort, Transformation);
 	ADD_COMPONENT(eAbort, TextRendering);
 	TRANSFORM(eAbort)->z = DL_PauseUIFg;
 	TEXT_RENDERING(eAbort)->color = green;
 	TEXT_RENDERING(eAbort)->charHeight = PlacementHelper::GimpHeightToScreen(75);
-	// TODO !
-	// TEXT_RENDERING(eAbort)->text = localizeAPI->text("give_up", "Quit");
 	TEXT_RENDERING(eAbort)->text = localizeAPI->text("give_up");
 	TEXT_RENDERING(eAbort)->show = false;
 	TEXT_RENDERING(eAbort)->positioning = TextRenderingComponent::LEFT;
 	TRANSFORM(eAbort)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(150),
 											(float)PlacementHelper::GimpYToScreen(900));
 	//Abort button
-	bAbort = theEntityManager.CreateEntity();
+	bAbort = theEntityManager.CreateEntity("bAbort");
 	ADD_COMPONENT(bAbort, Transformation);
 	ADD_COMPONENT(bAbort, Button);
 	ADD_COMPONENT(bAbort, Rendering);

@@ -41,7 +41,7 @@
 #include <algorithm>
 
 void LevelStateManager::Setup() {
-	eGrid = theEntityManager.CreateEntity();
+	eGrid = theEntityManager.CreateEntity("eGrid");
 	ADD_COMPONENT(eGrid, ADSR);
 
 	ADSR(eGrid)->idleValue = 0;
@@ -52,7 +52,7 @@ void LevelStateManager::Setup() {
 	ADSR(eGrid)->releaseTiming = 0;
 	ADSR(eGrid)->active = false;
 
-	eBigLevel = theEntityManager.CreateEntity();
+	eBigLevel = theEntityManager.CreateEntity("eBigLevel");
 	ADD_COMPONENT(eBigLevel, Transformation);
 	ADD_COMPONENT(eBigLevel, TextRendering);
 	TRANSFORM(eBigLevel)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(846));
@@ -65,7 +65,7 @@ void LevelStateManager::Setup() {
     ADD_COMPONENT(eBigLevel, Morphing);
 	MUSIC(eBigLevel)->control = MusicControl::Stop;
 
-	eSnowEmitter = theEntityManager.CreateEntity();
+	eSnowEmitter = theEntityManager.CreateEntity("eSnowEmitter");
 	ADD_COMPONENT(eSnowEmitter, Transformation);
 	TRANSFORM(eSnowEmitter)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 0.5f);
 	TransformationSystem::setPosition(TRANSFORM(eSnowEmitter), 
@@ -85,7 +85,7 @@ void LevelStateManager::Setup() {
 	PARTICULE(eSnowEmitter)->moment  = Interval<float>(-3, 3);
 	PARTICULE(eSnowEmitter)->mass = 1;
 
-	eSnowBranch = theEntityManager.CreateEntity();
+	eSnowBranch = theEntityManager.CreateEntity("eSnowBranch");
 	ADD_COMPONENT(eSnowBranch, Transformation);
 	TRANSFORM(eSnowBranch)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(800),
 											 (float)PlacementHelper::GimpHeightToScreen(218));
@@ -97,7 +97,7 @@ void LevelStateManager::Setup() {
 	ADD_COMPONENT(eSnowBranch, Rendering);
 	RENDERING(eSnowBranch)->texture = theRenderingSystem.loadTextureFile("snow_branch");
 
-	eSnowGround = theEntityManager.CreateEntity();
+	eSnowGround = theEntityManager.CreateEntity("eSnowGround");
 	ADD_COMPONENT(eSnowGround, Transformation);
 	TRANSFORM(eSnowGround)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 
 											 (float)PlacementHelper::GimpHeightToScreen(300));

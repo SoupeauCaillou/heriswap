@@ -81,7 +81,7 @@ BackgroundManager::~BackgroundManager() {
 void BackgroundManager::Setup() {
 	for(int j=0; j<3; j++) {
 		Actor* c = new Actor();
-		Entity e = theEntityManager.CreateEntity();
+		Entity e = theEntityManager.CreateEntity("cloud");
 		theEntityManager.AddComponent(e, &theTransformationSystem);
 		theEntityManager.AddComponent(e, &theADSRSystem);
 		theEntityManager.AddComponent(e, &theRenderingSystem);

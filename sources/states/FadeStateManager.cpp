@@ -34,7 +34,7 @@ FadeGameStateManager::FadeGameStateManager(float d, FadeType fade, GameState who
 }
 
 void FadeGameStateManager::Setup() {
-	eFading = theEntityManager.CreateEntity();
+	eFading = theEntityManager.CreateEntity("eFading");
 	ADD_COMPONENT(eFading, Transformation);
 	ADD_COMPONENT(eFading, Rendering);
 	TRANSFORM(eFading)->position = glm::vec2(0.f);
