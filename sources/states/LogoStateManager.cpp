@@ -102,7 +102,7 @@ void LogoStateManager::Exit() {
 
 void LogoStateManager::LateExit() {
     // ou unloadLogo
-    theRenderingSystem.unloadAtlas("logo");
+    // theRenderingSystem.unloadAtlas("logo");
     /*
     theRenderingSystem.unloadTexture(RENDERING(logo)->texture);
     theRenderingSystem.unloadTexture(theRenderingSystem.loadTextureFile("soupe_logo2_365_331"));
