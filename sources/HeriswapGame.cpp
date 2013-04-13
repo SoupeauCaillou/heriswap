@@ -96,8 +96,6 @@ static const float offset = 0.2;
 static const float scale = 0.95;
 static const float size = (10 - 2 * offset) / 8;
 
-static void updateFps(float dt);
-
 // grid: [48, 302] -> [752, 1006]  in gimp
 glm::vec2 HeriswapGame::GridCoordsToPosition(int i, int j, int gridSize) {
 	float startX = PlacementHelper::GimpXToScreen(48);
@@ -195,7 +193,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
 
     // init font
 	loadFont(renderThreadContext->assetAPI, "typo");
-	// loadFont(renderThreadContext->assetAPI, "gdtypo");
+	loadFont(renderThreadContext->assetAPI, "gdtypo");
 
 	// default camera
     camera = theEntityManager.CreateEntity("camera1");
@@ -227,7 +225,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     theMusicSystem.toggleMute(theSoundSystem.mute);
 
 	float bgElementWidth = PlacementHelper::ScreenWidth;
-	datas->sky = theEntityManager.CreateEntity();
+	datas->sky = theEntityManager.CreateEntity("sky");
 	ADD_COMPONENT(datas->sky, Transformation);
 	TRANSFORM(datas->sky)->z = DL_Sky;
 	TRANSFORM(datas->sky)->size = glm::vec2(bgElementWidth, 
@@ -357,10 +355,7 @@ void HeriswapGame::togglePause(bool activate) {
 void HeriswapGame::tick(float dt) {
 	PROFILE("Game", "Tick", BeginEvent);
 
-    updateFps(dt);
-
-	theTouchInputManager.Update(dt);
-    // update state
+	// update state
     datas->newState = datas->state2Manager[datas->state]->Update(dt);
 
     //update only if game has really begun (after countdown)
@@ -542,20 +537,8 @@ void HeriswapGame::tick(float dt) {
 	PROFILE("Game", "Tick", EndEvent);
 
     // systems update
-	theADSRSystem.Update(dt);
 	theGridSystem.Update(dt);
-	theButtonSystem.Update(dt);
-    theParticuleSystem.Update(dt);
-	theMorphingSystem.Update(dt);
-    theTwitchSystem.Update(dt);
-	thePhysicsSystem.Update(dt);
-	theScrollingSystem.Update(dt);
-	theContainerSystem.Update(dt);
-	theTextRenderingSystem.Update(dt);
-	theSoundSystem.Update(dt);
-    theMusicSystem.Update(dt);
-    theTransformationSystem.Update(dt);
-	theRenderingSystem.Update(dt);
+	theTwitchSystem.Update(dt);
 }
 
 int HeriswapGame::saveState(uint8_t** out) {
@@ -685,20 +668,6 @@ std::string HeriswapGame::cellTypeToTextureNameAndRotation(int type, float* rota
 
 float HeriswapGame::cellTypeToRotation(int type) {
 	return rotations[type];
-}
-
-void updateFps(float dt) {
-    #define COUNT 2500
-    static int frameCount = 0;
-    static float accum = 0, t = 0;
-    frameCount++;
-    accum += dt;
-    if (frameCount == COUNT) {
-         LOGI("'" << COUNT << "' frames: '" << accum << "' s - diff: '" << TimeUtil::GetTime() - t << "' s - ms per frame: '" << accum / COUNT << "'");
-         t = TimeUtil::GetTime();
-         accum = 0;
-         frameCount = 0;
-     }
 }
 
 bool HeriswapGame::shouldPlayPiano() {
