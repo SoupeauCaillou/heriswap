@@ -594,7 +594,7 @@ std::vector<Entity> GridSystem::ShowOneCombination() {
 
 	//then resature one combi
 	std::vector < std::vector<Entity> > c = GetSwapCombinations();
-	int i = std::floor(glm::linearRand(0.0f, c.size()+0.99f));
+	int i = glm::round(glm::linearRand(0.0f, (float)(c.size()-1)));
 	for ( std::vector<Entity>::reverse_iterator it = c[i].rbegin(); it != c[i].rend(); ++it) {
 		LOGW("Apply DefaultEffect to entity: '"<< *it << "'");
 		RENDERING(*it)->effectRef = DefaultEffectRef;

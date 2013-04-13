@@ -137,7 +137,7 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(a, Rendering);
 	herisson->actor.e = a;
 	herisson->anim.clear();
-	loadHerissonTexture(glm::round(glm::linearRand(0.f, 8.f))+1, herisson);
+	loadHerissonTexture(glm::round(glm::linearRand(1.f, 8.f)), herisson);
 	herisson->actor.speed = glm::linearRand(2.0f, 4.0f);
 	TRANSFORM(a)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), 
 								   (float)(PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f, 1.f));
@@ -153,6 +153,7 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(quitButton[0], TextRendering);
 	// TEXT_RENDERING(quitButton[0])->text = " " + localizeAPI->text("quit", "Exit") + " ";
 	TEXT_RENDERING(quitButton[0])->text = " " + localizeAPI->text("quit") + " ";
+	LOGI("TEXT: '" << TEXT_RENDERING(quitButton[0])->text << "'")
 	TEXT_RENDERING(quitButton[0])->show = false;
 	TEXT_RENDERING(quitButton[0])->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(quitButton[0])->color = green;
@@ -207,7 +208,7 @@ GameState MainMenuGameStateManager::Update(float dt) {
 		TRANSFORM(a)->position.x += herisson->actor.speed/8.*dt;
 	} else {
 		herisson->anim.clear();
-		loadHerissonTexture(glm::round(glm::linearRand(0.f, 8.f))+1, herisson);//random texture
+		loadHerissonTexture(glm::round(glm::linearRand(1.f, 8.f)), herisson);//random texture
 		herisson->actor.speed = glm::linearRand(2.0f,4.0f);//speed
 		TRANSFORM(a)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), 
 									   (float)PlacementHelper::GimpHeightToScreen(253))*glm::linearRand(.3f,1.f);//size

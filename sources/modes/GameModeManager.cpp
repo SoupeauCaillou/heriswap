@@ -293,9 +293,9 @@ void GameModeManager::generateLeaves(int* nb, int type) {
 
     for (int j=0;j<type;j++) {
 	    for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
-		    int rand = glm::round(glm::linearRand(0.f, (float)posBranch.size()));
+		    int rand = glm::round(glm::linearRand(0.f, (float)posBranch.size()-1));
 			glm::vec2 pos = posBranch[rand].v;
-			pos.x -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenWidth*0.5;
+			pos.x -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenWidth*0.5f;
 
 			BranchLeaf bl;
 			bl.e = createAndAddLeave(j, pos, posBranch[rand].rot);

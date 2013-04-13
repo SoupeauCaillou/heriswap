@@ -96,11 +96,11 @@ void SpawnGameStateManager::removeEntitiesInCombination() {
 		c = theGridSystem.LookForCombination(false,true);
 		// change type from cells in combi
 		for(unsigned int i=0; i<c.size(); i++) {
-			int j = glm::round(glm::linearRand(0.f, (float)c[i].points.size()));
+			int j = glm::round(glm::linearRand(0.f, (float)(c[i].points.size()-1)));
 			Entity e = theGridSystem.GetOnPos(c[i].points[j].x, c[i].points[j].y);
 			int type, iter = 0;
 			do {
-				type = glm::round(glm::linearRand(0.f, (float)theGridSystem.Types));
+				type = glm::round(glm::linearRand(0.f, (float)(theGridSystem.Types-1)));
 				iter++;
 			} while (theGridSystem.GridPosIsInCombination(c[i].points[j].x, c[i].points[j].y, type, 0) && iter < 100);
 			GRID(e)->type = type;
@@ -236,7 +236,7 @@ void fillTheBlank(std::vector<Feuille>& newLeaves)
 				//get a type which doesn't create a combi with its neighboors
 				int type, ite = 0;
 				do {
-					type = glm::round(glm::linearRand(0.f, (float)theGridSystem.Types));
+					type = glm::round(glm::linearRand(0.f, (float)(theGridSystem.Types-1)));
 					ite++;
 				} while (theGridSystem.GridPosIsInCombination(i, j, type, typeVoisins) && ite<5000);
 
@@ -268,25 +268,6 @@ static Entity createCell(Feuille& f, bool assignGridPos) {
 		GRID(e)->j = f.Y;
 	}
 	rc->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(f.type, &TRANSFORM(e)->rotation));
-	// TODO !
 	rc->opaqueType = RenderingComponent::FULL_OPAQUE;
-	switch (f.type) {
-		case 0:
-		case 1:
-			// rc->opaqueSeparation = 42.0 / 74;
-			break;
-		case 2:
-		case 3:
-			// rc->opaqueSeparation = 35.0 / 62;
-			break;
-		case 4:
-		case 5:
-			// rc->opaqueSeparation = 27.0 / 52;
-			break;
-		case 6:
-		case 7:
-			// rc->opaqueSeparation = 18.0 / 38;
-			break;
-	}
 	return e;
 }
