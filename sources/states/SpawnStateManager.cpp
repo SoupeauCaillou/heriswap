@@ -268,6 +268,5 @@ static Entity createCell(Feuille& f, bool assignGridPos) {
 		GRID(e)->j = f.Y;
 	}
 	rc->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(f.type, &TRANSFORM(e)->rotation));
-	rc->opaqueType = RenderingComponent::FULL_OPAQUE;
 	return e;
 }

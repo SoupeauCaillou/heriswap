@@ -162,7 +162,7 @@ void GameModeManager::Setup() {
 
 	uiHelper.build();
 
-	#ifdef DEBUG
+	#ifdef SAC_DEBUG
 	_debug = false;
 	for(int i=0; i<8; i++) {
 		std::stringstream a;
@@ -258,7 +258,6 @@ Entity GameModeManager::createAndAddLeave(int type, const glm::vec2& position, f
     ADD_COMPONENT(e, Twitch);
 	RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(type, 0));
 	RENDERING(e)->show = true;
-	RENDERING(e)->opaqueType = RenderingComponent::FULL_OPAQUE;
 	
 	TRANSFORM(e)->size = HeriswapGame::CellSize(8, type) * HeriswapGame::CellContentScale();
 

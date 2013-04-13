@@ -62,7 +62,7 @@ class GameModeManager {
 		// to be called to toggle pause mode display
 		virtual void TogglePauseDisplay(bool paused);
 
-		#ifdef DEBUG
+		#ifdef SAC_DEBUG
 		void toggleDebugDisplay();
 		bool _debug;
 		Entity debugEntities[16];
