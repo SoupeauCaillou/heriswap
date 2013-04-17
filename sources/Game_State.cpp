@@ -74,15 +74,17 @@ void HeriswapGame::setupGameProp() {
 		ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 1.;
 	}
 
-
+	LOGE("todo");
+/*
 	float avg;
-	 std::vector<StorageAPI::Score> entries = datas->storage->savedScores(datas->mode, theGridSystem.sizeToDifficulty(), avg);
-	 datas->bestScores.clear();
-	 datas->bestScores.reserve(entries.size());
-	 for (unsigned i=0; i<entries.size(); i++) {
+	std::vector<StorageAPI::Score> entries = datas->storage->savedScores(datas->mode, theGridSystem.sizeToDifficulty(), avg);
+	datas->bestScores.clear();
+	datas->bestScores.reserve(entries.size());
+	for (unsigned i=0; i<entries.size(); i++) {
 		datas->bestScores[i] = entries[i].points;
-	 }
-	 datas->scoreboardRankInSight = entries.size();
+	}
+	datas->scoreboardRankInSight = entries.size();
+	*/
 }
 
 void HeriswapGame::stateChanged(GameState oldState, GameState newState) {

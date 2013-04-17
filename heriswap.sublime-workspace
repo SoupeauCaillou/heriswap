@@ -4,71 +4,103 @@
 		"selected_items":
 		[
 			[
-				"scr",
-				"screenH"
+				"game",
+				"gameThreadContext"
 			],
 			[
-				"minS",
-				"minScaleY"
+				"string",
+				"stringstream"
 			],
 			[
-				"max",
-				"maxScaleY"
+				"sour",
+				"source_platforms_files"
 			],
 			[
-				"va",
-				"value_y"
+				"update",
+				"updateInotify"
 			],
 			[
-				"valu",
-				"value_ymin"
+				"regis",
+				"registerFilename"
 			],
 			[
-				"value",
-				"value_y"
+				"met",
+				"method1"
 			],
 			[
-				"poin",
-				"pointsList"
+				"add",
+				"add_subdirectory"
 			],
 			[
-				"I",
-				"IntersectionUtil"
+				"libs",
+				"check_and_link_libs"
 			],
 			[
-				"inc",
-				"include"
+				"inclu",
+				"include_directories"
 			],
 			[
-				"x",
-				"x"
+				"foreach",
+				"check_libs_foreach"
 			],
 			[
-				"TwEventM",
-				"TwEventMouseButtonGLFW"
+				"VARPL",
+				"VARPLATFORM"
+			],
+			[
+				"key",
+				"keyValues"
+			],
+			[
+				"current",
+				"currentKV"
 			]
 		]
 	},
 	"buffers":
 	[
-		{
-			"file": "/home/jordane/Dev/fond_ecran2/prototype.sublime-project",
-			"settings":
-			{
-				"buffer_size": 168,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 372.0,
+		"height": 392.0,
 		"selected_items":
 		[
 			[
-				"pac",
-				"Package Control: List Packages"
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"cmake",
+				"Set Syntax: CMake"
+			],
+			[
+				"sidebar",
+				"View: Toggle Side Bar"
+			],
+			[
+				"cmak",
+				"Set Syntax: CMake"
+			],
+			[
+				"intal",
+				"Package Control: Install Package"
+			],
+			[
+				"toggle",
+				"View: Toggle Side Bar"
+			],
+			[
+				"mini",
+				"View: Toggle Minimap"
 			]
 		],
 		"width": 449.0
@@ -88,32 +120,134 @@
 	},
 	"file_history":
 	[
-		"/home/jordane/.config/sublime-text-2/Packages/Default/Default (Linux).sublime-keymap",
-		"/home/jordane/Dev/fond_ecran2/sac/systems/GraphSystem.h",
-		"/home/jordane/Documents/Documents/CV.tex",
-		"/home/jordane/Dev/fond_ecran/sources/PixelManager.cpp",
-		"/home/jordane/Dev/fond_ecran/.classpath",
-		"/home/jordane/Dev/fond_ecran2/sources/PrototypeGame.h",
-		"/home/jordane/Dev/fond_ecran2/sources/PixelManager.cpp",
-		"/home/jordane/Dev/fond_ecran2/sources/PrototypeGame.cpp",
-		"/home/jordane/untitlced.sch",
-		"/home/jordane/Dev/fond_ecran2/sources/PixelManager.h",
-		"/home/jordane/Dev/fond_ecran/sources/PrototypeGame.cpp",
-		"/home/jordane/Dev/fond_ecran2/sac/build/cmake/toolchains/linux.cmake",
-		"/home/jordane/Dev/fond_ecran2/sac/base/Game.h",
-		"/home/jordane/Dev/fond_ecran2/sac/base/Game.cpp",
-		"/home/jordane/Dev/fond_ecran2/sac/systems/GraphSystem.cpp",
-		"/home/jordane/Dev/fond_ecran2/sources/Makefile",
-		"/home/jordane/Dev/fond_ecran/sources/PrototypeGame.h",
-		"/home/jordane/Dev/fond_ecran/sources/PixelManager.h",
-		"/home/jordane/Dev/prototype/sources/PrototypeGame.h",
-		"/home/jordane/Dev/prototype/sac/systems/RenderingSystem.cpp",
-		"/home/jordane/Dev/prototype/sac/util/LevelEditor.h",
-		"/home/jordane/Dev/prototype/sac/util/LevelEditor.cpp",
-		"/home/jordane/Dev/sac_libs_dep/AntTweakBar/include/AntTweakBar.h",
-		"/home/jordane/Dev/shell-message-notifier/README",
-		"/home/jordane/Dev/prototype/CMakeLists.txt",
-		"/home/jordane/Dev/prototype/prototype.sublime-project"
+		"/home/gautier/code/c/sac/heriswap/sources/HeriswapGame.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/util/ScoreStorageProxy.h",
+		"/home/gautier/code/c/sac/apiheriswapold/linux/StorageAPILinuxImpl.h",
+		"/home/gautier/code/c/sac/apiheriswapold/linux/StorageAPILinuxImpl.cpp",
+		"/home/gautier/code/c/sac/heriswap/sac/api/StorageAPI.h",
+		"/home/gautier/code/c/sac/heriswap/sources/util/ScoreStorageProxy.cpp",
+		"/home/gautier/code/c/sac/heriswap/sac/api/default/SqliteStorageAPIImpl.cpp",
+		"/home/gautier/code/c/sac/heriswap/sac/api/default/SqliteStorageAPIImpl.h",
+		"/home/gautier/code/c/sac/heriswap/sources/SuccessManager.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/SuccessManager.h",
+		"/home/gautier/code/c/sac/heriswap/sources/api/StorageAPI.h",
+		"/home/gautier/code/c/sac/prototype/sources/util/ScoreStorageProxy.cpp",
+		"/home/gautier/code/c/sac/prototype/sources/util/ScoreStorageProxy.h",
+		"/home/gautier/code/c/sac/heriswap/sac/api/linux/StorageAPILinuxImpl.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/GridSystem.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/Game_State.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/states/UserInputStateManager.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/states/RateItStateManager.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/states/LevelStateManager.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/states/HelpStateManager.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/states/FallStateManager.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/states/ElitePopupStateManager.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/modes/NormalModeManager.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/modes/InGameUiHelper.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/modes/Go100SecondsModeManager.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/modes/GameModeManager.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/api/linux/Callback.cpp",
+		"/home/gautier/code/c/sac/heriswap/sources/modes/TilesAttackModeManager.cpp",
+		"/home/gautier/code/c/sac/heriswap/sac/build/cmake/toolchains/linux.cmake",
+		"/home/gautier/code/c/sac/heriswap/sac/build/cmake/CMakeLists.txt",
+		"/home/gautier/code/c/sac/heriswap/CMakeLists.txt",
+		"/home/gautier/code/c/sac/prototype/sac/build/cmake/toolchains/android.cmake",
+		"/home/gautier/code/c/sac/prototype/CMakeLists.txt",
+		"/home/gautier/code/c/sac/prototype/sac/util/StorageProxy.h",
+		"/home/gautier/code/c/sac/prototype/sources/tools/StorageAPI.h",
+		"/home/gautier/code/c/sac/prototype/sac/util/StorageProxy.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/build/cmake/toolchains/windows.cmake",
+		"/home/gautier/code/c/sac/prototype/sac/build/cmake/toolchains/linux.cmake",
+		"/home/gautier/code/c/sac/prototype/sac/build/cmake/toolchains/darwin.cmake",
+		"/home/gautier/code/c/sac/prototype/sac/build/cmake/CMakeLists.txt",
+		"/home/gautier/code/c/sac/prototype/sac/build/cmake/toolchains/emscripten.cmake",
+		"/home/gautier/code/c/sac/prototype/build/emscripten/Makefile",
+		"/home/gautier/code/c/sac/prototype/sac/api/android/CommunicationAPIAndroidImpl.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/api/android/CommunicationAPIAndroidImpl.h",
+		"/home/gautier/code/c/sac/prototype/sac/api/android/JNIWrapper.h",
+		"/home/gautier/code/c/sac/prototype/sac/android/net/damsy/soupeaucaillou/api/StorageAPI.java",
+		"/home/gautier/code/c/sac/prototype/sac/api/linux/StorageAPILinuxImpl.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/api/linux/StorageAPILinuxImpl.h",
+		"/home/gautier/code/c/sac/prototype/sac/api/android/StorageAPIAndroidImpl.h",
+		"/home/gautier/code/c/sac/prototype/platforms/android/prototype.cpp",
+		"/home/gautier/code/c/sac/prototype/platforms/android/Application.mk",
+		"/home/gautier/code/c/sac/prototype/platforms/android/Android.mk",
+		"/home/gautier/code/c/sac/prototype/sac/api/android/StorageAPIAndroidImpl.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/api/StorageAPI.h",
+		"/home/gautier/code/c/sac/prototype/sac/api/android/JNIWrapper.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/systems/opengl/EffectLibrary.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/systems/MusicSystem.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/base/NamedAssetLibrary.h",
+		"/home/gautier/code/c/sac/prototype/sac/base/Log.h",
+		"/home/gautier/code/c/sac/prototype/sac/api/CommunicationAPI.h",
+		"/home/gautier/code/c/sac/prototype/sac/build/cmake/Modules/FindSqlite3.cmake",
+		"/home/gautier/code/c/sac/prototype/build/android/CMakeCache.txt",
+		"/home/gautier/code/c/sac/prototype/sources/states/SocialCenterScreen.cpp",
+		"/home/gautier/code/c/sac/prototype/sources/states/TransitionStateManager.cpp",
+		"/home/gautier/code/c/sac/prototype/sources/states/MenuScreen.cpp",
+		"/home/gautier/code/c/sac/prototype/sources/states/LogoScreen.cpp",
+		"/home/gautier/code/c/sac/prototype/sources/PrototypeGame.cpp",
+		"/home/gautier/code/c/sac/recursiveRunner/sources/states/StateManager.h",
+		"/home/gautier/code/c/sac/prototype/sources/states/StateManager.h",
+		"/home/gautier/code/c/sac/prototype/sources/states/SocialCenter.cpp",
+		"/home/gautier/code/c/sac/recursiveRunner/sources/states/TransitionStateManager.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/systems/RenderingSystem.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/systems/RenderingSystem_Render.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/systems/RenderingSystem_Texture.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/base/Color.cpp",
+		"/home/gautier/code/c/sac/prototype/sources/states/MenuStateManager.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/base/Color.h",
+		"/home/gautier/code/c/sac/prototype/sac/systems/RenderingSystem.h",
+		"/home/gautier/code/c/sac/prototype/sac/systems/System.h",
+		"/home/gautier/code/c/sac/prototype/sac/base/EntityManager.h",
+		"/home/gautier/code/c/sac/prototype/sac/systems/NetworkSystem.h",
+		"/home/gautier/code/c/sac/prototype/sac/api/linux/NetworkAPILinuxImpl.h",
+		"/home/gautier/code/c/sac/prototype/sac/api/linux/NetworkAPILinuxImpl.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/systems/DebuggingSystem.h",
+		"/home/gautier/code/c/sac/prototype/sac/systems/DebuggingSystem.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/util/LevelEditor.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/base/EntityManager.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/systems/AnimationSystem.cpp",
+		"/home/gautier/code/c/sac/prototype/sources/states/SocialManager.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/libs/squirrel/squirrel/sqdebug.cpp",
+		"/home/gautier/code/c/sac/prototype/build/linux/texture_packer",
+		"/home/gautier/code/c/sac/prototype/sac/tools/texture_packer/TexturePacker.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/base/Log.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/base/Game.cpp",
+		"/home/gautier/code/c/sac/prototype/sources/PrototypeGame.h",
+		"/home/gautier/code/c/sac/prototype/sac/base/GameContext.h",
+		"/home/gautier/code/c/sac/prototype/platforms/default/prototype.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/tests/systems/TestAnimationDescriptor.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/base/TimeUtil.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/api/linux/CommunicationAPILinuxImpl.h",
+		"/home/gautier/code/c/sac/prototype/sac/base/Profiler.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/systems/opengl/OpenGLTextureCreator.h",
+		"/home/gautier/code/c/sac/prototype/sac/systems/opengl/OpenglHelper.h",
+		"/home/gautier/code/c/sac/prototype/sac/systems/TextRenderingSystem.h",
+		"/home/gautier/code/c/sac/prototype/sac/util/Recorder.h",
+		"/home/gautier/code/c/sac/prototype/sac/util/Recorder.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/app/MouseNativeTouchState.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/util/MurmurHash.h",
+		"/home/gautier/code/c/sac/prototype/sac/systems/TransformationSystem.h",
+		"/home/gautier/code/c/sac/prototype/sac/systems/ParticuleSystem.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/systems/MusicSystem.h",
+		"/home/gautier/code/c/sac/prototype/sac/systems/ButtonSystem.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/systems/AutoDestroySystem.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/systems/opengl/OpenGLTextureCreator.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/systems/opengl/EffectLibrary.h",
+		"/home/gautier/code/c/sac/prototype/sac/api/linux/SoundAPILinuxOpenALImpl.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/api/linux/SoundAPILinuxOpenALImpl.h",
+		"/home/gautier/code/c/sac/prototype/sac/systems/NetworkSystem.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/api/linux/LocalizeAPILinuxImpl.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/api/linux/MusicAPILinuxOpenALImpl.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/api/linux/AssetAPILinuxImpl.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/app/AppSetup.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/base/TimeUtil.h",
+		"/home/gautier/code/c/sac/prototype/sac/libs/tinyxml2/xmltest.cpp",
+		"/home/gautier/code/c/sac/prototype/sac/base/Game.h",
+		"/home/gautier/code/c/sac/prototype/sac/systems/AutoDestroySystem.h",
+		"/home/gautier/code/c/sac/prototype/sac/app/AppSetup.h",
+		"/home/gautier/code/c/sac/prototype/sac/systems/ButtonSystem.h"
 	],
 	"find":
 	{
@@ -124,50 +258,135 @@
 		"height": 0.0,
 		"where_history":
 		[
-			"/home/jordane/Dev/fond_ecran2/sac",
-			"/home/jordane/Dev/prototype/sac",
-			"/home/jordane/Dev/prototype"
+			""
 		]
 	},
 	"find_state":
 	{
-		"case_sensitive": true,
+		"case_sensitive": false,
 		"find_history":
 		[
-			"\"'\");\n",
-			"SAC_ASSETS_DIR",
-			"renderThreadContext",
-			"}\n",
-			"Math",
-			"hide",
-			"DIVIDE",
-			"divide",
-			"Y",
-			"X",
-			"x",
-			"rand",
-			"vector2",
-			"TwEventCharGLFWPERSO",
-			"TwEventKeyGLFWPERSO",
-			"TwEventMouseWheelGLFWPERSO",
-			"TwEventMousePosGLFWPERSO",
-			"TwEventMouseButtonGLFWPERSO",
-			"buttonCallback",
-			"glfwSetMouseButtonCallback\nglfwSetMouseButtonCallback\nTwEventMouseButtonGLFW",
-			"glfwSetMouseButtonCallback\nglfwSetMouseButtonCallback\nGLFWmousewheelfun",
-			"glfwSetMouseButtonCallback\nglfwSetMouseButtonCallback\nglfwSetMouseButtonCallback",
-			"TwEventCharGLFW",
-			"TwEventKeyGLFW",
-			"TwEventMouseWheelGLFW",
-			"TwMouseMotion",
-			"TwEventMousePosGLFW",
-			"TwEventMouseButtonGLFW",
-			"TwEvent",
-			"TwMouse",
-			"TwKey",
-			"TwKeyTes",
-			"TwKeyPressed",
-			"sac_libs_"
+			"istr",
+			");\n",
+			"rm ",
+			"rm",
+			"assert",
+			"language(ASM)\n    set (ogg_base ${PROJECT_SOURCE_DIR}/sac/libs/tremor)\n    file(\n        GLOB_RECURSE ogg_sources\n        ${ogg_base}/*.s\n        ${ogg_base}/*.c\n    )\n\n    add_library(\"ogg\" STATIC ${ogg_sources})\n    set_target_properties(\"ogg\" PROPERTIES COMPILE_FLAGS\n        \"-DLITTLE_EN",
+			"ManagerDatas",
+			"StateManagerDatas",
+			"SocialCenterStateManager",
+			"MenuStateManager",
+			"LogoStateManager",
+			"SocialStateManager",
+			"TransitionScreen",
+			"StateManager",
+			"State",
+			"DEF_Screen_MANAGER",
+			"State",
+			"SocialStateManager",
+			"MenuStateManager",
+			"LogoStateManager",
+			"loadorth",
+			"loadort",
+			"computeVerticesScreenPos",
+			"beginframema",
+			"proj",
+			"proje",
+			"--",
+			" >",
+			"<=",
+			"(\"",
+			"glClearColor",
+			"assert",
+			"updateInoti",
+			"RetrieveAllEntityWithComponent",
+			"EntityNextFree",
+			"lobb",
+			"-",
+			"addEntity",
+			"name",
+			"\n::",
+			"231",
+			"endif",
+			"206",
+			"if defined(",
+			") || defined(",
+			"defined(",
+			") || defined(",
+			"asset",
+			"gameThreadContext",
+			"gameThrea",
+			"social",
+			"Menu",
+			"social",
+			"Menu",
+			"gameCenterBtn",
+			"Menu",
+			"gameCenterBtn",
+			"name",
+			"clicked",
+			"timer",
+			"StateManager",
+			"swarmRegistering",
+			"swarmInstalled",
+			"namespace",
+			"nextvalid",
+			"condition",
+			"load",
+			");",
+			"SAC_LINUX",
+			".X",
+			".Y",
+			".X",
+			"VarPlatform",
+			"base",
+			".X",
+			".Y",
+			".X",
+			"Vector2",
+			".Y",
+			".X",
+			"Vector2",
+			"zero",
+			"result.Y",
+			"result.X",
+			"expected.Y",
+			"expected.X",
+			"glm::vec2\nglm::vec2",
+			"glm::vec2\n",
+			"Vector2",
+			"recorder",
+			"record",
+			"APPLE",
+			"check_libs_foreach",
+			"${PROJET_SOURCE_DIR",
+			"../../",
+			"#~",
+			"# ",
+			"duplic",
+			"select",
+			"xml",
+			"tnew",
+			"()\n",
+			"ctrl+/",
+			"\\n-",
+			"SET",
+			"set",
+			"bar",
+			"line",
+			"ctrl+t",
+			"ctrl+p",
+			"transpose",
+			"ctrl+t",
+			"switch",
+			"timeut",
+			"timeElapsed",
+			"\n	static = 0.f;",
+			"'------------------------------'",
+			"echo",
+			"32m",
+			"$2",
+			"$1"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -175,14 +394,54 @@
 		"regex": false,
 		"replace_history":
 		[
-			"y",
-			"x",
+			"Datas",
+			"StateDatas",
+			"SocialCenterState",
+			"MenuState",
+			"LogoState",
+			"SocialCenterStateManager",
+			"TransitionScreenManager",
+			"Screen",
+			"SocialStateScreen",
+			"MenuScreen",
+			"LogoScreen",
+			"",
+			"#if ",
+			" || ",
+			"",
+			" || ",
+			"menu",
+			"Social",
+			"menu",
+			"Social",
+			"menuBtn",
+			"Social",
+			"socialBtn",
+			"gameCenterBtn",
+			"gameCenterSignUp",
+			"gameCenterSignIn",
+			".x",
+			".y",
+			".x",
+			".y",
+			".x",
 			"glm::vec2",
-			"_TwEventCharGLFW",
-			"_TwEventKeyGLFW",
-			"_TwEventMouseWheelGLFW",
-			"_TwEventMousePosGLFW",
-			"_TwEventMouseButtonGLFW"
+			".y",
+			".x",
+			"glm::vec2",
+			"result.y",
+			"result.x",
+			"expected.y",
+			"expected.x",
+			"glm::vec2expected.x",
+			"glm::vec2",
+			"check_and_link_libs",
+			"${PROJECT_SOURCE_DIR",
+			"",
+			"\\n",
+			"info",
+			"$testToDo",
+			"$directory"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -193,35 +452,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "/home/jordane/Dev/fond_ecran2/prototype.sublime-project",
-					"settings":
-					{
-						"buffer_size": 168,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								168,
-								168
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -231,7 +463,7 @@
 	},
 	"input":
 	{
-		"height": 0.0
+		"height": 31.0
 	},
 	"layout":
 	{
@@ -256,6 +488,10 @@
 		]
 	},
 	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
 	"replace":
 	{
 		"height": 62.0
@@ -266,21 +502,549 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"proxy",
+				"sources/util/ScoreStorageProxy.cpp"
+			],
+			[
+				"storagecpp",
+				"/home/gautier/code/c/sac/apiheriswapold/linux/StorageAPILinuxImpl.cpp"
+			],
+			[
+				"scorestor",
+				"sources/util/ScoreStorageProxy.cpp"
+			],
+			[
+				"heriswapgam",
+				"sources/HeriswapGame.cpp"
+			],
+			[
+				"succ",
+				"sources/SuccessManager.h"
+			],
+			[
+				"sqlitest",
+				"sac/api/default/SqliteStorageAPIImpl.cpp"
+			],
+			[
+				"storageapi",
+				"sac/api/default/SqliteStorageAPIImpl.h"
+			],
+			[
+				"sucess",
+				"sources/SuccessManager.cpp"
+			],
+			[
+				"storage",
+				"sac/api/StorageAPI.h"
+			],
+			[
+				"scostc",
+				"sources/util/ScoreStorageProxy.cpp"
+			],
+			[
+				"scorstpr",
+				"sources/util/ScoreStorageProxy.cpp"
+			],
+			[
+				"heriswagam",
+				"sources/HeriswapGame.cpp"
+			],
+			[
+				"gridsy",
+				"sources/GridSystem.cpp"
+			],
+			[
+				"gamesta",
+				"sources/Game_State.cpp"
+			],
+			[
+				"userinpu",
+				"sources/states/UserInputStateManager.cpp"
+			],
+			[
+				"rateit",
+				"sources/states/RateItStateManager.cpp"
+			],
+			[
+				"levstmc",
+				"sources/states/LevelStateManager.cpp"
+			],
+			[
+				"helstam",
+				"sources/states/HelpStateManager.cpp"
+			],
+			[
+				"fallstm",
+				"sources/states/FallStateManager.cpp"
+			],
+			[
+				"elitepo",
+				"sources/states/ElitePopupStateManager.cpp"
+			],
+			[
+				"norma",
+				"sources/modes/NormalModeManager.cpp"
+			],
+			[
+				"ingamui",
+				"sources/modes/InGameUiHelper.cpp"
+			],
+			[
+				"go100",
+				"sources/modes/Go100SecondsModeManager.cpp"
+			],
+			[
+				"gamemodman",
+				"sources/modes/GameModeManager.cpp"
+			],
+			[
+				"acllb",
+				"sources/api/linux/Callback.cpp"
+			],
+			[
+				"tilesatta",
+				"sources/modes/TilesAttackModeManager.cpp"
+			],
+			[
+				"linuxc",
+				"sac/build/cmake/toolchains/linux.cmake"
+			],
+			[
+				"cmakeli",
+				"sac/build/cmake/CMakeLists.txt"
+			],
+			[
+				"cmakel",
+				"CMakeLists.txt"
+			],
+			[
+				"android.cm",
+				"sac/build/cmake/toolchains/android.cmake"
+			],
+			[
+				"cmakelis",
+				"sac/build/cmake/CMakeLists.txt"
+			],
+			[
+				"commuan",
+				"sac/api/android/CommunicationAPIAndroidImpl.cpp"
+			],
+			[
+				"communicat",
+				"sac/api/android/CommunicationAPIAndroidImpl.h"
+			],
+			[
+				"wrappe",
+				"sac/api/android/JNIWrapper.h"
+			],
+			[
+				"java",
+				"sac/android/net/damsy/soupeaucaillou/api/CommunicationAPI.java"
+			],
+			[
+				"storlinc",
+				"sac/api/linux/StorageAPILinuxImpl.cpp"
+			],
+			[
+				"storand",
+				"sac/api/android/StorageAPIAndroidImpl.h"
+			],
+			[
+				"communi",
+				"sac/api/android/CommunicationAPIAndroidImpl.h"
+			],
+			[
+				"jni",
+				"sac/api/android/JNIWrapper.cpp"
+			],
+			[
+				"jniw",
+				"sac/api/android/JNIWrapper.h"
+			],
+			[
+				"storageapian",
+				"sac/api/android/StorageAPIAndroidImpl.cpp"
+			],
+			[
+				"effect",
+				"sac/systems/opengl/EffectLibrary.cpp"
+			],
+			[
+				"musics",
+				"sac/systems/MusicSystem.cpp"
+			],
+			[
+				"communica",
+				"sac/api/android/CommunicationAPIAndroidImpl.cpp"
+			],
+			[
+				"storageandroid",
+				"sac/api/android/StorageAPIAndroidImpl.h"
+			],
+			[
+				"storagapan",
+				"sac/api/android/StorageAPIAndroidImpl.cpp"
+			],
+			[
+				"communian",
+				"sac/api/android/CommunicationAPIAndroidImpl.h"
+			],
+			[
+				"musicsys",
+				"sac/systems/MusicSystem.cpp"
+			],
+			[
+				"log.h",
+				"sac/base/Log.h"
+			],
+			[
+				"names",
+				"sac/base/NamedAssetLibrary.h"
+			],
+			[
+				"cmali",
+				"sac/build/cmake/CMakeLists.txt"
+			],
+			[
+				"cmak",
+				"build/android/CMakeCache.txt"
+			],
+			[
+				"sqlite",
+				"sac/build/cmake/Modules/FindSqlite3.cmake"
+			],
+			[
+				"andr",
+				"sac/build/cmake/toolchains/android.cmake"
+			],
+			[
+				"socialce",
+				"sources/states/SocialCenter.cpp"
+			],
+			[
+				"socialcen",
+				"sources/states/SocialCenterScreen.cpp"
+			],
+			[
+				"transitin",
+				"sources/states/TransitionStateManager.cpp"
+			],
+			[
+				"statemana",
+				"sources/states/StateManager.h"
+			],
+			[
+				"socialc",
+				"sources/states/SocialCenterScreen.cpp"
+			],
+			[
+				"menu",
+				"sources/states/MenuScreen.cpp"
+			],
+			[
+				"logo",
+				"sources/states/LogoScreen.cpp"
+			],
+			[
+				"prototy",
+				"sources/PrototypeGame.cpp"
+			],
+			[
+				"statem",
+				"sources/states/StateManager.h"
+			],
+			[
+				"linux.cm",
+				"sac/build/cmake/toolchains/linux.cmake"
+			],
+			[
+				"sacbucmakeli",
+				"sac/build/cmake/CMakeLists.txt"
+			],
+			[
+				"render",
+				"sac/systems/RenderingSystem_Render.cpp"
+			],
+			[
+				"linux",
+				"sac/build/cmake/toolchains/linux.cmake"
+			],
+			[
+				"rendering",
+				"sac/systems/RenderingSystem_Texture.cpp"
+			],
+			[
+				"colo.",
+				"sac/base/Color.cpp"
+			],
+			[
+				"color.",
+				"sac/base/Color.h"
+			],
+			[
+				"namedass",
+				"sac/base/NamedAssetLibrary.h"
+			],
+			[
+				"renderin",
+				"sac/systems/RenderingSystem.h"
+			],
+			[
+				"entit",
+				"sac/base/EntityManager.h"
+			],
+			[
+				"colo.h",
+				"sac/base/Color.h"
+			],
+			[
+				"sys.h",
+				"sac/systems/System.h"
+			],
+			[
+				"cmake",
+				"CMakeLists.txt"
+			],
+			[
+				"netwli",
+				"sac/api/linux/NetworkAPILinuxImpl.h"
+			],
+			[
+				"netwo",
+				"sac/systems/NetworkSystem.h"
+			],
+			[
+				"networ",
+				"sac/api/linux/NetworkAPILinuxImpl.cpp"
+			],
+			[
+				"debug",
+				"sac/systems/DebuggingSystem.cpp"
+			],
+			[
+				"leve",
+				"sac/util/LevelEditor.cpp"
+			],
+			[
+				"entityma",
+				"sac/base/EntityManager.h"
+			],
+			[
+				"debugin",
+				"sac/systems/DebuggingSystem.cpp"
+			],
+			[
+				"debugi",
+				"sac/systems/DebuggingSystem.h"
+			],
+			[
+				"debu",
+				"sac/systems/DebuggingSystem.cpp"
+			],
+			[
+				"social",
+				"sources/states/SocialManager.cpp"
+			],
+			[
+				"menustatm",
+				"sources/states/MenuStateManager.cpp"
+			],
+			[
+				"enti",
+				"sac/base/EntityManager.h"
+			],
+			[
+				"level.cpp",
+				"sac/util/LevelEditor.cpp"
+			],
+			[
+				"entity.h",
+				"sac/base/EntityManager.h"
+			],
+			[
+				"debug.cp",
+				"sac/libs/squirrel/squirrel/sqdebug.cpp"
+			],
+			[
+				"textur.cpp",
+				"sac/tools/texture_packer/TexturePacker.cpp"
+			],
+			[
+				"textur",
+				"build/linux/texture_packer"
+			],
+			[
+				"animas",
+				"sac/systems/AnimationSystem.cpp"
+			],
+			[
+				"android.cma",
+				"sac/build/cmake/toolchains/android.cmake"
+			],
+			[
+				"win",
+				"sac/build/cmake/toolchains/windows.cmake"
+			],
+			[
+				"ems",
+				"sac/build/cmake/toolchains/emscripten.cmake"
+			],
+			[
+				"win.cmake",
+				"sac/build/cmake/toolchains/darwin.cmake"
+			],
+			[
+				"linuxcmake",
+				"sac/build/cmake/toolchains/linux.cmake"
+			],
+			[
+				"game.cpp",
+				"sac/base/Game.cpp"
+			],
+			[
+				"protgam.h",
+				"sources/PrototypeGame.h"
+			],
+			[
+				"log.c",
+				"sac/base/Log.cpp"
+			],
+			[
+				"base/log",
+				"sac/base/Log.h"
+			],
+			[
+				"musi",
+				"sac/systems/MusicSystem.cpp"
+			],
+			[
+				"rend.h",
+				"sac/systems/RenderingSystem.h"
+			],
+			[
+				"rendesy.cp",
+				"sac/systems/RenderingSystem.cpp"
+			],
+			[
+				"timeut",
+				"sac/base/TimeUtil.h"
+			],
+			[
+				"naassli",
+				"sac/base/NamedAssetLibrary.h"
+			],
+			[
+				"appset",
+				"sac/app/AppSetup.cpp"
+			],
+			[
+				"assliimc",
+				"sac/api/linux/AssetAPILinuxImpl.cpp"
+			],
+			[
+				"musopimc",
+				"sac/api/linux/MusicAPILinuxOpenALImpl.cpp"
+			],
+			[
+				"localli",
+				"sac/api/linux/LocalizeAPILinuxImpl.cpp"
+			],
+			[
+				"rensy_r.c",
+				"sac/systems/RenderingSystem_Render.cpp"
+			],
+			[
+				"rendsys.cp",
+				"sac/systems/RenderingSystem.cpp"
+			],
+			[
+				"mussy",
+				"sac/systems/MusicSystem.cpp"
+			],
+			[
+				"netwos",
+				"sac/systems/NetworkSystem.cpp"
+			],
+			[
+				"mussy.c",
+				"sac/systems/MusicSystem.cpp"
+			],
+			[
+				"sounalih",
+				"sac/api/linux/SoundAPILinuxOpenALImpl.h"
+			],
+			[
+				"soulinim.c",
+				"sac/api/linux/SoundAPILinuxOpenALImpl.cpp"
+			],
+			[
+				"musicliim.c",
+				"sac/api/linux/MusicAPILinuxOpenALImpl.cpp"
+			],
+			[
+				"soulinopim",
+				"sac/api/linux/SoundAPILinuxOpenALImpl.cpp"
+			],
+			[
+				"asseapilin",
+				"sac/api/linux/AssetAPILinuxImpl.cpp"
+			],
+			[
+				"entityman",
+				"sac/base/EntityManager.h"
+			],
+			[
+				"gam.cp",
+				"sac/base/Game.cpp"
+			],
+			[
+				"effli.h",
+				"sac/systems/opengl/EffectLibrary.h"
+			],
+			[
+				"opengltecr.c",
+				"sac/systems/opengl/OpenGLTextureCreator.cpp"
+			],
+			[
+				"autodessys",
+				"sac/systems/AutoDestroySystem.cpp"
+			],
+			[
+				"buttsy.c",
+				"sac/systems/ButtonSystem.cpp"
+			]
 		],
 		"width": 0.0
 	},
 	"select_project":
 	{
-		"height": 0.0,
+		"height": 500.0,
 		"selected_items":
 		[
+			[
+				"rec",
+				"/home/gautier/code/c/sac/recursiveRunner/recursiveRunner.sublime-project"
+			],
+			[
+				"recur",
+				"/home/gautier/code/c/sac/recursiveRunner/recursiveRunner.sublime-project"
+			],
+			[
+				"",
+				"/home/gautier/code/c/sac/prototype/prototype.sublime-project"
+			],
+			[
+				"recursi",
+				"/home/gautier/code/c/sac/recursiveRunner/recursiveRunner.sublime-project"
+			]
 		],
-		"width": 0.0
+		"width": 380.0
 	},
-	"show_minimap": true,
-	"show_open_files": false,
+	"show_minimap": false,
+	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 148.0,
+	"side_bar_width": 234.0,
 	"status_bar_visible": true
 }

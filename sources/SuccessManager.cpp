@@ -18,18 +18,12 @@
 */
 #include "SuccessManager.h"
 
-/* Proto :
-void SuccessManager::sName() {
-	if (hardMode) {
-		if () {
-			bName = true;
-		}
-	}
-}
-*/
+#include <sstream>
+#include "util/ScoreStorageProxy.h"
 
 SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	successAPI = sAPI;
+
 	hardMode=true;
 
 	bRainbow = false;
@@ -59,7 +53,8 @@ SuccessManager::SuccessManager(SuccessAPI* sAPI) {
 	timeInSwappingPreparation = 0.f;
 
 	numberCombinationInARow = 0;
-	//ne dois pas etre reinit a chaque game :
+
+	//must be not reinitialized at each game
 	l666numberLose = 0;
 	lTheyGood = 0;
 	gameDuration = 0;
@@ -87,9 +82,10 @@ void SuccessManager::s6InARow(int nbInCombi) {
 	}
 }
 
-void SuccessManager::sHardScore(StorageAPI* storage) {
+void SuccessManager::sHardScore(StorageAPI* storageAPI) {
 	if (!bHardScore) {
-		if (storage->getSavedGamePointsSum() > 1000000) {
+		ScoreStorageProxy ssp;
+		if (storageAPI->sum(&ssp, "points")  > 1000000.f) {
 			successAPI->successCompleted("Hardscore gamer", 3432);
 			bHardScore=true;
 		}
@@ -200,9 +196,10 @@ void SuccessManager::sLuckyLuke() {
 	}
 }
 
-void SuccessManager::sTestEverything(StorageAPI* str) {
+void SuccessManager::sTestEverything(StorageAPI* storageAPI) {
 	if (!bTestEverything) {
-		if (str->everyModesPlayed()) {
+		ScoreStorageProxy ssp;		
+		if (storageAPI->count(&ssp, "distinct difficulty, mode") == 9) {
 			successAPI->successCompleted("Test everything", 3454);
 			bTestEverything = true;
 		}
@@ -210,19 +207,22 @@ void SuccessManager::sTestEverything(StorageAPI* str) {
 }
 
 void SuccessManager::sBTAC(StorageAPI* storage, Difficulty difficulty, unsigned int points) {
+	LOGE("TODO");
+	/*
 	if (!bBTAC) {
 		float avg;
-	    std::vector<StorageAPI::Score> entries = storage->savedScores(1, difficulty, avg);
+	    std::vector<Score> entries = storage->savedScores(1, difficulty, avg);
 		int s = entries.size();
 		if (s >= 5 && (int)points > entries[0].points) {
 			successAPI->successCompleted("Beat them all (score race)", 3436);
 			bBTAC = true;
 		}
-	}
+	}*/
 }
 
 void SuccessManager::sBTAM(StorageAPI* storage, Difficulty difficulty, float time) {
-	if (!bBTAM) {
+	LOGE("TODO");
+/*	if (!bBTAM) {
 		float avg;
 		std::vector<StorageAPI::Score> entries = storage->savedScores(2, difficulty, avg);
 		int s = entries.size();
@@ -230,7 +230,7 @@ void SuccessManager::sBTAM(StorageAPI* storage, Difficulty difficulty, float tim
 			successAPI->successCompleted("Beat them all (time attack)", 3428);
 			bBTAM = true;
 		}
-	}
+	}*/
 }
 
 void SuccessManager::s666Loser(int level) {

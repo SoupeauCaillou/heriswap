@@ -59,7 +59,7 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
      mode2Manager[Normal] = new NormalGameModeManager(game, successMgr, context->storageAPI);
      mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game, successMgr, context->storageAPI);
      mode2Manager[Go100Seconds] = new Go100SecondsGameModeManager(game, successMgr, context->storageAPI);
-     storage = context->storageAPI;
+     storageAPI = context->storageAPI;
 
      soundButton = theEntityManager.CreateEntity("soundButton");
      socialGamNet = theEntityManager.CreateEntity("socialGamNet");
@@ -75,9 +75,9 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
      state2Manager[Pause] = new PauseStateManager(context->localizeAPI);
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
      state2Manager[MainMenu] = new MainMenuGameStateManager(context->localizeAPI, context->successAPI);
-     state2Manager[ModeMenu] = new ModeMenuStateManager(storage, context->nameInputAPI, successMgr, context->localizeAPI, context->successAPI, context->communicationAPI);
+     state2Manager[ModeMenu] = new ModeMenuStateManager(storageAPI, context->nameInputAPI, successMgr, context->localizeAPI, context->successAPI, context->communicationAPI);
      state2Manager[Help] = new HelpStateManager(context->localizeAPI);
-     state2Manager[Ads] = new AdsStateManager(context->adAPI, storage, successMgr);
+     state2Manager[Ads] = new AdsStateManager(context->adAPI, storageAPI, successMgr);
      state2Manager[RateIt] = new RateItStateManager(context->localizeAPI, context->communicationAPI);
      state2Manager[ElitePopup] = new ElitePopupStateManager(static_cast<NormalGameModeManager*>(mode2Manager[Normal]), context->localizeAPI);
 
@@ -119,7 +119,7 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
      BUTTON(soundButton)->overSize = 1.3;
      ADD_COMPONENT(soundButton, Rendering);
      ADD_COMPONENT(soundButton, Sound);
-     if (storage->soundEnable(false))
+     if (storageAPI->isOption("sound", "on"))
 		RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on");
      else
 		RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");

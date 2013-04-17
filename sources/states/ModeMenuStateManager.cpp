@@ -26,6 +26,7 @@
 #include <base/EntityManager.h>
 #include <base/TouchInputManager.h>
 #include <base/PlacementHelper.h>
+#include <base/ObjectSerializer.h>
 
 #include "systems/MorphingSystem.h"
 #include "systems/ButtonSystem.h"
@@ -38,6 +39,8 @@
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
 #include "states/HelpStateManager.h"
+
+#include "util/ScoreStorageProxy.h"
 
 #include "DepthLayer.h"
 
@@ -239,11 +242,13 @@ void ModeMenuStateManager::Setup() {
 }
 
 void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
+	LOGE("todo") /*
 	float avg;
-	/*getting scores*/
-	std::vector<StorageAPI::Score> entries = storageAPI->savedScores(mode, dif, avg);
+	ScoreStorageProxy ssp;
+	storageAPI->loadEntries(&ssp, "*", "where mode =" + mode " and difficulty " = dif);
+	//storageAPI->savedScores(mode, dif, avg);
+	std::queue<Score> entries = ssp._queue;
 
-	/* treatment*/
 	bool alreadyRed = false;
 	for (unsigned int i=0; i<5; i++) {
 		TextRenderingComponent* trcN = TEXT_RENDERING(scoresName[i]);
@@ -305,7 +310,7 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 		TEXT_RENDERING(average)->show = true;
 	} else {
 		TEXT_RENDERING(average)->show = false;
-	}
+	}*/
 }
 
 
@@ -319,6 +324,7 @@ void ModeMenuStateManager::Enter() {
 
 	//first launch : set an easiest diff
     if (gameOverState == NoGame) {
+	    LOGE("todo");/*
 	    float avg;
 		std::vector<StorageAPI::Score> entries = storageAPI->savedScores(modeMgr->GetMode(), SelectAllDifficulty, avg);
 		if  (entries.size() <= 1)
@@ -326,7 +332,7 @@ void ModeMenuStateManager::Enter() {
 		else if  (entries.size() < 5)
 			difficulty = DifficultyMedium;
 		else
-			difficulty = DifficultyHard;
+			difficulty = DifficultyHard;*/
 	} else {
 		difficulty = theGridSystem.sizeToDifficulty();
 	}
@@ -375,22 +381,27 @@ void ModeMenuStateManager::Enter() {
 
 void ModeMenuStateManager::submitScore(const std::string& playerName) {
     GameMode m = modeMgr->GetMode();
-    StorageAPI::Score entry;
-    entry.points = modeMgr->points;
-    entry.time = modeMgr->time;
-    entry.name = playerName;
+    ScoreStorageProxy ssp;
+    ssp.pushAnElement();
+    ssp.setValue("points", ObjectSerializer<int>::object2string(modeMgr->points));
+    ssp.setValue("time", ObjectSerializer<float>::object2string(modeMgr->time));
+    ssp.setValue("name", playerName);
+    
     if (m==Normal) {
-     NormalGameModeManager* ng = static_cast<NormalGameModeManager*>(modeMgr);
-     entry.level = ng->currentLevel();
+    	NormalGameModeManager* ng = static_cast<NormalGameModeManager*>(modeMgr);
+	    ssp.setValue("level", ObjectSerializer<int>::object2string(ng->currentLevel()));
     } else {
-     entry.level = 1;
+	    ssp.setValue("level", ObjectSerializer<int>::object2string(1));
     }
-    storageAPI->submitScore(entry, m, difficulty);
+    storageAPI->saveEntries(&ssp);
 }
 
 bool ModeMenuStateManager::isCurrentScoreAHighOne() {
+	LOGE("todo");
+	return false;
+	/*
 	float avg;
-    std::vector<StorageAPI::Score> entries = storageAPI->savedScores(modeMgr->GetMode(), difficulty, avg);
+    std::vector<Score> entries = storageAPI->savedScores(modeMgr->GetMode(), difficulty, avg);
 
     int s = entries.size();
     if (s < 5)
@@ -400,7 +411,7 @@ bool ModeMenuStateManager::isCurrentScoreAHighOne() {
         return modeMgr->points > (unsigned int)entries[s - 1].points;
     } else {
         return modeMgr->time < entries[s - 1].time;
-    }
+    }*/
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
@@ -496,13 +507,15 @@ GameState ModeMenuStateManager::Update(float dt) {
 
 		//new game button
 		else if (BUTTON(playContainer)->clicked) {
-			float avg;
 			SOUND(playContainer)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 			RENDERING(herisson->actor.e)->show = false;
 			TRANSFORM(herissonActor)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.x;
 			TEXT_RENDERING(title)->show = false;
 
-			if (storageAPI->savedScores(modeMgr->GetMode(), difficulty, avg).size() == 0) {
+			std::stringstream ss;
+			ss << "where mode = " << (int)modeMgr->GetMode() << " and difficulty = " << (int)difficulty;
+        	ScoreStorageProxy ssp;
+			if (storageAPI->count(&ssp, "*", ss.str()) == 0) {
 				// show help
 				helpMgr->mode = modeMgr->GetMode();
 				helpMgr->oldState = BlackToSpawn;

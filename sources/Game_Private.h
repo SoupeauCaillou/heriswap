@@ -49,7 +49,7 @@ class PrivateData {
      std::map<GameState, GameStateManager*> state2Manager;
      std::map<GameMode, GameModeManager*> mode2Manager;
      
-     StorageAPI* storage;
+     StorageAPI* storageAPI;
      
      GameMode mode;
 

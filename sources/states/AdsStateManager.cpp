@@ -24,6 +24,7 @@
 
 #include <base/PlacementHelper.h>
 #include <base/EntityManager.h>
+#include <base/ObjectSerializer.h>
 
 #include "systems/TransformationSystem.h"
 #include "systems/TextRenderingSystem.h"
@@ -53,8 +54,8 @@ void AdsStateManager::Setup() {
 
 void AdsStateManager::Enter() {
 	stateActiveDuration = 0;
-	gameb4Ads = storage->getGameCountBeforeNextAd();
- 	LOGI("'" << __PRETTY_FUNCTION__ << "' : '" << gameb4Ads << "'");
+	gameb4Ads = ObjectSerializer<int>::string2object(storageAPI->getOption("gameb4Ads"));
+ 	LOGI("Game b4 ads: " <<  gameb4Ads);
  	if (gameb4Ads > 3) {
 	 	gameb4Ads = 3;
  	}
@@ -92,7 +93,7 @@ void AdsStateManager::Exit() {
 	if (gameb4Ads==0)
 		gameb4Ads=3;
     gameb4Ads--;
-    storage->setGameCountBeforeNextAd(gameb4Ads);
+	storageAPI->setOption("gameb4Ads", ObjectSerializer<int>::object2string(gameb4Ads));
 }
 
 void AdsStateManager::LateExit() {

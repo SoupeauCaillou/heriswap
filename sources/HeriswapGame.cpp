@@ -175,6 +175,9 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
 	PlacementHelper::GimpWidth = 800;
     PlacementHelper::GimpHeight = 1280;
 
+	//init database
+    gameThreadContext->storageAPI->init(gameThreadContext->assetAPI, "Heriswap");
+
 	Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
 
 	theRenderingSystem.effectLibrary.load("desaturate.fs");
@@ -221,7 +224,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
 
 	datas->Setup();
 
-	theSoundSystem.mute = !datas->storage->soundEnable(false);
+	theSoundSystem.mute = !datas->storageAPI->isOption("sound", "on");
     theMusicSystem.toggleMute(theSoundSystem.mute);
 
 	float bgElementWidth = PlacementHelper::ScreenWidth;
@@ -437,7 +440,10 @@ void HeriswapGame::tick(float dt) {
 	//si on appuye sur le bouton mute
 	if (BUTTON(datas->soundButton)->clicked) {
 		BUTTON(datas->soundButton)->clicked = false;
-		datas->storage->soundEnable(true); //on met a jour la table sql
+
+		bool isEnable = datas->storageAPI->isOption("sound", "on");
+		datas->storageAPI->setOption("sound", isEnable ? "off" : "on");
+
 		theSoundSystem.mute = !theSoundSystem.mute;
         theMusicSystem.toggleMute(theSoundSystem.mute);
 		if (!theSoundSystem.mute) {
