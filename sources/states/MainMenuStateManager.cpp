@@ -154,7 +154,6 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(quitButton[0], TextRendering);
 	// TEXT_RENDERING(quitButton[0])->text = " " + localizeAPI->text("quit", "Exit") + " ";
 	TEXT_RENDERING(quitButton[0])->text = " " + localizeAPI->text("quit") + " ";
-	LOGI("TEXT: '" << TEXT_RENDERING(quitButton[0])->text << "'")
 	TEXT_RENDERING(quitButton[0])->show = false;
 	TEXT_RENDERING(quitButton[0])->positioning = TextRenderingComponent::CENTER;
 	TEXT_RENDERING(quitButton[0])->color = green;

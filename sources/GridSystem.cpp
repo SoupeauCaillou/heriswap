@@ -605,7 +605,7 @@ std::vector<Entity> GridSystem::ShowOneCombination() {
 }
 
 #if SAC_INGAME_EDITORS
-void GridSystem::addEntityPropertiesToBar(Entity entity, TwBar* bar) {
+void GridSystem::addEntityPropertiesToBar(Entity, TwBar*) {
 }
 #endif
 

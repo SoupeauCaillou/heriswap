@@ -58,6 +58,8 @@
 #include "modes/TilesAttackModeManager.h"
 #include "modes/Go100SecondsModeManager.h"
 
+#include "util/ScoreStorageProxy.h"
+	
 #include "DepthLayer.h"
 #include "GridSystem.h"
 #include "HeriswapGame.h"
@@ -218,6 +220,8 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     if (in && size) {
         in = loadEntitySystemState(in, size);
     }
+    ScoreStorageProxy ssp;
+    gameThreadContext->storageAPI->createTable(&ssp);
 
     SuccessManager *sm = new SuccessManager(gameThreadContext->successAPI);
     datas = new PrivateData(this, gameThreadContext, sm);

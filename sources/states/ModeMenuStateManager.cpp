@@ -242,7 +242,7 @@ void ModeMenuStateManager::Setup() {
 }
 
 void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
-	LOGE("todo") /*
+	LOGT("loadscore") /*
 	float avg;
 	ScoreStorageProxy ssp;
 	storageAPI->loadEntries(&ssp, "*", "where mode =" + mode " and difficulty " = dif);
