@@ -206,31 +206,32 @@ void SuccessManager::sTestEverything(StorageAPI* storageAPI) {
 	}
 }
 
-void SuccessManager::sBTAC(StorageAPI* storage, Difficulty difficulty, unsigned int points) {
-	LOGE("TODO");
-	/*
+void SuccessManager::sBTAC(StorageAPI* storageAPI, Difficulty difficulty, unsigned int points) {	
 	if (!bBTAC) {
-		float avg;
-	    std::vector<Score> entries = storage->savedScores(1, difficulty, avg);
-		int s = entries.size();
-		if (s >= 5 && (int)points > entries[0].points) {
+		std::stringstream ss;
+		ss << "where mode = 1 and difficulty = " << difficulty << " order by points desc limit 5";
+		ScoreStorageProxy ssp;
+		storageAPI->loadEntries(&ssp, "points", ss.str());
+
+		if (ssp._queue.size() == 5 && (int)points > ssp._queue.back().points) {
 			successAPI->successCompleted("Beat them all (score race)", 3436);
 			bBTAC = true;
 		}
-	}*/
+	}
 }
 
-void SuccessManager::sBTAM(StorageAPI* storage, Difficulty difficulty, float time) {
-	LOGE("TODO");
-/*	if (!bBTAM) {
-		float avg;
-		std::vector<StorageAPI::Score> entries = storage->savedScores(2, difficulty, avg);
-		int s = entries.size();
-		if (s >= 5 && time < entries[0].time) {
+void SuccessManager::sBTAM(StorageAPI* storageAPI, Difficulty difficulty, float time) {
+	if (!bBTAM) {
+		std::stringstream ss;
+		ss << "where mode = 2 and difficulty = " << difficulty << " order by time asc limit 5";
+		ScoreStorageProxy ssp;
+		storageAPI->loadEntries(&ssp, "time", ss.str());
+
+		if (ssp._queue.size() == 5 && time > ssp._queue.back().time) {
 			successAPI->successCompleted("Beat them all (time attack)", 3428);
 			bBTAM = true;
 		}
-	}*/
+	}
 }
 
 void SuccessManager::s666Loser(int level) {

@@ -36,6 +36,8 @@
 #include "modes/TilesAttackModeManager.h"
 #include "modes/NormalModeManager.h"
 
+#include "util/ScoreStorageProxy.h"
+
 void HeriswapGame::stopInGameMusics() {
 	MUSIC(datas->inGameMusic.masterTrack)->control = MusicControl::Stop;
 	MUSIC(datas->inGameMusic.accessoryTrack)->control = MusicControl::Stop;
@@ -74,17 +76,24 @@ void HeriswapGame::setupGameProp() {
 		ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 1.;
 	}
 
-	LOGE("todo");
-/*
-	float avg;
-	std::vector<StorageAPI::Score> entries = datas->storage->savedScores(datas->mode, theGridSystem.sizeToDifficulty(), avg);
+
+	std::stringstream ss;
+	ss << "where mode = " << datas->mode << " and difficulty = " << theGridSystem.sizeToDifficulty();
+	if (datas->mode == TilesAttack) ss << " order by time asc limit 5";
+	else ss << " order by points desc limit 5";
+
+	ScoreStorageProxy ssp;
+	datas->storageAPI->loadEntries(&ssp, "*", ss.str());
+
 	datas->bestScores.clear();
-	datas->bestScores.reserve(entries.size());
-	for (unsigned i=0; i<entries.size(); i++) {
-		datas->bestScores[i] = entries[i].points;
+	datas->bestScores.reserve(ssp._queue.size());
+	datas->scoreboardRankInSight = ssp._queue.size();
+
+	for (unsigned i = 0; i < ssp._queue.size(); ++i) {
+		datas->bestScores[i] = ssp._queue.back().points;
+		ssp.popAnElement();
 	}
-	datas->scoreboardRankInSight = entries.size();
-	*/
+	
 }
 
 void HeriswapGame::stateChanged(GameState oldState, GameState newState) {

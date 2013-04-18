@@ -25,12 +25,17 @@
 #include <string>
 #include <map>
 
+#include "GridSystem.h"
+#include "modes/GameModeManager.h"
+
 //to be moved
 struct Score {
     int points;
     int level;
     float time;
     std::string name;
+    GameMode mode;
+    Difficulty difficulty;
 };
 
 

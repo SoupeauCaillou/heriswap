@@ -23,10 +23,11 @@
 
 #include <glm/glm.hpp>
 
-#include <base/EntityManager.h>
-#include <base/TouchInputManager.h>
-#include <base/PlacementHelper.h>
-#include <base/ObjectSerializer.h>
+#include "base/EntityManager.h"
+#include "base/TouchInputManager.h"
+#include "base/PlacementHelper.h"
+#include "base/ObjectSerializer.h"
+#include "base/Log.h"
 
 #include "systems/MorphingSystem.h"
 #include "systems/ButtonSystem.h"
@@ -242,12 +243,27 @@ void ModeMenuStateManager::Setup() {
 }
 
 void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
-	LOGT("loadscore") /*
-	float avg;
+	float avg = 0.f;
+
+	std::stringstream ss;
+	ss << "where mode = " << mode << " and difficulty = " << dif;
+	if (mode == 2) ss << " order by time asc limit 5";
+	else ss << " order by points desc limit 5";
+
 	ScoreStorageProxy ssp;
-	storageAPI->loadEntries(&ssp, "*", "where mode =" + mode " and difficulty " = dif);
-	//storageAPI->savedScores(mode, dif, avg);
-	std::queue<Score> entries = ssp._queue;
+	storageAPI->loadEntries(&ssp, "*", ss.str());
+
+
+	//a bit heavy, but..
+	std::vector<Score> entries;
+	while (! ssp.isEmpty()) {
+		entries.push_back(ssp._queue.back());
+		avg += (mode == TilesAttack) ? ssp._queue.back().time : ssp._queue.back().points;
+		ssp.popAnElement();		
+	}
+
+	if (entries.size() > 0)
+		avg /= entries.size();
 
 	bool alreadyRed = false;
 	for (unsigned int i=0; i<5; i++) {
@@ -299,7 +315,7 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 	if (avg > 0) {
 		std::stringstream a;
 		a.precision(1);
-		// a << localizeAPI->text("average_score", "Average score: ") << ' ';
+
 		a << localizeAPI->text("average_score") << ' ';
 		if (mode==Normal || mode==Go100Seconds) {
 			a << (int)avg;
@@ -310,7 +326,7 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 		TEXT_RENDERING(average)->show = true;
 	} else {
 		TEXT_RENDERING(average)->show = false;
-	}*/
+	}
 }
 
 
@@ -324,15 +340,18 @@ void ModeMenuStateManager::Enter() {
 
 	//first launch : set an easiest diff
     if (gameOverState == NoGame) {
-	    LOGE("todo");/*
-	    float avg;
-		std::vector<StorageAPI::Score> entries = storageAPI->savedScores(modeMgr->GetMode(), SelectAllDifficulty, avg);
-		if  (entries.size() <= 1)
+   		std::stringstream ss;
+		ss << "where mode = " << modeMgr->GetMode();
+
+	    ScoreStorageProxy ssp;
+	    int count = storageAPI->count(&ssp, "*", ss.str());
+	    LOGV(LogVerbosity::VERBOSE1, "There are currently " << count << " scores in database");
+		if  (count <= 1)
 			difficulty = DifficultyEasy;
-		else if  (entries.size() < 5)
+		else if  (count < 5)
 			difficulty = DifficultyMedium;
 		else
-			difficulty = DifficultyHard;*/
+			difficulty = DifficultyHard;
 	} else {
 		difficulty = theGridSystem.sizeToDifficulty();
 	}
@@ -397,21 +416,17 @@ void ModeMenuStateManager::submitScore(const std::string& playerName) {
 }
 
 bool ModeMenuStateManager::isCurrentScoreAHighOne() {
-	LOGE("todo");
-	return false;
-	/*
-	float avg;
-    std::vector<Score> entries = storageAPI->savedScores(modeMgr->GetMode(), difficulty, avg);
-
-    int s = entries.size();
-    if (s < 5)
-        return true;
+	std::stringstream ss;
+	ss << "where mode = " << modeMgr->GetMode() << " and difficulty = " << difficulty;
 
     if (modeMgr->GetMode() == Normal || modeMgr->GetMode() == Go100Seconds) {
-        return modeMgr->points > (unsigned int)entries[s - 1].points;
+        ss << " and points >= " << modeMgr->points;
     } else {
-        return modeMgr->time < entries[s - 1].time;
-    }*/
+        ss << " and time <= " << modeMgr->time;
+    }
+
+    ScoreStorageProxy ssp;
+    return (storageAPI->count(&ssp, "*", ss.str()) < 5);
 }
 
 GameState ModeMenuStateManager::Update(float dt) {
@@ -544,7 +559,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 #endif
 		//enableSwarm button
 		else if (BUTTON(enableSwarmContainer)->clicked) {
-			// TODO !
+			LOGE("NOT HANDLED YET!");
 			// communicationAPI->swarmRegistering(modeMgr->GetMode(), theGridSystem.sizeToDifficulty());
 			TEXT_RENDERING(enableSwarm)->show = false;
 			BUTTON(enableSwarmContainer)->enabled = false;
