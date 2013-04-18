@@ -50,12 +50,15 @@ void AdsStateManager::Setup() {
 										  (float)PlacementHelper::GimpYToScreen(0));
 	BUTTON(eAds)->enabled = false;
     lastAdTime = -30;
+
+    //init in db
+    storageAPI->setOption("gameB4Ads", "2");
 }
 
 void AdsStateManager::Enter() {
 	stateActiveDuration = 0;
-	gameb4Ads = ObjectSerializer<int>::string2object(storageAPI->getOption("gameb4Ads"));
- 	LOGI("Game b4 ads: " <<  gameb4Ads);
+	gameb4Ads = ObjectSerializer<int>::string2object(storageAPI->getOption("gameB4Ads"));
+ 	LOGI("GameB4Bds: " <<  gameb4Ads);
  	if (gameb4Ads > 3) {
 	 	gameb4Ads = 3;
  	}
@@ -93,7 +96,7 @@ void AdsStateManager::Exit() {
 	if (gameb4Ads==0)
 		gameb4Ads=3;
     gameb4Ads--;
-	storageAPI->setOption("gameb4Ads", ObjectSerializer<int>::object2string(gameb4Ads));
+	storageAPI->setOption("gameB4Ads", ObjectSerializer<int>::object2string(gameb4Ads));
 }
 
 void AdsStateManager::LateExit() {
