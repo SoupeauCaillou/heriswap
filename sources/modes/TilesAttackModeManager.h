@@ -48,6 +48,5 @@ class TilesAttackGameModeManager : public GameModeManager {
 	private:
 		unsigned int leavesDone;
 		bool succNoGridReset;
-		Entity rank;
 };
 

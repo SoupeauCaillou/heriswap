@@ -37,7 +37,6 @@ class UserInputGameStateManager : public GameStateManager {
 	private:
 		// datas
 		Entity dragged;
-		bool dragStarted;
 		int originI, originJ;
 		int swapI, swapJ;
         std::vector<Entity> inCombinationCells;

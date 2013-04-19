@@ -24,7 +24,7 @@
 class AdsStateManager : public GameStateManager {
 	public:
 
-	AdsStateManager(AdAPI* ad, StorageAPI* str, SuccessManager* smgr) : adAPI(ad), storageAPI(str), successMgr(smgr) { };
+	AdsStateManager(AdAPI* ad, StorageAPI* str) : adAPI(ad), storageAPI(str) { };
 	void Setup();
 	void Enter();
 	GameState Update(float dt);
@@ -37,5 +37,4 @@ class AdsStateManager : public GameStateManager {
 		StorageAPI* storageAPI;
 		int gameb4Ads;
         float lastAdTime;
-		SuccessManager* successMgr;
 };

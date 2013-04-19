@@ -64,7 +64,11 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
      soundButton = theEntityManager.CreateEntity("soundButton");
      socialGamNet = theEntityManager.CreateEntity("socialGamNet");
 
+#if SAC_DEBUG
+     state = LogoToBlackState;
+#else
      state = BlackToLogoState;
+#endif
 
      state2Manager[CountDown] = new CountDownStateManager();
      state2Manager[Spawn] = new SpawnGameStateManager(successMgr);
@@ -74,10 +78,10 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
      state2Manager[LevelChanged] = new LevelStateManager(static_cast<NormalGameModeManager*> (mode2Manager[Normal]));
      state2Manager[Pause] = new PauseStateManager(context->localizeAPI);
      state2Manager[Logo] = new LogoStateManager(LogoToBlackState);
-     state2Manager[MainMenu] = new MainMenuGameStateManager(context->localizeAPI, context->successAPI);
-     state2Manager[ModeMenu] = new ModeMenuStateManager(storageAPI, context->nameInputAPI, successMgr, context->localizeAPI, context->successAPI, context->communicationAPI);
+     state2Manager[MainMenu] = new MainMenuGameStateManager(context->localizeAPI);
+     state2Manager[ModeMenu] = new ModeMenuStateManager(storageAPI, context->keyboardInputHandlerAPI, successMgr, context->localizeAPI, context->successAPI, context->communicationAPI);
      state2Manager[Help] = new HelpStateManager(context->localizeAPI);
-     state2Manager[Ads] = new AdsStateManager(context->adAPI, storageAPI, successMgr);
+     state2Manager[Ads] = new AdsStateManager(context->adAPI, storageAPI);
      state2Manager[RateIt] = new RateItStateManager(context->localizeAPI, context->communicationAPI);
      state2Manager[ElitePopup] = new ElitePopupStateManager(static_cast<NormalGameModeManager*>(mode2Manager[Normal]), context->localizeAPI);
 

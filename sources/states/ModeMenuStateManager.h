@@ -18,7 +18,7 @@
 */
 #pragma once
 
-#include "api/NameInputAPI.h"
+#include "api/KeyboardInputHandlerAPI.h"
 #include "api/CommunicationAPI.h"
 #include "SuccessManager.h"
 #include "states/StateManager.h"
@@ -29,7 +29,7 @@ class HelpStateManager;
 
 class ModeMenuStateManager : public GameStateManager {
 	public:
-		ModeMenuStateManager(StorageAPI* storag, NameInputAPI* nameInputAPI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, CommunicationAPI* comAPI);
+		ModeMenuStateManager(StorageAPI* storag, KeyboardInputHandlerAPI* kbInputHandlerAPI, SuccessManager* successMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, CommunicationAPI* comAPI);
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
@@ -54,7 +54,7 @@ class ModeMenuStateManager : public GameStateManager {
 	private:
 		StorageAPI* storageAPI;
 		CommunicationAPI* communicationAPI;
-		NameInputAPI* nameInputAPI;
+		KeyboardInputHandlerAPI* keyboardInputHandlerAPI;
         SuccessAPI* successAPI;
 		Entity playText, playContainer, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle, average;
 		Entity yourScore, fond;
@@ -66,6 +66,11 @@ class ModeMenuStateManager : public GameStateManager {
 #if 0
 		Entity facebook, twitter
 #endif
+
+#if ! SAC_MOBILE
+		Entity input_label, input_textbox, input_background;
+#endif
+
 		Entity enableSwarm, enableSwarmContainer;
 
         void submitScore(const std::string& playerName);

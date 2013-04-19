@@ -45,12 +45,12 @@
 
 #include "DepthLayer.h"
 
-ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, NameInputAPI* pNameInputAPI, SuccessManager* sMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, CommunicationAPI* comAPI) {
+ModeMenuStateManager::ModeMenuStateManager(StorageAPI* storag, KeyboardInputHandlerAPI* kbInputHandler, SuccessManager* sMgr, LocalizeAPI* lAPI, SuccessAPI* sAPI, CommunicationAPI* comAPI) {
 	storageAPI = storag;
     successAPI = sAPI;
 	successMgr = sMgr;
 	communicationAPI = comAPI;
-	nameInputAPI = pNameInputAPI;
+	keyboardInputHandlerAPI = kbInputHandler;
 	localizeAPI = lAPI;
 	difficulty = DifficultyEasy;
     gameOverState = NoGame;
@@ -240,6 +240,42 @@ void ModeMenuStateManager::Setup() {
 	CONTAINER(enableSwarmContainer)->includeChildren = true;
 	ADD_COMPONENT(enableSwarmContainer, Button);
 	BUTTON(enableSwarmContainer)->enabled = false;
+
+
+#if ! SAC_MOBILE
+    // name input entities
+    input_label = theEntityManager.CreateEntity("input_label");
+    ADD_COMPONENT(input_label, Transformation);
+    TRANSFORM(input_label)->position = glm::vec2(0, PlacementHelper::GimpYToScreen(275));
+    TRANSFORM(input_label)->z = DL_HelpText;
+    ADD_COMPONENT(input_label, TextRendering);
+    TEXT_RENDERING(input_label)->text = localizeAPI->text("enter_name");
+    TEXT_RENDERING(input_label)->fontName = "typo";
+    TEXT_RENDERING(input_label)->positioning = TextRenderingComponent::CENTER;
+    TEXT_RENDERING(input_label)->color = green;
+    TEXT_RENDERING(input_label)->charHeight = PlacementHelper::GimpHeightToScreen(54);
+
+    input_textbox = theEntityManager.CreateEntity("input_textbox");
+    ADD_COMPONENT(input_textbox, Transformation);
+    TRANSFORM(input_textbox)->position = glm::vec2(0, PlacementHelper::GimpYToScreen(390));
+    TRANSFORM(input_textbox)->z = DL_HelpText;
+    ADD_COMPONENT(input_textbox, TextRendering);
+    TEXT_RENDERING(input_textbox)->fontName = "typo";
+    TEXT_RENDERING(input_textbox)->text = "";
+    TEXT_RENDERING(input_textbox)->positioning = TextRenderingComponent::CENTER;
+    TEXT_RENDERING(input_textbox)->color = green;
+    TEXT_RENDERING(input_textbox)->charHeight = PlacementHelper::GimpHeightToScreen(54);
+    TEXT_RENDERING(input_textbox)->caret.speed = 0.5;
+
+    input_background = theEntityManager.CreateEntity("input_background");
+    ADD_COMPONENT(input_background, Transformation);
+    TRANSFORM(input_background)->size = glm::vec2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(256));
+    TRANSFORM(input_background)->position = glm::vec2(0, PlacementHelper::GimpYToScreen(320));
+    TRANSFORM(input_background)->z = DL_HelpTextBg;
+    ADD_COMPONENT(input_background, Rendering);
+    RENDERING(input_background)->texture = theRenderingSystem.loadTextureFile("fond_bouton");
+    RENDERING(input_background)->color.a = 1;
+#endif
 }
 
 void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
@@ -257,8 +293,8 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 	//a bit heavy, but..
 	std::vector<Score> entries;
 	while (! ssp.isEmpty()) {
-		entries.push_back(ssp._queue.back());
-		avg += (mode == TilesAttack) ? ssp._queue.back().time : ssp._queue.back().points;
+		entries.push_back(ssp._queue.front());
+		avg += (mode == TilesAttack) ? ssp._queue.front().time : ssp._queue.front().points;
 		ssp.popAnElement();		
 	}
 
@@ -371,13 +407,6 @@ void ModeMenuStateManager::Enter() {
 	TEXT_RENDERING(eDifficulty)->show = true;
 	BUTTON(bDifficulty)->enabled = true;
 
-    // if (difficulty == DifficultyEasy)
-    //     TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
-    // else if (difficulty == DifficultyMedium)
-    //     TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Medium") + " }";
-    // else
-    //     TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
-
 	if (difficulty == DifficultyEasy)
         TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1") + " }";
     else if (difficulty == DifficultyMedium)
@@ -412,6 +441,9 @@ void ModeMenuStateManager::submitScore(const std::string& playerName) {
     } else {
 	    ssp.setValue("level", ObjectSerializer<int>::object2string(1));
     }
+    ssp.setValue("mode", ObjectSerializer<int>::object2string(m));
+    ssp.setValue("difficulty", ObjectSerializer<int>::object2string(difficulty));
+
     storageAPI->saveEntries(&ssp);
 }
 
@@ -444,7 +476,10 @@ GameState ModeMenuStateManager::Update(float dt) {
 			#endif
             // ask player's name if needed
             if (isCurrentScoreAHighOne()) {
-                nameInputAPI->show();
+#if ! SAC_MOBILE
+            	TEXT_RENDERING(input_label)->show = TEXT_RENDERING(input_textbox)->show = RENDERING(input_background)->show = true;
+#endif
+                keyboardInputHandlerAPI->getUserInput(14);
                 gameOverState = AskingPlayerName;
                 successMgr->sTheyGood(true);
             } else {
@@ -457,7 +492,6 @@ GameState ModeMenuStateManager::Update(float dt) {
             std::stringstream a;
             a.precision(1);
             if (modeMgr->GetMode()==Normal) {
-                // a << modeMgr->points << " : "<< localizeAPI->text("lvl", "lvl") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
                 a << modeMgr->points << " : "<< localizeAPI->text("lvl") << " " << static_cast<NormalGameModeManager*>(modeMgr)->currentLevel();
             } else if (modeMgr->GetMode()==Go100Seconds) {
                 a << modeMgr->points;
@@ -469,12 +503,18 @@ GameState ModeMenuStateManager::Update(float dt) {
             break;
         }
         case AskingPlayerName: {
-            if (nameInputAPI->done(playerName)) {
+            if (keyboardInputHandlerAPI->done(TEXT_RENDERING(input_textbox)->text)) {
+            	playerName = TEXT_RENDERING(input_textbox)->text;
+            	TEXT_RENDERING(input_textbox)->text = "";
+
+            	TEXT_RENDERING(input_label)->show = TEXT_RENDERING(input_textbox)->show = RENDERING(input_background)->show = false;
+
                 if (modeMgr->GetMode()==Normal)
 					successMgr->sBTAC(storageAPI, difficulty, modeMgr->points);
 				else if (modeMgr->GetMode()==TilesAttack)
 					successMgr->sBTAM(storageAPI, difficulty, modeMgr->time);
-                nameInputAPI->hide();
+                
+
                 submitScore(playerName);
                 LoadScore(modeMgr->GetMode(), difficulty);
                 gameOverState = NoGame;
@@ -485,6 +525,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 					this->LateExit();
 					return RateIt;
 				}
+
             }
             break;
         }

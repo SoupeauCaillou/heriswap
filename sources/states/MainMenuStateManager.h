@@ -24,7 +24,7 @@
 
 class MainMenuGameStateManager : public GameStateManager {
 	public:
-		MainMenuGameStateManager(LocalizeAPI* lAPI, SuccessAPI* sAPI) : localizeAPI(lAPI), successAPI(sAPI) { };
+		MainMenuGameStateManager(LocalizeAPI* lAPI) : localizeAPI(lAPI) { };
 		void Setup();
 		void Enter();
 		GameState Update(float dt);
@@ -40,5 +40,4 @@ class MainMenuGameStateManager : public GameStateManager {
 		Entity quitButton[3];
 
 		LocalizeAPI* localizeAPI;
-        SuccessAPI* successAPI;
 };

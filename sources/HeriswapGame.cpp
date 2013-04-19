@@ -28,8 +28,6 @@
 #include <base/TimeUtil.h>
 #include <base/PlacementHelper.h>
 
-#include "api/NameInputAPI.h"
-
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/ButtonSystem.h"
@@ -156,7 +154,7 @@ bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
         case ContextAPI::Communication:
         case ContextAPI::Localize:
         case ContextAPI::Music:
-        case ContextAPI::NameInput:
+        case ContextAPI::KeyboardInputHandler:
         case ContextAPI::Sound:
         case ContextAPI::Storage:
         case ContextAPI::Success:

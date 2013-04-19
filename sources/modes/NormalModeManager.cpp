@@ -56,7 +56,7 @@ void NormalGameModeManager::Setup() {
 
 void NormalGameModeManager::Enter() {
 	PROFILE("NormalGameModeManager", "Enter", BeginEvent);
-	limit = 45;
+	limit = 2;//45;
 	time = 0;
 	points = 0;
 	level = 1;

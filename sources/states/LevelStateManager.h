@@ -49,7 +49,6 @@ class LevelStateManager : public GameStateManager {
 		Entity eSnowEmitter;
 		Entity eSnowBranch;
 		Entity eSnowGround;
-		Entity eMusic;
 
 		float duration;
 
