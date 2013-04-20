@@ -27,15 +27,16 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ADSRSystem.h"
 
+#include "util/Serializer.h"
 INSTANCE_IMPL(GridSystem);
 
 GridSystem::GridSystem() : ComponentSystemImpl<GridComponent>("Grid") {
 	GridSize = Types = 8;
 	nbmin = 3;
 	GridComponent a;
-    componentSerializer.add(new Property<int>(OFFSET(i, a)));
-    componentSerializer.add(new Property<int>(OFFSET(j, a)));
-    componentSerializer.add(new Property<int>(OFFSET(type, a)));
+    componentSerializer.add(new Property<int>("i", OFFSET(i, a)));
+    componentSerializer.add(new Property<int>("j", OFFSET(j, a)));
+    componentSerializer.add(new Property<int>("type", OFFSET(type, a)));
 }
 
 Difficulty GridSystem::sizeToDifficulty() {
