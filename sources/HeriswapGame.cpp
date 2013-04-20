@@ -177,6 +177,8 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
 
 	//init database
     gameThreadContext->storageAPI->init(gameThreadContext->assetAPI, "Heriswap");
+    gameThreadContext->storageAPI->setOption("sound", std::string(), "on");
+    gameThreadContext->storageAPI->setOption("gameCount", std::string(), "0");
 
 	Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
 
@@ -444,7 +446,7 @@ void HeriswapGame::tick(float dt) {
 		BUTTON(datas->soundButton)->clicked = false;
 
 		bool isEnable = datas->storageAPI->isOption("sound", "on");
-		datas->storageAPI->setOption("sound", isEnable ? "off" : "on");
+		datas->storageAPI->setOption("sound", isEnable ? "off" : "on", "on");
 
 		theSoundSystem.mute = !theSoundSystem.mute;
         theMusicSystem.toggleMute(theSoundSystem.mute);

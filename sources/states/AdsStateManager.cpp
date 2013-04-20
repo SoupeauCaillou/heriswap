@@ -51,8 +51,8 @@ void AdsStateManager::Setup() {
 	BUTTON(eAds)->enabled = false;
     lastAdTime = -30;
 
-    //init in db
-    storageAPI->setOption("gameB4Ads", "2");
+    //at each start of the game, we set the number of party to '2' before first ad
+    storageAPI->setOption("gameB4Ads", "2", "2");
 }
 
 void AdsStateManager::Enter() {
@@ -96,7 +96,7 @@ void AdsStateManager::Exit() {
 	if (gameb4Ads==0)
 		gameb4Ads=3;
     gameb4Ads--;
-	storageAPI->setOption("gameB4Ads", ObjectSerializer<int>::object2string(gameb4Ads));
+	storageAPI->setOption("gameB4Ads", ObjectSerializer<int>::object2string(gameb4Ads), "2");
 }
 
 void AdsStateManager::LateExit() {
