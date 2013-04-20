@@ -33,7 +33,11 @@ std::string ScoreStorageProxy::getValue(const std::string& columnName) {
     return "";
 }
 
-void ScoreStorageProxy::setValue(const std::string& columnName, const std::string& value) {
+void ScoreStorageProxy::setValue(const std::string& columnName, const std::string& value, bool pushNewElement) {
+    if (pushNewElement) {
+        pushAnElement();
+    }
+
     if (columnName == "points") {
         _queue.back().points =  ObjectSerializer<int>::string2object(value);
     } else if (columnName == "level") {
