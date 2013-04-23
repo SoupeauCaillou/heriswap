@@ -23,7 +23,6 @@
 #include "api/StorageAPI.h"
 #include "HeriswapGame.h"
 #include "InGameUiHelper.h"
-#include "AnimedActor.h"
 #include "SuccessManager.h"
 
 enum GameMode {
@@ -108,7 +107,7 @@ class GameModeManager {
 
 		SuccessManager* successMgr;
 		//hérisson
-		AnimatedActor* c;
+		Entity c;
 
 		StorageAPI* storageAPI;
 	private:

@@ -49,7 +49,7 @@ struct BackgroundManager::AnimatedActor {
 };
 
 BackgroundManager::BackgroundManager() {
-	cloudY[0] = Interval<float>(PlacementHelper::GimpYToScreen(70.0), PlacementHelper::GimpYToScreen(240));
+	cloudY[0] = Interval<float>(PlacementHelper::GimpYToScreen(70), PlacementHelper::GimpYToScreen(240));
 	cloudY[1] = Interval<float>(PlacementHelper::GimpYToScreen(390), PlacementHelper::GimpYToScreen(490));
 	cloudY[2] = Interval<float>(PlacementHelper::GimpYToScreen(560), PlacementHelper::GimpYToScreen(650));
 

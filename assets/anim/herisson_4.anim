@@ -1,0 +1,13 @@
+[meta]
+speed=2
+loop=infinite
+num_frames=3
+
+[frame0]
+texture=herisson_1_4
+
+[frame1]
+texture=herisson_2_4
+
+[frame2]
+texture=herisson_3_4

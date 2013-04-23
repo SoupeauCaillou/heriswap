@@ -25,6 +25,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
 
+#include "systems/AnimationSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/TransformationSystem.h"
@@ -131,8 +132,11 @@ void Go100SecondsGameModeManager::GameUpdate(float dt, GameState state) {
 		squallDuration += dt;
 		//if the central leaf is next to the herisson, change his bonus
 		if (TRANSFORM(squallLeaves[0])->position.x <= TRANSFORM(herisson)->position.x) {
-			LoadHerissonTexture(bonus+1);
-			RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
+			// LoadHerissonTexture(bonus+1);
+			std::stringstream a;
+			a << "herisson_" << bonus+1;
+			ANIMATION(herisson)->name = a.str();
+			// RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 		}
 		//make the tree leaves grow ...
 		for (unsigned int i = 0; i < branchLeaves.size(); i++) {

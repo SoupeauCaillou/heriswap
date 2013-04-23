@@ -22,7 +22,6 @@
 #include "api/CommunicationAPI.h"
 #include "SuccessManager.h"
 #include "states/StateManager.h"
-#include "AnimedActor.h"
 #include "GridSystem.h"
 
 class HelpStateManager;
@@ -40,7 +39,7 @@ class ModeMenuStateManager : public GameStateManager {
 
 		Difficulty difficulty;
 		Entity title, menufg, menubg;
-		AnimatedActor* herisson;
+		Entity herisson;
 
         bool pleaseGoBack;
         HelpStateManager* helpMgr;

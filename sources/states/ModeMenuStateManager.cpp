@@ -29,6 +29,11 @@
 #include "base/ObjectSerializer.h"
 #include "base/Log.h"
 
+// #ifndef SAC_EMSCRIPTEN
+// #include <api/linux/NameInputAPILinuxImpl.h>
+// #endif
+
+#include "systems/AnimationSystem.h"
 #include "systems/MorphingSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
@@ -241,7 +246,6 @@ void ModeMenuStateManager::Setup() {
 	ADD_COMPONENT(enableSwarmContainer, Button);
 	BUTTON(enableSwarmContainer)->enabled = false;
 
-
 #if ! SAC_MOBILE
     // name input entities
     input_label = theEntityManager.CreateEntity("input_label");
@@ -321,7 +325,6 @@ void ModeMenuStateManager::LoadScore(int mode, Difficulty dif) {
 			trcP->text = a.str();
 			trcN->text = entries[i].name;
 
-			// a.str(""); a<< std::fixed <<localizeAPI->text("lvl", "lvl") << " " <<entries[i].level;
 			a.str(""); a<< std::fixed <<localizeAPI->text("lvl") << " " <<entries[i].level;
 			trcL->text = a.str();
 			//affichage lvl
@@ -401,7 +404,6 @@ void ModeMenuStateManager::Enter() {
 	TEXT_RENDERING(title)->show = true;
 	RENDERING(menufg)->show = true;
 	RENDERING(fond)->show = true;
-	// TEXT_RENDERING(playText)->text = (gameOverState != NoGame) ? localizeAPI->text("restart", "Restart") : localizeAPI->text("play", "Play");
 	TEXT_RENDERING(playText)->text = (gameOverState != NoGame) ? localizeAPI->text("restart") : localizeAPI->text("play");
 	TEXT_RENDERING(scoreTitle)->show = true;
 	TEXT_RENDERING(eDifficulty)->show = true;
@@ -467,13 +469,6 @@ GameState ModeMenuStateManager::Update(float dt) {
 			break;
         }
         case GameEnded: {
-			#if 0
-			//show twitter, fb, und so weiter
-			RENDERING(facebook)->hide = false;
-			RENDERING(twitter)->hide = false;
-			BUTTON(facebook)->enabled = true;
-			BUTTON(twitter)->enabled = true;
-			#endif
             // ask player's name if needed
             if (isCurrentScoreAHighOne()) {
 #if ! SAC_MOBILE
@@ -520,7 +515,7 @@ GameState ModeMenuStateManager::Update(float dt) {
                 gameOverState = NoGame;
 
 				if (communicationAPI->mustShowRateDialog()) {
-					TRANSFORM(herisson->actor.e)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(herisson->actor.e)->size.x;
+					TRANSFORM(herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(herisson)->size.x;
 					TEXT_RENDERING(title)->show = false;
 					this->LateExit();
 					return RateIt;
@@ -532,12 +527,10 @@ GameState ModeMenuStateManager::Update(float dt) {
     }
 
 	//herisson
-	Entity herissonActor=  herisson->actor.e;
-	if (TRANSFORM(herissonActor)->position.x < PlacementHelper::ScreenWidth+TRANSFORM(herissonActor)->size.x) {
-		TRANSFORM(herissonActor)->position.x += herisson->actor.speed*dt;
-		updateAnim(herisson, dt);
+	if (TRANSFORM(herisson)->position.x < PlacementHelper::ScreenWidth + TRANSFORM(herisson)->size.x) {
+		TRANSFORM(herisson)->position.x += ANIMATION(herisson)->playbackSpeed*dt;
 	} else {
-		RENDERING(herissonActor)->show = false;
+		RENDERING(herisson)->show = false;
 	}
 
 	if (gameOverState != AskingPlayerName) {
@@ -547,16 +540,12 @@ GameState ModeMenuStateManager::Update(float dt) {
 			difficulty = theGridSystem.nextDifficulty(difficulty);
 
 			if (difficulty == DifficultyEasy)
-				// TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1", "Easy") + " }";
 				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_1") + " }";
 			else if (difficulty == DifficultyMedium)
-				// TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2", "Medium") + " }";
 				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_2") + " }";
 			else
-				// TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3", "Hard") + " }";
 				TEXT_RENDERING(eDifficulty)->text = "{ " + localizeAPI->text("diff_3") + " }";
 
-			// TEXT_RENDERING(playText)->text = localizeAPI->text("play", "Play");
 			TEXT_RENDERING(playText)->text = localizeAPI->text("play");
 			LoadScore(modeMgr->GetMode(), difficulty);
 		}
@@ -564,8 +553,8 @@ GameState ModeMenuStateManager::Update(float dt) {
 		//new game button
 		else if (BUTTON(playContainer)->clicked) {
 			SOUND(playContainer)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-			RENDERING(herisson->actor.e)->show = false;
-			TRANSFORM(herissonActor)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(herissonActor)->size.x;
+			RENDERING(herisson)->show = false;
+			TRANSFORM(herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(herisson)->size.x;
 			TEXT_RENDERING(title)->show = false;
 
 			std::stringstream ss;
@@ -588,16 +577,7 @@ GameState ModeMenuStateManager::Update(float dt) {
 			SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 			return MainMenu;
 		}
-#if 0
-		//facebook button
-		else if (BUTTON(facebook)->clicked) {
-			communicationAPI->shareFacebook();
-		}
-		//twitter button
-		else if (BUTTON(twitter)->clicked) {
-			communicationAPI->shareTwitter();
-		}
-#endif
+
 		//enableSwarm button
 		else if (BUTTON(enableSwarmContainer)->clicked) {
 			LOGE("NOT HANDLED YET!");
@@ -633,12 +613,6 @@ void ModeMenuStateManager::LateExit() {
 	BUTTON(playContainer)->enabled = false;
 	TEXT_RENDERING(eDifficulty)->show = false;
 	BUTTON(bDifficulty)->enabled = false;
-#if 0
-	BUTTON(facebook)->enabled = false;
-	BUTTON(twitter)->enabled = false;
-	RENDERING(facebook)->hide = true;
-	RENDERING(twitter)->hide = true;
-#endif
 	BUTTON(enableSwarmContainer)->enabled = false;
 	TEXT_RENDERING(enableSwarm)->show = false;
 
@@ -649,5 +623,5 @@ void ModeMenuStateManager::LateExit() {
 	RENDERING(fond)->show = false;
 	TEXT_RENDERING(scoreTitle)->show = false;
 	TEXT_RENDERING(average)->show = false;
-	RENDERING(herisson->actor.e)->show = false;
+	RENDERING(herisson)->show = false;
 }

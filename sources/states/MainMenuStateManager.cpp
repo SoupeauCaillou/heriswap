@@ -24,6 +24,7 @@
 #include <base/TouchInputManager.h>
 #include <base/PlacementHelper.h>
 
+#include "systems/AnimationSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/MorphingSystem.h"
@@ -110,9 +111,7 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(menubg, Rendering);
 	RENDERING(menubg)->texture = theRenderingSystem.loadTextureFile("2emeplan");
 	RENDERING(menubg)->show = false;
-	// TODO !
 	RENDERING(menubg)->opaqueType = RenderingComponent::NON_OPAQUE;
-	// RENDERING(menubg)->opaqueSeparation = 0.26;
 
 	menufg = theEntityManager.CreateEntity("menufg");
 	ADD_COMPONENT(menufg, Transformation);
@@ -125,27 +124,24 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(menufg, Rendering);
 	RENDERING(menufg)->texture = theRenderingSystem.loadTextureFile("1erplan");
 	RENDERING(menufg)->show = false;
-	// TODO !
 	RENDERING(menufg)->opaqueType = RenderingComponent::NON_OPAQUE;
-	// RENDERING(menufg)->opaqueSeparation = (PlacementHelper::GimpHeightToScreen(1092) - PlacementHelper::GimpHeightToScreen(1280 - 570)) / TRANSFORM(menufg)->size.y;
-
-	herisson = new AnimatedActor();
-	herisson->frames=0;
-	herisson->actor.speed = 4.1;
-	Entity a = theEntityManager.CreateEntity("herisson_actor");
-	ADD_COMPONENT(a, Transformation);
-	TRANSFORM(a)->z = DL_MainMenuHerisson;
-	ADD_COMPONENT(a, Rendering);
-	herisson->actor.e = a;
-	herisson->anim.clear();
-	loadHerissonTexture(glm::round(glm::linearRand(1.f, 8.f)), herisson);
-	herisson->actor.speed = glm::linearRand(2.0f, 4.0f);
-	TRANSFORM(a)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), 
-								   (float)(PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f, 1.f));
-	TransformationSystem::setPosition(TRANSFORM(a), 
-									  glm::vec2((float)(PlacementHelper::GimpXToScreen(-glm::round(glm::linearRand(0.f, 300.f))) - TRANSFORM(a)->size.x), 
-									  			(float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f,1150.f)))), 
+	
+	herisson = theEntityManager.CreateEntity("herisson_menu");
+	ADD_COMPONENT(herisson, Transformation);
+	TRANSFORM(herisson)->z = DL_MainMenuHerisson;
+	
+	TRANSFORM(herisson)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), 
+								   		  (float)(PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f, 1.f));
+	TransformationSystem::setPosition(TRANSFORM(herisson), 
+									  glm::vec2((float)(PlacementHelper::GimpXToScreen(-glm::round(glm::linearRand(0.f, 299.f))) - TRANSFORM(herisson)->size.x), 
+									  			(float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f,1149.f)))), 
 									  TransformationSystem::SW);
+	ADD_COMPONENT(herisson, Rendering);
+	ADD_COMPONENT(herisson, Animation);
+	ANIMATION(herisson)->playbackSpeed = 4.1f;
+	std::stringstream a;
+	a << "herisson_" << 1;//glm::round(glm::linearRand(1.f, 8.f));
+	ANIMATION(herisson)->name = a.str();
 
 	quitButton[0] = theEntityManager.CreateEntity("quitButton_0");
 	ADD_COMPONENT(quitButton[0], Transformation);
@@ -180,7 +176,7 @@ void MainMenuGameStateManager::Enter() {
 	// preload sound effect
 	theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 
-	RENDERING(herisson->actor.e)->show = true;
+	RENDERING(herisson)->show = true;
 
 	for (int i = 0; i < 3; i++) {
 		RENDERING(bStart[i])->show = true;
@@ -202,19 +198,24 @@ void MainMenuGameStateManager::Enter() {
 }
 
 GameState MainMenuGameStateManager::Update(float dt) {
-	Entity a = herisson->actor.e;
-	updateAnim(herisson, dt);
-	if (TRANSFORM(a)->position.x < PlacementHelper::GimpXToScreen(800)+TRANSFORM(a)->size.x) {
-		TRANSFORM(a)->position.x += herisson->actor.speed/8.*dt;
+	// Entity a = herisson->actor.e;
+	// updateAnim(herisson, dt);
+	if (TRANSFORM(herisson)->position.x < PlacementHelper::GimpXToScreen(800)+TRANSFORM(herisson)->size.x) {
+		TRANSFORM(herisson)->position.x += ANIMATION(herisson)->playbackSpeed/8. * dt;
 	} else {
-		herisson->anim.clear();
-		loadHerissonTexture(glm::round(glm::linearRand(1.f, 8.f)), herisson);//random texture
-		herisson->actor.speed = glm::linearRand(2.0f,4.0f);//speed
-		TRANSFORM(a)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), 
-									   (float)PlacementHelper::GimpHeightToScreen(253))*glm::linearRand(.3f,1.f);//size
-		TransformationSystem::setPosition(TRANSFORM(a), 
-										  glm::vec2((float)(PlacementHelper::GimpXToScreen(-glm::round(glm::linearRand(0.f, 300.f)))-TRANSFORM(a)->size.x), 
-										  			(float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f, 1150.f)))), 
+		// herisson->anim.clear();
+		// loadHerissonTexture(glm::round(glm::linearRand(1.f, 8.f)), herisson);//random texture
+		// herisson->actor.speed = glm::linearRand(2.0f,4.0f);//speed
+		std::stringstream a;
+		a << "herisson_" << glm::round(glm::linearRand(1.f, 8.f));
+		ANIMATION(herisson)->name = a.str();
+		ANIMATION(herisson)->frameIndex = 0;
+		ANIMATION(herisson)->playbackSpeed = glm::linearRand(2.0f,4.0f);
+		TRANSFORM(herisson)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), 
+									   		  (float)PlacementHelper::GimpHeightToScreen(253))*glm::linearRand(.3f,1.f);//size
+		TransformationSystem::setPosition(TRANSFORM(herisson), 
+										  glm::vec2((float)(PlacementHelper::GimpXToScreen(-glm::round(glm::linearRand(0.f, 299.f)))-TRANSFORM(herisson)->size.x), 
+										  			(float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f, 1149.f)))), 
 										  TransformationSystem::SW);//offset
 	}
 
@@ -257,7 +258,7 @@ void MainMenuGameStateManager::Exit() {
     MORPHING(eStart[choosenGameMode])->active = true;
     modeTitleToReset = eStart[choosenGameMode];
 
-    herisson->actor.speed = 4.5f;
+    ANIMATION(herisson)->playbackSpeed = 4.5f;
 
 	TEXT_RENDERING(quitButton[0])->show = false;
 	RENDERING(quitButton[1])->show = false;

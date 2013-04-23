@@ -20,7 +20,6 @@
 
 #include "StateManager.h"
 #include "modes/GameModeManager.h"
-#include "AnimedActor.h"
 
 class MainMenuGameStateManager : public GameStateManager {
 	public:
@@ -33,7 +32,7 @@ class MainMenuGameStateManager : public GameStateManager {
 		GameMode choosenGameMode;
 		Entity eStart[3];
 		Entity menufg, menubg;
-		AnimatedActor* herisson;
+		Entity herisson;
 	Entity modeTitleToReset;
 	private:
 		Entity bStart[3];

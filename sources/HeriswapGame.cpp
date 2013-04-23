@@ -18,43 +18,46 @@
 */
 #include <sstream>
 
-#include <base/Log.h>
-#include <base/TouchInputManager.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtx/constants.hpp>
 
 #include <base/EntityManager.h>
-#include <base/TimeUtil.h>
+#include <base/Log.h>
 #include <base/PlacementHelper.h>
+#include <base/TimeUtil.h>
+#include <base/TouchInputManager.h>
 
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/ADSRSystem.h"
-#include "systems/TextRenderingSystem.h"
-#include "systems/SoundSystem.h"
-#include "systems/MusicSystem.h"
-#include "systems/ContainerSystem.h"
-#include "systems/PhysicsSystem.h"
-#include "systems/ParticuleSystem.h"
-#include "systems/ScrollingSystem.h"
-#include "systems/MorphingSystem.h"
+#include "systems/AnimationSystem.h"
+#include "systems/ButtonSystem.h"
 #include "systems/CameraSystem.h"
+#include "systems/ContainerSystem.h"
+#include "systems/MorphingSystem.h"
+#include "systems/MusicSystem.h"
+#include "systems/ParticuleSystem.h"
+#include "systems/PhysicsSystem.h"
+#include "systems/RenderingSystem.h"
+#include "systems/ScrollingSystem.h"
+#include "systems/SoundSystem.h"
+#include "systems/TextRenderingSystem.h"
+#include "systems/TransformationSystem.h"
 
-#include "states/StateManager.h"
 #include "states/BackgroundManager.h"
+#include "states/CountDownStateManager.h"
+#include "states/FadeStateManager.h"
 #include "states/LevelStateManager.h"
+#include "states/MainMenuStateManager.h"
 #include "states/ModeMenuStateManager.h"
 #include "states/PauseStateManager.h"
-#include "states/MainMenuStateManager.h"
-#include "states/FadeStateManager.h"
-#include "states/CountDownStateManager.h"
+#include "states/StateManager.h"
 #include "states/UserInputStateManager.h"
 
 #include "modes/NormalModeManager.h"
-#include "modes/TilesAttackModeManager.h"
 #include "modes/Go100SecondsModeManager.h"
+#include "modes/TilesAttackModeManager.h"
 
 #include "util/ScoreStorageProxy.h"
 	
@@ -193,6 +196,16 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     theRenderingSystem.loadAtlas("menu", true);
     theRenderingSystem.loadAtlas("nuages");
     theRenderingSystem.loadAtlas("help");
+
+    // Animations
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_1", "herisson_1");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_2", "herisson_2");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_3", "herisson_3");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_4", "herisson_4");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_5", "herisson_5");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_6", "herisson_6");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_7", "herisson_7");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_8", "herisson_8");
     
     theButtonSystem.vibrateAPI = gameThreadContext->vibrateAPI;
 
@@ -231,11 +244,10 @@ void HeriswapGame::init(const uint8_t* in, int size) {
 	theSoundSystem.mute = !datas->storageAPI->isOption("sound", "on");
     theMusicSystem.toggleMute(theSoundSystem.mute);
 
-	float bgElementWidth = PlacementHelper::ScreenWidth;
 	datas->sky = theEntityManager.CreateEntity("sky");
 	ADD_COMPONENT(datas->sky, Transformation);
 	TRANSFORM(datas->sky)->z = DL_Sky;
-	TRANSFORM(datas->sky)->size = glm::vec2(bgElementWidth, 
+	TRANSFORM(datas->sky)->size = glm::vec2(PlacementHelper::ScreenWidth, 
 		                                    PlacementHelper::GimpWidthToScreen(800) * 833.0 / 808.0);
 	TransformationSystem::setPosition(TRANSFORM(datas->sky), 
 									  glm::vec2(0, PlacementHelper::GimpYToScreen(0)), 
@@ -245,7 +257,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
 	SCROLLING(datas->sky)->images.push_back("ciel1");
 	SCROLLING(datas->sky)->images.push_back("ciel2");
 	SCROLLING(datas->sky)->images.push_back("ciel3");
-	SCROLLING(datas->sky)->direction = -glm::vec2(1.0f, 0.0f);
+	SCROLLING(datas->sky)->direction = -glm::vec2(1.f, 0.f);
 	SCROLLING(datas->sky)->speed = 0.1;
 	SCROLLING(datas->sky)->displaySize = glm::vec2(TRANSFORM(datas->sky)->size.x * 1.01, 
 												   TRANSFORM(datas->sky)->size.y);

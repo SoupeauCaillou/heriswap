@@ -28,12 +28,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/compatibility.hpp>
 
-#include <systems/TextRenderingSystem.h>
-#include <systems/RenderingSystem.h>
-#include <systems/TransformationSystem.h>
-#include <systems/System.h>
-#include <systems/ScrollingSystem.h>
+#include <systems/AnimationSystem.h>
 #include <systems/ButtonSystem.h>
+#include <systems/RenderingSystem.h>
+#include <systems/ScrollingSystem.h>
+#include <systems/System.h>
+#include <systems/TextRenderingSystem.h>
+#include <systems/TransformationSystem.h>
 
 #include "DepthLayer.h"
 #include "TwitchSystem.h"
@@ -83,13 +84,17 @@ float GameModeManager::position(float t) {
 }
 
 void GameModeManager::LoadHerissonTexture(int type) {
-    loadHerissonTexture(type, c);
+    // loadHerissonTexture(type, c);
+    std::stringstream a;
+    a << "herisson_" << type;
+    ANIMATION(herisson)->name = a.str();
 }
 
 void GameModeManager::Setup() {
 	herisson = theEntityManager.CreateEntity("herisson");
 	ADD_COMPONENT(herisson, Transformation);
 	ADD_COMPONENT(herisson, Rendering);
+	ADD_COMPONENT(herisson, Animation);
 	ADD_COMPONENT(herisson, Button);
 	TRANSFORM(herisson)->z = DL_Animal;
 	TRANSFORM(herisson)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(142), 
@@ -98,10 +103,20 @@ void GameModeManager::Setup() {
 									  glm::vec2(0.f, 
 									  (float)PlacementHelper::GimpYToScreen(1028)), 
 									  TransformationSystem::N);
-	c = new AnimatedActor();
-	c->actor.e = herisson;
-	c->frames=0;
-	c->actor.speed = 4.1;
+	
+	ANIMATION(herisson)->playbackSpeed = 4.1;
+
+	// std::string name, previousName;
+ //    float accum, playbackSpeed;
+ //    int loopCount, frameIndex;
+ //    float waitAccum;
+ //    std::vector<Entity> subPart;
+
+	// c = new AnimatedActor();
+	// c->actor.e = herisson;
+	// c->frames=0;
+	// c->actor.speed = 4.1;
+
 	RENDERING(herisson)->show = false;
 	BUTTON(herisson)->enabled = false;
 
@@ -220,7 +235,7 @@ void GameModeManager::Enter() {
 	uiHelper.show();
     theGridSystem.ShowAll(true);
     TRANSFORM(herisson)->position.x = initialHerissonPosition(herisson);
-    RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
+    // RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
     PROFILE("GameModeManager", "Enter", EndEvent);
 }
 
@@ -343,16 +358,17 @@ void GameModeManager::updateHerisson(float dt, float obj, float herissonSpeed) {
 		newPos = tc->position.x + herissonSpeed * dt;
 	}
 	//set animation speed
-	c->actor.speed = 15*(newPos - tc->position.x)/dt;
-	if (c->actor.speed < 1.4) c->actor.speed = 2.5;
-	if (c->actor.speed > 4.5) c->actor.speed = 4.5;
+	float newSpeed = 15*(newPos - tc->position.x)/dt;
+	if (newSpeed < 1.4f) newSpeed = 2.5f;
+	if (newSpeed > 4.5f) newSpeed = 4.5f;
+	
+	ANIMATION(herisson)->playbackSpeed = newSpeed;
 
 	tc->position.x = newPos;
 
-	if (herissonSpeed > 0) {
-		updateAnim(c, dt);
-	} else {
-		RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
+	if (herissonSpeed <= 0) {
+		// RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
+		ANIMATION(herisson)->frameIndex = 0;
 	}
 }
 

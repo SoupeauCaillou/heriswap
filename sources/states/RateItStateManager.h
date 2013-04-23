@@ -22,8 +22,6 @@
 
 #include "StateManager.h"
 
-#include "AnimedActor.h"
-
 class RateItStateManager : public GameStateManager {
 	public:
 		RateItStateManager(LocalizeAPI* lAPI, CommunicationAPI* cAPI) : localizeAPI(lAPI), communicationAPI(cAPI) { };

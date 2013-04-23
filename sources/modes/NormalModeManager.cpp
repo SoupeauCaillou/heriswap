@@ -256,10 +256,10 @@ void NormalGameModeManager::startLevel(int lvl) {
 	}
 
 	// put hedgehog back on first animation position
-	c->ind = 0;
+	// c->ind = 0;
 	bonus = glm::round(glm::linearRand(0.f, (float)(theGridSystem.Types-1)));
 	LoadHerissonTexture(bonus+1);
-	RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
+	// RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
 	SCROLLING(decor1er)->speed = 0;
 }
 
@@ -280,7 +280,7 @@ bool NormalGameModeManager::LevelUp() {
 	if (match) {
 		successMgr->sLevel1For2K(level, points);
 
-		time -= glm::min(20*8.f/theGridSystem.GridSize,time);
+		time -= glm::min(20 * 8.f / theGridSystem.GridSize, time);
 
 		PROFILE("NormalGameModeManager", "changeLevel", InstantEvent);
 
