@@ -56,7 +56,7 @@ void NormalGameModeManager::Setup() {
 
 void NormalGameModeManager::Enter() {
 	PROFILE("NormalGameModeManager", "Enter", BeginEvent);
-	limit = 2;//45;
+	limit = 45;
 	time = 0;
 	points = 0;
 	level = 1;
@@ -114,6 +114,7 @@ void NormalGameModeManager::GameUpdate(float dt, GameState state) {
 }
 
 float NormalGameModeManager::GameProgressPercent() {
+	std::cout << glm::min(1.0f, (float)time/limit) << std::endl;
 	return glm::min(1.0f, (float)time/limit);
 }
 
@@ -129,8 +130,6 @@ void NormalGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 	a.precision(0);
-	//~not enable currently
-	//~a << rank << ". ";
 	a << std::fixed << points;
 	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
 	}

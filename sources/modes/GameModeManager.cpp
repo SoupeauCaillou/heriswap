@@ -64,7 +64,7 @@ GameModeManager::GameModeManager(HeriswapGame* game, SuccessManager* sMgr, Stora
 float GameModeManager::position(float t) {
 	float p = 0;
 
-	if (t<=pts[0].x) {
+	if (t <= pts[0].x) {
 		p = pts[0].y;
 	} else {
 		unsigned int i;
@@ -78,14 +78,16 @@ float GameModeManager::position(float t) {
 			p = pts[pts.size()-1].y;
 		}
 	}
-	return glm::lerp(initialHerissonPosition(herisson), 
-					 finalHerissonPosition(herisson), 
+	return glm::lerp(initialHerissonPosition(herisson),
+					 finalHerissonPosition(herisson),
 					 p);
 }
 
 void GameModeManager::LoadHerissonTexture(int type) {
-    // loadHerissonTexture(type, c);
     std::stringstream a;
+    LOGW_IF(type > 8, "type > 8");
+    LOGW_IF(type < 1, "type < 1");
+    type = (type > 8 ? 8 : (type < 1 ? 1 : type));
     a << "herisson_" << type;
     ANIMATION(herisson)->name = a.str();
 }
@@ -100,22 +102,10 @@ void GameModeManager::Setup() {
 	TRANSFORM(herisson)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(142), 
 										  (float)PlacementHelper::GimpHeightToScreen(116));
 	TransformationSystem::setPosition(TRANSFORM(herisson), 
-									  glm::vec2(0.f, 
-									  (float)PlacementHelper::GimpYToScreen(1028)), 
+									  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1028)), 
 									  TransformationSystem::N);
 	
 	ANIMATION(herisson)->playbackSpeed = 4.1;
-
-	// std::string name, previousName;
- //    float accum, playbackSpeed;
- //    int loopCount, frameIndex;
- //    float waitAccum;
- //    std::vector<Entity> subPart;
-
-	// c = new AnimatedActor();
-	// c->actor.e = herisson;
-	// c->frames=0;
-	// c->actor.speed = 4.1;
 
 	RENDERING(herisson)->show = false;
 	BUTTON(herisson)->enabled = false;
@@ -140,6 +130,7 @@ void GameModeManager::Setup() {
 	TransformationSystem::setPosition(TRANSFORM(decor2nd), 
 									  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(610)), 
 									  TransformationSystem::N);
+	
 	ADD_COMPONENT(decor2nd, Scrolling);
 	SCROLLING(decor2nd)->images.push_back("decor2nd_0");
 	SCROLLING(decor2nd)->images.push_back("decor2nd_3");
@@ -150,7 +141,6 @@ void GameModeManager::Setup() {
 	SCROLLING(decor2nd)->displaySize = glm::vec2(TRANSFORM(decor2nd)->size.x * 1.01f, TRANSFORM(decor2nd)->size.y);
 	SCROLLING(decor2nd)->show = false;
 	SCROLLING(decor2nd)->opaqueType = RenderingComponent::NON_OPAQUE;
-	// SCROLLING(decor2nd)->opaqueSeparation = 0.40;
 
 	decor1er = theEntityManager.CreateEntity("decor1er");
 	ADD_COMPONENT(decor1er, Transformation);
@@ -206,16 +196,13 @@ void GameModeManager::Setup() {
 }
 
 void GameModeManager::showGameDecor(bool onlyBg) {
-    // RENDERING(branch)->show = true;
     SCROLLING(decor2nd)->show = true;
     SCROLLING(decor1er)->show = true;
     
     RENDERING(herisson)->show = !onlyBg;
     RENDERING(branch)->show = !onlyBg;
-    // if (onlyBg)
-    //     uiHelper.show();
-    // else
     uiHelper.show();
+
     // delete leaves
     for (unsigned int az=0;az<branchLeaves.size();az++) {
         RENDERING(branchLeaves[az].e)->show = !onlyBg;
@@ -235,6 +222,7 @@ void GameModeManager::Enter() {
 	uiHelper.show();
     theGridSystem.ShowAll(true);
     TRANSFORM(herisson)->position.x = initialHerissonPosition(herisson);
+    // TODO
     // RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
     PROFILE("GameModeManager", "Enter", EndEvent);
 }

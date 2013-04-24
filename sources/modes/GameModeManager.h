@@ -106,8 +106,6 @@ class GameModeManager {
 		std::vector<glm::vec2> pts;
 
 		SuccessManager* successMgr;
-		//hérisson
-		Entity c;
 
 		StorageAPI* storageAPI;
 	private:
