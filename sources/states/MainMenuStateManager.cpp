@@ -131,7 +131,7 @@ void MainMenuGameStateManager::Setup() {
 	TRANSFORM(herisson)->z = DL_MainMenuHerisson;
 	
 	TRANSFORM(herisson)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), 
-								   		  (float)(PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f, 1.f));
+								   		  (float)PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f, 1.f);
 	TransformationSystem::setPosition(TRANSFORM(herisson), 
 									  glm::vec2((float)(PlacementHelper::GimpXToScreen(-glm::round(glm::linearRand(0.f, 299.f))) - TRANSFORM(herisson)->size.x), 
 									  			(float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f,1149.f)))), 
@@ -140,7 +140,7 @@ void MainMenuGameStateManager::Setup() {
 	ADD_COMPONENT(herisson, Animation);
 	ANIMATION(herisson)->playbackSpeed = 4.1f;
 	std::stringstream a;
-	a << "herisson_" << 1;//glm::round(glm::linearRand(1.f, 8.f));
+	a << "herisson_" << glm::round(glm::linearRand(1.f, 8.f));
 	ANIMATION(herisson)->name = a.str();
 
 	quitButton[0] = theEntityManager.CreateEntity("quitButton_0");
@@ -198,21 +198,16 @@ void MainMenuGameStateManager::Enter() {
 }
 
 GameState MainMenuGameStateManager::Update(float dt) {
-	// Entity a = herisson->actor.e;
-	// updateAnim(herisson, dt);
 	if (TRANSFORM(herisson)->position.x < PlacementHelper::GimpXToScreen(800)+TRANSFORM(herisson)->size.x) {
 		TRANSFORM(herisson)->position.x += ANIMATION(herisson)->playbackSpeed/8. * dt;
 	} else {
-		// herisson->anim.clear();
-		// loadHerissonTexture(glm::round(glm::linearRand(1.f, 8.f)), herisson);//random texture
-		// herisson->actor.speed = glm::linearRand(2.0f,4.0f);//speed
 		std::stringstream a;
 		a << "herisson_" << glm::round(glm::linearRand(1.f, 8.f));
 		ANIMATION(herisson)->name = a.str();
-		ANIMATION(herisson)->frameIndex = 0;
 		ANIMATION(herisson)->playbackSpeed = glm::linearRand(2.0f,4.0f);
+
 		TRANSFORM(herisson)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), 
-									   		  (float)PlacementHelper::GimpHeightToScreen(253))*glm::linearRand(.3f,1.f);//size
+									   		  (float)PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f,1.f); //size
 		TransformationSystem::setPosition(TRANSFORM(herisson), 
 										  glm::vec2((float)(PlacementHelper::GimpXToScreen(-glm::round(glm::linearRand(0.f, 299.f)))-TRANSFORM(herisson)->size.x), 
 										  			(float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f, 1149.f)))), 
