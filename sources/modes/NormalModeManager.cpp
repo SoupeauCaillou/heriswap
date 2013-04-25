@@ -114,7 +114,6 @@ void NormalGameModeManager::GameUpdate(float dt, GameState state) {
 }
 
 float NormalGameModeManager::GameProgressPercent() {
-	std::cout << glm::min(1.0f, (float)time/limit) << std::endl;
 	return glm::min(1.0f, (float)time/limit);
 }
 

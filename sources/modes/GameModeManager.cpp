@@ -222,8 +222,6 @@ void GameModeManager::Enter() {
 	uiHelper.show();
     theGridSystem.ShowAll(true);
     TRANSFORM(herisson)->position.x = initialHerissonPosition(herisson);
-    // TODO
-    // RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
     PROFILE("GameModeManager", "Enter", EndEvent);
 }
 
@@ -346,7 +344,9 @@ void GameModeManager::updateHerisson(float dt, float obj, float herissonSpeed) {
 		newPos = tc->position.x + herissonSpeed * dt;
 	}
 	//set animation speed
-	float newSpeed = 15*(newPos - tc->position.x)/dt;
+	float newSpeed = 2.5f;
+	if (dt != 0)
+		newSpeed = 15*(newPos - tc->position.x)/dt;
 	if (newSpeed < 1.4f) newSpeed = 2.5f;
 	if (newSpeed > 4.5f) newSpeed = 4.5f;
 	
@@ -355,8 +355,7 @@ void GameModeManager::updateHerisson(float dt, float obj, float herissonSpeed) {
 	tc->position.x = newPos;
 
 	if (herissonSpeed <= 0) {
-		// RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
-		ANIMATION(herisson)->frameIndex = 0;
+		ANIMATION(herisson)->playbackSpeed = 0;
 	}
 }
 
