@@ -231,7 +231,7 @@ void GameModeManager::Exit() {
 	SCROLLING(decor2nd)->show = false;
 	SCROLLING(decor1er)->show = false;
 
-	uiHelper.show();
+	uiHelper.hide();
 
 	// delete leaves
 	for (unsigned int az=0;az<branchLeaves.size();az++) {

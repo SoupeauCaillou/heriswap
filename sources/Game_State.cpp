@@ -132,7 +132,7 @@ void HeriswapGame::stateChanged(GameState oldState, GameState newState) {
 		// call Enter before starting fade-in
          datas->mode2Manager[datas->mode]->Enter();
          // TODO Fix it!
-         datas->mode2Manager[datas->mode]->UiUpdate(0);
+         // datas->mode2Manager[datas->mode]->UiUpdate(0);
          MUSIC(datas->menu)->control = MusicControl::Stop;
 
          setupGameProp();
