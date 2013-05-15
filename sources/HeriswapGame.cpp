@@ -16,20 +16,35 @@
 	You should have received a copy of the GNU General Public License
 	along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <sstream>
 
-#include <glm/glm.hpp>
-#include <glm/gtx/constants.hpp>
+#include "HeriswapGame.h"
 
-#include <base/EntityManager.h>
-#include <base/Log.h>
-#include <base/PlacementHelper.h>
-#include <base/TimeUtil.h>
-#include <base/TouchInputManager.h>
+#include "CombinationMark.h"
+#include "DepthLayer.h"
+#include "Game_Private.h"
+#include "GridSystem.h"
+#include "TwitchSystem.h"
 
-#include "systems/TransformationSystem.h"
-#include "systems/RenderingSystem.h"
-#include "systems/ButtonSystem.h"
+#include "modes/NormalModeManager.h"
+#include "modes/Go100SecondsModeManager.h"
+#include "modes/TilesAttackModeManager.h"
+
+#include "states/BackgroundManager.h"
+#include "states/CountDownStateManager.h"
+#include "states/FadeStateManager.h"
+#include "states/LevelStateManager.h"
+#include "states/MainMenuStateManager.h"
+#include "states/ModeMenuStateManager.h"
+#include "states/PauseStateManager.h"
+#include "states/StateManager.h"
+#include "states/UserInputStateManager.h"
+
+#include "base/EntityManager.h"
+#include "base/Log.h"
+#include "base/PlacementHelper.h"
+#include "base/TimeUtil.h"
+#include "base/TouchInputManager.h"
+
 #include "systems/ADSRSystem.h"
 #include "systems/AnimationSystem.h"
 #include "systems/ButtonSystem.h"
@@ -45,28 +60,12 @@
 #include "systems/TextRenderingSystem.h"
 #include "systems/TransformationSystem.h"
 
-#include "states/BackgroundManager.h"
-#include "states/CountDownStateManager.h"
-#include "states/FadeStateManager.h"
-#include "states/LevelStateManager.h"
-#include "states/MainMenuStateManager.h"
-#include "states/ModeMenuStateManager.h"
-#include "states/PauseStateManager.h"
-#include "states/StateManager.h"
-#include "states/UserInputStateManager.h"
-
-#include "modes/NormalModeManager.h"
-#include "modes/Go100SecondsModeManager.h"
-#include "modes/TilesAttackModeManager.h"
-
 #include "util/ScoreStorageProxy.h"
-	
-#include "DepthLayer.h"
-#include "GridSystem.h"
-#include "HeriswapGame.h"
-#include "TwitchSystem.h"
-#include "CombinationMark.h"
-#include "Game_Private.h"
+
+#include <glm/glm.hpp>
+#include <glm/gtx/constants.hpp>
+
+#include <sstream>
 
 bool HeriswapGame::inGameState(GameState state) {
 	switch (state) {
@@ -141,6 +140,34 @@ float HeriswapGame::CellContentScale() {
 HeriswapGame::HeriswapGame() : Game() {
 	GridSystem::CreateInstance();
 	TwitchSystem::CreateInstance();
+
+	sceneStateMachine.registerState(Scene::CountDown, Scene::CreateLogoSceneHandler(this), "Scene::CountDown");
+	sceneStateMachine.registerState(Scene::Spawn, Scene::CreateLogoSceneHandler(this), "Scene::Spawn");
+	sceneStateMachine.registerState(Scene::UserInput, Scene::CreateLogoSceneHandler(this), "Scene::UserInput");
+	sceneStateMachine.registerState(Scene::Delete, Scene::CreateLogoSceneHandler(this), "Scene::Delete");
+	sceneStateMachine.registerState(Scene::Fall, Scene::CreateLogoSceneHandler(this), "Scene::Fall");
+	sceneStateMachine.registerState(Scene::LevelChanged, Scene::CreateLogoSceneHandler(this), "Scene::LevelChanged");
+	sceneStateMachine.registerState(Scene::Pause, Scene::CreateLogoSceneHandler(this), "Scene::Pause");
+	sceneStateMachine.registerState(Scene::Unpause, Scene::CreateLogoSceneHandler(this), "Scene::Unpause");
+	sceneStateMachine.registerState(Scene::MainMenu, Scene::CreateLogoSceneHandler(this), "Scene::MainMenu");
+	sceneStateMachine.registerState(Scene::ModeMenu, Scene::CreateLogoSceneHandler(this), "Scene::ModeMenu");
+	sceneStateMachine.registerState(Scene::ScoreBoard, Scene::CreateLogoSceneHandler(this), "Scene::ScoreBoard");
+	sceneStateMachine.registerState(Scene::EndMenu, Scene::CreateLogoSceneHandler(this), "Scene::EndMenu");
+	sceneStateMachine.registerState(Scene::Background, Scene::CreateLogoSceneHandler(this), "Scene::Background");
+	sceneStateMachine.registerState(Scene::LogoToBlackState, Scene::CreateLogoSceneHandler(this), "Scene::LogoToBlackState");
+	sceneStateMachine.registerState(Scene::ModeMenuToBlackState, Scene::CreateLogoSceneHandler(this), "Scene::ModeMenuToBlackState");
+	sceneStateMachine.registerState(Scene::AdsToBlackState, Scene::CreateLogoSceneHandler(this), "Scene::AdsToBlackState");
+	sceneStateMachine.registerState(Scene::BlackToLogoState, Scene::CreateLogoSceneHandler(this), "Scene::BlackToLogoState");
+	sceneStateMachine.registerState(Scene::BlackToMainMenu, Scene::CreateLogoSceneHandler(this), "Scene::BlackToMainMenu");
+	sceneStateMachine.registerState(Scene::BlackToSpawn, Scene::CreateLogoSceneHandler(this), "Scene::BlackToSpawn");
+	sceneStateMachine.registerState(Scene::GameToBlack, Scene::CreateLogoSceneHandler(this), "Scene::GameToBlack");
+	sceneStateMachine.registerState(Scene::BlackToModeMenu, Scene::CreateLogoSceneHandler(this), "Scene::BlackToModeMenu");
+	sceneStateMachine.registerState(Scene::Logo, Scene::CreateLogoSceneHandler(this), "Scene::Logo");
+	sceneStateMachine.registerState(Scene::Help, Scene::CreateLogoSceneHandler(this), "Scene::Help");
+	sceneStateMachine.registerState(Scene::Ads, Scene::CreateLogoSceneHandler(this), "Scene::Ads");
+	sceneStateMachine.registerState(Scene::RateIt, Scene::CreateLogoSceneHandler(this), "Scene::RateIt");
+	sceneStateMachine.registerState(Scene::ExitState, Scene::CreateLogoSceneHandler(this), "Scene::ExitState");
+	sceneStateMachine.registerState(Scene::ElitePopup, Scene::CreateLogoSceneHandler(this), "Scene::ElitePopup");
 }
 
 HeriswapGame::~HeriswapGame() {

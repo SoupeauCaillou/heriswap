@@ -48,6 +48,7 @@ class PrivateData {
      Entity sky, decord2nd, decord1er;
      std::map<GameState, GameStateManager*> state2Manager;
      std::map<GameMode, GameModeManager*> mode2Manager;
+     SuccessManager* successMgr;
      
      StorageAPI* storageAPI;
      

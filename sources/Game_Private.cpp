@@ -56,6 +56,7 @@
 
 PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManager* successMgr) {
      mode = Normal;
+     this->successMgr = successMgr;
      mode2Manager[Normal] = new NormalGameModeManager(game, successMgr, context->storageAPI);
      mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game, successMgr, context->storageAPI);
      mode2Manager[Go100Seconds] = new Go100SecondsGameModeManager(game, successMgr, context->storageAPI);

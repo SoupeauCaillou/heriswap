@@ -18,24 +18,28 @@
 */
 #pragma once
 
+#include "GameState.h"
+
+#include "base/StateMachine.h"
+#include "states/Scenes.h"
+
+#include "api/AdAPI.h"
+#include "api/CommunicationAPI.h"
+#include "api/ExitAPI.h"
+#include "api/LocalizeAPI.h"
+#include "api/StorageAPI.h"
+#include "api/SuccessAPI.h"
+#include "api/VibrateAPI.h"
+
 #include "base/Game.h"
-
-#include <string>
-#include <vector>
-
-#include <glm/glm.hpp>
+#include "base/StateMachine.h"
 
 #include "systems/RenderingSystem.h"
 
-#include "GameState.h"
+#include <glm/glm.hpp>
 
-#include "api/LocalizeAPI.h"
-#include "api/StorageAPI.h"
-#include "api/AdAPI.h"
-#include "api/ExitAPI.h"
-#include "api/CommunicationAPI.h"
-#include "api/SuccessAPI.h"
-#include "api/VibrateAPI.h"
+#include <string>
+#include <vector>
 
 class NameInputAPI;
 
@@ -68,17 +72,19 @@ class HeriswapGame : public Game {
 		static float cellTypeToRotation(int type);
 
 		void setupGameProp();
+
+		Entity camera;
+		PrivateData* datas;
+
 	private:
         const uint8_t* loadEntitySystemState(const uint8_t* in, int size);
         void loadGameState(const uint8_t* in, int size);
 		void stopInGameMusics();
 		bool shouldPlayPiano();
+		
+		SuccessAPI* successAPI;
+		ExitAPI* exitAPI;
+	    VibrateAPI* vibrateAPI;
 
-	Entity camera;
-
-	PrivateData* datas;
-	
-	SuccessAPI* successAPI;
-	ExitAPI* exitAPI;
-    VibrateAPI* vibrateAPI;
+	    StateMachine<Scene::Enum> sceneStateMachine;
 };
