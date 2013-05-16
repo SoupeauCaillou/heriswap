@@ -34,25 +34,18 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <glm/glm.hpp>
 
-enum FadeType {
-	FadeIn,
-	FadeOut
-};
-
 struct FadeScene : public StateHandler<Scene::Enum> {
 	HeriswapGame* game;
-
-	// State variables
+	FadingType::Enum type;
 	float duration;
-	Entity eFading;
-	FadeType fading;
-	Scene::Enum iAm, heIs;
-	float timeout, accum;
-	float stateActiveDuration;
-	// StateHandler* enterDelegate, exitDelegate;
+	Scene::Enum nextState;
 
-	FadeScene(HeriswapGame* game)://, float d, FadeType fade, Scene::Enum whoAmI, Scene::Enum whoIsNext)://, StateHandler* enter, StateHandler* exitD) : 
-	StateHandler<Scene::Enum>() {//, duration(d), fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(0) {//, enterDelegate(enter), exitDelegate(exitD){
+	// State variables	
+	Entity eFading;
+	float timeout, accum;
+
+	FadeScene(HeriswapGame* game, FadingType::Enum pType, float pDuration, Scene::Enum pNextState)://, float d, FadeType fade, Scene::Enum whoAmI, Scene::Enum whoIsNext)://, StateHandler* enter, StateHandler* exitD) : 
+	StateHandler<Scene::Enum>(), type(pType), duration(pDuration), nextState(pNextState) {//, duration(d), fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(0) {//, enterDelegate(enter), exitDelegate(exitD){
 	    this->game = game;
 	}
 
@@ -76,52 +69,53 @@ struct FadeScene : public StateHandler<Scene::Enum> {
 		ADSR(eFading)->attackMode = Quadratic;
 	}
 
-	static void updateColor(Entity eFading, FadeType fading) {
+	static void updateColor(Entity eFading, FadingType::Enum type) {
 		float value = ADSR(eFading)->value;
-		if (fading == FadeIn)
-			RENDERING(eFading)->color.a = 1 - value;
-		else
-			RENDERING(eFading)->color.a = value;
+		switch (type) {
+			case FadingType::FadeIn:
+				RENDERING(eFading)->color.a = 1 - value;
+				break;
+			case FadingType::FadeOut:
+				RENDERING(eFading)->color.a = value;
+				break;
+		}
 	}
 
 	///----------------------------------------------------------------------------//
 	///--------------------- ENTER SECTION ----------------------------------------//
 	///----------------------------------------------------------------------------//
 	void onPreEnter(Scene::Enum) override {
-	}
-
-	void onEnter(Scene::Enum) override {
-		stateActiveDuration = 0;
-		LOGW("Fade type: '" << fading << "'");
+		LOGW("Fade type: '" << type << "'");
 		RENDERING(eFading)->show = true;
 		//update duration (can be changed)
 		ADSR(eFading)->attackTiming = duration;
 		ADSR(eFading)->active = true;
 
 		accum = 0;
-		updateColor(eFading, fading);
+		updateColor(eFading, type);
+	}
 
-		// if (enterDelegate)
-		// 	enterDelegate->onEnter();
+	// Return false, until fading (in or out) is finished
+	bool updatePreEnter(Scene::Enum , float dt) override {
+		updateColor(eFading, type);
+
+		if (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()) {
+			return true;
+		}
+		if (ADSR(eFading)->value == ADSR(eFading)->sustainValue) {
+			accum += dt;
+			if (accum >= timeout) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	///----------------------------------------------------------------------------//
 	///--------------------- UPDATE SECTION ---------------------------------------//
 	///----------------------------------------------------------------------------//
-	Scene::Enum update(float dt) override {
-		stateActiveDuration += dt;
-		updateColor(eFading, fading);
-		if (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()) {
-		return heIs;
-		}
-		if (ADSR(eFading)->value == ADSR(eFading)->sustainValue) {
-			accum += dt;
-			if (accum >= timeout)
-				return heIs;
-			else
-				return iAm;
-		}
-			return iAm;
+	Scene::Enum update(float ) override {
+		return nextState;	
 	}
 
 	///----------------------------------------------------------------------------//
@@ -131,17 +125,13 @@ struct FadeScene : public StateHandler<Scene::Enum> {
 	}
 
 	void onExit(Scene::Enum) override {
-		LOGW("Duration : '" << stateActiveDuration << "'");
 		RENDERING(eFading)->show = false;
 		ADSR(eFading)->active = false;
-
-	    // if (exitDelegate)
-	    //     exitDelegate->onExit();
 	}
 };
 
 namespace Scene {
-	StateHandler<Scene::Enum>* CreateFadeSceneHandler(HeriswapGame* game) {
-    	return new FadeScene(game);
+	StateHandler<Scene::Enum>* CreateFadeSceneHandler(HeriswapGame* game, FadingType::Enum type, float duration, Scene::Enum nextState) {
+    	return new FadeScene(game, type, duration, nextState);
 	}
 }

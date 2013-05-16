@@ -20,6 +20,13 @@
 
 class HeriswapGame;
 
+namespace FadingType {
+	enum Enum {
+		FadeIn,
+		FadeOut
+	};
+}
+
 namespace Scene {
    	enum Enum {
 		CountDown,
@@ -67,19 +74,20 @@ namespace Scene {
 	DECLARE_SCENE_HANDLER_FACTORY(ModeMenu)
 	DECLARE_SCENE_HANDLER_FACTORY(ScoreBoard)
 	DECLARE_SCENE_HANDLER_FACTORY(EndMenu)
-	DECLARE_SCENE_HANDLER_FACTORY(Background)
-	DECLARE_SCENE_HANDLER_FACTORY(LogoToBlackState)
-	DECLARE_SCENE_HANDLER_FACTORY(ModeMenuToBlackState)
-	DECLARE_SCENE_HANDLER_FACTORY(AdsToBlackState)
-	DECLARE_SCENE_HANDLER_FACTORY(BlackToLogoState)
-	DECLARE_SCENE_HANDLER_FACTORY(BlackToMainMenu)
-	DECLARE_SCENE_HANDLER_FACTORY(BlackToSpawn)
-	DECLARE_SCENE_HANDLER_FACTORY(GameToBlack)
-	DECLARE_SCENE_HANDLER_FACTORY(BlackToModeMenu)
+	DECLARE_SCENE_HANDLER_FACTORY(Background)	
 	DECLARE_SCENE_HANDLER_FACTORY(Logo)
 	DECLARE_SCENE_HANDLER_FACTORY(Help)
 	DECLARE_SCENE_HANDLER_FACTORY(Ads)
 	DECLARE_SCENE_HANDLER_FACTORY(RateIt)
 	DECLARE_SCENE_HANDLER_FACTORY(ExitState)
 	DECLARE_SCENE_HANDLER_FACTORY(ElitePopup)
+
+	DECLARE_SCENE_HANDLER_FACTORY(BlackToModeMenu)
+
+	// Declare a unique StateHandler, for all Fade scenes
+	StateHandler<Scene::Enum>* CreateFadeSceneHandler(
+		HeriswapGame* game,
+		FadingType::Enum type,
+		float duration,
+		Scene::Enum nextState);
 }
