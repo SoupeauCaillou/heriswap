@@ -40,8 +40,8 @@ struct PauseScene : public StateHandler<Scene::Enum> {
 	HeriswapGame* game;
 
 	// State variables
-	GameMode mode;
-	HelpStateManager* helpMgr;
+	// GameMode mode;
+	// HelpStateManager* helpMgr;
 	Entity eRestart, bRestart;
 	Entity eAbort, bAbort;
 	Entity eHelp, bHelp;

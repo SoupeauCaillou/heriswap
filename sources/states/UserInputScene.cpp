@@ -20,6 +20,7 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Scenes.h"
 
+#include "Game_Private.h"
 #include "HeriswapGame.h"
 
 #include "GridSystem.h"
@@ -84,73 +85,73 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
 	}
 
 	static bool contains(const std::vector<Combinais>& combi, const GridComponent* g) {
-	for (unsigned int i=0; i<combi.size(); i++) {
-		for (unsigned int j=0; j<combi[i].points.size(); j++) {
-			const glm::vec2& p = combi[i].points[j];
-			if (p.x == g->i && p.y == g->j)
-				return true;
+		for (unsigned int i=0; i<combi.size(); i++) {
+			for (unsigned int j=0; j<combi[i].points.size(); j++) {
+				const glm::vec2& p = combi[i].points[j];
+				if (p.x == g->i && p.y == g->j)
+					return true;
+			}
 		}
+		return false;
 	}
-	return false;
-}
 
-static Entity cellUnderFinger(const glm::vec2& pos, bool) {
-	std::vector<Combinais> combinaisons;// = theGridSystem.LookForCombination(false,false);
-	const float maxDist = HeriswapGame::CellSize(theGridSystem.GridSize, 0).y;
+	static Entity cellUnderFinger(const glm::vec2& pos, bool) {
+		std::vector<Combinais> combinaisons;// = theGridSystem.LookForCombination(false,false);
+		const float maxDist = HeriswapGame::CellSize(theGridSystem.GridSize, 0).y;
 
-	// 4 nearest
-	Entity e = 0;
-	float nearestDist = maxDist;
-	bool nearestInCombi = 0;
+		// 4 nearest
+		Entity e = 0;
+		float nearestDist = maxDist;
+		bool nearestInCombi = 0;
 
-	std::vector<Entity> leaves = theGridSystem.RetrieveAllEntityWithComponent();
-	for (std::vector<Entity>::iterator it=leaves.begin(); it!=leaves.end(); ++it) {
-		float sqdist = glm::distance2(pos, TRANSFORM(*it)->worldPosition);
-		if (sqdist < maxDist) {
-			bool inCombi = contains(combinaisons, GRID(*it));
+		std::vector<Entity> leaves = theGridSystem.RetrieveAllEntityWithComponent();
+		for (std::vector<Entity>::iterator it=leaves.begin(); it!=leaves.end(); ++it) {
+			float sqdist = glm::distance2(pos, TRANSFORM(*it)->worldPosition);
+			if (sqdist < maxDist) {
+				bool inCombi = contains(combinaisons, GRID(*it));
 
-			if (sqdist < nearestDist || (inCombi && !nearestInCombi)) {
-				nearestDist = sqdist;
-				nearestInCombi = inCombi;
-				e = *it;
+				if (sqdist < nearestDist || (inCombi && !nearestInCombi)) {
+					nearestDist = sqdist;
+					nearestInCombi = inCombi;
+					e = *it;
+				}
+			}
+		}
+		return e;
+	}
+
+	static Entity moveToCell(Entity original, const glm::vec2& move, float) {
+	#ifdef ANDROID
+		if (glm::length2(move) < threshold)
+			return 0;
+	#endif
+
+		int i = GRID(original)->i;
+		int j = GRID(original)->j;
+
+		if (glm::abs(move.x) > glm::abs(move.y)) {
+			if (move.x < 0) {
+				return theGridSystem.GetOnPos(i-1,j);
+			} else {
+				return theGridSystem.GetOnPos(i+1,j);
+			}
+		} else {
+			if (move.y < 0) {
+				return theGridSystem.GetOnPos(i,j-1);
+			} else {
+				return theGridSystem.GetOnPos(i,j+1);
 			}
 		}
 	}
-	return e;
-}
 
-static Entity moveToCell(Entity original, const glm::vec2& move, float) {
-#ifdef ANDROID
-	if (glm::length2(move) < threshold)
-		return 0;
-#endif
-
-	int i = GRID(original)->i;
-	int j = GRID(original)->j;
-
-	if (glm::abs(move.x) > glm::abs(move.y)) {
-		if (move.x < 0) {
-			return theGridSystem.GetOnPos(i-1,j);
-		} else {
-			return theGridSystem.GetOnPos(i+1,j);
-		}
-	} else {
-		if (move.y < 0) {
-			return theGridSystem.GetOnPos(i,j-1);
-		} else {
-			return theGridSystem.GetOnPos(i,j+1);
-		}
+	static void exchangeGridCoords(Entity a, Entity b) {
+		int iA = GRID(a)->i;
+		int jA = GRID(a)->j;
+		GRID(a)->i = GRID(b)->i;
+		GRID(a)->j = GRID(b)->j;
+		GRID(b)->i = iA;
+		GRID(b)->j = jA;
 	}
-}
-
-static void exchangeGridCoords(Entity a, Entity b) {
-	int iA = GRID(a)->i;
-	int jA = GRID(a)->j;
-	GRID(a)->i = GRID(b)->i;
-	GRID(a)->j = GRID(b)->j;
-	GRID(b)->i = iA;
-	GRID(b)->j = jA;
-}
 
 	///----------------------------------------------------------------------------//
 	///--------------------- ENTER SECTION ----------------------------------------//
@@ -181,8 +182,8 @@ static void exchangeGridCoords(Entity a, Entity b) {
 			newGame = false;
 			return Scene::CountDown;
 		}
-		// successMgr->timeUserInputloop += dt;
-		// successMgr->sWhatToDo(theTouchInputManager.wasTouched(0) && theTouchInputManager.isTouched(0), dt);
+		game->datas->successMgr->timeUserInputloop += dt;
+		game->datas->successMgr->sWhatToDo(theTouchInputManager.wasTouched(0) && theTouchInputManager.isTouched(0), dt);
 
 		if (MORPHING(rollback)->active) {
 			return Scene::UserInput;

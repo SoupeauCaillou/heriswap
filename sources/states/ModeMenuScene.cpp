@@ -24,6 +24,7 @@
 #include "HeriswapGame.h"
 
 #include "api/StorageAPI.h"
+#include "api/KeyboardInputHandlerAPI.h"
 
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
@@ -311,6 +312,125 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 	#endif
 	}
 
+	void LoadScore(GameMode mode, Difficulty dif) {
+		float avg = 0.f;
+
+		std::stringstream ss;
+		ss << "where mode = " << mode << " and difficulty = " << dif;
+		if (mode == TilesAttack) ss << " order by time asc limit 5";
+		else ss << " order by points desc limit 5";
+
+		ScoreStorageProxy ssp;
+		game->gameThreadContext->storageAPI->loadEntries(&ssp, "*", ss.str());
+
+
+		//a bit heavy, but..
+		std::vector<Score> entries;
+		while (! ssp.isEmpty()) {
+			entries.push_back(ssp._queue.front());
+			avg += (mode == TilesAttack) ? ssp._queue.front().time : ssp._queue.front().points;
+			ssp.popAnElement();		
+		}
+
+		if (entries.size() > 0)
+			avg /= entries.size();
+
+		bool alreadyRed = false;
+		for (unsigned int i=0; i<5; i++) {
+			TextRenderingComponent* trcN = TEXT_RENDERING(scoresName[i]);
+			TextRenderingComponent* trcP = TEXT_RENDERING(scoresPoints[i]);
+			TextRenderingComponent* trcL = TEXT_RENDERING(scoresLevel[i]);
+			if (i < entries.size()) {
+				trcN->show = true;
+				trcP->show = true;
+				std::stringstream a;
+				a.precision(1);
+				if (mode==Normal || mode==Go100Seconds) {
+					a << std::fixed << entries[i].points;
+					trcP->flags |= TextRenderingComponent::IsANumberBit;
+				} else {
+					a << std::fixed << entries[i].time << " s";
+					trcP->flags &= ~TextRenderingComponent::IsANumberBit;
+				}
+				trcP->text = a.str();
+				trcN->text = entries[i].name;
+
+				a.str(""); a<< std::fixed << game->gameThreadContext->localizeAPI->text("lvl") << " " <<entries[i].level;
+				trcL->text = a.str();
+				//affichage lvl
+				if (mode==Normal) {
+					trcL->show = true;
+				}
+				//highlight the just-played score if it is in the top 5
+				if (!alreadyRed && gameOverState == AskingPlayerName &&
+				 ((mode==Normal && (unsigned int)entries[i].points == game->datas->mode2Manager[game->datas->mode]->points)
+				  || (mode==TilesAttack && glm::abs(entries[i].time-game->datas->mode2Manager[game->datas->mode]->time)<0.01f)
+				  || (mode==Go100Seconds && (unsigned int)entries[i].points == game->datas->mode2Manager[game->datas->mode]->points))
+				   && entries[i].name == playerName) {
+					trcN->color = Color(1.0f,0.f,0.f);
+					trcP->color = Color(1.0f,0.f,0.f);
+					trcL->color = Color(1.0f,0.f,0.f);
+					alreadyRed = true;
+				} else {
+					trcN->color = trcP->color = trcL->color = Color(3.0/255.0, 99.0/255, 71.0/255);
+				}
+			} else {
+				trcP->show = false;
+				trcN->show = false;
+				trcL->show = false;
+			}
+		}
+
+		if (avg > 0) {
+			std::stringstream a;
+			a.precision(1);
+
+			a << game->gameThreadContext->localizeAPI->text("average_score") << ' ';
+			if (mode==Normal || mode==Go100Seconds) {
+				a << (int)avg;
+			} else {
+				a << std::fixed << ((int)(avg*10))/10.f << " s";
+			}
+			TEXT_RENDERING(average)->text = a.str();
+			TEXT_RENDERING(average)->show = true;
+		} else {
+			TEXT_RENDERING(average)->show = false;
+		}
+	}
+
+	void submitScore(const std::string& playerName) {
+	    ScoreStorageProxy ssp;
+	    ssp.pushAnElement();
+	    ssp.setValue("points", ObjectSerializer<int>::object2string(game->datas->mode2Manager[game->datas->mode]->points));
+	    ssp.setValue("time", ObjectSerializer<float>::object2string(game->datas->mode2Manager[game->datas->mode]->time));
+	    ssp.setValue("name", playerName);
+	    
+	    if (game->datas->mode==Normal) {
+	    	NormalGameModeManager* ng = static_cast<NormalGameModeManager*>(game->datas->mode2Manager[game->datas->mode]);
+		    ssp.setValue("level", ObjectSerializer<int>::object2string(ng->currentLevel()));
+	    } else {
+		    ssp.setValue("level", ObjectSerializer<int>::object2string(1));
+	    }
+	    ssp.setValue("mode", ObjectSerializer<int>::object2string(game->datas->mode));
+	    ssp.setValue("difficulty", ObjectSerializer<int>::object2string(difficulty));
+
+	    game->gameThreadContext->storageAPI->saveEntries(&ssp);
+	}
+	    
+	bool isCurrentScoreAHighOne() {
+		std::stringstream ss;
+		ss << "where mode = " << game->datas->mode << " and difficulty = " << difficulty;
+
+	    if (game->datas->mode == Normal || game->datas->mode == Go100Seconds) {
+	        ss << " and points >= " << game->datas->mode2Manager[game->datas->mode]->points;
+	    } else {
+	        ss << " and time <= " << game->datas->mode2Manager[game->datas->mode]->time;
+	    }
+
+	    ScoreStorageProxy ssp;
+	    return (game->gameThreadContext->storageAPI->count(&ssp, "*", ss.str()) < 5);
+    }
+
 	///----------------------------------------------------------------------------//
 	///--------------------- ENTER SECTION ----------------------------------------//
 	///----------------------------------------------------------------------------//
@@ -411,7 +531,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 					a << std::fixed << ((int)(game->datas->mode2Manager[game->datas->mode]->time*10))/10.f << " s";
 				}
 				TEXT_RENDERING(yourScore)->text = a.str();
-				game-datas->successMgr->sTestEverything(game->gameThreadContext->storageAPI);
+				game->datas->successMgr->sTestEverything(game->gameThreadContext->storageAPI);
 				break;
 			}
 			case AskingPlayerName: {
@@ -474,7 +594,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 				TEXT_RENDERING(title)->show = false;
 
 				std::stringstream ss;
-				ss << "where mode = " << (int)modeMgr->GetMode() << " and difficulty = " << (int)difficulty;
+				ss << "where mode = " << (int)game->datas->mode << " and difficulty = " << (int)difficulty;
 				ScoreStorageProxy ssp;
 				if (game->gameThreadContext->storageAPI->count(&ssp, "*", ss.str()) == 0) {
 					// show help
@@ -514,7 +634,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 	void onExit(Scene::Enum) override {
 		theGridSystem.setGridFromDifficulty(difficulty);
 
-		successMgr->NewGame(difficulty);
+		game->datas->successMgr->NewGame(difficulty);
 
 		CONTAINER(playContainer)->enable =
 			CONTAINER(bDifficulty)->enable =

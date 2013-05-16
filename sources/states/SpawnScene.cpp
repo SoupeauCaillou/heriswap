@@ -20,6 +20,7 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Scenes.h"
 
+#include "Game_Private.h"
 #include "HeriswapGame.h"
 
 #include "DepthLayer.h"
@@ -44,6 +45,8 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	HeriswapGame* game;
 
 	// State variables
+	Entity haveToAddLeavesInGrid, replaceGrid;
+	std::vector<Feuille> newLeaves;
 
 	SpawnScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
 	    this->game = game;
@@ -163,7 +166,7 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 		} while((!c.empty() || !theGridSystem.StillCombinations()) && ite<100);
 	}
 
-	Scene::Enum NextState(bool recheckEveryone) {
+	Scene::Enum NextState(bool recheckEveryoneInGrid) {
 		std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false, recheckEveryoneInGrid);
 		//pas de combinaisons à supprimer, qu'est-ce qu'il faut donc faire ?
 		if (combinaisons.empty()) {
@@ -171,7 +174,7 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 			if (!theGridSystem.StillCombinations()) {
 				//(on doit pas etre en changement de niveau / fin de jeu)
 				if (game->datas->mode == Normal && 
-					game->datas->mode2Mode[game->datas->mode]->LevelUp())
+					game->datas->mode2Manager[game->datas->mode]->LevelUp())
 					return Scene::LevelChanged;
 				//inutile logiquement (on quitte avant)
 				//~else if (modeMgr->GetMode() == TilesAttack && modeMgr->GameProgressPercent() == 1)
