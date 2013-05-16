@@ -435,6 +435,14 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 	///--------------------- ENTER SECTION ----------------------------------------//
 	///----------------------------------------------------------------------------//
 	void onPreEnter(Scene::Enum pState) override {
+		switch (pState) {
+			case Scene::MainMenu:
+				// datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
+				//reference title into mode menu from main menu
+				// static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode];
+				// setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
+				break;
+		}
 	}
 	
 	void onEnter(Scene::Enum) override {

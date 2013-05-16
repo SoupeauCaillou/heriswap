@@ -53,7 +53,7 @@ typedef struct FeuilleOrientee {
 	int sens;
 } FeuilleOrientee;
 
-struct LevelScene : public StateHandler<Scene::Enum> {
+struct LevelChangedScene : public StateHandler<Scene::Enum> {
 	HeriswapGame* game;
 
 	// State variables
@@ -76,7 +76,7 @@ struct LevelScene : public StateHandler<Scene::Enum> {
 		BigScoreMoving
     } levelState;
 
-	LevelScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+	LevelChangedScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
 	    this->game = game;
 	}
 
@@ -118,8 +118,10 @@ struct LevelScene : public StateHandler<Scene::Enum> {
 		PARTICULE(eSnowEmitter)->lifetime = Interval<float>(5.0f, 6.5f);
 		PARTICULE(eSnowEmitter)->initialColor = Interval<Color> (Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 1.0));
 		PARTICULE(eSnowEmitter)->finalColor  = Interval<Color> (Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 1.0));
-		PARTICULE(eSnowEmitter)->initialSize = Interval<float>(PlacementHelper::GimpWidthToScreen(30), PlacementHelper::GimpWidthToScreen(40));
-		PARTICULE(eSnowEmitter)->finalSize = Interval<float>(PlacementHelper::GimpWidthToScreen(30), PlacementHelper::GimpWidthToScreen(40));
+		PARTICULE(eSnowEmitter)->initialSize = Interval<float>(PlacementHelper::GimpWidthToScreen(30), 
+															   PlacementHelper::GimpWidthToScreen(40));
+		PARTICULE(eSnowEmitter)->finalSize = Interval<float>(PlacementHelper::GimpWidthToScreen(30), 
+															 PlacementHelper::GimpWidthToScreen(40));
 		PARTICULE(eSnowEmitter)->forceDirection = Interval<float>(0, 0);
 		PARTICULE(eSnowEmitter)->forceAmplitude  = Interval<float>(0, 0);
 		PARTICULE(eSnowEmitter)->moment  = Interval<float>(-3, 3);
@@ -247,16 +249,21 @@ struct LevelScene : public StateHandler<Scene::Enum> {
 			mc->elements.clear();
 			// move big score to small score
 			//Color blue = Color(164.0/255.0, 164.0/255, 164.0/255);
-			mc->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->charHeight, TEXT_RENDERING(eBigLevel)->charHeight, TEXT_RENDERING(smallLevel)->charHeight));
+			mc->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->charHeight, 
+																  TEXT_RENDERING(eBigLevel)->charHeight, 
+																  TEXT_RENDERING(smallLevel)->charHeight));
 			// mc->elements.push_back(new TypedMorphElement<Color> (&TEXT_RENDERING(eBigLevel)->color, blue, Color(1,1,1,1)));
-			mc->elements.push_back(new TypedMorphElement<glm::vec2> (&TRANSFORM(eBigLevel)->position, TRANSFORM(eBigLevel)->position, TRANSFORM(smallLevel)->position));
+			mc->elements.push_back(new TypedMorphElement<glm::vec2> (&TRANSFORM(eBigLevel)->position, 
+																	  TRANSFORM(eBigLevel)->position, 
+																	  TRANSFORM(smallLevel)->position));
 			mc->active = true;
 			mc->activationTime = 0;
 			mc->timing = 0.5;
 
 			PARTICULE(eSnowEmitter)->emissionRate = 0;
 			//on modifie le herisson
-			TRANSFORM(game->datas->mode2Manager[game->datas->mode]->herisson)->position.x = game->datas->mode2Manager[game->datas->mode]->position(game->datas->mode2Manager[game->datas->mode]->time);
+			TRANSFORM(game->datas->mode2Manager[game->datas->mode]->herisson)->position.x = 
+				game->datas->mode2Manager[game->datas->mode]->position(game->datas->mode2Manager[game->datas->mode]->time);
 			RENDERING(game->datas->mode2Manager[game->datas->mode]->herisson)->color.a = 1;
 			RENDERING(game->datas->mode2Manager[game->datas->mode]->herisson)->effectRef = DefaultEffectRef;
 			//on genere les nouvelles feuilles
@@ -270,7 +277,8 @@ struct LevelScene : public StateHandler<Scene::Enum> {
 			//if leaves created, make them grow !
 			for (unsigned int i=0; i<game->datas->mode2Manager[game->datas->mode]->branchLeaves.size(); i++) {
 				TRANSFORM(game->datas->mode2Manager[game->datas->mode]->branchLeaves[i].e)->size = 
-	                HeriswapGame::CellSize(8, game->datas->mode2Manager[game->datas->mode]->branchLeaves[i].type) * HeriswapGame::CellContentScale() * glm::min((duration-6) / 4.f, 1.f);
+	                HeriswapGame::CellSize(8, 
+	                		game->datas->mode2Manager[game->datas->mode]->branchLeaves[i].type) * HeriswapGame::CellContentScale() * glm::min((duration-6) / 4.f, 1.f);
 			}
 			RENDERING(eSnowBranch)->color.a = 1-(duration-6)/(10-6);
 			RENDERING(eSnowGround)->color.a = 1-(duration-6)/(10-6.f);
@@ -328,7 +336,7 @@ struct LevelScene : public StateHandler<Scene::Enum> {
 };
 
 namespace Scene {
-	StateHandler<Scene::Enum>* CreateLevelSceneHandler(HeriswapGame* game) {
-    	return new LevelScene(game);
+	StateHandler<Scene::Enum>* CreateLevelChangedSceneHandler(HeriswapGame* game) {
+    	return new LevelChangedScene(game);
 	}
 }

@@ -195,25 +195,24 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
-    void onPreEnter(Scene::Enum pState) override {
+    void onPreEnter(Scene::Enum) override {
+    }
+
+    void onEnter(Scene::Enum pState) override {
         switch (pState) {
-            case Scene::Pause: 
+            case Scene::Pause:
                 LOGI("aborted. going to main menu");
                 RENDERING(game->datas->soundButton)->show = true;
                 // game->datas->state2Manager[game->datas->stateBeforePause]->Exit();
                 // game->datas->mode2Manager[game->datas->mode]->Exit();
+                // static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->gameOverState = ModeMenuStateManager::NoGame;
                 // stopInGameMusics();
                 break;
             case Scene::ModeMenu:
                 RENDERING(game->datas->soundButton)->show = true;
                 // game->datas->state2Manager[oldState]->LateExit();
                 break;
-            default:
-                break;
         }
-    }
-
-    void onEnter(Scene::Enum) override {
     
         // preload sound effect
         theSoundSystem.loadSoundFile("audio/son_menu.ogg");

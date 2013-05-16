@@ -44,8 +44,8 @@ struct FadeScene : public StateHandler<Scene::Enum> {
 	Entity eFading;
 	float timeout, accum;
 
-	FadeScene(HeriswapGame* game, FadingType::Enum pType, float pDuration, Scene::Enum pNextState)://, float d, FadeType fade, Scene::Enum whoAmI, Scene::Enum whoIsNext)://, StateHandler* enter, StateHandler* exitD) : 
-	StateHandler<Scene::Enum>(), type(pType), duration(pDuration), nextState(pNextState) {//, duration(d), fading(fade), iAm(whoAmI), heIs(whoIsNext), timeout(0) {//, enterDelegate(enter), exitDelegate(exitD){
+	FadeScene(HeriswapGame* game, FadingType::Enum pType, float pDuration, Scene::Enum pNextState):
+	StateHandler<Scene::Enum>(), type(pType), duration(pDuration), nextState(pNextState) {
 	    this->game = game;
 	}
 

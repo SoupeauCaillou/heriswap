@@ -141,33 +141,34 @@ HeriswapGame::HeriswapGame() : Game() {
 	GridSystem::CreateInstance();
 	TwitchSystem::CreateInstance();
 
-	sceneStateMachine.registerState(Scene::CountDown, Scene::CreateLogoSceneHandler(this), "Scene::CountDown");
-	sceneStateMachine.registerState(Scene::Spawn, Scene::CreateLogoSceneHandler(this), "Scene::Spawn");
-	sceneStateMachine.registerState(Scene::UserInput, Scene::CreateLogoSceneHandler(this), "Scene::UserInput");
-	sceneStateMachine.registerState(Scene::Delete, Scene::CreateLogoSceneHandler(this), "Scene::Delete");
-	sceneStateMachine.registerState(Scene::Fall, Scene::CreateLogoSceneHandler(this), "Scene::Fall");
-	sceneStateMachine.registerState(Scene::LevelChanged, Scene::CreateLogoSceneHandler(this), "Scene::LevelChanged");
-	sceneStateMachine.registerState(Scene::Pause, Scene::CreateLogoSceneHandler(this), "Scene::Pause");
-	sceneStateMachine.registerState(Scene::Unpause, Scene::CreateLogoSceneHandler(this), "Scene::Unpause");
-	sceneStateMachine.registerState(Scene::MainMenu, Scene::CreateLogoSceneHandler(this), "Scene::MainMenu");
-	sceneStateMachine.registerState(Scene::ModeMenu, Scene::CreateLogoSceneHandler(this), "Scene::ModeMenu");
-	sceneStateMachine.registerState(Scene::ScoreBoard, Scene::CreateLogoSceneHandler(this), "Scene::ScoreBoard");
-	sceneStateMachine.registerState(Scene::EndMenu, Scene::CreateLogoSceneHandler(this), "Scene::EndMenu");
-	sceneStateMachine.registerState(Scene::Background, Scene::CreateLogoSceneHandler(this), "Scene::Background");
-	sceneStateMachine.registerState(Scene::LogoToBlackState, Scene::CreateLogoSceneHandler(this), "Scene::LogoToBlackState");
-	sceneStateMachine.registerState(Scene::ModeMenuToBlackState, Scene::CreateLogoSceneHandler(this), "Scene::ModeMenuToBlackState");
-	sceneStateMachine.registerState(Scene::AdsToBlackState, Scene::CreateLogoSceneHandler(this), "Scene::AdsToBlackState");
-	sceneStateMachine.registerState(Scene::BlackToLogoState, Scene::CreateLogoSceneHandler(this), "Scene::BlackToLogoState");
-	sceneStateMachine.registerState(Scene::BlackToMainMenu, Scene::CreateLogoSceneHandler(this), "Scene::BlackToMainMenu");
-	sceneStateMachine.registerState(Scene::BlackToSpawn, Scene::CreateLogoSceneHandler(this), "Scene::BlackToSpawn");
-	sceneStateMachine.registerState(Scene::GameToBlack, Scene::CreateLogoSceneHandler(this), "Scene::GameToBlack");
-	sceneStateMachine.registerState(Scene::BlackToModeMenu, Scene::CreateLogoSceneHandler(this), "Scene::BlackToModeMenu");
+	sceneStateMachine.registerState(Scene::CountDown, Scene::CreateCountDownSceneHandler(this), "Scene::CountDown");
+	sceneStateMachine.registerState(Scene::Spawn, Scene::CreateSpawnSceneHandler(this), "Scene::Spawn");
+	sceneStateMachine.registerState(Scene::UserInput, Scene::CreateUserInputSceneHandler(this), "Scene::UserInput");
+	sceneStateMachine.registerState(Scene::Delete, Scene::CreateDeleteSceneHandler(this), "Scene::Delete");
+	sceneStateMachine.registerState(Scene::Fall, Scene::CreateFallSceneHandler(this), "Scene::Fall");
+	sceneStateMachine.registerState(Scene::LevelChanged, Scene::CreateLevelChangedSceneHandler(this), "Scene::LevelChanged");
+	sceneStateMachine.registerState(Scene::Pause, Scene::CreatePauseSceneHandler(this), "Scene::Pause");
+	// sceneStateMachine.registerState(Scene::Unpause, Scene::CreateUnpauseSceneHandler(this), "Scene::Unpause");
+	sceneStateMachine.registerState(Scene::MainMenu, Scene::CreateMainMenuSceneHandler(this), "Scene::MainMenu");
+	sceneStateMachine.registerState(Scene::ModeMenu, Scene::CreateModeMenuSceneHandler(this), "Scene::ModeMenu");
+	// sceneStateMachine.registerState(Scene::ScoreBoard, Scene::CreateScoreBoardSceneHandler(this), "Scene::ScoreBoard");
+	// sceneStateMachine.registerState(Scene::EndMenu, Scene::CreateEndMenuSceneHandler(this), "Scene::EndMenu");
+	sceneStateMachine.registerState(Scene::Background, Scene::CreateBackgroundSceneHandler(this), "Scene::Background");
 	sceneStateMachine.registerState(Scene::Logo, Scene::CreateLogoSceneHandler(this), "Scene::Logo");
-	sceneStateMachine.registerState(Scene::Help, Scene::CreateLogoSceneHandler(this), "Scene::Help");
-	sceneStateMachine.registerState(Scene::Ads, Scene::CreateLogoSceneHandler(this), "Scene::Ads");
-	sceneStateMachine.registerState(Scene::RateIt, Scene::CreateLogoSceneHandler(this), "Scene::RateIt");
-	sceneStateMachine.registerState(Scene::ExitState, Scene::CreateLogoSceneHandler(this), "Scene::ExitState");
-	sceneStateMachine.registerState(Scene::ElitePopup, Scene::CreateLogoSceneHandler(this), "Scene::ElitePopup");
+	sceneStateMachine.registerState(Scene::Help, Scene::CreateHelpSceneHandler(this), "Scene::Help");
+	sceneStateMachine.registerState(Scene::Ads, Scene::CreateAdsSceneHandler(this), "Scene::Ads");
+	sceneStateMachine.registerState(Scene::RateIt, Scene::CreateRateItSceneHandler(this), "Scene::RateIt");
+	// sceneStateMachine.registerState(Scene::ExitState, Scene::CreateExitStateSceneHandler(this), "Scene::ExitState");
+	sceneStateMachine.registerState(Scene::ElitePopup, Scene::CreateElitePopupSceneHandler(this), "Scene::ElitePopup");
+
+	sceneStateMachine.registerState(Scene::BlackToLogoState, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.2f, Scene::Logo), "Scene::BlackToLogoState");
+	sceneStateMachine.registerState(Scene::BlackToMainMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.3f, Scene::MainMenu), "Scene::BlackToMainMenu");
+	sceneStateMachine.registerState(Scene::BlackToModeMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::ModeMenu), "Scene::BlackToModeMenu");
+	sceneStateMachine.registerState(Scene::BlackToSpawn, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::Spawn), "Scene::BlackToSpawn");
+	sceneStateMachine.registerState(Scene::AdsToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::BlackToSpawn), "Scene::AdsToBlackState");
+	sceneStateMachine.registerState(Scene::GameToBlack, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.4f, Scene::BlackToModeMenu), "Scene::GameToBlack");
+	sceneStateMachine.registerState(Scene::LogoToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.3f, Scene::BlackToMainMenu), "Scene::LogoToBlackState");
+	sceneStateMachine.registerState(Scene::ModeMenuToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::Ads), "Scene::ModeMenuToBlackState");
 }
 
 HeriswapGame::~HeriswapGame() {
@@ -196,7 +197,7 @@ bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
 }
 
 void HeriswapGame::quickInit(){
-	
+	sceneStateMachine.reEnterCurrentState();	
 }
 
 void HeriswapGame::sacInit(int windowW, int windowH) {
@@ -300,6 +301,8 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     }
     datas->state2Manager[datas->state]->Enter();
 
+    sceneStateMachine.setup(Scene::MainMenu);
+
     quickInit();
 
     LOGI("HeriswapGame initialisation done.")
@@ -400,15 +403,15 @@ void HeriswapGame::togglePause(bool activate) {
 
 void HeriswapGame::tick(float dt) {
 	PROFILE("Game", "Tick", BeginEvent);
-
+	sceneStateMachine.update(dt);
 	// update state
-    datas->newState = datas->state2Manager[datas->state]->Update(dt);
+    //datas->newState = datas->state2Manager[datas->state]->Update(dt);
 
     //update only if game has really begun (after countdown)
-    if (datas->state != CountDown && static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame == false) {
+    //if (datas->state != CountDown && static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame == false) {
 		//updating gamemode
-		datas->mode2Manager[datas->mode]->GameUpdate(dt, datas->state);
-    }
+		// datas->mode2Manager[datas->mode]->GameUpdate(dt, datas->state);
+  //   }
 
 	//quand c'est plus au joueur de jouer, on supprime les marquages sur les feuilles
 	if (datas->state != UserInput) {
