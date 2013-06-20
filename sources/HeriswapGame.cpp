@@ -203,16 +203,6 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
 
     theRenderingSystem.effectLibrary.load("desaturate.fs");
-    theRenderingSystem.loadAtlas("sprites", true);
-    theRenderingSystem.loadAtlas("logo");
-    theRenderingSystem.loadAtlas("alphabet", true);
-    theRenderingSystem.loadAtlas("decor1");
-    theRenderingSystem.loadAtlas("decor2");
-    theRenderingSystem.loadAtlas("feuilles");
-    theRenderingSystem.loadAtlas("snow");
-    theRenderingSystem.loadAtlas("menu", true);
-    theRenderingSystem.loadAtlas("nuages");
-    theRenderingSystem.loadAtlas("help");
 
     // Animations
     theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_1", "herisson_1");
@@ -225,10 +215,6 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_8", "herisson_8");
 
     theButtonSystem.vibrateAPI = gameThreadContext->vibrateAPI;
-
-    // init font
-    loadFont(renderThreadContext->assetAPI, "typo");
-    loadFont(renderThreadContext->assetAPI, "gdtypo");
 
     // default camera
     camera = theEntityManager.CreateEntity("camera",
