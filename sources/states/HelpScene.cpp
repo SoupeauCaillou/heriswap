@@ -40,7 +40,6 @@ struct HelpScene : public StateHandler<Scene::Enum> {
 
 	// State variables
 	Scene::Enum oldState;
-	GameMode mode;
 	Entity title,text,postscriptum;
 
 	enum State {
@@ -126,6 +125,8 @@ struct HelpScene : public StateHandler<Scene::Enum> {
 	        	game->gameThreadContext->localizeAPI->text("help_general_1");
 	        TEXT_RENDERING(postscriptum)->text = game->gameThreadContext->localizeAPI->text("help_click_continue");
 	    }
+
+        game->datas->mode2Manager[game->datas->mode]->showGameDecor(true);
 	}
 
 	///----------------------------------------------------------------------------//
@@ -134,10 +135,10 @@ struct HelpScene : public StateHandler<Scene::Enum> {
 	Scene::Enum update(float) override {
 		if (!theTouchInputManager.isTouched(0) && theTouchInputManager.wasTouched(0)) {
 			if (state == HowToPlay) {
-	            if (mode == Normal) {
+	            if (game->datas->mode == Normal) {
 	                TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_general_2") + " " +
 	                	game->gameThreadContext->localizeAPI->text("help_mode1_2");
-	            } else if (mode == TilesAttack) {
+	            } else if (game->datas->mode == TilesAttack) {
 	                TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_mode2_2");
 	            } else {
 	                TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_general_2");

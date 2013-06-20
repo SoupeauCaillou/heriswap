@@ -61,16 +61,6 @@ void HeriswapGame::stateChanged(GameState oldState, GameState newState) {
         // place title
         MORPHING(static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title)->active = true;
      //let's play !
-     } else if (newState == BlackToSpawn) {
-        //for count down in 2nd mode
-        static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame = true;
-        // call Enter before starting fade-in
-         datas->mode2Manager[datas->mode]->Enter();
-         // TODO Fix it!
-         // datas->mode2Manager[datas->mode]->UiUpdate(0);
-         MUSIC(datas->menu)->control = MusicControl::Stop;
-
-         setupGameProp();
      } else if (newState == LevelChanged) {
         static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel =
         static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->getSmallLevelEntity();

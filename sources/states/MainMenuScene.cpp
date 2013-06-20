@@ -231,23 +231,20 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         game->title = 0;
         if (!modeTitleToReset || (modeTitleToReset && !MORPHING(modeTitleToReset)->active)) {
             if (BUTTON(bStart[0])->clicked) {
-                game->datas->mode =
-                    choosenGameMode = Normal;
+                choosenGameMode = Normal;
                 SOUND(bStart[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
                 game->title = eStart[0];
                 return Scene::ModeMenu;
             }
             if(BUTTON(bStart[1])->clicked){
-                game->datas->mode =
-                    choosenGameMode = TilesAttack;
+                choosenGameMode = TilesAttack;
 
                 SOUND(bStart[1])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
                 game->title = eStart[1];
                 return Scene::ModeMenu;
             }
             if(BUTTON(bStart[2])->clicked){
-                game->datas->mode =
-                    choosenGameMode = Go100Seconds;
+                choosenGameMode = Go100Seconds;
                 SOUND(bStart[2])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
                 game->title = eStart[2];
                 return Scene::ModeMenu;
@@ -269,7 +266,11 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         game->gameThreadContext->storageAPI->saveEntries((IStorageProxy*)&ssp);
     }
 
-    void onExit(Scene::Enum) override {
+    void onExit(Scene::Enum to) override {
+        if (to == Scene::ModeMenu) {
+            game->datas->mode = choosenGameMode;
+        }
+
         for (int i = 0; i < 3; i++) {
             if (i != choosenGameMode)
                 TEXT_RENDERING(eStart[i])->show = false;
