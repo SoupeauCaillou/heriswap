@@ -25,7 +25,7 @@
 
 #include "systems/HeriswapGridSystem.h"
 
-#include "api/KeyboardInputHandlerAPI.h"
+#include "api/StringInputAPI.h"
 #include "api/StorageAPI.h"
 
 #include "modes/GameModeManager.h"
@@ -445,7 +445,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     #if ! SAC_MOBILE
                     TEXT_RENDERING(input_label)->show = TEXT_RENDERING(input_textbox)->show = RENDERING(input_background)->show = true;
     #endif
-                    game->gameThreadContext->keyboardInputHandlerAPI->askUserInput("", 14);
+                    game->gameThreadContext->stringInputAPI->askUserInput("", 14);
                     gameOverState = AskingPlayerName;
                     game->datas->successMgr->sTheyGood(true);
                 } else {
@@ -469,17 +469,15 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 break;
             }
             case AskingPlayerName: {
-                LOGT("name input api!");
 #if SAC_MOBILE
-                playerName = "random";
+                if (game->gameThreadContext->stringInputAPI->done(playerName)) {
 #else
-                if (game->gameThreadContext->keyboardInputHandlerAPI->done(TEXT_RENDERING(input_textbox)->text))
+                if (game->gameThreadContext->stringInputAPI->done(TEXT_RENDERING(input_textbox)->text)) {
                     playerName = TEXT_RENDERING(input_textbox)->text;
                     TEXT_RENDERING(input_textbox)->text = "";
 
                     TEXT_RENDERING(input_label)->show = TEXT_RENDERING(input_textbox)->show = RENDERING(input_background)->show = false;
 #endif
-                {
                     if (game->datas->mode==Normal)
                         game->datas->successMgr->sBTAC(game->gameThreadContext->storageAPI, difficulty, game->datas->mode2Manager[game->datas->mode]->points);
                     else if (game->datas->mode==TilesAttack)
