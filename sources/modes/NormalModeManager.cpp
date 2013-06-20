@@ -22,6 +22,7 @@
 #include "systems/HeriswapGridSystem.h"
 
 #include "base/PlacementHelper.h"
+#include "base/EntityManager.h"
 
 #include "systems/ADSRSystem.h"
 #include "systems/ButtonSystem.h"
@@ -92,7 +93,7 @@ void NormalGameModeManager::TogglePauseDisplay(bool paused) {
 }
 
 void NormalGameModeManager::GameUpdate(float dt, GameState state) {
-    #ifdef DEBUG
+    #if SAC_DEBUG
     // no time update when debug shown
     if (!_debug)
     #endif
@@ -151,7 +152,7 @@ void NormalGameModeManager::UiUpdate(float dt) {
         updateHerisson(dt, time, 0);
     }
 
-#ifdef DEBUG
+#if SAC_DEBUG
     if (_debug) {
         for(int i=0; i<8; i++) {
             std::stringstream text;

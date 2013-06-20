@@ -447,7 +447,7 @@ void HeriswapGame::tick(float dt) {
         datas->state = datas->newState;
         // datas->state2Manager[datas->state]->Enter();
 
-        #ifdef ANDROID
+        #if SAC_ANDROID
         bool ofHidden = (datas->newState != MainMenu && datas->newState != ModeMenu);
         #else
         bool ofHidden = true;

@@ -61,7 +61,7 @@ class GameModeManager {
 		// to be called to toggle pause mode display
 		virtual void TogglePauseDisplay(bool paused);
 
-		#ifdef SAC_DEBUG
+		#if SAC_DEBUG
 		void toggleDebugDisplay();
 		bool _debug;
 		Entity debugEntities[16];
@@ -81,7 +81,7 @@ class GameModeManager {
 		void generateLeaves(int* nb, int type);
 
 		float position(float t);
-     
+
         void showGameDecor(bool onlyBg);
 	protected:
 		void LoadHerissonTexture(int type);

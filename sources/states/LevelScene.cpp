@@ -170,14 +170,11 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
         std::vector<Entity> text = theTextRenderingSystem.RetrieveAllEntityWithComponent();
         std::vector<Entity> entities = theRenderingSystem.RetrieveAllEntityWithComponent();
         for (unsigned int i=0; i<entities.size(); i++) {
-            TransformationComponent* tc = TRANSFORM(entities[i]);
-            {
-                RenderingComponent* rc = RENDERING(entities[i]);
-                if (rc->texture == branch || rc->texture == pause || rc->texture == sound1 || rc->texture == sound2) {
-                    continue;
-                }
-                rc->effectRef = theRenderingSystem.effectLibrary.load("desaturate.fs");
+            RenderingComponent* rc = RENDERING(entities[i]);
+            if (rc->texture == branch || rc->texture == pause || rc->texture == sound1 || rc->texture == sound2) {
+                continue;
             }
+            rc->effectRef = theRenderingSystem.effectLibrary.load("desaturate.fs");
         }
 
         entities = theHeriswapGridSystem.RetrieveAllEntityWithComponent();

@@ -23,6 +23,7 @@
 #include "systems/HeriswapGridSystem.h"
 
 #include "base/PlacementHelper.h"
+#include "base/EntityManager.h"
 
 #include "systems/AnimationSystem.h"
 #include "systems/ButtonSystem.h"
@@ -118,7 +119,7 @@ void GameModeManager::Setup() {
 
     uiHelper.build();
 
-    #ifdef SAC_DEBUG
+    #if SAC_DEBUG
     _debug = false;
     for(int i=0; i<8; i++) {
         std::stringstream a;
@@ -355,7 +356,7 @@ const uint8_t* GameModeManager::restoreInternalState(const uint8_t* in, int) {
     return &in[index];
 }
 
-#ifdef DEBUG
+#if SAC_DEBUG
 void GameModeManager::toggleDebugDisplay() {
     _debug = !_debug;
     for(int i=0; i<8; i++) {

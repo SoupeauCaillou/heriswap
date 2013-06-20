@@ -23,6 +23,7 @@
 #include "systems/HeriswapGridSystem.h"
 
 #include "base/PlacementHelper.h"
+#include "base/EntityManager.h"
 
 #include "systems/ButtonSystem.h"
 #include "systems/TextRenderingSystem.h"
@@ -118,7 +119,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 
 	updateHerisson(dt, leavesDone, 0);
 
-#ifdef DEBUG
+#if SAC_DEBUG
 	if (_debug) {
 		for(int i=0; i<8; i++) {
 			std::stringstream text;

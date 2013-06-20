@@ -112,11 +112,17 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
         return e;
     }
 
-    static Entity moveToCell(Entity original, const glm::vec2& move, float) {
-    #ifdef ANDROID
+    static Entity moveToCell(Entity original, const glm::vec2& move,
+#if SAC_ANDROID
+        float threshold) {
+#else
+        float) {
+#endif
+
+#if SAC_ANDROID
         if (glm::length2(move) < threshold)
             return 0;
-    #endif
+#endif
 
         int i = HERISWAPGRID(original)->i;
         int j = HERISWAPGRID(original)->j;

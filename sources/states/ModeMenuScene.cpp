@@ -419,9 +419,10 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         CONTAINER(playContainer)->enable = CONTAINER(bDifficulty)->enable = true;
 
-        #ifdef ANDROID
+        #if SAC_ANDROID
         if (gameOverState == NoGame) {
-            if (!game->gameThreadContext->communicationAPI->swarmInstalled()) {
+            if (true) {
+            //if (!game->gameThreadContext->communicationAPI->swarmInstalled()) {
                 BUTTON(enableSwarmContainer)->enabled = true;
                 TEXT_RENDERING(enableSwarm)->show = true;
                 CONTAINER(enableSwarmContainer)->enable = true;
@@ -468,12 +469,17 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 break;
             }
             case AskingPlayerName: {
-                if (game->gameThreadContext->keyboardInputHandlerAPI->done(TEXT_RENDERING(input_textbox)->text)) {
+                LOGT("name input api!");
+#if SAC_MOBILE
+                playerName = "random";
+#else
+                if (game->gameThreadContext->keyboardInputHandlerAPI->done(TEXT_RENDERING(input_textbox)->text))
                     playerName = TEXT_RENDERING(input_textbox)->text;
                     TEXT_RENDERING(input_textbox)->text = "";
 
                     TEXT_RENDERING(input_label)->show = TEXT_RENDERING(input_textbox)->show = RENDERING(input_background)->show = false;
-
+#endif
+                {
                     if (game->datas->mode==Normal)
                         game->datas->successMgr->sBTAC(game->gameThreadContext->storageAPI, difficulty, game->datas->mode2Manager[game->datas->mode]->points);
                     else if (game->datas->mode==TilesAttack)
@@ -580,7 +586,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         CONTAINER(playContainer)->enable =
             CONTAINER(bDifficulty)->enable = false;
 
-        #ifdef ANDROID
+        #if SAC_ANDROID
             BUTTON(enableSwarmContainer)->enabled = false;
             TEXT_RENDERING(enableSwarm)->show = false;
             CONTAINER(enableSwarmContainer)->enable = false;
