@@ -188,13 +188,11 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     // sceneStateMachine.registerState(Scene::ExitState, Scene::CreateExitStateSceneHandler(this), "Scene::ExitState");
     sceneStateMachine.registerState(Scene::ElitePopup, Scene::CreateElitePopupSceneHandler(this), "Scene::ElitePopup");
 
-    sceneStateMachine.registerState(Scene::BlackToLogoState, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.2f, Scene::Logo), "Scene::BlackToLogoState");
     sceneStateMachine.registerState(Scene::BlackToMainMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.3f, Scene::MainMenu), "Scene::BlackToMainMenu");
     sceneStateMachine.registerState(Scene::BlackToModeMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::ModeMenu), "Scene::BlackToModeMenu");
     sceneStateMachine.registerState(Scene::BlackToSpawn, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::Spawn), "Scene::BlackToSpawn");
     sceneStateMachine.registerState(Scene::AdsToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::BlackToSpawn), "Scene::AdsToBlackState");
     sceneStateMachine.registerState(Scene::GameToBlack, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.4f, Scene::BlackToModeMenu), "Scene::GameToBlack");
-    sceneStateMachine.registerState(Scene::LogoToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.3f, Scene::BlackToMainMenu), "Scene::LogoToBlackState");
     sceneStateMachine.registerState(Scene::ModeMenuToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::Ads), "Scene::ModeMenuToBlackState");
 
     //init database
@@ -281,7 +279,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     }
     // datas->state2Manager[datas->state]->Enter();
 
-    sceneStateMachine.setup(Scene::MainMenu);
+    sceneStateMachine.setup(Scene::Logo);
 
     quickInit();
 

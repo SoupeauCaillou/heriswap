@@ -31,7 +31,6 @@ namespace Scene {
     enum Enum {
         Ads,
         AdsToBlackState,
-        BlackToLogoState,
         BlackToMainMenu,
         BlackToModeMenu,
         BlackToSpawn,
@@ -45,7 +44,6 @@ namespace Scene {
         Help,
         LevelChanged,
         Logo,
-        LogoToBlackState,
         MainMenu,
         ModeMenu,
         ModeMenuToBlackState,
