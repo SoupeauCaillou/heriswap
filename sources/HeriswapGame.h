@@ -60,7 +60,7 @@ class HeriswapGame : public Game {
         void backPressed();
 		void setMode();
 		int saveState(uint8_t** out);
-		
+
         void stateChanged(GameState from, GameState to);
 
 		static bool inGameState(GameState state);
@@ -75,13 +75,15 @@ class HeriswapGame : public Game {
 
 		Entity camera;
 		PrivateData* datas;
+		Entity title, menufg, menubg;
+		Entity herisson;
 
 	private:
         const uint8_t* loadEntitySystemState(const uint8_t* in, int size);
         void loadGameState(const uint8_t* in, int size);
 		void stopInGameMusics();
 		bool shouldPlayPiano();
-		
+
 		SuccessAPI* successAPI;
 		ExitAPI* exitAPI;
 	    VibrateAPI* vibrateAPI;
