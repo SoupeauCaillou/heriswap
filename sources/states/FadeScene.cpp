@@ -35,103 +35,103 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 #include <glm/glm.hpp>
 
 struct FadeScene : public StateHandler<Scene::Enum> {
-	HeriswapGame* game;
-	FadingType::Enum type;
-	float duration;
-	Scene::Enum nextState;
+    HeriswapGame* game;
+    FadingType::Enum type;
+    float duration;
+    Scene::Enum nextState;
 
-	// State variables	
-	Entity eFading;
-	float timeout, accum;
+    // State variables
+    Entity eFading;
+    float timeout, accum;
 
-	FadeScene(HeriswapGame* game, FadingType::Enum pType, float pDuration, Scene::Enum pNextState):
-	StateHandler<Scene::Enum>(), type(pType), duration(pDuration), nextState(pNextState) {
-	    this->game = game;
-	}
+    FadeScene(HeriswapGame* game, FadingType::Enum pType, float pDuration, Scene::Enum pNextState):
+    StateHandler<Scene::Enum>(), type(pType), duration(pDuration), nextState(pNextState) {
+        this->game = game;
+    }
 
-	void setup() {
-		eFading = theEntityManager.CreateEntity("eFading");
-		ADD_COMPONENT(eFading, Transformation);
-		ADD_COMPONENT(eFading, Rendering);
-		TRANSFORM(eFading)->position = glm::vec2(0.f);
-		TRANSFORM(eFading)->size = glm::vec2(10.f, 20.f);
-		RENDERING(eFading)->show = false;
-		RENDERING(eFading)->color = Color(0,0,0);
-		TRANSFORM(eFading)->z = DL_Fading;
+    void setup() {
+        eFading = theEntityManager.CreateEntity("eFading");
+        ADD_COMPONENT(eFading, Transformation);
+        ADD_COMPONENT(eFading, Rendering);
+        TRANSFORM(eFading)->position = glm::vec2(0.f);
+        TRANSFORM(eFading)->size = glm::vec2(10.f, 20.f);
+        RENDERING(eFading)->show = false;
+        RENDERING(eFading)->color = Color(0,0,0);
+        TRANSFORM(eFading)->z = DL_Fading;
 
-		ADD_COMPONENT(eFading, ADSR);
-		ADSR(eFading)->idleValue = 0;
-		ADSR(eFading)->attackValue = 1.0;
-		ADSR(eFading)->attackTiming = duration;
-		ADSR(eFading)->decayTiming = 0;
-		ADSR(eFading)->sustainValue = 1.0;
-		ADSR(eFading)->releaseTiming = .2;
-		ADSR(eFading)->attackMode = Quadratic;
-	}
+        ADD_COMPONENT(eFading, ADSR);
+        ADSR(eFading)->idleValue = 0;
+        ADSR(eFading)->attackValue = 1.0;
+        ADSR(eFading)->attackTiming = duration;
+        ADSR(eFading)->decayTiming = 0;
+        ADSR(eFading)->sustainValue = 1.0;
+        ADSR(eFading)->releaseTiming = .2;
+        ADSR(eFading)->attackMode = Quadratic;
+    }
 
-	static void updateColor(Entity eFading, FadingType::Enum type) {
-		float value = ADSR(eFading)->value;
-		switch (type) {
-			case FadingType::FadeIn:
-				RENDERING(eFading)->color.a = 1 - value;
-				break;
-			case FadingType::FadeOut:
-				RENDERING(eFading)->color.a = value;
-				break;
-		}
-	}
+    static void updateColor(Entity eFading, FadingType::Enum type) {
+        float value = ADSR(eFading)->value;
+        switch (type) {
+            case FadingType::FadeIn:
+                RENDERING(eFading)->color.a = 1 - value;
+                break;
+            case FadingType::FadeOut:
+                RENDERING(eFading)->color.a = value;
+                break;
+        }
+    }
 
-	///----------------------------------------------------------------------------//
-	///--------------------- ENTER SECTION ----------------------------------------//
-	///----------------------------------------------------------------------------//
-	void onPreEnter(Scene::Enum) override {
-		LOGW("Fade type: '" << type << "'");
-		RENDERING(eFading)->show = true;
-		//update duration (can be changed)
-		ADSR(eFading)->attackTiming = duration;
-		ADSR(eFading)->active = true;
+    ///----------------------------------------------------------------------------//
+    ///--------------------- ENTER SECTION ----------------------------------------//
+    ///----------------------------------------------------------------------------//
+    void onPreEnter(Scene::Enum) override {
+        LOGW("Fade type: '" << type << "'");
+        RENDERING(eFading)->show = true;
+        //update duration (can be changed)
+        ADSR(eFading)->attackTiming = duration;
+        ADSR(eFading)->active = true;
 
-		accum = 0;
-		updateColor(eFading, type);
-	}
+        accum = 0;
+        updateColor(eFading, type);
+    }
 
-	// Return false, until fading (in or out) is finished
-	bool updatePreEnter(Scene::Enum , float dt) override {
-		updateColor(eFading, type);
+    // Return false, until fading (in or out) is finished
+    bool updatePreEnter(Scene::Enum , float dt) override {
+        updateColor(eFading, type);
 
-		if (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()) {
-			return true;
-		}
-		if (ADSR(eFading)->value == ADSR(eFading)->sustainValue) {
-			accum += dt;
-			if (accum >= timeout) {
-				return true;
-			}
-		}
-		return false;
-	}
+        if (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()) {
+            return true;
+        }
+        if (ADSR(eFading)->value == ADSR(eFading)->sustainValue) {
+            accum += dt;
+            if (accum >= timeout) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	///----------------------------------------------------------------------------//
-	///--------------------- UPDATE SECTION ---------------------------------------//
-	///----------------------------------------------------------------------------//
-	Scene::Enum update(float ) override {
-		return nextState;	
-	}
+    ///----------------------------------------------------------------------------//
+    ///--------------------- UPDATE SECTION ---------------------------------------//
+    ///----------------------------------------------------------------------------//
+    Scene::Enum update(float ) override {
+        return nextState;
+    }
 
-	///----------------------------------------------------------------------------//
-	///--------------------- EXIT SECTION -----------------------------------------//
-	///----------------------------------------------------------------------------//
-	void onPreExit(Scene::Enum) override {
-	}
+    ///----------------------------------------------------------------------------//
+    ///--------------------- EXIT SECTION -----------------------------------------//
+    ///----------------------------------------------------------------------------//
+    void onPreExit(Scene::Enum) override {
+    }
 
-	void onExit(Scene::Enum) override {
-		RENDERING(eFading)->show = false;
-		ADSR(eFading)->active = false;
-	}
+    void onExit(Scene::Enum) override {
+        RENDERING(eFading)->show = false;
+        ADSR(eFading)->active = false;
+    }
 };
 
 namespace Scene {
-	StateHandler<Scene::Enum>* CreateFadeSceneHandler(HeriswapGame* game, FadingType::Enum type, float duration, Scene::Enum nextState) {
-    	return new FadeScene(game, type, duration, nextState);
-	}
+    StateHandler<Scene::Enum>* CreateFadeSceneHandler(HeriswapGame* game, FadingType::Enum type, float duration, Scene::Enum nextState) {
+        return new FadeScene(game, type, duration, nextState);
+    }
 }

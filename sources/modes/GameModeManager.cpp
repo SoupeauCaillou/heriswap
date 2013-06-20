@@ -99,12 +99,12 @@ void GameModeManager::Setup() {
 	ADD_COMPONENT(herisson, Animation);
 	ADD_COMPONENT(herisson, Button);
 	TRANSFORM(herisson)->z = DL_Animal;
-	TRANSFORM(herisson)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(142), 
+	TRANSFORM(herisson)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(142),
 										  (float)PlacementHelper::GimpHeightToScreen(116));
-	TransformationSystem::setPosition(TRANSFORM(herisson), 
-									  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1028)), 
-									  TransformationSystem::N);
-	
+	// TransformationSystem::setPosition(TRANSFORM(herisson),
+	// 								  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1028)),
+	// 								  TransformationSystem::N);
+
 	ANIMATION(herisson)->playbackSpeed = 4.1;
 
 	RENDERING(herisson)->show = false;
@@ -113,24 +113,24 @@ void GameModeManager::Setup() {
 	branch = theEntityManager.CreateEntity("branch");
 	ADD_COMPONENT(branch, Transformation);
 	TRANSFORM(branch)->z = DL_Branch;
-	TRANSFORM(branch)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(800), 
+	TRANSFORM(branch)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(800),
 										(float)PlacementHelper::GimpWidthToScreen(800) * 107.0f / 391.0f);
-	TransformationSystem::setPosition(TRANSFORM(branch), 
-									  glm::vec2((float)-PlacementHelper::ScreenWidth*0.5f, (float)PlacementHelper::GimpYToScreen(0)), 
-									  TransformationSystem::NW);
+	// TransformationSystem::setPosition(TRANSFORM(branch),
+	// 								  glm::vec2((float)-PlacementHelper::ScreenWidth*0.5f, (float)PlacementHelper::GimpYToScreen(0)),
+	// 								  TransformationSystem::NW);
 	ADD_COMPONENT(branch, Rendering);
-	RENDERING(branch)->show = true;
+	RENDERING(branch)->show = false;
 	RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche");
 
 	decor2nd = theEntityManager.CreateEntity("decor2nd");
 	ADD_COMPONENT(decor2nd, Transformation);
 	TRANSFORM(decor2nd)->z = DL_Decor2nd;
-	TRANSFORM(decor2nd)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 
+	TRANSFORM(decor2nd)->size = glm::vec2((float)PlacementHelper::ScreenWidth,
 										  (float)PlacementHelper::GimpHeightToScreen(470));
-	TransformationSystem::setPosition(TRANSFORM(decor2nd), 
-									  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(610)), 
-									  TransformationSystem::N);
-	
+	// TransformationSystem::setPosition(TRANSFORM(decor2nd),
+	// 								  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(610)),
+	// 								  TransformationSystem::N);
+
 	ADD_COMPONENT(decor2nd, Scrolling);
 	SCROLLING(decor2nd)->images.push_back("decor2nd_0");
 	SCROLLING(decor2nd)->images.push_back("decor2nd_3");
@@ -145,11 +145,11 @@ void GameModeManager::Setup() {
 	decor1er = theEntityManager.CreateEntity("decor1er");
 	ADD_COMPONENT(decor1er, Transformation);
 	TRANSFORM(decor1er)->z = DL_Decor1er;
-	TRANSFORM(decor1er)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 
+	TRANSFORM(decor1er)->size = glm::vec2((float)PlacementHelper::ScreenWidth,
 										  (float)PlacementHelper::GimpHeightToScreen(300));
-	TransformationSystem::setPosition(TRANSFORM(decor1er), 
-									  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1280)), 
-									  TransformationSystem::S);
+	// TransformationSystem::setPosition(TRANSFORM(decor1er),
+	// 								  glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1280)),
+	// 								  TransformationSystem::S);
 	ADD_COMPONENT(decor1er, Scrolling);
 	SCROLLING(decor1er)->images.push_back("decor1er_0");
 	SCROLLING(decor1er)->images.push_back("decor1er_1");
@@ -175,9 +175,9 @@ void GameModeManager::Setup() {
 		ADD_COMPONENT(debugEntities[2*i], Rendering);
 		ADD_COMPONENT(debugEntities[2*i], Transformation);
 		RENDERING(debugEntities[2*i])->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(i, 0));
-		TransformationSystem::setPosition(TRANSFORM(debugEntities[2*i]), 
-										  glm::vec2((float)(PlacementHelper::GimpXToScreen(0) + i * PlacementHelper::GimpWidthToScreen(80)), (float)PlacementHelper::GimpYToScreen(1280)), 
-										  TransformationSystem::SW);
+		// TransformationSystem::setPosition(TRANSFORM(debugEntities[2*i]),
+		// 								  glm::vec2((float)(PlacementHelper::GimpXToScreen(0) + i * PlacementHelper::GimpWidthToScreen(80)), (float)PlacementHelper::GimpYToScreen(1280)),
+		// 								  TransformationSystem::SW);
 		TRANSFORM(debugEntities[2*i])->z = DL_DebugLayer;
 		TRANSFORM(debugEntities[2*i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(80));
 
@@ -198,7 +198,7 @@ void GameModeManager::Setup() {
 void GameModeManager::showGameDecor(bool onlyBg) {
     SCROLLING(decor2nd)->show = true;
     SCROLLING(decor1er)->show = true;
-    
+
     RENDERING(herisson)->show = !onlyBg;
     RENDERING(branch)->show = !onlyBg;
     uiHelper.show();
@@ -257,7 +257,7 @@ Entity GameModeManager::createAndAddLeave(int type, const glm::vec2& position, f
     ADD_COMPONENT(e, Twitch);
 	RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(type, 0));
 	RENDERING(e)->show = true;
-	
+
 	TRANSFORM(e)->size = HeriswapGame::CellSize(8, type) * HeriswapGame::CellContentScale();
 
 	TRANSFORM(e)->position = position;
@@ -318,7 +318,7 @@ void GameModeManager::fillVec() {
 	posBranch.clear();
 	#include "PositionFeuilles.h"
 	for (int i=0; i<8*6; i++) {
-		glm::vec2 v((float)PlacementHelper::GimpXToScreen(pos[3*i]), 
+		glm::vec2 v((float)PlacementHelper::GimpXToScreen(pos[3*i]),
 					(float)PlacementHelper::GimpYToScreen(pos[3*i+1]));
 		Render truc = {v, glm::radians<float>(pos[3*i+2])};
 		posBranch.push_back(truc);
@@ -349,7 +349,7 @@ void GameModeManager::updateHerisson(float dt, float obj, float herissonSpeed) {
 		newSpeed = 15*(newPos - tc->position.x)/dt;
 	if (newSpeed < 1.4f) newSpeed = 2.5f;
 	if (newSpeed > 4.5f) newSpeed = 4.5f;
-	
+
 	ANIMATION(herisson)->playbackSpeed = newSpeed;
 
 	tc->position.x = newPos;

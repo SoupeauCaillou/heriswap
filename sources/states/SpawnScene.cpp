@@ -53,23 +53,11 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	}
 
 	void setup() {
-		haveToAddLeavesInGrid = theEntityManager.CreateEntity("haveToAddLeavesInGrid");
-		ADD_COMPONENT(haveToAddLeavesInGrid, ADSR);
+		haveToAddLeavesInGrid = theEntityManager.CreateEntity("haveToAddLeavesInGrid",
+			EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("spawn/haveToAddLeavesInGrid"));
 
-		replaceGrid = theEntityManager.CreateEntity("replaceGrid");
-		ADD_COMPONENT(replaceGrid, ADSR);
-
-		ADSR(haveToAddLeavesInGrid)->idleValue = 0;
-		ADSR(haveToAddLeavesInGrid)->attackValue = 1.0;
-		ADSR(haveToAddLeavesInGrid)->decayTiming = 0;
-		ADSR(haveToAddLeavesInGrid)->sustainValue = 1.0;
-		ADSR(haveToAddLeavesInGrid)->releaseTiming = 0;
-
-		ADSR(replaceGrid)->idleValue = 0;
-		ADSR(replaceGrid)->attackValue = 1.0;
-		ADSR(replaceGrid)->decayTiming = 0;
-		ADSR(replaceGrid)->sustainValue = 1.0;
-		ADSR(replaceGrid)->releaseTiming = 0;
+		replaceGrid = theEntityManager.CreateEntity("replaceGrid",
+			EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("spawn/replaceGrid"));
 	}
 
 	static int newLeavesInSpawning(std::vector<Feuille>& newLeaves, int i, int j) {
@@ -120,10 +108,8 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	}
 
 	static Entity createCell(Feuille& f, bool assignGridPos) {
-		Entity e = theEntityManager.CreateEntity("Cell", EntityType::Persistent);
-		ADD_COMPONENT(e, Transformation);
-		ADD_COMPONENT(e, Rendering);
-		ADD_COMPONENT(e, ADSR);
+		Entity e = theEntityManager.CreateEntity("Cell",
+			EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("spawn/cell"));
 		ADD_COMPONENT(e, Grid);
 	    ADD_COMPONENT(e, Twitch);
 
@@ -173,7 +159,7 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 			//si y a plus de combi, on genere une nouvelle grille (uniquement parce que y a plus de solutions)
 			if (!theGridSystem.StillCombinations()) {
 				//(on doit pas etre en changement de niveau / fin de jeu)
-				if (game->datas->mode == Normal && 
+				if (game->datas->mode == Normal &&
 					game->datas->mode2Manager[game->datas->mode]->LevelUp())
 					return Scene::LevelChanged;
 				//inutile logiquement (on quitte avant)

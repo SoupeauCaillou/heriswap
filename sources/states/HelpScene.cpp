@@ -70,7 +70,7 @@ struct HelpScene : public StateHandler<Scene::Enum> {
 		ADD_COMPONENT(text, Transformation);
 	    TRANSFORM(text)->position = glm::vec2(0.f, (float)PlacementHelper::ScreenHeight * 0.3);
 	    TRANSFORM(text)->z = DL_HelpText;
-	    TRANSFORM(text)->size = glm::vec2((float)PlacementHelper::ScreenWidth * 0.9f, 
+	    TRANSFORM(text)->size = glm::vec2((float)PlacementHelper::ScreenWidth * 0.9f,
 	                                      (float)PlacementHelper::ScreenHeight);
 		ADD_COMPONENT(text, TextRendering);
 		TEXT_RENDERING(text)->show = false;
@@ -101,7 +101,10 @@ struct HelpScene : public StateHandler<Scene::Enum> {
 		LOGI("'" << __PRETTY_FUNCTION__ << "'");
 
 		state = HowToPlay;
-		this->oldState = oldState;
+		if (oldState == Scene::ModeMenu)
+			this->oldState = Scene::BlackToSpawn;
+		else
+			this->oldState = oldState;
 
 	    // TODO !
 		// setup how to play help page
@@ -119,7 +122,7 @@ struct HelpScene : public StateHandler<Scene::Enum> {
 	        TEXT_RENDERING(postscriptum)->text = game->gameThreadContext->localizeAPI->text("help_click_continue");
 	    } else {
 	        TEXT_RENDERING(title)->text = game->gameThreadContext->localizeAPI->text("mode_3");
-	        TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_mode3_1") + "\n\n" + 
+	        TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_mode3_1") + "\n\n" +
 	        	game->gameThreadContext->localizeAPI->text("help_general_1");
 	        TEXT_RENDERING(postscriptum)->text = game->gameThreadContext->localizeAPI->text("help_click_continue");
 	    }
@@ -132,7 +135,7 @@ struct HelpScene : public StateHandler<Scene::Enum> {
 		if (!theTouchInputManager.isTouched(0) && theTouchInputManager.wasTouched(0)) {
 			if (state == HowToPlay) {
 	            if (mode == Normal) {
-	                TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_general_2") + " " + 
+	                TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_general_2") + " " +
 	                	game->gameThreadContext->localizeAPI->text("help_mode1_2");
 	            } else if (mode == TilesAttack) {
 	                TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_mode2_2");

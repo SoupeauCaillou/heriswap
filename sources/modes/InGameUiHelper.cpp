@@ -41,7 +41,7 @@ void InGameUiHelper::build() {
 
 	smallLevel = theEntityManager.CreateEntity("smallLevel");
 	ADD_COMPONENT(smallLevel, Transformation);
-	TRANSFORM(smallLevel)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(680), 
+	TRANSFORM(smallLevel)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(680),
 												(float)PlacementHelper::GimpYToScreen(188));
 	TRANSFORM(smallLevel)->z = DL_Score;
 	ADD_COMPONENT(smallLevel, TextRendering);
@@ -54,7 +54,7 @@ void InGameUiHelper::build() {
 	pauseButton = theEntityManager.CreateEntity("pauseButton");
 	ADD_COMPONENT(pauseButton, Transformation);
     TRANSFORM(pauseButton)->size = glm::vec2(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpHeightToScreen(95));
-    TransformationSystem::setPosition(TRANSFORM(pauseButton), glm::vec2(-PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
+    // TransformationSystem::setPosition(TRANSFORM(pauseButton), glm::vec2(-PlacementHelper::GimpWidthToScreen(354), PlacementHelper::GimpYToScreen(1215)), TransformationSystem::W);
     TRANSFORM(pauseButton)->z = DL_Score;
 	ADD_COMPONENT(pauseButton, Rendering);
 	RENDERING(pauseButton)->texture = theRenderingSystem.loadTextureFile("pause");

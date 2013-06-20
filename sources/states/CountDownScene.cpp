@@ -45,23 +45,11 @@ struct CountDownScene : public StateHandler<Scene::Enum> {
 	}
 
 	void setup() {
-		counter = theEntityManager.CreateEntity("counter");
-		ADD_COMPONENT(counter, Transformation);
-		ADD_COMPONENT(counter, TextRendering);
-		TRANSFORM(counter)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(650));
-		TEXT_RENDERING(counter)->color = Color(3.0/255.0, 99.0/255, 71.0/255);
-		TEXT_RENDERING(counter)->fontName = "gdtypo";
-		TEXT_RENDERING(counter)->positioning = TextRenderingComponent::CENTER;
-		TEXT_RENDERING(counter)->charHeight = PlacementHelper::GimpHeightToScreen(300);
-		TRANSFORM(counter)->z = DL_MainMenuFg;
+		counter = theEntityManager.CreateEntity("counter",
+			EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("counter"));
 
-		vorhang = theEntityManager.CreateEntity("vorhang");
-		ADD_COMPONENT(vorhang, Rendering);
-		ADD_COMPONENT(vorhang, Transformation);
-		TRANSFORM(vorhang)->z = DL_MainMenuBg;
-		TRANSFORM(vorhang)->size = glm::vec2( (float)PlacementHelper::GimpWidth, 
-											  (float)PlacementHelper::GimpHeight);
-		RENDERING(vorhang)->color = Color(0.f, 0.f, 0.f, 0.2f);
+		vorhang = theEntityManager.CreateEntity("vorhang",
+			EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("vorhang"));
 	}
 
 	///----------------------------------------------------------------------------//
