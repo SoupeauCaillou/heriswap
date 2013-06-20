@@ -53,10 +53,6 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
  }
 
  void PrivateData::Setup() {
-    // BackgroundManager* bg = new BackgroundManager();
-    // bg->cloudStartX = Interval<float>(0.0,15.0);
-    // state2Manager[Background] = bg;
-
     soundButton = theEntityManager.CreateEntity("soundButton",
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/soundButton"));
 
@@ -68,9 +64,6 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
     socialGamNet = theEntityManager.CreateEntity("socialGamNet",
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/socialGamNet"));
 
-    // for(std::map<GameState, GameStateManager*>::iterator it=state2Manager.begin(); it!=state2Manager.end(); ++it)
-    //     it->second->Setup();
-
     for (int i=0; i<3; ++i) {
         Entity e = theEntityManager.CreateEntity("cloud",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/cloud"));
@@ -80,55 +73,31 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
     for(auto it : mode2Manager)
         it.second->Setup();
 
-    // bg->cloudStartX = Interval<float>(8.0,15.0);
+    menu = theEntityManager.CreateEntity("menu",
+        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("music/menuTrack"));
 
-    // modemenu->menufg = mainmenu->menufg;
-    // modemenu->menubg = mainmenu->menubg;
-    // modemenu->herisson = mainmenu->herisson;
-    // rateIt->menufg = mainmenu->menufg;
-    // rateIt->menubg = mainmenu->menubg;
-
-    menu = theEntityManager.CreateEntity("menu");
-    ADD_COMPONENT(menu, Music);
-    MUSIC(menu)->control = MusicControl::Play;
-    MUSIC(menu)->loopAt = 64.0f;
-
-    inGameMusic.masterTrack = theEntityManager.CreateEntity("masterTrack");
-    ADD_COMPONENT(inGameMusic.masterTrack, Music);
-    MUSIC(inGameMusic.masterTrack)->loopAt = 17.0f;
+    inGameMusic.masterTrack = theEntityManager.CreateEntity("masterTrack",
+        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("music/masterTrack"));
 
     for (int i=0; i<3; i++) {
         std::stringstream a;
         a << "" << "secondaryTracks_" << i;
-        inGameMusic.secondaryTracks[i] = theEntityManager.CreateEntity(a.str());
-        ADD_COMPONENT(inGameMusic.secondaryTracks[i], Music);
-        MUSIC(inGameMusic.secondaryTracks[i])->loopAt = 17.0f;
+        inGameMusic.secondaryTracks[i] = theEntityManager.CreateEntity(a.str(),
+            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("music/secondaryTrack"));
         MUSIC(inGameMusic.secondaryTracks[i])->master = MUSIC(inGameMusic.masterTrack);
     }
-    inGameMusic.accessoryTrack = theEntityManager.CreateEntity("accessoryTrack");
-    ADD_COMPONENT(inGameMusic.accessoryTrack, Music);
-    MUSIC(inGameMusic.accessoryTrack)->loopAt = 17.0f;
+    inGameMusic.accessoryTrack = theEntityManager.CreateEntity("accessoryTrack",
+        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("music/accessoryTrack"));
     MUSIC(inGameMusic.accessoryTrack)->master = MUSIC(inGameMusic.masterTrack);
-    MUSIC(inGameMusic.accessoryTrack)->volume = 0.75;
 
-    inGameMusic.stressTrack = theEntityManager.CreateEntity("stressTrack");
-    ADD_COMPONENT(inGameMusic.stressTrack, Music);
-    MUSIC(inGameMusic.stressTrack)->loopAt = 17.0f;
+    inGameMusic.stressTrack = theEntityManager.CreateEntity("stressTrack",
+        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("music/stressTrack"));
     MUSIC(inGameMusic.stressTrack)->master = MUSIC(inGameMusic.masterTrack);
-    ADD_COMPONENT(inGameMusic.stressTrack, ADSR);
-    ADSR(inGameMusic.stressTrack)->idleValue = 0;
-    ADSR(inGameMusic.stressTrack)->attackValue = 1.0;
-    ADSR(inGameMusic.stressTrack)->attackTiming = 1;
-    ADSR(inGameMusic.stressTrack)->decayTiming = 0;
-    ADSR(inGameMusic.stressTrack)->sustainValue = 1.0;
-    ADSR(inGameMusic.stressTrack)->releaseTiming = 0.5;
-    ADSR(inGameMusic.stressTrack)->attackMode = Quadratic;
 
     const float MusicFadeOut = 1;
-    std::vector<Entity> musics = theMusicSystem.RetrieveAllEntityWithComponent();
-    for (unsigned int i=0; i<musics.size(); i++) {
-        MUSIC(musics[i])->fadeOut = MusicFadeOut;
-    }
+    theMusicSystem.forEachECDo([&MusicFadeOut] (Entity, MusicComponent *mc) -> void {
+        mc->fadeOut = MusicFadeOut;
+    });
 
     (static_cast<NormalGameModeManager*> (mode2Manager[Normal]))->stressTrack = inGameMusic.stressTrack;
     // PauseStateManager* pause = static_cast<PauseStateManager*> (state2Manager[Pause]);

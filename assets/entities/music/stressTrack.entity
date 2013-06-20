@@ -1,0 +1,45 @@
+[Music]
+#~ int
+#music =
+#~ int
+#loop_next =
+#~ int
+#previous_ending =
+#~ float
+loop_at = 17
+#~ int
+#position_i =
+#~ float
+#fade_out =
+#~ float
+#fade_in =
+#~ float
+volume = 0.75
+#~ bool
+#looped =
+#~ bool
+#paused =
+#~ Play = 0, Stop = 1, Pause = 2
+#control =
+
+[ADSR]
+#~ bool
+#active =
+#~ float
+idle_value = 0
+#~ float
+attack_value = 1
+#~ float
+attack_timing = 1
+#~ float
+decay_timing = 0
+#~ float
+sustain_value = 1
+#~ float
+release_timing = 0.5
+#~ MODE : Linear = 0, Quadratic = 1
+attack_mode = 1
+#~ MODE : Linear = 0, Quadratic = 1
+#decay_mode =
+#~ MODE : Linear = 0, Quadratic = 1
+#release_mode =

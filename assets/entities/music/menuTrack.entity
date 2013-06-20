@@ -1,0 +1,23 @@
+[Music]
+#~ int
+#music =
+#~ int
+#loop_next =
+#~ int
+#previous_ending =
+#~ float
+loop_at = 64
+#~ int
+#position_i =
+#~ float
+#fade_out =
+#~ float
+#fade_in =
+#~ float
+#volume =
+#~ bool
+#looped =
+#~ bool
+#paused =
+#~ Play = 0, Stop = 1, Pause = 2
+control = 0
