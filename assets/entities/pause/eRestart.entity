@@ -1,0 +1,8 @@
+extends = button_text
+
+[Transformation]
+position%screen = −0.3125, −0.265625
+z = 0.49
+
+[TextRendering]
+positioning = 0

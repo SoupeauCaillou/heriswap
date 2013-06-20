@@ -46,17 +46,8 @@ struct FallScene : public StateHandler<Scene::Enum> {
     }
 
     void setup() {
-        fallAnimation = theEntityManager.CreateEntity("fallAnimation");
-        ADD_COMPONENT(fallAnimation, ADSR);
-
-        ADSR(fallAnimation)->idleValue = 0;
-        ADSR(fallAnimation)->attackValue = 1.0;
-        ADSR(fallAnimation)->decayTiming = 0;
-        ADSR(fallAnimation)->sustainValue = 1.0;
-        ADSR(fallAnimation)->releaseTiming = 0;
-        ADSR(fallAnimation)->attackMode = Quadratic;
-        ADSR(fallAnimation)->decayMode = Quadratic;
-        ADSR(fallAnimation)->releaseMode = Quadratic;
+        fallAnimation = theEntityManager.CreateEntity("fallAnimation",
+            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("fallAnimation"));
     }
 
     ///----------------------------------------------------------------------------//

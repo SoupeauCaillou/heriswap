@@ -50,23 +50,9 @@ struct FadeScene : public StateHandler<Scene::Enum> {
     }
 
     void setup() {
-        eFading = theEntityManager.CreateEntity("eFading");
-        ADD_COMPONENT(eFading, Transformation);
-        ADD_COMPONENT(eFading, Rendering);
-        TRANSFORM(eFading)->position = glm::vec2(0.f);
-        TRANSFORM(eFading)->size = glm::vec2(10.f, 20.f);
-        RENDERING(eFading)->show = false;
-        RENDERING(eFading)->color = Color(0,0,0);
-        TRANSFORM(eFading)->z = DL_Fading;
-
-        ADD_COMPONENT(eFading, ADSR);
-        ADSR(eFading)->idleValue = 0;
-        ADSR(eFading)->attackValue = 1.0;
+        eFading = theEntityManager.CreateEntity("eFading",
+            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("eFading"));
         ADSR(eFading)->attackTiming = duration;
-        ADSR(eFading)->decayTiming = 0;
-        ADSR(eFading)->sustainValue = 1.0;
-        ADSR(eFading)->releaseTiming = .2;
-        ADSR(eFading)->attackMode = Quadratic;
     }
 
     static void updateColor(Entity eFading, FadingType::Enum type) {

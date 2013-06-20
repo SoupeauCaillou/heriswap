@@ -1,0 +1,47 @@
+[Transformation]
+position = 0, 0
+size%screen = 1, 1
+#rotation = 0
+z = 0.75
+
+[Rendering]
+#~ TextureRef
+#texture
+#~ EffectRef
+#effectRef
+#~ Color
+color = 0,0,0
+#~ bool
+#show
+#~ bool
+#mirror_h
+#~ bool
+#z_pre_pass
+#~ bool
+#fast_culling
+#~ int
+#opaque_type
+#~ int
+#camera_bitmask
+
+[ADSR]
+#~ bool
+#active =
+#~ float
+idle_value = 0
+#~ float
+attack_value = 1
+#~ float
+#attack_timing =
+#~ float
+decay_timing = 0
+#~ float
+sustain_value = 1
+#~ float
+release_timing = 0.2
+#~ MODE : Linear = 0, Quadratic = 1
+attack_mode = 1
+#~ MODE : Linear = 0, Quadratic = 1
+#decay_mode =
+#~ MODE : Linear = 0, Quadratic = 1
+#release_mode =

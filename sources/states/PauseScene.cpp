@@ -55,84 +55,32 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         const Color green("green");
 
         //Restart Text
-        eRestart = theEntityManager.CreateEntity("eRestart");
-        ADD_COMPONENT(eRestart, Transformation);
-        ADD_COMPONENT(eRestart, TextRendering);
-        ADD_COMPONENT(eRestart, Rendering);
-        TRANSFORM(eRestart)->z = DL_PauseUIFg;
-        TEXT_RENDERING(eRestart)->color = green;
-        TEXT_RENDERING(eRestart)->charHeight = PlacementHelper::GimpHeightToScreen(75);
+        eRestart = theEntityManager.CreateEntity("eRestart",
+            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/eRestart"));
         TEXT_RENDERING(eRestart)->text = game->gameThreadContext->localizeAPI->text("continue_");
-        TEXT_RENDERING(eRestart)->show = false;
-        TEXT_RENDERING(eRestart)->positioning = TextRenderingComponent::LEFT;
-        TRANSFORM(eRestart)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(150),
-                                                  (float)PlacementHelper::GimpYToScreen(300));
+        
         //Restart button
-        bRestart = theEntityManager.CreateEntity("bRestart");
-        ADD_COMPONENT(bRestart, Transformation);
-        ADD_COMPONENT(bRestart, Button);
-        ADD_COMPONENT(bRestart, Rendering);
-        ADD_COMPONENT(bRestart, Sound);
-        RENDERING(bRestart)->color.a = .5;
-        RENDERING(bRestart)->texture = theRenderingSystem.loadTextureFile("fond_bouton");
-        TRANSFORM(bRestart)->z = DL_PauseUIBg;
-        TRANSFORM(bRestart)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(708),
-                                              (float)PlacementHelper::GimpHeightToScreen(147));
-        TRANSFORM(bRestart)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(300));
-        BUTTON(bRestart)->enabled = false;
+        bRestart = theEntityManager.CreateEntity("bRestart",
+            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/bRestart"));
 
         //Help Text
-        eHelp = theEntityManager.CreateEntity("eHelp");
-        ADD_COMPONENT(eHelp, Transformation);
-        ADD_COMPONENT(eHelp, TextRendering);
-        ADD_COMPONENT(eHelp, Rendering);
-        TRANSFORM(eHelp)->z = DL_PauseUIFg;
-        TEXT_RENDERING(eHelp)->color = green;
-        TEXT_RENDERING(eHelp)->charHeight = PlacementHelper::GimpHeightToScreen(75);
+        eHelp = theEntityManager.CreateEntity("eHelp",
+            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/eHelp"));
         TEXT_RENDERING(eHelp)->text = game->gameThreadContext->localizeAPI->text("help");
-        TEXT_RENDERING(eHelp)->show = false;
-        TEXT_RENDERING(eHelp)->positioning = TextRenderingComponent::LEFT;
-        TRANSFORM(eHelp)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(150),
-                                               (float)PlacementHelper::GimpYToScreen(500));
+
         //Help button
-        bHelp = theEntityManager.CreateEntity("bHelp");
-        ADD_COMPONENT(bHelp, Transformation);
-        ADD_COMPONENT(bHelp, Button);
-        ADD_COMPONENT(bHelp, Rendering);
-        ADD_COMPONENT(bHelp, Sound);
-        RENDERING(bHelp)->color.a = .5;
-        RENDERING(bHelp)->texture = theRenderingSystem.loadTextureFile("fond_bouton");
-        TRANSFORM(bHelp)->z = DL_PauseUIBg;
-        TRANSFORM(bHelp)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(708),
-                                           (float)PlacementHelper::GimpHeightToScreen(147));
-        TRANSFORM(bHelp)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(500));
-        BUTTON(bHelp)->enabled = false;
+        bHelp = theEntityManager.CreateEntity("bHelp",
+            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/bHelp"));
 
         //Abort text
-        eAbort = theEntityManager.CreateEntity("eAbort");
-        ADD_COMPONENT(eAbort, Transformation);
-        ADD_COMPONENT(eAbort, TextRendering);
-        TRANSFORM(eAbort)->z = DL_PauseUIFg;
-        TEXT_RENDERING(eAbort)->color = green;
-        TEXT_RENDERING(eAbort)->charHeight = PlacementHelper::GimpHeightToScreen(75);
+        eAbort = theEntityManager.CreateEntity("eAbort",
+            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/eAbort"));
+        
         TEXT_RENDERING(eAbort)->text = game->gameThreadContext->localizeAPI->text("give_up");
-        TEXT_RENDERING(eAbort)->show = false;
-        TEXT_RENDERING(eAbort)->positioning = TextRenderingComponent::LEFT;
-        TRANSFORM(eAbort)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(150),
-                                                (float)PlacementHelper::GimpYToScreen(900));
+
         //Abort button
-        bAbort = theEntityManager.CreateEntity("bAbort");
-        ADD_COMPONENT(bAbort, Transformation);
-        ADD_COMPONENT(bAbort, Button);
-        ADD_COMPONENT(bAbort, Rendering);
-        ADD_COMPONENT(bAbort, Sound);
-        RENDERING(bAbort)->color.a = .5;
-        RENDERING(bAbort)->texture = theRenderingSystem.loadTextureFile("fond_bouton");
-        TRANSFORM(bAbort)->z = DL_PauseUIBg;
-        TRANSFORM(bAbort)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(708),
-                                            (float)PlacementHelper::GimpHeightToScreen(147));
-        TRANSFORM(bAbort)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(900));
-        BUTTON(bAbort)->enabled = false;
+        bAbort = theEntityManager.CreateEntity("bAbort",
+            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/bAbort"));
     }
 
     ///----------------------------------------------------------------------------//
