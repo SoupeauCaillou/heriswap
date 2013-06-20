@@ -232,7 +232,7 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 					//leaves grow up from 0 to fixed size
 					glm::vec2 s = HeriswapGame::CellSize(theHeriswapGridSystem.GridSize, gc->type);
 					if (ADSR(haveToAddLeavesInGrid)->value == 1){
-						tc->size = glm::vec2(s.x * 0.1, s.y);
+						tc->size = glm::vec2(s.x, s.y);
 						gc->i = it->X;
 						gc->j = it->Y;
 					} else {
