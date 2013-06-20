@@ -381,51 +381,6 @@ void HeriswapGame::tick(float dt) {
         // datas->mode2Manager[datas->mode]->GameUpdate(dt, datas->state);
   //   }
 
-    //quand c'est plus au joueur de jouer, on supprime les marquages sur les feuilles
-
-    LOGT("To be done in UserInput onExit method");
-#if 0
-    if (datas->state != UserInput) {
-        toggleShowCombi(false);
-        if (datas->mode == Normal) {
-            std::vector<Entity>& leavesInHelpCombination = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->leavesInHelpCombination;
-            if (!leavesInHelpCombination.empty()) {
-                std::vector<Entity> leaves = theHeriswapGridSystem.RetrieveAllEntityWithComponent();
-                for ( std::vector<Entity>::reverse_iterator it = leaves.rbegin(); it != leaves.rend(); ++it) {
-                    RENDERING(*it)->effectRef = DefaultEffectRef;
-                }
-
-                leavesInHelpCombination.clear();
-            }
-        }
-    }
-#endif
-    //get the game progress
-    float percentDone = 0;
-    if (inGameState(sceneStateMachine.getCurrentState())) {
-        percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent();
-    }
-
-    LOGT("To be done in UserInput Update method");
-#if 0
-    //game ended
-    if (datas->state == UserInput && percentDone >= 1) {
-        datas->newState = GameToBlack;
-        //show one combination which remain
-        if (datas->mode != TilesAttack) {
-            theHeriswapGridSystem.ShowOneCombination();
-        }
-    }
-
-    //ne pas changer la grille si fin de niveau/jeu
-    if (datas->state == UserInput && datas->mode == Normal) {
-        NormalGameModeManager* m = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]);
-        if (m->LevelUp()) {
-            datas->newState = LevelChanged;
-        }
-    }
-#endif
-
     LOGT("TBD in Pause (prolly)");
 #if 0
     //si on est passé de pause à quelque chose different de pause, on desactive la pause

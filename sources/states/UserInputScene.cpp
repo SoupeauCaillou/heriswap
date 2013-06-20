@@ -182,6 +182,27 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
             newGame = false;
             return Scene::CountDown;
         }
+
+        //get the game progress
+        const float percentDone = game->datas->mode2Manager[game->datas->mode]->GameProgressPercent();
+
+        //game ended
+        if (percentDone >= 1) {
+            //show one combination which remain
+            if (game->datas->mode != TilesAttack) {
+                theHeriswapGridSystem.ShowOneCombination();
+            }
+            return Scene::GameToBlack;
+        }
+
+        //ne pas changer la grille si fin de niveau/jeu
+        if (game->datas->mode == Normal) {
+            NormalGameModeManager* m = static_cast<NormalGameModeManager*> (game->datas->mode2Manager[Normal]);
+            if (m->LevelUp()) {
+                return Scene::LevelChanged;
+            }
+        }
+
         game->datas->successMgr->timeUserInputloop += dt;
         game->datas->successMgr->sWhatToDo(theTouchInputManager.wasTouched(0) && theTouchInputManager.isTouched(0), dt);
 
@@ -327,6 +348,7 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
         LOGI("'" << __PRETTY_FUNCTION__ << "'");
         inCombinationCells.clear();
 
+        //quand c'est plus au joueur de jouer, on supprime les marquages sur les feuilles
         game->toggleShowCombi(false);
         if (game->datas->mode == Normal) {
             std::vector<Entity>& leavesInHelpCombination =
