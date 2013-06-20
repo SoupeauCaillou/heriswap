@@ -1,0 +1,5 @@
+extends = modemenu/score_text
+
+[Transformation]
+position%screen = 0.3, 0
+

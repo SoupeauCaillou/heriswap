@@ -1,0 +1,20 @@
+[Transformation]
+#position = 0, 0
+# 708/800, 147/1280
+size%screen = 0.885,0.115
+#rotation = 0
+z = 0.51
+
+[TextRendering]
+#~ String
+#text
+#~ String
+#font_name
+#~ Color
+color = green
+#~ float #75
+char_height = 0.586
+#~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
+positioning = 0.5
+#~ bool
+#show

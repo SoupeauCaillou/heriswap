@@ -1,0 +1,19 @@
+[Transformation]
+position = 0, 0
+#size = 1, 1
+#rotation = 0
+z = 0.51
+
+[TextRendering]
+#~ String
+#text
+#~ String
+#font_name
+#~ Color
+color%name = green
+#~ float
+char_height = 0.4
+#~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
+positioning = 0
+#~ bool
+#show

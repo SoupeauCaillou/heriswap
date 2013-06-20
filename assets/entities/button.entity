@@ -1,0 +1,35 @@
+[Transformation]
+#position = 0, 0
+#size%screen = 0.8, 0.1
+#rotation = 0
+z = 0.5
+
+[Rendering]
+#~ TextureRef
+texture = fond_bouton
+#~ EffectRef
+#effectRef
+#~ Color
+color = 1,1,1,0.5
+#~ bool
+#show = 0
+#~ bool
+#mirror_h
+#~ bool
+#z_pre_pass
+#~ bool
+#fast_culling
+#~ int
+#opaque_type
+#~ int
+#camera_bitmask
+
+[Button]
+#~ bool
+#enabled = 0
+
+[Sound]
+#~ float
+#volume =
+#~ int
+#sound =

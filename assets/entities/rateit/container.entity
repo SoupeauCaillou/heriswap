@@ -1,0 +1,27 @@
+[Transformation]
+# NW 44/800 40/1280
+positionNW = 0.055, 0.03125
+# 712/800, 500/1280
+size%screen = 0.89, 0.39
+#rotation = 0
+z = 0.47
+
+[Rendering]
+#~ TextureRef
+texture = fond_menu_mode
+#~ EffectRef
+#effectRef
+#~ Color
+color = 1,1,1,0.5
+#~ bool
+#show
+#~ bool
+#mirror_h
+#~ bool
+#z_pre_pass
+#~ bool
+#fast_culling
+#~ int
+#opaque_type
+#~ int
+#camera_bitmask

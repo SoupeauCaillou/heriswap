@@ -1,0 +1,25 @@
+[Transformation]
+positionS%screen = 0, -0.5
+size%texture_ratio,screen_h = 0.7
+#rotation = 0
+z = 0.47
+
+[Rendering]
+#~ TextureRef
+texture = 2emeplan
+#~ EffectRef
+#effectRef
+#~ Color
+#color
+#~ bool
+#show
+#~ bool
+#mirror_h
+#~ bool
+#z_pre_pass
+#~ bool
+#fast_culling
+#~ int
+opaque_type = 0
+#~ int
+#camera_bitmask

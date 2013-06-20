@@ -1,0 +1,25 @@
+[Transformation]
+positionNW%screen = -0.5, 0
+size%texture_ratio,screen_h = 0.5
+#rotation = 0
+z = 0.41
+
+[Rendering]
+#~ TextureRef
+texture = snow_branch
+#~ EffectRef
+#effectRef
+#~ Color
+#color
+#~ bool
+show = 0
+#~ bool
+#mirror_h
+#~ bool
+#z_pre_pass
+#~ bool
+#fast_culling
+#~ int
+#opaque_type
+#~ int
+#camera_bitmask

@@ -1,0 +1,41 @@
+[Transformation]
+# positionE =  354,1215 (800/1280)
+positionSE%screen = 0.5, -0.5
+# size = 100/800, 95/1280
+size%screen = 0.125, 0.074
+#rotation = 0
+z = 0.51
+
+[Rendering]
+#~ TextureRef
+texture = sound_on
+#~ EffectRef
+#effectRef
+#~ Color
+#color
+#~ bool
+#show
+#~ bool
+#mirror_h
+#~ bool
+#z_pre_pass
+#~ bool
+#fast_culling
+#~ int
+#opaque_type
+#~ int
+#camera_bitmask
+
+[Button]
+#~ bool
+#enabled =
+#~ float
+over_size = 1.3
+#~ float
+#vibration =
+
+[Sound]
+#~ float
+#volume =
+#~ int
+#sound =

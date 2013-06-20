@@ -1,0 +1,17 @@
+[Transformation]
+positionN%screen = 0, 0.5
+size%screen = 1, 0.5
+#rotation = 0
+z = 0.01
+
+[Scrolling]
+#~ glm::vec2
+direction = -1, 0
+#~ float
+speed = 0.5
+#~ glm::vec2
+#display_size =
+#~ bool
+show = 0
+#~ RenderingComponent::Opacity
+opaque_type = 0

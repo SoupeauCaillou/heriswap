@@ -1,0 +1,37 @@
+# vec2 modifiers : %screen, %screen_rev, %screen_w, %screen_h
+# relative vec2 modifiers : %texture_ratio,screen_w, %texture_ratio,screen_h, %screen_w,texture_ratio, %screen_h,texture_ratio, %texture_ratio,abs, %abs,texture_ratio
+# color modifiers : %html, %255
+
+[Transformation]
+positionS%screen = 0.5, 0.5
+size%screen = 1, 0.05
+#rotation = 0
+z = 0.42
+
+[Particule]
+#~ float
+emission_rate = 0
+#~ float
+#duration =
+#~ TextureRef
+texture  = snow_flake0
+#~ Interval float
+lifetime = 5, 6.5
+#~ Interval Color
+initial_color = 1,1,1,1,1,1,1,1
+#~ Interval Color
+final_color = 1,1,1,1,1,1,1,1
+#~ Interval float
+initial_size = 12,14
+#~ Interval float
+final_size = 12, 14
+#~ Interval float
+force_direction = 0, 0
+#~ Interval float
+force_amplitude = 0, 0
+#~ Interval float
+moment = -3, 3
+#~ float
+mass = 1
+#~glm::vec2
+#gravity =

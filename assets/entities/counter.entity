@@ -1,0 +1,19 @@
+[Transformation]
+position%screen = 0, 0
+#size = 1, 1
+#rotation = 0
+z = 0.49
+
+[TextRendering]
+#~ String
+#text
+#~ String
+font_name = gdtypo
+#~ Color
+color%255 = 3, 99, 71
+#~ float
+char_height = 2.66
+#~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
+positioning = 0.5
+#~ bool
+#show

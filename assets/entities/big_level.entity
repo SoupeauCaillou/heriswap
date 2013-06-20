@@ -1,0 +1,54 @@
+[Transformation]
+#position = 0, 0
+#size = 1, 1
+#rotation = 0
+#z = 0.1
+
+[TextRendering]
+#~ String
+#text
+#~ String
+font_name = gdtypo
+#~ Color
+color = 1,1,1,1
+#~ float
+char_height = 2.0
+#~ float
+positioning = 0
+#~ bool
+#show
+
+[Music]
+#~ int
+#music =
+#~ int
+#loop_next =
+#~ int
+#previous_ending =
+#~ float
+#loop_at =
+#~ int
+#position_i =
+#~ float
+#fade_out =
+#~ float
+#fade_in =
+#~ float
+#volume =
+#~ bool
+#looped =
+#~ bool
+#paused =
+#~ Play = 0, Stop = 1, Pause = 2
+control = 1
+
+[Morphing]
+#~ bool
+#active =
+#~ float
+#value =
+#~ float
+#activation_time =
+#~ float
+#timing =
+

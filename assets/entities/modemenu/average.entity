@@ -1,0 +1,4 @@
+extends = modemenu/text
+
+[Transformation]
+positionS%screen = 0, -0.4

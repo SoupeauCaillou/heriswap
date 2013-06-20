@@ -1,0 +1,29 @@
+# vec2 modifiers : %screen, %screen_rev, %screen_w, %screen_h
+# relative vec2 modifiers : %texture_ratio,screen_w, %texture_ratio,screen_h, %screen_w,texture_ratio, %screen_h,texture_ratio, %texture_ratio,abs, %abs,texture_ratio
+# color modifiers : %html, %255
+
+[Transformation]
+positionNW%screen = 0.5, -0.5
+size%texture_ratio,screen_h = 1
+#rotation = 0
+z = 0.5
+
+[Rendering]
+#~ TextureRef
+texture = fond_menu_mode
+#~ EffectRef
+#effectRef
+#~ Color
+color = 1, 1, 1, 0.5
+#~ bool
+#show
+#~ bool
+#mirror_h
+#~ bool
+#z_pre_pass
+#~ bool
+#fast_culling
+#~ int
+#opaque_type
+#~ int
+#camera_bitmask
