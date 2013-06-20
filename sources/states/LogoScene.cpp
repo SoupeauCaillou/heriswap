@@ -84,7 +84,7 @@ public:
             * glm::vec2(1.0 / theRenderingSystem.getTextureSize("soupe_logo").x, 1.0 / theRenderingSystem.getTextureSize("soupe_logo").y);
         glm::vec2 offset = glm::vec2(-10 / 800.0, 83/869.0) * TRANSFORM(logo)->size;
         TRANSFORM(animLogo)->position = TRANSFORM(logo)->position + offset;
-        TRANSFORM(animLogo)->z = 0.95;
+        TRANSFORM(animLogo)->z = 0.99;
         ADD_COMPONENT(animLogo, Rendering);
         RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo2_365_331");
         RENDERING(animLogo)->show = false;

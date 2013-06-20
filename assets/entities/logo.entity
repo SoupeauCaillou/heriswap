@@ -1,6 +1,6 @@
 [Transformation]
 position = 0, 0
-size%screen_h = 0.8, 0.8
+size%screen_w,texture_ratio = 1
 z = 0.98
 
 [Rendering]
