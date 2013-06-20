@@ -37,6 +37,8 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 #include "systems/SoundSystem.h"
 #include "systems/TransformationSystem.h"
 
+#include "modes/NormalModeManager.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtx/norm.hpp>
 #include <glm/gtx/compatibility.hpp>
@@ -324,6 +326,20 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
     void onExit(Scene::Enum) override {
         LOGI("'" << __PRETTY_FUNCTION__ << "'");
         inCombinationCells.clear();
+
+        game->toggleShowCombi(false);
+        if (game->datas->mode == Normal) {
+            std::vector<Entity>& leavesInHelpCombination =
+                static_cast<NormalGameModeManager*> (game->datas->mode2Manager[Normal])->leavesInHelpCombination;
+            if (!leavesInHelpCombination.empty()) {
+                std::vector<Entity> leaves = theHeriswapGridSystem.RetrieveAllEntityWithComponent();
+                for ( std::vector<Entity>::reverse_iterator it = leaves.rbegin(); it != leaves.rend(); ++it) {
+                    RENDERING(*it)->effectRef = DefaultEffectRef;
+                }
+
+                leavesInHelpCombination.clear();
+            }
+        }
 
         // successMgr->sLuckyLuke();
         // successMgr->sWhatToDo(false, 0.f);
