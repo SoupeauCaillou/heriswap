@@ -75,7 +75,7 @@ void BackgroundSystem::initCloud(Entity e, int group) {
     float width = cloudSize[group].random();
     TRANSFORM(e)->position.x = cloudStartX.random();
     TRANSFORM(e)->position.y = cloudY[group].random();
-    TRANSFORM(e)->z = 0.8; //DL_Cloud;
+    TRANSFORM(e)->z = DL_Cloud;
 
     int idx = glm::round(glm::linearRand(0.f, (float)(textures[group].size()-1)));
     RENDERING(e)->texture = theRenderingSystem.loadTextureFile(textures[group][idx]);
