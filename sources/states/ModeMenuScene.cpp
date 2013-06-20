@@ -563,7 +563,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     void onPreExit(Scene::Enum) override {
     }
 
-    void onExit(Scene::Enum) override {
+    void onExit(Scene::Enum ) override {
         theHeriswapGridSystem.setGridFromDifficulty(difficulty);
 
         game->datas->successMgr->NewGame(difficulty);
@@ -591,6 +591,8 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             TEXT_RENDERING(enableSwarm)->show = false;
             CONTAINER(enableSwarmContainer)->enable = false;
         #endif
+
+
     }
 };
 

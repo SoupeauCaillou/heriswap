@@ -67,6 +67,7 @@ class HeriswapGame : public Game {
 		static std::string cellTypeToTextureNameAndRotation(int type, float* rotation);
 		static float cellTypeToRotation(int type);
 
+        void prepareNewGame();
 		void setupGameProp();
 
 		Entity camera;

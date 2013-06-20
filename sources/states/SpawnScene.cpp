@@ -186,7 +186,12 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	///----------------------------------------------------------------------------//
 	///--------------------- ENTER SECTION ----------------------------------------//
 	///----------------------------------------------------------------------------//
-	void onPreEnter(Scene::Enum) override {
+	void onPreEnter(Scene::Enum from) override {
+        // Prepare game
+        if (from == Scene::BlackToSpawn) {
+            game->prepareNewGame();
+            game->setupGameProp();
+        }
 	}
 
 	void onEnter(Scene::Enum) override {

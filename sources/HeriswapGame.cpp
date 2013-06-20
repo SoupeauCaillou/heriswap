@@ -793,3 +793,17 @@ void HeriswapGame::setupGameProp() {
     }
 
 }
+
+void HeriswapGame::prepareNewGame() {
+    //for count down in 2nd mode
+    #if 1
+    LOGT("TODO");
+    #else
+    static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame = true;
+    #endif
+    // call Enter before starting fade-in
+    datas->mode2Manager[datas->mode]->Enter();
+    // TODO Fix it!
+    // datas->mode2Manager[datas->mode]->UiUpdate(0);
+    MUSIC(datas->menu)->control = MusicControl::Stop;
+}
