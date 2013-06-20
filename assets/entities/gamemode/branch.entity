@@ -1,0 +1,26 @@
+[Transformation]
+positionNW%screen = -0.5, 0.5
+# 800/800, 800 * 107.0f / 391.0f = 218.93 / 1280
+size%screen = 1, 0.171
+#rotation = 0
+z = 0.12
+
+[Rendering]
+#~ TextureRef
+texture = branche
+#~ EffectRef
+#effectRef
+#~ Color
+#color
+#~ bool
+#show
+#~ bool
+#mirror_h
+#~ bool
+#z_pre_pass
+#~ bool
+#fast_culling
+#~ int
+#opaque_type
+#~ int
+#camera_bitmask

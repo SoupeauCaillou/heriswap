@@ -92,73 +92,27 @@ void GameModeManager::LoadHerissonTexture(int type) {
 }
 
 void GameModeManager::Setup() {
-    herisson = theEntityManager.CreateEntity("herisson");
-    ADD_COMPONENT(herisson, Transformation);
-    ADD_COMPONENT(herisson, Rendering);
-    ADD_COMPONENT(herisson, Animation);
-    ADD_COMPONENT(herisson, Button);
-    TRANSFORM(herisson)->z = DL_Animal;
-    TRANSFORM(herisson)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(142),
-                                          (float)PlacementHelper::GimpHeightToScreen(116));
-    // TransformationSystem::setPosition(TRANSFORM(herisson),
-    //                                glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1028)),
-    //                                TransformationSystem::N);
+    herisson = theEntityManager.CreateEntity("herisson",
+        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/herisson"));
 
-    ANIMATION(herisson)->playbackSpeed = 4.1;
+    branch = theEntityManager.CreateEntity("branch",
+        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/branch"));
 
-    RENDERING(herisson)->show = false;
-    BUTTON(herisson)->enabled = false;
+    decor2nd = theEntityManager.CreateEntity("decor2nd",
+        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/decor2nd"));
 
-    branch = theEntityManager.CreateEntity("branch");
-    ADD_COMPONENT(branch, Transformation);
-    TRANSFORM(branch)->z = DL_Branch;
-    TRANSFORM(branch)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(800),
-                                        (float)PlacementHelper::GimpWidthToScreen(800) * 107.0f / 391.0f);
-    // TransformationSystem::setPosition(TRANSFORM(branch),
-    //                                glm::vec2((float)-PlacementHelper::ScreenWidth*0.5f, (float)PlacementHelper::GimpYToScreen(0)),
-    //                                TransformationSystem::NW);
-    ADD_COMPONENT(branch, Rendering);
-    RENDERING(branch)->show = false;
-    RENDERING(branch)->texture = theRenderingSystem.loadTextureFile("branche");
-
-    decor2nd = theEntityManager.CreateEntity("decor2nd");
-    ADD_COMPONENT(decor2nd, Transformation);
-    TRANSFORM(decor2nd)->z = DL_Decor2nd;
-    TRANSFORM(decor2nd)->size = glm::vec2((float)PlacementHelper::ScreenWidth,
-                                          (float)PlacementHelper::GimpHeightToScreen(470));
-    // TransformationSystem::setPosition(TRANSFORM(decor2nd),
-    //                                glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(610)),
-    //                                TransformationSystem::N);
-
-    ADD_COMPONENT(decor2nd, Scrolling);
     SCROLLING(decor2nd)->images.push_back("decor2nd_0");
     SCROLLING(decor2nd)->images.push_back("decor2nd_3");
     SCROLLING(decor2nd)->images.push_back("decor2nd_2");
     SCROLLING(decor2nd)->images.push_back("decor2nd_1");
-    SCROLLING(decor2nd)->direction = glm::vec2(1.f, 0.f);
-    SCROLLING(decor2nd)->speed = 0.05f;
-    SCROLLING(decor2nd)->displaySize = glm::vec2(TRANSFORM(decor2nd)->size.x * 1.01f, TRANSFORM(decor2nd)->size.y);
-    SCROLLING(decor2nd)->show = false;
-    SCROLLING(decor2nd)->opaqueType = RenderingComponent::NON_OPAQUE;
-
-    decor1er = theEntityManager.CreateEntity("decor1er");
-    ADD_COMPONENT(decor1er, Transformation);
-    TRANSFORM(decor1er)->z = DL_Decor1er;
-    TRANSFORM(decor1er)->size = glm::vec2((float)PlacementHelper::ScreenWidth,
-                                          (float)PlacementHelper::GimpHeightToScreen(300));
-    // TransformationSystem::setPosition(TRANSFORM(decor1er),
-    //                                glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1280)),
-    //                                TransformationSystem::S);
-    ADD_COMPONENT(decor1er, Scrolling);
+    
+    decor1er = theEntityManager.CreateEntity("decor1er",
+        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/decor1er"));
+    
     SCROLLING(decor1er)->images.push_back("decor1er_0");
     SCROLLING(decor1er)->images.push_back("decor1er_1");
     SCROLLING(decor1er)->images.push_back("decor1er_2");
     SCROLLING(decor1er)->images.push_back("decor1er_3");
-    SCROLLING(decor1er)->direction = -glm::vec2(1.f, 0.f);
-    SCROLLING(decor1er)->speed = 0;
-    SCROLLING(decor1er)->displaySize = glm::vec2(TRANSFORM(decor1er)->size.x * 1.01f, TRANSFORM(decor1er)->size.y);
-    SCROLLING(decor1er)->show = false;
-    SCROLLING(decor1er)->opaqueType = RenderingComponent::NON_OPAQUE;
 
     fillVec();
 

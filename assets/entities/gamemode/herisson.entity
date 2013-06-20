@@ -1,0 +1,49 @@
+[Transformation]
+# N : 0, 1028
+positionN%screen = 0, -0.303
+# 142 / 800, 116 / 1280
+size%screen = 0.1775, 0.0906
+#rotation = 0
+z = 0.155
+
+[Rendering]
+#~ TextureRef
+#texture
+#~ EffectRef
+#effectRef
+#~ Color
+#color
+#~ bool
+#show
+#~ bool
+#mirror_h
+#~ bool
+#z_pre_pass
+#~ bool
+#fast_culling
+#~ int
+#opaque_type
+#~ int
+#camera_bitmask
+
+[Animation]
+#~ String
+#name =
+#~ float
+playback_speed = 4.1
+#~ float
+#accum =
+#~ float
+#wait_accum =
+#~ int
+#loop_count =
+#~ int
+#frame_index =
+
+[Button]
+#~ bool
+#enabled =
+#~ float
+#over_size =
+#~ float
+#vibration =
