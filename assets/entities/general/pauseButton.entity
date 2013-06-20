@@ -1,6 +1,6 @@
 [Transformation]
 # -354, 1215
-positionW%screen = 0.575, 0.449
+positionSW%screen = -0.5, -0.5
 # 100, 95
 size%screen = 0.125, 0.074
 #rotation = 0
@@ -8,7 +8,7 @@ z = 0.45
 
 [Rendering]
 #~ TextureRef
-#texture = pause
+texture = pause
 #~ EffectRef
 #effectRef
 #~ Color

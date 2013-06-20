@@ -43,10 +43,6 @@
 #include <iostream>
 #include <sstream>
 
-//FCRR : FPS Calculation Refresh Rate
-#define FCRR 1.
-
-
 static float initialHerissonPosition(Entity herisson) {
     return -PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.x * 0.25;
 }
@@ -106,10 +102,10 @@ void GameModeManager::Setup() {
     SCROLLING(decor2nd)->images.push_back("decor2nd_3");
     SCROLLING(decor2nd)->images.push_back("decor2nd_2");
     SCROLLING(decor2nd)->images.push_back("decor2nd_1");
-    
+
     decor1er = theEntityManager.CreateEntity("decor1er",
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/decor1er"));
-    
+
     SCROLLING(decor1er)->images.push_back("decor1er_0");
     SCROLLING(decor1er)->images.push_back("decor1er_1");
     SCROLLING(decor1er)->images.push_back("decor1er_2");
@@ -200,7 +196,7 @@ void GameModeManager::TogglePauseDisplay(bool paused) {
     theHeriswapGridSystem.ShowAll(!paused);
     //show levelbig score
 
-    BUTTON(uiHelper.pauseButton)->enabled = !paused;;
+    BUTTON(uiHelper.pauseButton)->enabled = !paused;
     RENDERING(uiHelper.pauseButton)->show = !paused;
 }
 
