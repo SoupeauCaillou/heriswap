@@ -20,7 +20,6 @@
 #include "Game_Private.h"
 
 #include "DepthLayer.h"
-#include "GameState.h"
 
 #include "modes/GameModeManager.h"
 #include "modes/Go100SecondsModeManager.h"
@@ -45,12 +44,6 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game, successMgr, context->storageAPI);
     mode2Manager[Go100Seconds] = new Go100SecondsGameModeManager(game, successMgr, context->storageAPI);
     storageAPI = context->storageAPI;
-
-#if SAC_DEBUG
-    state = BlackToLogoState;
-#else
-    state = BlackToLogoState;
-#endif
 }
 
  PrivateData::~PrivateData() {

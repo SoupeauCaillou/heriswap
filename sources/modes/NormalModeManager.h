@@ -28,7 +28,7 @@ class NormalGameModeManager : public GameModeManager {
 
 		void Setup();
 		void Enter();
-		void GameUpdate(float dt, GameState state);
+		void GameUpdate(float dt, Scene::Enum state);
 		float GameProgressPercent();
 		void UiUpdate(float dt);
 		void Exit();

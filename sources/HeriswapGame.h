@@ -18,8 +18,6 @@
 */
 #pragma once
 
-#include "GameState.h"
-
 #include "base/StateMachine.h"
 #include "states/Scenes.h"
 
@@ -61,10 +59,8 @@ class HeriswapGame : public Game {
 		void setMode();
 		int saveState(uint8_t** out);
 
-        void stateChanged(GameState from, GameState to);
-
-		static bool inGameState(GameState state);
-		static bool pausableState(GameState state);
+		static bool inGameState(Scene::Enum state);
+		static bool pausableState(Scene::Enum state);
 		static glm::vec2 GridCoordsToPosition(int i, int j, int s);
 		static glm::vec2 CellSize(int gridSize, int cellType);
 		static float CellContentScale();

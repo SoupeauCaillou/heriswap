@@ -51,7 +51,7 @@ class GameModeManager {
 		// to be called at the beginning of each game: setup entites, scoring, etc..
 		virtual void Enter();
 		// to be called during the game (only in UserInput GameState) - return game completion percentage
-		virtual void GameUpdate(float dt, GameState state) = 0;
+		virtual void GameUpdate(float dt, Scene::Enum state) = 0;
 		// to be called during the game (only in UserInput GameState) - return game completion percentage
 		virtual float GameProgressPercent() = 0;
 		// to be called once per frame during game

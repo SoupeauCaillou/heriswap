@@ -43,15 +43,15 @@ class PrivateData {
         PrivateData(HeriswapGame* game, GameContext* context, SuccessManager* successMgr);
         ~PrivateData();
         void Setup();
-     GameState state, stateBeforePause, newState;
+     // GameState state, stateBeforePause, newState;
      bool stateBeforePauseNeedEnter;
      Entity sky, decord2nd, decord1er;
-     std::map<GameState, GameStateManager*> state2Manager;
+
      std::map<GameMode, GameModeManager*> mode2Manager;
      SuccessManager* successMgr;
-     
+
      StorageAPI* storageAPI;
-     
+
      GameMode mode;
 
      Entity cursor;

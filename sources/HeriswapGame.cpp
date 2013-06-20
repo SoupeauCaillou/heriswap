@@ -58,27 +58,27 @@
 
 #include <sstream>
 
-bool HeriswapGame::inGameState(GameState state) {
+bool HeriswapGame::inGameState(Scene::Enum state) {
     switch (state) {
-        case Spawn:
-        case UserInput:
-        case Delete:
-        case Fall:
-        case LevelChanged:
+        case Scene::Spawn:
+        case Scene::UserInput:
+        case Scene::Delete:
+        case Scene::Fall:
+        case Scene::LevelChanged:
             return true;
         default:
             return false;
     }
 }
 
-bool HeriswapGame::pausableState(GameState state) {
+bool HeriswapGame::pausableState(Scene::Enum state) {
     switch (state) {
-        case Spawn:
-        case UserInput:
-        case Delete:
-        case Fall:
-        case LevelChanged:
-        case Pause:
+        case Scene::Spawn:
+        case Scene::UserInput:
+        case Scene::Delete:
+        case Scene::Fall:
+        case Scene::LevelChanged:
+        case Scene::Pause:
             return true;
         default:
             return false;
@@ -305,7 +305,7 @@ void HeriswapGame::toggleShowCombi(bool enabled) {
     static std::vector<Entity> marks;
     //on switch le bool
     activated = !activated;
-    if (!enabled || (datas->state != UserInput))
+    if (!enabled || (sceneStateMachine.getCurrentState() != Scene::UserInput))
         activated = false;
 
     if (activated) {
@@ -345,10 +345,11 @@ void HeriswapGame::toggleShowCombi(bool enabled) {
 void HeriswapGame::backPressed() {
     Game::backPressed();
 
-    if (datas->state == ModeMenu) {
+    const Scene::Enum state = sceneStateMachine.getCurrentState();
+    if (state == Scene::ModeMenu) {
         // go back to main menu
         // (static_cast<ModeMenuStateManager*>(datas->state2Manager[ModeMenu]))->pleaseGoBack = true;
-    } else if (pausableState(datas->state)) {
+    } else if (pausableState(state)) {
         #if defined(DEBUG)
         // datas->mode2Manager[datas->mode]->toggleDebugDisplay();
         #else
@@ -358,6 +359,8 @@ void HeriswapGame::backPressed() {
 }
 
 void HeriswapGame::togglePause(bool activate) {
+    LOGT("Handle togglePause");
+#if 0
     if (activate && datas->state != Pause && pausableState(datas->state)) {
         stopInGameMusics();
         // pause
@@ -379,6 +382,7 @@ void HeriswapGame::togglePause(bool activate) {
         // if (datas->stateBeforePauseNeedEnter)
             // datas->state2Manager[datas->state]->Enter();
     }
+#endif
 }
 
 void HeriswapGame::tick(float dt) {
@@ -394,6 +398,9 @@ void HeriswapGame::tick(float dt) {
   //   }
 
     //quand c'est plus au joueur de jouer, on supprime les marquages sur les feuilles
+
+    LOGT("To be done in UserInput onExit method");
+#if 0
     if (datas->state != UserInput) {
         toggleShowCombi(false);
         if (datas->mode == Normal) {
@@ -408,12 +415,15 @@ void HeriswapGame::tick(float dt) {
             }
         }
     }
+#endif
     //get the game progress
     float percentDone = 0;
-    if (inGameState(datas->state)) {
+    if (inGameState(sceneStateMachine.getCurrentState())) {
         percentDone = datas->mode2Manager[datas->mode]->GameProgressPercent();
     }
 
+    LOGT("To be done in UserInput Update method");
+#if 0
     //game ended
     if (datas->state == UserInput && percentDone >= 1) {
         datas->newState = GameToBlack;
@@ -430,12 +440,18 @@ void HeriswapGame::tick(float dt) {
             datas->newState = LevelChanged;
         }
     }
+#endif
 
+    LOGT("TBD in Pause (prolly)");
+#if 0
     //si on est passé de pause à quelque chose different de pause, on desactive la pause
     if (datas->state == Pause && datas->newState == Unpause) {
         togglePause(false);
-
     }
+#endif
+
+    LOGT("State change action must be done in states respective onEnter/onExit methods");
+#if 0
     //si on a change d'etat
      else if (datas->newState != datas->state) {
         stateChanged(datas->state, datas->newState);
@@ -455,6 +471,7 @@ void HeriswapGame::tick(float dt) {
         RENDERING(datas->socialGamNet)->show = !ofHidden;
         BUTTON(datas->socialGamNet)->enabled = RENDERING(datas->socialGamNet)->show;
     }
+#endif
 
     // background (unconditionnal) update of state managers
     // for(std::map<GameState, GameStateManager*>::iterator it=datas->state2Manager.begin();
@@ -479,9 +496,11 @@ void HeriswapGame::tick(float dt) {
             RENDERING(datas->soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
         }
     }
+
     //if socialGamNet is clicked
     if (BUTTON(datas->socialGamNet)->clicked){
-        if (datas->state == ModeMenu) {
+        if (sceneStateMachine.getCurrentState() == Scene::ModeMenu) {
+            LOGT("TBD");
             // Difficulty diff = (static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]))->difficulty;
             // successAPI->openLeaderboard(datas->mode, diff);
         } else {
@@ -490,7 +509,7 @@ void HeriswapGame::tick(float dt) {
     }
 
     //updating HUD if playing
-    if (inGameState(datas->newState) && datas->newState != LevelChanged) {
+    if (inGameState(sceneStateMachine.getCurrentState()) && sceneStateMachine.getCurrentState() != Scene::LevelChanged) {
         datas->mode2Manager[datas->mode]->UiUpdate(dt);
     }
 
@@ -501,8 +520,11 @@ void HeriswapGame::tick(float dt) {
 
     //update music
     if (!theMusicSystem.isMuted()) {
+        const Scene::Enum state = sceneStateMachine.getCurrentState();
         //si on est en jeu et/ou  fin de musiques, charger de nouvelles musiques
-        if ((pausableState(datas->state) && datas->state != LevelChanged && datas->state != Pause) || datas->state == BlackToSpawn) {
+        if ((pausableState(state) &&
+            state != Scene::LevelChanged &&
+            state != Scene::Pause) || state == Scene::BlackToSpawn) {
             MUSIC(datas->inGameMusic.masterTrack)->control = MusicControl::Play;
             MUSIC(datas->inGameMusic.masterTrack)->volume = 1;
             MUSIC(datas->inGameMusic.stressTrack)->control = (datas->mode == Normal) ? MusicControl::Play : MusicControl::Stop;
@@ -552,7 +574,7 @@ void HeriswapGame::tick(float dt) {
             MUSIC(datas->inGameMusic.stressTrack)->volume = (datas->mode == Normal) ? ADSR(datas->inGameMusic.stressTrack)->value : 0;
             MUSIC(datas->menu)->control = MusicControl::Stop;
 
-        } else if (datas->state == MainMenu || datas->state == ModeMenu) { //dans les menus
+        } else if (state == Scene::MainMenu || state == Scene::ModeMenu) { //dans les menus
             if (MUSIC(datas->menu)->music == InvalidMusicRef) {
                 LOGW("Start Menu music");
                 MUSIC(datas->menu)->music = theMusicSystem.loadMusicFile("audio/musique_menu.ogg");
@@ -575,11 +597,14 @@ void HeriswapGame::tick(float dt) {
 }
 
 int HeriswapGame::saveState(uint8_t** out) {
+    LOGT("TODO");
+    return 0;
+#if 0
     if (datas->state == Help) {
         // datas->state2Manager[datas->state]->Exit();
         // datas->state = static_cast<HelpStateManager*>(datas->state2Manager[datas->state])->oldState;//Pause;
-        if (datas->state == BlackToSpawn) {
-            datas->state = MainMenu;
+        if (datas->state == Scene::BlackToSpawn) {
+            datas->state = Scene::MainMenu;
         }
         // datas->state2Manager[datas->state]->Enter();
     }
@@ -631,6 +656,7 @@ int HeriswapGame::saveState(uint8_t** out) {
     LOGI("'" << sizeof(datas->stateBeforePause) << "' + '"<< sizeof(datas->mode) << "' + '" << sizeof(eSize) << "' + '" << sizeof(sSize) << "' + '" << eSize << "' + '" << sSize << "' + '" << gSize << "' -> '" << finalSize << "' ('" << *out << "')");
 
     return finalSize;
+#endif
 }
 
 const uint8_t* HeriswapGame::loadEntitySystemState(const uint8_t* in, int) {
@@ -650,6 +676,8 @@ const uint8_t* HeriswapGame::loadEntitySystemState(const uint8_t* in, int) {
 }
 
 void HeriswapGame::loadGameState(const uint8_t* in, int size) {
+    LOGT("TODO");
+#if 0
     /* restore Game fields */
     memcpy(&datas->stateBeforePause, in, sizeof(datas->stateBeforePause));
     datas->state = datas->stateBeforePause;
@@ -677,6 +705,7 @@ void HeriswapGame::loadGameState(const uint8_t* in, int size) {
     RENDERING(datas->soundButton)->show = true;
     SCROLLING(datas->sky)->show = true;
     LOGW("RESTORED STATE: '" << datas->stateBeforePause << "'");
+#endif
 }
 
 static float rotations[] = {
@@ -721,4 +750,62 @@ bool HeriswapGame::shouldPlayPiano() {
         return true;
     }
     return false;
+}
+
+void HeriswapGame::stopInGameMusics() {
+    MUSIC(datas->inGameMusic.masterTrack)->control = MusicControl::Stop;
+    MUSIC(datas->inGameMusic.accessoryTrack)->control = MusicControl::Stop;
+    MUSIC(datas->inGameMusic.stressTrack)->control = MusicControl::Stop;
+    for(int i=0; i<3; i++) {
+       MUSIC(datas->inGameMusic.secondaryTracks[i])->control = MusicControl::Stop;
+    }
+}
+
+void HeriswapGame::setupGameProp() {
+    if (datas->mode == Go100Seconds) {
+        // ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.2;
+        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.03;
+        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.03;
+        // ADSR((static_cast<FallGameStateManager*> (datas->state2Manager[Fall]))->fallAnimation)->attackTiming = 0.1;
+        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->haveToAddLeavesInGrid)->attackTiming = 0.2;
+        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 0.5;
+        return;
+    }
+
+    //update anim times
+    Difficulty difficulty = theHeriswapGridSystem.sizeToDifficulty();
+    if (difficulty == DifficultyEasy) {
+        // ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.6;
+        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.14;
+        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.14;
+        // ADSR((static_cast<FallGameStateManager*> (datas->state2Manager[Fall]))->fallAnimation)->attackTiming = 0.30;
+        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->haveToAddLeavesInGrid)->attackTiming = 0.40;
+        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 1.;
+    } else {
+        // ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.3;
+        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.07;
+        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.07;
+        // ADSR((static_cast<FallGameStateManager*> (datas->state2Manager[Fall]))->fallAnimation)->attackTiming = 0.15;
+        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->haveToAddLeavesInGrid)->attackTiming = 0.40;
+        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 1.;
+    }
+
+
+    std::stringstream ss;
+    ss << "where mode = " << datas->mode << " and difficulty = " << theHeriswapGridSystem.sizeToDifficulty();
+    if (datas->mode == TilesAttack) ss << " order by time asc limit 5";
+    else ss << " order by points desc limit 5";
+
+    ScoreStorageProxy ssp;
+    datas->storageAPI->loadEntries(&ssp, "*", ss.str());
+
+    datas->bestScores.clear();
+    datas->bestScores.reserve(ssp._queue.size());
+    datas->scoreboardRankInSight = ssp._queue.size();
+
+    for (unsigned i = 0; i < ssp._queue.size(); ++i) {
+        datas->bestScores[i] = ssp._queue.back().points;
+        ssp.popAnElement();
+    }
+
 }

@@ -122,7 +122,7 @@ void Go100SecondsGameModeManager::Exit() {
 	GameModeManager::Exit();
 }
 
-void Go100SecondsGameModeManager::GameUpdate(float dt, GameState state) {
+void Go100SecondsGameModeManager::GameUpdate(float dt, Scene::Enum state) {
 	//update UI (pause button, etc)
 	if (HeriswapGame::pausableState(state))
 	    uiHelper.update(dt);

@@ -27,7 +27,7 @@ class Go100SecondsGameModeManager : public GameModeManager {
 		~Go100SecondsGameModeManager();
 		void Setup();
 		void Enter();
-		void GameUpdate(float dt, GameState state);
+		void GameUpdate(float dt, Scene::Enum state);
 		float GameProgressPercent();
 		void UiUpdate(float dt);
 		void Exit();

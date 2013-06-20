@@ -30,134 +30,78 @@
 #include "systems/MorphingSystem.h"
 #include "systems/ScrollingSystem.h"
 
-void HeriswapGame::stopInGameMusics() {
-    MUSIC(datas->inGameMusic.masterTrack)->control = MusicControl::Stop;
-    MUSIC(datas->inGameMusic.accessoryTrack)->control = MusicControl::Stop;
-    MUSIC(datas->inGameMusic.stressTrack)->control = MusicControl::Stop;
-    for(int i=0; i<3; i++) {
-       MUSIC(datas->inGameMusic.secondaryTracks[i])->control = MusicControl::Stop;
-    }
-}
-
-void HeriswapGame::setupGameProp() {
-    if (datas->mode == Go100Seconds) {
-        // ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.2;
-        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.03;
-        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.03;
-        // ADSR((static_cast<FallGameStateManager*> (datas->state2Manager[Fall]))->fallAnimation)->attackTiming = 0.1;
-        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->haveToAddLeavesInGrid)->attackTiming = 0.2;
-        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 0.5;
-        return;
-    }
-
-    //update anim times
-    Difficulty difficulty = theHeriswapGridSystem.sizeToDifficulty();
-    if (difficulty == DifficultyEasy) {
-        // ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.6;
-        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.14;
-        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.14;
-        // ADSR((static_cast<FallGameStateManager*> (datas->state2Manager[Fall]))->fallAnimation)->attackTiming = 0.30;
-        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->haveToAddLeavesInGrid)->attackTiming = 0.40;
-        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 1.;
-    } else {
-        // ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.3;
-        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.07;
-        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.07;
-        // ADSR((static_cast<FallGameStateManager*> (datas->state2Manager[Fall]))->fallAnimation)->attackTiming = 0.15;
-        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->haveToAddLeavesInGrid)->attackTiming = 0.40;
-        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 1.;
-    }
-
-
-    std::stringstream ss;
-    ss << "where mode = " << datas->mode << " and difficulty = " << theHeriswapGridSystem.sizeToDifficulty();
-    if (datas->mode == TilesAttack) ss << " order by time asc limit 5";
-    else ss << " order by points desc limit 5";
-
-    ScoreStorageProxy ssp;
-    datas->storageAPI->loadEntries(&ssp, "*", ss.str());
-
-    datas->bestScores.clear();
-    datas->bestScores.reserve(ssp._queue.size());
-    datas->scoreboardRankInSight = ssp._queue.size();
-
-    for (unsigned i = 0; i < ssp._queue.size(); ++i) {
-        datas->bestScores[i] = ssp._queue.back().points;
-        ssp.popAnElement();
-    }
-
-}
-
+#if 0
 void HeriswapGame::stateChanged(GameState oldState, GameState newState) {
-  //   if (newState == Unpause) {
-  //       togglePause(false);
-  //   //pressing "give up" button
-  //   } else if (oldState == Pause && newState == MainMenu) {
-  //        LOGI("aborted. going to main menu");
-  //        RENDERING(datas->soundButton)->show = true;
-  //        // datas->state2Manager[datas->stateBeforePause]->Exit();
-  //        // datas->mode2Manager[datas->mode]->Exit();
-  //        newState = MainMenu;
-  //        // static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->gameOverState = ModeMenuStateManager::NoGame;
-  //        stopInGameMusics();
-  //    //click on a mode button
-  //    } else if (oldState == MainMenu && newState == ModeMenu) {
-  //        datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
-  //        //reference title into mode menu from main menu
-  //        static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode];
-  //        setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
-  //    //end game
-  //    } else if (newState == BlackToModeMenu) {
-  //       RENDERING(datas->soundButton)->show = false;
-  //       datas->mode2Manager[datas->mode]->Exit();
-  //       stopInGameMusics();
-  //    //end game, stop musics
-  //    } else if (newState == GameToBlack) {
-     //     stopInGameMusics();
-  //       static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->gameOverState = ModeMenuStateManager::GameEnded;
-        // // place title
-        // MORPHING(static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title)->active = true;
-  //    //let's play !
-  //    } else if (newState == BlackToSpawn) {
-  //       //for count down in 2nd mode
-        // static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame = true;
-        // // call Enter before starting fade-in
-  //        datas->mode2Manager[datas->mode]->Enter();
-  //        // TODO Fix it!
-  //        // datas->mode2Manager[datas->mode]->UiUpdate(0);
-  //        MUSIC(datas->menu)->control = MusicControl::Stop;
+    if (newState == Unpause) {
+        togglePause(false);
+    //pressing "give up" button
+    } else if (oldState == Pause && newState == MainMenu) {
+         LOGI("aborted. going to main menu");
+         RENDERING(datas->soundButton)->show = true;
+         // datas->state2Manager[datas->stateBeforePause]->Exit();
+         // datas->mode2Manager[datas->mode]->Exit();
+         newState = MainMenu;
+         // static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->gameOverState = ModeMenuStateManager::NoGame;
+         stopInGameMusics();
+     //click on a mode button
+     } else if (oldState == MainMenu && newState == ModeMenu) {
+         datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
+         //reference title into mode menu from main menu
+         static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode];
+         setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
+     //end game
+     } else if (newState == BlackToModeMenu) {
+        RENDERING(datas->soundButton)->show = false;
+        datas->mode2Manager[datas->mode]->Exit();
+        stopInGameMusics();
+     //end game, stop musics
+     } else if (newState == GameToBlack) {
+         stopInGameMusics();
+        static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->gameOverState = ModeMenuStateManager::GameEnded;
+        // place title
+        MORPHING(static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title)->active = true;
+     //let's play !
+     } else if (newState == BlackToSpawn) {
+        //for count down in 2nd mode
+        static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame = true;
+        // call Enter before starting fade-in
+         datas->mode2Manager[datas->mode]->Enter();
+         // TODO Fix it!
+         // datas->mode2Manager[datas->mode]->UiUpdate(0);
+         MUSIC(datas->menu)->control = MusicControl::Stop;
 
-  //        setupGameProp();
-  //    } else if (newState == LevelChanged) {
-  //       static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel =
-  //       static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->getSmallLevelEntity();
-  //       static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel =
-        //  (static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]))->currentLevel();
-  //       stopInGameMusics();
-  //    //back button to main
-  //    } else if( newState == MainMenu && oldState == ModeMenu) {
-  //        RENDERING(datas->soundButton)->show = true;
-  //        datas->state2Manager[oldState]->LateExit();
-  //    } else if (newState == BlackToMainMenu) {
-  //       SCROLLING(datas->sky)->show = true;
-  //       RENDERING(datas->soundButton)->show = true;
-  //    } else if (newState == Help) {
-     //    static_cast<HelpStateManager*> (datas->state2Manager[newState])->mode = datas->mode;
-  //       datas->mode2Manager[datas->mode]->showGameDecor(true);
-  //    } else if (newState == ExitState) {
-     //     exitAPI->exitGame();
-  //    } else if (newState == Spawn) {
-        // if (!theMusicSystem.isMuted() && datas->mode == Normal) {
-        //     if (MUSIC(datas->inGameMusic.masterTrack)->loopNext != InvalidMusicRef) {
-        //      if (shouldPlayPiano()) {
-        //          // replace master track next
-        //          theMusicSystem.unloadMusic(MUSIC(datas->inGameMusic.masterTrack)->loopNext);
-        //          MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile("audio/H.ogg");
-        //      }
-        //     }
-     //     }
-  //    }
-  //    if (oldState == Help) {
-  //       datas->mode2Manager[datas->mode]->showGameDecor(false);
-  //    }
+         setupGameProp();
+     } else if (newState == LevelChanged) {
+        static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->smallLevel =
+        static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->getSmallLevelEntity();
+        static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->currentLevel =
+         (static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal]))->currentLevel();
+        stopInGameMusics();
+     //back button to main
+     } else if( newState == MainMenu && oldState == ModeMenu) {
+         RENDERING(datas->soundButton)->show = true;
+         datas->state2Manager[oldState]->LateExit();
+     } else if (newState == BlackToMainMenu) {
+        SCROLLING(datas->sky)->show = true;
+        RENDERING(datas->soundButton)->show = true;
+     } else if (newState == Help) {
+        static_cast<HelpStateManager*> (datas->state2Manager[newState])->mode = datas->mode;
+        datas->mode2Manager[datas->mode]->showGameDecor(true);
+     } else if (newState == ExitState) {
+         exitAPI->exitGame();
+     } else if (newState == Spawn) {
+        if (!theMusicSystem.isMuted() && datas->mode == Normal) {
+            if (MUSIC(datas->inGameMusic.masterTrack)->loopNext != InvalidMusicRef) {
+             if (shouldPlayPiano()) {
+                 // replace master track next
+                 theMusicSystem.unloadMusic(MUSIC(datas->inGameMusic.masterTrack)->loopNext);
+                 MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile("audio/H.ogg");
+             }
+            }
+         }
+     }
+     if (oldState == Help) {
+        datas->mode2Manager[datas->mode]->showGameDecor(false);
+     }
 }
+#endif

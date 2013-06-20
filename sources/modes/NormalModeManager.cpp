@@ -92,8 +92,8 @@ void NormalGameModeManager::TogglePauseDisplay(bool paused) {
     GameModeManager::TogglePauseDisplay(paused);
 }
 
-void NormalGameModeManager::GameUpdate(float dt, GameState state) {
-    #if SAC_DEBUG
+void NormalGameModeManager::GameUpdate(float dt, Scene::Enum state) {
+    #ifdef DEBUG
     // no time update when debug shown
     if (!_debug)
     #endif
@@ -101,7 +101,7 @@ void NormalGameModeManager::GameUpdate(float dt, GameState state) {
     if (HeriswapGame::pausableState(state))
         uiHelper.update(dt);
 
-    if (state != UserInput)
+    if (state != Scene::UserInput)
         return;
 
 

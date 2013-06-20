@@ -76,7 +76,7 @@ void TilesAttackGameModeManager::Exit() {
 	GameModeManager::Exit();
 }
 
-void TilesAttackGameModeManager::GameUpdate(float dt, GameState state) {
+void TilesAttackGameModeManager::GameUpdate(float dt, Scene::Enum state) {
 	//update UI (pause button, etc)
 	if (HeriswapGame::pausableState(state))
 	    uiHelper.update(dt);
