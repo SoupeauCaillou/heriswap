@@ -42,12 +42,24 @@
 #include "systems/SoundSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/TransformationSystem.h"
+#include "systems/AnchorSystem.h"
 
 #include "util/ScoreStorageProxy.h"
 
 #include <iomanip>
 #include <sstream>
 #include <vector>
+
+static glm::vec2 randomHerissonSize() {
+    return
+        glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), (float)PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f, 1.f);
+}
+
+static glm::vec2 randomHerissionStart() {
+    return glm::vec2(
+        (float)PlacementHelper::GimpXToScreen(-glm::round(glm::linearRand(0.f, 299.f))),
+        (float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f, 1149.f))));
+}
 
 struct MainMenuScene : public StateHandler<Scene::Enum> {
     HeriswapGame* game;
@@ -117,11 +129,10 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/herisson"));
 
         // glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), (float)PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f, 1.f);
-        TRANSFORM(game->herisson)->size *= glm::linearRand(.3f, 1.f);
-        // TransformationSystem::setPosition(TRANSFORM(herisson),
-        //                                   glm::vec2((float)(PlacementHelper::GimpXToScreen(-glm::round(glm::linearRand(0.f, 299.f))) - TRANSFORM(herisson)->size.x),
-        //                                             (float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f,1149.f)))),
-        //                                   TransformationSystem::SW);
+        TRANSFORM(game->herisson)->size = randomHerissonSize();
+        TRANSFORM(game->herisson)->position = AnchorSystem::adjustPositionWithCardinal(randomHerissionStart(),
+                TRANSFORM(game->herisson)->size, Cardinal::SW);
+
         a.str("");
         a << "herisson_" << glm::round(glm::linearRand(1.f, 8.f));
         ANIMATION(game->herisson)->name = a.str();
@@ -211,13 +222,11 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             a << "herisson_" << glm::round(glm::linearRand(1.f, 8.f));
             ANIMATION(game->herisson)->name = a.str();
             ANIMATION(game->herisson)->playbackSpeed = glm::linearRand(2.0f, 4.0f);
-
-            TRANSFORM(game->herisson)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(310),
-                                                  (float)PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f, 1.f); //size
-            // TransformationSystem::setPosition(TRANSFORM(herisson),
-            //                                   glm::vec2((float)(PlacementHelper::GimpXToScreen(-glm::round(glm::linearRand(0.f, 299.f)))-TRANSFORM(herisson)->size.x),
-            //                                             (float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f, 1149.f)))),
-            //                                   TransformationSystem::SW);//offset
+            auto textureSize = theRenderingSystem.getTextureSize("herisson_1_5");
+            float r = glm::linearRand(.3f, 1.f);
+            TRANSFORM(game->herisson)->size = randomHerissonSize();
+            TRANSFORM(game->herisson)->position = AnchorSystem::adjustPositionWithCardinal(randomHerissionStart(),
+                TRANSFORM(game->herisson)->size, Cardinal::SW);
         }
         game->title = 0;
         if (!modeTitleToReset || (modeTitleToReset && !MORPHING(modeTitleToReset)->active)) {
