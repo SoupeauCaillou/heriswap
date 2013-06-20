@@ -147,10 +147,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
-    void onPreEnter(Scene::Enum) override {
-    }
-
-    void onEnter(Scene::Enum pState) override {
+    void onPreEnter(Scene::Enum pState) override {
         switch (pState) {
             case Scene::Pause:
                 LOGI("aborted. going to main menu");

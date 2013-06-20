@@ -45,7 +45,7 @@ struct FadeScene : public StateHandler<Scene::Enum> {
     float timeout, accum;
 
     FadeScene(HeriswapGame* game, FadingType::Enum pType, float pDuration, Scene::Enum pNextState):
-    StateHandler<Scene::Enum>(), type(pType), duration(pDuration), nextState(pNextState) {
+    StateHandler<Scene::Enum>(), type(pType), duration(pDuration), nextState(pNextState), timeout(0) {
         this->game = game;
     }
 
@@ -98,17 +98,9 @@ struct FadeScene : public StateHandler<Scene::Enum> {
     // Return false, until fading (in or out) is finished
     bool updatePreEnter(Scene::Enum , float dt) override {
         updateColor(eFading, type);
-
-        if (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()) {
+        if (type == FadingType::FadeIn)
             return true;
-        }
-        if (ADSR(eFading)->value == ADSR(eFading)->sustainValue) {
-            accum += dt;
-            if (accum >= timeout) {
-                return true;
-            }
-        }
-        return false;
+        return internalUpdate(dt);
     }
 
     ///----------------------------------------------------------------------------//
@@ -121,12 +113,30 @@ struct FadeScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     ///--------------------- EXIT SECTION -----------------------------------------//
     ///----------------------------------------------------------------------------//
-    void onPreExit(Scene::Enum) override {
+    bool updatePreExit(Scene::Enum , float dt) override {
+        updateColor(eFading, type);
+        if (type == FadingType::FadeOut)
+            return true;
+        return internalUpdate(dt);
     }
 
     void onExit(Scene::Enum) override {
         RENDERING(eFading)->show = false;
         ADSR(eFading)->active = false;
+    }
+
+    bool internalUpdate(float dt) {
+        if (theTouchInputManager.isTouched() && !theTouchInputManager.wasTouched()) {
+            return true;
+        }
+        const auto* adsr = ADSR(eFading);
+        if (adsr->value == adsr->sustainValue) {
+            accum += dt;
+            if (accum >= timeout) {
+                return true;
+            }
+        }
+        return false;
     }
 };
 

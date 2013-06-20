@@ -188,7 +188,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     // sceneStateMachine.registerState(Scene::ExitState, Scene::CreateExitStateSceneHandler(this), "Scene::ExitState");
     sceneStateMachine.registerState(Scene::ElitePopup, Scene::CreateElitePopupSceneHandler(this), "Scene::ElitePopup");
 
-    sceneStateMachine.registerState(Scene::BlackToMainMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.3f, Scene::MainMenu), "Scene::BlackToMainMenu");
+    sceneStateMachine.registerState(Scene::BlackToMainMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, .5f, Scene::MainMenu), "Scene::BlackToMainMenu");
     sceneStateMachine.registerState(Scene::BlackToModeMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::ModeMenu), "Scene::BlackToModeMenu");
     sceneStateMachine.registerState(Scene::BlackToSpawn, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::Spawn), "Scene::BlackToSpawn");
     sceneStateMachine.registerState(Scene::AdsToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::BlackToSpawn), "Scene::AdsToBlackState");

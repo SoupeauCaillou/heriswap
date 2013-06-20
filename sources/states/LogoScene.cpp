@@ -152,7 +152,7 @@ public:
                 RENDERING(logofade)->color.a = elapsed / FADE;
                 break;
             case LogoStep7:
-                return Scene::MainMenu;
+                return Scene::BlackToMainMenu;
             default:
                 break;
         }
