@@ -20,7 +20,7 @@
 
 #include <vector>
 
-#include "GridSystem.h"
+#include "systems/HeriswapGridSystem.h"
 #include "HeriswapGame.h"
 
 class SuccessManager {

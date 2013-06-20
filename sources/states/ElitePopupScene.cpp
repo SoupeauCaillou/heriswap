@@ -126,7 +126,7 @@ struct ElitePopupScene : public StateHandler<Scene::Enum> {
     Scene::Enum update(float) override {
         if (BUTTON(eButton[0])->clicked) {
             LOGW("Change difficulty");
-            theGridSystem.setGridFromDifficulty(theGridSystem.nextDifficulty(theGridSystem.sizeToDifficulty()));
+            theHeriswapGridSystem.setGridFromDifficulty(theHeriswapGridSystem.nextDifficulty(theHeriswapGridSystem.sizeToDifficulty()));
             game->datas->mode2Manager[Normal]->points = 0;
             static_cast<NormalGameModeManager*>(game->datas->mode2Manager[Normal])->changeLevel(1);
             return Scene::Spawn;

@@ -22,9 +22,9 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Game_Private.h"
 #include "HeriswapGame.h"
-
-#include "GridSystem.h"
 #include "CombinationMark.h"
+
+#include "systems/HeriswapGridSystem.h"
 
 #include "base/EntityManager.h"
 #include "base/Log.h"
@@ -76,7 +76,7 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
         newGame = true;
     }
 
-    static bool contains(const std::vector<Combinais>& combi, const GridComponent* g) {
+    static bool contains(const std::vector<Combinais>& combi, const HeriswapGridComponent* g) {
         for (unsigned int i=0; i<combi.size(); i++) {
             for (unsigned int j=0; j<combi[i].points.size(); j++) {
                 const glm::vec2& p = combi[i].points[j];
@@ -88,19 +88,19 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
     }
 
     static Entity cellUnderFinger(const glm::vec2& pos, bool) {
-        std::vector<Combinais> combinaisons;// = theGridSystem.LookForCombination(false,false);
-        const float maxDist = HeriswapGame::CellSize(theGridSystem.GridSize, 0).y;
+        std::vector<Combinais> combinaisons;// = theHeriswapGridSystem.LookForCombination(false,false);
+        const float maxDist = HeriswapGame::CellSize(theHeriswapGridSystem.GridSize, 0).y;
 
         // 4 nearest
         Entity e = 0;
         float nearestDist = maxDist;
         bool nearestInCombi = 0;
 
-        std::vector<Entity> leaves = theGridSystem.RetrieveAllEntityWithComponent();
+        std::vector<Entity> leaves = theHeriswapGridSystem.RetrieveAllEntityWithComponent();
         for (std::vector<Entity>::iterator it=leaves.begin(); it!=leaves.end(); ++it) {
             float sqdist = glm::distance2(pos, TRANSFORM(*it)->position);
             if (sqdist < maxDist) {
-                bool inCombi = contains(combinaisons, GRID(*it));
+                bool inCombi = contains(combinaisons, HERISWAPGRID(*it));
 
                 if (sqdist < nearestDist || (inCombi && !nearestInCombi)) {
                     nearestDist = sqdist;
@@ -118,31 +118,31 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
             return 0;
     #endif
 
-        int i = GRID(original)->i;
-        int j = GRID(original)->j;
+        int i = HERISWAPGRID(original)->i;
+        int j = HERISWAPGRID(original)->j;
 
         if (glm::abs(move.x) > glm::abs(move.y)) {
             if (move.x < 0) {
-                return theGridSystem.GetOnPos(i-1,j);
+                return theHeriswapGridSystem.GetOnPos(i-1,j);
             } else {
-                return theGridSystem.GetOnPos(i+1,j);
+                return theHeriswapGridSystem.GetOnPos(i+1,j);
             }
         } else {
             if (move.y < 0) {
-                return theGridSystem.GetOnPos(i,j-1);
+                return theHeriswapGridSystem.GetOnPos(i,j-1);
             } else {
-                return theGridSystem.GetOnPos(i,j+1);
+                return theHeriswapGridSystem.GetOnPos(i,j+1);
             }
         }
     }
 
     static void exchangeGridCoords(Entity a, Entity b) {
-        int iA = GRID(a)->i;
-        int jA = GRID(a)->j;
-        GRID(a)->i = GRID(b)->i;
-        GRID(a)->j = GRID(b)->j;
-        GRID(b)->i = iA;
-        GRID(b)->j = jA;
+        int iA = HERISWAPGRID(a)->i;
+        int jA = HERISWAPGRID(a)->j;
+        HERISWAPGRID(a)->i = HERISWAPGRID(b)->i;
+        HERISWAPGRID(a)->j = HERISWAPGRID(b)->j;
+        HERISWAPGRID(b)->i = iA;
+        HERISWAPGRID(b)->j = jA;
     }
 
     ///----------------------------------------------------------------------------//
@@ -193,7 +193,7 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
                 }
             }
         } else {
-            const glm::vec2 posA = HeriswapGame::GridCoordsToPosition(GRID(currentCell)->i, GRID(currentCell)->j,theGridSystem.GridSize);
+            const glm::vec2 posA = HeriswapGame::GridCoordsToPosition(HERISWAPGRID(currentCell)->i, HERISWAPGRID(currentCell)->j,theHeriswapGridSystem.GridSize);
             const glm::vec2& pos = theTouchInputManager.getTouchLastPosition(0);
             // compute move
             glm::vec2 move = pos - posA;
@@ -209,7 +209,7 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
                     }
                     swappedCell = c;
 
-                    const glm::vec2 posB = HeriswapGame::GridCoordsToPosition(GRID(swappedCell)->i, GRID(swappedCell)->j,theGridSystem.GridSize);
+                    const glm::vec2 posB = HeriswapGame::GridCoordsToPosition(HERISWAPGRID(swappedCell)->i, HERISWAPGRID(swappedCell)->j,theHeriswapGridSystem.GridSize);
                     float t = glm::min(1.0f, glm::length(move));
                     TRANSFORM(currentCell)->position = glm::lerp(posA, posB, t);
                     TRANSFORM(swappedCell)->position = glm::lerp(posA, posB, 1 - t);
@@ -217,7 +217,7 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
                     if (swappedCell) {
                         CombinationMark::clearCellInCombination(swappedCell);
                         // different cell, restore pos
-                        TRANSFORM(swappedCell)->position = HeriswapGame::GridCoordsToPosition(GRID(swappedCell)->i, GRID(swappedCell)->j,theGridSystem.GridSize);
+                        TRANSFORM(swappedCell)->position = HeriswapGame::GridCoordsToPosition(HERISWAPGRID(swappedCell)->i, HERISWAPGRID(swappedCell)->j,theHeriswapGridSystem.GridSize);
                     }
                     if (!c) {
                         TRANSFORM(currentCell)->position = posA;
@@ -235,20 +235,20 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
                     if (glm::length(move) < TRANSFORM(currentCell)->size.x * 0.5) {
                         // restore position
                         TRANSFORM(currentCell)->position = posA;
-                        TRANSFORM(swappedCell)->position = HeriswapGame::GridCoordsToPosition(GRID(swappedCell)->i, GRID(swappedCell)->j,theGridSystem.GridSize);
+                        TRANSFORM(swappedCell)->position = HeriswapGame::GridCoordsToPosition(HERISWAPGRID(swappedCell)->i, HERISWAPGRID(swappedCell)->j,theHeriswapGridSystem.GridSize);
                     } else {
-                        const glm::vec2 posB = HeriswapGame::GridCoordsToPosition(GRID(swappedCell)->i, GRID(swappedCell)->j,theGridSystem.GridSize);
+                        const glm::vec2 posB = HeriswapGame::GridCoordsToPosition(HERISWAPGRID(swappedCell)->i, HERISWAPGRID(swappedCell)->j,theHeriswapGridSystem.GridSize);
 
-                        int typeA = GRID(currentCell)->type;
-                        int typeB = GRID(swappedCell)->type;
+                        int typeA = HERISWAPGRID(currentCell)->type;
+                        int typeB = HERISWAPGRID(swappedCell)->type;
                         // exchange types
-                        GRID(currentCell)->type = typeB;
-                        GRID(swappedCell)->type = typeA;
+                        HERISWAPGRID(currentCell)->type = typeB;
+                        HERISWAPGRID(swappedCell)->type = typeA;
                         // check combi
-                        std::vector<Combinais> combinaisons = theGridSystem.LookForCombination(false,false);
+                        std::vector<Combinais> combinaisons = theHeriswapGridSystem.LookForCombination(false,false);
                         // restore types
-                        GRID(currentCell)->type = typeA;
-                        GRID(swappedCell)->type = typeB;
+                        HERISWAPGRID(currentCell)->type = typeA;
+                        HERISWAPGRID(swappedCell)->type = typeB;
 
                         if (combinaisons.empty()) {
                             // cancel swap
@@ -260,10 +260,10 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
                             MORPHING(rollback)->active = true;
                             SOUND(swapAnimation)->sound = theSoundSystem.loadSoundFile("audio/son_descend.ogg");
                         } else {
-                            GRID(currentCell)->checkedH  = false;
-                            GRID(currentCell)->checkedV = false;
-                            GRID(swappedCell)->checkedH = false;
-                            GRID(swappedCell)->checkedV = false;
+                            HERISWAPGRID(currentCell)->checkedH  = false;
+                            HERISWAPGRID(currentCell)->checkedV = false;
+                            HERISWAPGRID(swappedCell)->checkedH = false;
+                            HERISWAPGRID(swappedCell)->checkedV = false;
                             exchangeGridCoords(currentCell, swappedCell);
                             TRANSFORM(currentCell)->position = posB;
                             TRANSFORM(swappedCell)->position = posA;
@@ -280,11 +280,11 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
     }
 
     void BackgroundUpdate(float dt __attribute__((unused))) {
-        for(int i=0; i<theGridSystem.GridSize; i++) {
-            for(int j=0; j<theGridSystem.GridSize; j++) {
-                Entity e = theGridSystem.GetOnPos(i,j);
+        for(int i=0; i<theHeriswapGridSystem.GridSize; i++) {
+            for(int j=0; j<theHeriswapGridSystem.GridSize; j++) {
+                Entity e = theHeriswapGridSystem.GetOnPos(i,j);
                 if (e) {
-                    glm::vec2 size = HeriswapGame::CellSize(theGridSystem.GridSize, GRID(e)->type);
+                    glm::vec2 size = HeriswapGame::CellSize(theHeriswapGridSystem.GridSize, HERISWAPGRID(e)->type);
                     float scale = ADSR(e)->value / size.x;
                     TRANSFORM(e)->size = size * scale;
                 }
@@ -293,14 +293,14 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
 
         if (ADSR(swapAnimation)->activationTime >= 0 && originI >= 0 && originJ >= 0) {
 
-            glm::vec2 pos1 = HeriswapGame::GridCoordsToPosition(originI, originJ, theGridSystem.GridSize);
-            glm::vec2 pos2 = HeriswapGame::GridCoordsToPosition(originI + swapI, originJ + swapJ, theGridSystem.GridSize);
+            glm::vec2 pos1 = HeriswapGame::GridCoordsToPosition(originI, originJ, theHeriswapGridSystem.GridSize);
+            glm::vec2 pos2 = HeriswapGame::GridCoordsToPosition(originI + swapI, originJ + swapJ, theHeriswapGridSystem.GridSize);
 
             glm::vec2 interp1 = glm::lerp(pos1, pos2, ADSR(swapAnimation)->value);
             glm::vec2 interp2 = glm::lerp(pos2, pos1, ADSR(swapAnimation)->value);
 
-            Entity e1 = theGridSystem.GetOnPos(originI,originJ);
-            Entity e2 = theGridSystem.GetOnPos(originI + swapI,originJ + swapJ);
+            Entity e1 = theHeriswapGridSystem.GetOnPos(originI,originJ);
+            Entity e2 = theHeriswapGridSystem.GetOnPos(originI + swapI,originJ + swapJ);
 
             if (e1)
                 TRANSFORM(e1)->position = interp1;

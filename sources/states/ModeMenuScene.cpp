@@ -23,6 +23,8 @@
 #include "Game_Private.h"
 #include "HeriswapGame.h"
 
+#include "systems/HeriswapGridSystem.h"
+
 #include "api/KeyboardInputHandlerAPI.h"
 #include "api/StorageAPI.h"
 
@@ -384,7 +386,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             else
                 difficulty = DifficultyHard;
         } else {
-            difficulty = theGridSystem.sizeToDifficulty();
+            difficulty = theHeriswapGridSystem.sizeToDifficulty();
         }
 
         // LoadScore(game->datas->mode, difficulty);
@@ -506,7 +508,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             //difficulty button
             if (BUTTON(bDifficulty)->clicked) {
                 SOUND(bDifficulty)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-                difficulty = theGridSystem.nextDifficulty(difficulty);
+                difficulty = theHeriswapGridSystem.nextDifficulty(difficulty);
 
                 if (difficulty == DifficultyEasy)
                     TEXT_RENDERING(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_1") + " }";
@@ -543,7 +545,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             //enableSwarm button
             else if (BUTTON(enableSwarmContainer)->clicked) {
                 LOGE("NOT HANDLED YET!");
-                // communicationAPI->swarmRegistering(modeMgr->GetMode(), theGridSystem.sizeToDifficulty());
+                // communicationAPI->swarmRegistering(modeMgr->GetMode(), theHeriswapGridSystem.sizeToDifficulty());
             }
         }
         return Scene::ModeMenu;
@@ -556,7 +558,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     }
 
     void onExit(Scene::Enum) override {
-        theGridSystem.setGridFromDifficulty(difficulty);
+        theHeriswapGridSystem.setGridFromDifficulty(difficulty);
 
         game->datas->successMgr->NewGame(difficulty);
 

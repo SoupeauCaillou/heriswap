@@ -22,8 +22,8 @@
 #include "CombinationMark.h"
 #include "DepthLayer.h"
 #include "Game_Private.h"
-#include "GridSystem.h"
-#include "TwitchSystem.h"
+#include "systems/HeriswapGridSystem.h"
+#include "systems/TwitchSystem.h"
 #include "systems/BackgroundSystem.h"
 
 #include "modes/NormalModeManager.h"
@@ -132,7 +132,7 @@ HeriswapGame::HeriswapGame() : Game() {
 }
 
 HeriswapGame::~HeriswapGame() {
-    GridSystem::DestroyInstance();
+    HeriswapGridSystem::DestroyInstance();
     TwitchSystem::DestroyInstance();
     BackgroundSystem::DestroyInstance();
     delete datas;
@@ -164,7 +164,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     LOGI("SAC engine initialisation begins...");
     Game::sacInit(windowW, windowH);
 
-    GridSystem::CreateInstance();
+    HeriswapGridSystem::CreateInstance();
     TwitchSystem::CreateInstance();
     BackgroundSystem::CreateInstance();
 
@@ -314,16 +314,16 @@ void HeriswapGame::toggleShowCombi(bool enabled) {
         //j=1 : h
         for (int j=0;j<2;j++) {
             std::vector<glm::vec2> combinaisons;
-            if (j) combinaisons = theGridSystem.LookForCombinationsOnSwitchHorizontal();
-            else combinaisons = theGridSystem.LookForCombinationsOnSwitchVertical();
+            if (j) combinaisons = theHeriswapGridSystem.LookForCombinationsOnSwitchHorizontal();
+            else combinaisons = theHeriswapGridSystem.LookForCombinationsOnSwitchVertical();
             if (!combinaisons.empty())
             {
                 for ( std::vector<glm::vec2>::reverse_iterator it = combinaisons.rbegin(); it != combinaisons.rend(); ++it )
                 {
-                    CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->x, it->y));
-                    marks.push_back(theGridSystem.GetOnPos(it->x, it->y));
-                    CombinationMark::markCellInCombination(theGridSystem.GetOnPos(it->x+(j+1)/2, it->y+(j+1)%2));
-                    marks.push_back(theGridSystem.GetOnPos(it->x+(j+1)/2, it->y+(j+1)%2));
+                    CombinationMark::markCellInCombination(theHeriswapGridSystem.GetOnPos(it->x, it->y));
+                    marks.push_back(theHeriswapGridSystem.GetOnPos(it->x, it->y));
+                    CombinationMark::markCellInCombination(theHeriswapGridSystem.GetOnPos(it->x+(j+1)/2, it->y+(j+1)%2));
+                    marks.push_back(theHeriswapGridSystem.GetOnPos(it->x+(j+1)/2, it->y+(j+1)%2));
                 }
             }
         }
@@ -399,7 +399,7 @@ void HeriswapGame::tick(float dt) {
         if (datas->mode == Normal) {
             std::vector<Entity>& leavesInHelpCombination = static_cast<NormalGameModeManager*> (datas->mode2Manager[Normal])->leavesInHelpCombination;
             if (!leavesInHelpCombination.empty()) {
-                std::vector<Entity> leaves = theGridSystem.RetrieveAllEntityWithComponent();
+                std::vector<Entity> leaves = theHeriswapGridSystem.RetrieveAllEntityWithComponent();
                 for ( std::vector<Entity>::reverse_iterator it = leaves.rbegin(); it != leaves.rend(); ++it) {
                     RENDERING(*it)->effectRef = DefaultEffectRef;
                 }
@@ -419,7 +419,7 @@ void HeriswapGame::tick(float dt) {
         datas->newState = GameToBlack;
         //show one combination which remain
         if (datas->mode != TilesAttack) {
-            theGridSystem.ShowOneCombination();
+            theHeriswapGridSystem.ShowOneCombination();
         }
     }
 
@@ -569,7 +569,7 @@ void HeriswapGame::tick(float dt) {
     PROFILE("Game", "Tick", EndEvent);
 
     // systems update
-    theGridSystem.Update(dt);
+    theHeriswapGridSystem.Update(dt);
     theTwitchSystem.Update(dt);
     theBackgroundSystem.Update(dt);
 }
@@ -592,7 +592,7 @@ int HeriswapGame::saveState(uint8_t** out) {
     if (datas->state == LevelChanged) {
         // datas->state2Manager[datas->state]->Exit();
         datas->state = Spawn;
-        datas->mode2Manager[datas->mode]->generateLeaves(0, theGridSystem.Types);
+        datas->mode2Manager[datas->mode]->generateLeaves(0, theHeriswapGridSystem.Types);
     }
 
     /* save all entities/components */
@@ -607,7 +607,7 @@ int HeriswapGame::saveState(uint8_t** out) {
     uint8_t* gamemode = 0;
     int gSize = datas->mode2Manager[datas->mode]->saveInternalState(&gamemode);
 
-    int finalSize = sizeof(datas->state) + sizeof(datas->mode) + sizeof(theGridSystem.GridSize) + sizeof(eSize) + sizeof(sSize) + eSize + sSize + gSize;
+    int finalSize = sizeof(datas->state) + sizeof(datas->mode) + sizeof(theHeriswapGridSystem.GridSize) + sizeof(eSize) + sizeof(sSize) + eSize + sSize + gSize;
     *out = new uint8_t[finalSize];
     uint8_t* ptr = *out;
 
@@ -625,7 +625,7 @@ int HeriswapGame::saveState(uint8_t** out) {
     }
 
     ptr = (uint8_t*)mempcpy(ptr, &datas->mode, sizeof(datas->mode));
-    ptr = (uint8_t*)mempcpy(ptr, &theGridSystem.GridSize, sizeof(theGridSystem.GridSize));
+    ptr = (uint8_t*)mempcpy(ptr, &theHeriswapGridSystem.GridSize, sizeof(theHeriswapGridSystem.GridSize));
     ptr = (uint8_t*)mempcpy(ptr, gamemode, gSize);
 
     LOGI("'" << sizeof(datas->stateBeforePause) << "' + '"<< sizeof(datas->mode) << "' + '" << sizeof(eSize) << "' + '" << sizeof(sSize) << "' + '" << eSize << "' + '" << sSize << "' + '" << gSize << "' -> '" << finalSize << "' ('" << *out << "')");
@@ -656,9 +656,9 @@ void HeriswapGame::loadGameState(const uint8_t* in, int size) {
     in += sizeof(datas->stateBeforePause);
     memcpy(&datas->mode, in, sizeof(datas->mode));
     in += sizeof(datas->mode);
-    memcpy(&theGridSystem.GridSize, in, sizeof(theGridSystem.GridSize));
-    theGridSystem.Types = theGridSystem.GridSize; //utiliser gridParamFromDifficulty nn ?
-    in += sizeof(theGridSystem.GridSize);
+    memcpy(&theHeriswapGridSystem.GridSize, in, sizeof(theHeriswapGridSystem.GridSize));
+    theHeriswapGridSystem.Types = theHeriswapGridSystem.GridSize; //utiliser gridParamFromDifficulty nn ?
+    in += sizeof(theHeriswapGridSystem.GridSize);
 
     datas->mode2Manager[datas->mode]->Enter();
     datas->mode2Manager[datas->mode]->restoreInternalState(in, size);

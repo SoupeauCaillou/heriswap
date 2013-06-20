@@ -18,16 +18,17 @@
 */
 #include "HeriswapGame.h"
 #include "Game_Private.h"
-#include "GridSystem.h"
 
-#include "systems/ScrollingSystem.h"
-#include "systems/MorphingSystem.h"
-#include "systems/ADSRSystem.h"
+#include "systems/HeriswapGridSystem.h"
 
-#include "modes/TilesAttackModeManager.h"
 #include "modes/NormalModeManager.h"
+#include "modes/TilesAttackModeManager.h"
 
 #include "util/ScoreStorageProxy.h"
+
+#include "systems/ADSRSystem.h"
+#include "systems/MorphingSystem.h"
+#include "systems/ScrollingSystem.h"
 
 void HeriswapGame::stopInGameMusics() {
     MUSIC(datas->inGameMusic.masterTrack)->control = MusicControl::Stop;
@@ -50,7 +51,7 @@ void HeriswapGame::setupGameProp() {
     }
 
     //update anim times
-    Difficulty difficulty = theGridSystem.sizeToDifficulty();
+    Difficulty difficulty = theHeriswapGridSystem.sizeToDifficulty();
     if (difficulty == DifficultyEasy) {
         // ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.6;
         // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.14;
@@ -69,7 +70,7 @@ void HeriswapGame::setupGameProp() {
 
 
     std::stringstream ss;
-    ss << "where mode = " << datas->mode << " and difficulty = " << theGridSystem.sizeToDifficulty();
+    ss << "where mode = " << datas->mode << " and difficulty = " << theHeriswapGridSystem.sizeToDifficulty();
     if (datas->mode == TilesAttack) ss << " order by time asc limit 5";
     else ss << " order by points desc limit 5";
 

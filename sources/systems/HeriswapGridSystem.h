@@ -49,8 +49,8 @@ struct CellFall {
 	int fromY, toY;
 };
 
-struct GridComponent {
-	GridComponent() {
+struct HeriswapGridComponent {
+	HeriswapGridComponent() {
 		i = -1 ;
 		j = -1;
 		type = -1;
@@ -64,10 +64,10 @@ struct GridComponent {
 	bool checkedH;
 };
 
-#define theGridSystem GridSystem::GetInstance()
-#define GRID(e) theGridSystem.Get(e)
+#define theHeriswapGridSystem HeriswapGridSystem::GetInstance()
+#define HERISWAPGRID(e) theHeriswapGridSystem.Get(e)
 
-UPDATABLE_SYSTEM(Grid)
+UPDATABLE_SYSTEM(HeriswapGrid)
 
 public:
 

@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "GridSystem.h"
+#include "HeriswapGridSystem.h"
 
 #include <iostream>
 
@@ -28,18 +28,18 @@
 #include "systems/ADSRSystem.h"
 
 #include "util/Serializer.h"
-INSTANCE_IMPL(GridSystem);
+INSTANCE_IMPL(HeriswapGridSystem);
 
-GridSystem::GridSystem() : ComponentSystemImpl<GridComponent>("Grid") {
+HeriswapGridSystem::HeriswapGridSystem() : ComponentSystemImpl<HeriswapGridComponent>("HeriswapGrid") {
     GridSize = Types = 8;
     nbmin = 3;
-    GridComponent a;
+    HeriswapGridComponent a;
     componentSerializer.add(new Property<int>("i", OFFSET(i, a)));
     componentSerializer.add(new Property<int>("j", OFFSET(j, a)));
     componentSerializer.add(new Property<int>("type", OFFSET(type, a)));
 }
 
-Difficulty GridSystem::sizeToDifficulty() {
+Difficulty HeriswapGridSystem::sizeToDifficulty() {
     if (GridSize == 5)
         return DifficultyEasy;
     else if (GridSize == 6)
@@ -48,7 +48,7 @@ Difficulty GridSystem::sizeToDifficulty() {
         return DifficultyHard;
 }
 
-int GridSystem::difficultyToSize(Difficulty diff) {
+int HeriswapGridSystem::difficultyToSize(Difficulty diff) {
     if (diff == DifficultyEasy)
         return 5;
     else if (diff == DifficultyMedium)
@@ -57,7 +57,7 @@ int GridSystem::difficultyToSize(Difficulty diff) {
         return 8;
 }
 
-void GridSystem::setGridFromDifficulty(Difficulty diff) {
+void HeriswapGridSystem::setGridFromDifficulty(Difficulty diff) {
     if (diff == DifficultyEasy)
         GridSize = Types = 5;
     else if (diff == DifficultyMedium)
@@ -66,7 +66,7 @@ void GridSystem::setGridFromDifficulty(Difficulty diff) {
         GridSize = Types = 8;
 }
 
-Difficulty GridSystem::nextDifficulty(Difficulty diff) {
+Difficulty HeriswapGridSystem::nextDifficulty(Difficulty diff) {
     switch (diff) {
         case DifficultyEasy :
             return DifficultyMedium;
@@ -82,12 +82,12 @@ Difficulty GridSystem::nextDifficulty(Difficulty diff) {
 }
 
 
-void GridSystem::print() {
+void HeriswapGridSystem::print() {
     for(int j=GridSize-1; j>=0; j--) {
         for(int i=0; i<GridSize; i++) {
             Entity e = GetOnPos(i, j);
             if (e) {
-                char t = GRID(e)->type;
+                char t = HERISWAPGRID(e)->type;
                 std::cerr << t << " ";
             } else
                 std::cerr << "_ ";
@@ -96,39 +96,39 @@ void GridSystem::print() {
     }
 }
 
-void GridSystem::ShowAll(bool activate) {
+void HeriswapGridSystem::ShowAll(bool activate) {
     for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
         Entity e = (*it).first;
         RENDERING(e)->show = activate;
     }
 }
 
-void GridSystem::DeleteAll() {
+void HeriswapGridSystem::DeleteAll() {
     std::vector<Entity> all = this->RetrieveAllEntityWithComponent();
     for (unsigned int i=0; i<all.size(); i++) {
         theEntityManager.DeleteEntity(all[i]);
     }
 }
 
-Entity GridSystem::GetOnPos(int i, int j) {
+Entity HeriswapGridSystem::GetOnPos(int i, int j) {
     for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
         Entity a = (*it).first;
-        GridComponent* bc = (*it).second;
+        HeriswapGridComponent* bc = (*it).second;
         if (bc->i == i && bc->j == j)
             return a;
     }
     return 0;
 }
 
-void GridSystem::ResetTest() {
+void HeriswapGridSystem::ResetTest() {
     for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-        GridComponent* bc = (*it).second;
+        HeriswapGridComponent* bc = (*it).second;
         bc->checkedH = false;
         bc->checkedV = false;
     }
 }
 
-bool GridSystem::Intersec(std::vector<glm::vec2> v1, std::vector<glm::vec2> v2){
+bool HeriswapGridSystem::Intersec(std::vector<glm::vec2> v1, std::vector<glm::vec2> v2){
     for ( size_t i = 0; i < v1.size(); ++i ) {
         for ( size_t j = 0; j < v2.size(); ++j ) {
             if (v1[i] == v2[j])
@@ -138,7 +138,7 @@ bool GridSystem::Intersec(std::vector<glm::vec2> v1, std::vector<glm::vec2> v2){
     return false;
 }
 
-bool GridSystem::InVect(std::vector<glm::vec2> v1, glm::vec2 v2){
+bool HeriswapGridSystem::InVect(std::vector<glm::vec2> v1, glm::vec2 v2){
     for ( size_t i = 0; i < v1.size(); ++i ) {
         if (v1[i] == v2)
             return true;
@@ -146,7 +146,7 @@ bool GridSystem::InVect(std::vector<glm::vec2> v1, glm::vec2 v2){
     return false;
 }
 
-Combinais GridSystem::MergeVectors(Combinais c1, Combinais c2) {
+Combinais HeriswapGridSystem::MergeVectors(Combinais c1, Combinais c2) {
     Combinais merged;
     merged = c1;
     for (size_t i=0; i<c2.points.size();i++) {
@@ -156,7 +156,7 @@ Combinais GridSystem::MergeVectors(Combinais c1, Combinais c2) {
     return merged;
 }
 
-std::vector<Combinais> GridSystem::MergeCombination(std::vector<Combinais> combinaisons) {
+std::vector<Combinais> HeriswapGridSystem::MergeCombination(std::vector<Combinais> combinaisons) {
     std::vector<Combinais> combinmerged;
 
     for ( size_t i = 0; i < combinaisons.size(); ++i ) {
@@ -175,11 +175,11 @@ std::vector<Combinais> GridSystem::MergeCombination(std::vector<Combinais> combi
     return combinmerged;
 }
 
-std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool recheckEveryone) {
+std::vector<Combinais> HeriswapGridSystem::LookForCombination(bool markAsChecked, bool recheckEveryone) {
     std::vector<Combinais> combinaisons;
 
     for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-        GridComponent* gc = (*it).second;
+        HeriswapGridComponent* gc = (*it).second;
         int i=gc->i;
         int j=gc->j;
         Combinais potential;
@@ -194,12 +194,12 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool r
             while (k>-1){
                 Entity next = GetOnPos(i,k);
 
-                if (!next || GRID(next)->type != gc->type) {
+                if (!next || HERISWAPGRID(next)->type != gc->type) {
                     k=-2;
                 } else {
                     /*Useless to check them later : we already did it now*/
                     potential.points.push_back(glm::vec2(i,k));
-                    if (markAsChecked) GRID(next)->checkedV = true;
+                    if (markAsChecked) HERISWAPGRID(next)->checkedV = true;
                     k--;
                 }
             }
@@ -211,10 +211,10 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool r
 
 
 
-                if (!next || GRID(next)->type != gc->type){
+                if (!next || HERISWAPGRID(next)->type != gc->type){
                     k=GridSize;
                 } else {
-                    if (markAsChecked) GRID(next)->checkedV = true;
+                    if (markAsChecked) HERISWAPGRID(next)->checkedV = true;
                     potential.points.push_back(glm::vec2(i,k));
                     k++;
                 }
@@ -241,11 +241,11 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool r
             while (k>-1){
                 Entity next = GetOnPos(k,j);
 
-                if (!next || GRID(next)->type != gc->type) {
+                if (!next || HERISWAPGRID(next)->type != gc->type) {
                     k=-2;
                 } else {
                     /*Useless to check them later : we already did it now*/
-                    if (markAsChecked) GRID(next)->checkedH = true;
+                    if (markAsChecked) HERISWAPGRID(next)->checkedH = true;
                     potential.points.push_back(glm::vec2(k,j));
                     k--;
                 }
@@ -256,10 +256,10 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool r
             while (k<GridSize){
                 Entity next = GetOnPos(k,j);
 
-                if (!next || GRID(next)->type != gc->type) {
+                if (!next || HERISWAPGRID(next)->type != gc->type) {
                     k=(GridSize+1);
                 } else {
-                    if (markAsChecked) GRID(next)->checkedH = true;
+                    if (markAsChecked) HERISWAPGRID(next)->checkedH = true;
                     potential.points.push_back(glm::vec2(k,j));
                     k++;
                 }
@@ -283,7 +283,7 @@ std::vector<Combinais> GridSystem::LookForCombination(bool markAsChecked, bool r
     return MergeCombination(combinaisons);
 }
 
-std::vector<CellFall> GridSystem::TileFall() {
+std::vector<CellFall> HeriswapGridSystem::TileFall() {
     std::vector<CellFall> result;
 
     for (int i=0; i<GridSize; i++) {
@@ -315,43 +315,50 @@ std::vector<CellFall> GridSystem::TileFall() {
     return result;
 }
 
-void GridSystem::DoUpdate(float dt __attribute__((unused))) {
+void HeriswapGridSystem::DoUpdate(float dt __attribute__((unused))) {
 }
 
-bool GridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
+bool HeriswapGridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
     //test right and top
     Entity e = GetOnPos(i+1,j);
     if (e) {
-        GRID(e)->i--;
-        GRID(a)->i++;
-        GRID(e)->checkedH = GRID(a)->checkedH = GRID(e)->checkedV = GRID(a)->checkedV = false;
+        HERISWAPGRID(e)->i--;
+        HERISWAPGRID(a)->i++;
+        HERISWAPGRID(e)->checkedH = 
+            HERISWAPGRID(a)->checkedH = 
+            HERISWAPGRID(e)->checkedV = 
+            HERISWAPGRID(a)->checkedV = false;
         std::vector<Combinais> combin = LookForCombination(true,true);
-        GRID(e)->i++;
-        GRID(a)->i--;
+        HERISWAPGRID(e)->i++;
+        HERISWAPGRID(a)->i--;
         if (combin.size()>0) return true;
     }
     e = GetOnPos(i,j+1);
     if (e) {
-        GRID(e)->j--;
-        GRID(a)->j++;
-        GRID(e)->checkedH = GRID(a)->checkedH = GRID(e)->checkedV = GRID(a)->checkedV = false;
+        HERISWAPGRID(e)->j--;
+        HERISWAPGRID(a)->j++;
+        HERISWAPGRID(e)->checkedH = 
+            HERISWAPGRID(a)->checkedH = 
+            HERISWAPGRID(e)->checkedV = 
+            HERISWAPGRID(a)->checkedV = false;
         std::vector<Combinais> combin = LookForCombination(true,true);
-        GRID(e)->j++;
-        GRID(a)->j--;
+        HERISWAPGRID(e)->j++;
+        HERISWAPGRID(a)->j--;
         if (combin.size()>0) return true;
     }
     return false;
 }
 
-void GridSystem::SetCheckInCombi(std::vector<Combinais> c) {
+void HeriswapGridSystem::SetCheckInCombi(std::vector<Combinais> c) {
     for (std::vector<Combinais>::reverse_iterator itc = c.rbegin(); itc != c.rend(); ++itc) {
         for (std::vector<glm::vec2>::reverse_iterator it = itc->points.rbegin(); it != itc->points.rend(); ++it) {
-            GRID(GetOnPos(it->x, it->y))->checkedV = GRID(GetOnPos(it->x,it->y))->checkedH = false;
+            HERISWAPGRID(GetOnPos(it->x, it->y))->checkedV = 
+                HERISWAPGRID(GetOnPos(it->x,it->y))->checkedH = false;
         }
     }
 }
 
-bool GridSystem::StillCombinations() {
+bool HeriswapGridSystem::StillCombinations() {
     //on utilise les checked pour pas recalculer toute la grille à chaque coup, apres on va juste en switch 2 à chaque fois donc les nouvelels combi
     //peuvent etre qu'au niveau du switch. A la fin, on remet la grille comme au debut.
     std::vector<Combinais> combin = LookForCombination(true,true);
@@ -369,48 +376,48 @@ bool GridSystem::StillCombinations() {
     return false;
 }
 
-std::vector<glm::vec2> GridSystem::LookForCombinationsOnSwitchVertical() {
+std::vector<glm::vec2> HeriswapGridSystem::LookForCombinationsOnSwitchVertical() {
     std::vector<glm::vec2> combin;
     for (int i=0; i<GridSize; i++) {
         for (int j=0; j<GridSize-1; j++) {
             Entity a = GetOnPos(i,j);
             Entity e = GetOnPos(i,j+1);
             //si on a une nouvelle combi parmi les 8 possibles (1vert,3hori chacun pour e, et pour a)
-            if ((j>=2 && GetOnPos(i,j-1) && GetOnPos(i,j-2) && GRID(e)->type == GRID(GetOnPos(i,j-1))->type && GRID(e)->type == GRID(GetOnPos(i,j-2))->type)
-            || (i>1 && GetOnPos(i-1,j) && GetOnPos(i-2,j) && GRID(e)->type == GRID(GetOnPos(i-1,j))->type &&  GRID(e)->type == GRID(GetOnPos(i-2,j))->type)
-            || (i>0 && GetOnPos(i+1,j) && GetOnPos(i-1,j) && GRID(e)->type == GRID(GetOnPos(i-1,j))->type &&  GRID(e)->type == GRID(GetOnPos(i+1,j))->type)
-            || (i<GridSize-2 && GetOnPos(i+1,j) && GetOnPos(i+2,j) && GRID(e)->type == GRID(GetOnPos(i+2,j))->type && GRID(e)->type == GRID(GetOnPos(i+1,j))->type)
-            || (j<GridSize-3 && GetOnPos(i,j+2) && GetOnPos(i,j+3) && GRID(a)->type == GRID(GetOnPos(i,j+2))->type && GRID(a)->type == GRID(GetOnPos(i,j+3))->type)
-            || (i>1 && GetOnPos(i-1,j+1) && GetOnPos(i-2,j+1) && GRID(a)->type == GRID(GetOnPos(i-1,j+1))->type && GRID(a)->type == GRID(GetOnPos(i-2,j+1))->type)
-            || (i>0 && GetOnPos(i+1,j+1) && GetOnPos(i-1,j+1) &&     GRID(a)->type == GRID(GetOnPos(i-1,j+1))->type && GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type)
-            || (i<GridSize-2 && GetOnPos(i+1,j+1) && GetOnPos(i+2,j+1) && GRID(a)->type == GRID(GetOnPos(i+2,j+1))->type && GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type))
+            if ((j>=2 && GetOnPos(i,j-1) && GetOnPos(i,j-2) && HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i,j-1))->type && HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i,j-2))->type)
+            || (i>1 && GetOnPos(i-1,j) && GetOnPos(i-2,j) && HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i-1,j))->type && HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i-2,j))->type)
+            || (i>0 && GetOnPos(i+1,j) && GetOnPos(i-1,j) && HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i-1,j))->type && HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i+1,j))->type)
+            || (i<GridSize-2 && GetOnPos(i+1,j) && GetOnPos(i+2,j) && HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i+2,j))->type && HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i+1,j))->type)
+            || (j<GridSize-3 && GetOnPos(i,j+2) && GetOnPos(i,j+3) && HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i,j+2))->type && HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i,j+3))->type)
+            || (i>1 && GetOnPos(i-1,j+1) && GetOnPos(i-2,j+1) && HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i-1,j+1))->type && HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i-2,j+1))->type)
+            || (i>0 && GetOnPos(i+1,j+1) && GetOnPos(i-1,j+1) && HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i-1,j+1))->type && HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i+1,j+1))->type)
+            || (i<GridSize-2 && GetOnPos(i+1,j+1) && GetOnPos(i+2,j+1) && HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i+2,j+1))->type && HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i+1,j+1))->type))
                 combin.push_back(glm::vec2(i, j));
         }
     }
     return combin;
 }
 
-std::vector<glm::vec2> GridSystem::LookForCombinationsOnSwitchHorizontal() {
+std::vector<glm::vec2> HeriswapGridSystem::LookForCombinationsOnSwitchHorizontal() {
     std::vector<glm::vec2> combin;
     for (int i=0; i<GridSize-1; i++) {
         for (int j=0; j<GridSize; j++) {
             Entity a = GetOnPos(i,j);
             Entity e = GetOnPos(i+1,j);
-            if ((i>=2 && GetOnPos(i-1,j) && GetOnPos(i-2,j) && GRID(e)->type == GRID(GetOnPos(i-1,j))->type &&  GRID(e)->type == GRID(GetOnPos(i-2,j))->type)
-            || (j>1 && GetOnPos(i,j-1) && GetOnPos(i,j-2) && GRID(e)->type == GRID(GetOnPos(i,j-1))->type &&   GRID(e)->type == GRID(GetOnPos(i,j-2))->type)
-            || (j>0 && GetOnPos(i,j+1) && GetOnPos(i,j-1) &&     GRID(e)->type == GRID(GetOnPos(i,j-1))->type &&   GRID(e)->type == GRID(GetOnPos(i,j+1))->type)
-            || (j<GridSize-2 && GetOnPos(i,j+1) && GetOnPos(i,j+2) && GRID(e)->type == GRID(GetOnPos(i,j+2))->type &&   GRID(e)->type == GRID(GetOnPos(i,j+1))->type)
-            || (i<GridSize-3 && GetOnPos(i+2,j) && GetOnPos(i+3,j) && GRID(a)->type == GRID(GetOnPos(i+2,j))->type &&  GRID(a)->type == GRID(GetOnPos(i+3,j))->type)
-            || (j>1 && GetOnPos(i+1,j-1) && GetOnPos(i+1,j-2) && GRID(a)->type == GRID(GetOnPos(i+1,j-1))->type &&  GRID(a)->type == GRID(GetOnPos(i+1,j-2))->type)
-            || (j>0 && GetOnPos(i+1,j+1) && GetOnPos(i+1,j-1) &&     GRID(a)->type == GRID(GetOnPos(i+1,j-1))->type && GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type)
-            || (j<GridSize-2 && GetOnPos(i+1,j+1) && GetOnPos(i+1,j+2) && GRID(a)->type == GRID(GetOnPos(i+1,j+2))->type &&  GRID(a)->type == GRID(GetOnPos(i+1,j+1))->type))
+            if ((i>=2 && GetOnPos(i-1,j) && GetOnPos(i-2,j) && HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i-1,j))->type &&  HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i-2,j))->type)
+            || (j>1 && GetOnPos(i,j-1) && GetOnPos(i,j-2) && HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i,j-1))->type &&   HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i,j-2))->type)
+            || (j>0 && GetOnPos(i,j+1) && GetOnPos(i,j-1) &&     HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i,j-1))->type &&   HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i,j+1))->type)
+            || (j<GridSize-2 && GetOnPos(i,j+1) && GetOnPos(i,j+2) && HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i,j+2))->type &&   HERISWAPGRID(e)->type == HERISWAPGRID(GetOnPos(i,j+1))->type)
+            || (i<GridSize-3 && GetOnPos(i+2,j) && GetOnPos(i+3,j) && HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i+2,j))->type &&  HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i+3,j))->type)
+            || (j>1 && GetOnPos(i+1,j-1) && GetOnPos(i+1,j-2) && HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i+1,j-1))->type &&  HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i+1,j-2))->type)
+            || (j>0 && GetOnPos(i+1,j+1) && GetOnPos(i+1,j-1) &&     HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i+1,j-1))->type && HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i+1,j+1))->type)
+            || (j<GridSize-2 && GetOnPos(i+1,j+1) && GetOnPos(i+1,j+2) && HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i+1,j+2))->type &&  HERISWAPGRID(a)->type == HERISWAPGRID(GetOnPos(i+1,j+1))->type))
                 combin.push_back(glm::vec2(i, j));
         }
     }
     return combin;
 }
 
-std::vector< std::vector<Entity> > GridSystem::GetSwapCombinations() {
+std::vector< std::vector<Entity> > HeriswapGridSystem::GetSwapCombinations() {
     std::vector< std::vector<Entity> > res;
     for (int i = 0; i < GridSize; i++) {
         for (int j = 0; j < GridSize; j++) {
@@ -436,12 +443,12 @@ std::vector< std::vector<Entity> > GridSystem::GetSwapCombinations() {
     return res;
 }
 
-std::vector<Entity> GridSystem::getCombiEntitiesInLine(Entity a, int i, int j, int move) {
+std::vector<Entity> HeriswapGridSystem::getCombiEntitiesInLine(Entity a, int i, int j, int move) {
     std::vector<Entity> res;
     if (i < 0 || i == GridSize || j < 0 || j == GridSize)
         return res;
 
-    int type = GRID(a)->type;
+    int type = HERISWAPGRID(a)->type;
 
     //adding itself
     res.push_back(a);
@@ -455,7 +462,7 @@ std::vector<Entity> GridSystem::getCombiEntitiesInLine(Entity a, int i, int j, i
         //first look the line (NB : entity's type in (i,j) != type necessary)
         //so only right in right move, only left in left move
         Entity e = GetOnPos(k, j);
-        while (k < GridSize && k >= 0 && GRID(e)->type == type) {
+        while (k < GridSize && k >= 0 && HERISWAPGRID(e)->type == type) {
             cpt++;
             k += sens;
             res.push_back(e);
@@ -472,7 +479,7 @@ std::vector<Entity> GridSystem::getCombiEntitiesInLine(Entity a, int i, int j, i
         //look below
         k = j-1;
         e = GetOnPos(i, k);
-        while (k >= 0 && GRID(e)->type == type) {
+        while (k >= 0 && HERISWAPGRID(e)->type == type) {
             res.push_back(e);
             k--;
             cpt++;
@@ -481,7 +488,7 @@ std::vector<Entity> GridSystem::getCombiEntitiesInLine(Entity a, int i, int j, i
         //look above
         k=j+1;
         e = GetOnPos(i, k);
-        while (k<GridSize && GRID(e)->type == type) {
+        while (k<GridSize && HERISWAPGRID(e)->type == type) {
             res.push_back(e);
             k++;
             cpt++;
@@ -501,7 +508,7 @@ std::vector<Entity> GridSystem::getCombiEntitiesInLine(Entity a, int i, int j, i
         //first look the column (NB : entity's type in (i,j) != type necessary)
         //so only top in top move, only bot in bot move
         Entity e = GetOnPos(i, k);
-        while (k < GridSize && k >= 0 && GRID(e)->type == type) {
+        while (k < GridSize && k >= 0 && HERISWAPGRID(e)->type == type) {
             cpt++;
             k += sens;
             res.push_back(e);
@@ -518,7 +525,7 @@ std::vector<Entity> GridSystem::getCombiEntitiesInLine(Entity a, int i, int j, i
         //look left
         k = i-1;
         e = GetOnPos(k, j);
-        while (k >= 0 && GRID(e)->type == type) {
+        while (k >= 0 && HERISWAPGRID(e)->type == type) {
             res.push_back(e);
             k--;
             cpt++;
@@ -527,7 +534,7 @@ std::vector<Entity> GridSystem::getCombiEntitiesInLine(Entity a, int i, int j, i
         //look right
         k=i+1;
         e = GetOnPos(k, j);
-        while (k<GridSize && GRID(e)->type == type) {
+        while (k<GridSize && HERISWAPGRID(e)->type == type) {
             res.push_back(e);
             k++;
             cpt++;
@@ -544,7 +551,7 @@ std::vector<Entity> GridSystem::getCombiEntitiesInLine(Entity a, int i, int j, i
     return res;
 }
 
-bool GridSystem::GridPosIsInCombination(int i, int j, int type, int* voisinsType) {
+bool HeriswapGridSystem::GridPosIsInCombination(int i, int j, int type, int* voisinsType) {
     if (type==-1)
         return false;
 
@@ -564,7 +571,7 @@ bool GridSystem::GridPosIsInCombination(int i, int j, int type, int* voisinsType
 
         vType = (int*)malloc(sizeof(int)*8);
         for (int i= 0; i<8; i++)
-            vType[i] = voisins[i] ? GRID(voisins[i])->type : -1;
+            vType[i] = voisins[i] ? HERISWAPGRID(voisins[i])->type : -1;
     }
 
     bool res =  (
@@ -584,7 +591,7 @@ bool GridSystem::GridPosIsInCombination(int i, int j, int type, int* voisinsType
     return res;
 }
 
-std::vector<Entity> GridSystem::ShowOneCombination() {
+std::vector<Entity> HeriswapGridSystem::ShowOneCombination() {
     LOGW("Show one 1 combi");
     std::vector<Entity> highLightedCombi;
     //desaturate everything

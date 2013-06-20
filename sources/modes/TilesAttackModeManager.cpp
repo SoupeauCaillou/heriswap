@@ -18,19 +18,20 @@
 */
 #include "TilesAttackModeManager.h"
 
-#include <iomanip>
-#include <sstream>
-
-#include <base/PlacementHelper.h>
-#include <glm/glm.hpp>
-
-#include <systems/ButtonSystem.h>
-#include <systems/TextRenderingSystem.h>
-#include <systems/TransformationSystem.h>
-
 #include "DepthLayer.h"
 #include "CombinationMark.h"
-#include "GridSystem.h"
+#include "systems/HeriswapGridSystem.h"
+
+#include "base/PlacementHelper.h"
+
+#include "systems/ButtonSystem.h"
+#include "systems/TextRenderingSystem.h"
+#include "systems/TransformationSystem.h"
+
+#include <glm/glm.hpp>
+
+#include <iomanip>
+#include <sstream>
 
 TilesAttackGameModeManager::TilesAttackGameModeManager(HeriswapGame* game, SuccessManager* successMgr, StorageAPI* sAPI) : GameModeManager(game, successMgr, sAPI) {
 }
@@ -46,13 +47,13 @@ void TilesAttackGameModeManager::Enter() {
 	time = 0;
 	leavesDone = 0;
 	points = 0;
-	bonus =  glm::round(glm::linearRand(0.f, (float)(theGridSystem.Types-1)));
+	bonus =  glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
 	succNoGridReset=false;
 	pts.clear();
 	pts.push_back(glm::vec2(0, 0));
-	if (theGridSystem.sizeToDifficulty() == DifficultyEasy)
+	if (theHeriswapGridSystem.sizeToDifficulty() == DifficultyEasy)
 		limit = 30;
-	else if (theGridSystem.sizeToDifficulty() == DifficultyMedium)
+	else if (theHeriswapGridSystem.sizeToDifficulty() == DifficultyMedium)
 		limit = 100;
 	else
 		limit = 100;

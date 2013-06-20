@@ -22,16 +22,16 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Game_Private.h"
 #include "HeriswapGame.h"
-
-#include "modes/GameModeManager.h"
-#include "modes/NormalModeManager.h"
 #include "CombinationMark.h"
 #include "DepthLayer.h"
 
-#include "GridSystem.h"
-#include "TwitchSystem.h"
+#include "modes/GameModeManager.h"
+#include "modes/NormalModeManager.h"
 
-#include <base/PlacementHelper.h>
+#include "systems/HeriswapGridSystem.h"
+#include "systems/TwitchSystem.h"
+
+#include "base/PlacementHelper.h"
 
 #include "systems/ADSRSystem.h"
 #include "systems/MorphingSystem.h"
@@ -180,7 +180,7 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
             }
         }
 
-        entities = theGridSystem.RetrieveAllEntityWithComponent();
+        entities = theHeriswapGridSystem.RetrieveAllEntityWithComponent();
         for (unsigned int i=0; i<entities.size(); i++) {
             CombinationMark::markCellInCombination(entities[i]);
         }
@@ -197,7 +197,7 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
         }
 
         float alpha = 1 - ADSR(eGrid)->value;
-        std::vector<Entity> entities = theGridSystem.RetrieveAllEntityWithComponent();
+        std::vector<Entity> entities = theHeriswapGridSystem.RetrieveAllEntityWithComponent();
         for (std::vector<Entity>::iterator it = entities.begin(); it != entities.end(); ++it ) {
             RENDERING(*it)->color.a = alpha;
             TWITCH(*it)->speed = alpha * 9;
@@ -238,7 +238,7 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
             RENDERING(game->datas->mode2Manager[game->datas->mode]->herisson)->color.a = 1;
             RENDERING(game->datas->mode2Manager[game->datas->mode]->herisson)->effectRef = DefaultEffectRef;
             //on genere les nouvelles feuilles
-            game->datas->mode2Manager[game->datas->mode]->generateLeaves(0, theGridSystem.Types);
+            game->datas->mode2Manager[game->datas->mode]->generateLeaves(0, theHeriswapGridSystem.Types);
             for (unsigned int i=0; i<game->datas->mode2Manager[game->datas->mode]->branchLeaves.size(); i++) {
                 TRANSFORM(game->datas->mode2Manager[game->datas->mode]->branchLeaves[i].e)->size =glm::vec2(0.f);
             }
@@ -259,7 +259,7 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
 
         //level animation ended - back to game
         if (levelState == BigScoreMoving && duration > 10) {
-            if (currentLevel == 10 && theGridSystem.sizeToDifficulty() != DifficultyHard) {
+            if (currentLevel == 10 && theHeriswapGridSystem.sizeToDifficulty() != DifficultyHard) {
                 return Scene::ElitePopup;
             }
             return Scene::Spawn;
@@ -275,7 +275,7 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
     }
 
     void onExit(Scene::Enum) override {
-        theGridSystem.DeleteAll();
+        theHeriswapGridSystem.DeleteAll();
         ADSR(eGrid)->active = false;
         feuilles.clear();
         LOGI("'" << __PRETTY_FUNCTION__ << "'");

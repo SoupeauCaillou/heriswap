@@ -18,22 +18,25 @@
 */
 #include "Go100SecondsModeManager.h"
 
-#include <iomanip>
-#include <sstream>
+#include "DepthLayer.h"
+#include "CombinationMark.h"
 
-#include <base/PlacementHelper.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/random.hpp>
+#include "systems/HeriswapGridSystem.h"
+
+#include "base/PlacementHelper.h"
 
 #include "systems/AnimationSystem.h"
 #include "systems/ButtonSystem.h"
+#include "systems/PhysicsSystem.h"
 #include "systems/TextRenderingSystem.h"
 #include "systems/TransformationSystem.h"
-#include "systems/PhysicsSystem.h"
 
-#include "DepthLayer.h"
-#include "CombinationMark.h"
-#include "GridSystem.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
+
+#include <iomanip>
+#include <sstream>
+
 
 Go100SecondsGameModeManager::Go100SecondsGameModeManager(HeriswapGame* game, SuccessManager* successMgr, StorageAPI* sAPI) : GameModeManager(game, successMgr, sAPI) {
 }
@@ -70,7 +73,7 @@ void Go100SecondsGameModeManager::Enter() {
 	points = 0;
 	squallGo = false;
 	squallDuration = 0.f;
-	bonus = glm::round(glm::linearRand(0.f, (float)(theGridSystem.Types-1)));
+	bonus = glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
 	pts.clear();
 	pts.push_back(glm::vec2(0.f, 0.f));
 
@@ -166,7 +169,7 @@ void Go100SecondsGameModeManager::GameUpdate(float dt, GameState state) {
 		//oh noes, no longer leaf on tree ! Give me new one
 		if (branchLeaves.size() == 0) {
 			//Ok, but first u'll have a new bonus
-			bonus = glm::round(glm::linearRand(0.f, (float)(theGridSystem.Types-1)));
+			bonus = glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
 			//And leaves aren't magic, they need to grow ... be patient.
 			generateLeaves(0, 8);
 			for (unsigned int i = 0; i < branchLeaves.size(); i++)
@@ -209,7 +212,7 @@ void Go100SecondsGameModeManager::UiUpdate(float dt) {
 }
 
 void Go100SecondsGameModeManager::ScoreCalc(int nb, unsigned int type) {
-	Difficulty diff = theGridSystem.sizeToDifficulty();
+	Difficulty diff = theHeriswapGridSystem.sizeToDifficulty();
 
 	float score = 10 * nb * nb * nb * nb;
 

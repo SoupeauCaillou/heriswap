@@ -23,7 +23,9 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 #include "Game_Private.h"
 #include "CombinationMark.h"
 #include "HeriswapGame.h"
-#include "TwitchSystem.h"
+
+#include "systems/TwitchSystem.h"
+#include "systems/HeriswapGridSystem.h"
 
 #include "modes/GameModeManager.h"
 
@@ -68,13 +70,13 @@ struct DeleteScene : public StateHandler<Scene::Enum> {
 		LOGI("'" << __PRETTY_FUNCTION__ << "'");
 
 		littleLeavesDeleted.clear();
-		removing = theGridSystem.LookForCombination(true,true);
+		removing = theHeriswapGridSystem.LookForCombination(true,true);
 		if (!removing.empty()) {
 			game->datas->successMgr->sDoubleInOne(removing);
 			game->datas->successMgr->sBimBamBoum(removing.size());
 		    for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
 		        for ( std::vector<glm::vec2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
-		            Entity e = theGridSystem.GetOnPos(itV->x,itV->y);
+		            Entity e = theHeriswapGridSystem.GetOnPos(itV->x,itV->y);
 		            TwitchComponent* tc = TWITCH(e);
 		            if (tc->speed == 0) {
 		                CombinationMark::markCellInCombination(e);
@@ -96,12 +98,12 @@ struct DeleteScene : public StateHandler<Scene::Enum> {
 		if (!removing.empty()) {
 			transitionSuppr->active = true;
 	        for ( std::vector<Combinais>::reverse_iterator it = removing.rbegin(); it != removing.rend(); ++it ) {
-	    	    const glm::vec2 cellSize = HeriswapGame::CellSize(theGridSystem.GridSize, it->type) * HeriswapGame::CellContentScale() * (1 - transitionSuppr->value);
+	    	    const glm::vec2 cellSize = HeriswapGame::CellSize(theHeriswapGridSystem.GridSize, it->type) * HeriswapGame::CellContentScale() * (1 - transitionSuppr->value);
 	        	if (transitionSuppr->value == transitionSuppr->sustainValue) {
 	    			game->datas->mode2Manager[game->datas->mode]->ScoreCalc(it->points.size(), it->type);
 				}
 	    		for ( std::vector<glm::vec2>::reverse_iterator itV = (it->points).rbegin(); itV != (it->points).rend(); ++itV ) {
-	    			Entity e = theGridSystem.GetOnPos(itV->x,itV->y);
+	    			Entity e = theHeriswapGridSystem.GetOnPos(itV->x,itV->y);
 	    			//  TRANSFORM(e)->rotation = HeriswapGame::cellTypeToRotation(it->type) + (1 - transitionSuppr->value) * MathUtil::TwoPi;
 	    			ADSR(e)->idleValue = cellSize.x;
 	    			if (transitionSuppr->value == transitionSuppr->sustainValue) {
