@@ -22,9 +22,9 @@ initial_color = 1,1,1,1,1,1,1,1
 #~ Interval Color
 final_color = 1,1,1,1,1,1,1,1
 #~ Interval float
-initial_size = 12,14
+initial_size = 1,1.5
 #~ Interval float
-final_size = 12, 14
+final_size = 1,1.5
 #~ Interval float
 force_direction = 0, 0
 #~ Interval float
@@ -34,4 +34,4 @@ moment = -3, 3
 #~ float
 mass = 1
 #~glm::vec2
-#gravity =
+gravity = 0, -1

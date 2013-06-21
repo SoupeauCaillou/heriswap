@@ -1,6 +1,6 @@
 [Transformation]
 positionS%screen = 0, -0.5
-size%texture_ratio,screen_h = 0.5
+size%screen = 1, 0.234
 #rotation = 0
 z = 0.4
 
