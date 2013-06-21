@@ -34,7 +34,7 @@ INSTANCE_IMPL(BackgroundSystem);
 BackgroundSystem::BackgroundSystem() : ComponentSystemImpl<BackgroundComponent>("Background") {
     skySpeed = -0.3;
 
-    cloudStartX = Interval<float>(0.0,15.0);
+    cloudStartX = Interval<float>(8.0,15.0);
 
     cloudY[0] = Interval<float>(PlacementHelper::GimpYToScreen(70), PlacementHelper::GimpYToScreen(240));
     cloudY[1] = Interval<float>(PlacementHelper::GimpYToScreen(390), PlacementHelper::GimpYToScreen(490));
