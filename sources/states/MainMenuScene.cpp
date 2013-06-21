@@ -288,13 +288,13 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         ANIMATION(game->herisson)->playbackSpeed = 4.5f;
 
         TEXT_RENDERING(quitButton[0])->show = false;
-        // RENDERING(game->datas->socialGamNet)->show =
+        RENDERING(game->datas->socialGamNet)->show =
             // RENDERING(game->datas->soundButton)->show =
         RENDERING(quitButton[1])->show = false;
 
         // SCROLLING(game->datas->sky)->show = false;
 
-        // BUTTON(game->datas->socialGamNet)->enabled =
+        BUTTON(game->datas->socialGamNet)->enabled =
             // BUTTON(game->datas->soundButton)->enabled =
         BUTTON(quitButton[1])->enabled = false;
     }
