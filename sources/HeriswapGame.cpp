@@ -376,10 +376,10 @@ void HeriswapGame::tick(float dt) {
     //datas->newState = datas->state2Manager[datas->state]->Update(dt);
 
     //update only if game has really begun (after countdown)
-    //if (datas->state != CountDown && static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame == false) {
+    if (sceneStateMachine.getCurrentState() != Scene::CountDown && !datas->newGame) {
         //updating gamemode
-        // datas->mode2Manager[datas->mode]->GameUpdate(dt, datas->state);
-  //   }
+        datas->mode2Manager[datas->mode]->GameUpdate(dt, sceneStateMachine.getCurrentState());
+    }
 
     LOGT("TBD in Pause (prolly)");
 #if 0
@@ -747,14 +747,11 @@ void HeriswapGame::setupGameProp() {
 
 void HeriswapGame::prepareNewGame() {
     //for count down in 2nd mode
-    #if 1
-    LOGT("TODO");
-    #else
-    static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput])->newGame = true;
-    #endif
+    datas->newGame = true;
     // call Enter before starting fade-in
     datas->mode2Manager[datas->mode]->Enter();
-    // TODO Fix it!
+
+    LOGT("UiUpdate first call missing");
     // datas->mode2Manager[datas->mode]->UiUpdate(0);
     MUSIC(datas->menu)->control = MusicControl::Stop;
 }

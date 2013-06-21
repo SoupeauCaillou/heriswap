@@ -49,8 +49,6 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
     // State variables
 
     Entity swapAnimation;
-    //for count down in time attack mode
-    bool newGame;
     // datas
     Entity dragged;
     int originI, originJ;
@@ -74,8 +72,6 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
 
         rollback = theEntityManager.CreateEntity("rollback",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("rollback"));
-
-        newGame = true;
     }
 
     static bool contains(const std::vector<Combinais>& combi, const HeriswapGridComponent* g) {
@@ -179,8 +175,8 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
     ///--------------------- UPDATE SECTION ---------------------------------------//
     ///----------------------------------------------------------------------------//
     Scene::Enum update(float dt) override {
-        if (newGame) {
-            newGame = false;
+        if (game->datas->newGame) {
+            game->datas->newGame = false;
             return Scene::CountDown;
         }
 

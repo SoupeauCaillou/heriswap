@@ -77,4 +77,7 @@ class PrivateData {
         float haveToAddLeavesInGrid;
         float replaceGrid;
     } timing;
+
+    // hum hum
+    bool newGame;
 };
