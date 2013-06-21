@@ -131,7 +131,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         // glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), (float)PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f, 1.f);
         TRANSFORM(game->herisson)->size = randomHerissonSize();
         TRANSFORM(game->herisson)->position = AnchorSystem::adjustPositionWithCardinal(randomHerissionStart(),
-                TRANSFORM(game->herisson)->size, Cardinal::SW);
+                TRANSFORM(game->herisson)->size, Cardinal::SE);
 
         a.str("");
         a << "herisson_" << glm::round(glm::linearRand(1.f, 8.f));
@@ -226,7 +226,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             float r = glm::linearRand(.3f, 1.f);
             TRANSFORM(game->herisson)->size = randomHerissonSize();
             TRANSFORM(game->herisson)->position = AnchorSystem::adjustPositionWithCardinal(randomHerissionStart(),
-                TRANSFORM(game->herisson)->size, Cardinal::SW);
+                TRANSFORM(game->herisson)->size, Cardinal::SE);
         }
         game->title = 0;
         if (!modeTitleToReset || (modeTitleToReset && !MORPHING(modeTitleToReset)->active)) {
