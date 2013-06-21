@@ -68,4 +68,13 @@ class PrivateData {
      Jukebox jukebox;
      int scoreboardRankInSight;
      std::vector<int> bestScores;
+
+    // animations timing
+    struct {
+        float deletion;
+        float swap;
+        float fall;
+        float haveToAddLeavesInGrid;
+        float replaceGrid;
+    } timing;
 };

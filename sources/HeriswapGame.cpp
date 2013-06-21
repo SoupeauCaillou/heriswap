@@ -702,31 +702,27 @@ void HeriswapGame::stopInGameMusics() {
 
 void HeriswapGame::setupGameProp() {
     if (datas->mode == Go100Seconds) {
-        // ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.2;
-        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.03;
-        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.03;
-        // ADSR((static_cast<FallGameStateManager*> (datas->state2Manager[Fall]))->fallAnimation)->attackTiming = 0.1;
-        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->haveToAddLeavesInGrid)->attackTiming = 0.2;
-        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 0.5;
-        return;
-    }
-
-    //update anim times
-    Difficulty difficulty = theHeriswapGridSystem.sizeToDifficulty();
-    if (difficulty == DifficultyEasy) {
-        // ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.6;
-        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.14;
-        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.14;
-        // ADSR((static_cast<FallGameStateManager*> (datas->state2Manager[Fall]))->fallAnimation)->attackTiming = 0.30;
-        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->haveToAddLeavesInGrid)->attackTiming = 0.40;
-        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 1.;
+        datas->timing.deletion = 0.2;
+        datas->timing.swap = 0.03;
+        datas->timing.fall = 0.1;
+        datas->timing.haveToAddLeavesInGrid = 0.2;
+        datas->timing.replaceGrid = 0.5;
     } else {
-        // ADSR((static_cast<DeleteGameStateManager*> (datas->state2Manager[Delete]))->deleteAnimation)->attackTiming = 0.3;
-        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->attackTiming = 0.07;
-        // ADSR((static_cast<UserInputGameStateManager*> (datas->state2Manager[UserInput]))->swapAnimation)->releaseTiming = 0.07;
-        // ADSR((static_cast<FallGameStateManager*> (datas->state2Manager[Fall]))->fallAnimation)->attackTiming = 0.15;
-        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->haveToAddLeavesInGrid)->attackTiming = 0.40;
-        // ADSR((static_cast<SpawnGameStateManager*> (datas->state2Manager[Spawn]))->replaceGrid)->attackTiming = 1.;
+        //update anim times
+        Difficulty difficulty = theHeriswapGridSystem.sizeToDifficulty();
+        if (difficulty == DifficultyEasy) {
+            datas->timing.deletion = 0.6;
+            datas->timing.swap = 0.14;
+            datas->timing.fall = 0.30;
+            datas->timing.haveToAddLeavesInGrid = 0.40;
+            datas->timing.replaceGrid = 1;
+        } else {
+            datas->timing.deletion = 0.3;
+            datas->timing.swap = 0.07;
+            datas->timing.fall = 0.15;
+            datas->timing.haveToAddLeavesInGrid = 0.40;
+            datas->timing.replaceGrid = 1;
+        }
     }
 
 

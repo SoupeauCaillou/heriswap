@@ -160,10 +160,11 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
     }
 
     void onEnter(Scene::Enum) override {
-        LOGI("'" << __PRETTY_FUNCTION__ << "'");
-        dragged = 0;
-        ADSR(swapAnimation)->active = false;
-        ADSR(swapAnimation)->activationTime = 0;
+        auto* adsr = ADSR(swapAnimation);
+        adsr->attackTiming =
+            adsr->releaseTiming = game->datas->timing.swap;
+        adsr->active = false;
+        adsr->activationTime = 0;
         originI = originJ = -1;
         dragged = 0;
 

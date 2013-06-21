@@ -21,6 +21,7 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 #include "Scenes.h"
 
 #include "HeriswapGame.h"
+#include "Game_Private.h"
 #include "CombinationMark.h"
 
 #include "systems/HeriswapGridSystem.h"
@@ -57,7 +58,8 @@ struct FallScene : public StateHandler<Scene::Enum> {
     }
 
     void onEnter(Scene::Enum) override {
-        LOGI("'" << __PRETTY_FUNCTION__ << "'");
+        ADSR(fallAnimation)->attackTiming = game->datas->timing.fall;
+
         falling = theHeriswapGridSystem.TileFall();
 
         // Creation de la nouvelle grille

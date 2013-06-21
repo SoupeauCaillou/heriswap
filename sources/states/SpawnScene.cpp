@@ -195,7 +195,8 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	}
 
 	void onEnter(Scene::Enum) override {
-		LOGI("'" << __PRETTY_FUNCTION__ << "'");
+		ADSR(haveToAddLeavesInGrid)->attackTiming = game->datas->timing.haveToAddLeavesInGrid;
+        ADSR(replaceGrid)->attackTiming = game->datas->timing.replaceGrid;
 
 		fillTheBlank(newLeaves);
 

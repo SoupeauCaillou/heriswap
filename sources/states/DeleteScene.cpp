@@ -60,7 +60,7 @@ struct DeleteScene : public StateHandler<Scene::Enum> {
     }
 
     void onEnter(Scene::Enum) override {
-        LOGI("'" << __PRETTY_FUNCTION__ << "'");
+        ADSR(deleteAnimation)->attackTiming = game->datas->timing.deletion;
 
         littleLeavesDeleted.clear();
         removing = theHeriswapGridSystem.LookForCombination(true,true);
