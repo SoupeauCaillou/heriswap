@@ -20,7 +20,7 @@
 #include "android/sacjnilib.h"
 #include "../sources/HeriswapGame.h"
 /*
-class PrototypeGameThreadJNIEnvCtx : public GameThreadJNIEnvCtx {
+class HeriswapGameThreadJNIEnvCtx : public GameThreadJNIEnvCtx {
 	public:
 
     void init(JNIEnv* pEnv, jobject assetMgr) {
@@ -38,7 +38,7 @@ GameHolder* GameHolder::build() {
 	GameHolder* hld = new GameHolder();
 
 /*
-	PrototypeGameThreadJNIEnvCtx* jniCtx = new PrototypeGameThreadJNIEnvCtx();
+	HeriswapGameThreadJNIEnvCtx* jniCtx = new HeriswapGameThreadJNIEnvCtx();
 	hld->gameThreadJNICtx = jniCtx;
 */
 	hld->game = new HeriswapGame();

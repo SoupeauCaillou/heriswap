@@ -16,14 +16,14 @@
 	You should have received a copy of the GNU General Public License
 	along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
-package net.damsy.soupeaucaillou.prototype;
+package net.damsy.soupeaucaillou.heriswap;
 
 import net.damsy.soupeaucaillou.SacActivity;
 import net.damsy.soupeaucaillou.api.AssetAPI;
 import net.damsy.soupeaucaillou.api.LocalizeAPI;
 import android.os.Bundle;
 
-public class PrototypeActivity extends SacActivity {
+public class HeriswapActivity extends SacActivity {
 	static {
         System.loadLibrary("sac");
     }
