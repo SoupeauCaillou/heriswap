@@ -8,7 +8,7 @@ z = 0.01
 #~ glm::vec2
 direction = -1, 0
 #~ float
-speed = 0.5
+speed = 0.1
 #~ glm::vec2
 #display_size =
 #~ bool
