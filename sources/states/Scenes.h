@@ -49,9 +49,9 @@ namespace Scene {
         ModeMenuToBlackState,
         Pause,
         RateIt,
-        ScoreBoard,
+        // ScoreBoard,
         Spawn,
-        Unpause,
+        // Unpause,
         UserInput,
     };
 
