@@ -89,6 +89,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
             TypedMorphElement<float>* sizeMorph = new TypedMorphElement<float>(&TEXT_RENDERING(eStart[i])->charHeight, TEXT_RENDERING(eStart[i])->charHeight, PlacementHelper::GimpHeightToScreen(54));
             MORPHING(eStart[i])->elements.push_back(sizeMorph);
+            TypedMorphElement<float>* alignMorph = new TypedMorphElement<float>(&TEXT_RENDERING(eStart[i])->positioning, 0, 1);
+            MORPHING(eStart[i])->elements.push_back(alignMorph);
 
             a.str("");
             a << "bStart_" << i;
@@ -108,8 +110,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(54);
             float w = theTextRenderingSystem.computeTextRenderingComponentWidth(TEXT_RENDERING(eStart[i]));
             TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
-            glm::vec2 target = glm::vec2((float)(PlacementHelper::GimpXToScreen(700) - w) ,
-                                         (float)PlacementHelper::GimpYToScreen(100));
+            glm::vec2 target = glm::vec2((float)(PlacementHelper::GimpXToScreen(708)) ,
+                                         (float)PlacementHelper::GimpYToScreen(147));
             TypedMorphElement<glm::vec2>* posMorph = new TypedMorphElement<glm::vec2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, target);
             MORPHING(eStart[i])->elements.push_back(posMorph);
         }
@@ -288,7 +290,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         ANIMATION(game->herisson)->playbackSpeed = 4.5f;
 
         TEXT_RENDERING(quitButton[0])->show = false;
-        
+
         RENDERING(quitButton[1])->show = false;
 
         BUTTON(quitButton[1])->enabled = false;
