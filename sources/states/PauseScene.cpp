@@ -90,7 +90,6 @@ struct PauseScene : public StateHandler<Scene::Enum> {
     }
 
     void onEnter(Scene::Enum from) override {
-        LOGI("'" << __PRETTY_FUNCTION__ << "'");
         theSoundSystem.loadSoundFile("audio/son_menu.ogg");
         TEXT_RENDERING(eRestart)->show = true;
         RENDERING(bRestart)->show = true;
@@ -123,7 +122,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
             return Scene::MainMenu;
         } if (BUTTON(bRestart)->clicked) {
             SOUND(bRestart)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-            return Scene::Unpause;
+            return previousState;
         } if (BUTTON(bHelp)->clicked) {
             SOUND(bHelp)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
             return Scene::Help;
