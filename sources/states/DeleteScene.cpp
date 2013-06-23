@@ -103,6 +103,10 @@ struct DeleteScene : public StateHandler<Scene::Enum> {
                         if (e)
                             theEntityManager.DeleteEntity(e);
                         littleLeavesDeleted.clear();
+                    } else {
+                        glm::vec2 size = HeriswapGame::CellSize(theHeriswapGridSystem.GridSize, HERISWAPGRID(e)->type);
+                        float scale = ADSR(e)->value / size.x;
+                        TRANSFORM(e)->size = size * scale;
                     }
                 }
             }
