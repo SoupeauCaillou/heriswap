@@ -334,7 +334,7 @@ void HeriswapGame::backPressed() {
         // go back to main menu
         // (static_cast<ModeMenuStateManager*>(datas->state2Manager[ModeMenu]))->pleaseGoBack = true;
     } else if (pausableState(state)) {
-        #if defined(DEBUG)
+        #if SAC_DEBUG
         // datas->mode2Manager[datas->mode]->toggleDebugDisplay();
         #else
         togglePause(true);
