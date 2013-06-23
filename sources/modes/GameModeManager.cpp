@@ -118,10 +118,7 @@ void GameModeManager::Setup() {
     #if SAC_DEBUG
     _debug = false;
     for(int i=0; i<8; i++) {
-        std::stringstream a;
-        a.str("");
-        a << "debugEntities_" << 2*i;
-        debugEntities[2*i] = theEntityManager.CreateEntity(a.str());
+        debugEntities[2*i] = theEntityManager.CreateEntity("debugEntities");
         ADD_COMPONENT(debugEntities[2*i], Rendering);
         ADD_COMPONENT(debugEntities[2*i], Transformation);
         RENDERING(debugEntities[2*i])->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(i, 0));
@@ -131,9 +128,7 @@ void GameModeManager::Setup() {
         TRANSFORM(debugEntities[2*i])->z = DL_DebugLayer;
         TRANSFORM(debugEntities[2*i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(80));
 
-        a.str("");
-        a << "debugEntities_" << 2*i+1;
-        debugEntities[2*i + 1] = theEntityManager.CreateEntity(a.str());
+        debugEntities[2*i + 1] = theEntityManager.CreateEntity("debugEntities");
         ADD_COMPONENT(debugEntities[2*i + 1], TextRendering);
         TEXT_RENDERING(debugEntities[2*i + 1])->positioning = TextRenderingComponent::CENTER;
         ADD_COMPONENT(debugEntities[2*i + 1], Transformation);
