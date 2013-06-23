@@ -582,6 +582,12 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             CONTAINER(enableSwarmContainer)->enable = false;
         #endif   
         }
+
+        for (int i = 0; i<5; ++i) {
+            TEXT_RENDERING(scoresPoints[i])->show = 
+                TEXT_RENDERING(scoresName[i])->show =
+                TEXT_RENDERING(scoresLevel[i])->show = false;
+        }
         
         RENDERING(back)->show =
             RENDERING(fond)->show = false;
