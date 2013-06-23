@@ -75,10 +75,10 @@ class HeriswapGame : public Game {
 		Entity title, menufg, menubg;
 		Entity herisson;
 
-	private:
+		void stopInGameMusics();
+    private:
         const uint8_t* loadEntitySystemState(const uint8_t* in, int size);
         void loadGameState(const uint8_t* in, int size);
-		void stopInGameMusics();
 		bool shouldPlayPiano();
 
 		SuccessAPI* successAPI;

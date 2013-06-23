@@ -1,7 +1,7 @@
 extends = button_text
 
 [Transformation]
-position%screen = −0.3125, 0.203125
+position%screen = -0.3125, -0.203125
 #size = 1, 1
 z = 0.39
 

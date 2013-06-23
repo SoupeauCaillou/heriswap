@@ -1,6 +1,6 @@
 extends = button
 
 [Transformation]
-position = 0, −0.109
+position%screen = 0, 0.109
 size%screen = 0.885, 0.115
 z = 0.38

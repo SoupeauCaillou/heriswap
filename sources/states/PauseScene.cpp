@@ -110,6 +110,8 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         // helpMgr->mode = mode;
 
         game->datas->mode2Manager[game->datas->mode]->TogglePauseDisplay(true);
+
+        game->stopInGameMusics();
     }
 
     ///----------------------------------------------------------------------------//

@@ -347,7 +347,7 @@ void HeriswapGame::togglePause(bool activate) {
 
     const Scene::Enum currentState = sceneStateMachine.getCurrentState();
     if (activate && currentState != Scene::Pause && pausableState(currentState)) {
-        stopInGameMusics();
+
         // pause
         sceneStateMachine.forceNewState(Scene::Pause);
     }
