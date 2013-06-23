@@ -561,21 +561,32 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     void onPreExit(Scene::Enum to) override {
     }
 
-    void onExit(Scene::Enum ) override {
-        theHeriswapGridSystem.setGridFromDifficulty(difficulty);
+    void onExit(Scene::Enum nextState) override {
+        if (nextState != Scene::MainMenu){
+            theHeriswapGridSystem.setGridFromDifficulty(difficulty);    
+            game->datas->successMgr->NewGame(difficulty);
+            TRANSFORM(game->herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(game->herisson)->size.x;
 
-        game->datas->successMgr->NewGame(difficulty);
-
-        TRANSFORM(game->herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(game->herisson)->size.x;
-
-        RENDERING(back)->show =
             RENDERING(game->herisson)->show =
-            RENDERING(game->menubg)->show =
-            RENDERING(fond)->show =
-            RENDERING(game->menufg)->show = false;
+                RENDERING(game->menubg)->show =
+                RENDERING(game->datas->socialGamNet)->show =
+                RENDERING(game->menufg)->show = false;
 
-        TEXT_RENDERING(game->title)->show =
-            TEXT_RENDERING(scoreTitle)->show =
+            TEXT_RENDERING(game->title)->show = false;
+
+            BUTTON(game->datas->socialGamNet)->enabled = false;
+
+        #if SAC_ANDROID
+            BUTTON(enableSwarmContainer)->enabled = false;
+            TEXT_RENDERING(enableSwarm)->show = false;
+            CONTAINER(enableSwarmContainer)->enable = false;
+        #endif   
+        }
+        
+        RENDERING(back)->show =
+            RENDERING(fond)->show = false;
+
+        TEXT_RENDERING(scoreTitle)->show =
             TEXT_RENDERING(eDifficulty)->show =
             TEXT_RENDERING(playText)->show = false;
 
@@ -583,14 +594,6 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         CONTAINER(playContainer)->enable =
             CONTAINER(bDifficulty)->enable = false;
-
-        #if SAC_ANDROID
-            BUTTON(enableSwarmContainer)->enabled = false;
-            TEXT_RENDERING(enableSwarm)->show = false;
-            CONTAINER(enableSwarmContainer)->enable = false;
-        #endif
-
-
     }
 };
 
