@@ -44,11 +44,10 @@ struct AdsScene : public StateHandler<Scene::Enum> {
     // State variables
     Entity eAds;
     AdAPI* adAPI;
-    StorageAPI* storageAPI;
     int gameb4Ads;
     float lastAdTime;
     float stateActiveDuration;
-    
+
     AdsScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
         this->game = game;
     }
@@ -115,7 +114,7 @@ struct AdsScene : public StateHandler<Scene::Enum> {
         if (gameb4Ads==0)
             gameb4Ads=3;
         gameb4Ads--;
-        storageAPI->setOption("gameB4Ads", ObjectSerializer<int>::object2string(gameb4Ads), "2");
+        game->gameThreadContext->storageAPI->setOption("gameB4Ads", ObjectSerializer<int>::object2string(gameb4Ads), "2");
     }
 
     void onExit(Scene::Enum) override {
