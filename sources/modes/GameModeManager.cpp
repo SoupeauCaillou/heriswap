@@ -151,7 +151,10 @@ void GameModeManager::showGameDecor(bool onlyBg) {
 
     RENDERING(herisson)->show = !onlyBg;
     RENDERING(branch)->show = !onlyBg;
-    uiHelper.show();
+    if (onlyBg)
+        uiHelper.hide();
+    else
+        uiHelper.show();
 
     // delete leaves
     for (unsigned int az=0;az<branchLeaves.size();az++) {

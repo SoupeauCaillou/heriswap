@@ -341,7 +341,7 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
     void onPreExit(Scene::Enum) override {
     }
 
-    void onExit(Scene::Enum) override {
+    void onExit(Scene::Enum nextState) override {
         LOGI("'" << __PRETTY_FUNCTION__ << "'");
         inCombinationCells.clear();
 
@@ -362,6 +362,10 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
 
         // successMgr->sLuckyLuke();
         // successMgr->sWhatToDo(false, 0.f);
+
+        if (nextState == Scene::Help) {
+            game->datas->mode2Manager[game->datas->mode]->showGameDecor(true);
+        }
     }
 };
 
