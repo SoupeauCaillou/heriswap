@@ -58,7 +58,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         eRestart = theEntityManager.CreateEntity("eRestart",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/eRestart"));
         TEXT_RENDERING(eRestart)->text = game->gameThreadContext->localizeAPI->text("continue_");
-        
+
         //Restart button
         bRestart = theEntityManager.CreateEntity("bRestart",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/bRestart"));
@@ -75,7 +75,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         //Abort text
         eAbort = theEntityManager.CreateEntity("eAbort",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/eAbort"));
-        
+
         TEXT_RENDERING(eAbort)->text = game->gameThreadContext->localizeAPI->text("give_up");
 
         //Abort button
@@ -89,7 +89,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
     void onPreEnter(Scene::Enum) override {
     }
 
-    void onEnter(Scene::Enum pS) override {
+    void onEnter(Scene::Enum from) override {
         LOGI("'" << __PRETTY_FUNCTION__ << "'");
         theSoundSystem.loadSoundFile("audio/son_menu.ogg");
         TEXT_RENDERING(eRestart)->show = true;
@@ -104,10 +104,12 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         // theMusicSystem.toggleMute(true);
         BUTTON(bHelp)->enabled = true;
 
-        previousState = pS;
+        previousState = from;
 
         // helpMgr->oldState = Pause;
         // helpMgr->mode = mode;
+
+        game->datas->mode2Manager[game->datas->mode]->TogglePauseDisplay(true);
     }
 
     ///----------------------------------------------------------------------------//
@@ -131,6 +133,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
     ///--------------------- EXIT SECTION -----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreExit(Scene::Enum) override {
+        game->datas->mode2Manager[game->datas->mode]->TogglePauseDisplay(false);
     }
 
     void onExit(Scene::Enum) override {

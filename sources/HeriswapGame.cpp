@@ -343,30 +343,14 @@ void HeriswapGame::backPressed() {
 }
 
 void HeriswapGame::togglePause(bool activate) {
-    LOGT("Handle togglePause");
-#if 0
-    if (activate && datas->state != Pause && pausableState(datas->state)) {
+    LOGT("TODO: Must be called from Game thread");
+
+    const Scene::Enum currentState = sceneStateMachine.getCurrentState();
+    if (activate && currentState != Scene::Pause && pausableState(currentState)) {
         stopInGameMusics();
         // pause
-        datas->stateBeforePause = datas->state;
-        datas->stateBeforePauseNeedEnter = false;
-        datas->state = datas->newState = Pause;
-        // static_cast<PauseStateManager*> (datas->state2Manager[Pause])->mode = datas->mode;
-        // TEXT_RENDERING(static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->eBigLevel)->show = false;
-        datas->mode2Manager[datas->mode]->TogglePauseDisplay(true);
-        // datas->state2Manager[datas->state]->Enter();
-
-    } else if (!activate) {
-        // unpause
-        // if (datas->stateBeforePause == LevelChanged)
-            // TEXT_RENDERING(static_cast<LevelStateManager*> (datas->state2Manager[LevelChanged])->eBigLevel)->show = true;
-        datas->mode2Manager[datas->mode]->TogglePauseDisplay(false);
-        // datas->state2Manager[datas->state]->Exit();
-        datas->state = datas->stateBeforePause;
-        // if (datas->stateBeforePauseNeedEnter)
-            // datas->state2Manager[datas->state]->Enter();
+        sceneStateMachine.forceNewState(Scene::Pause);
     }
-#endif
 }
 
 void HeriswapGame::tick(float dt) {
