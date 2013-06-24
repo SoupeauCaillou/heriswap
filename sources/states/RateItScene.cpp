@@ -87,7 +87,6 @@ struct RateItScene : public StateHandler<Scene::Enum> {
     }
 
     void onEnter(Scene::Enum) override {
-        LOGI(__PRETTY_FUNCTION__);
         RENDERING(textToReadContainer)->show = true;
         TEXT_RENDERING(textToRead)->show = true;
         for (int i=0; i<3; i++) {
@@ -130,7 +129,6 @@ struct RateItScene : public StateHandler<Scene::Enum> {
     }
 
     void onExit(Scene::Enum) override {
-        LOGI(__PRETTY_FUNCTION__);
         RENDERING(textToReadContainer)->show = false;
         TEXT_RENDERING(textToRead)->show = false;
         for (int i=0; i<3; i++) {

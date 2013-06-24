@@ -12,7 +12,7 @@ font_name = typo
 #~ Color
 color%name = green
 #~ float
-char_height = 2
+char_height%screen_h = 0.05
 #~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
 positioning = 0.5
 #~ bool
