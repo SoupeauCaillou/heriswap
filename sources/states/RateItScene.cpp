@@ -87,6 +87,9 @@ struct RateItScene : public StateHandler<Scene::Enum> {
     }
 
     void onEnter(Scene::Enum) override {
+        RENDERING(game->menubg)->show =
+            RENDERING(game->menufg)->show = true;
+
         RENDERING(textToReadContainer)->show = true;
         TEXT_RENDERING(textToRead)->show = true;
         for (int i=0; i<3; i++) {
