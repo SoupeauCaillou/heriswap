@@ -391,7 +391,8 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             difficulty = theHeriswapGridSystem.sizeToDifficulty();
         }
 
-        // LoadScore(game->datas->mode, difficulty);
+        LoadScore(game->datas->mode, difficulty);
+
         RENDERING(back)->show =
             RENDERING(game->herisson)->show =
             RENDERING(game->menubg)->show =

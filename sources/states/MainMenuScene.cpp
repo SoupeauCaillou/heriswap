@@ -244,18 +244,15 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     ///--------------------- EXIT SECTION -----------------------------------------//
     ///----------------------------------------------------------------------------//
-    void onPreExit(Scene::Enum) override {
+    void onPreExit(Scene::Enum to) override {
         ScoreStorageProxy ssp;
         ssp.setValue("time", ObjectSerializer<float>::object2string(timeElapsed), true);
         timeElapsed = 0.f;
         game->gameThreadContext->storageAPI->saveEntries((IStorageProxy*)&ssp);
-    }
 
-    void onExit(Scene::Enum to) override {
         if (to == Scene::ModeMenu) {
             game->datas->mode = choosenGameMode;
         }
-
         for (int i = 0; i < 3; i++) {
             if (i != choosenGameMode)
                 TEXT_RENDERING(eStart[i])->show = false;
