@@ -366,7 +366,7 @@ void HeriswapGame::tick(float dt) {
         datas->mode2Manager[datas->mode]->GameUpdate(dt, sceneStateMachine.getCurrentState());
     }
 
-    LOGT("TBD in Pause (prolly)");
+    LOGT_EVERY_N(600, "TBD in Pause (prolly)");
 #if 0
     //si on est passé de pause à quelque chose different de pause, on desactive la pause
     if (datas->state == Pause && datas->newState == Unpause) {
@@ -374,7 +374,7 @@ void HeriswapGame::tick(float dt) {
     }
 #endif
 
-    LOGT("State change action must be done in states respective onEnter/onExit methods");
+    LOGT_EVERY_N(600, "State change action must be done in states respective onEnter/onExit methods");
 #if 0
     //si on a change d'etat
      else if (datas->newState != datas->state) {
