@@ -183,7 +183,6 @@ void Go100SecondsGameModeManager::GameUpdate(float dt, Scene::Enum state) {
 }
 
 float Go100SecondsGameModeManager::GameProgressPercent() {
-    return 1;
 	return glm::min(1.0f, (float)time/limit);
 }
 
