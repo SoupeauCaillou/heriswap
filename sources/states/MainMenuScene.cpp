@@ -24,6 +24,10 @@
 #include "Game_Private.h"
 #include "DepthLayer.h"
 
+#include "modes/NormalModeManager.h"
+#include "modes/Go100SecondsModeManager.h"
+#include "modes/TilesAttackModeManager.h"
+
 #include "systems/BackgroundSystem.h"
 
 #include "api/StorageAPI.h"
@@ -96,10 +100,6 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             a << "bStart_" << i;
             bStart[i] = theEntityManager.CreateEntity(a.str(),
                 EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/" + a.str()));
-
-            // TRANSFORM(bStart[i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(708),
-            //                                        (float)PlacementHelper::GimpHeightToScreen(147));
-            // TRANSFORM(bStart[i])->position.x = 0;
         }
         TEXT_RENDERING(eStart[0])->text = game->gameThreadContext->localizeAPI->text("mode_1");
         TEXT_RENDERING(eStart[1])->text = game->gameThreadContext->localizeAPI->text("mode_2");
@@ -108,7 +108,6 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         //Containers properties
         for (int i=0; i<3; i++) {
             TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(54);
-            float w = theTextRenderingSystem.computeTextRenderingComponentWidth(TEXT_RENDERING(eStart[i]));
             TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
             glm::vec2 target = glm::vec2((float)(PlacementHelper::GimpXToScreen(708)) ,
                                          (float)PlacementHelper::GimpYToScreen(147));
@@ -130,7 +129,6 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         game->herisson = theEntityManager.CreateEntity("herisson_menu",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/herisson"));
 
-        // glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), (float)PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f, 1.f);
         TRANSFORM(game->herisson)->size = randomHerissonSize();
         TRANSFORM(game->herisson)->position = AnchorSystem::adjustPositionWithCardinal(randomHerissionStart(),
                 TRANSFORM(game->herisson)->size, Cardinal::SE);
@@ -142,18 +140,11 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         quitButton[0] = theEntityManager.CreateEntity("quitButton_0",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/quit_text"));
 
-
-        //TRANSFORM(quitButton[0])->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1215));
         TEXT_RENDERING(quitButton[0])->text = " " + game->gameThreadContext->localizeAPI->text("quit") + " ";
-        // TEXT_RENDERING(quitButton[0])->charHeight = PlacementHelper::GimpHeightToScreen(60);
 
         quitButton[1] = theEntityManager.CreateEntity("quitButton_1",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/quit_button"));
 
-        // float hhh = PlacementHelper::GimpHeightToScreen(95);
-        // float www = hhh / 0.209;
-        // TRANSFORM(quitButton[1])->size = glm::vec2(www, www * 0.209);
-        // TRANSFORM(quitButton[1])->position = glm::vec2(0, PlacementHelper::GimpYToScreen(1215));
         modeTitleToReset = 0;
     }
 
@@ -161,21 +152,15 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum pState) override {
-        switch (pState) {
-            case Scene::Pause:
-                LOGI("aborted. going to main menu");
-                // RENDERING(game->datas->soundButton)->show = true;
-                // game->datas->state2Manager[game->datas->stateBeforePause]->Exit();
-                // game->datas->mode2Manager[game->datas->mode]->Exit();
-                // static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->gameOverState = ModeMenuStateManager::NoGame;
-                // stopInGameMusics();
-                break;
-            case Scene::ModeMenu:
-                // RENDERING(game->datas->soundButton)->show = true;
-                // game->datas->state2Manager[oldState]->LateExit();
-                break;
-            default:
-                break;
+        if (pState == Scene::Pause) {
+            LOGI("aborted. going to main menu");
+            if (game->datas->mode == Normal) {
+                static_cast<NormalGameModeManager*> (game->datas->mode2Manager[Normal])->Exit();
+            } else if (game->datas->mode == TilesAttack) {
+                static_cast<TilesAttackGameModeManager*> (game->datas->mode2Manager[TilesAttack])->Exit();
+            } else {
+                static_cast<Go100SecondsGameModeManager*> (game->datas->mode2Manager[Go100Seconds])->Exit();
+            }
         }
 
         // preload sound effect
@@ -224,8 +209,6 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             a << "herisson_" << glm::round(glm::linearRand(1.f, 8.f));
             ANIMATION(game->herisson)->name = a.str();
             ANIMATION(game->herisson)->playbackSpeed = glm::linearRand(2.0f, 4.0f);
-            auto textureSize = theRenderingSystem.getTextureSize("herisson_1_5");
-            float r = glm::linearRand(.3f, 1.f);
             TRANSFORM(game->herisson)->size = randomHerissonSize();
             TRANSFORM(game->herisson)->position = AnchorSystem::adjustPositionWithCardinal(randomHerissionStart(),
                 TRANSFORM(game->herisson)->size, Cardinal::SE);
