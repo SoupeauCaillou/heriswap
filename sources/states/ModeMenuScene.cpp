@@ -361,17 +361,21 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             } else {
                 static_cast<Go100SecondsGameModeManager*> (game->datas->mode2Manager[Go100Seconds])->Exit();
             }
-            
+
         }
     }
 
-    void onEnter(Scene::Enum) override {
-        LOGI("'"<< __PRETTY_FUNCTION__ << "'");
+    void onEnter(Scene::Enum from) override {
         pleaseGoBack = false;
         game->datas->successMgr->sHardScore(game->gameThreadContext->storageAPI);
 
         BUTTON(back)->enabled = true;
         BUTTON(playContainer)->enabled = true;
+
+        gameOverState = GameEnded;
+        if (from == Scene::MainMenu) {
+            gameOverState = NoGame;
+        }
 
         //first launch : set an easiest diff
         if (gameOverState == NoGame) {
@@ -492,7 +496,6 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                     if (game->gameThreadContext->communicationAPI->mustShowRateDialog()) {
                         TRANSFORM(game->herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(game->herisson)->size.x;
                         TEXT_RENDERING(game->title)->show = false;
-                        //this->LateExit();
                         return Scene::RateIt;
                     }
 
@@ -565,7 +568,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
     void onExit(Scene::Enum nextState) override {
         if (nextState != Scene::MainMenu){
-            theHeriswapGridSystem.setGridFromDifficulty(difficulty);    
+            theHeriswapGridSystem.setGridFromDifficulty(difficulty);
             game->datas->successMgr->NewGame(difficulty);
             TRANSFORM(game->herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(game->herisson)->size.x;
 
@@ -582,15 +585,15 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             BUTTON(enableSwarmContainer)->enabled = false;
             TEXT_RENDERING(enableSwarm)->show = false;
             CONTAINER(enableSwarmContainer)->enable = false;
-        #endif   
+        #endif
         }
 
         for (int i = 0; i<5; ++i) {
-            TEXT_RENDERING(scoresPoints[i])->show = 
+            TEXT_RENDERING(scoresPoints[i])->show =
                 TEXT_RENDERING(scoresName[i])->show =
                 TEXT_RENDERING(scoresLevel[i])->show = false;
         }
-        
+
         RENDERING(back)->show =
             RENDERING(fond)->show = false;
 
