@@ -372,9 +372,14 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         BUTTON(back)->enabled = true;
         BUTTON(playContainer)->enabled = true;
 
-        gameOverState = GameEnded;
-        if (from == Scene::MainMenu) {
-            gameOverState = NoGame;
+        switch (from) {
+            case Scene::MainMenu:
+            case Scene::RateIt:
+                gameOverState = NoGame;
+                break;
+            default:
+                gameOverState = GameEnded;
+                break;
         }
 
         //first launch : set an easiest diff
