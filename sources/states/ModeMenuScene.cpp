@@ -30,6 +30,8 @@
 
 #include "modes/GameModeManager.h"
 #include "modes/NormalModeManager.h"
+#include "modes/TilesAttackModeManager.h"
+#include "modes/Go100SecondsModeManager.h"
 
 #include "DepthLayer.h"
 
@@ -351,15 +353,15 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum pState) override {
-        switch (pState) {
-            case Scene::MainMenu:
-                // datas->mode = (static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]))->choosenGameMode;
-                //reference title into mode menu from main menu
-                // static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu])->eStart[datas->mode];
-                // setMode(); //on met à jour le mode de jeu dans les etats qui en ont besoin
-                break;
-            default:
-                break;
+        if (pState == Scene::BlackToModeMenu) {
+            if (game->datas->mode == Normal) {
+                static_cast<NormalGameModeManager*> (game->datas->mode2Manager[Normal])->Exit();
+            } else if (game->datas->mode == TilesAttack) {
+                static_cast<TilesAttackGameModeManager*> (game->datas->mode2Manager[TilesAttack])->Exit();
+            } else {
+                static_cast<Go100SecondsGameModeManager*> (game->datas->mode2Manager[Go100Seconds])->Exit();
+            }
+            
         }
     }
 
