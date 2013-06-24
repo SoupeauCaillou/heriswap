@@ -352,20 +352,11 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
-    void onPreEnter(Scene::Enum pState) override {
-        if (pState == Scene::BlackToModeMenu) {
-            if (game->datas->mode == Normal) {
-                static_cast<NormalGameModeManager*> (game->datas->mode2Manager[Normal])->Exit();
-            } else if (game->datas->mode == TilesAttack) {
-                static_cast<TilesAttackGameModeManager*> (game->datas->mode2Manager[TilesAttack])->Exit();
-            } else {
-                static_cast<Go100SecondsGameModeManager*> (game->datas->mode2Manager[Go100Seconds])->Exit();
-            }
-
+    void onPreEnter(Scene::Enum from) override {
+        if (from == Scene::BlackToModeMenu) {
+            game->datas->mode2Manager[game->datas->mode]->Exit();
         }
-    }
 
-    void onEnter(Scene::Enum from) override {
         pleaseGoBack = false;
         game->datas->successMgr->sHardScore(game->gameThreadContext->storageAPI);
 

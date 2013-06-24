@@ -342,7 +342,6 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
     }
 
     void onExit(Scene::Enum nextState) override {
-        LOGI("'" << __PRETTY_FUNCTION__ << "'");
         inCombinationCells.clear();
 
         //quand c'est plus au joueur de jouer, on supprime les marquages sur les feuilles
