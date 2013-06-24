@@ -167,6 +167,8 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 				//~else if (modeMgr->GetMode() == TilesAttack && modeMgr->GameProgressPercent() == 1)
 					//~return GameToBlack;
 
+                ADSR(replaceGrid)->activationTime = 0;
+                ADSR(replaceGrid)->value = ADSR(replaceGrid)->idleValue;
 				ADSR(replaceGrid)->active = true;
 				std::vector<Entity> feuilles = theHeriswapGridSystem.RetrieveAllEntityWithComponent();
 				for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
@@ -253,14 +255,15 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 			}
 		//sinon si on est en train de remplacer la grille (plus de combinaisons en cours de jeu)
 		} else if (ADSR(replaceGrid)->active) {
+            const float value = ADSR(replaceGrid)->value;
 	        std::vector<Entity> feuilles = theHeriswapGridSystem.RetrieveAllEntityWithComponent();
 	        //les feuilles disparaissent (taille tend vers 0)
 	        for ( std::vector<Entity>::reverse_iterator it = feuilles.rbegin(); it != feuilles.rend(); ++it ) {
-	            glm::vec2 cellSize = HeriswapGame::CellSize(theHeriswapGridSystem.GridSize, HERISWAPGRID(*it)->type) * HeriswapGame::CellContentScale() * (1 - ADSR(replaceGrid)->value);
-	            ADSR(*it)->idleValue = cellSize.x;
+	            const glm::vec2 size = HeriswapGame::CellSize(theHeriswapGridSystem.GridSize, HERISWAPGRID(*it)->type) * HeriswapGame::CellContentScale() * (1 - ADSR(replaceGrid)->value);
+                TRANSFORM(*it)->size = size * (1 - value);
 	        }
 	        //les feuilles ont disparu, on les supprime et on remplit avec de nouvelles feuilles
-	        if (ADSR(replaceGrid)->value == ADSR(replaceGrid)->sustainValue) {
+	        if (value == ADSR(replaceGrid)->sustainValue) {
 				theHeriswapGridSystem.DeleteAll();
 	            fillTheBlank(newLeaves);
 	            LOGI("nouvelle grille de '" << newLeaves.size() << "' elements! ");

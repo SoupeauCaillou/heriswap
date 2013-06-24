@@ -130,8 +130,6 @@ struct FallScene : public StateHandler<Scene::Enum> {
     void onExit(Scene::Enum) override {
         falling.clear();
         ADSR(fallAnimation)->active = false;
-
-        LOGI("'" << __PRETTY_FUNCTION__ << "'");
     }
 };
 
