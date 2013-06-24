@@ -150,6 +150,7 @@ bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
         case ContextAPI::Storage:
         case ContextAPI::Success:
         case ContextAPI::Vibrate:
+        case ContextAPI::StringInput:
             return true;
         default:
             return false;
