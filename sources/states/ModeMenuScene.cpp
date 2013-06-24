@@ -383,7 +383,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         }
 
         //first launch : set an easiest diff
-        if (gameOverState == NoGame) {
+        if (gameOverState == NoGame && from == Scene::MainMenu) {
             std::stringstream ss;
             ss << "where mode = " << game->datas->mode2Manager[game->datas->mode]->GetMode();
 
