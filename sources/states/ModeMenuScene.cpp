@@ -564,7 +564,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     }
 
     void onExit(Scene::Enum nextState) override {
-        if (nextState != Scene::MainMenu){
+        if (nextState != Scene::MainMenu) {
             theHeriswapGridSystem.setGridFromDifficulty(difficulty);
             game->datas->successMgr->NewGame(difficulty);
             TRANSFORM(game->herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(game->herisson)->size.x;

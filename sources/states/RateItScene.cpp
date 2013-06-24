@@ -94,9 +94,6 @@ struct RateItScene : public StateHandler<Scene::Enum> {
             TEXT_RENDERING(boutonText[i])->show = true;
             BUTTON(boutonContainer[i])->enabled = true;
         }
-
-        RENDERING(game->menubg)->show = true;
-        RENDERING(game->menufg)->show = true;
     }
 
     ///----------------------------------------------------------------------------//
@@ -136,9 +133,6 @@ struct RateItScene : public StateHandler<Scene::Enum> {
             RENDERING(boutonContainer[i])->show = false;
             BUTTON(boutonContainer[i])->enabled = false;
         }
-
-        RENDERING(game->menubg)->show = false;
-        RENDERING(game->menufg)->show = false;
     }
 };
 
