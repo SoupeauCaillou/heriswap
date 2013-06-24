@@ -602,6 +602,8 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         CONTAINER(playContainer)->enable =
             CONTAINER(bDifficulty)->enable = false;
+
+        TEXT_RENDERING(average)->show = false;
     }
 };
 
