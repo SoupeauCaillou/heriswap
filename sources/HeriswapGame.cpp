@@ -162,13 +162,15 @@ void HeriswapGame::quickInit(){
 }
 
 void HeriswapGame::sacInit(int windowW, int windowH) {
-    LOGI("SAC engine initialisation begins...");
+    LOGI("SAC engine initialisation begins:");
     Game::sacInit(windowW, windowH);
 
+    LOGI("\t- Create Heriswap specific systems...");
     HeriswapGridSystem::CreateInstance();
     TwitchSystem::CreateInstance();
     BackgroundSystem::CreateInstance();
 
+    LOGI("\t- Init sceneStateMachine...");
     sceneStateMachine.registerState(Scene::CountDown, Scene::CreateCountDownSceneHandler(this), "Scene::CountDown");
     sceneStateMachine.registerState(Scene::Spawn, Scene::CreateSpawnSceneHandler(this), "Scene::Spawn");
     sceneStateMachine.registerState(Scene::UserInput, Scene::CreateUserInputSceneHandler(this), "Scene::UserInput");
@@ -196,15 +198,12 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     sceneStateMachine.registerState(Scene::GameToBlack, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.4f, Scene::BlackToModeMenu), "Scene::GameToBlack");
     sceneStateMachine.registerState(Scene::ModeMenuToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::Ads), "Scene::ModeMenuToBlackState");
 
-    //init database
-    gameThreadContext->storageAPI->init(gameThreadContext->assetAPI, "Heriswap");
-    gameThreadContext->storageAPI->setOption("sound", std::string(), "on");
-    gameThreadContext->storageAPI->setOption("gameCount", std::string(), "0");
-
     Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
 
+    LOGI("\t- Load FX...");
     theRenderingSystem.effectLibrary.load("desaturate.fs");
 
+    LOGI("\t- Load animations...");
     // Animations
     theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_1", "herisson_1");
     theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_2", "herisson_2");
@@ -215,11 +214,8 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_7", "herisson_7");
     theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_8", "herisson_8");
 
+    LOGI("\t- Define vibrateAPI...");
     theButtonSystem.vibrateAPI = gameThreadContext->vibrateAPI;
-
-    // default camera
-    camera = theEntityManager.CreateEntity("camera",
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("camera"));
 
     LOGI("SAC engine initialisation done.");
 }
@@ -229,8 +225,19 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     if (in && size) {
         in = loadEntitySystemState(in, size);
     }
+
     ScoreStorageProxy ssp;
+    //init database
+    LOGI("\t- Init database...");
+    gameThreadContext->storageAPI->init(gameThreadContext->assetAPI, "Heriswap");
+    gameThreadContext->storageAPI->setOption("sound", std::string(), "on");
+    gameThreadContext->storageAPI->setOption("gameCount", std::string(), "0");
     gameThreadContext->storageAPI->createTable(&ssp);
+
+    LOGI("\t- Create camera...");
+    // default camera
+    camera = theEntityManager.CreateEntity("camera",
+        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("camera"));
 
     SuccessManager *sm = new SuccessManager(gameThreadContext->successAPI);
     datas = new PrivateData(this, gameThreadContext, sm);
@@ -242,7 +249,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
 
     datas->sky = theEntityManager.CreateEntity("sky",
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/sky"));
-    
+
     SCROLLING(datas->sky)->images.push_back("ciel0");
     SCROLLING(datas->sky)->images.push_back("ciel1");
     SCROLLING(datas->sky)->images.push_back("ciel2");

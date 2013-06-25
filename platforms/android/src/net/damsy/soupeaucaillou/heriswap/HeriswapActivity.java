@@ -20,14 +20,20 @@ package net.damsy.soupeaucaillou.heriswap;
 
 import net.damsy.soupeaucaillou.SacActivity;
 import net.damsy.soupeaucaillou.api.AssetAPI;
+import net.damsy.soupeaucaillou.api.ExitAPI;
 import net.damsy.soupeaucaillou.api.LocalizeAPI;
+import net.damsy.soupeaucaillou.api.MusicAPI;
+import net.damsy.soupeaucaillou.api.SoundAPI;
+import net.damsy.soupeaucaillou.api.StorageAPI;
+import net.damsy.soupeaucaillou.api.StringInputAPI;
+import net.damsy.soupeaucaillou.api.VibrateAPI;
 import android.os.Bundle;
 
 public class HeriswapActivity extends SacActivity {
 	static {
         System.loadLibrary("sac");
     }
-
+ 
     public int getLayoutId() {
         return R.layout.main;
     }
@@ -43,10 +49,16 @@ public class HeriswapActivity extends SacActivity {
         
         // Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
-	
+
 	@Override
 	public void initRequiredAPI() {
-		AssetAPI.Instance().init(getAssets());
+		AssetAPI.Instance().init(this, getAssets());
 		LocalizeAPI.Instance().init(this.getResources(), this.getPackageName());
+		StorageAPI.Instance().init(this);
+		ExitAPI.Instance();
+		MusicAPI.Instance();
+		SoundAPI.Instance();
+		StringInputAPI.Instance();
+		VibrateAPI.Instance();
 	}
 }
