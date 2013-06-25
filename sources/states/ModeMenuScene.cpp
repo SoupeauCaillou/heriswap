@@ -560,7 +560,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     ///--------------------- EXIT SECTION -----------------------------------------//
     ///----------------------------------------------------------------------------//
-    void onPreExit(Scene::Enum to) override {
+    void onPreExit(Scene::Enum) override {
     }
 
     void onExit(Scene::Enum nextState) override {
@@ -596,6 +596,8 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         TEXT(scoreTitle)->show =
             TEXT(eDifficulty)->show =
+            TEXT(yourScore)->show =
+            TEXT(average)->show =
             TEXT(playText)->show = false;
 
         BUTTON(bDifficulty)->enabled = false;
@@ -603,7 +605,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         CONTAINER(playContainer)->enable =
             CONTAINER(bDifficulty)->enable = false;
 
-        TEXT(average)->show = false;
+        
     }
 };
 
