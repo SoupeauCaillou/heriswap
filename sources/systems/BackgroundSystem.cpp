@@ -98,7 +98,7 @@ void BackgroundSystem::DoUpdate(float dt) {
                 bc->visible = true;
             }
         }
-    }
+    END_FOR_EACH()
 }
 
 void BackgroundSystem::showAll() {
@@ -106,12 +106,12 @@ void BackgroundSystem::showAll() {
         RENDERING(e)->show =
             BACKGROUND(e)->visible =
             BACKGROUND(e)->enable = true;
-    }
+    END_FOR_EACH()
 }
 
 void BackgroundSystem::hideAll() {
     FOR_EACH_ENTITY(Background, e)
         RENDERING(e)->show =
             BACKGROUND(e)->visible = false;
-    }
+    END_FOR_EACH()
 }

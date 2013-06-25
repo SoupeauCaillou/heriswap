@@ -30,9 +30,7 @@ TwitchSystem::TwitchSystem() : ComponentSystemImpl<TwitchComponent>("twitch_") {
 }
 
 void TwitchSystem::DoUpdate(float dt) {
-    for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-        Entity a = (*it).first;
-        TwitchComponent* tc = (*it).second;
+    FOR_EACH_ENTITY_COMPONENT(Twitch, a, tc)
         TransformationComponent* trc = TRANSFORM(a);
 
         if (tc->maxAngle == tc->minAngle || tc->speed == 0)
@@ -52,6 +50,6 @@ void TwitchSystem::DoUpdate(float dt) {
             float sign = target - trc->rotation;
             trc->rotation = trc->rotation + sign * tc->speed * dt;
         }
-    }
+    END_FOR_EACH()
 }
 
