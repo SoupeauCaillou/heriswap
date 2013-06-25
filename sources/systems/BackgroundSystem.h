@@ -22,7 +22,7 @@
 #include "systems/System.h"
 
 struct BackgroundComponent {
-    BackgroundComponent() {}
+    BackgroundComponent() : speed(0), group(0), enable(false), visible(false) {}
     float speed;
     int group;
     bool enable;
