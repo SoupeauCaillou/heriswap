@@ -17,7 +17,7 @@
 	along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
 package net.damsy.soupeaucaillou.heriswap;
-
+ 
 import net.damsy.soupeaucaillou.SacActivity;
 import net.damsy.soupeaucaillou.api.AssetAPI;
 import net.damsy.soupeaucaillou.api.ExitAPI;
@@ -27,7 +27,9 @@ import net.damsy.soupeaucaillou.api.SoundAPI;
 import net.damsy.soupeaucaillou.api.StorageAPI;
 import net.damsy.soupeaucaillou.api.StringInputAPI;
 import net.damsy.soupeaucaillou.api.VibrateAPI;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 
 public class HeriswapActivity extends SacActivity {
 	static {
@@ -46,8 +48,6 @@ public class HeriswapActivity extends SacActivity {
     protected void onCreate(Bundle savedInstanceState) {
 		SacActivity.LogI("-> onCreate [" + savedInstanceState);
         super.onCreate(savedInstanceState);
-        
-        // Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
 	@Override
@@ -59,6 +59,6 @@ public class HeriswapActivity extends SacActivity {
 		MusicAPI.Instance();
 		SoundAPI.Instance();
 		StringInputAPI.Instance();
-		VibrateAPI.Instance();
+		VibrateAPI.Instance().init((Vibrator) getSystemService(Context.VIBRATOR_SERVICE));
 	}
 }
