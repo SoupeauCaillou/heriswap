@@ -12,9 +12,10 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:padding="10dp"
         android:background="#F2F2F2F0"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:visibility="gone" >
 
         <TextView
             android:id="@+id/congrat"
