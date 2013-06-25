@@ -92,11 +92,11 @@ void Go100SecondsGameModeManager::Enter() {
 
 void Go100SecondsGameModeManager::squall() {
 	squallGo = true;
-	float minX = PlacementHelper::ScreenWidth/2.+1;
-	float maxX = PlacementHelper::ScreenWidth/2.+3;
+	float minX = PlacementHelper::ScreenSize.x/2.+1;
+	float maxX = PlacementHelper::ScreenSize.x/2.+3;
 
 	float minY = PlacementHelper::GimpYToScreen(1000);
-	float maxY = -PlacementHelper::ScreenHeight/2.;
+	float maxY = -PlacementHelper::ScreenSize.y/2.;
 	for (unsigned int i = 0; i < squallLeaves.size();  i++) {
 
 		Entity  e = squallLeaves[i];
@@ -150,7 +150,7 @@ void Go100SecondsGameModeManager::GameUpdate(float dt, Scene::Enum state) {
 		//check if every leaves has gone...
 		bool ended = true;
 		for (unsigned int i = 0 ; i < squallLeaves.size() ; i++) {
-			if (TRANSFORM(squallLeaves[i])->position.x >= -PlacementHelper::ScreenWidth * 0.5 - TRANSFORM(squallLeaves[i])->size.x)
+			if (TRANSFORM(squallLeaves[i])->position.x >= -PlacementHelper::ScreenSize.x * 0.5 - TRANSFORM(squallLeaves[i])->size.x)
 				ended = false;
 		}
 		//YES : stop the squall, keep playing !

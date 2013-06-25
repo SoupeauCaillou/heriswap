@@ -242,12 +242,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
 
     datas->sky = theEntityManager.CreateEntity("sky",
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/sky"));
-
-    TRANSFORM(datas->sky)->size = glm::vec2(PlacementHelper::ScreenWidth,
-                                            PlacementHelper::GimpWidthToScreen(800) * 833.0 / 808.0);
-    // TransformationSystem::setPosition(TRANSFORM(datas->sky),
-    //                                   glm::vec2(0, PlacementHelper::GimpYToScreen(0)),
-    //                                   TransformationSystem::N);
+    
     SCROLLING(datas->sky)->images.push_back("ciel0");
     SCROLLING(datas->sky)->images.push_back("ciel1");
     SCROLLING(datas->sky)->images.push_back("ciel2");
@@ -256,15 +251,10 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     SCROLLING(datas->sky)->displaySize = glm::vec2(TRANSFORM(datas->sky)->size.x * 1.01,
                                                    TRANSFORM(datas->sky)->size.y);
 
-    // static_cast<BackgroundManager*> (datas->state2Manager[Background])->skySpeed = -0.3;
-
-    // datas->mode2Manager[Normal]->sky = datas->sky;
-
     if (in && size) {
         // datas->state = Pause;
         // loadGameState(in, size);
     }
-    // datas->state2Manager[datas->state]->Enter();
 
     sceneStateMachine.setup(Scene::Logo);
 

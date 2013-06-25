@@ -44,11 +44,11 @@
 #include <sstream>
 
 static float initialHerissonPosition(Entity herisson) {
-    return -PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.x * 0.25;
+    return -PlacementHelper::ScreenSize.x * 0.5 + TRANSFORM(herisson)->size.x * 0.25;
 }
 
 static float finalHerissonPosition(Entity herisson) {
-    return PlacementHelper::ScreenWidth * 0.5 + TRANSFORM(herisson)->size.x * 0.5;
+    return PlacementHelper::ScreenSize.x * 0.5 + TRANSFORM(herisson)->size.x * 0.5;
 }
 
 GameModeManager::GameModeManager(HeriswapGame* game, SuccessManager* sMgr, StorageAPI* sAPI) {
@@ -122,9 +122,6 @@ void GameModeManager::Setup() {
         ADD_COMPONENT(debugEntities[2*i], Rendering);
         ADD_COMPONENT(debugEntities[2*i], Transformation);
         RENDERING(debugEntities[2*i])->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(i, 0));
-        // TransformationSystem::setPosition(TRANSFORM(debugEntities[2*i]),
-        //                                glm::vec2((float)(PlacementHelper::GimpXToScreen(0) + i * PlacementHelper::GimpWidthToScreen(80)), (float)PlacementHelper::GimpYToScreen(1280)),
-        //                                TransformationSystem::SW);
         TRANSFORM(debugEntities[2*i])->z = DL_DebugLayer;
         TRANSFORM(debugEntities[2*i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(80));
 
@@ -227,7 +224,7 @@ void GameModeManager::generateLeaves(int* nb, int type) {
         for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
             int rand = glm::round(glm::linearRand(0.f, (float)(posBranch.size()-1)));
             glm::vec2 pos = posBranch[rand].v;
-            pos.x -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenWidth*0.5f;
+            pos.x -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenSize.x*0.5f;
 
             BranchLeaf bl;
             bl.e = createAndAddLeave(j, pos, posBranch[rand].rot);
