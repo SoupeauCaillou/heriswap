@@ -72,6 +72,7 @@ BackgroundSystem::BackgroundSystem() : ComponentSystemImpl<BackgroundComponent>(
 void BackgroundSystem::initCloud(Entity e, int group) {
     float ratio = 1.67;
 
+    LOGF_IF(group < 0 || group > 2, "Invalid group value: " << group);
     float width = cloudSize[group].random();
     TRANSFORM(e)->position.x = cloudStartX.random();
     TRANSFORM(e)->position.y = cloudY[group].random();

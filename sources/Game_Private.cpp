@@ -44,6 +44,7 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
     mode2Manager[TilesAttack] = new TilesAttackGameModeManager(game, successMgr, context->storageAPI);
     mode2Manager[Go100Seconds] = new Go100SecondsGameModeManager(game, successMgr, context->storageAPI);
     storageAPI = context->storageAPI;
+    newGame = false;
 }
 
  PrivateData::~PrivateData() {
