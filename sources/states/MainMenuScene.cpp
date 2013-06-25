@@ -44,7 +44,7 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ScrollingSystem.h"
 #include "systems/SoundSystem.h"
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 #include "systems/AnchorSystem.h"
 
@@ -91,9 +91,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             eStart[i] = theEntityManager.CreateEntity(a.str(),
                 EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/"+ a.str()));
 
-            TypedMorphElement<float>* sizeMorph = new TypedMorphElement<float>(&TEXT_RENDERING(eStart[i])->charHeight, TEXT_RENDERING(eStart[i])->charHeight, PlacementHelper::GimpHeightToScreen(54));
+            TypedMorphElement<float>* sizeMorph = new TypedMorphElement<float>(&TEXT(eStart[i])->charHeight, TEXT(eStart[i])->charHeight, PlacementHelper::GimpHeightToScreen(54));
             MORPHING(eStart[i])->elements.push_back(sizeMorph);
-            TypedMorphElement<float>* alignMorph = new TypedMorphElement<float>(&TEXT_RENDERING(eStart[i])->positioning, 0, 1);
+            TypedMorphElement<float>* alignMorph = new TypedMorphElement<float>(&TEXT(eStart[i])->positioning, 0, 1);
             MORPHING(eStart[i])->elements.push_back(alignMorph);
 
             a.str("");
@@ -101,14 +101,14 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             bStart[i] = theEntityManager.CreateEntity(a.str(),
                 EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/" + a.str()));
         }
-        TEXT_RENDERING(eStart[0])->text = game->gameThreadContext->localizeAPI->text("mode_1");
-        TEXT_RENDERING(eStart[1])->text = game->gameThreadContext->localizeAPI->text("mode_2");
-        TEXT_RENDERING(eStart[2])->text = game->gameThreadContext->localizeAPI->text("mode_3");
+        TEXT(eStart[0])->text = game->gameThreadContext->localizeAPI->text("mode_1");
+        TEXT(eStart[1])->text = game->gameThreadContext->localizeAPI->text("mode_2");
+        TEXT(eStart[2])->text = game->gameThreadContext->localizeAPI->text("mode_3");
 
         //Containers properties
         for (int i=0; i<3; i++) {
-            TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(54);
-            TEXT_RENDERING(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
+            TEXT(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(54);
+            TEXT(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
             glm::vec2 target = glm::vec2((float)(PlacementHelper::GimpXToScreen(708)) ,
                                          (float)PlacementHelper::GimpYToScreen(147));
             TypedMorphElement<glm::vec2>* posMorph = new TypedMorphElement<glm::vec2>(&TRANSFORM(eStart[i])->position, TRANSFORM(eStart[i])->position, target);
@@ -116,7 +116,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         }
 
         for (int i=0; i<3; i++) {
-            TEXT_RENDERING(eStart[i])->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
+            TEXT(eStart[i])->flags |= TextComponent::AdjustHeightToFillWidthBit;
             TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9f;
         }
 
@@ -140,7 +140,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         quitButton[0] = theEntityManager.CreateEntity("quitButton_0",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/quit_text"));
 
-        TEXT_RENDERING(quitButton[0])->text = " " + game->gameThreadContext->localizeAPI->text("quit") + " ";
+        TEXT(quitButton[0])->text = " " + game->gameThreadContext->localizeAPI->text("quit") + " ";
 
         quitButton[1] = theEntityManager.CreateEntity("quitButton_1",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/quit_button"));
@@ -167,7 +167,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 
         for (int i=0; i<3; ++i) {
-            TEXT_RENDERING(eStart[i])->show = true;
+            TEXT(eStart[i])->show = true;
             RENDERING(bStart[i])->show = true;
             BUTTON(bStart[i])->enabled = true;
         }
@@ -178,7 +178,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             RENDERING(game->datas->soundButton)->show =
             RENDERING(game->herisson)->show = true;
 
-        TEXT_RENDERING(quitButton[0])->show =
+        TEXT(quitButton[0])->show =
             RENDERING(quitButton[1])->show = true;
 
         BUTTON(game->datas->socialGamNet)->enabled =
@@ -255,7 +255,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         }
         for (int i = 0; i < 3; i++) {
             if (i != choosenGameMode)
-                TEXT_RENDERING(eStart[i])->show = false;
+                TEXT(eStart[i])->show = false;
             RENDERING(bStart[i])->show = false;
             BUTTON(bStart[i])->enabled = false;
         }
@@ -269,7 +269,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
         ANIMATION(game->herisson)->playbackSpeed = 4.5f;
 
-        TEXT_RENDERING(quitButton[0])->show = false;
+        TEXT(quitButton[0])->show = false;
 
         RENDERING(quitButton[1])->show = false;
 

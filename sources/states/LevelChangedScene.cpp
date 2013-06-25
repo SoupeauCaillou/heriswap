@@ -38,7 +38,7 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 #include "systems/MusicSystem.h"
 #include "systems/ParticuleSystem.h"
 #include "systems/RenderingSystem.h"
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
 #include <glm/glm.hpp>
@@ -87,9 +87,9 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
         eBigLevel = theEntityManager.CreateEntity("eBigLevel",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("big_level"));
 
-        // TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(350);
+        // TEXT(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(350);
         // TRANSFORM(eBigLevel)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(846));
-        // TEXT_RENDERING(eBigLevel)->positioning = TextRenderingComponent::CENTER;
+        // TEXT(eBigLevel)->positioning = TextComponent::CENTER;
 
         eSnowEmitter = theEntityManager.CreateEntity("eSnowEmitter",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("snow_emiter"));
@@ -139,18 +139,18 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
         levelState = Start;
         std::stringstream a;
         a << currentLevel;
-        TEXT_RENDERING(eBigLevel)->text = a.str();
-        TEXT_RENDERING(eBigLevel)->show = true;
-        TEXT_RENDERING(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(300);
+        TEXT(eBigLevel)->text = a.str();
+        TEXT(eBigLevel)->show = true;
+        TEXT(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(300);
         TRANSFORM(eBigLevel)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(846));
         TRANSFORM(eBigLevel)->z = DL_Score;
 
-        TEXT_RENDERING(eBigLevel)->color = blue;
+        TEXT(eBigLevel)->color = blue;
 
         MUSIC(eBigLevel)->control = MusicControl::Play;
         MORPHING(eBigLevel)->timing = 1;
-        MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->color.a, 0, 1));
-        MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(smallLevel)->color.a, 1, 0));
+        MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT(eBigLevel)->color.a, 0, 1));
+        MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&TEXT(smallLevel)->color.a, 1, 0));
         MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&RENDERING(eSnowGround)->color.a, 0, 1));
         MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&RENDERING(eSnowBranch)->color.a, 0, 2));
         MORPHING(eBigLevel)->elements.push_back(new TypedMorphElement<float> (&RENDERING(game->datas->mode2Manager[game->datas->mode]->herisson)->color.a, 1, 0));
@@ -167,7 +167,7 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
         TextureRef pause = theRenderingSystem.loadTextureFile("pause");
         TextureRef sound1 = theRenderingSystem.loadTextureFile("sound_on");
         TextureRef sound2 = theRenderingSystem.loadTextureFile("sound_off");
-        std::vector<Entity> text = theTextRenderingSystem.RetrieveAllEntityWithComponent();
+        std::vector<Entity> text = theTextSystem.RetrieveAllEntityWithComponent();
         std::vector<Entity> entities = theRenderingSystem.RetrieveAllEntityWithComponent();
         for (unsigned int i=0; i<entities.size(); i++) {
             RenderingComponent* rc = RENDERING(entities[i]);
@@ -217,10 +217,10 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
             mc->elements.clear();
             // move big score to small score
             //Color blue = Color(164.0/255.0, 164.0/255, 164.0/255);
-            mc->elements.push_back(new TypedMorphElement<float> (&TEXT_RENDERING(eBigLevel)->charHeight,
-                                                                  TEXT_RENDERING(eBigLevel)->charHeight,
-                                                                  TEXT_RENDERING(smallLevel)->charHeight));
-            // mc->elements.push_back(new TypedMorphElement<Color> (&TEXT_RENDERING(eBigLevel)->color, blue, Color(1,1,1,1)));
+            mc->elements.push_back(new TypedMorphElement<float> (&TEXT(eBigLevel)->charHeight,
+                                                                  TEXT(eBigLevel)->charHeight,
+                                                                  TEXT(smallLevel)->charHeight));
+            // mc->elements.push_back(new TypedMorphElement<Color> (&TEXT(eBigLevel)->color, blue, Color(1,1,1,1)));
             mc->elements.push_back(new TypedMorphElement<glm::vec2> (&TRANSFORM(eBigLevel)->position,
                                                                       TRANSFORM(eBigLevel)->position,
                                                                       TRANSFORM(smallLevel)->position));
@@ -290,10 +290,10 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
         }
         mc->elements.clear();
         // hide big level
-        TEXT_RENDERING(eBigLevel)->show = false;
+        TEXT(eBigLevel)->show = false;
         // show small level
-        TEXT_RENDERING(smallLevel)->text = TEXT_RENDERING(eBigLevel)->text;
-        TEXT_RENDERING(smallLevel)->color.a = 1;
+        TEXT(smallLevel)->text = TEXT(eBigLevel)->text;
+        TEXT(smallLevel)->color.a = 1;
         RENDERING(game->datas->mode2Manager[game->datas->mode]->herisson)->color.a = 1;
 
         std::vector<Entity> ent = theRenderingSystem.RetrieveAllEntityWithComponent();

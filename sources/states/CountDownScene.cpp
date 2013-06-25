@@ -27,7 +27,7 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "base/PlacementHelper.h"
 
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
 #include <sstream>
@@ -62,7 +62,7 @@ struct CountDownScene : public StateHandler<Scene::Enum> {
 		LOGI("'" << __PRETTY_FUNCTION__ << "'");
 
 		if (game->datas->mode != Normal) {
-			TEXT_RENDERING(counter)->show = true;
+			TEXT(counter)->show = true;
 			RENDERING(vorhang)->show = true;
 		}
 		timeRemaining = 3.f;
@@ -80,7 +80,7 @@ struct CountDownScene : public StateHandler<Scene::Enum> {
 
 		std::stringstream a;
 		a << (int)timeRemaining+1;
-		TEXT_RENDERING(counter)->text = a.str();
+		TEXT(counter)->text = a.str();
 
 		if (timeRemaining <= 0.f) {
 			return Scene::UserInput;
@@ -97,7 +97,7 @@ struct CountDownScene : public StateHandler<Scene::Enum> {
 	void onExit(Scene::Enum) override {
 		LOGI("'" << __PRETTY_FUNCTION__ << "'");
 
-		TEXT_RENDERING(counter)->show = false;
+		TEXT(counter)->show = false;
 		RENDERING(vorhang)->show = false;
 	}
 };

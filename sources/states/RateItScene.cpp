@@ -32,7 +32,7 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 #include "systems/ButtonSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/SoundSystem.h"
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
 #include <glm/glm.hpp>
@@ -56,7 +56,7 @@ struct RateItScene : public StateHandler<Scene::Enum> {
         textToRead = theEntityManager.CreateEntity("textToRead",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("rateit/text"));
 
-        TEXT_RENDERING(textToRead)->text = game->gameThreadContext->localizeAPI->text("please_rate_it");
+        TEXT(textToRead)->text = game->gameThreadContext->localizeAPI->text("please_rate_it");
         // ??
         // TRANSFORM(textToRead)->position.x = TRANSFORM(textToReadContainer)->position.x = 0;
 
@@ -75,9 +75,9 @@ struct RateItScene : public StateHandler<Scene::Enum> {
             TRANSFORM(boutonText[i])->position.y =
                 TRANSFORM(boutonContainer[i])->position.y = (float)PlacementHelper::GimpYToScreen(650 + i*183);
         }
-        TEXT_RENDERING(boutonText[0])->text = game->gameThreadContext->localizeAPI->text("rate_now");
-        TEXT_RENDERING(boutonText[1])->text = game->gameThreadContext->localizeAPI->text("rate_later");
-        TEXT_RENDERING(boutonText[2])->text = game->gameThreadContext->localizeAPI->text("rate_never");
+        TEXT(boutonText[0])->text = game->gameThreadContext->localizeAPI->text("rate_now");
+        TEXT(boutonText[1])->text = game->gameThreadContext->localizeAPI->text("rate_later");
+        TEXT(boutonText[2])->text = game->gameThreadContext->localizeAPI->text("rate_never");
     }
 
     ///----------------------------------------------------------------------------//
@@ -91,10 +91,10 @@ struct RateItScene : public StateHandler<Scene::Enum> {
             RENDERING(game->menufg)->show = true;
 
         RENDERING(textToReadContainer)->show = true;
-        TEXT_RENDERING(textToRead)->show = true;
+        TEXT(textToRead)->show = true;
         for (int i=0; i<3; i++) {
             RENDERING(boutonContainer[i])->show = true;
-            TEXT_RENDERING(boutonText[i])->show = true;
+            TEXT(boutonText[i])->show = true;
             BUTTON(boutonContainer[i])->enabled = true;
         }
     }
@@ -130,9 +130,9 @@ struct RateItScene : public StateHandler<Scene::Enum> {
 
     void onExit(Scene::Enum) override {
         RENDERING(textToReadContainer)->show = false;
-        TEXT_RENDERING(textToRead)->show = false;
+        TEXT(textToRead)->show = false;
         for (int i=0; i<3; i++) {
-            TEXT_RENDERING(boutonText[i])->show = false;
+            TEXT(boutonText[i])->show = false;
             RENDERING(boutonContainer[i])->show = false;
             BUTTON(boutonContainer[i])->enabled = false;
         }

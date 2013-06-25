@@ -4,7 +4,7 @@ positionS%screen = 0, -0.5
 #rotation = 0
 z = 0.72
 
-[TextRendering]
+[Text]
 #~ String
 #text =
 #~ String

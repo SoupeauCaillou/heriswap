@@ -28,7 +28,7 @@
 #include "systems/ButtonSystem.h"
 #include "systems/MusicSystem.h"
 #include "systems/ScrollingSystem.h"
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
 #include <glm/glm.hpp>
@@ -70,7 +70,7 @@ void NormalGameModeManager::Enter() {
 
     generateLeaves(0, theHeriswapGridSystem.Types);
 
-    TEXT_RENDERING(uiHelper.scoreProgress)->flags |= TextRenderingComponent::IsANumberBit;
+    TEXT(uiHelper.scoreProgress)->flags |= TextComponent::IsANumberBit;
     PROFILE("NormalGameModeManager", "Enter", EndEvent);
     GameModeManager::Enter();
 }
@@ -131,14 +131,14 @@ void NormalGameModeManager::UiUpdate(float dt) {
     std::stringstream a;
     a.precision(0);
     a << std::fixed << points;
-    TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
+    TEXT(uiHelper.scoreProgress)->text = a.str();
     }
 
     //Level
     {
     std::stringstream a;
     a << level;
-    TEXT_RENDERING(uiHelper.smallLevel)->text = a.str();
+    TEXT(uiHelper.smallLevel)->text = a.str();
     }
 
     if (levelMoveDuration > 0) {
@@ -157,9 +157,9 @@ void NormalGameModeManager::UiUpdate(float dt) {
         for(int i=0; i<8; i++) {
             std::stringstream text;
             text << (int)remain[i] << "," << (int)(level+2) << "," <<  countBranchLeavesOfType(i);
-            TEXT_RENDERING(debugEntities[2*i+1])->text = text.str();
-            TEXT_RENDERING(debugEntities[2*i+1])->show = true;
-            TEXT_RENDERING(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
+            TEXT(debugEntities[2*i+1])->text = text.str();
+            TEXT(debugEntities[2*i+1])->show = true;
+            TEXT(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
         }
     }
 #endif

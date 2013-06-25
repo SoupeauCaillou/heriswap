@@ -5,5 +5,5 @@ position%screen = -0.3125, 0.265625
 z = 0.49
 rotation = 0
 
-[TextRendering]
+[Text]
 positioning = 0

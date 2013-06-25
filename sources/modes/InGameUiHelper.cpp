@@ -25,7 +25,7 @@
 
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/SoundSystem.h"
 #include "systems/ButtonSystem.h"
 
@@ -55,9 +55,9 @@ void InGameUiHelper::show() {
     if (!built)
         return;
 
-    TEXT_RENDERING(smallLevel)->show = true;
+    TEXT(smallLevel)->show = true;
     RENDERING(pauseButton)->show = true;
-    TEXT_RENDERING(scoreProgress)->show = true;
+    TEXT(scoreProgress)->show = true;
     BUTTON(pauseButton)->enabled=true;
 }
 
@@ -72,10 +72,10 @@ void InGameUiHelper::update(float) {
 void InGameUiHelper::hide() {
     if (!built)
         return;
-    TEXT_RENDERING(smallLevel)->show = false;
+    TEXT(smallLevel)->show = false;
     RENDERING(pauseButton)->show = false;
     BUTTON(pauseButton)->enabled = false;
-    TEXT_RENDERING(scoreProgress)->show = false;
+    TEXT(scoreProgress)->show = false;
 }
 
 void InGameUiHelper::destroy() {

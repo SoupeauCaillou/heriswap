@@ -1,6 +1,6 @@
 extends = modemenu/text
 
-[TextRendering]
+[Text]
 #~ String
 #text
 #~ String

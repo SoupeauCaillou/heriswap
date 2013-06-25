@@ -26,7 +26,7 @@
 #include "base/EntityManager.h"
 
 #include "systems/ButtonSystem.h"
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
 #include <glm/glm.hpp>
@@ -62,7 +62,7 @@ void TilesAttackGameModeManager::Enter() {
 
 	generateLeaves(0, 8);
 
-	TEXT_RENDERING(uiHelper.scoreProgress)->flags &= ~TextRenderingComponent::IsANumberBit;
+	TEXT(uiHelper.scoreProgress)->flags &= ~TextComponent::IsANumberBit;
 
 	GameModeManager::Enter();
 }
@@ -100,7 +100,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	else
 		a << std::fixed << limit - leavesDone;
 
-	TEXT_RENDERING(uiHelper.smallLevel)->text = a.str();
+	TEXT(uiHelper.smallLevel)->text = a.str();
 	}
 	//Temps
 	{
@@ -114,7 +114,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	int tenthsec = (time - minute * 60 - seconde) * 10;
 	if (minute) a << minute << ':';
 	a << std::setw(2) << std::setfill('0') << seconde << '.' << std::setw(1) << tenthsec << " s";
-	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
+	TEXT(uiHelper.scoreProgress)->text = a.str();
 	}
 
 	updateHerisson(dt, leavesDone, 0);
@@ -127,9 +127,9 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 			if (i == 7) {
 				text << ":" << leavesDone;
 			}
-			TEXT_RENDERING(debugEntities[2*i+1])->text = text.str();
-			TEXT_RENDERING(debugEntities[2*i+1])->show = true;
-			TEXT_RENDERING(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
+			TEXT(debugEntities[2*i+1])->text = text.str();
+			TEXT(debugEntities[2*i+1])->show = true;
+			TEXT(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
 		}
 	}
 #endif

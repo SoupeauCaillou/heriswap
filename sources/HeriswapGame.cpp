@@ -48,7 +48,7 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ScrollingSystem.h"
 #include "systems/SoundSystem.h"
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
 #include "util/ScoreStorageProxy.h"

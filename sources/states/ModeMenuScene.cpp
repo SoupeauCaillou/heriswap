@@ -50,7 +50,7 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ScrollingSystem.h"
 #include "systems/SoundSystem.h"
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
 #include "util/ScoreStorageProxy.h"
@@ -118,10 +118,10 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             TRANSFORM(scoresPoints[i])->position.x = (float)PlacementHelper::GimpXToScreen(552);
             TRANSFORM(scoresLevel[i])->position.x = (float)PlacementHelper::GimpXToScreen(590);
 
-            // TEXT_RENDERING(scoresName[i])->charHeight =
-            //     TEXT_RENDERING(scoresPoints[i])->charHeight =
-            //         TEXT_RENDERING(scoresLevel[i])->charHeight = PlacementHelper::GimpHeightToScreen(45);
-            TEXT_RENDERING(scoresPoints[i])->flags |= TextRenderingComponent::IsANumberBit;
+            // TEXT(scoresName[i])->charHeight =
+            //     TEXT(scoresPoints[i])->charHeight =
+            //         TEXT(scoresLevel[i])->charHeight = PlacementHelper::GimpHeightToScreen(45);
+            TEXT(scoresPoints[i])->flags |= TextComponent::IsANumberBit;
         }
         // back button
         back = theEntityManager.CreateEntity("back",
@@ -142,8 +142,8 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         TRANSFORM(scoreTitle)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(92),
                                                     (float)PlacementHelper::GimpYToScreen(520));
         std::vector<char> v;
-        TEXT_RENDERING(scoreTitle)->text = game->gameThreadContext->localizeAPI->text("score");
-        //TEXT_RENDERING(scoreTitle)->charHeight = PlacementHelper::GimpHeightToScreen(54);
+        TEXT(scoreTitle)->text = game->gameThreadContext->localizeAPI->text("score");
+        //TEXT(scoreTitle)->charHeight = PlacementHelper::GimpHeightToScreen(54);
 
         // score title
         average = theEntityManager.CreateEntity("average",
@@ -152,15 +152,15 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         TRANSFORM(average)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(92),
                                                  (float)PlacementHelper::GimpYToScreen(675 + 400));
 
-        // TEXT_RENDERING(average)->charHeight = PlacementHelper::GimpHeightToScreen(54);
-        TEXT_RENDERING(average)->flags |= TextRenderingComponent::AdjustHeightToFillWidthBit;
+        // TEXT(average)->charHeight = PlacementHelper::GimpHeightToScreen(54);
+        TEXT(average)->flags |= TextComponent::AdjustHeightToFillWidthBit;
 
         // play text
         playText = theEntityManager.CreateEntity("playText",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/play_text"));
         TRANSFORM(playText)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(275));
-        TEXT_RENDERING(playText)->text = game->gameThreadContext->localizeAPI->text("play");
-        TEXT_RENDERING(playText)->charHeight = PlacementHelper::GimpHeightToScreen(100);
+        TEXT(playText)->text = game->gameThreadContext->localizeAPI->text("play");
+        TEXT(playText)->charHeight = PlacementHelper::GimpHeightToScreen(100);
         // play button
         playContainer = theEntityManager.CreateEntity("playContainer",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/play_container"));
@@ -170,7 +170,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         eDifficulty = theEntityManager.CreateEntity("eDifficulty",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/difficulty_text"));
         TRANSFORM(eDifficulty)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(375));
-        // TEXT_RENDERING(eDifficulty)->charHeight = PlacementHelper::GimpHeightToScreen(45);
+        // TEXT(eDifficulty)->charHeight = PlacementHelper::GimpHeightToScreen(45);
 
         //difficulty container
         bDifficulty = theEntityManager.CreateEntity("bDifficulty",
@@ -181,7 +181,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         yourScore = theEntityManager.CreateEntity("yourScore",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/your_score"));
         TRANSFORM(yourScore)->position = glm::vec2(0.f,(float)PlacementHelper::GimpYToScreen(1215));
-        // TEXT_RENDERING(yourScore)->charHeight = PlacementHelper::GimpHeightToScreen(56);
+        // TEXT(yourScore)->charHeight = PlacementHelper::GimpHeightToScreen(56);
 
         // fond
         fond = theEntityManager.CreateEntity("background",
@@ -198,9 +198,9 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/enable_swarm"));
         TRANSFORM(enableSwarm)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1160));
         TRANSFORM(enableSwarm)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(460), 0.f);
-        // TEXT_RENDERING(enableSwarm)->charHeight = PlacementHelper::GimpHeightToScreen(40);
-        TEXT_RENDERING(enableSwarm)->flags |= TextRenderingComponent::MultiLineBit;
-        TEXT_RENDERING(enableSwarm)->text = game->gameThreadContext->localizeAPI->text("get_swarm");
+        // TEXT(enableSwarm)->charHeight = PlacementHelper::GimpHeightToScreen(40);
+        TEXT(enableSwarm)->flags |= TextComponent::MultiLineBit;
+        TEXT(enableSwarm)->text = game->gameThreadContext->localizeAPI->text("get_swarm");
 
         // enableSwarm container
         enableSwarmContainer = theEntityManager.CreateEntity("enableSwarmContainer",
@@ -214,14 +214,14 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/input_label"));
 
         TRANSFORM(input_label)->position = glm::vec2(0, PlacementHelper::GimpYToScreen(275));
-        TEXT_RENDERING(input_label)->text = game->gameThreadContext->localizeAPI->text("enter_name");
-        // TEXT_RENDERING(input_label)->charHeight = PlacementHelper::GimpHeightToScreen(54);
+        TEXT(input_label)->text = game->gameThreadContext->localizeAPI->text("enter_name");
+        // TEXT(input_label)->charHeight = PlacementHelper::GimpHeightToScreen(54);
 
         input_textbox = theEntityManager.CreateEntity("input_textbox",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/input_textbox"));
         TRANSFORM(input_textbox)->position = glm::vec2(0, PlacementHelper::GimpYToScreen(390));
-        // TEXT_RENDERING(input_textbox)->charHeight = PlacementHelper::GimpHeightToScreen(54);
-        TEXT_RENDERING(input_textbox)->caret.speed = 0.5;
+        // TEXT(input_textbox)->charHeight = PlacementHelper::GimpHeightToScreen(54);
+        TEXT(input_textbox)->caret.speed = 0.5;
 
         input_background = theEntityManager.CreateEntity("input_background",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/input_background"));
@@ -255,9 +255,9 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         bool alreadyRed = false;
         for (unsigned int i=0; i<5; i++) {
-            TextRenderingComponent* trcN = TEXT_RENDERING(scoresName[i]);
-            TextRenderingComponent* trcP = TEXT_RENDERING(scoresPoints[i]);
-            TextRenderingComponent* trcL = TEXT_RENDERING(scoresLevel[i]);
+            TextComponent* trcN = TEXT(scoresName[i]);
+            TextComponent* trcP = TEXT(scoresPoints[i]);
+            TextComponent* trcL = TEXT(scoresLevel[i]);
             if (i < entries.size()) {
                 trcN->show = true;
                 trcP->show = true;
@@ -265,10 +265,10 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 a.precision(1);
                 if (mode==Normal || mode==Go100Seconds) {
                     a << std::fixed << entries[i].points;
-                    trcP->flags |= TextRenderingComponent::IsANumberBit;
+                    trcP->flags |= TextComponent::IsANumberBit;
                 } else {
                     a << std::fixed << entries[i].time << " s";
-                    trcP->flags &= ~TextRenderingComponent::IsANumberBit;
+                    trcP->flags &= ~TextComponent::IsANumberBit;
                 }
                 trcP->text = a.str();
                 trcN->text = entries[i].name;
@@ -309,10 +309,10 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             } else {
                 a << std::fixed << ((int)(avg*10))/10.f << " s";
             }
-            TEXT_RENDERING(average)->text = a.str();
-            TEXT_RENDERING(average)->show = true;
+            TEXT(average)->text = a.str();
+            TEXT(average)->show = true;
         } else {
-            TEXT_RENDERING(average)->show = false;
+            TEXT(average)->show = false;
         }
     }
 
@@ -399,10 +399,10 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             RENDERING(fond)->show =
             RENDERING(game->menufg)->show = true;
 
-        TEXT_RENDERING(game->title)->show =
-            TEXT_RENDERING(scoreTitle)->show =
-            TEXT_RENDERING(eDifficulty)->show =
-            TEXT_RENDERING(playText)->show = true;
+        TEXT(game->title)->show =
+            TEXT(scoreTitle)->show =
+            TEXT(eDifficulty)->show =
+            TEXT(playText)->show = true;
 
         BUTTON(bDifficulty)->enabled = true;
 
@@ -411,14 +411,14 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         SCROLLING(game->datas->sky)->show = true;
 
-        TEXT_RENDERING(playText)->text = (gameOverState != NoGame) ? game->gameThreadContext->localizeAPI->text("restart") : game->gameThreadContext->localizeAPI->text("play");
+        TEXT(playText)->text = (gameOverState != NoGame) ? game->gameThreadContext->localizeAPI->text("restart") : game->gameThreadContext->localizeAPI->text("play");
 
         if (difficulty == DifficultyEasy)
-            TEXT_RENDERING(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_1") + " }";
+            TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_1") + " }";
         else if (difficulty == DifficultyMedium)
-            TEXT_RENDERING(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_2") + " }";
+            TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_2") + " }";
         else
-            TEXT_RENDERING(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_3") + " }";
+            TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_3") + " }";
 
         CONTAINER(playContainer)->enable = CONTAINER(bDifficulty)->enable = true;
 
@@ -427,7 +427,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             if (true) {
             //if (!game->gameThreadContext->communicationAPI->swarmInstalled()) {
                 BUTTON(enableSwarmContainer)->enabled = true;
-                TEXT_RENDERING(enableSwarm)->show = true;
+                TEXT(enableSwarm)->show = true;
                 CONTAINER(enableSwarmContainer)->enable = true;
             }
         }
@@ -446,7 +446,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 // ask player's name if needed
                 if (isCurrentScoreAHighOne()) {
     #if ! SAC_MOBILE
-                    TEXT_RENDERING(input_label)->show = TEXT_RENDERING(input_textbox)->show = RENDERING(input_background)->show = true;
+                    TEXT(input_label)->show = TEXT(input_textbox)->show = RENDERING(input_background)->show = true;
     #endif
                     game->gameThreadContext->stringInputAPI->askUserInput("", 14);
                     gameOverState = AskingPlayerName;
@@ -457,7 +457,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                     submitScore("rzehtrtyBg");
                 }
 
-                TEXT_RENDERING(yourScore)->show = true;
+                TEXT(yourScore)->show = true;
                 std::stringstream a;
                 a.precision(1);
                 if (game->datas->mode==Normal) {
@@ -467,7 +467,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 } else {
                     a << std::fixed << ((int)(game->datas->mode2Manager[game->datas->mode]->time*10))/10.f << " s";
                 }
-                TEXT_RENDERING(yourScore)->text = a.str();
+                TEXT(yourScore)->text = a.str();
                 game->datas->successMgr->sTestEverything(game->gameThreadContext->storageAPI);
                 break;
             }
@@ -475,11 +475,11 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 #if SAC_MOBILE
                 if (game->gameThreadContext->stringInputAPI->done(playerName)) {
 #else
-                if (game->gameThreadContext->stringInputAPI->done(TEXT_RENDERING(input_textbox)->text)) {
-                    playerName = TEXT_RENDERING(input_textbox)->text;
-                    TEXT_RENDERING(input_textbox)->text = "";
+                if (game->gameThreadContext->stringInputAPI->done(TEXT(input_textbox)->text)) {
+                    playerName = TEXT(input_textbox)->text;
+                    TEXT(input_textbox)->text = "";
 
-                    TEXT_RENDERING(input_label)->show = TEXT_RENDERING(input_textbox)->show = RENDERING(input_background)->show = false;
+                    TEXT(input_label)->show = TEXT(input_textbox)->show = RENDERING(input_background)->show = false;
 #endif
                     if (game->datas->mode==Normal)
                         game->datas->successMgr->sBTAC(game->gameThreadContext->storageAPI, difficulty, game->datas->mode2Manager[game->datas->mode]->points);
@@ -492,7 +492,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
                     if (game->gameThreadContext->communicationAPI->mustShowRateDialog()) {
                         TRANSFORM(game->herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(game->herisson)->size.x;
-                        TEXT_RENDERING(game->title)->show = false;
+                        TEXT(game->title)->show = false;
                         return Scene::RateIt;
                     }
 
@@ -517,13 +517,13 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 difficulty = theHeriswapGridSystem.nextDifficulty(difficulty);
 
                 if (difficulty == DifficultyEasy)
-                    TEXT_RENDERING(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_1") + " }";
+                    TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_1") + " }";
                 else if (difficulty == DifficultyMedium)
-                    TEXT_RENDERING(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_2") + " }";
+                    TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_2") + " }";
                 else
-                    TEXT_RENDERING(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_3") + " }";
+                    TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_3") + " }";
 
-                TEXT_RENDERING(playText)->text = game->gameThreadContext->localizeAPI->text("play");
+                TEXT(playText)->text = game->gameThreadContext->localizeAPI->text("play");
                 LoadScore(game->datas->mode, difficulty);
             }
 
@@ -574,36 +574,36 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 RENDERING(game->datas->socialGamNet)->show =
                 RENDERING(game->menufg)->show = false;
 
-            TEXT_RENDERING(game->title)->show = false;
+            TEXT(game->title)->show = false;
 
             BUTTON(game->datas->socialGamNet)->enabled = false;
 
         #if SAC_ANDROID
             BUTTON(enableSwarmContainer)->enabled = false;
-            TEXT_RENDERING(enableSwarm)->show = false;
+            TEXT(enableSwarm)->show = false;
             CONTAINER(enableSwarmContainer)->enable = false;
         #endif
         }
 
         for (int i = 0; i<5; ++i) {
-            TEXT_RENDERING(scoresPoints[i])->show =
-                TEXT_RENDERING(scoresName[i])->show =
-                TEXT_RENDERING(scoresLevel[i])->show = false;
+            TEXT(scoresPoints[i])->show =
+                TEXT(scoresName[i])->show =
+                TEXT(scoresLevel[i])->show = false;
         }
 
         RENDERING(back)->show =
             RENDERING(fond)->show = false;
 
-        TEXT_RENDERING(scoreTitle)->show =
-            TEXT_RENDERING(eDifficulty)->show =
-            TEXT_RENDERING(playText)->show = false;
+        TEXT(scoreTitle)->show =
+            TEXT(eDifficulty)->show =
+            TEXT(playText)->show = false;
 
         BUTTON(bDifficulty)->enabled = false;
 
         CONTAINER(playContainer)->enable =
             CONTAINER(bDifficulty)->enable = false;
 
-        TEXT_RENDERING(average)->show = false;
+        TEXT(average)->show = false;
     }
 };
 

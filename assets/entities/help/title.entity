@@ -7,7 +7,7 @@ size%screen = 0.9, 1
 #rotation = 0
 z = 0.72
 
-[TextRendering]
+[Text]
 #~ String
 #text =
 #~ String

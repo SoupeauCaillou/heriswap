@@ -30,7 +30,7 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "systems/ButtonSystem.h"
 #include "systems/SoundSystem.h"
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
 #include <glm/glm.hpp>
@@ -82,23 +82,23 @@ struct HelpScene : public StateHandler<Scene::Enum> {
 
         // TODO !
         // setup how to play help page
-        TEXT_RENDERING(text)->show = true;
-        TEXT_RENDERING(title)->show = true;
-        TEXT_RENDERING(postscriptum)->show = true;
+        TEXT(text)->show = true;
+        TEXT(title)->show = true;
+        TEXT(postscriptum)->show = true;
         if (game->datas->mode == Normal) {
-            TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_mode1_1") + "\n\n" +
+            TEXT(text)->text = game->gameThreadContext->localizeAPI->text("help_mode1_1") + "\n\n" +
                 game->gameThreadContext->localizeAPI->text("help_general_1");
-            TEXT_RENDERING(title)->text = game->gameThreadContext->localizeAPI->text("mode_1");
-            TEXT_RENDERING(postscriptum)->text = game->gameThreadContext->localizeAPI->text("help_click_continue");
+            TEXT(title)->text = game->gameThreadContext->localizeAPI->text("mode_1");
+            TEXT(postscriptum)->text = game->gameThreadContext->localizeAPI->text("help_click_continue");
         } else if (game->datas->mode == TilesAttack) {
-            TEXT_RENDERING(title)->text = game->gameThreadContext->localizeAPI->text("mode_2");
-            TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_mode2_1");
-            TEXT_RENDERING(postscriptum)->text = game->gameThreadContext->localizeAPI->text("help_click_continue");
+            TEXT(title)->text = game->gameThreadContext->localizeAPI->text("mode_2");
+            TEXT(text)->text = game->gameThreadContext->localizeAPI->text("help_mode2_1");
+            TEXT(postscriptum)->text = game->gameThreadContext->localizeAPI->text("help_click_continue");
         } else {
-            TEXT_RENDERING(title)->text = game->gameThreadContext->localizeAPI->text("mode_3");
-            TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_mode3_1") + "\n\n" +
+            TEXT(title)->text = game->gameThreadContext->localizeAPI->text("mode_3");
+            TEXT(text)->text = game->gameThreadContext->localizeAPI->text("help_mode3_1") + "\n\n" +
                 game->gameThreadContext->localizeAPI->text("help_general_1");
-            TEXT_RENDERING(postscriptum)->text = game->gameThreadContext->localizeAPI->text("help_click_continue");
+            TEXT(postscriptum)->text = game->gameThreadContext->localizeAPI->text("help_click_continue");
         }
 
         game->datas->mode2Manager[game->datas->mode]->showGameDecor(true);
@@ -111,15 +111,15 @@ struct HelpScene : public StateHandler<Scene::Enum> {
         if (!theTouchInputManager.isTouched(0) && theTouchInputManager.wasTouched(0)) {
             if (state == HowToPlay) {
                 if (game->datas->mode == Normal) {
-                    TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_general_2") + " " +
+                    TEXT(text)->text = game->gameThreadContext->localizeAPI->text("help_general_2") + " " +
                         game->gameThreadContext->localizeAPI->text("help_mode1_2");
                 } else if (game->datas->mode == TilesAttack) {
-                    TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_mode2_2");
+                    TEXT(text)->text = game->gameThreadContext->localizeAPI->text("help_mode2_2");
                 } else {
-                    TEXT_RENDERING(text)->text = game->gameThreadContext->localizeAPI->text("help_general_2");
+                    TEXT(text)->text = game->gameThreadContext->localizeAPI->text("help_general_2");
                 }
 
-                TEXT_RENDERING(postscriptum)->text = game->gameThreadContext->localizeAPI->text("help_click_play");
+                TEXT(postscriptum)->text = game->gameThreadContext->localizeAPI->text("help_click_play");
                 state = Objective;
 
             } else {
@@ -137,9 +137,9 @@ struct HelpScene : public StateHandler<Scene::Enum> {
 
     void onExit(Scene::Enum) override {
         LOGI("'" << __PRETTY_FUNCTION__ << "'");
-        TEXT_RENDERING(text)->show = false;
-        TEXT_RENDERING(title)->show = false;
-        TEXT_RENDERING(postscriptum)->show = false;
+        TEXT(text)->show = false;
+        TEXT(title)->show = false;
+        TEXT(postscriptum)->show = false;
         theRenderingSystem.unloadAtlas("help");
     }
 };

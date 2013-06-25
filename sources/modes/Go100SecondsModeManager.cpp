@@ -29,7 +29,7 @@
 #include "systems/AnimationSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/PhysicsSystem.h"
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
 #include <glm/glm.hpp>
@@ -85,7 +85,7 @@ void Go100SecondsGameModeManager::Enter() {
 	for (unsigned int i = 0; i < squallLeaves.size();  i++)
 		RENDERING(squallLeaves[i])->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(bonus, &TRANSFORM(squallLeaves[i])->rotation));
 
-	TEXT_RENDERING(uiHelper.scoreProgress)->flags |= TextRenderingComponent::IsANumberBit;
+	TEXT(uiHelper.scoreProgress)->flags |= TextComponent::IsANumberBit;
 
 	GameModeManager::Enter();
 }
@@ -194,7 +194,7 @@ void Go100SecondsGameModeManager::UiUpdate(float dt) {
 	//~not enable currently
 	//~a << rank << ". ";
 	a << std::fixed << points;
-	TEXT_RENDERING(uiHelper.scoreProgress)->text = a.str();
+	TEXT(uiHelper.scoreProgress)->text = a.str();
 	}
 
 	updateHerisson(dt, time, 0);
@@ -204,9 +204,9 @@ void Go100SecondsGameModeManager::UiUpdate(float dt) {
 		for(int i=0; i<8; i++) {
 			std::stringstream text;
 			text << countBranchLeavesOfType(i);
-			TEXT_RENDERING(debugEntities[2*i+1])->text = text.str();
-			TEXT_RENDERING(debugEntities[2*i+1])->show = true;
-			TEXT_RENDERING(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
+			TEXT(debugEntities[2*i+1])->text = text.str();
+			TEXT(debugEntities[2*i+1])->show = true;
+			TEXT(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
 		}
 	}
 #endif

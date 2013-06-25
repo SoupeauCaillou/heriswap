@@ -4,7 +4,7 @@
 #rotation = 0
 #z = 0.1
 
-[TextRendering]
+[Text]
 #~ String
 #text
 #~ String

@@ -30,7 +30,7 @@
 #include "systems/RenderingSystem.h"
 #include "systems/ScrollingSystem.h"
 #include "systems/System.h"
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
 #include <glm/glm.hpp>
@@ -126,13 +126,13 @@ void GameModeManager::Setup() {
         TRANSFORM(debugEntities[2*i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(80));
 
         debugEntities[2*i + 1] = theEntityManager.CreateEntity("debugEntities");
-        ADD_COMPONENT(debugEntities[2*i + 1], TextRendering);
-        TEXT_RENDERING(debugEntities[2*i + 1])->positioning = TextRenderingComponent::CENTER;
+        ADD_COMPONENT(debugEntities[2*i + 1], Text);
+        TEXT(debugEntities[2*i + 1])->positioning = TextComponent::CENTER;
         ADD_COMPONENT(debugEntities[2*i + 1], Transformation);
         TRANSFORM(debugEntities[2*i + 1])->position = TRANSFORM(debugEntities[2*i])->position;
         TRANSFORM(debugEntities[2*i+1])->z = DL_DebugLayer+0.01;
-        TEXT_RENDERING(debugEntities[2*i + 1])->fontName = "typo";
-        TEXT_RENDERING(debugEntities[2*i + 1])->charHeight = PlacementHelper::GimpHeightToScreen(25);
+        TEXT(debugEntities[2*i + 1])->fontName = "typo";
+        TEXT(debugEntities[2*i + 1])->charHeight = PlacementHelper::GimpHeightToScreen(25);
     }
     #endif
 }
@@ -352,7 +352,7 @@ void GameModeManager::toggleDebugDisplay() {
     _debug = !_debug;
     for(int i=0; i<8; i++) {
         RENDERING(debugEntities[2*i])->show = _debug;
-        TEXT_RENDERING(debugEntities[2*i+1])->show = _debug;
+        TEXT(debugEntities[2*i+1])->show = _debug;
     }
 }
 #endif

@@ -3,7 +3,7 @@ extends = button_text
 [Transformation]
 position%screen = -0.406, 0.378
 
-[TextRendering]
+[Text]
 #~ float
 char_height%screen_h = 0.0585
 #~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f

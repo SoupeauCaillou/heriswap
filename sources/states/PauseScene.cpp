@@ -31,7 +31,7 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 #include "systems/ButtonSystem.h"
 #include "systems/MusicSystem.h"
 #include "systems/SoundSystem.h"
-#include "systems/TextRenderingSystem.h"
+#include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
 #include <glm/glm.hpp>
@@ -57,7 +57,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         //Restart Text
         eRestart = theEntityManager.CreateEntity("eRestart",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/eRestart"));
-        TEXT_RENDERING(eRestart)->text = game->gameThreadContext->localizeAPI->text("continue_");
+        TEXT(eRestart)->text = game->gameThreadContext->localizeAPI->text("continue_");
 
         //Restart button
         bRestart = theEntityManager.CreateEntity("bRestart",
@@ -66,7 +66,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         //Help Text
         eHelp = theEntityManager.CreateEntity("eHelp",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/eHelp"));
-        TEXT_RENDERING(eHelp)->text = game->gameThreadContext->localizeAPI->text("help");
+        TEXT(eHelp)->text = game->gameThreadContext->localizeAPI->text("help");
 
         //Help button
         bHelp = theEntityManager.CreateEntity("bHelp",
@@ -76,7 +76,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         eAbort = theEntityManager.CreateEntity("eAbort",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/eAbort"));
 
-        TEXT_RENDERING(eAbort)->text = game->gameThreadContext->localizeAPI->text("give_up");
+        TEXT(eAbort)->text = game->gameThreadContext->localizeAPI->text("give_up");
 
         //Abort button
         bAbort = theEntityManager.CreateEntity("bAbort",
@@ -91,11 +91,11 @@ struct PauseScene : public StateHandler<Scene::Enum> {
 
     void onEnter(Scene::Enum from) override {
         theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-        TEXT_RENDERING(eRestart)->show = true;
+        TEXT(eRestart)->show = true;
         RENDERING(bRestart)->show = true;
-        TEXT_RENDERING(eAbort)->show = true;
+        TEXT(eAbort)->show = true;
         RENDERING(bAbort)->show = true;
-        TEXT_RENDERING(eHelp)->show = true;
+        TEXT(eHelp)->show = true;
         RENDERING(bHelp)->show = true;
         BUTTON(bRestart)->enabled = true;
         BUTTON(bAbort)->enabled = true;
@@ -139,11 +139,11 @@ struct PauseScene : public StateHandler<Scene::Enum> {
 
     void onExit(Scene::Enum) override {
         LOGI("'" << __PRETTY_FUNCTION__ << "'");
-        TEXT_RENDERING(eRestart)->show = false;
+        TEXT(eRestart)->show = false;
         RENDERING(bRestart)->show = false;
-        TEXT_RENDERING(eAbort)->show = false;
+        TEXT(eAbort)->show = false;
         RENDERING(bAbort)->show = false;
-        TEXT_RENDERING(eHelp)->show = false;
+        TEXT(eHelp)->show = false;
         RENDERING(bHelp)->show = false;
         BUTTON(bRestart)->enabled = false;
         BUTTON(bAbort)->enabled = false;

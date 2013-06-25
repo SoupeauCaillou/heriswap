@@ -3,7 +3,7 @@ extends = modemenu/text
 [Transformation]
 position%screen = 0, 0.22
 
-[TextRendering]
+[Text]
 #~ String
 #text
 #~ String

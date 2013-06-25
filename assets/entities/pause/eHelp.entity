@@ -5,5 +5,5 @@ position%screen = -0.3125, 0.109375
 #size = 1, 1
 z = 0.39
 
-[TextRendering]
+[Text]
 positioning = 0
