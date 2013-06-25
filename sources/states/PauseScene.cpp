@@ -28,6 +28,7 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 #include "base/EntityManager.h"
 #include "base/PlacementHelper.h"
 
+#include "systems/AnimationSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/MusicSystem.h"
 #include "systems/SoundSystem.h"
@@ -108,6 +109,9 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         // helpMgr->oldState = Pause;
         // helpMgr->mode = mode;
 
+        Entity herisson = game->datas->mode2Manager[game->datas->mode]->herisson;
+        ANIMATION(herisson)->playbackSpeed = 0;   
+
         game->datas->mode2Manager[game->datas->mode]->TogglePauseDisplay(true);
 
         game->stopInGameMusics();
@@ -139,17 +143,22 @@ struct PauseScene : public StateHandler<Scene::Enum> {
 
     void onExit(Scene::Enum) override {
         LOGI("'" << __PRETTY_FUNCTION__ << "'");
-        TEXT(eRestart)->show = false;
-        RENDERING(bRestart)->show = false;
-        TEXT(eAbort)->show = false;
-        RENDERING(bAbort)->show = false;
-        TEXT(eHelp)->show = false;
-        RENDERING(bHelp)->show = false;
-        BUTTON(bRestart)->enabled = false;
-        BUTTON(bAbort)->enabled = false;
+        TEXT(eRestart)->show =
+            TEXT(eHelp)->show =
+            TEXT(eAbort)->show = false;
+        
+        RENDERING(bRestart)->show =
+            RENDERING(bAbort)->show =
+            RENDERING(bHelp)->show = false;
+        
+        BUTTON(bHelp)->enabled =
+            BUTTON(bRestart)->enabled =
+            BUTTON(bAbort)->enabled = false;
+
         theMusicSystem.toggleMute(theSoundSystem.mute);
 
-        BUTTON(bHelp)->enabled = false;
+        Entity herisson = game->datas->mode2Manager[game->datas->mode]->herisson;
+        ANIMATION(herisson)->playbackSpeed = 4.1;        
     }
 };
 

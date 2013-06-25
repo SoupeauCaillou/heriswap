@@ -27,83 +27,93 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "base/PlacementHelper.h"
 
+#include "systems/AnimationSystem.h"
 #include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
 #include <sstream>
 
 struct CountDownScene : public StateHandler<Scene::Enum> {
-	HeriswapGame* game;
+    HeriswapGame* game;
 
-	// State variables
-	Entity counter;
-	Entity vorhang;
-	float timeRemaining;
+    // State variables
+    Entity counter;
+    Entity vorhang;
+    float timeRemaining;
 
-	CountDownScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
-	    this->game = game;
-	}
+    CountDownScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+        this->game = game;
+    }
 
-	void setup() {
-		counter = theEntityManager.CreateEntity("counter",
-			EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("counter"));
+    void setup() {
+        counter = theEntityManager.CreateEntity("counter",
+            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("counter"));
 
-		vorhang = theEntityManager.CreateEntity("vorhang",
-			EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("vorhang"));
-	}
+        vorhang = theEntityManager.CreateEntity("vorhang",
+            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("vorhang"));
+    }
 
-	///----------------------------------------------------------------------------//
-	///--------------------- ENTER SECTION ----------------------------------------//
-	///----------------------------------------------------------------------------//
-	void onPreEnter(Scene::Enum) override {
-	}
+    ///----------------------------------------------------------------------------//
+    ///--------------------- ENTER SECTION ----------------------------------------//
+    ///----------------------------------------------------------------------------//
+    void onPreEnter(Scene::Enum) override {
+    }
 
-	void onEnter(Scene::Enum) override {
-		LOGI("'" << __PRETTY_FUNCTION__ << "'");
+    void onEnter(Scene::Enum) override {
+        LOGI("'" << __PRETTY_FUNCTION__ << "'");
 
-		if (game->datas->mode != Normal) {
-			TEXT(counter)->show = true;
-			RENDERING(vorhang)->show = true;
-		}
-		timeRemaining = 3.f;
-	}
+        if (game->datas->mode != Normal) {
+            TEXT(counter)->show = true;
+            RENDERING(vorhang)->show = true;
 
-	///----------------------------------------------------------------------------//
-	///--------------------- UPDATE SECTION ---------------------------------------//
-	///----------------------------------------------------------------------------//
-	Scene::Enum update(float dt) override {
-		if (game->datas->mode == Normal) {
-			return Scene::UserInput;
-		}
+            if (game->datas->mode == TilesAttack || game->datas->mode == Go100Seconds) {
+                Entity herisson = game->datas->mode2Manager[game->datas->mode]->herisson;
+                ANIMATION(herisson)->playbackSpeed = 0;
+            }
+        }
+        timeRemaining = 3.f;
+    }
 
-		timeRemaining -= dt;
+    ///----------------------------------------------------------------------------//
+    ///--------------------- UPDATE SECTION ---------------------------------------//
+    ///----------------------------------------------------------------------------//
+    Scene::Enum update(float dt) override {
+        if (game->datas->mode == Normal) {
+            return Scene::UserInput;
+        }
 
-		std::stringstream a;
-		a << (int)timeRemaining+1;
-		TEXT(counter)->text = a.str();
+        timeRemaining -= dt;
 
-		if (timeRemaining <= 0.f) {
-			return Scene::UserInput;
-		}
-		return Scene::CountDown;
-	}
+        std::stringstream a;
+        a << (int)timeRemaining+1;
+        TEXT(counter)->text = a.str();
 
-	///----------------------------------------------------------------------------//
-	///--------------------- EXIT SECTION -----------------------------------------//
-	///----------------------------------------------------------------------------//
-	void onPreExit(Scene::Enum) override {
-	}
+        if (timeRemaining <= 0.f) {
+            return Scene::UserInput;
+        }
+        return Scene::CountDown;
+    }
 
-	void onExit(Scene::Enum) override {
-		LOGI("'" << __PRETTY_FUNCTION__ << "'");
+    ///----------------------------------------------------------------------------//
+    ///--------------------- EXIT SECTION -----------------------------------------//
+    ///----------------------------------------------------------------------------//
+    void onPreExit(Scene::Enum) override {
+    }
 
-		TEXT(counter)->show = false;
-		RENDERING(vorhang)->show = false;
-	}
+    void onExit(Scene::Enum) override {
+        LOGI("'" << __PRETTY_FUNCTION__ << "'");
+
+        TEXT(counter)->show = false;
+        RENDERING(vorhang)->show = false;
+        if (game->datas->mode == TilesAttack || game->datas->mode == Go100Seconds) {
+            Entity herisson = game->datas->mode2Manager[game->datas->mode]->herisson;
+            ANIMATION(herisson)->playbackSpeed = 4.1;
+        }
+    }
 };
 
 namespace Scene {
-	StateHandler<Scene::Enum>* CreateCountDownSceneHandler(HeriswapGame* game) {
-    	return new CountDownScene(game);
-	}
+    StateHandler<Scene::Enum>* CreateCountDownSceneHandler(HeriswapGame* game) {
+        return new CountDownScene(game);
+    }
 }
