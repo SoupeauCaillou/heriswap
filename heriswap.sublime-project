@@ -1,10 +1,24 @@
 {
-	"folders":
-	[
-		{
+    "folders":
+    [
+        {
             "path": ".",
             "folder_exclude_patterns" : [".*", "bin"],
             "file_exclude_patterns": [".*", "*.sln", "*.cproj*"]
-		}
-	]
+        }
+    ],
+    "settings":
+    {
+        "sublimeclang_options":
+        [
+            "-I/usr/include/x86_64-linux-gnu/c++/4.8/",
+            "-I/home/jordane/Dev/miseajour/sac/libs/glm/",
+            "-I/usr/include/unittest++/",
+            "-I/home/jordane/Dev/miseajour/sac/",
+            "-I/home/jordane/Dev/sac_libs_dep/AntTweakBar/include",
+            "-DSAC_DEBUG=1",
+            "-DSAC_INGAME_EDITORS=1",
+            "-I${this_file_path}/**"
+        ]
+    }
 }

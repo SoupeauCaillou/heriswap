@@ -402,11 +402,13 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         TEXT(game->title)->show =
             TEXT(scoreTitle)->show =
             TEXT(eDifficulty)->show =
+            TEXT(enableSwarm)->show =
             TEXT(playText)->show = true;
 
         BUTTON(bDifficulty)->enabled = true;
 
         CONTAINER(playContainer)->enable =
+            CONTAINER(enableSwarmContainer)->enable =
             CONTAINER(bDifficulty)->enable = true;
 
         SCROLLING(game->datas->sky)->show = true;
@@ -598,11 +600,13 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             TEXT(eDifficulty)->show =
             TEXT(yourScore)->show =
             TEXT(average)->show =
+            TEXT(enableSwarm)->show =
             TEXT(playText)->show = false;
 
         BUTTON(bDifficulty)->enabled = false;
 
         CONTAINER(playContainer)->enable =
+            CONTAINER(enableSwarmContainer)->enable =
             CONTAINER(bDifficulty)->enable = false;
 
         
