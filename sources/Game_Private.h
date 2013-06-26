@@ -29,6 +29,8 @@
 #include "modes/GameModeManager.h"
 
 #include "Jukebox.h"
+#include "util/FaderHelper.h"
+
 class Game;
 class ScoreStorage;
 class PlayerNameInputUI;
@@ -51,6 +53,7 @@ class PrivateData {
      StorageAPI* storageAPI;
 
      GameMode mode;
+     FaderHelper faderHelper;
 
      Entity cursor;
 

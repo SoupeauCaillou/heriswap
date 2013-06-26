@@ -158,7 +158,7 @@ bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
 }
 
 void HeriswapGame::quickInit(){
-    sceneStateMachine.reEnterCurrentState();
+//    sceneStateMachine.reEnterCurrentState();
 }
 
 void HeriswapGame::sacInit(int windowW, int windowH) {
@@ -262,6 +262,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
         // datas->state = Pause;
         // loadGameState(in, size);
     }
+    datas->faderHelper.init(camera);
 
     sceneStateMachine.setup(Scene::Logo);
 

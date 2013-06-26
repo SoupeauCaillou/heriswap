@@ -21,6 +21,7 @@
 #include "Scenes.h"
 
 #include "HeriswapGame.h"
+#include "Game_Private.h"
 
 #include "base/EntityManager.h"
 #include "base/PlacementHelper.h"
@@ -31,7 +32,6 @@
 #include "systems/TransformationSystem.h"
 
 enum LogoStep {
-    LogoStep0,
     LogoStep1,
     LogoStep2,
     LogoStep3,
@@ -94,18 +94,22 @@ public:
     ///----------------------------------------------------------------------------//
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
-    #define FADE 0.5f
+    #define FADE 0.85f
+    void onPreEnter(Scene::Enum) override {
+        RENDERING(logo)->show = RENDERING(logobg)->show = true;
+        game->datas->faderHelper.start(Fading::In, FADE);
+    }
+
+    bool updatePreEnter(Scene::Enum, float dt) override {
+        return game->datas->faderHelper.update(dt);
+    }
+
     void onEnter(Scene::Enum) {
-        RENDERING(logo)->show = RENDERING(logobg)->show = RENDERING(logofade)->show = true;
         // preload sound
         theSoundSystem.loadSoundFile("son_monte.ogg");
 
         // setup state machine
         logoSM = new StateMachine<LogoStep>();
-        logoSM->registerState(LogoStep0,
-            new LogoTimeBasedStateHandler(LogoStep0, FADE, [this] () {
-                RENDERING(logofade)->show = false;
-            }), "BlackToLogoFade");
         logoSM->registerState(LogoStep1,
             new LogoTimeBasedStateHandler(LogoStep1, 0.8, [this] () {
                 RENDERING(animLogo)->show = true;
@@ -125,15 +129,12 @@ public:
             }), "LogoStep4");
         logoSM->registerState(LogoStep5,
             new LogoTimeBasedStateHandler(LogoStep5, 0.6, [this] () {
-                RENDERING(logofade)->show = true;
+                game->datas->faderHelper.start(Fading::Out, FADE);
             }), "LogoStep5");
         logoSM->registerState(LogoStep6,
             new LogoTimeBasedStateHandler(LogoStep6, FADE),
             "FadeToBlack");
-        logoSM->registerState(LogoStep7,
-            new LogoTimeBasedStateHandler(LogoStep7, 10),
-            "LogoStep7");
-        logoSM->setup(LogoStep0);
+        logoSM->setup(LogoStep1);
     }
 
     ///----------------------------------------------------------------------------//
@@ -142,17 +143,10 @@ public:
     Scene::Enum update(float dt) {
         logoSM->update(dt);
 
-        const float elapsed = (static_cast<LogoTimeBasedStateHandler*> (logoSM->getCurrentHandler()))->elapsed;
-
         switch (logoSM->getCurrentState()) {
-            case LogoStep0:
-                RENDERING(logofade)->color.a = 1 - elapsed / FADE;
-                break;
             case LogoStep6:
-                RENDERING(logofade)->color.a = elapsed / FADE;
-                break;
-            case LogoStep7:
-                return Scene::BlackToMainMenu;
+                if (game->datas->faderHelper.update(dt))
+                    return Scene::BlackToMainMenu;
             default:
                 break;
         }
