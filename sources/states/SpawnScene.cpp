@@ -191,6 +191,7 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	void onPreEnter(Scene::Enum from) override {
         // Prepare game
         if (from == Scene::CountDown) {
+            game->datas->faderHelper.start(Fading::In, 0.5);
             game->prepareNewGame();
             game->setupGameProp();
         }
@@ -218,10 +219,10 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 		ADSR(replaceGrid)->active = false;
 	}
 
-    bool updatePreEnter(Scene::Enum from, float ) override {
+    bool updatePreEnter(Scene::Enum from, float dt) override {
         // if we come from count down, spawn here
         if (from == Scene::CountDown) {
-            return updateLeavesSpawn();
+            return updateLeavesSpawn() && game->datas->faderHelper.update(dt);
         } else {
             return true;
         }

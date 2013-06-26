@@ -74,7 +74,7 @@ struct HelpScene : public StateHandler<Scene::Enum> {
     void onEnter(Scene::Enum oldState) override {
         state = HowToPlay;
         if (oldState == Scene::ModeMenu)
-            this->oldState = Scene::BlackToSpawn;
+            this->oldState = Scene::Spawn;
         else
             this->oldState = oldState;
 

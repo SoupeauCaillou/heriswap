@@ -194,8 +194,8 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
 
     // sceneStateMachine.registerState(Scene::BlackToMainMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, .5f, Scene::MainMenu), "Scene::BlackToMainMenu");
     // sceneStateMachine.registerState(Scene::BlackToModeMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::ModeMenu), "Scene::BlackToModeMenu");
-    sceneStateMachine.registerState(Scene::BlackToSpawn, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::CountDown), "Scene::BlackToSpawn");
-    sceneStateMachine.registerState(Scene::AdsToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::BlackToSpawn), "Scene::AdsToBlackState");
+    // sceneStateMachine.registerState(Scene::BlackToSpawn, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::CountDown), "Scene::BlackToSpawn");
+    sceneStateMachine.registerState(Scene::AdsToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::CountDown), "Scene::AdsToBlackState");
     // sceneStateMachine.registerState(Scene::GameToBlack, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.4f, Scene::BlackToModeMenu), "Scene::GameToBlack");
     sceneStateMachine.registerState(Scene::ModeMenuToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::Ads), "Scene::ModeMenuToBlackState");
 
@@ -455,7 +455,8 @@ void HeriswapGame::tick(float dt) {
         //si on est en jeu et/ou  fin de musiques, charger de nouvelles musiques
         if ((pausableState(state) &&
             state != Scene::LevelChanged &&
-            state != Scene::Pause) || state == Scene::BlackToSpawn) {
+            state != Scene::Pause)) {
+            // TODO || state == Scene::BlackToSpawn) {
             MUSIC(datas->inGameMusic.masterTrack)->control = MusicControl::Play;
             MUSIC(datas->inGameMusic.masterTrack)->volume = 1;
             MUSIC(datas->inGameMusic.stressTrack)->control = (datas->mode == Normal) ? MusicControl::Play : MusicControl::Stop;
