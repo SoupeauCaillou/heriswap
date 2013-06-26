@@ -31,15 +31,14 @@ namespace Scene {
     enum Enum {
         Ads,
         AdsToBlackState,
-        BlackToModeMenu,
         BlackToSpawn,
         CountDown,
         Delete,
         ElitePopup,
+        EndGame,
         EndMenu,
         ExitState,
         Fall,
-        GameToBlack,
         Help,
         LevelChanged,
         Logo,
@@ -64,6 +63,7 @@ namespace Scene {
     DECLARE_SCENE_HANDLER_FACTORY(CountDown)
     DECLARE_SCENE_HANDLER_FACTORY(Delete)
     DECLARE_SCENE_HANDLER_FACTORY(ElitePopup)
+    DECLARE_SCENE_HANDLER_FACTORY(EndGame)
     DECLARE_SCENE_HANDLER_FACTORY(EndMenu)
     DECLARE_SCENE_HANDLER_FACTORY(ExitState)
     DECLARE_SCENE_HANDLER_FACTORY(Fall)

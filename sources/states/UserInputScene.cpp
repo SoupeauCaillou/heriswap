@@ -184,7 +184,7 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
             if (game->datas->mode != TilesAttack) {
                 theHeriswapGridSystem.ShowOneCombination();
             }
-            return Scene::GameToBlack;
+            return Scene::EndGame;
         }
 
         //ne pas changer la grille si fin de niveau/jeu
@@ -333,7 +333,19 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     ///--------------------- EXIT SECTION -----------------------------------------//
     ///----------------------------------------------------------------------------//
-    void onPreExit(Scene::Enum) override {
+    void onPreExit(Scene::Enum to) override {
+        if (to == Scene::EndGame) {
+            // setup fade out to menu
+            game->datas->faderHelper.start(Fading::Out, 1.5);
+        }
+    }
+
+    bool updatePreExit(Scene::Enum to, float dt) {
+        if (to == Scene::EndGame) {
+            return game->datas->faderHelper.update(dt);
+        } else {
+            return true;
+        }
     }
 
     void onExit(Scene::Enum nextState) override {

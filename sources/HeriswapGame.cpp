@@ -181,6 +181,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     // sceneStateMachine.registerState(Scene::Unpause, Scene::CreateUnpauseSceneHandler(this), "Scene::Unpause");
     sceneStateMachine.registerState(Scene::MainMenu, Scene::CreateMainMenuSceneHandler(this), "Scene::MainMenu");
     sceneStateMachine.registerState(Scene::ModeMenu, Scene::CreateModeMenuSceneHandler(this), "Scene::ModeMenu");
+    sceneStateMachine.registerState(Scene::EndGame, Scene::CreateEndGameSceneHandler(this), "Scene::EndGame");
     // sceneStateMachine.registerState(Scene::ScoreBoard, Scene::CreateScoreBoardSceneHandler(this), "Scene::ScoreBoard");
     // sceneStateMachine.registerState(Scene::EndMenu, Scene::CreateEndMenuSceneHandler(this), "Scene::EndMenu");
     // sceneStateMachine.registerState(Scene::Background, Scene::CreateBackgroundSceneHandler(this), "Scene::Background");
@@ -192,10 +193,10 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     sceneStateMachine.registerState(Scene::ElitePopup, Scene::CreateElitePopupSceneHandler(this), "Scene::ElitePopup");
 
     // sceneStateMachine.registerState(Scene::BlackToMainMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, .5f, Scene::MainMenu), "Scene::BlackToMainMenu");
-    sceneStateMachine.registerState(Scene::BlackToModeMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::ModeMenu), "Scene::BlackToModeMenu");
+    // sceneStateMachine.registerState(Scene::BlackToModeMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::ModeMenu), "Scene::BlackToModeMenu");
     sceneStateMachine.registerState(Scene::BlackToSpawn, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::CountDown), "Scene::BlackToSpawn");
     sceneStateMachine.registerState(Scene::AdsToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::BlackToSpawn), "Scene::AdsToBlackState");
-    sceneStateMachine.registerState(Scene::GameToBlack, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.4f, Scene::BlackToModeMenu), "Scene::GameToBlack");
+    // sceneStateMachine.registerState(Scene::GameToBlack, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.4f, Scene::BlackToModeMenu), "Scene::GameToBlack");
     sceneStateMachine.registerState(Scene::ModeMenuToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::Ads), "Scene::ModeMenuToBlackState");
 
     Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");

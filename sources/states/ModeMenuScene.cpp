@@ -353,8 +353,12 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum from) override {
-        if (from == Scene::BlackToModeMenu) {
+        // if coming from game
+        if (from == Scene::EndGame) {
+            // exit game
             game->datas->mode2Manager[game->datas->mode]->Exit();
+            // setup fadeout
+            game->datas->faderHelper.start(Fading::In, 1.5f);
         }
 
         pleaseGoBack = false;
@@ -434,6 +438,14 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             }
         }
         #endif
+    }
+
+    bool updatePreEnter(Scene::Enum from, float dt) {
+        if (from == Scene::EndGame) {
+            return game->datas->faderHelper.update(dt);
+        } else {
+            return true;
+        }
     }
 
     ///----------------------------------------------------------------------------//
@@ -609,7 +621,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             CONTAINER(enableSwarmContainer)->enable =
             CONTAINER(bDifficulty)->enable = false;
 
-        
+
     }
 };
 
