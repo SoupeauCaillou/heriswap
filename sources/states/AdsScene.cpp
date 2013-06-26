@@ -30,6 +30,7 @@ along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 #include "base/ObjectSerializer.h"
 #include "base/PlacementHelper.h"
 #include "base/TimeUtil.h"
+#include "Game_Private.h"
 
 #include "systems/ButtonSystem.h"
 #include "systems/RenderingSystem.h"
@@ -65,6 +66,11 @@ struct AdsScene : public StateHandler<Scene::Enum> {
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum) override {
+        game->datas->faderHelper.start(Fading::Out, 0.5);
+    }
+
+    bool updatePreEnter(Scene::Enum, float dt) override {
+        return game->datas->faderHelper.update(dt);
     }
 
     void onEnter(Scene::Enum) override {
@@ -100,7 +106,7 @@ struct AdsScene : public StateHandler<Scene::Enum> {
     Scene::Enum update(float dt) override {
         stateActiveDuration += dt;
         if (gameb4Ads>0 || BUTTON(eAds)->clicked || game->gameThreadContext->adAPI->done()) {
-            return Scene::AdsToBlackState;
+            return Scene::CountDown;
         }
         return Scene::Ads;
     }
@@ -109,7 +115,6 @@ struct AdsScene : public StateHandler<Scene::Enum> {
     ///--------------------- EXIT SECTION -----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreExit(Scene::Enum) override {
-        LOGI("'" << __PRETTY_FUNCTION__ << "' : '" << stateActiveDuration << "'");
         BUTTON(eAds)->enabled = false;
         if (gameb4Ads==0)
             gameb4Ads=3;

@@ -30,7 +30,6 @@ namespace FadingType {
 namespace Scene {
     enum Enum {
         Ads,
-        AdsToBlackState,
         CountDown,
         Delete,
         ElitePopup,
@@ -58,7 +57,6 @@ namespace Scene {
 
 
     DECLARE_SCENE_HANDLER_FACTORY(Ads)
-    DECLARE_SCENE_HANDLER_FACTORY(BlackToModeMenu)
     DECLARE_SCENE_HANDLER_FACTORY(CountDown)
     DECLARE_SCENE_HANDLER_FACTORY(Delete)
     DECLARE_SCENE_HANDLER_FACTORY(ElitePopup)
