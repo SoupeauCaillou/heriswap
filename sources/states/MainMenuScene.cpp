@@ -152,6 +152,11 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum pState) override {
+        if (pState == Scene::Logo) {
+            // setup fadein
+            game->datas->faderHelper.start(Fading::In, 0.5f);
+        }
+
         if (pState == Scene::Pause) {
             LOGI("aborted. going to main menu");
             if (game->datas->mode == Normal) {
@@ -196,6 +201,13 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         }
 
         choosenGameMode = Normal;
+    }
+
+    bool updatePreEnter(Scene::Enum from, float dt) {
+        if (from == Scene::Logo)
+            return game->datas->faderHelper.update(dt);
+        else
+            return true;
     }
 
     ///----------------------------------------------------------------------------//

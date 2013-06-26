@@ -31,7 +31,6 @@ namespace Scene {
     enum Enum {
         Ads,
         AdsToBlackState,
-        BlackToMainMenu,
         BlackToModeMenu,
         BlackToSpawn,
         CountDown,

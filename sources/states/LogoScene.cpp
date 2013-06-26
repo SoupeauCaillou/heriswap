@@ -38,7 +38,6 @@ enum LogoStep {
     LogoStep4,
     LogoStep5,
     LogoStep6,
-    LogoStep7,
 };
 
 struct LogoTimeBasedStateHandler : public StateHandler<LogoStep> {
@@ -146,7 +145,7 @@ public:
         switch (logoSM->getCurrentState()) {
             case LogoStep6:
                 if (game->datas->faderHelper.update(dt))
-                    return Scene::BlackToMainMenu;
+                    return Scene::MainMenu;
             default:
                 break;
         }
