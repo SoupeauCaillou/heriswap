@@ -104,13 +104,13 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         // theMusicSystem.toggleMute(true);
         BUTTON(bHelp)->enabled = true;
 
-        previousState = from;
-
-        // helpMgr->oldState = Pause;
-        // helpMgr->mode = mode;
+        if (from != Scene::Help)
+            previousState = from;
+        else
+            game->datas->mode2Manager[game->datas->mode]->showGameDecor(false);
 
         Entity herisson = game->datas->mode2Manager[game->datas->mode]->herisson;
-        ANIMATION(herisson)->playbackSpeed = 0;   
+        ANIMATION(herisson)->playbackSpeed = 0;
 
         game->datas->mode2Manager[game->datas->mode]->TogglePauseDisplay(true);
 
@@ -137,20 +137,21 @@ struct PauseScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     ///--------------------- EXIT SECTION -----------------------------------------//
     ///----------------------------------------------------------------------------//
-    void onPreExit(Scene::Enum) override {
+    void onPreExit(Scene::Enum to) override {
         game->datas->mode2Manager[game->datas->mode]->TogglePauseDisplay(false);
+        if (to == Scene::Help)
+            theHeriswapGridSystem.ShowAll(false);
     }
 
     void onExit(Scene::Enum) override {
-        LOGI("'" << __PRETTY_FUNCTION__ << "'");
         TEXT(eRestart)->show =
             TEXT(eHelp)->show =
             TEXT(eAbort)->show = false;
-        
+
         RENDERING(bRestart)->show =
             RENDERING(bAbort)->show =
             RENDERING(bHelp)->show = false;
-        
+
         BUTTON(bHelp)->enabled =
             BUTTON(bRestart)->enabled =
             BUTTON(bAbort)->enabled = false;
@@ -158,7 +159,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         theMusicSystem.toggleMute(theSoundSystem.mute);
 
         Entity herisson = game->datas->mode2Manager[game->datas->mode]->herisson;
-        ANIMATION(herisson)->playbackSpeed = 4.1;        
+        ANIMATION(herisson)->playbackSpeed = 4.1;
     }
 };
 

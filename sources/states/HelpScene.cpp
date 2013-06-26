@@ -60,7 +60,7 @@ struct HelpScene : public StateHandler<Scene::Enum> {
         // title text + bg
         text = theEntityManager.CreateEntity("text",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("help/text"));
-        
+
         postscriptum = theEntityManager.CreateEntity("postscriptum",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("help/postscriptum"));
     }
@@ -72,8 +72,6 @@ struct HelpScene : public StateHandler<Scene::Enum> {
     }
 
     void onEnter(Scene::Enum oldState) override {
-        LOGI("'" << __PRETTY_FUNCTION__ << "'");
-
         state = HowToPlay;
         if (oldState == Scene::ModeMenu)
             this->oldState = Scene::BlackToSpawn;
@@ -136,7 +134,6 @@ struct HelpScene : public StateHandler<Scene::Enum> {
     }
 
     void onExit(Scene::Enum) override {
-        LOGI("'" << __PRETTY_FUNCTION__ << "'");
         TEXT(text)->show = false;
         TEXT(title)->show = false;
         TEXT(postscriptum)->show = false;
