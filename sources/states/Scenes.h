@@ -20,13 +20,6 @@
 
 class HeriswapGame;
 
-namespace FadingType {
-    enum Enum {
-        FadeIn,
-        FadeOut
-    };
-}
-
 namespace Scene {
     enum Enum {
         Ads,
@@ -74,11 +67,4 @@ namespace Scene {
     DECLARE_SCENE_HANDLER_FACTORY(Spawn)
     DECLARE_SCENE_HANDLER_FACTORY(Unpause)
     DECLARE_SCENE_HANDLER_FACTORY(UserInput)
-
-    // Declare a unique StateHandler, for all Fade scenes
-    StateHandler<Scene::Enum>* CreateFadeSceneHandler(
-        HeriswapGame* game,
-        FadingType::Enum type,
-        float duration,
-        Scene::Enum nextState);
 }

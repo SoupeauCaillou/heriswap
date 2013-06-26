@@ -165,7 +165,6 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 					return Scene::LevelChanged;
 				//inutile logiquement (on quitte avant)
 				//~else if (modeMgr->GetMode() == TilesAttack && modeMgr->GameProgressPercent() == 1)
-					//~return GameToBlack;
 
                 ADSR(replaceGrid)->activationTime = 0;
                 ADSR(replaceGrid)->value = ADSR(replaceGrid)->idleValue;
