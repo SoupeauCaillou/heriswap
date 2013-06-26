@@ -42,7 +42,6 @@ namespace Scene {
         Logo,
         MainMenu,
         ModeMenu,
-        ModeMenuToBlackState,
         Pause,
         RateIt,
         // ScoreBoard,

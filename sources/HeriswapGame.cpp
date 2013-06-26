@@ -197,7 +197,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     // sceneStateMachine.registerState(Scene::BlackToSpawn, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::CountDown), "Scene::BlackToSpawn");
     // sceneStateMachine.registerState(Scene::AdsToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::CountDown), "Scene::AdsToBlackState");
     // sceneStateMachine.registerState(Scene::GameToBlack, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.4f, Scene::BlackToModeMenu), "Scene::GameToBlack");
-    sceneStateMachine.registerState(Scene::ModeMenuToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::Ads), "Scene::ModeMenuToBlackState");
+    // sceneStateMachine.registerState(Scene::ModeMenuToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::Ads), "Scene::ModeMenuToBlackState");
 
     Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
 
