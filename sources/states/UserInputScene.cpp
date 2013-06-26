@@ -175,11 +175,6 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
     ///--------------------- UPDATE SECTION ---------------------------------------//
     ///----------------------------------------------------------------------------//
     Scene::Enum update(float dt) override {
-        if (game->datas->newGame) {
-            game->datas->newGame = false;
-            return Scene::CountDown;
-        }
-
         //get the game progress
         const float percentDone = game->datas->mode2Manager[game->datas->mode]->GameProgressPercent();
 

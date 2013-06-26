@@ -193,7 +193,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
 
     sceneStateMachine.registerState(Scene::BlackToMainMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, .5f, Scene::MainMenu), "Scene::BlackToMainMenu");
     sceneStateMachine.registerState(Scene::BlackToModeMenu, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::ModeMenu), "Scene::BlackToModeMenu");
-    sceneStateMachine.registerState(Scene::BlackToSpawn, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::Spawn), "Scene::BlackToSpawn");
+    sceneStateMachine.registerState(Scene::BlackToSpawn, Scene::CreateFadeSceneHandler(this, FadingType::FadeIn, 0.5f, Scene::CountDown), "Scene::BlackToSpawn");
     sceneStateMachine.registerState(Scene::AdsToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::BlackToSpawn), "Scene::AdsToBlackState");
     sceneStateMachine.registerState(Scene::GameToBlack, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.4f, Scene::BlackToModeMenu), "Scene::GameToBlack");
     sceneStateMachine.registerState(Scene::ModeMenuToBlackState, Scene::CreateFadeSceneHandler(this, FadingType::FadeOut, 0.2f, Scene::Ads), "Scene::ModeMenuToBlackState");
@@ -358,9 +358,17 @@ void HeriswapGame::tick(float dt) {
     //datas->newState = datas->state2Manager[datas->state]->Update(dt);
 
     //update only if game has really begun (after countdown)
-    if (sceneStateMachine.getCurrentState() != Scene::CountDown && !datas->newGame) {
-        //updating gamemode
-        datas->mode2Manager[datas->mode]->GameUpdate(dt, sceneStateMachine.getCurrentState());
+    switch (sceneStateMachine.getCurrentState()) {
+        case Scene::UserInput:
+        case Scene::Delete:
+        case Scene::Fall:
+        case Scene::Spawn:
+        case Scene::LevelChanged:
+            //updating gamemode
+            datas->mode2Manager[datas->mode]->GameUpdate(dt, sceneStateMachine.getCurrentState());
+            break;
+        default:
+        break;
     }
 
     LOGT_EVERY_N(600, "TBD in Pause (prolly)");

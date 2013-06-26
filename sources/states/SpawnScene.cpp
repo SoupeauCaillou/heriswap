@@ -190,13 +190,11 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	///----------------------------------------------------------------------------//
 	void onPreEnter(Scene::Enum from) override {
         // Prepare game
-        if (from == Scene::BlackToSpawn) {
+        if (from == Scene::CountDown) {
             game->prepareNewGame();
             game->setupGameProp();
         }
-	}
 
-	void onEnter(Scene::Enum) override {
 		ADSR(haveToAddLeavesInGrid)->attackTiming = game->datas->timing.haveToAddLeavesInGrid;
         ADSR(replaceGrid)->attackTiming = game->datas->timing.replaceGrid;
 
@@ -220,36 +218,49 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 		ADSR(replaceGrid)->active = false;
 	}
 
+    bool updatePreEnter(Scene::Enum from, float ) override {
+        // if we come from count down, spawn here
+        if (from == Scene::CountDown) {
+            return updateLeavesSpawn();
+        } else {
+            return true;
+        }
+    }
+
+    bool updateLeavesSpawn() {
+        bool fullGridSpawn = (newLeaves.size() == (unsigned)theHeriswapGridSystem.GridSize*theHeriswapGridSystem.GridSize);
+        ADSR(haveToAddLeavesInGrid)->active = true;
+        for ( std::vector<Feuille>::reverse_iterator it = newLeaves.rbegin(); it != newLeaves.rend(); ++it ) {
+            if (it->entity == 0) {
+                it->entity = createCell(*it, fullGridSpawn);
+            } else {
+                HeriswapGridComponent* gc = HERISWAPGRID(it->entity);
+                if (fullGridSpawn) {
+                    gc->i = gc->j = -1;
+                }
+                TransformationComponent* tc = TRANSFORM(it->entity);
+                //leaves grow up from 0 to fixed size
+                glm::vec2 s = HeriswapGame::CellSize(theHeriswapGridSystem.GridSize, gc->type);
+                if (ADSR(haveToAddLeavesInGrid)->value == 1){
+                    tc->size = glm::vec2(s.x, s.y);
+                    gc->i = it->X;
+                    gc->j = it->Y;
+                } else {
+                    tc->size = s * ADSR(haveToAddLeavesInGrid)->value;
+                }
+            }
+        }
+        return (ADSR(haveToAddLeavesInGrid)->value == 1);
+    }
+
 	///----------------------------------------------------------------------------//
 	///--------------------- UPDATE SECTION ---------------------------------------//
 	///----------------------------------------------------------------------------//
 	Scene::Enum update(float) override {
 		//si on bouche les trous
 		if (!newLeaves.empty()) {
-	        bool fullGridSpawn = (newLeaves.size() == (unsigned)theHeriswapGridSystem.GridSize*theHeriswapGridSystem.GridSize);
-			ADSR(haveToAddLeavesInGrid)->active = true;
-			for ( std::vector<Feuille>::reverse_iterator it = newLeaves.rbegin(); it != newLeaves.rend(); ++it ) {
-				if (it->entity == 0) {
-					it->entity = createCell(*it, fullGridSpawn);
-				} else {
-	                HeriswapGridComponent* gc = HERISWAPGRID(it->entity);
-	                if (fullGridSpawn) {
-	                    gc->i = gc->j = -1;
-	                }
-					TransformationComponent* tc = TRANSFORM(it->entity);
-					//leaves grow up from 0 to fixed size
-					glm::vec2 s = HeriswapGame::CellSize(theHeriswapGridSystem.GridSize, gc->type);
-					if (ADSR(haveToAddLeavesInGrid)->value == 1){
-						tc->size = glm::vec2(s.x, s.y);
-						gc->i = it->X;
-						gc->j = it->Y;
-					} else {
-						tc->size = s * ADSR(haveToAddLeavesInGrid)->value;
-					}
-				}
-			}
 			//tout le monde est en place : quel sera le prochain état ?
-			if (ADSR(haveToAddLeavesInGrid)->value == 1) {
+			if (updateLeavesSpawn()) {
 				newLeaves.clear();
 				return NextState(true);
 			}

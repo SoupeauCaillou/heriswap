@@ -60,8 +60,6 @@ struct CountDownScene : public StateHandler<Scene::Enum> {
     }
 
     void onEnter(Scene::Enum) override {
-        LOGI("'" << __PRETTY_FUNCTION__ << "'");
-
         if (game->datas->mode != Normal) {
             TEXT(counter)->show = true;
             RENDERING(vorhang)->show = true;
@@ -78,20 +76,7 @@ struct CountDownScene : public StateHandler<Scene::Enum> {
     ///--------------------- UPDATE SECTION ---------------------------------------//
     ///----------------------------------------------------------------------------//
     Scene::Enum update(float dt) override {
-        if (game->datas->mode == Normal) {
-            return Scene::UserInput;
-        }
-
-        timeRemaining -= dt;
-
-        std::stringstream a;
-        a << (int)timeRemaining+1;
-        TEXT(counter)->text = a.str();
-
-        if (timeRemaining <= 0.f) {
-            return Scene::UserInput;
-        }
-        return Scene::CountDown;
+        return Scene::Spawn;
     }
 
     ///----------------------------------------------------------------------------//
@@ -100,9 +85,20 @@ struct CountDownScene : public StateHandler<Scene::Enum> {
     void onPreExit(Scene::Enum) override {
     }
 
-    void onExit(Scene::Enum) override {
-        LOGI("'" << __PRETTY_FUNCTION__ << "'");
+    bool updatePreExit(Scene::Enum , float dt) {
+        if (game->datas->mode == Normal)
+            return true;
 
+        timeRemaining -= dt;
+
+        std::stringstream a;
+        a << (int)timeRemaining+1;
+        TEXT(counter)->text = a.str();
+
+        return (timeRemaining <= 0.f);
+    }
+
+    void onExit(Scene::Enum) override {
         TEXT(counter)->show = false;
         RENDERING(vorhang)->show = false;
         if (game->datas->mode == TilesAttack || game->datas->mode == Go100Seconds) {
