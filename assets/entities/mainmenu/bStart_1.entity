@@ -1,5 +1,5 @@
 extends = button
 
 [Transformation]
-position%screen = 0, 0.235
-size%screen = 0.885, 0.115
+position%gimp = 400, 339
+size%gimp = 708, 147
