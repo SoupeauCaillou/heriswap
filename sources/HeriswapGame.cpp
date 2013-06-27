@@ -78,7 +78,6 @@ bool HeriswapGame::pausableState(Scene::Enum state) {
         case Scene::Delete:
         case Scene::Fall:
         case Scene::LevelChanged:
-        case Scene::Pause:
             return true;
         default:
             return false;
@@ -311,7 +310,23 @@ void HeriswapGame::toggleShowCombi(bool enabled) {
             LOGI("Destruction des marquages et de la triche !");
         }
     }
+}
 
+bool HeriswapGame::willConsumeBackEvent() {
+    const auto state = sceneStateMachine.getCurrentState();
+
+    if (pausableState(state))
+        return true;
+
+    switch (state) {
+        case Scene::ModeMenu:
+        case Scene::Help:
+        case Scene::Pause:
+            return true;
+        default:
+            LOGI("HeriswapGame will not consume backEvent");
+            return false;
+    }
 }
 
 void HeriswapGame::backPressed() {
@@ -319,14 +334,11 @@ void HeriswapGame::backPressed() {
 
     const Scene::Enum state = sceneStateMachine.getCurrentState();
     if (state == Scene::ModeMenu) {
-        // go back to main menu
-        // (static_cast<ModeMenuStateManager*>(datas->state2Manager[ModeMenu]))->pleaseGoBack = true;
+        sceneStateMachine.forceNewState(Scene::MainMenu);
     } else if (pausableState(state)) {
-        #if SAC_DEBUG
-        // datas->mode2Manager[datas->mode]->toggleDebugDisplay();
-        #else
-        togglePause(true);
-        #endif
+        sceneStateMachine.forceNewState(Scene::Pause);
+    } else if (state == Scene::Pause) {
+        sceneStateMachine.forceNewState(Scene::MainMenu);
     }
 }
 

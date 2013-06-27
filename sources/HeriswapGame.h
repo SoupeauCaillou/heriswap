@@ -55,9 +55,11 @@ class HeriswapGame : public Game {
 		void tick(float dt);
 		void togglePause(bool activate);
 		void toggleShowCombi(bool enabled);
-        void backPressed();
 		void setMode();
 		int saveState(uint8_t** out);
+
+        void backPressed();
+        bool willConsumeBackEvent();
 
 		static bool inGameState(Scene::Enum state);
 		static bool pausableState(Scene::Enum state);
