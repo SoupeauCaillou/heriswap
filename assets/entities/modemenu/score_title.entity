@@ -1,2 +1,9 @@
 extends = modemenu/text
 
+[Transformation]
+position%gimp = 92, 520
+
+[TextRendering]
+char_height%gimp_h = 54
+
+

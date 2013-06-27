@@ -1,2 +1,4 @@
 extends = modemenu/score_text
 
+[Transformation]
+position%gimp = 92, 605

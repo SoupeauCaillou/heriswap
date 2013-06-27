@@ -1,5 +1,8 @@
 extends = modemenu/text
 
+[Transformation]
+position%gimp = 400, 1215
+
 [Text]
 #~ String
 #text
@@ -8,7 +11,7 @@ extends = modemenu/text
 #~ Color
 #color
 #~ float
-#char_height
+char_height%gimp_h = 56
 #~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
 positioning = 0.5
 #~ bool

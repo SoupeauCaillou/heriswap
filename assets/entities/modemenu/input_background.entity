@@ -1,6 +1,6 @@
 [Transformation]
-#position = 0, 0
-#size = 1, 1
+position%gimp = 400, 320
+size%gimp = 708, 256
 #rotation = 0
 z = 0.70
 

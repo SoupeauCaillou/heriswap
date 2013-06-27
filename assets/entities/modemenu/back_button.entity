@@ -1,28 +1,11 @@
 [Transformation]
-positionNE%screen = -0.25, 0.4
-#size = 1, 1
-#rotation = 0
+positionW%gimp = 92, 95
+size%gimp = 100, 75
 z = 0.51
 
 [Rendering]
 #~ TextureRef
 texture = back
-#~ EffectRef
-#effectRef
-#~ Color
-#color
-#~ bool
-#show
-#~ bool
-#mirror_h
-#~ bool
-#z_pre_pass
-#~ bool
-#fast_culling
-#~ int
-#opaque_type
-#~ int
-#camera_bitmask
 
 [Button]
 #~ bool
@@ -30,7 +13,3 @@ texture = back
 over_size = 1.3
 
 [Sound]
-#~ float
-#volume =
-#~ int
-#sound =

@@ -1,7 +1,7 @@
 extends = modemenu/text
 
 [Transformation]
-position%screen = 0, 0.22
+position%gimp = 400, 375
 
 [Text]
 #~ String
@@ -11,7 +11,7 @@ position%screen = 0, 0.22
 #~ Color
 #color
 #~ float
-char_height = 0.4
+char_height%gimp_h = 45
 #~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
 positioning = 0.5
 #~ bool

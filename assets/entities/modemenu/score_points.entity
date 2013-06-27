@@ -1,5 +1,8 @@
 extends = modemenu/score_text
 
-[Text]
-positionning = 0.5
+[Transformation]
+position%gimp = 552, 605
 
+[Text]
+positionning = 1
+flags = 1

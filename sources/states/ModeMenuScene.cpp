@@ -114,53 +114,25 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             TRANSFORM(scoresName[i])->position.y =
                 TRANSFORM(scoresPoints[i])->position.y =
                     TRANSFORM(scoresLevel[i])->position.y = (float)PlacementHelper::GimpYToScreen(605 + i * 95);
-            TRANSFORM(scoresName[i])->position.x = (float)PlacementHelper::GimpXToScreen(92);
-            TRANSFORM(scoresPoints[i])->position.x = (float)PlacementHelper::GimpXToScreen(552);
-            TRANSFORM(scoresLevel[i])->position.x = (float)PlacementHelper::GimpXToScreen(590);
-
-            // TEXT(scoresName[i])->charHeight =
-            //     TEXT(scoresPoints[i])->charHeight =
-            //         TEXT(scoresLevel[i])->charHeight = PlacementHelper::GimpHeightToScreen(45);
-            TEXT(scoresPoints[i])->flags |= TextComponent::IsANumberBit;
         }
         // back button
         back = theEntityManager.CreateEntity("back",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/back_button"));
 
-        TRANSFORM(back)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(100),
-                                          (float)PlacementHelper::GimpHeightToScreen(75));
-        // TransformationSystem::setPosition(TRANSFORM(back),
-        //                                   glm::vec2((float)PlacementHelper::GimpXToScreen(92),
-        //                                             (float)PlacementHelper::GimpYToScreen(95)),
-        //                                   TransformationSystem::W);
-        // TRANSFORM(back)->z = DL_MainMenuUITxt;
-
         // score title
         scoreTitle = theEntityManager.CreateEntity("scoreTitle",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/score_title"));
-
-        TRANSFORM(scoreTitle)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(92),
-                                                    (float)PlacementHelper::GimpYToScreen(520));
-        std::vector<char> v;
         TEXT(scoreTitle)->text = game->gameThreadContext->localizeAPI->text("score");
-        //TEXT(scoreTitle)->charHeight = PlacementHelper::GimpHeightToScreen(54);
 
         // score title
         average = theEntityManager.CreateEntity("average",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/average"));
-        TRANSFORM(average)->size.x = (float)PlacementHelper::GimpWidthToScreen(620);
-        TRANSFORM(average)->position = glm::vec2((float)PlacementHelper::GimpXToScreen(92),
-                                                 (float)PlacementHelper::GimpYToScreen(675 + 400));
-
-        // TEXT(average)->charHeight = PlacementHelper::GimpHeightToScreen(54);
-        TEXT(average)->flags |= TextComponent::AdjustHeightToFillWidthBit;
 
         // play text
         playText = theEntityManager.CreateEntity("playText",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/play_text"));
-        TRANSFORM(playText)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(275));
         TEXT(playText)->text = game->gameThreadContext->localizeAPI->text("play");
-        TEXT(playText)->charHeight = PlacementHelper::GimpHeightToScreen(100);
+        
         // play button
         playContainer = theEntityManager.CreateEntity("playContainer",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/play_container"));
@@ -169,8 +141,6 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         //difficulty text
         eDifficulty = theEntityManager.CreateEntity("eDifficulty",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/difficulty_text"));
-        TRANSFORM(eDifficulty)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(375));
-        // TEXT(eDifficulty)->charHeight = PlacementHelper::GimpHeightToScreen(45);
 
         //difficulty container
         bDifficulty = theEntityManager.CreateEntity("bDifficulty",
@@ -180,26 +150,14 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         // your score
         yourScore = theEntityManager.CreateEntity("yourScore",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/your_score"));
-        TRANSFORM(yourScore)->position = glm::vec2(0.f,(float)PlacementHelper::GimpYToScreen(1215));
-        // TEXT(yourScore)->charHeight = PlacementHelper::GimpHeightToScreen(56);
 
         // fond
         fond = theEntityManager.CreateEntity("background",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/background"));
-        TRANSFORM(fond)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(712),
-                                          (float)PlacementHelper::GimpHeightToScreen(1124));
-        // TransformationSystem::setPosition(TRANSFORM(fond),
-        //                                   glm::vec2((float)PlacementHelper::GimpXToScreen(44),
-        //                                             (float)PlacementHelper::GimpYToScreen(24)),
-        //                                   TransformationSystem::NW);
 
         // enableSwarm text
         enableSwarm = theEntityManager.CreateEntity("enableSwarm",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/enable_swarm"));
-        TRANSFORM(enableSwarm)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1160));
-        TRANSFORM(enableSwarm)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(460), 0.f);
-        // TEXT(enableSwarm)->charHeight = PlacementHelper::GimpHeightToScreen(40);
-        TEXT(enableSwarm)->flags |= TextComponent::MultiLineBit;
         TEXT(enableSwarm)->text = game->gameThreadContext->localizeAPI->text("get_swarm");
 
         // enableSwarm container
@@ -212,21 +170,14 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         // name input entities
         input_label = theEntityManager.CreateEntity("input_label",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/input_label"));
-
-        TRANSFORM(input_label)->position = glm::vec2(0, PlacementHelper::GimpYToScreen(275));
         TEXT(input_label)->text = game->gameThreadContext->localizeAPI->text("enter_name");
-        // TEXT(input_label)->charHeight = PlacementHelper::GimpHeightToScreen(54);
 
         input_textbox = theEntityManager.CreateEntity("input_textbox",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/input_textbox"));
-        TRANSFORM(input_textbox)->position = glm::vec2(0, PlacementHelper::GimpYToScreen(390));
-        // TEXT(input_textbox)->charHeight = PlacementHelper::GimpHeightToScreen(54);
         TEXT(input_textbox)->caret.speed = 0.5;
 
         input_background = theEntityManager.CreateEntity("input_background",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/input_background"));
-        TRANSFORM(input_background)->size = glm::vec2(PlacementHelper::GimpWidthToScreen(708), PlacementHelper::GimpHeightToScreen(256));
-        TRANSFORM(input_background)->position = glm::vec2(0, PlacementHelper::GimpYToScreen(320));
     #endif
     }
 
