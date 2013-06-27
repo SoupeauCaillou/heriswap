@@ -73,10 +73,7 @@ struct HelpScene : public StateHandler<Scene::Enum> {
 
     void onEnter(Scene::Enum oldState) override {
         state = HowToPlay;
-        if (oldState == Scene::ModeMenu)
-            this->oldState = Scene::Spawn;
-        else
-            this->oldState = oldState;
+        this->oldState = oldState;
 
         // TODO !
         // setup how to play help page
@@ -121,7 +118,10 @@ struct HelpScene : public StateHandler<Scene::Enum> {
                 state = Objective;
 
             } else {
-                return oldState;
+                if (oldState == Scene::ModeMenu)
+                    return Scene::CountDown;
+                else
+                    return oldState;
             }
         }
         return Scene::Help;

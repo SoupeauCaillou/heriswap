@@ -4,5 +4,5 @@ extends = modemenu/score_text
 position%gimp = 552, 605
 
 [Text]
-positionning = 1
+positioning = 1
 flags = 1
