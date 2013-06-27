@@ -191,8 +191,6 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
         // Prepare game
         if (from == Scene::CountDown) {
             game->datas->faderHelper.start(Fading::In, 0.5);
-            game->prepareNewGame();
-            game->setupGameProp();
         }
 
 		ADSR(haveToAddLeavesInGrid)->attackTiming = game->datas->timing.haveToAddLeavesInGrid;

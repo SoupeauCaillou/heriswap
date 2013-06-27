@@ -731,8 +731,7 @@ void HeriswapGame::prepareNewGame() {
     datas->newGame = true;
     // call Enter before starting fade-in
     datas->mode2Manager[datas->mode]->Enter();
+    datas->mode2Manager[datas->mode]->UiUpdate(0);
 
-    LOGT("UiUpdate first call missing");
-    // datas->mode2Manager[datas->mode]->UiUpdate(0);
     MUSIC(datas->menu)->control = MusicControl::Stop;
 }

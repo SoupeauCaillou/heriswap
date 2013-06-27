@@ -57,6 +57,9 @@ struct CountDownScene : public StateHandler<Scene::Enum> {
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum) override {
+        // setup game
+        game->prepareNewGame();
+        game->setupGameProp();
     }
 
     void onEnter(Scene::Enum) override {
