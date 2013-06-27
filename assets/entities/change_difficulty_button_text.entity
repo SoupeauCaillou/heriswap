@@ -1,7 +1,3 @@
-# vec2 modifiers : %screen, %screen_rev, %screen_w, %screen_h
-# relative vec2 modifiers : %texture_ratio,screen_w, %texture_ratio,screen_h, %screen_w,texture_ratio, %screen_h,texture_ratio, %texture_ratio,abs, %abs,texture_ratio
-# color modifiers : %html, %255
-
 [Transformation]
 position = 0, 0
 size = 1, 1
@@ -14,10 +10,10 @@ z = 0.51
 #~ String
 #font_name
 #~ Color
-color = green
+color%name = green
 #~ float
-char_height = 2.0
+char_height%gimp = 75
 #~ float
-positioning = 1
+positioning = 0.5
 #~ bool
 #show

@@ -1,5 +1,5 @@
 [Transformation]
-#position = 0, 0
+position%gimp = 400, 846
 #size = 1, 1
 #rotation = 0
 #z = 0.1
@@ -12,9 +12,9 @@ font_name = gdtypo
 #~ Color
 color = 1,1,1,1
 #~ float
-char_height = 2.0
+char_height%gimp_h = 350
 #~ float
-positioning = 0
+positioning = 0.5
 #~ bool
 #show
 
@@ -51,4 +51,3 @@ control = 1
 #activation_time =
 #~ float
 #timing =
-

@@ -1,7 +1,6 @@
 [Transformation]
-positionN%screen = 0, 0
-size = 1, 1
-#rotation = 0
+positionN%gimp = 44, 236
+size%gimp = 640.8, 147
 z = 0.51
 
 [Text]
@@ -10,9 +9,10 @@ z = 0.51
 #~ String
 #font_name
 #~ Color
-color = green
+color%name = green
 #~ float
-char_height = 2.0
+char_height%gimp_h = 55
+flags = 4
 #~ float
 positioning = 0
 #~ bool

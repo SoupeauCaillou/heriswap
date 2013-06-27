@@ -1,10 +1,5 @@
 [Transformation]
-#0.f, (float)PlacementHelper::ScreenHeight * 0.3
-position%screen = 0, 0.4
-
-# PlacementHelper::ScreenWidth * 0.9f, PlacementHelper::ScreenHeight);
-size%screen = 0.9, 1
-#rotation = 0
+position%gimp = 400, 128
 z = 0.72
 
 [Text]
@@ -17,7 +12,7 @@ color%name = green
 #~ int IsANumberBit : 1, AdjustHeightToFillWidthBit : 2, MultiLineBit : 4
 flags = 0
 #~ float
-char_height = 0.6
+char_height%gimp_h = 70
 #~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
 positioning = 0.5
 #~ bool

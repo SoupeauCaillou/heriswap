@@ -58,18 +58,7 @@ struct ElitePopupScene : public StateHandler<Scene::Enum> {
 
         text = theEntityManager.CreateEntity("change_difficulty_text",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("change_difficulty_text"));
-        // ADD_COMPONENT(text, Transformation);
-        // TRANSFORM(text)->position = TRANSFORM(background)->position;
-        // TRANSFORM(text)->size = TRANSFORM(background)->size;
-        // TRANSFORM(text)->size.x *= 0.9f;
-        // TRANSFORM(text)->size.y = (float)PlacementHelper::GimpHeightToScreen(147);
-        // TransformationSystem::setPosition(TRANSFORM(text),
-        //                                glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(236)),
-        //                                TransformationSystem::N);
-        // TEXT(text)->positioning = TextComponent::LEFT;
-        // TEXT(text)->color = green;
-        // TEXT(text)->charHeight = PlacementHelper::GimpHeightToScreen(55);
-        // TEXT(text)->flags |= TextComponent::MultiLineBit;
+        
         std::stringstream a;
         for (int i=0; i<2; i++) {
             a.str("");
@@ -77,27 +66,12 @@ struct ElitePopupScene : public StateHandler<Scene::Enum> {
             eText[i] = theEntityManager.CreateEntity(a.str(),
                 EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("change_difficulty_button_text"));
 
-            TRANSFORM(eText[i])->z = DL_MainMenuUITxt;
-            // TEXT(eText[i])->positioning = TextComponent::CENTER;
-            // TEXT(eText[i])->color = green;
-            // TEXT(eText[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
-
             a.str("");
             a << "change_difficulty_button_" << i;
             eButton[i] = theEntityManager.CreateEntity(a.str(),
                 EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("change_difficulty_button"));
-            // ADD_COMPONENT(eButton[i], Transformation);
-            // TRANSFORM(eButton[i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(708),
-            //                                         (float)PlacementHelper::GimpHeightToScreen(147));
-            // TRANSFORM(eButton[i])->z = DL_MainMenuUIBg;
-            // ADD_COMPONENT(eButton[i], Rendering);
-            // RENDERING(eButton[i])->texture = theRenderingSystem.loadTextureFile("fond_bouton");
-            // RENDERING(eButton[i])->color.a = 0.5;
-            // ADD_COMPONENT(eButton[i], Button);
-            // BUTTON(eButton[i])->enabled = false;
-
-            // TRANSFORM(eText[i])->position.x = TRANSFORM(eButton[i])->position.x = 0;
-            // TRANSFORM(eText[i])->position.y = TRANSFORM(eButton[i])->position.y = PlacementHelper::GimpYToScreen(850+i*183);
+            
+            TRANSFORM(eText[i])->position.y = TRANSFORM(eButton[i])->position.y = PlacementHelper::GimpYToScreen(850+i*183);
         }
         TEXT(text)->text = game->gameThreadContext->localizeAPI->text("change_difficulty");
         TEXT(eText[0])->text = game->gameThreadContext->localizeAPI->text("change_difficulty_yes");

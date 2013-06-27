@@ -1,33 +1,10 @@
 [Transformation]
-#position = 0, 0
-size%screen = 1, 1
-#rotation = 0
+position%gimp = 0, 0
+size%gimp = 800, 1280
 z = 0.61
 
 [Rendering]
-#~ TextureRef
-#texture
-#~ EffectRef
-#effectRef
 #~ Color
 color = 0, 0, 0
-#~ bool
-#show
-#~ bool
-#mirror_h
-#~ bool
-#z_pre_pass
-#~ bool
-#fast_culling
-#~ int
-#opaque_type
-#~ int
-#camera_bitmask
 
 [Button]
-#~ bool
-#enabled =
-#~ float
-#over_size =
-#~ float
-#vibration =

@@ -1,7 +1,6 @@
 [Transformation]
-#0.f, (float)PlacementHelper::ScreenHeight * 0.4
-position%screen = 0, 0.3
-size%screen = 0.9, 0.9
+position = 0, 3
+size%gimp = 720, 1280
 #rotation = 0
 z = 0.72
 
@@ -15,8 +14,8 @@ color%name = green
 #~ int IsANumberBit : 1, AdjustHeightToFillWidthBit : 2, MultiLineBit : 4
 flags = 4
 #~ float
-char_height = 0.430
+char_height%gimp_h = 50
 #~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
-positioning = 0.5
+positioning = 0
 #~ bool
 #show =

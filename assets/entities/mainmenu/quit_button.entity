@@ -1,8 +1,8 @@
 extends = button
 
 [Transformation]
-positionS%gimp = 400, 1215
-size%gimp = 19.855, 95
+position%gimp = 400, 1215
+size%gimp = 454.5, 95
 z = 0.50
 
 [Rendering]

@@ -1,25 +1,10 @@
 [Transformation]
-positionNW%screen = 0.5, -0.5
-size%texture_ratio,screen_h = 1
-#rotation = 0
+positionNW%gimp = 44, 236
+size%gimp = 800,1280
 z = 0.5
 
 [Rendering]
 #~ TextureRef
 texture = fond_menu_mode
-#~ EffectRef
-#effectRef
 #~ Color
 color = 1, 1, 1, 0.5
-#~ bool
-#show
-#~ bool
-#mirror_h
-#~ bool
-#z_pre_pass
-#~ bool
-#fast_culling
-#~ int
-#opaque_type
-#~ int
-#camera_bitmask

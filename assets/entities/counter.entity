@@ -1,5 +1,5 @@
 [Transformation]
-position%screen = 0, 0
+position%gimp = 400, 650
 #size = 1, 1
 #rotation = 0
 z = 0.49
@@ -12,7 +12,7 @@ font_name = gdtypo
 #~ Color
 color%name = green
 #~ float
-char_height = 2.66
+char_height%gimp = 300
 #~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
 positioning = 0.5
 #~ bool
