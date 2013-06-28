@@ -1,28 +1,13 @@
 [Transformation]
-position%screen = 400, 650
+position%gimp = 400, 650
 size%gimp = 708, 147
-#rotation = 0
 z = 0.50
 
 [Rendering]
 #~ TextureRef
 texture = fond_bouton
-#~ EffectRef
-#effectRef
 #~ Color
 color = 1,1,1,0.5
-#~ bool
-#show
-#~ bool
-#mirror_h
-#~ bool
-#z_pre_pass
-#~ bool
-#fast_culling
-#~ int
-#opaque_type
-#~ int
-#camera_bitmask
 
 [Button]
 #~ bool

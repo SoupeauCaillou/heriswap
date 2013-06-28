@@ -1,8 +1,6 @@
 [Transformation]
-# N : 0, 610
-positionN%screen = 0, -0.023
-# 800/800, 470 / 1280
-size%screen = 1, 0.367
+positionN%gimp = 400, 610
+size%gimp = 800, 470
 #rotation = 0
 z = 0.07
 
