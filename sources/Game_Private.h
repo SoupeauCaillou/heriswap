@@ -31,15 +31,6 @@
 #include "Jukebox.h"
 #include "util/FaderHelper.h"
 
-class Game;
-class ScoreStorage;
-class PlayerNameInputUI;
-class GameStateManager;
-class SuccessAPI;
-class NameInputAPI;
-class AdAPI;
-class CommunicationAPI;
-
 class PrivateData {
     public:
         PrivateData(HeriswapGame* game, GameContext* context, SuccessManager* successMgr);

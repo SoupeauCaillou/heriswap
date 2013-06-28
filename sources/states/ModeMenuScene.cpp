@@ -132,7 +132,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         playText = theEntityManager.CreateEntity("playText",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/play_text"));
         TEXT(playText)->text = game->gameThreadContext->localizeAPI->text("play");
-        
+
         // play button
         playContainer = theEntityManager.CreateEntity("playContainer",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/play_container"));
@@ -381,8 +381,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         #if SAC_ANDROID
         if (gameOverState == NoGame) {
-            if (true) {
-            //if (!game->gameThreadContext->communicationAPI->swarmInstalled()) {
+            if (! game->gameThreadContext->gameCenterAPI->isRegistered()) {
                 BUTTON(enableSwarmContainer)->enabled = true;
                 TEXT(enableSwarm)->show = true;
                 CONTAINER(enableSwarmContainer)->enable = true;

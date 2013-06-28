@@ -23,10 +23,12 @@
 #include "systems/HeriswapGridSystem.h"
 #include "HeriswapGame.h"
 
+#include "api/GameCenterAPI.h"
+
 class SuccessManager {
 	public :
 
-		SuccessManager(SuccessAPI* sAPI);
+		SuccessManager(GameCenterAPI* gAPI);
 		~SuccessManager() {};
 
 		void NewGame(Difficulty difficulty);
@@ -34,7 +36,7 @@ class SuccessManager {
 
 		//success only in "hard" difficulty
 		bool hardMode;
-		SuccessAPI* successAPI;
+		GameCenterAPI* gameCenterAPI;
 
 		//success 6 in a row (Delete 6 or more leaves in one swap)
 		void s6InARow(int nb);

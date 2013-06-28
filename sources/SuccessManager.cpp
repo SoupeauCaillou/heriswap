@@ -21,8 +21,8 @@
 #include <sstream>
 #include "util/ScoreStorageProxy.h"
 
-SuccessManager::SuccessManager(SuccessAPI* sAPI) {
-	successAPI = sAPI;
+SuccessManager::SuccessManager(GameCenterAPI* gAPI) {
+	gameCenterAPI = gAPI;
 
 	hardMode=true;
 
@@ -76,7 +76,7 @@ void SuccessManager::NewGame(Difficulty difficulty) {
 void SuccessManager::s6InARow(int nbInCombi) {
 	if (hardMode && !b6InARow) {
 		if (nbInCombi >= 6) {
-			successAPI->successCompleted("6 in a row", 3430);
+			gameCenterAPI->unlockAchievement(1);
 			b6InARow=true;
 		}
 	}
@@ -86,7 +86,7 @@ void SuccessManager::sHardScore(StorageAPI* storageAPI) {
 	if (!bHardScore) {
 		ScoreStorageProxy ssp;
 		if (storageAPI->sum(&ssp, "points")  > 1000000.f) {
-			successAPI->successCompleted("Hardscore gamer", 3432);
+			gameCenterAPI->unlockAchievement(2);
 			bHardScore=true;
 		}
 	}
@@ -94,7 +94,7 @@ void SuccessManager::sHardScore(StorageAPI* storageAPI) {
 void SuccessManager::sFastAndFinish(float time) {
 	if (hardMode && !bFastAndFinish) {
 		if (time<=53.f) {
-			successAPI->successCompleted("Fast and finish", 2988);
+			gameCenterAPI->unlockAchievement(3);
 			bFastAndFinish = true;
 		}
 	}
@@ -103,7 +103,7 @@ void SuccessManager::sFastAndFinish(float time) {
 void SuccessManager::sResetGrid() {
 	if (hardMode && !bResetGrid) {
 		if (!gridResetted) {
-			successAPI->successCompleted("Don't reset the grid !", 3418);
+			gameCenterAPI->unlockAchievement(4);
 			bResetGrid = true;
 		}
 	}
@@ -112,7 +112,7 @@ void SuccessManager::sResetGrid() {
 void SuccessManager::sTakeYourTime() {
 	if (hardMode && !bTakeYourTime) {
 		if (gameDuration > 900.) {
-			successAPI->successCompleted("Take your time", 3424);
+			gameCenterAPI->unlockAchievement(5);
 			bTakeYourTime = true;
 		}
 	}
@@ -122,7 +122,7 @@ void SuccessManager::sTakeYourTime() {
 void SuccessManager::sExterminaScore(int points) {
 	if (hardMode && !bExterminaScore) {
 		if (points > 100000) {
-			successAPI->successCompleted("Exterminascore", 3422);
+			gameCenterAPI->unlockAchievement(6);
 			bExterminaScore = true;
 		}
 	}
@@ -130,7 +130,7 @@ void SuccessManager::sExterminaScore(int points) {
 void SuccessManager::sLevel1For2K(int level, int points) {
 	if (hardMode && !bLevel1For2K) {
 		if (level==1 && points>=2000) {
-			successAPI->successCompleted("2k points for level 1", 3434);
+			gameCenterAPI->unlockAchievement(7);
 			bLevel1For2K = true;
 		}
 	}
@@ -139,7 +139,7 @@ void SuccessManager::sLevel1For2K(int level, int points) {
 void SuccessManager::sLevel10(int level) {
 	if (hardMode && !bLevel10) {
 		if (level == 10) {
-			successAPI->successCompleted("Level 10", 3426);
+			gameCenterAPI->unlockAchievement(8);
 			bLevel10 = true;
 		}
 	}
@@ -162,10 +162,10 @@ void SuccessManager::sRainbow(int type) {
 		}
 		if (rainbow(succEveryTypeInARow)) {
 			if (!bRainbow) {
-				successAPI->successCompleted("Rainbow combination", 3440);
+				gameCenterAPI->unlockAchievement(9);
 				bRainbow = true;
 			} else {
-				successAPI->successCompleted("Double rainbow ", 3444);
+				gameCenterAPI->unlockAchievement(10);
 				bDoubleRainbow = true;
 			}
 		}
@@ -176,7 +176,7 @@ void SuccessManager::sBonusToExcess(int type, int bonus, int nb) {
 		if (type == bonus)
 			bonusTilesNumber +=nb;
 		if (bonusTilesNumber >= 100) {
-			successAPI->successCompleted("Bonus bonus", 3420);
+			gameCenterAPI->unlockAchievement(11);
 			bBonusToExcess = true;
 		}
 	}
@@ -190,7 +190,7 @@ void SuccessManager::sLuckyLuke() {
 			timeTotalPlayed = 0.f;
 
 		if (timeTotalPlayed >= 15.f) {
-			successAPI->successCompleted("Lucky Luke", 3442);
+			gameCenterAPI->unlockAchievement(12);
 			bLuckyLuke = true;
 		}
 	}
@@ -198,15 +198,15 @@ void SuccessManager::sLuckyLuke() {
 
 void SuccessManager::sTestEverything(StorageAPI* storageAPI) {
 	if (!bTestEverything) {
-		ScoreStorageProxy ssp;		
+		ScoreStorageProxy ssp;
 		if (storageAPI->count(&ssp, "distinct difficulty, mode") == 9) {
-			successAPI->successCompleted("Test everything", 3454);
+			gameCenterAPI->unlockAchievement(13);
 			bTestEverything = true;
 		}
 	}
 }
 
-void SuccessManager::sBTAC(StorageAPI* storageAPI, Difficulty difficulty, unsigned int points) {	
+void SuccessManager::sBTAC(StorageAPI* storageAPI, Difficulty difficulty, unsigned int points) {
 	if (!bBTAC) {
 		std::stringstream ss;
 		ss << "where mode = 1 and difficulty = " << difficulty << " order by points desc limit 5";
@@ -214,7 +214,7 @@ void SuccessManager::sBTAC(StorageAPI* storageAPI, Difficulty difficulty, unsign
 		storageAPI->loadEntries(&ssp, "points", ss.str());
 
 		if (ssp._queue.size() == 5 && (int)points > ssp._queue.back().points) {
-			successAPI->successCompleted("Beat them all (score race)", 3436);
+			gameCenterAPI->unlockAchievement(14);
 			bBTAC = true;
 		}
 	}
@@ -228,7 +228,7 @@ void SuccessManager::sBTAM(StorageAPI* storageAPI, Difficulty difficulty, float 
 		storageAPI->loadEntries(&ssp, "time", ss.str());
 
 		if (ssp._queue.size() == 5 && time > ssp._queue.back().time) {
-			successAPI->successCompleted("Beat them all (time attack)", 3428);
+			gameCenterAPI->unlockAchievement(15);
 			bBTAM = true;
 		}
 	}
@@ -242,7 +242,7 @@ void SuccessManager::s666Loser(int level) {
 			l666numberLose = 0;
 
 		if (l666numberLose==3) {
-			successAPI->successCompleted("666 Loser !", 3438);
+			gameCenterAPI->unlockAchievement(16);
 			b666Loser = true;
 		}
 	}
@@ -256,7 +256,7 @@ void SuccessManager::sTheyGood(bool Ibetter) {
 			lTheyGood=0;
 
 		if (lTheyGood==3) {
-			successAPI->successCompleted("They're too good", 3446);
+			gameCenterAPI->unlockAchievement(17);
 			bTheyGood = true;
 		}
 	}
@@ -270,7 +270,7 @@ void SuccessManager::sWhatToDo(bool swapInPreparation, float dt) {
 			timeInSwappingPreparation=0.f;
 
 		if (timeInSwappingPreparation>5.0f) {
-			successAPI->successCompleted("What I gonna do ?", 3448);
+			gameCenterAPI->unlockAchievement(18);
 			bWhatToDo = true;
 		}
 	}
@@ -287,7 +287,7 @@ void SuccessManager::sBimBamBoum(int newCombiCount) {
 		}
 
 		if (numberCombinationInARow >= 3) {
-			successAPI->successCompleted("Bim Bam Boum", 3450);
+			gameCenterAPI->unlockAchievement(19);
 			bBimBamBoum = true;
 		}
 	}
@@ -296,7 +296,7 @@ void SuccessManager::sBimBamBoum(int newCombiCount) {
 void SuccessManager::sDoubleInOne(std::vector<Combinais> &s) {
 	if (hardMode && !bDoubleInOne) {
 		if (s.size() > 1) {
-			successAPI->successCompleted("Double in one", 3452);
+			gameCenterAPI->unlockAchievement(20);
 			bDoubleInOne = true;
 		}
 	}

@@ -142,14 +142,14 @@ bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
         case ContextAPI::Ad:
         case ContextAPI::Asset:
         case ContextAPI::Communication:
+        case ContextAPI::GameCenter:
+        case ContextAPI::KeyboardInputHandler:
         case ContextAPI::Localize:
         case ContextAPI::Music:
-        case ContextAPI::KeyboardInputHandler:
         case ContextAPI::Sound:
         case ContextAPI::Storage:
-        case ContextAPI::Success:
-        case ContextAPI::Vibrate:
         case ContextAPI::StringInput:
+        case ContextAPI::Vibrate:
             return true;
         default:
             return false;
@@ -227,7 +227,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     camera = theEntityManager.CreateEntity("camera",
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("camera"));
 
-    SuccessManager *sm = new SuccessManager(gameThreadContext->successAPI);
+    SuccessManager *sm = new SuccessManager(gameThreadContext->gameCenterAPI);
     datas = new PrivateData(this, gameThreadContext, sm);
 
     datas->Setup();
@@ -432,10 +432,14 @@ void HeriswapGame::tick(float dt) {
     if (BUTTON(datas->socialGamNet)->clicked){
         if (sceneStateMachine.getCurrentState() == Scene::ModeMenu) {
             LOGT("TBD");
-            // Difficulty diff = (static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu]))->difficulty;
-            // successAPI->openLeaderboard(datas->mode, diff);
+            // static_cast<ModeMenuStateManager*> (
+                // StateHandler<Scene::ModeMenu> * handler = sceneStateMachine.getCurrentHandler();
+                // );
+
+            int id = datas->mode; //* diff
+            gameThreadContext->gameCenterAPI->openSpecificLeaderboard(id);
         } else {
-            successAPI->openDashboard();
+            gameThreadContext->gameCenterAPI->openDashboard();
         }
     }
 

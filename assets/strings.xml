@@ -43,4 +43,25 @@
 	<string name="help_mode2_2">"The ×herisson_2_5,2,1.6× shows the progress. Game is finished when it reaches screen's right edge.\n\nEvery combination using bonus type leaves ×feuille5,1,1× score double."</string>
 	<string name="help_mode3_1">"The goal is to score the most points in exactly 100 seconds.\n\nThe goal is to score the most points.\n\nAligning at least 3 identical leaves ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1×.\n\nSwap 2 neighbouring leaves ×feuille2,1,1× ×feuille3,1,1× to create a combination and earn points.\n\n"</string>
 	<string name="help_mode3_2">"The ×herisson_2_5,2,1.6× shows how much time is left, and the game is over when it reaches screen's right edge.\n\nThe ×feuille5,1,1× on its back scores bonus points."</string>
+
+    <string name="success_1">3430</string>
+    <string name="success_2">3432</string>
+    <string name="success_3">3430</string>
+    <string name="success_4">2988</string>
+    <string name="success_5">3418</string>
+    <string name="success_6">3424</string>
+    <string name="success_7">3422</string>
+    <string name="success_8">3434</string>
+    <string name="success_9">3426</string>
+    <string name="success_10">3440</string>
+    <string name="success_11">3444</string>
+    <string name="success_12">3442</string>
+    <string name="success_13">3454</string>
+    <string name="success_14">3436</string>
+    <string name="success_15">3428</string>
+    <string name="success_16">3438</string>
+    <string name="success_17">3446</string>
+    <string name="success_18">3448</string>
+    <string name="success_19">3450</string>
+    <string name="success_20">3452</string>
 </resources>

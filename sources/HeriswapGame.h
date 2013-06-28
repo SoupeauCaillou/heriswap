@@ -26,7 +26,6 @@
 #include "api/ExitAPI.h"
 #include "api/LocalizeAPI.h"
 #include "api/StorageAPI.h"
-#include "api/SuccessAPI.h"
 #include "api/VibrateAPI.h"
 
 #include "base/Game.h"
@@ -83,7 +82,6 @@ class HeriswapGame : public Game {
         void loadGameState(const uint8_t* in, int size);
 		bool shouldPlayPiano();
 
-		SuccessAPI* successAPI;
 		ExitAPI* exitAPI;
 	    VibrateAPI* vibrateAPI;
 
