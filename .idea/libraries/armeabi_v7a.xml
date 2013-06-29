@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="armeabi-v7a">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/libs/armeabi-v7a.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
