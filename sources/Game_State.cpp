@@ -1,8 +1,9 @@
 /*
     This file is part of Heriswap.
 
-    @author Soupe au Caillou - Pierre-Eric Pelloux-Prayer
+    @author Soupe au Caillou - Jordane Pelloux-Prayer
     @author Soupe au Caillou - Gautier Pelloux-Prayer
+    @author Soupe au Caillou - Pierre-Eric Pelloux-Prayer
 
     Heriswap is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,6 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "HeriswapGame.h"
 #include "Game_Private.h"
 
