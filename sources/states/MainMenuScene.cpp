@@ -249,7 +249,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
                 return Scene::ModeMenu;
             }
             if (BUTTON(quitButton[1])->clicked) {
-                return Scene::ExitState;
+                LOGT("recreate the exit state! ");
+                // return Scene::ExitState;
             }
         }
         return Scene::MainMenu;
