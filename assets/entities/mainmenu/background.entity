@@ -5,3 +5,4 @@ z = 0.47
 
 [Rendering]
 texture = 2emeplan
+opaque_type = 0
