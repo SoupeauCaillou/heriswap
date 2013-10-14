@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="continue_">"Reprendre"</string>
+  <string name="help">"Aide"</string>
+  <string name="give_up">"Abandonner"</string>
+  <string name="mode_1">"Course au score"</string>
+  <string name="mode_2">"Contre la montre"</string>
+  <string name="mode_3">"100 secondes"</string>
+  <string name="score">"Meilleurs scores :"</string>
+  <string name="play">"Jouer"</string>
+  <string name="restart">"Rejouer"</string>
+  <string name="diff_1">"Débutant"</string>
+  <string name="diff_2">"Moyen"</string>
+  <string name="diff_3">"Confirmé"</string>
+  <string name="lvl">"niv"</string>
+  <string name="lvlcap">"Niv"</string>
+  <string name="enter_name">"Saisissez votre nom"</string>
+  <string name="save_name">"Enregistrer"</string>
+  <string name="congrats">"Nouveau meilleur score !"</string>
+  <string name="reuse_name">"Ou un de la liste :"</string>
+  <string name="success">"Succès"</string>
+  <string name="how_to_play">"Comment jouer ?"</string>
+  <string name="bonus_x2">"Bonus x2"</string>
+  <string name="objective">"Objectif"</string>
+  <string name="level">"Niveau"</string>
+  <string name="leave_left">"feuilles restantes"</string>
+  <string name="quit">"Quitter"</string>
+  <string name="please_rate_it">"Si vous aimez Heriswap, pourriez vous prendre quelques secondes pour laisser une évaluation ou un commentaire ? Merci d'avance !"</string>
+  <string name="rate_now">"Évaluer !"</string>
+  <string name="rate_later">"Plus tard"</string>
+  <string name="rate_never">"Non merci"</string>
+  <string name="get_googleplus">"Activez Google+ googleplus_icon,1,1× pour comparer vos scores avec les autres joueurs !"</string>
+  <string name="change_difficulty">"Excellent ! Que diriez-vous d'augmenter un peu la difficulté ?!"</string>
+  <string name="change_difficulty_yes">"Allons-y, plus dur !"</string>
+  <string name="change_difficulty_no">"Non merci."</string>
+  <string name="average_score">"Moyenne préc.:"</string>
+  <string name="help_click_continue">"-toucher l'écran pour continuer-"</string>
+  <string name="help_click_play">"-toucher l'écran pour jouer-"</string>
+  <string name="help_general_1">"Les points se gagnent en alignant au moins 3 feuilles ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1× identiques.\n\nCes combinaisons se créent en échangeant 2 feuilles ×feuille2,1,1× ×feuille3,1,1× voisines."</string>
+  <string name="help_general_2">"Le ×herisson_2_5,2,1.6× représente le temps restant et la partie se termine lorsqu'il arrive au bord droit de l'écran. Cliquez sur le hérisson pour afficher une solution !"</string>
+  <string name="help_mode1_1">"L'objectif est de marquer le plus de points.\n\nLe jeu se joue en un temps limité."</string>
+  <string name="help_mode1_2">"Le type de ×feuille5,1,1× sur son dos rapporte plus de points.\n\nChaque combinaison réussie rapporte un peu de temps. Pour gagner beaucoup de temps, il faut terminer un niveau. Un niveau est terminé lorsque l'arbre est vide."</string>
+  <string name="help_mode2_1">"L'objectif est de supprimer toutes les feuilles ×feuille2,1,1× de l'arbre le plus vite possible.\n\nL'arbre se vide en alignant au moins 3 feuilles ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1× identiques.\n\nCes combinaisons se créent en échangeant 2 feuilles ×feuille2,1,1× ×feuille3,1,1× voisines."</string>
+  <string name="help_mode2_2">"Le ×herisson_2_5,2,1.6× représente la progression et la partie se termine lorsqu'il arrive au bord droit de l'écran.\n\nLe type de ×feuille5,1,1× sur son dos compte double."</string>
+  <string name="help_mode3_1">"L'objectif est de marquer le plus de points en 100 secondes."</string>
+</resources>
