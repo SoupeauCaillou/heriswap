@@ -1,5 +1,3 @@
-.idea
-*.iml
 .classpath
 obj
 libs
@@ -10,11 +8,10 @@ CMakeCache.txt
 CMakeFiles
 Makefile
 cmake_install.cmake
-linux/heriswap
-heriswap_tests
 scores.txt
 tilematch.pidb
 tilematch.userprefs
-HeriswapSecret.java
+Parameters.h
 *.jar
 *.o
+*.sublime-workspace
