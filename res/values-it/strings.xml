@@ -33,4 +33,7 @@
   <string name="change_difficulty">"Sei molto forti, quindi, che ne dici aumentare un po la difficoltà?"</string>
   <string name="change_difficulty_yes">"Andiamo, più difficile!"</string>
   <string name="change_difficulty_no">"No, grazie"</string>
+  <string name="average_score">"Media dei punteggi recenti:"</string>
+  <string name="help_click_continue">"-tocca per continuare-"</string>
+  <string name="help_click_play">"-tocca per giocare-"</string>
 </resources>

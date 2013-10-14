@@ -29,6 +29,16 @@
   <string name="rate_now">"Bewerten jetzt"</string>
   <string name="rate_later">"Später"</string>
   <string name="rate_never">"Nein danke"</string>
+  <string name="get_googleplus">"Aktiviere Google+ ×googleplus_icon,1,1× um deine Punkte mit anderen Spielern zu vergleichen."</string>
+  <string name="change_difficulty">"Du scheinst echt gut zu sein. \nMöchtest du ein neues Spiel mit höherem Schwierigkeitsgrad probieren?"</string>
   <string name="change_difficulty_yes">"Erhöhen die Schwierigkeit!"</string>
   <string name="change_difficulty_no">"Nein, danke"</string>
+  <string name="average_score">"Bisheriger Punkte:"</string>
+  <string name="help_click_continue">"-Berühre um fortzufahren-"</string>
+  <string name="help_click_play">"-Berühre zum spielen-"</string>
+  <string name="help_general_1">"Verbinde mindestens 3 identische Blätter ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1×.\n\nTausche 2 benachbarte Blätter ×feuille2,1,1× ×feuille3,1,1× um eine Kombination zu kreieren und Punkte zu bekommen."</string>
+  <string name="help_general_2">"Die ×herisson_2_5,2,1.6× zeigt an, wie viel Zeit dir noch bleibt. Das Spiel ist vorbei wenn sie die Rechte Seite des Bildschirms erreicht. Berühre ihn für einen Tipp!"</string>
+  <string name="help_mode1_1">"Dein Ziel ist es die meisten Punkte zu erreichen.\n\nDie Spielzeit ist begrenzt"</string>
+  <string name="help_mode1_2">"Die ×feuille5,1,1× hinter ihr gibt Bonuspunkte.\n\nFür jede erfolgreiche Kombination bekommst du extra Zeit. Der beste Weg um Zeit zu bekommen ist Level abzuschließen. This is done by clearing the top branch of all its leaves."</string>
+  <string name="help_mode3_1">"The goal is to score the most points in exactly 100 seconds."</string>
 </resources>

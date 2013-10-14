@@ -1,2 +1,41 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources/>
+<resources>
+  <string name="continue_">"Devam et"</string>
+  <string name="help">"Yardım"</string>
+  <string name="give_up">"Çık"</string>
+  <string name="mode_1">"Skor yarışı"</string>
+  <string name="mode_2">"Zamana karşı"</string>
+  <string name="mode_3">"100 saniye"</string>
+  <string name="score">"Yüksek Skorlar:"</string>
+  <string name="play">"Başla"</string>
+  <string name="restart">"Yeniden Başla"</string>
+  <string name="diff_1">"Kolay"</string>
+  <string name="diff_2">"Orta"</string>
+  <string name="diff_3">"Zor"</string>
+  <string name="lvl">"Seviye"</string>
+  <string name="lvlcap">"Seviye"</string>
+  <string name="enter_name">"İsminizi girin"</string>
+  <string name="save_name">"Kaydet"</string>
+  <string name="congrats">"Yeni yüksek skor!"</string>
+  <string name="reuse_name">"Veya bir tane seçin:"</string>
+  <string name="success">"Sonuç"</string>
+  <string name="how_to_play">"Nasıl oynanır?"</string>
+  <string name="bonus_x2">"Bonus x2"</string>
+  <string name="objective">"Gol"</string>
+  <string name="level">"Seviye"</string>
+  <string name="leave_left">"ayrılan yapraklar"</string>
+  <string name="quit">"Çıkış"</string>
+  <string name="please_rate_it">"Heriswap'ı kullanmaktan mutluysanız, lütfen kısa bir zaman ayırıp oylama yapın. Desteğiniz için teşekkürler!"</string>
+  <string name="rate_now">"Şimdi oyla"</string>
+  <string name="rate_later">"Sonra"</string>
+  <string name="rate_never">"Hayır teşekkürler"</string>
+  <string name="get_googleplus">"Google+'ı ×googleplus_icon,1,1× etkinleştirerek skorlarınızı diğer oyuncularla karşılaştırın!"</string>
+  <string name="change_difficulty">"Gerçekten iyi gibisiniz.\nZorluğu yükseltilmiş yeni bir oyun başlatmak ister misiniz?"</string>
+  <string name="change_difficulty_yes">"Zorluğu yükselt"</string>
+  <string name="change_difficulty_no">"Hayır, kolay olsun"</string>
+  <string name="average_score">"Eski skorların ortalaması:"</string>
+  <string name="help_click_continue">"-devam etmek için dokunun-"</string>
+  <string name="help_click_play">"-oynamak için dokunun-"</string>
+  <string name="help_mode1_1">"Hedefiniz en fazla puan kazanmaktır."</string>
+  <string name="help_mode3_1">"Hedefiniz en fazla puan kazanmaktır."</string>
+</resources>
