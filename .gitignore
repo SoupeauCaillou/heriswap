@@ -15,3 +15,4 @@ Parameters.h
 *.jar
 *.o
 *.sublime-workspace
+local.properties
