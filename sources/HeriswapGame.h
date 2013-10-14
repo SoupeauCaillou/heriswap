@@ -72,17 +72,32 @@ class HeriswapGame : public Game {
 
         void prepareNewGame();
 		void setupGameProp();
-
-		Entity camera;
-		PrivateData* datas;
-		Entity title, menufg, menubg;
-		Entity herisson;
-
-		void stopInGameMusics();
     private:
         const uint8_t* loadEntitySystemState(const uint8_t* in, int size);
         void loadGameState(const uint8_t* in, int size);
 		bool shouldPlayPiano();
 
+
+    public:
+        enum ELeaderboard {
+            EScoreRaceEasy = 0,
+            EScoreRaceDifficult,
+            EScoreRaceMedium,
+            E100SecondsEasy,
+            E100SecondsDifficult,
+            E100SecondsMedium,
+            ETimeAttackEasy,
+            ETimeAttackDifficult,
+            ETimeAttackMedium,
+        };
+
+        Entity camera;
+        PrivateData* datas;
+        Entity title, menufg, menubg;
+        Entity herisson;
+
+        void stopInGameMusics();
+
+    private:
 	    StateMachine<Scene::Enum> sceneStateMachine;
 };

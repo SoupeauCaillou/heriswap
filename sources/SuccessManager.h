@@ -28,7 +28,30 @@
 #include "api/GameCenterAPI.h"
 
 class SuccessManager {
-	public :
+	public:
+        enum ESuccess {
+            E6InARow = 0,
+            EHardScore,
+            EFastAndFinish,
+            EResetGrid,
+            ETakeYourTime,
+            EExterminaScore,
+            ELevel1For2K,
+            ELevel10,
+            ERainbow,
+            EDoubleRainbow,
+            EBonusToExcess,
+            ELuckyLuke,
+            ETestEverything,
+            EBTAC,
+            EBTAM,
+            E666Loser,
+            ETheyGood,
+            EWhatToDo,
+            EBimBamBoum,
+            EDoubleInOne,
+        };
+
 
 		SuccessManager(GameCenterAPI* gAPI);
 		~SuccessManager() {};

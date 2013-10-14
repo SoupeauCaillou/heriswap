@@ -286,6 +286,10 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         ssp.setValue("difficulty", ObjectSerializer<int>::object2string(difficulty));
 
         game->gameThreadContext->storageAPI->saveEntries(&ssp);
+
+        HeriswapGame::ELeaderboard e = (HeriswapGame::ELeaderboard) (game->datas->mode * 3 + difficulty);
+        std::string scoreS = (game->datas->mode == TilesAttack) ? ssp.getValue("time") : ssp.getValue("points");
+        game->gameThreadContext->gameCenterAPI->submitScore(e, scoreS);
     }
 
     bool isCurrentScoreAHighOne() {
