@@ -1,0 +1,13 @@
+Faites une pause détente avec Heriswap, jeu simple, addictif et gratuit !
+Découvrez ce jeu de réflexion addictif au cours de parties reposantes et distrayantes.
+La mécanique de jeu reste classique (aligner des éléments identiques pour faire le meilleur score), mais la forme a été volontairement choisie douce et reposante.
+Jeu familial grâce aux 3 niveaux de difficulté permettant à tous - enfants, joueurs occasionnels ou aguerris - de s'amuser.
+* existe en version française et anglaise
+* graphismes et musiques soignés
+* classements en ligne pour comparer ses scores avec ses amis (via Swarm)
+* 20 succès à débloquer
+* possibilité de mettre en pause la partie et la reprendre à n'importe quel moment
+* aide accessible depuis le jeu
+* un joli petit hérisson !
+* nouveau mode de difficulté (intermédiaire)
+* nouveau mode de jeu : 100 secondes, pour des sessions de jeu rapides

@@ -1,0 +1,14 @@
+[main]
+host = https://www.transifex.com
+
+[heriswap.playstore-presentation]
+file_filter = documents/android/presentation_playstore/<lang>.txt
+source_file = documents/android/presentation_playstore/en.txt
+source_lang = en
+
+
+[heriswap.ingame-strings-v2]
+file_filter = res/values-<lang>/strings.xml
+source_file = res/values/strings.xml
+source_lang = en
+
