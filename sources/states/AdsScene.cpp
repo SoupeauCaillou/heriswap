@@ -91,13 +91,13 @@ struct AdsScene : public StateHandler<Scene::Enum> {
         }
 
         if (gameb4Ads==0 || timeSinceLAstAd > 150) {
-            if (game->gameThreadContext->adAPI->showAd()) {
-                BUTTON(eAds)->enabled = true;
-                gameb4Ads = 0;
-                lastAdTime = TimeUtil::GetTime();
-            } else {
+            // if (game->gameThreadContext->adAPI->showAd()) {
+                // BUTTON(eAds)->enabled = true;
+                // gameb4Ads = 0;
+                // lastAdTime = TimeUtil::GetTime();
+            // } else {
                 gameb4Ads = 1;
-            }
+            // }
         }
         RENDERING(eAds)->show = true;
     }
