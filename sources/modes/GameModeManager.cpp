@@ -204,6 +204,7 @@ Entity GameModeManager::createAndAddLeave(int type, const glm::vec2& position, f
     ADD_COMPONENT(e, Twitch);
     RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(type, 0));
     RENDERING(e)->show = true;
+    RENDERING(e)->opaqueType = RenderingComponent::NON_OPAQUE;
 
     TRANSFORM(e)->size = HeriswapGame::CellSize(8, type) * HeriswapGame::CellContentScale();
 
