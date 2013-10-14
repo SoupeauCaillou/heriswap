@@ -89,8 +89,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         for (int i=0; i<3; i++) {
             a.str("");
             a << "eStart_" << i;
-            eStart[i] = theEntityManager.CreateEntity(a.str(),
-                EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/"+ a.str()));
+            eStart[i] = theEntityManager.CreateEntityFromTemplate("mainmenu/"+ a.str());
 
             TypedMorphElement<float>* sizeMorph = new TypedMorphElement<float>(&TEXT(eStart[i])->charHeight, TEXT(eStart[i])->charHeight, PlacementHelper::GimpHeightToScreen(54));
             MORPHING(eStart[i])->elements.push_back(sizeMorph);
@@ -99,8 +98,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
             a.str("");
             a << "bStart_" << i;
-            bStart[i] = theEntityManager.CreateEntity(a.str(),
-                EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/" + a.str()));
+            bStart[i] = theEntityManager.CreateEntityFromTemplate("mainmenu/" + a.str());
         }
         TEXT(eStart[0])->text = game->gameThreadContext->localizeAPI->text("mode_1");
         TEXT(eStart[1])->text = game->gameThreadContext->localizeAPI->text("mode_2");
@@ -121,14 +119,11 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9f;
         }
 
-        game->menubg = theEntityManager.CreateEntity("menubg",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/background"));
+        game->menubg = theEntityManager.CreateEntityFromTemplate("mainmenu/background");
 
-        game->menufg = theEntityManager.CreateEntity("menufg",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/foreground"));
+        game->menufg = theEntityManager.CreateEntityFromTemplate("mainmenu/foreground");
 
-        game->herisson = theEntityManager.CreateEntity("herisson_menu",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/herisson"));
+        game->herisson = theEntityManager.CreateEntityFromTemplate("mainmenu/herisson");
 
         TRANSFORM(game->herisson)->size = randomHerissonSize();
         TRANSFORM(game->herisson)->position = AnchorSystem::adjustPositionWithCardinal(randomHerissionStart(),
@@ -148,6 +143,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         if (pState == Scene::Logo) {
             // setup fadein
             for (int i=0; i<3; ++i) {
+                game->datas->faderHelper.registerFadingInEntity(eStart[i]);
                 game->datas->faderHelper.registerFadingInEntity(bStart[i]);
             }
             game->datas->faderHelper.registerFadingInEntity(game->menufg);
