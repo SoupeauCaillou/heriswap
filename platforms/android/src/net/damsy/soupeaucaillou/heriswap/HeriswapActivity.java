@@ -36,6 +36,10 @@ import net.damsy.soupeaucaillou.googleplaygameservices.SacGooglePlayGameServices
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class HeriswapActivity extends SacActivity {
 	static {
@@ -48,7 +52,7 @@ public class HeriswapActivity extends SacActivity {
 
 	public int getParentViewId() {
         return R.id.parent_frame; 
-    }
+    } 
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,12 @@ public class HeriswapActivity extends SacActivity {
 		ExitAPI.Instance();
 		MusicAPI.Instance();
 		SoundAPI.Instance();
-		StringInputAPI.Instance();
+		StringInputAPI.Instance().init(
+			(Button)findViewById(R.id.name_save),
+			(EditText)findViewById(R.id.player_name_input),
+			(View)findViewById(R.id.enter_name),
+			(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)
+				);
 		VibrateAPI.Instance().init((Vibrator) getSystemService(Context.VIBRATOR_SERVICE));
         
         SacGooglePlayGameServicesPlugin sgpgsp = new SacGooglePlayGameServicesPlugin();
