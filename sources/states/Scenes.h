@@ -28,7 +28,6 @@ namespace Scene {
         Delete,
         ElitePopup,
         EndGame,
-        EndMenu,
         ExitState,
         Fall,
         Help,
@@ -52,7 +51,6 @@ namespace Scene {
     DECLARE_SCENE_HANDLER_FACTORY(Delete)
     DECLARE_SCENE_HANDLER_FACTORY(ElitePopup)
     DECLARE_SCENE_HANDLER_FACTORY(EndGame)
-    DECLARE_SCENE_HANDLER_FACTORY(EndMenu)
     DECLARE_SCENE_HANDLER_FACTORY(ExitState)
     DECLARE_SCENE_HANDLER_FACTORY(Fall)
     DECLARE_SCENE_HANDLER_FACTORY(Help)

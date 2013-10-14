@@ -221,7 +221,9 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
     bool updatePreEnter(Scene::Enum from, float dt) override {
         // if we come from count down, spawn here
         if (from == Scene::CountDown) {
-            return updateLeavesSpawn() && game->datas->faderHelper.update(dt);
+            bool b = updateLeavesSpawn();
+            bool c = game->datas->faderHelper.update(dt);
+            return (b & c);
         } else {
             return true;
         }
