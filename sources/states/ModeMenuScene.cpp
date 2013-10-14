@@ -160,7 +160,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         // enableSwarm text
         enableSwarm = theEntityManager.CreateEntity("enableSwarm",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/enable_swarm"));
-        TEXT(enableSwarm)->text = game->gameThreadContext->localizeAPI->text("get_swarm");
+        TEXT(enableSwarm)->text = game->gameThreadContext->localizeAPI->text("get_googleplus");
 
         // enableSwarm container
         enableSwarmContainer = theEntityManager.CreateEntity("enableSwarmContainer",
