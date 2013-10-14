@@ -1,45 +1,49 @@
 /*
-    This file is part of Heriswap.
+    This file is part of RecursiveRunner.
 
     @author Soupe au Caillou - Jordane Pelloux-Prayer
     @author Soupe au Caillou - Gautier Pelloux-Prayer
     @author Soupe au Caillou - Pierre-Eric Pelloux-Prayer
 
-    Heriswap is free software: you can redistribute it and/or modify
+    RecursiveRunner is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, version 3.
 
-    Heriswap is distributed in the hope that it will be useful,
+    RecursiveRunner is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
+    along with RecursiveRunner.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "base/StateMachine.h"
 
+#include "base/StateMachine.h"
 #include "Scenes.h"
 
-#include "HeriswapGame.h"
-#include "Game_Private.h"
-
 #include "base/EntityManager.h"
-#include "base/PlacementHelper.h"
 #include "base/TouchInputManager.h"
+#include "base/PlacementHelper.h"
+#include "base/StateMachine.h"
 
+#include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"
 #include "systems/SoundSystem.h"
-#include "systems/TransformationSystem.h"
+#include "systems/AnchorSystem.h"
+
+#include "HeriswapGame.h"
+#include "DepthLayer.h"
 
 enum LogoStep {
+    LogoStep0,
     LogoStep1,
     LogoStep2,
     LogoStep3,
     LogoStep4,
     LogoStep5,
     LogoStep6,
+    LogoStep7,
 };
 
 struct LogoTimeBasedStateHandler : public StateHandler<LogoStep> {
@@ -75,46 +79,43 @@ public:
     }
 
     void setup() {
-        logo = theEntityManager.CreateEntity("logo", EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("logo"));
-        logobg = theEntityManager.CreateEntity("logo_bg", EntityType::Volatile, theEntityManager.entityTemplateLibrary.load("logo_bg"));
-        logofade = theEntityManager.CreateEntity("logo_fade", EntityType::Volatile, theEntityManager.entityTemplateLibrary.load("logo_fade"));
-        animLogo = theEntityManager.CreateEntity("logo_anim");
+        logo = theEntityManager.CreateEntityFromTemplate("logo/logo");
+        logobg = theEntityManager.CreateEntityFromTemplate("logo/logo_bg");
+        logofade = theEntityManager.CreateEntityFromTemplate("logo/logo_fade");
+        animLogo = theEntityManager.CreateEntityFromTemplate("logo/logo_anim");
 
-        ADD_COMPONENT(animLogo, Transformation);
-        TRANSFORM(animLogo)->size = TRANSFORM(logo)->size * theRenderingSystem.getTextureSize("soupe_logo2_365_331")
+        ANCHOR(logo)->parent = game->camera;
+        ANCHOR(logobg)->parent = game->camera;
+        ANCHOR(logofade)->parent = game->camera;
+        ANCHOR(animLogo)->parent = game->camera;
+
+        TRANSFORM(animLogo)->size = 
+            TRANSFORM(logo)->size * theRenderingSystem.getTextureSize("soupe_logo2_365_331")
             * glm::vec2(1.0 / theRenderingSystem.getTextureSize("soupe_logo").x, 1.0 / theRenderingSystem.getTextureSize("soupe_logo").y);
         glm::vec2 offset = glm::vec2(-10 / 800.0, 83/869.0) * TRANSFORM(logo)->size;
-        TRANSFORM(animLogo)->position = TRANSFORM(logo)->position + offset;
-        TRANSFORM(animLogo)->z = 0.99;
-        ADD_COMPONENT(animLogo, Rendering);
-        RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo2_365_331");
-        RENDERING(animLogo)->show = false;
-        ADD_COMPONENT(animLogo, Sound);
+        ANCHOR(animLogo)->position = TRANSFORM(logo)->position + offset;
+        ANCHOR(animLogo)->z = DL_LogoAnim - TRANSFORM(game->camera)->z;
     }
+
 
     ///----------------------------------------------------------------------------//
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
-    #define FADE 0.85f
-    void onPreEnter(Scene::Enum) override {
-        RENDERING(logo)->show = RENDERING(logobg)->show = true;
-        game->datas->faderHelper.start(Fading::In, FADE);
-    }
-
-    bool updatePreEnter(Scene::Enum, float dt) override {
-        return game->datas->faderHelper.update(dt);
-    }
-
+    #define FADE 0.5f
     void onEnter(Scene::Enum) {
+        RENDERING(logo)->show = RENDERING(logobg)->show = RENDERING(logofade)->show = true;
         // preload sound
-        theSoundSystem.loadSoundFile("son_monte.ogg");
-
+        theSoundSystem.loadSoundFile("audio/son_monte.ogg");
         // setup state machine
         logoSM = new StateMachine<LogoStep>();
+        logoSM->registerState(LogoStep0,
+            new LogoTimeBasedStateHandler(LogoStep0, FADE, [this] () {
+                RENDERING(logofade)->show = false;
+            }), "BlackToLogoFade");
         logoSM->registerState(LogoStep1,
             new LogoTimeBasedStateHandler(LogoStep1, 0.8, [this] () {
                 RENDERING(animLogo)->show = true;
-                SOUND(animLogo)->sound = theSoundSystem.loadSoundFile("son_monte.ogg");
+                SOUND(animLogo)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg");
             }), "WaitBeforeBlink");
         logoSM->registerState(LogoStep2,
             new LogoTimeBasedStateHandler(LogoStep2, 0.05, [this] () {
@@ -130,13 +131,17 @@ public:
             }), "LogoStep4");
         logoSM->registerState(LogoStep5,
             new LogoTimeBasedStateHandler(LogoStep5, 0.6, [this] () {
-                game->datas->faderHelper.start(Fading::Out, FADE);
+                RENDERING(logofade)->show = true;
             }), "LogoStep5");
         logoSM->registerState(LogoStep6,
             new LogoTimeBasedStateHandler(LogoStep6, FADE),
             "FadeToBlack");
-        logoSM->setup(LogoStep1);
+        logoSM->registerState(LogoStep7,
+            new LogoTimeBasedStateHandler(LogoStep7, 10),
+            "LogoStep7");
+        logoSM->setup(LogoStep0);
     }
+
 
     ///----------------------------------------------------------------------------//
     ///--------------------- UPDATE SECTION ---------------------------------------//
@@ -144,10 +149,17 @@ public:
     Scene::Enum update(float dt) {
         logoSM->update(dt);
 
+        const float elapsed = (static_cast<LogoTimeBasedStateHandler*> (logoSM->getCurrentHandler()))->elapsed;
+
         switch (logoSM->getCurrentState()) {
+            case LogoStep0:
+                RENDERING(logofade)->color.a = 1 - elapsed / FADE;
+                break;
             case LogoStep6:
-                if (game->datas->faderHelper.update(dt))
-                    return Scene::MainMenu;
+                RENDERING(logofade)->color.a = elapsed / FADE;
+                break;
+            case LogoStep7:
+                return Scene::MainMenu;
             default:
                 break;
         }
@@ -162,7 +174,9 @@ public:
         theEntityManager.DeleteEntity(logobg);
         theEntityManager.DeleteEntity(animLogo);
         theEntityManager.DeleteEntity(logofade);
-        // theRenderingSystem.unloadAtlas("logo");
+
+        theRenderingSystem.unloadAtlas("logo");
+
         delete logoSM;
     }
 };
