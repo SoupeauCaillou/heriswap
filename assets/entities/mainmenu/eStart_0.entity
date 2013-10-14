@@ -4,13 +4,11 @@ extends = button_text
 position%gimp = 75, 156
 
 [Text]
-#~ float
 char_height%gimp_h = 75
-#~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
 positioning = 0
-#~ bool
-#show = 0
 
 [Morphing]
-#~ float
 timing = 0.2
+
+#[Anchor]
+#parent%name = 

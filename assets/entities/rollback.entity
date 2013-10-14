@@ -1,9 +1,2 @@
 [Morphing]
-#~ bool
-#active =
-#~ float
-#value =
-#~ float
-#activation_time =
-#~ float
 timing = 0.1

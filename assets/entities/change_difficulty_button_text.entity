@@ -1,19 +1,10 @@
 [Transformation]
 position = 0, 0
 size = 1, 1
-#rotation = 0
 z = 0.51
 
 [Text]
-#~ String
-#text
-#~ String
-#font_name
-#~ Color
 color%name = green
-#~ float
 char_height%gimp = 75
-#~ float
 positioning = 0.5
-#~ bool
-#show
+

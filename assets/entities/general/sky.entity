@@ -1,17 +1,9 @@
 [Transformation]
 positionN%gimp = 400, 0
 size%gimp = 800, 824.75
-#rotation = 0
 z = 0.01
 
 [Scrolling]
-#~ glm::vec2
 direction = -1, 0
-#~ float
 speed = 0.1
-#~ glm::vec2
-#display_size =
-#~ bool
 show = 0
-#~ RenderingComponent::Opacity
-opaque_type = 0

@@ -3,7 +3,6 @@ extends = button_text
 [Transformation]
 position%gimp = 150, 300
 z = 0.49
-rotation = 0
 
 [Text]
 positioning = 0

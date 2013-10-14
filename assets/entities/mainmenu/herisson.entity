@@ -4,6 +4,7 @@ size%gimp = 310, 253
 z = 0.48
 
 [Rendering]
+opaque_type = 0
 
 [Animation]
 #~ float

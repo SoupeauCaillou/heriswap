@@ -4,15 +4,5 @@ extends = modemenu/text
 position%gimp = 400, 375
 
 [Text]
-#~ String
-#text
-#~ String
-#font_name
-#~ Color
-#color
-#~ float
 char_height%gimp_h = 45
-#~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
 positioning = 0.5
-#~ bool
-#show

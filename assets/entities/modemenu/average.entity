@@ -5,13 +5,5 @@ position%gimp = 92, 1075
 size%gimp = 620, 0
 
 [TextRendering]
-#~ String
-#text =
-#~ String
-#font_name =
-#~ Color
-#color =
-#~ int IsANumberBit : 1, AdjustHeightToFillWidthBit : 2, MultiLineBit : 4
 flags = 2
-#~ float
 char_height%gimp_h = 54

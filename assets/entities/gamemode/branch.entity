@@ -1,25 +1,8 @@
 [Transformation]
 positionNW%gimp = 0, 0
 size%gimp = 800, 218.93
-#rotation = 0
 z = 0.12
 
 [Rendering]
-#~ TextureRef
 texture = branche
-#~ EffectRef
-#effectRef
-#~ Color
-#color
-#~ bool
-#show
-#~ bool
-#mirror_h
-#~ bool
-#z_pre_pass
-#~ bool
-#fast_culling
-#~ int
-#opaque_type
-#~ int
-#camera_bitmask
+opaque_type = 0

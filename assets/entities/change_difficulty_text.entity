@@ -4,16 +4,7 @@ size%gimp = 640.8, 147
 z = 0.51
 
 [Text]
-#~ String
-#text
-#~ String
-#font_name
-#~ Color
 color%name = green
-#~ float
 char_height%gimp_h = 55
 flags = 4
-#~ float
 positioning = 0
-#~ bool
-#show

@@ -1,21 +1,8 @@
 [Transformation]
-#position = 0, 0
-#size = 1, 1
-#rotation = 0
-#z = 0.1
 
 [Container]
-#~ bool
-#enable =
-#~ bool
 include_children = 1
 
 [Button]
-#~ bool
-# enabled =
 
 [Sound]
-#~ float
-#volume =
-#~ int
-#sound =

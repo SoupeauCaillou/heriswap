@@ -1,22 +1,10 @@
 [Transformation]
-# 680 / 800, 188 /1280
 position%screen = 0.35, 0.353
-#size = 1, 1
-#rotation = 0
 z = 0.45
 
 [Text]
-#~ String
-#text =
-#~ String
 font_name = gdtypo
-#~ Color
 color = 1, 1, 1
-#~ int IsANumberBit : 1, AdjustHeightToFillWidthBit : 2, MultiLineBit : 4
 flags = 1
-#~ float
 char_height%screen_h = 0.064
-#~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
 positioning = 0.5
-#~ bool
-#show =

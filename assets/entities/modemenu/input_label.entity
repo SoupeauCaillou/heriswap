@@ -1,19 +1,9 @@
 [Transformation]
 position%gimp = 400, 275
-#size = 1, 1
-#rotation = 0
 z = 0.72
 
 [Text]
-#~ String
-#text
-#~ String
 font_name = typo
-#~ Color
 color%name = green
-#~ float
 char_height%gimp_h = 54
-#~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
 positioning = 0.5
-#~ bool
-#show

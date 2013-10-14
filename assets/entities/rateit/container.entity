@@ -4,7 +4,6 @@ size%gimp = 712, 500
 z = 0.47
 
 [Rendering]
-#~ TextureRef
 texture = fond_menu_mode
-#~ Color
 color = 1,1,1,0.5
+opaque_type = 0

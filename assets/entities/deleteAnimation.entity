@@ -1,27 +1,8 @@
 [Sound]
-#~ float
-#volume =
-#~ int
-#sound =
 
 [ADSR]
-#~ bool
-#active =
-#~ float
 idle_value = 0
-#~ float
 attack_value = 1
-#~ float
-#attack_timing =
-#~ float
 decay_timing = 0
-#~ float
 sustain_value = 1
-#~ float
 release_timing = 0
-#~ MODE : Linear = 0, Quadratic = 1
-#attack_mode =
-#~ MODE : Linear = 0, Quadratic = 1
-#decay_mode =
-#~ MODE : Linear = 0, Quadratic = 1
-#release_mode =

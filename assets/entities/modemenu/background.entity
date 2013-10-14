@@ -1,25 +1,9 @@
 [Transformation]
 positionNW%gimp = 44, 24
 size%gimp = 712, 1124
-#rotation = 0
 z = 0.50
 
 [Rendering]
-#~ TextureRef
 texture = fond_menu_mode
-#~ EffectRef
-#effectRef
-#~ Color
 color = 1,1,1,0.5
-#~ bool
-#show
-#~ bool
-#mirror_h
-#~ bool
-#z_pre_pass
-#~ bool
-#fast_culling
-#~ int
-#opaque_type
-#~ int
-#camera_bitmask
+opaque_type = 0

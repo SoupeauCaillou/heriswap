@@ -3,5 +3,5 @@ size%gimp = 800, 1280
 z = 0.47
 
 [Rendering]
-#~ Color
 color = 0, 0, 0, 0.2
+opaque_type = 0

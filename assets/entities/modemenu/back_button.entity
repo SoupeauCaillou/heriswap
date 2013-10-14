@@ -4,8 +4,8 @@ size%gimp = 100, 75
 z = 0.51
 
 [Rendering]
-#~ TextureRef
 texture = back
+opaque_type = 0
 
 [Button]
 #~ bool
