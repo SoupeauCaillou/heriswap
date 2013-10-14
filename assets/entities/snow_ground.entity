@@ -5,3 +5,4 @@ z = 0.4
 
 [Rendering]
 texture = snow_ground
+opaque_type = 0
