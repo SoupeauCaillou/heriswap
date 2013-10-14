@@ -1,5 +1,5 @@
 [Transformation]
-size%screen_h = 0.8, 0.8
+size%screen_w,texture_ratio = 1
 
 [Anchor]
 position = 0, 0

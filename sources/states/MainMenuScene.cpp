@@ -156,52 +156,62 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     void onPreEnter(Scene::Enum pState) override {
         if (pState == Scene::Logo) {
             // setup fadein
-            game->datas->faderHelper.start(Fading::In, 0.5f);
-        }
+            for (int i=0; i<3; ++i) {
+                game->datas->faderHelper.registerFadingInEntity(bStart[i]);
+            }
+            game->datas->faderHelper.registerFadingInEntity(game->menufg);
+            game->datas->faderHelper.registerFadingInEntity(game->menubg);
+            game->datas->faderHelper.registerFadingInEntity(game->datas->socialGamNet);
+            game->datas->faderHelper.registerFadingInEntity(game->datas->soundButton);
+            game->datas->faderHelper.registerFadingInEntity(game->herisson);
+            game->datas->faderHelper.registerFadingInEntity(quitButton[0]);
+            game->datas->faderHelper.registerFadingInEntity(quitButton[1]);
+            game->datas->faderHelper.registerFadingInEntity(game->datas->sky);
+        } else {
 
-        if (pState == Scene::Pause) {
-            LOGI("aborted. going to main menu");
-            if (game->datas->mode == Normal) {
-                static_cast<NormalGameModeManager*> (game->datas->mode2Manager[Normal])->Exit();
-            } else if (game->datas->mode == TilesAttack) {
-                static_cast<TilesAttackGameModeManager*> (game->datas->mode2Manager[TilesAttack])->Exit();
-            } else {
-                static_cast<Go100SecondsGameModeManager*> (game->datas->mode2Manager[Go100Seconds])->Exit();
+            if (pState == Scene::Pause) {
+                LOGI("aborted. going to main menu");
+                if (game->datas->mode == Normal) {
+                    static_cast<NormalGameModeManager*> (game->datas->mode2Manager[Normal])->Exit();
+                } else if (game->datas->mode == TilesAttack) {
+                    static_cast<TilesAttackGameModeManager*> (game->datas->mode2Manager[TilesAttack])->Exit();
+                } else {
+                    static_cast<Go100SecondsGameModeManager*> (game->datas->mode2Manager[Go100Seconds])->Exit();
+                }
+            }
+
+            // preload sound effect
+            theSoundSystem.loadSoundFile("audio/son_menu.ogg");
+
+            for (int i=0; i<3; ++i) {
+                TEXT(eStart[i])->show = true;
+                RENDERING(bStart[i])->show = true;
+                BUTTON(bStart[i])->enabled = true;
+            }
+
+            RENDERING(game->menufg)->show =
+                RENDERING(game->menubg)->show =
+                RENDERING(game->datas->socialGamNet)->show =
+                RENDERING(game->datas->soundButton)->show =
+                RENDERING(game->herisson)->show = true;
+
+            TEXT(quitButton[0])->show =
+                RENDERING(quitButton[1])->show = true;
+
+            BUTTON(game->datas->socialGamNet)->enabled =
+                BUTTON(game->datas->soundButton)->enabled =
+                BUTTON(quitButton[1])->enabled = true;
+
+            SCROLLING(game->datas->sky)->show = true;
+
+            theBackgroundSystem.showAll();
+
+            if (modeTitleToReset) {
+                theMorphingSystem.reverse(MORPHING(modeTitleToReset));
+                MORPHING(modeTitleToReset)->activationTime = 0;
+                MORPHING(modeTitleToReset)->active = true;
             }
         }
-
-        // preload sound effect
-        theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-
-        for (int i=0; i<3; ++i) {
-            TEXT(eStart[i])->show = true;
-            RENDERING(bStart[i])->show = true;
-            BUTTON(bStart[i])->enabled = true;
-        }
-
-        RENDERING(game->menufg)->show =
-            RENDERING(game->menubg)->show =
-            RENDERING(game->datas->socialGamNet)->show =
-            RENDERING(game->datas->soundButton)->show =
-            RENDERING(game->herisson)->show = true;
-
-        TEXT(quitButton[0])->show =
-            RENDERING(quitButton[1])->show = true;
-
-        BUTTON(game->datas->socialGamNet)->enabled =
-            BUTTON(game->datas->soundButton)->enabled =
-            BUTTON(quitButton[1])->enabled = true;
-
-        SCROLLING(game->datas->sky)->show = true;
-
-        theBackgroundSystem.showAll();
-
-        if (modeTitleToReset) {
-            theMorphingSystem.reverse(MORPHING(modeTitleToReset));
-            MORPHING(modeTitleToReset)->activationTime = 0;
-            MORPHING(modeTitleToReset)->active = true;
-        }
-
         choosenGameMode = Normal;
     }
 
