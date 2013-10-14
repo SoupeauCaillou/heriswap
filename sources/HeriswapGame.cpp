@@ -331,15 +331,29 @@ bool HeriswapGame::willConsumeBackEvent() {
 }
 
 void HeriswapGame::backPressed() {
-    Game::backPressed();
-
     const Scene::Enum state = sceneStateMachine.getCurrentState();
-    if (state == Scene::ModeMenu) {
-        sceneStateMachine.forceNewState(Scene::MainMenu);
-    } else if (pausableState(state)) {
-        sceneStateMachine.forceNewState(Scene::Pause);
-    } else if (state == Scene::Pause) {
-        sceneStateMachine.forceNewState(Scene::MainMenu);
+    switch (state) {
+#if ! SAC_ANDROID
+        case Scene::MainMenu:
+            //exit the game
+            isFinished = true;
+            break;
+#endif
+        case Scene::ModeMenu:
+            sceneStateMachine.forceNewState(Scene::MainMenu);
+            break;
+        case Scene::Spawn:
+        case Scene::UserInput:
+        case Scene::Delete:
+        case Scene::Fall:
+        case Scene::LevelChanged:
+            sceneStateMachine.forceNewState(Scene::Pause);
+            break;
+        case Scene::Pause:
+            sceneStateMachine.forceNewState(Scene::MainMenu);
+            break;
+        default:
+            break;
     }
 }
 

@@ -74,7 +74,6 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     Entity eStart[3];
     Entity modeTitleToReset;
     Entity bStart[3];
-    Entity quitButton[2];
 
     float timeElapsed;
 
@@ -139,14 +138,6 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         a << "herisson_" << glm::round(glm::linearRand(1.f, 8.f));
         ANIMATION(game->herisson)->name = a.str();
 
-        quitButton[0] = theEntityManager.CreateEntity("quitButton_0",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/quit_text"));
-
-        TEXT(quitButton[0])->text = " " + game->gameThreadContext->localizeAPI->text("quit") + " ";
-
-        quitButton[1] = theEntityManager.CreateEntity("quitButton_1",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("mainmenu/quit_button"));
-
         modeTitleToReset = 0;
     }
 
@@ -164,8 +155,6 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             game->datas->faderHelper.registerFadingInEntity(game->datas->socialGamNet);
             game->datas->faderHelper.registerFadingInEntity(game->datas->soundButton);
             game->datas->faderHelper.registerFadingInEntity(game->herisson);
-            game->datas->faderHelper.registerFadingInEntity(quitButton[0]);
-            game->datas->faderHelper.registerFadingInEntity(quitButton[1]);
             game->datas->faderHelper.registerFadingInEntity(game->datas->sky);
         } else {
 
@@ -195,12 +184,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
                 RENDERING(game->datas->soundButton)->show =
                 RENDERING(game->herisson)->show = true;
 
-            TEXT(quitButton[0])->show =
-                RENDERING(quitButton[1])->show = true;
-
             BUTTON(game->datas->socialGamNet)->enabled =
-                BUTTON(game->datas->soundButton)->enabled =
-                BUTTON(quitButton[1])->enabled = true;
+                BUTTON(game->datas->soundButton)->enabled = true;
+
 
             SCROLLING(game->datas->sky)->show = true;
 
@@ -258,10 +244,6 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
                 game->title = eStart[2];
                 return Scene::ModeMenu;
             }
-            if (BUTTON(quitButton[1])->clicked) {
-                LOGT("recreate the exit state! ");
-                // return Scene::ExitState;
-            }
         }
         return Scene::MainMenu;
     }
@@ -293,12 +275,6 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         modeTitleToReset = eStart[choosenGameMode];
 
         ANIMATION(game->herisson)->playbackSpeed = 4.5f;
-
-        TEXT(quitButton[0])->show = false;
-
-        RENDERING(quitButton[1])->show = false;
-
-        BUTTON(quitButton[1])->enabled = false;
     }
 };
 
