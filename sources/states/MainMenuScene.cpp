@@ -152,6 +152,11 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             game->datas->faderHelper.registerFadingInEntity(game->datas->soundButton);
             game->datas->faderHelper.registerFadingInEntity(game->herisson);
             game->datas->faderHelper.registerFadingInEntity(game->datas->sky);
+
+            game->datas->faderHelper.registerFadingInCallback([this] () -> void {
+                theBackgroundSystem.showAll();
+                SCROLLING(game->datas->sky)->show = true;
+            });
         } else {
 
             if (pState == Scene::Pause) {

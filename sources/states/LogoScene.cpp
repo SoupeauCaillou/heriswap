@@ -122,6 +122,8 @@ public:
         theEntityManager.DeleteEntity(animLogo);
 
         theRenderingSystem.unloadAtlas("logo");
+
+        game->datas->faderHelper.clearFadingEntities();
     }
 };
 
