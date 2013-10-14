@@ -503,7 +503,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 if (game->gameThreadContext->storageAPI->count(&ssp, "*", ss.str()) == 0) {
                     return Scene::Help;
                 } else {
-                    return Scene::Ads;
+                    return Scene::CountDown;
                 }
             }
 

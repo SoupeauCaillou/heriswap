@@ -24,7 +24,6 @@ class HeriswapGame;
 
 namespace Scene {
     enum Enum {
-        Ads,
         CountDown,
         Delete,
         ElitePopup,
@@ -49,8 +48,6 @@ namespace Scene {
     StateHandler<Scene::Enum>* Create##name##SceneHandler(HeriswapGame* game);
 
 
-
-    DECLARE_SCENE_HANDLER_FACTORY(Ads)
     DECLARE_SCENE_HANDLER_FACTORY(CountDown)
     DECLARE_SCENE_HANDLER_FACTORY(Delete)
     DECLARE_SCENE_HANDLER_FACTORY(ElitePopup)
