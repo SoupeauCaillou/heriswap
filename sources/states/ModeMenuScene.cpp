@@ -67,8 +67,6 @@
 struct ModeMenuScene : public StateHandler<Scene::Enum> {
     HeriswapGame* game;
 
-    Difficulty difficulty;
-
     bool pleaseGoBack;
     // HelpStateManager* helpMgr;
 
@@ -283,7 +281,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             ssp.setValue("level", ObjectSerializer<int>::object2string(1));
         }
         ssp.setValue("mode", ObjectSerializer<int>::object2string(game->datas->mode));
-        ssp.setValue("difficulty", ObjectSerializer<int>::object2string(difficulty));
+        ssp.setValue("difficulty", ObjectSerializer<int>::object2string(game->difficulty));
 
         game->gameThreadContext->storageAPI->saveEntries(&ssp);
 
@@ -291,21 +289,21 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         //      EScoreRaceEasy = 0,
         //      EScoreRaceDifficult,
         //      EScoreRaceMedium,
-        //      E100SecondsEasy,
-        //      E100SecondsDifficult,
-        //      E100SecondsMedium,
         //      ETimeAttackEasy,
         //      ETimeAttackDifficult,
         //      ETimeAttackMedium,
+        //      E100SecondsEasy,
+        //      E100SecondsDifficult,
+        //      E100SecondsMedium,
 
-        int e = (game->datas->mode * 3 + difficulty);
+        int e = (game->datas->mode * 3 + game->difficulty);
         std::string scoreS = (game->datas->mode == TilesAttack) ? ssp.getValue("time") : ssp.getValue("points");
         game->gameThreadContext->gameCenterAPI->submitScore(e, scoreS);
     }
 
     bool isCurrentScoreAHighOne() {
         std::stringstream ss;
-        ss << "where mode = " << game->datas->mode << " and difficulty = " << difficulty;
+        ss << "where mode = " << game->datas->mode << " and difficulty = " << game->difficulty;
 
         if (game->datas->mode == Normal || game->datas->mode == Go100Seconds) {
             ss << " and points >= " << game->datas->mode2Manager[game->datas->mode]->points;
@@ -354,16 +352,16 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             int count = game->gameThreadContext->storageAPI->count(&ssp, "*", ss.str());
             LOGV(LogVerbosity::VERBOSE1, "There are currently " << count << " scores in database");
             if  (count <= 1)
-                difficulty = DifficultyEasy;
+                game->difficulty = DifficultyEasy;
             else if  (count < 5)
-                difficulty = DifficultyMedium;
+                game->difficulty = DifficultyMedium;
             else
-                difficulty = DifficultyHard;
+                game->difficulty = DifficultyHard;
         } else {
-            difficulty = theHeriswapGridSystem.sizeToDifficulty();
+            game->difficulty = theHeriswapGridSystem.sizeToDifficulty();
         }
 
-        LoadScore(game->datas->mode, difficulty);
+        LoadScore(game->datas->mode, game->difficulty);
 
         RENDERING(back)->show =
             RENDERING(game->herisson)->show =
@@ -387,9 +385,9 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         TEXT(playText)->text = (gameOverState != NoGame) ? game->gameThreadContext->localizeAPI->text("restart") : game->gameThreadContext->localizeAPI->text("play");
 
-        if (difficulty == DifficultyEasy)
+        if (game->difficulty == DifficultyEasy)
             TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_1") + " }";
-        else if (difficulty == DifficultyMedium)
+        else if (game->difficulty == DifficultyMedium)
             TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_2") + " }";
         else
             TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_3") + " }";
@@ -463,12 +461,12 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                     TEXT(input_label)->show = TEXT(input_textbox)->show = RENDERING(input_background)->show = false;
 #endif
                     if (game->datas->mode==Normal)
-                        game->datas->successMgr->sBTAC(game->gameThreadContext->storageAPI, difficulty, game->datas->mode2Manager[game->datas->mode]->points);
+                        game->datas->successMgr->sBTAC(game->gameThreadContext->storageAPI, game->difficulty, game->datas->mode2Manager[game->datas->mode]->points);
                     else if (game->datas->mode==TilesAttack)
-                        game->datas->successMgr->sBTAM(game->gameThreadContext->storageAPI, difficulty, game->datas->mode2Manager[game->datas->mode]->time);
+                        game->datas->successMgr->sBTAM(game->gameThreadContext->storageAPI, game->difficulty, game->datas->mode2Manager[game->datas->mode]->time);
 
                     submitScore(playerName);
-                    LoadScore(game->datas->mode, difficulty);
+                    LoadScore(game->datas->mode, game->difficulty);
                     gameOverState = NoGame;
 
                     if (game->gameThreadContext->communicationAPI->mustShowRateDialog()) {
@@ -495,17 +493,17 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             //difficulty button
             if (BUTTON(bDifficulty)->clicked) {
                 SOUND(bDifficulty)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-                difficulty = theHeriswapGridSystem.nextDifficulty(difficulty);
+                game->difficulty = theHeriswapGridSystem.nextDifficulty(game->difficulty);
 
-                if (difficulty == DifficultyEasy)
+                if (game->difficulty == DifficultyEasy)
                     TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_1") + " }";
-                else if (difficulty == DifficultyMedium)
+                else if (game->difficulty == DifficultyMedium)
                     TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_2") + " }";
                 else
                     TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_3") + " }";
 
                 TEXT(playText)->text = game->gameThreadContext->localizeAPI->text("play");
-                LoadScore(game->datas->mode, difficulty);
+                LoadScore(game->datas->mode, game->difficulty);
             }
 
             //new game button
@@ -513,7 +511,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 SOUND(playContainer)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 
                 std::stringstream ss;
-                ss << "where mode = " << (int)game->datas->mode << " and difficulty = " << (int)difficulty;
+                ss << "where mode = " << (int)game->datas->mode << " and difficulty = " << (int)game->difficulty;
                 ScoreStorageProxy ssp;
                 if (game->gameThreadContext->storageAPI->count(&ssp, "*", ss.str()) == 0) {
                     return Scene::Help;
@@ -559,18 +557,15 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
     void onExit(Scene::Enum nextState) override {
         if (nextState != Scene::MainMenu) {
-            theHeriswapGridSystem.setGridFromDifficulty(difficulty);
-            game->datas->successMgr->NewGame(difficulty);
+            theHeriswapGridSystem.setGridFromDifficulty(game->difficulty);
+            game->datas->successMgr->NewGame(game->difficulty);
             TRANSFORM(game->herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(game->herisson)->size.x;
 
             RENDERING(game->herisson)->show =
                 RENDERING(game->menubg)->show =
-                RENDERING(game->datas->socialGamNet)->show =
                 RENDERING(game->menufg)->show = false;
 
             TEXT(game->title)->show = false;
-
-            BUTTON(game->datas->socialGamNet)->enabled = false;
 
         #if SAC_ANDROID
             BUTTON(enableSwarmContainer)->enabled = false;

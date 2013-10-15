@@ -103,15 +103,15 @@ public class HeriswapActivity extends SacActivity {
                 Arrays.asList(new String[] {
                 	"CgkIwJzk2eQSEAIQFg",
                 	"CgkIwJzk2eQSEAIQFQ",
-            		"CgkIwJzk2eQSEAIQGA",
-            		
-            		"CgkIwJzk2eQSEAIQGw",
-            		"CgkIwJzk2eQSEAIQGQ",
-            		"CgkIwJzk2eQSEAIQGg",
-            		
+                    "CgkIwJzk2eQSEAIQGA",
+                    
             		"CgkIwJzk2eQSEAIQHQ",
             		"CgkIwJzk2eQSEAIQHg",
             		"CgkIwJzk2eQSEAIQHA",
+
+                    "CgkIwJzk2eQSEAIQGw",
+                    "CgkIwJzk2eQSEAIQGQ",
+                    "CgkIwJzk2eQSEAIQGg",
                 })
             )
         );

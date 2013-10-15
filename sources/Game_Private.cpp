@@ -64,9 +64,6 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
     else
         RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
 
-    socialGamNet = theEntityManager.CreateEntity("socialGamNet",
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/socialGamNet"));
-
     for (int i=0; i<3; ++i) {
         Entity e = theEntityManager.CreateEntity("cloud",
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/cloud"));

@@ -32,6 +32,7 @@
 
 #include "Jukebox.h"
 #include "util/FaderHelper.h"
+#include "util/GameCenterAPIHelper.h"
 
 class PrivateData {
     public:
@@ -47,10 +48,11 @@ class PrivateData {
 
      GameMode mode;
      FaderHelper faderHelper;
+     GameCenterAPIHelper gamecenterAPIHelper;
 
      Entity cursor;
 
-     Entity soundButton, socialGamNet;
+     Entity soundButton;
      Entity musicMenu[2], musicStress1[2], musicStress2[2], music[8];
      Entity menu;
      struct {

@@ -148,7 +148,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             }
             game->datas->faderHelper.registerFadingInEntity(game->menufg);
             game->datas->faderHelper.registerFadingInEntity(game->menubg);
-            game->datas->faderHelper.registerFadingInEntity(game->datas->socialGamNet);
+            game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.signButton);
+            game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.achievementsButton);
+            game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.leaderboardsButton);
             game->datas->faderHelper.registerFadingInEntity(game->datas->soundButton);
             game->datas->faderHelper.registerFadingInEntity(game->herisson);
             game->datas->faderHelper.registerFadingInEntity(game->datas->sky);
@@ -181,12 +183,10 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
             RENDERING(game->menufg)->show =
                 RENDERING(game->menubg)->show =
-                RENDERING(game->datas->socialGamNet)->show =
                 RENDERING(game->datas->soundButton)->show =
                 RENDERING(game->herisson)->show = true;
 
-            BUTTON(game->datas->socialGamNet)->enabled =
-                BUTTON(game->datas->soundButton)->enabled = true;
+            BUTTON(game->datas->soundButton)->enabled = true;
 
 
             SCROLLING(game->datas->sky)->show = true;

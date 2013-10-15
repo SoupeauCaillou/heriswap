@@ -54,7 +54,7 @@
 #include "systems/TransformationSystem.h"
 
 #include "util/ScoreStorageProxy.h"
-
+    
 #include <glm/glm.hpp>
 #include <glm/gtx/constants.hpp>
 
@@ -252,6 +252,14 @@ void HeriswapGame::init(const uint8_t* in, int size) {
         // loadGameState(in, size);
     }
     datas->faderHelper.init(camera);
+    datas->gamecenterAPIHelper.init(gameThreadContext->gameCenterAPI, true, true, true, [this] {
+        if (sceneStateMachine.getCurrentState() == Scene::ModeMenu) {
+            int id = datas->mode * difficulty;
+            gameThreadContext->gameCenterAPI->openSpecificLeaderboard(id);
+        } else {
+            gameThreadContext->gameCenterAPI->openDashboard();
+        }     
+    });
 
     sceneStateMachine.setup(Scene::Logo);
 
@@ -443,20 +451,7 @@ void HeriswapGame::tick(float dt) {
         }
     }
 
-    //if socialGamNet is clicked
-    if (BUTTON(datas->socialGamNet)->clicked){
-        if (sceneStateMachine.getCurrentState() == Scene::ModeMenu) {
-            LOGT("TBD");
-            // static_cast<ModeMenuStateManager*> (
-                // StateHandler<Scene::ModeMenu> * handler = sceneStateMachine.getCurrentHandler();
-                // );
-
-            int id = datas->mode; //* diff
-            gameThreadContext->gameCenterAPI->openSpecificLeaderboard(id);
-        } else {
-            gameThreadContext->gameCenterAPI->openDashboard();
-        }
-    }
+    datas->gamecenterAPIHelper.updateUI();
 
     //updating HUD if playing
     if (inGameState(sceneStateMachine.getCurrentState()) && sceneStateMachine.getCurrentState() != Scene::LevelChanged) {

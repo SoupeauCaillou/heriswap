@@ -34,6 +34,7 @@
 #include "base/StateMachine.h"
 
 #include "systems/RenderingSystem.h"
+#include "systems/HeriswapGridSystem.h"
 
 #include <glm/glm.hpp>
 
@@ -76,6 +77,7 @@ class HeriswapGame : public Game {
         const uint8_t* loadEntitySystemState(const uint8_t* in, int size);
         void loadGameState(const uint8_t* in, int size);
 		bool shouldPlayPiano();
+        void onLeaderboardClick();
 
 
     public:
@@ -83,6 +85,7 @@ class HeriswapGame : public Game {
         PrivateData* datas;
         Entity title, menufg, menubg;
         Entity herisson;
+        Difficulty difficulty;
 
         void stopInGameMusics();
 
