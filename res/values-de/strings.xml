@@ -29,7 +29,7 @@
   <string name="rate_now">"Bewerten jetzt"</string>
   <string name="rate_later">"Später"</string>
   <string name="rate_never">"Nein danke"</string>
-  <string name="get_googleplus">"Aktiviere Google+ ×googleplus_icon,1,1× um deine Punkte mit anderen Spielern zu vergleichen."</string>
+  <string name="get_googleplus">"Aktiviere Play Games ×games_controller_green,1× um deine Punkte mit anderen Spielern zu vergleichen."</string>
   <string name="change_difficulty">"Du scheinst echt gut zu sein. \nMöchtest du ein neues Spiel mit höherem Schwierigkeitsgrad probieren?"</string>
   <string name="change_difficulty_yes">"Erhöhen die Schwierigkeit!"</string>
   <string name="change_difficulty_no">"Nein, danke"</string>

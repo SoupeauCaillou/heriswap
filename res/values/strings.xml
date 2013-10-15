@@ -29,7 +29,7 @@
   <string name="rate_now">"Rate now"</string>
   <string name="rate_later">"Later"</string>
   <string name="rate_never">"No thanks"</string>
-  <string name="get_googleplus">"Enable Google+ ×googleplus_icon,1,1× to compare your scores with others players!"</string>
+  <string name="get_googleplus">"Enable Play Games ×games_controller_green,1× to compare your scores with others players!"</string>
   <string name="change_difficulty">"You seem really good.\nWould you like to start a new game with increased difficulty?"</string>
   <string name="change_difficulty_yes">"Increase difficulty"</string>
   <string name="change_difficulty_no">"No, keep it easy"</string>
