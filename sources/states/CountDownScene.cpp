@@ -59,12 +59,13 @@ struct CountDownScene : public StateHandler<Scene::Enum> {
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum) override {
-        // setup game
-        game->prepareNewGame();
-        game->setupGameProp();
     }
 
     void onEnter(Scene::Enum) override {
+        // setup game
+        game->prepareNewGame();
+        game->setupGameProp();
+
         if (game->datas->mode != Normal) {
             TEXT(counter)->show = true;
             RENDERING(vorhang)->show = true;

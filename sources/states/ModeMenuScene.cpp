@@ -530,7 +530,20 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     ///--------------------- EXIT SECTION -----------------------------------------//
     ///----------------------------------------------------------------------------//
-    void onPreExit(Scene::Enum) override {
+    void onPreExit(Scene::Enum to) override {
+        if (to != Scene::MainMenu && to != Scene::Help) {
+            game->datas->faderHelper.start(Fading::Out, 0.5);
+        }
+    }
+
+    bool updatePreExit(Scene::Enum to, float dt) override {
+        switch (to) {
+            case Scene::MainMenu:
+            case Scene::Help:
+                return true;
+            default:
+                return game->datas->faderHelper.update(dt);
+        }
     }
 
     void onExit(Scene::Enum nextState) override {
