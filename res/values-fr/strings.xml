@@ -33,7 +33,7 @@
   <string name="change_difficulty">"Excellent ! Que diriez-vous d'augmenter un peu la difficulté ?!"</string>
   <string name="change_difficulty_yes">"Allons-y, plus dur !"</string>
   <string name="change_difficulty_no">"Non merci."</string>
-  <string name="average_score">"Moyenne préc.:"</string>
+  <string name="average_score">"Moyenne préc. :"</string>
   <string name="help_click_continue">"-toucher l'écran pour continuer-"</string>
   <string name="help_click_play">"-toucher l'écran pour jouer-"</string>
   <string name="help_general_1">"Les points se gagnent en alignant au moins 3 feuilles ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1× identiques.\n\nCes combinaisons se créent en échangeant 2 feuilles ×feuille2,1,1× ×feuille3,1,1× voisines."</string>
