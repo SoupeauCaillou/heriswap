@@ -24,6 +24,7 @@ import java.util.Arrays;
 
 import net.damsy.soupeaucaillou.SacActivity;
 import net.damsy.soupeaucaillou.api.AssetAPI;
+import net.damsy.soupeaucaillou.api.CommunicationAPI;
 import net.damsy.soupeaucaillou.api.ExitAPI;
 import net.damsy.soupeaucaillou.api.GameCenterAPI;
 import net.damsy.soupeaucaillou.api.LocalizeAPI;
@@ -68,6 +69,7 @@ public class HeriswapActivity extends SacActivity {
 		ExitAPI.Instance();
 		MusicAPI.Instance();
 		SoundAPI.Instance();
+		CommunicationAPI.Instance().init(this, getPreferences(MODE_PRIVATE));
 		StringInputAPI.Instance().init(
 			(Button)findViewById(R.id.name_save),
 			(EditText)findViewById(R.id.player_name_input),
