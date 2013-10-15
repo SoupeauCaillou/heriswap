@@ -33,11 +33,11 @@
   <string name="average_score">"平均スコア"</string>
   <string name="help_click_continue">"-タッチして次へ-"</string>
   <string name="help_click_play">"-タッチしてプレイ-"</string>
-  <string name="help_general_1">"3枚以上の同じ葉っぱを一列に並べます。×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1×。\n\n隣接する2枚の葉っぱを入れ替えて、 ×feuille2,1,1× ×feuille3,1,1× 組み合わせを作り、点数をかせぎます。"</string>
-  <string name="help_general_2">"この ×herisson_2_5,2,1.6× はどれだけの時間が残されているかを示していて、 これが画面の右端に到達したときにゲームが終了します。彼にタッチするとヒントがもらえます！"</string>
+  <string name="help_general_1">"3枚以上の同じ葉っぱを一列に並べます。×feuille1,1× ×feuille1,1× ×feuille1,1×。\n\n隣接する2枚の葉っぱを入れ替えて、 ×feuille2,1× ×feuille3,1× 組み合わせを作り、点数をかせぎます。"</string>
+  <string name="help_general_2">"この ×herisson_2_5,2× はどれだけの時間が残されているかを示していて、 これが画面の右端に到達したときにゲームが終了します。彼にタッチするとヒントがもらえます！"</string>
   <string name="help_mode1_1">"ゲームの目的は多くのスコアを獲得することです。\n\nゲームには時間制限があります。"</string>
-  <string name="help_mode1_2">"彼の背中の葉っぱ ×feuille5,1,1× を消すとボーナスが加算されます。\n\n組み合わせが成功するごとに、残り時間が加算されます。時間を増やす最も良い方法はそのレベルをクリアすることです。クリアするには画面上の枝についた葉っぱを全て消してください。"</string>
-  <string name="help_mode2_1">"木から全ての葉っぱ ×feuille2,1,1× を可能な限り速く消していくことが目的です。\n\n葉っぱを消すには3枚以上の同じ葉っぱを一列に並べてください ×feuille1,1,1× ×feuille1,1,1× ×feuille1,1,1×。\n\n隣接する2枚の葉っぱ ×feuille2,1,1× ×feuille3,1,1× を入れ替えて、組み合わせを作ります。"</string>
-  <string name="help_mode2_2">"この ×herisson_2_5,2,1.6× は進行度を表しています。 これが画面の右端に到達したらゲームは終了です。\n\n加点のある葉っぱ ×feuille5,1,1× を組み合わせると点数が2倍になります。"</string>
+  <string name="help_mode1_2">"彼の背中の葉っぱ ×feuille5,1× を消すとボーナスが加算されます。\n\n組み合わせが成功するごとに、残り時間が加算されます。時間を増やす最も良い方法はそのレベルをクリアすることです。クリアするには画面上の枝についた葉っぱを全て消してください。"</string>
+  <string name="help_mode2_1">"木から全ての葉っぱ ×feuille2,1× を可能な限り速く消していくことが目的です。\n\n葉っぱを消すには3枚以上の同じ葉っぱを一列に並べてください ×feuille1,1× ×feuille1,1× ×feuille1,1×。\n\n隣接する2枚の葉っぱ ×feuille2,1× ×feuille3,1× を入れ替えて、組み合わせを作ります。"</string>
+  <string name="help_mode2_2">"この ×herisson_2_5,2× は進行度を表しています。 これが画面の右端に到達したらゲームは終了です。\n\n加点のある葉っぱ ×feuille5,1× を組み合わせると点数が2倍になります。"</string>
   <string name="help_mode3_1">"100秒以内に多くのスコアを獲得することが目的です。"</string>
 </resources>
