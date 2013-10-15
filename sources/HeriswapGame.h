@@ -79,18 +79,6 @@ class HeriswapGame : public Game {
 
 
     public:
-        enum ELeaderboard {
-            EScoreRaceEasy = 0,
-            EScoreRaceDifficult,
-            EScoreRaceMedium,
-            E100SecondsEasy,
-            E100SecondsDifficult,
-            E100SecondsMedium,
-            ETimeAttackEasy,
-            ETimeAttackDifficult,
-            ETimeAttackMedium,
-        };
-
         Entity camera;
         PrivateData* datas;
         Entity title, menufg, menubg;

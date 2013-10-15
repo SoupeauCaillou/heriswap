@@ -287,7 +287,18 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         game->gameThreadContext->storageAPI->saveEntries(&ssp);
 
-        HeriswapGame::ELeaderboard e = (HeriswapGame::ELeaderboard) (game->datas->mode * 3 + difficulty);
+        // This is the leaderboards order:
+        //      EScoreRaceEasy = 0,
+        //      EScoreRaceDifficult,
+        //      EScoreRaceMedium,
+        //      E100SecondsEasy,
+        //      E100SecondsDifficult,
+        //      E100SecondsMedium,
+        //      ETimeAttackEasy,
+        //      ETimeAttackDifficult,
+        //      ETimeAttackMedium,
+
+        int e = (game->datas->mode * 3 + difficulty);
         std::string scoreS = (game->datas->mode == TilesAttack) ? ssp.getValue("time") : ssp.getValue("points");
         game->gameThreadContext->gameCenterAPI->submitScore(e, scoreS);
     }
