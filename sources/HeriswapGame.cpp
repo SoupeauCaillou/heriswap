@@ -451,7 +451,16 @@ void HeriswapGame::tick(float dt) {
         }
     }
 
-    datas->gamecenterAPIHelper.updateUI();
+    switch (sceneStateMachine.getCurrentState()) {
+        case Scene::ModeMenu:
+        case Scene::MainMenu:
+            datas->gamecenterAPIHelper.displayUI();
+            datas->gamecenterAPIHelper.updateUI();
+            break;
+        default:
+            datas->gamecenterAPIHelper.hideUI();
+            break;
+    }
 
     //updating HUD if playing
     if (inGameState(sceneStateMachine.getCurrentState()) && sceneStateMachine.getCurrentState() != Scene::LevelChanged) {
