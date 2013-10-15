@@ -9,4 +9,6 @@ show=1
 opaque_type = 0
 
 [Button]
-over_size = 1.3
+overSize = 1.2
+texture_inactive = gg_signinout
+texture_active = gg_signinout_active
