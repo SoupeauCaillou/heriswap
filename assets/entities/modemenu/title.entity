@@ -1,0 +1,8 @@
+extends = button_text
+
+[Transformation]
+position%gimp = 708, 147
+
+[Text]
+char_height%gimp_h = 54
+positioning = 1
