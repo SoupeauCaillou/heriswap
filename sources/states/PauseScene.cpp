@@ -58,32 +58,26 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         const Color green("green");
 
         //Restart Text
-        eRestart = theEntityManager.CreateEntity("eRestart",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/eRestart"));
+        eRestart = theEntityManager.CreateEntityFromTemplate("pause/eRestart");
         TEXT(eRestart)->text = game->gameThreadContext->localizeAPI->text("continue_");
 
         //Restart button
-        bRestart = theEntityManager.CreateEntity("bRestart",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/bRestart"));
+        bRestart = theEntityManager.CreateEntityFromTemplate("pause/bRestart");
 
         //Help Text
-        eHelp = theEntityManager.CreateEntity("eHelp",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/eHelp"));
+        eHelp = theEntityManager.CreateEntityFromTemplate("pause/eHelp");
         TEXT(eHelp)->text = game->gameThreadContext->localizeAPI->text("help");
 
         //Help button
-        bHelp = theEntityManager.CreateEntity("bHelp",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/bHelp"));
+        bHelp = theEntityManager.CreateEntityFromTemplate("pause/bHelp");
 
         //Abort text
-        eAbort = theEntityManager.CreateEntity("eAbort",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/eAbort"));
+        eAbort = theEntityManager.CreateEntityFromTemplate("pause/eAbort");
 
         TEXT(eAbort)->text = game->gameThreadContext->localizeAPI->text("give_up");
 
         //Abort button
-        bAbort = theEntityManager.CreateEntity("bAbort",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("pause/bAbort"));
+        bAbort = theEntityManager.CreateEntityFromTemplate("pause/bAbort");
     }
 
     ///----------------------------------------------------------------------------//

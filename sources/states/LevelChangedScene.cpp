@@ -83,45 +83,11 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
     }
 
     void setup() {
-        eGrid = theEntityManager.CreateEntity("eGrid",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("grid"));
-
-        eBigLevel = theEntityManager.CreateEntity("eBigLevel",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("big_level"));
-
-        // TEXT(eBigLevel)->charHeight = PlacementHelper::GimpHeightToScreen(350);
-        // TRANSFORM(eBigLevel)->position = glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(846));
-        // TEXT(eBigLevel)->positioning = TextComponent::CENTER;
-
-        eSnowEmitter = theEntityManager.CreateEntity("eSnowEmitter",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("snow_emiter"));
-
-        // TRANSFORM(eSnowEmitter)->size = glm::vec2((float)PlacementHelper::ScreenWidth, 0.5f);
-        // TransformationSystem::setPosition(TRANSFORM(eSnowEmitter),
-        //                                   glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(0)),
-        //                                   TransformationSystem::S);
-        // PARTICULE(eSnowEmitter)->initialSize = Interval<float>(PlacementHelper::GimpWidthToScreen(30),
-        //                                                        PlacementHelper::GimpWidthToScreen(40));
-
-        eSnowBranch = theEntityManager.CreateEntity("eSnowBranch",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("snow_branch"));
-
-
-        // TRANSFORM(eSnowBranch)->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(800),
-        //                                          (float)PlacementHelper::GimpHeightToScreen(218));
-        // TransformationSystem::setPosition(TRANSFORM(eSnowBranch),
-        //                                   glm::vec2((float)(-PlacementHelper::ScreenWidth*0.5),
-        //                                             (float)PlacementHelper::GimpYToScreen(0)),
-        //                                   TransformationSystem::NW);
-
-        eSnowGround = theEntityManager.CreateEntity("eSnowGround",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("snow_ground"));
-
-        // TRANSFORM(eSnowGround)->size = glm::vec2((float)PlacementHelper::ScreenWidth,
-        //                                          (float)PlacementHelper::GimpHeightToScreen(300));
-        // TransformationSystem::setPosition(TRANSFORM(eSnowGround),
-        //                                   glm::vec2(0.f, (float)PlacementHelper::GimpYToScreen(1280)),
-        //                                   TransformationSystem::S);
+        eGrid = theEntityManager.CreateEntityFromTemplate("grid");
+        eBigLevel = theEntityManager.CreateEntityFromTemplate("big_level");
+        eSnowEmitter = theEntityManager.CreateEntityFromTemplate("snow_emiter");
+        eSnowBranch = theEntityManager.CreateEntityFromTemplate("snow_branch");
+        eSnowGround = theEntityManager.CreateEntityFromTemplate("snow_ground");
     }
 
     ///----------------------------------------------------------------------------//

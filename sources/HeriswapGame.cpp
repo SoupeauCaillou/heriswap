@@ -211,9 +211,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
 
 void HeriswapGame::init(const uint8_t* in, int size) {
     LOGI("HeriswapGame initialisation begins...");
-    if (in && size) {
-        in = loadEntitySystemState(in, size);
-    }
+
 
     ScoreStorageProxy ssp;
     //init database
@@ -225,8 +223,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
 
     LOGI("\t- Create camera...");
     // default camera
-    camera = theEntityManager.CreateEntity("camera",
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("camera"));
+    Entity camera = theEntityManager.CreateEntityFromTemplate("camera");
 
     SuccessManager *sm = new SuccessManager(gameThreadContext->gameCenterAPI);
     datas = new PrivateData(this, gameThreadContext, sm);
@@ -236,8 +233,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     theSoundSystem.mute = !datas->storageAPI->isOption("sound", "on");
     theMusicSystem.toggleMute(theSoundSystem.mute);
 
-    datas->sky = theEntityManager.CreateEntity("sky",
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/sky"));
+    datas->sky = theEntityManager.CreateEntityFromTemplate("general/sky");
 
     SCROLLING(datas->sky)->images.push_back("ciel0");
     SCROLLING(datas->sky)->images.push_back("ciel1");
@@ -247,11 +243,17 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     SCROLLING(datas->sky)->displaySize = glm::vec2(TRANSFORM(datas->sky)->size.x * 1.01,
                                                    TRANSFORM(datas->sky)->size.y);
 
-    if (in && size) {
-        // datas->state = Pause;
-        // loadGameState(in, size);
-    }
     datas->faderHelper.init(camera);
+
+    sceneStateMachine.setup();
+    if (in && size) {
+        loadGameState(in, size);
+        SCROLLING(datas->sky)->show = true;
+        theBackgroundSystem.showAll();
+    } else {
+        sceneStateMachine.start(Scene::Logo);
+    }
+
     datas->gamecenterAPIHelper.init(gameThreadContext->gameCenterAPI, true, true, true, [this] {
         if (sceneStateMachine.getCurrentState() == Scene::ModeMenu) {
             int id = datas->mode * difficulty;
@@ -260,10 +262,6 @@ void HeriswapGame::init(const uint8_t* in, int size) {
             gameThreadContext->gameCenterAPI->openDashboard();
         }     
     });
-
-    sceneStateMachine.setup(Scene::Logo);
-
-    quickInit();
 
     LOGI("HeriswapGame initialisation done.");
 }
@@ -551,67 +549,92 @@ void HeriswapGame::tick(float dt) {
     theBackgroundSystem.Update(dt);
 }
 
+struct SavedState {
+    // hand saved variables
+    GameMode mode;
+    int gridSize;
+    bool gameWasPaused;
+
+    int stateMachineSize;
+    int entitySize;
+    int systemSize;
+    int gameStateSize;
+};
+
+void HeriswapGame::initSerializer(Serializer& s) const {
+    SavedState ss;
+    s.add(new Property<int>("mode", OFFSET(mode, ss)));
+    s.add(new Property<int>("grid_size", OFFSET(gridSize, ss)));
+    s.add(new Property<bool>("game_was_paused", OFFSET(gameWasPaused, ss)));
+    
+    s.add(new Property<int>("state_machine_size", OFFSET(stateMachineSize, ss)));
+    s.add(new Property<int>("entity_size", OFFSET(entitySize, ss)));
+    s.add(new Property<int>("system_size", OFFSET(systemSize, ss)));
+    s.add(new Property<int>("game_state_size", OFFSET(gameStateSize, ss)));
+}
+
 int HeriswapGame::saveState(uint8_t** out) {
-    LOGT("TODO");
-    return 0;
-#if 0
-    if (datas->state == Help) {
-        // datas->state2Manager[datas->state]->Exit();
-        // datas->state = static_cast<HelpStateManager*>(datas->state2Manager[datas->state])->oldState;//Pause;
-        if (datas->state == Scene::BlackToSpawn) {
-            datas->state = Scene::MainMenu;
-        }
-        // datas->state2Manager[datas->state]->Enter();
-    }
-    bool pausable = pausableState(datas->state);
-    if (!pausable) {
-        LOGI("Current state is '" << datas->state << "' -> nothing to save");
-        return 0;
+    switch (sceneStateMachine.getCurrentState()) {
+        case Scene::Help:
+        case Scene::Pause:
+        case Scene::Delete:
+        case Scene::ElitePopup:
+        case Scene::Fall:
+        case Scene::LevelChanged:
+        case Scene::Spawn:
+        case Scene::UserInput:
+            break;
+        default:
+            // other states do not save anything
+            return 0;
     }
 
-    if (datas->state == LevelChanged) {
-        // datas->state2Manager[datas->state]->Exit();
-        datas->state = Spawn;
-        datas->mode2Manager[datas->mode]->generateLeaves(0, theHeriswapGridSystem.Types);
-    }
+    SavedState ss;
+    ss.mode = datas->mode;
+    ss.gridSize = theHeriswapGridSystem.GridSize;
+    ss.gameWasPaused = (sceneStateMachine.getCurrentState() == Scene::Pause);
 
     /* save all entities/components */
     uint8_t* entities = 0;
-    int eSize = theEntityManager.serialize(&entities);
+    ss.entitySize = theEntityManager.serialize(&entities);
 
     /* save System with assets ? (texture name -> texture ref map of RenderingSystem ?) */
     uint8_t* systems = 0;
-    int sSize = theRenderingSystem.saveInternalState(&systems);
+    ss.systemSize = theRenderingSystem.saveInternalState(&systems);
+
+    /* scene state machine */
+    uint8_t* ssm = 0;
+    ss.stateMachineSize = sceneStateMachine.serialize(&ssm);
 
     /* save Game mode */
     uint8_t* gamemode = 0;
-    int gSize = datas->mode2Manager[datas->mode]->saveInternalState(&gamemode);
+    ss.gameStateSize = datas->mode2Manager[datas->mode]->saveInternalState(&gamemode);
 
-    int finalSize = sizeof(datas->state) + sizeof(datas->mode) + sizeof(theHeriswapGridSystem.GridSize) + sizeof(eSize) + sizeof(sSize) + eSize + sSize + gSize;
+    /* save Game */
+    uint8_t* game = 0;
+    Serializer sz;
+    initSerializer(sz);
+    int gmSize = sz.serializeObject(&game, &ss);
+
+    int finalSize = sizeof(int) +
+        gmSize +
+        ss.entitySize +
+        ss.systemSize +
+        ss.gameStateSize +
+        ss.stateMachineSize;
     *out = new uint8_t[finalSize];
     uint8_t* ptr = *out;
 
     /* save entity/system thingie */
-    ptr = (uint8_t*)mempcpy(ptr, &eSize, sizeof(eSize));
-    ptr = (uint8_t*)mempcpy(ptr, &sSize, sizeof(sSize));
-    ptr = (uint8_t*)mempcpy(ptr, entities, eSize);
-    ptr = (uint8_t*)mempcpy(ptr, systems, sSize);
+    ptr = (uint8_t*)mempcpy(ptr, &gmSize, sizeof(int));
 
-    /* save Game fields */
-    if (datas->state == Pause) {
-        ptr = (uint8_t*)mempcpy(ptr, &datas->stateBeforePause, sizeof(datas->state));
-    } else {
-        ptr = (uint8_t*)mempcpy(ptr, &datas->state, sizeof(datas->state));
-    }
-
-    ptr = (uint8_t*)mempcpy(ptr, &datas->mode, sizeof(datas->mode));
-    ptr = (uint8_t*)mempcpy(ptr, &theHeriswapGridSystem.GridSize, sizeof(theHeriswapGridSystem.GridSize));
-    ptr = (uint8_t*)mempcpy(ptr, gamemode, gSize);
-
-    LOGI("'" << sizeof(datas->stateBeforePause) << "' + '"<< sizeof(datas->mode) << "' + '" << sizeof(eSize) << "' + '" << sizeof(sSize) << "' + '" << eSize << "' + '" << sSize << "' + '" << gSize << "' -> '" << finalSize << "' ('" << *out << "')");
+    ptr = (uint8_t*)mempcpy(ptr, game, gmSize);
+    ptr = (uint8_t*)mempcpy(ptr, entities, ss.entitySize);
+    ptr = (uint8_t*)mempcpy(ptr, systems, ss.systemSize);
+    ptr = (uint8_t*)mempcpy(ptr, ssm, ss.stateMachineSize);
+    ptr = (uint8_t*)mempcpy(ptr, gamemode, ss.gameStateSize);
 
     return finalSize;
-#endif
 }
 
 const uint8_t* HeriswapGame::loadEntitySystemState(const uint8_t* in, int) {
@@ -621,46 +644,50 @@ const uint8_t* HeriswapGame::loadEntitySystemState(const uint8_t* in, int) {
     index += sizeof(eSize);
     memcpy(&sSize, &in[index], sizeof(sSize));
     index += sizeof(sSize);
-    /* restore entities */
-    theEntityManager.deserialize(&in[index], eSize);
-    index += eSize;
-    /* restore systems */
-    theRenderingSystem.restoreInternalState(&in[index], sSize);
+
     index += sSize;
     return &in[index];
 }
 
-void HeriswapGame::loadGameState(const uint8_t* in, int size) {
-    LOGT("TODO");
-#if 0
+void HeriswapGame::loadGameState(const uint8_t* in, int ) {
+    int gmSize = 0;
+    memcpy(&gmSize, in, sizeof(int));
+    in += sizeof(int);
+
+    SavedState ss;
+    Serializer sz;
+    initSerializer(sz);
+
     /* restore Game fields */
-    memcpy(&datas->stateBeforePause, in, sizeof(datas->stateBeforePause));
-    datas->state = datas->stateBeforePause;
-    in += sizeof(datas->stateBeforePause);
-    memcpy(&datas->mode, in, sizeof(datas->mode));
-    in += sizeof(datas->mode);
-    memcpy(&theHeriswapGridSystem.GridSize, in, sizeof(theHeriswapGridSystem.GridSize));
+    sz.deserializeObject(in, gmSize, &ss);
+    datas->mode = ss.mode;
+    theHeriswapGridSystem.GridSize = ss.gridSize;
     theHeriswapGridSystem.Types = theHeriswapGridSystem.GridSize; //utiliser gridParamFromDifficulty nn ?
-    in += sizeof(theHeriswapGridSystem.GridSize);
+    in += gmSize;
 
-    datas->mode2Manager[datas->mode]->Enter();
-    datas->mode2Manager[datas->mode]->restoreInternalState(in, size);
-    datas->mode2Manager[datas->mode]->UiUpdate(0);
+    /* restore entities */
+    theEntityManager.deserialize(in, ss.entitySize);
+    in += ss.entitySize;
 
-    setMode();
-    togglePause(true);
-    datas->stateBeforePauseNeedEnter = true;
+    /* restore systems */
+    theRenderingSystem.restoreInternalState(in, ss.systemSize);
+    in += ss.systemSize;
 
-    // MainMenuGameStateManager* mgsm = static_cast<MainMenuGameStateManager*> (datas->state2Manager[MainMenu]);
-    // static_cast<ModeMenuStateManager*> (datas->state2Manager[ModeMenu])->title =
-        // mgsm->modeTitleToReset = mgsm->eStart[datas->mode];
+    /* restore state machine */
+    sceneStateMachine.deserialize(in, ss.stateMachineSize);
+    in += ss.stateMachineSize;
+
+    /* restore game vars */
+    datas->mode2Manager[datas->mode]->restoreInternalState(in, ss.gameStateSize);
+    in += ss.gameStateSize;
+
+    // if game wasn't pause before stopping, force pause
+    if (!ss.gameWasPaused) {
+        sceneStateMachine.update(0);
+        sceneStateMachine.forceNewState(Scene::Pause);
+    }
 
     setupGameProp();
-
-    RENDERING(datas->soundButton)->show = true;
-    SCROLLING(datas->sky)->show = true;
-    LOGW("RESTORED STATE: '" << datas->stateBeforePause << "'");
-#endif
 }
 
 static float rotations[] = {

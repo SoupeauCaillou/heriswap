@@ -4,6 +4,7 @@ size%screen_w,texture_ratio = 1
 [Anchor]
 position = 0, 0
 z = 0.98
+parent%name = camera
 
 [Rendering]
 texture = soupe_logo

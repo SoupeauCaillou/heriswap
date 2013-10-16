@@ -44,6 +44,8 @@
 class NameInputAPI;
 
 class PrivateData;
+struct SavedState;
+
 class HeriswapGame : public Game {
 	public:
 		HeriswapGame();
@@ -81,9 +83,7 @@ class HeriswapGame : public Game {
 
 
     public:
-        Entity camera;
         PrivateData* datas;
-        Entity title, menufg, menubg;
         Entity herisson;
         Difficulty difficulty;
 
@@ -91,4 +91,6 @@ class HeriswapGame : public Game {
 
     private:
 	    StateMachine<Scene::Enum> sceneStateMachine;
+
+        void initSerializer(Serializer& s) const;
 };

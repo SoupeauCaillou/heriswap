@@ -3,6 +3,7 @@ size%gimp = 49,40
 
 [Anchor]
 z = 0.99
+parent%name = camera
 
 [Rendering]
 texture = soupe_logo2_365_331

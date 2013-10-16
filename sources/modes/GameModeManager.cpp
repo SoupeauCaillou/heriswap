@@ -223,18 +223,22 @@ void GameModeManager::generateLeaves(int* nb, int type) {
     branchLeaves.clear();
     fillVec();
 
+    LOGF_IF(posBranch.empty(), "posBranch isn't initialized before call to generateLeaves");
+
     for (int j=0;j<type;j++) {
         for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
-            int rand = glm::round(glm::linearRand(0.f, (float)(posBranch.size()-1)));
-            glm::vec2 pos = posBranch[rand].v;
+            // LOGI(j << ',' << i << " -> " << posBranch.size());
+            float f = posBranch.size()-1;
+            int rnd = glm::round(glm::linearRand(0.f, f));
+            glm::vec2 pos = posBranch[rnd].v;
             pos.x -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenSize.x*0.5f;
 
             BranchLeaf bl;
-            bl.e = createAndAddLeave(j, pos, posBranch[rand].rot);
+            bl.e = createAndAddLeave(j, pos, posBranch[rnd].rot);
             bl.type = j;
             branchLeaves.push_back(bl);
 
-            posBranch.erase(posBranch.begin()+rand);
+            posBranch.erase(posBranch.begin()+rnd);
         }
     }
     //shuffle pour éviter que les mêmes couleurs soient à coté dans la liste :

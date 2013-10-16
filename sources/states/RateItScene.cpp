@@ -52,11 +52,9 @@ struct RateItScene : public StateHandler<Scene::Enum> {
 
     void setup() {
         //Creating text entities
-        textToReadContainer = theEntityManager.CreateEntity("textToReadContainer",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("rateit/container"));
+        textToReadContainer = theEntityManager.CreateEntityFromTemplate("rateit/container");
 
-        textToRead = theEntityManager.CreateEntity("textToRead",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("rateit/text"));
+        textToRead = theEntityManager.CreateEntityFromTemplate("rateit/text");
 
         TEXT(textToRead)->text = game->gameThreadContext->localizeAPI->text("please_rate_it");
         // ??
@@ -66,13 +64,11 @@ struct RateItScene : public StateHandler<Scene::Enum> {
         for (int i = 0; i < 3; i++) {
             a.str("");
             a << "boutonText_" << i;
-            boutonText[i] = theEntityManager.CreateEntity(a.str(),
-                EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("rateit/button_text"));
+            boutonText[i] = theEntityManager.CreateEntityFromTemplate("rateit/button_text");
 
             a.str("");
             a << "boutonContainer_" << i;
-            boutonContainer[i] = theEntityManager.CreateEntity(a.str(),
-                EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("rateit/button"));
+            boutonContainer[i] = theEntityManager.CreateEntityFromTemplate("rateit/button");
 
             TRANSFORM(boutonText[i])->position.y =
                 TRANSFORM(boutonContainer[i])->position.y = (float)PlacementHelper::GimpYToScreen(650 + i*183);
@@ -89,8 +85,10 @@ struct RateItScene : public StateHandler<Scene::Enum> {
     }
 
     void onEnter(Scene::Enum) override {
-        RENDERING(game->menubg)->show =
-            RENDERING(game->menufg)->show = true;
+        Entity menufg = theEntityManager.getEntityByName("mainmenu/foreground");
+        Entity menubg = theEntityManager.getEntityByName("mainmenu/background");
+        RENDERING(menubg)->show =
+            RENDERING(menufg)->show = true;
 
         RENDERING(textToReadContainer)->show = true;
         TEXT(textToRead)->show = true;

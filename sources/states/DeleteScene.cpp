@@ -51,8 +51,7 @@ struct DeleteScene : public StateHandler<Scene::Enum> {
     }
 
     void setup() {
-        deleteAnimation = theEntityManager.CreateEntity("deleteAnimation",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("deleteAnimation"));
+        deleteAnimation = theEntityManager.CreateEntityFromTemplate("deleteAnimation");
     }
 
     ///----------------------------------------------------------------------------//
@@ -61,7 +60,9 @@ struct DeleteScene : public StateHandler<Scene::Enum> {
     void onPreEnter(Scene::Enum) override {
     }
 
-    void onEnter(Scene::Enum) override {
+    void onEnter(Scene::Enum from) override {
+        if (from == Scene::Pause)
+            return;
         ADSR(deleteAnimation)->attackTiming = game->datas->timing.deletion;
 
         littleLeavesDeleted.clear();
@@ -131,10 +132,11 @@ struct DeleteScene : public StateHandler<Scene::Enum> {
     void onPreExit(Scene::Enum) override {
     }
 
-    void onExit(Scene::Enum) override {
+    void onExit(Scene::Enum to) override {
+        if (to == Scene::Pause)
+            return;
         ADSR(deleteAnimation)->active = false;
         removing.clear();
-        LOGI("'" << __PRETTY_FUNCTION__ << "'");
     }
 };
 

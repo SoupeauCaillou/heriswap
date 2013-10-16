@@ -50,10 +50,6 @@ public:
         logobg = theEntityManager.CreateEntityFromTemplate("logo/logo_bg");
         animLogo = theEntityManager.CreateEntityFromTemplate("logo/logo_anim");
 
-        ANCHOR(logo)->parent = game->camera;
-        ANCHOR(logobg)->parent = game->camera;
-        ANCHOR(animLogo)->parent = game->camera;
-
         glm::vec2 offset = glm::vec2(-10 / 800.0, 83/869.0) * TRANSFORM(logo)->size;
         ANCHOR(animLogo)->position = TRANSFORM(logo)->position + offset;
     }

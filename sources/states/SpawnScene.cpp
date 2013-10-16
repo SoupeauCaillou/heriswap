@@ -56,11 +56,8 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	}
 
 	void setup() {
-		haveToAddLeavesInGrid = theEntityManager.CreateEntity("haveToAddLeavesInGrid",
-			EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("spawn/haveToAddLeavesInGrid"));
-
-		replaceGrid = theEntityManager.CreateEntity("replaceGrid",
-			EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("spawn/replaceGrid"));
+		haveToAddLeavesInGrid = theEntityManager.CreateEntityFromTemplate("spawn/haveToAddLeavesInGrid");
+		replaceGrid = theEntityManager.CreateEntityFromTemplate("spawn/replaceGrid");
 	}
 
 	static int newLeavesInSpawning(std::vector<Feuille>& newLeaves, int i, int j) {

@@ -56,15 +56,12 @@ struct HelpScene : public StateHandler<Scene::Enum> {
     void setup() {
         const Color green("green");
 
-        title = theEntityManager.CreateEntity("title",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("help/title"));
+        title = theEntityManager.CreateEntityFromTemplate("help/title");
 
         // title text + bg
-        text = theEntityManager.CreateEntity("text",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("help/text"));
+        text = theEntityManager.CreateEntityFromTemplate("help/text");
 
-        postscriptum = theEntityManager.CreateEntity("postscriptum",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("help/postscriptum"));
+        postscriptum = theEntityManager.CreateEntityFromTemplate("help/postscriptum");
     }
 
     ///----------------------------------------------------------------------------//

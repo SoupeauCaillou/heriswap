@@ -48,11 +48,8 @@ struct CountDownScene : public StateHandler<Scene::Enum> {
     }
 
     void setup() {
-        counter = theEntityManager.CreateEntity("counter",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("counter"));
-
-        vorhang = theEntityManager.CreateEntity("vorhang",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("vorhang"));
+        counter = theEntityManager.CreateEntityFromTemplate("counter");
+        vorhang = theEntityManager.CreateEntityFromTemplate("vorhang");
     }
 
     ///----------------------------------------------------------------------------//

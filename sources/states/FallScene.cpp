@@ -49,8 +49,7 @@ struct FallScene : public StateHandler<Scene::Enum> {
     }
 
     void setup() {
-        fallAnimation = theEntityManager.CreateEntity("fallAnimation",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("fallAnimation"));
+        fallAnimation = theEntityManager.CreateEntityFromTemplate("fallAnimation");
     }
 
     ///----------------------------------------------------------------------------//

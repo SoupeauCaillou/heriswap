@@ -74,6 +74,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     Entity eStart[3];
     Entity modeTitleToReset;
     Entity bStart[3];
+    Entity menufg, menubg;
 
     float timeElapsed;
 
@@ -91,9 +92,13 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             a << "eStart_" << i;
             eStart[i] = theEntityManager.CreateEntityFromTemplate("mainmenu/"+ a.str());
 
-            TypedMorphElement<float>* sizeMorph = new TypedMorphElement<float>(&TEXT(eStart[i])->charHeight, TEXT(eStart[i])->charHeight, PlacementHelper::GimpHeightToScreen(54));
+            TypedMorphElement<float>* sizeMorph = new TypedMorphElement<float>(
+                &TEXT(eStart[i])->charHeight,
+                TEXT(eStart[i])->charHeight,
+                PlacementHelper::GimpHeightToScreen(54));
             MORPHING(eStart[i])->elements.push_back(sizeMorph);
-            TypedMorphElement<float>* alignMorph = new TypedMorphElement<float>(&TEXT(eStart[i])->positioning, 0, 1);
+            TypedMorphElement<float>* alignMorph = new TypedMorphElement<float>(
+                &TEXT(eStart[i])->positioning, 0, 1);
             MORPHING(eStart[i])->elements.push_back(alignMorph);
 
             a.str("");
@@ -119,9 +124,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9f;
         }
 
-        game->menubg = theEntityManager.CreateEntityFromTemplate("mainmenu/background");
-
-        game->menufg = theEntityManager.CreateEntityFromTemplate("mainmenu/foreground");
+        menubg = theEntityManager.CreateEntityFromTemplate("mainmenu/background");
+        menufg = theEntityManager.CreateEntityFromTemplate("mainmenu/foreground");
 
         game->herisson = theEntityManager.CreateEntityFromTemplate("mainmenu/herisson");
 
@@ -146,8 +150,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
                 game->datas->faderHelper.registerFadingInEntity(eStart[i]);
                 game->datas->faderHelper.registerFadingInEntity(bStart[i]);
             }
-            game->datas->faderHelper.registerFadingInEntity(game->menufg);
-            game->datas->faderHelper.registerFadingInEntity(game->menubg);
+            game->datas->faderHelper.registerFadingInEntity(menufg);
+            game->datas->faderHelper.registerFadingInEntity(menubg);
             game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.signButton);
             game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.achievementsButton);
             game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.leaderboardsButton);
@@ -181,8 +185,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
                 BUTTON(bStart[i])->enabled = true;
             }
 
-            RENDERING(game->menufg)->show =
-                RENDERING(game->menubg)->show =
+            RENDERING(menufg)->show =
+                RENDERING(menubg)->show =
                 RENDERING(game->datas->soundButton)->show =
                 RENDERING(game->herisson)->show = true;
 
@@ -224,25 +228,22 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             TRANSFORM(game->herisson)->position = AnchorSystem::adjustPositionWithCardinal(randomHerissionStart(),
                 TRANSFORM(game->herisson)->size, Cardinal::SE);
         }
-        game->title = 0;
+
         if (!modeTitleToReset || (modeTitleToReset && !MORPHING(modeTitleToReset)->active)) {
             if (BUTTON(bStart[0])->clicked) {
                 choosenGameMode = Normal;
                 SOUND(bStart[0])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-                game->title = eStart[0];
                 return Scene::ModeMenu;
             }
             if(BUTTON(bStart[1])->clicked){
                 choosenGameMode = TilesAttack;
 
                 SOUND(bStart[1])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-                game->title = eStart[1];
                 return Scene::ModeMenu;
             }
             if(BUTTON(bStart[2])->clicked){
                 choosenGameMode = Go100Seconds;
                 SOUND(bStart[2])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-                game->title = eStart[2];
                 return Scene::ModeMenu;
             }
         }
@@ -276,6 +277,14 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         modeTitleToReset = eStart[choosenGameMode];
 
         ANIMATION(game->herisson)->playbackSpeed = 4.5f;
+    }
+
+    bool updatePreExit(Scene::Enum, float) {
+        return !MORPHING(eStart[choosenGameMode])->active;
+    }
+
+    void onExit(Scene::Enum) override {
+        TEXT(eStart[choosenGameMode])->show = false;
     }
 };
 

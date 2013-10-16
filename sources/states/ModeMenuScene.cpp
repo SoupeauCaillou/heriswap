@@ -77,7 +77,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     } gameOverState;
 
     Entity playText, playContainer, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle, average;
-    Entity yourScore, fond;
+    Entity yourScore, fond, title;
     std::string playerName;
 
     Entity eDifficulty, bDifficulty;
@@ -95,89 +95,73 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     void setup() {
         const Color green("green");
 
+        title = theEntityManager.CreateEntityFromTemplate("modemenu/title");
         //Creating text entities
         for (int i=0; i<5; i++) {
             std::stringstream a;
             a.str("");
             a << "scoresName_" << i;
-            scoresName[i] = theEntityManager.CreateEntity(a.str(),
-                EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/score_name"));
+            scoresName[i] = theEntityManager.CreateEntityFromTemplate("modemenu/score_name");
             a.str("");
             a << "scoresPoints_" << i;
-            scoresPoints[i] = theEntityManager.CreateEntity(a.str(),
-                EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/score_points"));
+            scoresPoints[i] = theEntityManager.CreateEntityFromTemplate("modemenu/score_points");
             a.str("");
             a << "scoresLevel_" << i;
-            scoresLevel[i] = theEntityManager.CreateEntity(a.str(),
-                EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/score_level"));
+            scoresLevel[i] = theEntityManager.CreateEntityFromTemplate("modemenu/score_level");
 
             TRANSFORM(scoresName[i])->position.y =
                 TRANSFORM(scoresPoints[i])->position.y =
                     TRANSFORM(scoresLevel[i])->position.y = (float)PlacementHelper::GimpYToScreen(605 + i * 95);
         }
         // back button
-        back = theEntityManager.CreateEntity("back",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/back_button"));
+        back = theEntityManager.CreateEntityFromTemplate("modemenu/back_button");
 
         // score title
-        scoreTitle = theEntityManager.CreateEntity("scoreTitle",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/score_title"));
+        scoreTitle = theEntityManager.CreateEntityFromTemplate("modemenu/score_title");
         TEXT(scoreTitle)->text = game->gameThreadContext->localizeAPI->text("score");
 
         // score title
-        average = theEntityManager.CreateEntity("average",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/average"));
+        average = theEntityManager.CreateEntityFromTemplate("modemenu/average");
 
         // play text
-        playText = theEntityManager.CreateEntity("playText",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/play_text"));
+        playText = theEntityManager.CreateEntityFromTemplate("modemenu/play_text");
         TEXT(playText)->text = game->gameThreadContext->localizeAPI->text("play");
 
         // play button
-        playContainer = theEntityManager.CreateEntity("playContainer",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/play_container"));
+        playContainer = theEntityManager.CreateEntityFromTemplate("modemenu/play_container");
         CONTAINER(playContainer)->entities.push_back(playText);
 
         //difficulty text
-        eDifficulty = theEntityManager.CreateEntity("eDifficulty",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/difficulty_text"));
+        eDifficulty = theEntityManager.CreateEntityFromTemplate("modemenu/difficulty_text");
 
         //difficulty container
-        bDifficulty = theEntityManager.CreateEntity("bDifficulty",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/difficulty_button"));
+        bDifficulty = theEntityManager.CreateEntityFromTemplate("modemenu/difficulty_button");
         CONTAINER(bDifficulty)->entities.push_back(eDifficulty);
 
         // your score
-        yourScore = theEntityManager.CreateEntity("yourScore",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/your_score"));
+        yourScore = theEntityManager.CreateEntityFromTemplate("modemenu/your_score");
 
         // fond
-        fond = theEntityManager.CreateEntity("background",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/background"));
+        fond = theEntityManager.CreateEntityFromTemplate("modemenu/background");
 
         // enableSwarm text
-        enableSwarm = theEntityManager.CreateEntity("enableSwarm",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/enable_swarm"));
+        enableSwarm = theEntityManager.CreateEntityFromTemplate("modemenu/enable_swarm");
         TEXT(enableSwarm)->text = game->gameThreadContext->localizeAPI->text("get_googleplus");
 
         // enableSwarm container
-        enableSwarmContainer = theEntityManager.CreateEntity("enableSwarmContainer",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/swarm_container"));
+        enableSwarmContainer = theEntityManager.CreateEntityFromTemplate("modemenu/swarm_container");
         CONTAINER(enableSwarmContainer)->entities.push_back(enableSwarm);
 
 
     #if ! SAC_MOBILE
         // name input entities
-        input_label = theEntityManager.CreateEntity("input_label",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/input_label"));
+        input_label = theEntityManager.CreateEntityFromTemplate("modemenu/input_label");
         TEXT(input_label)->text = game->gameThreadContext->localizeAPI->text("enter_name");
 
-        input_textbox = theEntityManager.CreateEntity("input_textbox",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/input_textbox"));
+        input_textbox = theEntityManager.CreateEntityFromTemplate("modemenu/input_textbox");
         TEXT(input_textbox)->caret.speed = 0.5;
 
-        input_background = theEntityManager.CreateEntity("input_background",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("modemenu/input_background"));
+        input_background = theEntityManager.CreateEntityFromTemplate("modemenu/input_background");
     #endif
     }
 
@@ -319,6 +303,11 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum from) override {
+        std::stringstream textId;
+        textId << "mode_" << (1 + (int)(game->datas->mode));
+        TEXT(title)->text = game->gameThreadContext->localizeAPI->text(textId.str());
+        TEXT(title)->show = false;
+
         // if coming from game
         if (from == Scene::EndGame) {
             // exit game
@@ -363,14 +352,15 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         LoadScore(game->datas->mode, game->difficulty);
 
+        Entity menufg = theEntityManager.getEntityByName("mainmenu/foreground");
+        Entity menubg = theEntityManager.getEntityByName("mainmenu/background");
         RENDERING(back)->show =
             RENDERING(game->herisson)->show =
-            RENDERING(game->menubg)->show =
+            RENDERING(menubg)->show =
             RENDERING(fond)->show =
-            RENDERING(game->menufg)->show = true;
+            RENDERING(menufg)->show = true;
 
-        TEXT(game->title)->show =
-            TEXT(scoreTitle)->show =
+        TEXT(scoreTitle)->show =
             TEXT(eDifficulty)->show =
             TEXT(enableSwarm)->show =
             TEXT(playText)->show = true;
@@ -411,6 +401,10 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         } else {
             return true;
         }
+    }
+
+    void onEnter(Scene::Enum) override {
+        TEXT(title)->show = true;
     }
 
     ///----------------------------------------------------------------------------//
@@ -471,7 +465,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
                     if (game->gameThreadContext->communicationAPI->mustShowRateDialog()) {
                         TRANSFORM(game->herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(game->herisson)->size.x;
-                        TEXT(game->title)->show = false;
+                        TEXT(title)->show = false;
                         return Scene::RateIt;
                     }
 
@@ -540,8 +534,13 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- EXIT SECTION -----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreExit(Scene::Enum to) override {
-        if (to != Scene::MainMenu && to != Scene::Help) {
-            game->datas->faderHelper.start(Fading::Out, 0.5);
+        switch (to) {
+            case Scene::MainMenu:
+            case Scene::Help:
+            case Scene::RateIt:
+                break;
+            default:
+                game->datas->faderHelper.start(Fading::Out, 0.5);
         }
     }
 
@@ -549,6 +548,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         switch (to) {
             case Scene::MainMenu:
             case Scene::Help:
+            case Scene::RateIt:
                 return true;
             default:
                 return game->datas->faderHelper.update(dt);
@@ -561,11 +561,11 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             game->datas->successMgr->NewGame(game->difficulty);
             TRANSFORM(game->herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(game->herisson)->size.x;
 
+            Entity menufg = theEntityManager.getEntityByName("mainmenu/foreground");
+            Entity menubg = theEntityManager.getEntityByName("mainmenu/background");
             RENDERING(game->herisson)->show =
-                RENDERING(game->menubg)->show =
-                RENDERING(game->menufg)->show = false;
-
-            TEXT(game->title)->show = false;
+                RENDERING(menubg)->show =
+                RENDERING(menufg)->show = false;
 
         #if SAC_ANDROID
             BUTTON(enableSwarmContainer)->enabled = false;
@@ -573,6 +573,8 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             CONTAINER(enableSwarmContainer)->enable = false;
         #endif
         }
+
+        TEXT(title)->show = false;
 
         for (int i = 0; i<5; ++i) {
             TEXT(scoresPoints[i])->show =
