@@ -18,6 +18,7 @@
     along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 #include "Go100SecondsModeManager.h"
 
 #include "DepthLayer.h"
