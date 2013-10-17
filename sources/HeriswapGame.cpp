@@ -24,6 +24,7 @@
 #include "CombinationMark.h"
 #include "DepthLayer.h"
 #include "Game_Private.h"
+#include "util/ScoreStorageProxy.h"
 #include "systems/HeriswapGridSystem.h"
 #include "systems/TwitchSystem.h"
 #include "systems/BackgroundSystem.h"
@@ -40,9 +41,15 @@
 
 #include "systems/ADSRSystem.h"
 #include "systems/AnimationSystem.h"
+#include "systems/AutoDestroySystem.h"
+#include "systems/AutonomousAgentSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/CameraSystem.h"
+#include "systems/CollisionSystem.h"
 #include "systems/ContainerSystem.h"
+#include "systems/DebuggingSystem.h"
+#include "systems/GraphSystem.h"
+#include "systems/GridSystem.h"
 #include "systems/MorphingSystem.h"
 #include "systems/MusicSystem.h"
 #include "systems/ParticuleSystem.h"
@@ -52,8 +59,8 @@
 #include "systems/SoundSystem.h"
 #include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
+#include "systems/ZSQDSystem.h"
 
-#include "util/ScoreStorageProxy.h"
     
 #include <glm/glm.hpp>
 #include <glm/gtx/constants.hpp>
@@ -204,6 +211,17 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
 
     LOGI("\t- Define vibrateAPI...");
     theButtonSystem.vibrateAPI = gameThreadContext->vibrateAPI;
+
+    // destroy sac unused systems
+    AutoDestroySystem::DestroyInstance();
+    AutonomousAgentSystem::DestroyInstance();
+    CollisionSystem::DestroyInstance();
+    DebuggingSystem::DestroyInstance();
+    GraphSystem::DestroyInstance();
+    GridSystem::DestroyInstance();
+    ZSQDSystem::DestroyInstance();
+    
+    Game::buildOrderedSystemsToUpdateList();
 
     LOGI("SAC engine initialisation done.");
 }

@@ -39,7 +39,6 @@
 #include "base/PlacementHelper.h"
 
 #include "systems/AnimationSystem.h"
-#include "systems/AutoDestroySystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/MorphingSystem.h"
 #include "systems/PhysicsSystem.h"

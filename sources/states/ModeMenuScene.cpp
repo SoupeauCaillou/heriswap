@@ -44,7 +44,6 @@
 #include "base/TouchInputManager.h"
 
 #include "systems/AnimationSystem.h"
-#include "systems/AutoDestroySystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/ContainerSystem.h"
 #include "systems/MorphingSystem.h"
