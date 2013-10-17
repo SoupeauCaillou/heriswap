@@ -141,7 +141,6 @@ HeriswapGame::~HeriswapGame() {
 
 bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
     switch (api) {
-        case ContextAPI::Ad:
         case ContextAPI::Asset:
         case ContextAPI::Communication:
         case ContextAPI::GameCenter:
