@@ -80,6 +80,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
     MainMenuScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
         this->game = game;
+        timeElapsed = 0.0f;
     }
 
     void setup() {

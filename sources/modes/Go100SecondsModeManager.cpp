@@ -70,6 +70,14 @@ void Go100SecondsGameModeManager::Setup() {
 		RENDERING(e)->show = false;
 	}
 }
+
+void Go100SecondsGameModeManager::initPosition() {
+	limit = 100;
+	pts.clear();
+	pts.push_back(glm::vec2(0.f, 0.f));
+
+	pts.push_back(glm::vec2(limit, 1.f));//need limit leaves to end game
+}
 #define RATE 1
 void Go100SecondsGameModeManager::Enter() {
 	time = 0;
@@ -78,10 +86,8 @@ void Go100SecondsGameModeManager::Enter() {
 	squallGo = false;
 	squallDuration = 0.f;
 	bonus = glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
-	pts.clear();
-	pts.push_back(glm::vec2(0.f, 0.f));
 
-	pts.push_back(glm::vec2(limit, 1.f));//need limit leaves to end game
+	initPosition();
 
 	generateLeaves(0, 8);
 
@@ -263,6 +269,8 @@ int Go100SecondsGameModeManager::saveInternalState(uint8_t** out) {
 
 const uint8_t* Go100SecondsGameModeManager::restoreInternalState(const uint8_t* in, int size) {
     in = GameModeManager::restoreInternalState(in, size);
+
+    initPosition();
 
     TRANSFORM(herisson)->position.x = GameModeManager::position(time);
 

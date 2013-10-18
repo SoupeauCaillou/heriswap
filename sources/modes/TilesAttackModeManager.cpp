@@ -47,12 +47,7 @@ void TilesAttackGameModeManager::Setup() {
 	GameModeManager::Setup();
 }
 
-void TilesAttackGameModeManager::Enter() {
-	time = 0;
-	leavesDone = 0;
-	points = 0;
-	bonus =  glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
-	succNoGridReset=false;
+void TilesAttackGameModeManager::initPosition() {
 	pts.clear();
 	pts.push_back(glm::vec2(0, 0));
 	if (theHeriswapGridSystem.sizeToDifficulty() == DifficultyEasy)
@@ -62,6 +57,15 @@ void TilesAttackGameModeManager::Enter() {
 	else
 		limit = 100;
 	pts.push_back(glm::vec2(limit, 1));//need limit leaves to end game
+}
+
+void TilesAttackGameModeManager::Enter() {
+	time = 0;
+	leavesDone = 0;
+	points = 0;
+	bonus =  glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
+	succNoGridReset=false;
+	initPosition();
 
 	generateLeaves(0, 8);
 
@@ -209,6 +213,7 @@ const uint8_t* TilesAttackGameModeManager::restoreInternalState(const uint8_t* i
     in = GameModeManager::restoreInternalState(in, size);
     memcpy(&leavesDone, in, sizeof(leavesDone)); in += sizeof(leavesDone);
 
+    initPosition();
     TRANSFORM(herisson)->position.x = GameModeManager::position(leavesDone);
 
     return in;

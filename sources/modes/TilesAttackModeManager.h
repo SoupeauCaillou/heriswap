@@ -49,6 +49,7 @@ class TilesAttackGameModeManager : public GameModeManager {
 		int saveInternalState(uint8_t** out);
         const uint8_t* restoreInternalState(const uint8_t* in, int size);
 	private:
+		void initPosition();
 		unsigned int leavesDone;
 		bool succNoGridReset;
 };
