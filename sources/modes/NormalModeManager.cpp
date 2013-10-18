@@ -49,6 +49,9 @@ NormalGameModeManager::NormalGameModeManager(HeriswapGame* game, SuccessManager*
     pts.push_back(glm::vec2(25.f,0.25f));
     pts.push_back(glm::vec2(35.f,0.5f));
     pts.push_back(glm::vec2(45.f,1.f));
+
+    helpAvailable = true;
+    levelMoveDuration = 0;
 }
 
 NormalGameModeManager::~NormalGameModeManager() {

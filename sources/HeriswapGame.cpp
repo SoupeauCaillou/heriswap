@@ -575,7 +575,6 @@ struct SavedState {
 
     int stateMachineSize;
     int entitySize;
-    int systemSize;
     int gameStateSize;
 };
 
@@ -587,7 +586,6 @@ void HeriswapGame::initSerializer(Serializer& s) const {
     
     s.add(new Property<int>("state_machine_size", OFFSET(stateMachineSize, ss)));
     s.add(new Property<int>("entity_size", OFFSET(entitySize, ss)));
-    s.add(new Property<int>("system_size", OFFSET(systemSize, ss)));
     s.add(new Property<int>("game_state_size", OFFSET(gameStateSize, ss)));
 }
 
@@ -616,10 +614,6 @@ int HeriswapGame::saveState(uint8_t** out) {
     uint8_t* entities = 0;
     ss.entitySize = theEntityManager.serialize(&entities);
 
-    /* save System with assets ? (texture name -> texture ref map of RenderingSystem ?) */
-    uint8_t* systems = 0;
-    ss.systemSize = theRenderingSystem.saveInternalState(&systems);
-
     /* scene state machine */
     uint8_t* ssm = 0;
     ss.stateMachineSize = sceneStateMachine.serialize(&ssm);
@@ -637,7 +631,6 @@ int HeriswapGame::saveState(uint8_t** out) {
     int finalSize = sizeof(int) +
         gmSize +
         ss.entitySize +
-        ss.systemSize +
         ss.gameStateSize +
         ss.stateMachineSize;
     *out = new uint8_t[finalSize];
@@ -648,23 +641,10 @@ int HeriswapGame::saveState(uint8_t** out) {
 
     ptr = (uint8_t*)mempcpy(ptr, game, gmSize);
     ptr = (uint8_t*)mempcpy(ptr, entities, ss.entitySize);
-    ptr = (uint8_t*)mempcpy(ptr, systems, ss.systemSize);
     ptr = (uint8_t*)mempcpy(ptr, ssm, ss.stateMachineSize);
     ptr = (uint8_t*)mempcpy(ptr, gamemode, ss.gameStateSize);
 
     return finalSize;
-}
-
-const uint8_t* HeriswapGame::loadEntitySystemState(const uint8_t* in, int) {
-    /* restore Game fields */
-    int eSize, sSize, index=0;
-    memcpy(&eSize, &in[index], sizeof(eSize));
-    index += sizeof(eSize);
-    memcpy(&sSize, &in[index], sizeof(sSize));
-    index += sizeof(sSize);
-
-    index += sSize;
-    return &in[index];
 }
 
 void HeriswapGame::loadGameState(const uint8_t* in, int ) {
@@ -686,10 +666,6 @@ void HeriswapGame::loadGameState(const uint8_t* in, int ) {
     /* restore entities */
     theEntityManager.deserialize(in, ss.entitySize);
     in += ss.entitySize;
-
-    /* restore systems */
-    theRenderingSystem.restoreInternalState(in, ss.systemSize);
-    in += ss.systemSize;
 
     /* restore state machine */
     sceneStateMachine.deserialize(in, ss.stateMachineSize);

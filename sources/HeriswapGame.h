@@ -77,7 +77,6 @@ class HeriswapGame : public Game {
         void prepareNewGame();
 		void setupGameProp();
     private:
-        const uint8_t* loadEntitySystemState(const uint8_t* in, int size);
         void loadGameState(const uint8_t* in, int size);
 		bool shouldPlayPiano();
         void onLeaderboardClick();
