@@ -69,7 +69,7 @@ public class HeriswapActivity extends SacActivity {
 		StorageAPI.Instance().init(this);
 		ExitAPI.Instance();
 		MusicAPI.Instance();
-		SoundAPI.Instance();
+		SoundAPI.Instance().init(getAssets());
 		CommunicationAPI.Instance().init(this, getPreferences(MODE_PRIVATE));
 		StringInputAPI.Instance().init(
 			(Button)findViewById(R.id.name_save),
