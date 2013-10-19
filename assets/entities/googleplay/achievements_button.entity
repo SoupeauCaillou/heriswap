@@ -1,15 +1,12 @@
 [Transformation]
-size%gimp = 129, 92
-
-[Anchor]
-parent%name = gg/sign_in_out_button
-positionS%gimp_size= 0, 76
-z = 0
+positionSW%gimp = 46, 1080
+size%gimp = 180, 127
 
 [Rendering]
+show=1
 opaque_type = 0
 
 [Button]
-overSize = 1.2
+overSize = 1.0
 texture_inactive = gg_achievements
 texture_active = gg_achievements_active

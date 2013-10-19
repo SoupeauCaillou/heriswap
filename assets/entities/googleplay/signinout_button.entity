@@ -1,14 +1,12 @@
 [Transformation]
-positionSW%screen = -0.5, -0.5
-size%screen = 0.125, 0.074
-z = 0.51
+positionSW%gimp = 46, 1234
+size%gimp = 180, 127
 
 [Rendering]
-texture = swarm_icon
 show=1
 opaque_type = 0
 
 [Button]
-overSize = 1.2
+overSize = 1.0
 texture_inactive = gg_signinout
 texture_active = gg_signinout_active
