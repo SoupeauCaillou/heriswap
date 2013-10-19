@@ -1,10 +1,11 @@
 [Transformation]
 positionN%screen = 0, -0.303
-size%screen = 0.1775, 0.0906
+size%screen_w,texture_ratio = 0.1775
 z = 0.155
 
 [Rendering]
 opaque_type = 0
+texture = herisson_2_1
 
 [Animation]
 playback_speed = 4.1
