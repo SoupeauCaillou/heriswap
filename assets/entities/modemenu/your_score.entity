@@ -1,8 +1,0 @@
-extends = modemenu/text
-
-[Transformation]
-position%gimp = 400, 1215
-
-[Text]
-char_height%gimp_h = 56
-positioning = 0.5
