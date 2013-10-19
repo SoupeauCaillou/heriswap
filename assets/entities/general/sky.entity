@@ -1,6 +1,6 @@
 [Transformation]
 positionN%gimp = 400, 0
-size%screen_w = 1, 1.03
+size%screen_w = 1, 1.1
 z = 0.01
 
 [Scrolling]
