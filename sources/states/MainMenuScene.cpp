@@ -75,6 +75,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     Entity modeTitleToReset;
     Entity bStart[3];
     Entity menufg, menubg;
+    Entity ggsBg;
 
     float timeElapsed;
 
@@ -127,6 +128,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
         menubg = theEntityManager.CreateEntityFromTemplate("mainmenu/background");
         menufg = theEntityManager.CreateEntityFromTemplate("mainmenu/foreground");
+        ggsBg = theEntityManager.CreateEntityFromTemplate("mainmenu/bg_ggs");
 
         game->herisson = theEntityManager.CreateEntityFromTemplate("mainmenu/herisson");
 
@@ -145,6 +147,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum pState) override {
+        BUTTON(game->datas->soundButton)->enabled = 
+            RENDERING(game->datas->soundButton)->show = false;
+
         if (pState == Scene::Logo) {
             // setup fadein
             for (int i=0; i<3; ++i) {
@@ -153,10 +158,10 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             }
             game->datas->faderHelper.registerFadingInEntity(menufg);
             game->datas->faderHelper.registerFadingInEntity(menubg);
+            game->datas->faderHelper.registerFadingInEntity(ggsBg);
             game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.signButton);
             game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.achievementsButton);
             game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.leaderboardsButton);
-            game->datas->faderHelper.registerFadingInEntity(game->datas->soundButton);
             game->datas->faderHelper.registerFadingInEntity(game->herisson);
             game->datas->faderHelper.registerFadingInEntity(game->datas->sky);
 
@@ -189,12 +194,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
             RENDERING(menufg)->show =
                 RENDERING(menubg)->show =
-                RENDERING(game->datas->soundButton)->show =
+                RENDERING(ggsBg)->show =
                 RENDERING(game->herisson)->show = true;
-
-            BUTTON(game->datas->soundButton)->enabled = true;
-
-
             SCROLLING(game->datas->sky)->show = true;
 
             theBackgroundSystem.showAll();
@@ -274,6 +275,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             RENDERING(bStart[i])->show = false;
             BUTTON(bStart[i])->enabled = false;
         }
+        RENDERING(ggsBg)->show = false;
 
         if (modeTitleToReset) {
             theMorphingSystem.reverse(MORPHING(modeTitleToReset));
@@ -283,6 +285,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         modeTitleToReset = eStart[choosenGameMode];
 
         ANIMATION(game->herisson)->playbackSpeed = 4.5f;
+
+        BUTTON(game->datas->soundButton)->enabled = 
+            RENDERING(game->datas->soundButton)->show = true;
     }
 
     bool updatePreExit(Scene::Enum, float) {

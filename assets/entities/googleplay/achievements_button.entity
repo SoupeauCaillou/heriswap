@@ -1,7 +1,10 @@
 [Transformation]
-positionSW%gimp = 46, 1080
-size%gimp = 180, 127
-z = 0.7
+size%gimp = 150, 107
+
+[Anchor]
+parent%name = mainmenu/bg_ggs
+position%gimp_size = -247,0
+z = 0.1
 
 [Rendering]
 opaque_type = 0
