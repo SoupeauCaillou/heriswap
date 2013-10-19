@@ -1,6 +1,6 @@
 [Transformation]
-positionNW%gimp = 0, 0
-size%gimp = 800, 218.93
+positionN%screen = 0, 0.5
+size%screen_w,texture_ratio = 1
 z = 0.12
 
 [Rendering]

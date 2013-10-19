@@ -276,6 +276,7 @@ void GameModeManager::fillVec() {
     for (int i=0; i<8*6; i++) {
         glm::vec2 v((float)PlacementHelper::GimpXToScreen(pos[3*i]),
                     (float)PlacementHelper::GimpYToScreen(pos[3*i+1]));
+        v.x *= PlacementHelper::ScreenSize.x / PlacementHelper::GimpWidthToScreen(800);
         Render truc = {v, glm::radians<float>(pos[3*i+2])};
         posBranch.push_back(truc);
     }
