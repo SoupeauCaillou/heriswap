@@ -182,6 +182,7 @@ void GameModeManager::Exit() {
     SCROLLING(decor2nd)->show = false;
     SCROLLING(decor1er)->show = false;
 
+    uiHelper.game->stopInGameMusics();
     uiHelper.hide();
 
     // delete leaves
