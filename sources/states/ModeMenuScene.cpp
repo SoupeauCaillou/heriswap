@@ -519,6 +519,12 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
                 return Scene::MainMenu;
             }
+
+            // lb button
+            else if (BUTTON(leaderboard[0])->clicked) {
+                const int e = (game->datas->mode * 3 + game->difficulty);
+                game->gameThreadContext->gameCenterAPI->openSpecificLeaderboard(e);
+            }
         }
         return Scene::ModeMenu;
     }
