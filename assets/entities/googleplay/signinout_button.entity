@@ -1,12 +1,13 @@
 [Transformation]
 positionSW%gimp = 46, 1234
 size%gimp = 180, 127
+z = 0.7
 
 [Rendering]
-show=1
 opaque_type = 0
+texture = gg_signin
 
 [Button]
 overSize = 1.0
-texture_inactive = gg_signinout
-texture_active = gg_signinout_active
+texture_inactive = gg_signin
+texture_active = gg_signin_active

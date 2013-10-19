@@ -86,8 +86,6 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         Entity input_label, input_textbox, input_background;
 #endif
 
-    Entity enableSwarm, enableSwarmContainer;
-
     ModeMenuScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
         this->game = game;
     }
@@ -143,15 +141,6 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         // fond
         fond = theEntityManager.CreateEntityFromTemplate("modemenu/background");
-
-        // enableSwarm text
-        enableSwarm = theEntityManager.CreateEntityFromTemplate("modemenu/enable_swarm");
-        TEXT(enableSwarm)->text = game->gameThreadContext->localizeAPI->text("get_googleplus");
-
-        // enableSwarm container
-        enableSwarmContainer = theEntityManager.CreateEntityFromTemplate("modemenu/swarm_container");
-        CONTAINER(enableSwarmContainer)->entities.push_back(enableSwarm);
-
 
     #if ! SAC_MOBILE
         // name input entities
@@ -362,13 +351,11 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         TEXT(scoreTitle)->show =
             TEXT(eDifficulty)->show =
-            TEXT(enableSwarm)->show =
             TEXT(playText)->show = true;
 
         BUTTON(bDifficulty)->enabled = true;
 
         CONTAINER(playContainer)->enable =
-            CONTAINER(enableSwarmContainer)->enable =
             CONTAINER(bDifficulty)->enable = true;
 
         SCROLLING(game->datas->sky)->show = true;
@@ -383,16 +370,6 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_3") + " }";
 
         CONTAINER(playContainer)->enable = CONTAINER(bDifficulty)->enable = true;
-
-        #if SAC_ANDROID
-        if (gameOverState == NoGame) {
-            if (! game->gameThreadContext->gameCenterAPI->isRegistered()) {
-                BUTTON(enableSwarmContainer)->enabled = true;
-                TEXT(enableSwarm)->show = true;
-                CONTAINER(enableSwarmContainer)->enable = true;
-            }
-        }
-        #endif
     }
 
     bool updatePreEnter(Scene::Enum from, float dt) {
@@ -520,12 +497,6 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
                 return Scene::MainMenu;
             }
-
-            //enableSwarm button
-            else if (BUTTON(enableSwarmContainer)->clicked) {
-                LOGE("NOT HANDLED YET!");
-                // communicationAPI->swarmRegistering(modeMgr->GetMode(), theHeriswapGridSystem.sizeToDifficulty());
-            }
         }
         return Scene::ModeMenu;
     }
@@ -566,12 +537,6 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             RENDERING(game->herisson)->show =
                 RENDERING(menubg)->show =
                 RENDERING(menufg)->show = false;
-
-        #if SAC_ANDROID
-            BUTTON(enableSwarmContainer)->enabled = false;
-            TEXT(enableSwarm)->show = false;
-            CONTAINER(enableSwarmContainer)->enable = false;
-        #endif
         }
 
         TEXT(title)->show = false;
@@ -589,16 +554,12 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             TEXT(eDifficulty)->show =
             TEXT(yourScore)->show =
             TEXT(average)->show =
-            TEXT(enableSwarm)->show =
             TEXT(playText)->show = false;
 
         BUTTON(bDifficulty)->enabled = false;
 
         CONTAINER(playContainer)->enable =
-            CONTAINER(enableSwarmContainer)->enable =
             CONTAINER(bDifficulty)->enable = false;
-
-
     }
 };
 

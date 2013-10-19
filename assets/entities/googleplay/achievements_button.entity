@@ -1,10 +1,11 @@
 [Transformation]
 positionSW%gimp = 46, 1080
 size%gimp = 180, 127
+z = 0.7
 
 [Rendering]
-show=1
 opaque_type = 0
+texture = gg_achievements
 
 [Button]
 overSize = 1.0

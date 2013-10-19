@@ -163,9 +163,10 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             game->datas->faderHelper.registerFadingInCallback([this] () -> void {
                 theBackgroundSystem.showAll();
                 SCROLLING(game->datas->sky)->show = true;
+                game->datas->gamecenterAPIHelper.displayUI();
             });
         } else {
-
+            game->datas->gamecenterAPIHelper.displayUI();
             if (pState == Scene::Pause) {
                 LOGI("aborted. going to main menu");
                 if (game->datas->mode == Normal) {
@@ -218,6 +219,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- UPDATE SECTION ---------------------------------------//
     ///----------------------------------------------------------------------------//
     Scene::Enum update(float dt) override {
+        game->datas->gamecenterAPIHelper.updateUI();
+
         if (TRANSFORM(game->herisson)->position.x < PlacementHelper::GimpXToScreen(800)+TRANSFORM(game->herisson)->size.x) {
             TRANSFORM(game->herisson)->position.x += ANIMATION(game->herisson)->playbackSpeed/8. * dt;
         } else {
@@ -255,6 +258,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- EXIT SECTION -----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreExit(Scene::Enum to) override {
+        game->datas->gamecenterAPIHelper.hideUI();
+
         ScoreStorageProxy ssp;
         ssp.setValue("time", ObjectSerializer<float>::object2string(timeElapsed), true);
         timeElapsed = 0.f;
