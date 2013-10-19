@@ -158,7 +158,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     #endif
     }
 
-    void LoadScore(GameMode mode, Difficulty dif) {
+    void loadScore(GameMode mode, Difficulty dif) {
         float avg = 0.f;
 
         std::stringstream ss;
@@ -350,7 +350,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             game->difficulty = theHeriswapGridSystem.sizeToDifficulty();
         }
 
-        LoadScore(game->datas->mode, game->difficulty);
+        loadScore(game->datas->mode, game->difficulty);
 
         Entity menufg = theEntityManager.getEntityByName("mainmenu/foreground");
         Entity menubg = theEntityManager.getEntityByName("mainmenu/background");
@@ -459,7 +459,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                         game->datas->successMgr->sBTAM(game->gameThreadContext->storageAPI, game->difficulty, game->datas->mode2Manager[game->datas->mode]->time);
 
                     submitScore(playerName);
-                    LoadScore(game->datas->mode, game->difficulty);
+                    loadScore(game->datas->mode, game->difficulty);
                     gameOverState = NoGame;
 
                     if (game->gameThreadContext->communicationAPI->mustShowRateDialog()) {
@@ -496,7 +496,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                     TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_3") + " }";
 
                 TEXT(playText)->text = game->gameThreadContext->localizeAPI->text("play");
-                LoadScore(game->datas->mode, game->difficulty);
+                loadScore(game->datas->mode, game->difficulty);
             }
 
             //new game button

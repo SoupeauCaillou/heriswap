@@ -214,7 +214,11 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     theButtonSystem.vibrateAPI = gameThreadContext->vibrateAPI;
 
     // destroy sac unused systems
+
+#if ! SAC_DESKTOP
+    //used for gamecenter api debug...
     AutoDestroySystem::DestroyInstance();
+#endif
     AutonomousAgentSystem::DestroyInstance();
     CollisionSystem::DestroyInstance();
     DebuggingSystem::DestroyInstance();
