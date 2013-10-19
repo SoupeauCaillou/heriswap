@@ -72,10 +72,10 @@ public:
     }
 
     float timeAccum;
+    bool soundPlayed;
     void onEnter(Scene::Enum) override {
-        SOUND(animLogo)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg");
-
         timeAccum = 0;
+        soundPlayed = false;
     }
 
 
@@ -89,6 +89,10 @@ public:
             RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo2_365_331");
         }
         else if (timeAccum > 0.8 + 0.05) {
+            if (!soundPlayed) {
+                SOUND(animLogo)->sound = theSoundSystem.loadSoundFile("audio/son_monte.ogg");
+                soundPlayed = true;
+            }
             RENDERING(animLogo)->texture = theRenderingSystem.loadTextureFile("soupe_logo3_365_331");
         }
         else if (timeAccum > 0.8) {
