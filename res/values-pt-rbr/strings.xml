@@ -30,7 +30,6 @@
   <string name="rate_now">"Avaliar agora"</string>
   <string name="rate_later">"Depois"</string>
   <string name="rate_never">"Não, obrigado"</string>
-  <string name="get_googleplus">"Habilita o placar ×games_controller_green,1× para comparar sua pontuação com os outros!"</string>
   <string name="change_difficulty">"Você parece ser muito bom!\nDeseja iniciar um novo jogo com dificuldade aumentada?"</string>
   <string name="change_difficulty_yes">"Aumentar dificuldade"</string>
   <string name="change_difficulty_no">"Não, deixe fácil"</string>

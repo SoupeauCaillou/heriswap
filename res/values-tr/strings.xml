@@ -29,7 +29,6 @@
   <string name="rate_now">"Şimdi oyla"</string>
   <string name="rate_later">"Sonra"</string>
   <string name="rate_never">"Hayır teşekkürler"</string>
-  <string name="get_googleplus">"Play Games'ı ×games_controller_green,1× etkinleştirerek skorlarınızı diğer oyuncularla karşılaştırın!"</string>
   <string name="change_difficulty">"Gerçekten iyi gibisiniz.\nZorluğu yükseltilmiş yeni bir oyun başlatmak ister misiniz?"</string>
   <string name="change_difficulty_yes">"Zorluğu yükselt"</string>
   <string name="change_difficulty_no">"Hayır, kolay olsun"</string>
