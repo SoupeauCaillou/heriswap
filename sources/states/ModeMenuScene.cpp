@@ -77,7 +77,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     } gameOverState;
 
     Entity playText, playContainer, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle, average;
-    Entity fond, title;
+    Entity yourScore, fond, title;
     std::string playerName;
     Entity leaderboard[2];
 
@@ -136,6 +136,9 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         //difficulty container
         bDifficulty = theEntityManager.CreateEntityFromTemplate("modemenu/difficulty_button");
         CONTAINER(bDifficulty)->entities.push_back(eDifficulty);
+
+        // your score
+        yourScore = theEntityManager.CreateEntityFromTemplate("modemenu/your_score");
 
         // fond
         fond = theEntityManager.CreateEntityFromTemplate("modemenu/background");
@@ -426,6 +429,17 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                     submitScore("rzehtrtyBg");
                 }
 
+                TEXT(yourScore)->show = true;
+                std::stringstream a;
+                a.precision(1);
+                if (game->datas->mode==Normal) {
+                    a << game->datas->mode2Manager[game->datas->mode]->points << " : "<< game->gameThreadContext->localizeAPI->text("lvl") << " " << static_cast<NormalGameModeManager*>(game->datas->mode2Manager[game->datas->mode])->currentLevel();
+                } else if (game->datas->mode==Go100Seconds) {
+                    a << game->datas->mode2Manager[game->datas->mode]->points;
+                } else {
+                    a << std::fixed << ((int)(game->datas->mode2Manager[game->datas->mode]->time*10))/10.f << " s";
+                }
+                TEXT(yourScore)->text = a.str();
                 game->datas->successMgr->sTestEverything(game->gameThreadContext->storageAPI);
                 break;
             }
@@ -573,6 +587,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         TEXT(scoreTitle)->show =
             TEXT(eDifficulty)->show =
+            TEXT(yourScore)->show =
             TEXT(average)->show =
             TEXT(playText)->show = false;
 
