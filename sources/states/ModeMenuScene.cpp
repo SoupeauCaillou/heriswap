@@ -79,6 +79,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     Entity playText, playContainer, scoresPoints[5], scoresName[5], scoresLevel[5], back, scoreTitle, average;
     Entity yourScore, fond, title;
     std::string playerName;
+    Entity leaderboard[2];
 
     Entity eDifficulty, bDifficulty;
 
@@ -141,6 +142,9 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         // fond
         fond = theEntityManager.CreateEntityFromTemplate("modemenu/background");
+
+        leaderboard[0] = theEntityManager.CreateEntityFromTemplate("modemenu/b_leaderboard");
+        leaderboard[1] = theEntityManager.CreateEntityFromTemplate("modemenu/text_leaderboard");
 
     #if ! SAC_MOBILE
         // name input entities
@@ -223,6 +227,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             }
         }
 
+#if 0
         if (avg > 0) {
             std::stringstream a;
             a.precision(1);
@@ -238,6 +243,9 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         } else {
             TEXT(average)->show = false;
         }
+#else
+        TEXT(average)->show = false;
+#endif
     }
 
     void submitScore(const std::string& playerName) {
@@ -292,6 +300,9 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum from) override {
+        BUTTON(game->datas->soundButton)->enabled = 
+            RENDERING(game->datas->soundButton)->show = false;
+
         std::stringstream textId;
         textId << "mode_" << (1 + (int)(game->datas->mode));
         TEXT(title)->text = game->gameThreadContext->localizeAPI->text(textId.str());
@@ -370,6 +381,17 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_3") + " }";
 
         CONTAINER(playContainer)->enable = CONTAINER(bDifficulty)->enable = true;
+
+        if (game->gameThreadContext->gameCenterAPI->isConnected()) {
+            RENDERING(leaderboard[0])->show =
+                TEXT(leaderboard[1])->show = 
+                    BUTTON(leaderboard[0])->enabled = true;
+            TEXT(leaderboard[1])->text = game->gameThreadContext->localizeAPI->text("leaderboard");
+        } else {
+            RENDERING(leaderboard[0])->show =
+                TEXT(leaderboard[1])->show = 
+                    BUTTON(leaderboard[0])->enabled = false;
+        }
     }
 
     bool updatePreEnter(Scene::Enum from, float dt) {
@@ -537,7 +559,14 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             RENDERING(game->herisson)->show =
                 RENDERING(menubg)->show =
                 RENDERING(menufg)->show = false;
+
+            BUTTON(game->datas->soundButton)->enabled = 
+                RENDERING(game->datas->soundButton)->show = true;
         }
+
+        RENDERING(leaderboard[0])->show =
+            TEXT(leaderboard[1])->show = 
+            BUTTON(leaderboard[0])->enabled = false;
 
         TEXT(title)->show = false;
 
