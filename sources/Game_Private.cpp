@@ -66,33 +66,27 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
         RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_off");
 
     for (int i=0; i<3; ++i) {
-        Entity e = theEntityManager.CreateEntity("cloud",
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/cloud"));
+        Entity e = theEntityManager.CreateEntityFromTemplate("general/cloud");
         theBackgroundSystem.initCloud(e, i);
     }
 
     for(auto it : mode2Manager)
         it.second->Setup();
 
-    menu = theEntityManager.CreateEntity("menu",
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("music/menuTrack"));
+    menu = theEntityManager.CreateEntityFromTemplate("music/menuTrack");
 
-    inGameMusic.masterTrack = theEntityManager.CreateEntity("masterTrack",
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("music/masterTrack"));
+    inGameMusic.masterTrack = theEntityManager.CreateEntityFromTemplate("music/masterTrack");
 
     for (int i=0; i<3; i++) {
         std::stringstream a;
         a << "" << "secondaryTracks_" << i;
-        inGameMusic.secondaryTracks[i] = theEntityManager.CreateEntity(a.str(),
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("music/secondaryTrack"));
+        inGameMusic.secondaryTracks[i] = theEntityManager.CreateEntityFromTemplate("music/secondaryTrack");
         MUSIC(inGameMusic.secondaryTracks[i])->master = MUSIC(inGameMusic.masterTrack);
     }
-    inGameMusic.accessoryTrack = theEntityManager.CreateEntity("accessoryTrack",
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("music/accessoryTrack"));
+    inGameMusic.accessoryTrack = theEntityManager.CreateEntityFromTemplate("music/accessoryTrack");
     MUSIC(inGameMusic.accessoryTrack)->master = MUSIC(inGameMusic.masterTrack);
 
-    inGameMusic.stressTrack = theEntityManager.CreateEntity("stressTrack",
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("music/stressTrack"));
+    inGameMusic.stressTrack = theEntityManager.CreateEntityFromTemplate("music/stressTrack");
     MUSIC(inGameMusic.stressTrack)->master = MUSIC(inGameMusic.masterTrack);
 
     const float MusicFadeOut = 1;
