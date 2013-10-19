@@ -23,7 +23,9 @@
 #include "app/AppSetup.h"
 
 int main(int argc, char** argv) {
-    if (initGame("Heriswap", glm::ivec2(480, 640))) {
+    #define MAX_SIZE 700
+    #define RATIO (16.0 / 9.0)
+    if (initGame("Heriswap", glm::ivec2(MAX_SIZE / RATIO, MAX_SIZE))) {
         LOGE("Failed to initialize");
         return 1;
     }
