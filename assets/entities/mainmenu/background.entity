@@ -1,6 +1,6 @@
 [Transformation]
 positionN%gimp = 400, 542
-size%screen_w,texture_ratio
+size%screen_w,texture_ratio = 1
 z = 0.47
 
 [Rendering]
