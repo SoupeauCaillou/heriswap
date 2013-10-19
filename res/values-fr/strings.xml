@@ -12,6 +12,7 @@
   <string name="diff_1">"Débutant"</string>
   <string name="diff_2">"Moyen"</string>
   <string name="diff_3">"Confirmé"</string>
+  <string name="leaderboard">"×gg_leaderboards,1× Classement"</string>
   <string name="lvl">"niv"</string>
   <string name="lvlcap">"Niv"</string>
   <string name="enter_name">"Saisissez votre nom"</string>

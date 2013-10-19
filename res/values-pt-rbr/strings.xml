@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="continue_">"Continuar"</string>
+  <string name="help">"Ajuda"</string>
+  <string name="give_up">"Sair"</string>
+  <string name="mode_3">"100 segundos"</string>
+  <string name="score">"Recordes:"</string>
+  <string name="play">"Iniciar"</string>
+  <string name="restart">"Reiniciar"</string>
+  <string name="diff_1">"Fácil"</string>
+  <string name="diff_2">"Médio"</string>
+  <string name="diff_3">"Difícil"</string>
+  <string name="lvl">"fase"</string>
+  <string name="lvlcap">"Fase"</string>
+  <string name="enter_name">"Digite seu nome"</string>
+  <string name="save_name">"Salvar"</string>
+  <string name="congrats">"Novo recorde!"</string>
+  <string name="success">"Sucesso"</string>
+  <string name="how_to_play">"Como jogar?"</string>
+  <string name="bonus_x2">"Bônus x2"</string>
+  <string name="objective">"Objetivo"</string>
+  <string name="level">"Fase"</string>
+  <string name="leave_left">"folhas restantes"</string>
+  <string name="quit">"Sair"</string>
+  <string name="rate_now">"Avaliar agora"</string>
+  <string name="rate_later">"Depois"</string>
+  <string name="rate_never">"Não, obrigado"</string>
+  <string name="help_click_continue">"-toque para continuar-"</string>
+  <string name="help_click_play">"-toque para jogar-"</string>
+  <string name="help_mode3_1">"O objetivo é marcar o máximo de pontos em exatamente 100 segundos."</string>
+</resources>
