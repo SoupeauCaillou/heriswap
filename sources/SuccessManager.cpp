@@ -63,6 +63,30 @@ SuccessManager::SuccessManager(GameCenterAPI* gAPI) {
 	gameDuration = 0;
 }
 
+void SuccessManager::initSerializer(Serializer& s) {
+	SuccessManager sm(0);
+    s.add(new Property<float>("timeTotalPlayed", OFFSET(timeTotalPlayed, sm)));
+    s.add(new Property<float>("timeUserInputloop", OFFSET(timeUserInputloop, sm)));
+    s.add(new Property<float>("timeInSwappingPreparation", OFFSET(timeInSwappingPreparation, sm)));
+    
+    s.add(new Property<int>("numberCombinationInARow", OFFSET(numberCombinationInARow, sm)));
+    s.add(new Property<int>("l666numberLose", OFFSET(l666numberLose, sm)));
+    s.add(new Property<int>("lTheyGood", OFFSET(lTheyGood, sm)));
+    s.add(new Property<float>("gameDuration", OFFSET(gameDuration, sm)));
+}
+
+int SuccessManager::saveState(uint8_t** out) {
+	Serializer s;
+	initSerializer(s);
+	return s.serializeObject(out, this);
+}
+
+int SuccessManager::restoreState(const uint8_t* in, int size) {
+	Serializer s;
+	initSerializer(s);
+	return s.deserializeObject(in, size, this);
+}
+
 void SuccessManager::NewGame(Difficulty difficulty) {
 	hardMode = (difficulty == DifficultyHard);
 

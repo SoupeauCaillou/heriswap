@@ -150,4 +150,8 @@ class SuccessManager {
 		//success Double in one (Make a double combination by switching 2 leaves)
 		void sDoubleInOne(std::vector<Combinais> &s);
 		bool bDoubleInOne;
+
+		int saveState(uint8_t** out);
+		int restoreState(const uint8_t* in, int size);
+		void initSerializer(Serializer& s);
 };

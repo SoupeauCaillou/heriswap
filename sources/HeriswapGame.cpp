@@ -568,6 +568,7 @@ struct SavedState {
 
     int stateMachineSize;
     int entitySize;
+    int successSize;
     int gameStateSize;
 };
 
@@ -579,6 +580,7 @@ void HeriswapGame::initSerializer(Serializer& s) const {
     
     s.add(new Property<int>("state_machine_size", OFFSET(stateMachineSize, ss)));
     s.add(new Property<int>("entity_size", OFFSET(entitySize, ss)));
+    s.add(new Property<int>("success_size", OFFSET(successSize, ss)));
     s.add(new Property<int>("game_state_size", OFFSET(gameStateSize, ss)));
 }
 
@@ -615,6 +617,9 @@ int HeriswapGame::saveState(uint8_t** out) {
     uint8_t* gamemode = 0;
     ss.gameStateSize = datas->mode2Manager[datas->mode]->saveInternalState(&gamemode);
 
+    uint8_t* success = 0;
+    ss.successSize = datas->successMgr->saveState(&success);
+
     /* save Game */
     uint8_t* game = 0;
     Serializer sz;
@@ -625,6 +630,7 @@ int HeriswapGame::saveState(uint8_t** out) {
         gmSize +
         ss.entitySize +
         ss.gameStateSize +
+        ss.successSize +
         ss.stateMachineSize;
     *out = new uint8_t[finalSize];
     uint8_t* ptr = *out;
@@ -635,6 +641,7 @@ int HeriswapGame::saveState(uint8_t** out) {
     ptr = (uint8_t*)mempcpy(ptr, game, gmSize);
     ptr = (uint8_t*)mempcpy(ptr, entities, ss.entitySize);
     ptr = (uint8_t*)mempcpy(ptr, ssm, ss.stateMachineSize);
+    ptr = (uint8_t*)mempcpy(ptr, success, ss.successSize);
     ptr = (uint8_t*)mempcpy(ptr, gamemode, ss.gameStateSize);
 
     return finalSize;
@@ -663,6 +670,9 @@ void HeriswapGame::loadGameState(const uint8_t* in, int ) {
     /* restore state machine */
     sceneStateMachine.deserialize(in, ss.stateMachineSize);
     in += ss.stateMachineSize;
+
+    datas->successMgr->restoreState(in, ss.successSize);
+    in += ss.successSize;
 
     /* restore game vars */
     datas->mode2Manager[datas->mode]->restoreInternalState(in, ss.gameStateSize);
