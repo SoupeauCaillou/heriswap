@@ -77,11 +77,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     Entity menufg, menubg;
     Entity ggsBg;
 
-    float timeElapsed;
-
     MainMenuScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
         this->game = game;
-        timeElapsed = 0.0f;
     }
 
     void setup() {
@@ -263,11 +260,6 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     void onPreExit(Scene::Enum to) override {
         game->datas->gamecenterAPIHelper.hideUI();
-
-        ScoreStorageProxy ssp;
-        ssp.setValue("time", ObjectSerializer<float>::object2string(timeElapsed), true);
-        timeElapsed = 0.f;
-        game->gameThreadContext->storageAPI->saveEntries((IStorageProxy*)&ssp);
 
         if (to == Scene::ModeMenu) {
             game->datas->mode = choosenGameMode;
