@@ -23,7 +23,7 @@
 #include "app/AppSetup.h"
 
 int main(int argc, char** argv) {
-    if (initGame("Heriswap", glm::ivec2(435, 700))) {
+    if (initGame("Heriswap", glm::ivec2(480, 640))) {
         LOGE("Failed to initialize");
         return 1;
     }

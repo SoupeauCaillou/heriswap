@@ -100,6 +100,8 @@ void GameModeManager::Setup() {
 
     decor2nd = theEntityManager.CreateEntity("decor2nd",
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/decor2nd"));
+    // HACK
+    TRANSFORM(decor2nd)->size.x = PlacementHelper::ScreenSize.x;
 
     SCROLLING(decor2nd)->images.push_back("decor2nd_0");
     SCROLLING(decor2nd)->images.push_back("decor2nd_3");
@@ -108,6 +110,7 @@ void GameModeManager::Setup() {
 
     decor1er = theEntityManager.CreateEntity("decor1er",
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/decor1er"));
+    TRANSFORM(decor1er)->size.x = PlacementHelper::ScreenSize.x;
 
     SCROLLING(decor1er)->images.push_back("decor1er_0");
     SCROLLING(decor1er)->images.push_back("decor1er_1");

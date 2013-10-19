@@ -128,6 +128,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
         menubg = theEntityManager.CreateEntityFromTemplate("mainmenu/background");
         menufg = theEntityManager.CreateEntityFromTemplate("mainmenu/foreground");
+        // hack hack hack
+        TRANSFORM(menufg)->size.x = TRANSFORM(menubg)->size.x = PlacementHelper::ScreenSize.x;
+
         ggsBg = theEntityManager.CreateEntityFromTemplate("mainmenu/bg_ggs");
 
         game->herisson = theEntityManager.CreateEntityFromTemplate("mainmenu/herisson");
