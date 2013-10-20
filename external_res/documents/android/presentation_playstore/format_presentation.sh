@@ -34,6 +34,7 @@ function parse_file {
         echo -ne "$line ${semantic[$c]}"
         c=$(($c + 1))
     done < $file
+    echo -ne "$line ${semantic[$c]}"
 }
 
 
