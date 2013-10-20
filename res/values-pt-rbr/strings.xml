@@ -3,7 +3,7 @@
   <string name="continue_">"Continuar"</string>
   <string name="help">"Ajuda"</string>
   <string name="give_up">"Sair"</string>
-  <string name="mode_1">"Caçar pontos"</string>
+  <string name="mode_1">"Corrida de pontos"</string>
   <string name="mode_2">"Contra o relógio"</string>
   <string name="mode_3">"100 segundos"</string>
   <string name="score">"Recordes:"</string>
@@ -36,11 +36,11 @@
   <string name="average_score">"Média de pontos recentes:"</string>
   <string name="help_click_continue">"-toque para continuar-"</string>
   <string name="help_click_play">"-toque para jogar-"</string>
-  <string name="help_general_1">"Alinhe pelo menos 3 folhas da mesma cor ×feuille1,1× ×feuille1,1× ×feuille1,1×.\n\nTroque 2 folhas vizinhas ×feuille2,1× ×feuille3,1× para criar uma combinação e ganhar pontos."</string>
-  <string name="help_general_2">"O ×herisson_2_5,2× mostra quanto tempo você tem, e o jogo acaba quando ele chega ao canto direita da tela. Toque nele para pedir uma dica!"</string>
+  <string name="help_general_1">"Alinhe pelo menos 3 folhas iguais ×feuille1,1× ×feuille1,1× ×feuille1,1×.\n\nTroque 2 folhas vizinhas ×feuille2,1× ×feuille3,1× para criar uma combinação e ganhar pontos."</string>
+  <string name="help_general_2">"×herisson_2_5,2× mostra quanto tempo você tem, e o jogo acaba quando ele chega ao canto direita da tela. Toque nele para pedir uma dica!"</string>
   <string name="help_mode1_1">"O objetivo é marcar o máximo de pontos.\n\nO tempo de jogo é limitado."</string>
-  <string name="help_mode1_2">"O ×feuille5,1× em suas costas marca pontos extras.\n\nPara cada combinação você ganha mais tempo. A melhor forma de ganhar muito tempo é concluir uma fase, limpando completamente a coluna do topo."</string>
-  <string name="help_mode2_1">"O objetivo é remover todas as folhas ×feuille2,1× da árvore o mais rápido que você puder.\n\nFaça isto alinhando pelo menos 3 folhas da mesma cor ×feuille1,1× ×feuille1,1× ×feuille1,1×.\n\nTroque 2 folhas vizinhas ×feuille2,1× ×feuille3,1× para criar uma combinação e ganhar pontos."</string>
-  <string name="help_mode2_2">"O ×herisson_2_5,2× mostra o seu progreso. O jogo acaba quando ele chega ao canto direito da tela.\n\nCada combinação usando folhas de bônus ×feuille5,1× duplicam sua pontuação."</string>
+  <string name="help_mode1_2">"A folha ×feuille5,1× em suas costas marca pontos extras.\n\nPara cada combinação você ganha mais tempo. A melhor forma de ganhar muito tempo é concluir uma fase, limpando completamente as folhas do galho lá de cima."</string>
+  <string name="help_mode2_1">"O objetivo é remover todas as folhas ×feuille2,1× da árvore o mais rápido que você puder.\n\nFaça isto alinhando pelo menos 3 folhas iguais ×feuille1,1× ×feuille1,1× ×feuille1,1×.\n\nTroque 2 folhas vizinhas ×feuille2,1× ×feuille3,1× para criar uma combinação e ganhar pontos."</string>
+  <string name="help_mode2_2">"×herisson_2_5,2× mostra o seu progreso. O jogo acaba quando ele chega ao canto direito da tela.\n\nCada combinação usando folhas de bônus ×feuille5,1× duplicam sua pontuação."</string>
   <string name="help_mode3_1">"O objetivo é marcar o máximo de pontos em 100 segundos."</string>
 </resources>
