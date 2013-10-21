@@ -73,6 +73,16 @@ void SuccessManager::initSerializer(Serializer& s) {
     s.add(new Property<int>("l666numberLose", OFFSET(l666numberLose, sm)));
     s.add(new Property<int>("lTheyGood", OFFSET(lTheyGood, sm)));
     s.add(new Property<float>("gameDuration", OFFSET(gameDuration, sm)));
+
+    s.add(new Property<bool>("hardMode", OFFSET(hardMode, sm)));
+    s.add(new Property<int>("numberCombinationInARow", OFFSET(numberCombinationInARow, sm)));
+
+    for (int i=0; i<8; i++) {
+    	std::stringstream s;
+    	s << "succEveryTypeInARow_" << i;
+    	s.add(new Property<int>(s.str(), OFFSET(succEveryTypeInARow[i], sm)));
+    }
+    
 }
 
 int SuccessManager::saveState(uint8_t** out) {
