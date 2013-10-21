@@ -297,6 +297,9 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 
 	void onExit(Scene::Enum) override {
 		LOGI("'" << __PRETTY_FUNCTION__ << "'");
+		for (Feuille& e: newLeaves) {
+			theEntityManager.DeleteEntity(e.entity);
+		}
 		newLeaves.clear();
 	}
 };
