@@ -4,7 +4,7 @@ Das Spiel ist klassisch im Kern (3 Elemente verbinden um Punkte zu bekommen), di
 3 Schwierigkeitsgrade damit jeder in der Familie spass daran hat - auch Kinder.
 *verfügbar in Englisch, Französisch, Deutsch, Italienisch, Niederländisch und Spanisch
 * raffinierte Grafiken und Musik
-* Online-Bestenliste um dich mit deinen Freunden zu messen (Swarm)
+* Online-Bestenliste um dich mit deinen Freunden zu messen (Google Play Games)
 * 20 Erfolge zum Freischalten
 * Das Spiel kann jederzeit pausiert werden um die mobile Nutzbarkeit zu Gewährleisten.
 * Hilfefunktion im Spiel

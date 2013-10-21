@@ -4,7 +4,7 @@ La mécanique de jeu reste classique (aligner des éléments identiques pour fai
 Jeu familial grâce aux 3 niveaux de difficulté permettant à tous - enfants, joueurs occasionnels ou aguerris - de s'amuser.
 * existe en version française et anglaise
 * graphismes et musiques soignés
-* classements en ligne pour comparer ses scores avec ses amis (via Swarm)
+* classements en ligne pour comparer ses scores avec ses amis (via Google Play Games)
 * 20 succès à débloquer
 * possibilité de mettre en pause la partie et la reprendre à n'importe quel moment
 * aide accessible depuis le jeu

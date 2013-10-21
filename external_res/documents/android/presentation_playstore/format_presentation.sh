@@ -16,7 +16,7 @@ declare -A semantic
 semantic[1]="\n\n"
 semantic[2]="\n"
 semantic[3]="\n"
-semantic[4]="\n"
+semantic[4]="\n\n"
 semantic[5]="\n"
 semantic[6]="\n"
 semantic[7]="\n"
@@ -24,8 +24,8 @@ semantic[8]="\n"
 semantic[9]="\n"
 semantic[10]="\n"
 semantic[11]="\n"
-semantic[12]="\n"
-semantic[13]="\n"
+semantic[12]="\r"
+semantic[13]="\r"
 
 
 function parse_file {

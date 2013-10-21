@@ -1,13 +1,13 @@
 Discover this stressless match3 game for free!
 Discover this classic addictive but stressless puzzle game.
-Core gameplay is a classic one (match3 elements to score points), the novelty is in the form : soft and peaceful.
+Core gameplay is a classic one (match3 elements to score points), the novelty is in the form: soft and peaceful.
 3 difficulty levels makes it suitable for the whole family - children included.
 * available in English, French, Deutsch, Italian, Dutch, Spanish
 * slick graphics and musics
-* online leaderboards to compete with your friends (Swarm)
+* online leaderboards to compete with your friends (Google Play Games)
 * 20 achievements to unlock
 * game can be paused/resumed anytime, to accomodate mobile usage
 * in-game help
-* a cute little hedgehog !
+* a cute little hedgehog!
 * new intermediate difficulty setting
 * new game mode: 100 seconds for short gaming sessions

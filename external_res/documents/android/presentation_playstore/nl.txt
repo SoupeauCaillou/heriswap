@@ -4,7 +4,7 @@ De hoofdgameplay is klassiek (schuif 3 elementen op een rij om punten te scoren)
 Dankzij 3 moeilijkheidsgraden is het spel geschikt voor het hele gezin, inclusief kinderen.
 * beschikbaar in het Engels, Frans, Duits, Italiaans, Nederlands, Spaans
 * strakke graphics en muziek
-* online klassementen om het tegen je vrienden op te nemen (Swarm)
+* online klassementen om het tegen je vrienden op te nemen (Google Play Games)
 * 20 prestaties om vrij te spelen
 * het spel kan op elk moment worden gepauzeerd/verder gespeeld, ideaal voor mobiel gebruik
 * in-game hulp
