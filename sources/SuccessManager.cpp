@@ -78,9 +78,9 @@ void SuccessManager::initSerializer(Serializer& s) {
     s.add(new Property<int>("numberCombinationInARow", OFFSET(numberCombinationInARow, sm)));
 
     for (int i=0; i<8; i++) {
-    	std::stringstream s;
-    	s << "succEveryTypeInARow_" << i;
-    	s.add(new Property<int>(s.str(), OFFSET(succEveryTypeInARow[i], sm)));
+    	std::stringstream ss;
+    	ss << "succEveryTypeInARow_" << i;
+    	s.add(new Property<int>(ss.str(), OFFSET(succEveryTypeInARow[i], sm)));
     }
     
 }
