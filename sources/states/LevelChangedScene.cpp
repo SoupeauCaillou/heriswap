@@ -150,6 +150,8 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
         for (unsigned int i=0; i<entities.size(); i++) {
             CombinationMark::markCellInCombination(entities[i]);
         }
+
+        game->stopInGameMusics();
     }
 
     ///----------------------------------------------------------------------------//
