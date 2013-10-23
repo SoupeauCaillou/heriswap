@@ -225,6 +225,7 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
 
         //level animation ended - back to game
         if (levelState == BigScoreMoving && duration > 10) {
+            theHeriswapGridSystem.DeleteAll();
             if (currentLevel == 10 && theHeriswapGridSystem.sizeToDifficulty() != DifficultyHard) {
                 return Scene::ElitePopup;
             }
@@ -241,7 +242,6 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
     }
 
     void onExit(Scene::Enum) override {
-        theHeriswapGridSystem.DeleteAll();
         ADSR(eGrid)->active = false;
         feuilles.clear();
         LOGI("'" << __PRETTY_FUNCTION__ << "'");
