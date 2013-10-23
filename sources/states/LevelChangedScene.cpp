@@ -200,12 +200,12 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
             mc->timing = 0.5;
 
             PARTICULE(eSnowEmitter)->emissionRate = 0;
-            //on modifie le herisson
+            //modifying the hedgehog
             TRANSFORM(game->datas->mode2Manager[game->datas->mode]->herisson)->position.x =
                 game->datas->mode2Manager[game->datas->mode]->position(game->datas->mode2Manager[game->datas->mode]->time);
             RENDERING(game->datas->mode2Manager[game->datas->mode]->herisson)->color.a = 1;
             RENDERING(game->datas->mode2Manager[game->datas->mode]->herisson)->effectRef = DefaultEffectRef;
-            //on genere les nouvelles feuilles
+            // generating the brand-new leaves
             game->datas->mode2Manager[game->datas->mode]->generateLeaves(0, theHeriswapGridSystem.Types);
             for (unsigned int i=0; i<game->datas->mode2Manager[game->datas->mode]->branchLeaves.size(); i++) {
                 TRANSFORM(game->datas->mode2Manager[game->datas->mode]->branchLeaves[i].e)->size =glm::vec2(0.f);
@@ -213,7 +213,7 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
         }
         if (levelState == BigScoreBeganToMove || levelState == BigScoreMoving) {
             levelState = BigScoreMoving;
-            //if leaves created, make them grow !
+            //if leaves created, make them grow!
             for (unsigned int i=0; i<game->datas->mode2Manager[game->datas->mode]->branchLeaves.size(); i++) {
                 TRANSFORM(game->datas->mode2Manager[game->datas->mode]->branchLeaves[i].e)->size =
                     HeriswapGame::CellSize(8,
