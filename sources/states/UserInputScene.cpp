@@ -169,9 +169,8 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
 
         currentCell = swappedCell = 0;
 
-        // successMgr->timeUserInputloop = 0.f;
-
-        // successMgr->sBimBamBoum(0);
+        game->datas->successMgr->timeUserInputloop = 0.f;
+        game->datas->successMgr->sBimBamBoum(0);
     }
 
     ///----------------------------------------------------------------------------//
@@ -369,8 +368,8 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
             }
         }
 
-        // successMgr->sLuckyLuke();
-        // successMgr->sWhatToDo(false, 0.f);
+        game->datas->successMgr->sLuckyLuke();
+        game->datas->successMgr->sWhatToDo(false, 0.f);
 
         if (nextState == Scene::Help) {
             game->datas->mode2Manager[game->datas->mode]->showGameDecor(true);

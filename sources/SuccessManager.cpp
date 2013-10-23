@@ -69,7 +69,6 @@ void SuccessManager::initSerializer(Serializer& s) {
     s.add(new Property<float>("timeUserInputloop", OFFSET(timeUserInputloop, sm)));
     s.add(new Property<float>("timeInSwappingPreparation", OFFSET(timeInSwappingPreparation, sm)));
     
-    s.add(new Property<int>("numberCombinationInARow", OFFSET(numberCombinationInARow, sm)));
     s.add(new Property<int>("l666numberLose", OFFSET(l666numberLose, sm)));
     s.add(new Property<int>("lTheyGood", OFFSET(lTheyGood, sm)));
     s.add(new Property<float>("gameDuration", OFFSET(gameDuration, sm)));
