@@ -4,6 +4,7 @@ size%screen = 1, 0.1
 z = 0.42
 
 [Particule]
+duration = -1
 emission_rate = 0
 texture  = snow_flake0
 lifetime = 5, 6.5
