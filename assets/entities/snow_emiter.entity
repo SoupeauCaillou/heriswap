@@ -1,6 +1,6 @@
 [Transformation]
 positionS%gimp = 400, 0
-size%screen_w,texture_ratio = 1
+size%screen = 1, 0.1
 z = 0.42
 
 [Particule]
@@ -9,10 +9,11 @@ texture  = snow_flake0
 lifetime = 5, 6.5
 initial_color = 1,1,1,1,1,1,1,1
 final_color = 1,1,1,1,1,1,1,1
-initial_size = 1,1.5
-final_size = 1,1.5
+initial_size%screen_w = 0.03,0.06
+final_size%screen_w = 0.03,0.06
 force_direction = 0, 0
 force_amplitude = 0, 0
 moment = -3, 3
 mass = 1
 gravity = 0, -1
+opaque_type = 0
