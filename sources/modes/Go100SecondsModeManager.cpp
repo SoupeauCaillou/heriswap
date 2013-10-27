@@ -35,8 +35,9 @@
 #include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
+#include "util/Random.h"
+
 #include <glm/glm.hpp>
-#include <glm/gtc/random.hpp>
 
 #include <iomanip>
 #include <sstream>
@@ -60,11 +61,11 @@ void Go100SecondsGameModeManager::Setup() {
 	}
 
 	for (int i = 0; i < 100;  i++) {
-		squallLeaves.push_back(GameModeManager::createAndAddLeave(0, glm::vec2(0, 0), glm::linearRand(0.f, 7.f)));
+		squallLeaves.push_back(GameModeManager::createAndAddLeave(0, glm::vec2(0, 0), Random::Float(0.f, 7.f)));
 		Entity e = squallLeaves[i];
 
 		ADD_COMPONENT(e, Physics);
-		PHYSICS(e)->mass = glm::linearRand(1.f, 10.f);
+		PHYSICS(e)->mass = Random::Float(1.f, 10.f);
 		PHYSICS(e)->gravity = glm::vec2(0 ,0*-10.f);
 
 		RENDERING(e)->show = false;
@@ -85,7 +86,7 @@ void Go100SecondsGameModeManager::Enter() {
 	points = 0;
 	squallGo = false;
 	squallDuration = 0.f;
-	bonus = glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
+	bonus = Random::Int(0, theHeriswapGridSystem.Types-1);
 
 	initPosition();
 
@@ -109,21 +110,21 @@ void Go100SecondsGameModeManager::squall() {
 	for (unsigned int i = 0; i < squallLeaves.size();  i++) {
 
 		Entity  e = squallLeaves[i];
-		TRANSFORM(e)->position = glm::vec2(glm::linearRand(minX, maxX), glm::linearRand(minY, maxY));
-		TRANSFORM(e)->size = HeriswapGame::CellSize(8, 0) * HeriswapGame::CellContentScale() * glm::linearRand(0.35f,1.2f);
+		TRANSFORM(e)->position = glm::vec2(Random::Float(minX, maxX), Random::Float(minY, maxY));
+		TRANSFORM(e)->size = HeriswapGame::CellSize(8, 0) * HeriswapGame::CellContentScale() * Random::Float(0.35f,1.2f);
 		RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(bonus, &TRANSFORM(e)->rotation));
 		RENDERING(e)->show = true;
 
 		Force force;
 		force.vector = glm::vec2(-45, 0);
-		force.point =  glm::vec2( 0, glm::linearRand(TRANSFORM(e)->size.y/48.f, TRANSFORM(e)->size.y/2.f));
+		force.point =  glm::vec2( 0, Random::Float(TRANSFORM(e)->size.y/48.f, TRANSFORM(e)->size.y/2.f));
 
 		std::pair<Force, float> f (force, 1.f);
 		PHYSICS(e)->forces.push_back(f);
-		PHYSICS(e)->mass = glm::linearRand(1.f, 10.f); // go update (dumb PhysicsSystem!)
+		PHYSICS(e)->mass = Random::Float(1.f, 10.f); // go update (dumb PhysicsSystem!)
 	}
 	//herisson's Y. He'll change his bonus behind this leaf
-	TRANSFORM(squallLeaves[0])->position = glm::vec2(glm::linearRand(minX, maxX), PlacementHelper::GimpYToScreen(1028));
+	TRANSFORM(squallLeaves[0])->position = glm::vec2(Random::Float(minX, maxX), PlacementHelper::GimpYToScreen(1028));
 	TRANSFORM(squallLeaves[0])->size = HeriswapGame::CellSize(8, 0) * HeriswapGame::CellContentScale();
 }
 
@@ -179,7 +180,7 @@ void Go100SecondsGameModeManager::GameUpdate(float dt, Scene::Enum state) {
 		//oh noes, no longer leaf on tree ! Give me new one
 		if (branchLeaves.size() == 0) {
 			//Ok, but first u'll have a new bonus
-			bonus = glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
+			bonus = Random::Int(0, theHeriswapGridSystem.Types-1);
 			//And leaves aren't magic, they need to grow ... be patient.
 			generateLeaves(0, 8);
 			for (unsigned int i = 0; i < branchLeaves.size(); i++)

@@ -34,8 +34,9 @@
 #include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
+#include "util/Random.h"
+
 #include <glm/glm.hpp>
-#include <glm/gtc/random.hpp>
 
 #include <sstream>
 
@@ -67,7 +68,7 @@ void NormalGameModeManager::Enter() {
     time = 0;
     points = 0;
     level = 1;
-    bonus = glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
+    bonus = Random::Int(0, theHeriswapGridSystem.Types-1);
     for (int i=0;i<theHeriswapGridSystem.Types;i++) remain[i]=3;
     nextHerissonSpeed = 1;
     levelMoveDuration = 0;
@@ -262,7 +263,7 @@ void NormalGameModeManager::startLevel(int lvl) {
 
     // put hedgehog back on first animation position
     // c->ind = 0;
-    bonus = glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
+    bonus = Random::Int(0, theHeriswapGridSystem.Types-1);
     LoadHerissonTexture(bonus+1);
     // RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
     SCROLLING(decor1er)->speed = 0;

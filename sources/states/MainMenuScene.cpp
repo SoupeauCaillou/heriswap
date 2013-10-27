@@ -18,7 +18,6 @@
     along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "base/StateMachine.h"
 
 #include "Scenes.h"
@@ -51,6 +50,7 @@
 #include "systems/AnchorSystem.h"
 
 #include "util/ScoreStorageProxy.h"
+#include "util/Random.h"
 
 #include <iomanip>
 #include <sstream>
@@ -58,13 +58,13 @@
 
 static glm::vec2 randomHerissonSize() {
     return
-        glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), (float)PlacementHelper::GimpHeightToScreen(253)) * glm::linearRand(.3f, 1.f);
+        glm::vec2((float)PlacementHelper::GimpWidthToScreen(310), (float)PlacementHelper::GimpHeightToScreen(253)) * Random::Float(.3f, 1.f);
 }
 
 static glm::vec2 randomHerissionStart() {
     return glm::vec2(
-        (float)PlacementHelper::GimpXToScreen(-glm::round(glm::linearRand(0.f, 299.f))),
-        (float)PlacementHelper::GimpYToScreen(glm::round(glm::linearRand(830.f, 1149.f))));
+        (float)PlacementHelper::GimpXToScreen(-Random::Int(0, 298)),
+        (float)PlacementHelper::GimpYToScreen(Random::Int(830.f, 1148.f)));
 }
 
 struct MainMenuScene : public StateHandler<Scene::Enum> {
@@ -137,7 +137,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
                 TRANSFORM(game->herisson)->size, Cardinal::SE);
 
         a.str("");
-        a << "herisson_" << glm::round(glm::linearRand(1.f, 8.f));
+        a << "herisson_" << Random::Int(1, 8);
         ANIMATION(game->herisson)->name = a.str();
 
         modeTitleToReset = 0;
@@ -226,9 +226,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             TRANSFORM(game->herisson)->position.x += ANIMATION(game->herisson)->playbackSpeed/8. * dt;
         } else {
             std::stringstream a;
-            a << "herisson_" << glm::round(glm::linearRand(1.f, 8.f));
+            a << "herisson_" << Random::Int(1, 8);
             ANIMATION(game->herisson)->name = a.str();
-            ANIMATION(game->herisson)->playbackSpeed = glm::linearRand(2.0f, 4.0f);
+            ANIMATION(game->herisson)->playbackSpeed = Random::Float(2.0f, 4.0f);
             TRANSFORM(game->herisson)->size = randomHerissonSize();
             TRANSFORM(game->herisson)->position = AnchorSystem::adjustPositionWithCardinal(randomHerissionStart(),
                 TRANSFORM(game->herisson)->size, Cardinal::SE);

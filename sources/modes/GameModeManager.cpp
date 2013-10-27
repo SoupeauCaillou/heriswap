@@ -36,6 +36,8 @@
 #include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
+#include "util/Random.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtx/compatibility.hpp>
 
@@ -233,8 +235,7 @@ void GameModeManager::generateLeaves(int* nb, int type) {
     for (int j=0;j<type;j++) {
         for (int i=0 ; i < (nb ? nb[j] : 6);i++) {
             // LOGI(j << ',' << i << " -> " << posBranch.size());
-            float f = posBranch.size()-1;
-            int rnd = glm::round(glm::linearRand(0.f, f));
+            int rnd = Random::Int(0, posBranch.size()-1);
             glm::vec2 pos = posBranch[rnd].v;
             pos.x -= PlacementHelper::GimpXToScreen(0) - -PlacementHelper::ScreenSize.x*0.5f;
 

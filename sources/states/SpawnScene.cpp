@@ -40,8 +40,9 @@
 #include "systems/ScrollingSystem.h"
 #include "systems/TransformationSystem.h"
 
+#include "util/Random.h"
+
 #include <glm/glm.hpp>
-#include <glm/gtc/random.hpp>
 
 #include <sstream>
 
@@ -97,7 +98,7 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 					//get a type which doesn't create a combi with its neighboors
 					int type, ite = 0;
 					do {
-						type = glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
+						type = Random::Int(0, theHeriswapGridSystem.Types-1);
 						ite++;
 					} while (theHeriswapGridSystem.GridPosIsInCombination(i, j, type, typeVoisins) && ite<5000);
 
@@ -115,7 +116,7 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	    ADD_COMPONENT(e, Twitch);
 
 		TRANSFORM(e)->position = HeriswapGame::GridCoordsToPosition(f.X, f.Y, theHeriswapGridSystem.GridSize);
-		TRANSFORM(e)->z = DL_Cell + glm::linearRand(0.f, 1.f) * 0.001;
+		TRANSFORM(e)->z = DL_Cell + Random::Float(0.f, 1.f) * 0.001;
 		RenderingComponent* rc = RENDERING(e);
 		rc->show = true;
 
@@ -138,11 +139,11 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 			c = theHeriswapGridSystem.LookForCombination(false,true);
 			// change type from cells in combi
 			for(unsigned int i=0; i<c.size(); i++) {
-				int j = glm::round(glm::linearRand(0.f, (float)(c[i].points.size()-1)));
+				int j = Random::Int(0, c[i].points.size()-1);
 				Entity e = theHeriswapGridSystem.GetOnPos(c[i].points[j].x, c[i].points[j].y);
 				int type, iter = 0;
 				do {
-					type = glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
+					type = Random::Int(0, theHeriswapGridSystem.Types-1);
 					iter++;
 				} while (theHeriswapGridSystem.GridPosIsInCombination(c[i].points[j].x, c[i].points[j].y, type, 0) && iter < 100);
 				HERISWAPGRID(e)->type = type;

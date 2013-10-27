@@ -32,6 +32,8 @@
 #include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
+#include "util/Random.h"
+
 #include <glm/glm.hpp>
 
 #include <iomanip>
@@ -63,7 +65,7 @@ void TilesAttackGameModeManager::Enter() {
 	time = 0;
 	leavesDone = 0;
 	points = 0;
-	bonus =  glm::round(glm::linearRand(0.f, (float)(theHeriswapGridSystem.Types-1)));
+	bonus =  Random::Int(0, theHeriswapGridSystem.Types-1);
 	succNoGridReset=false;
 	initPosition();
 
