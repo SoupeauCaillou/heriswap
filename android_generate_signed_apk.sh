@@ -20,9 +20,6 @@ else
 	echo "Keeping android:versionName to $(grep 'android:versionName' AndroidManifest.xml | cut -d= -f2 | tr -d '"')"
 fi
 
-echo "Uninstall current version from device..."
-adb uninstall net.damsy.soupeaucaillou.heriswap
-
 #replace R package name import
 sed -i "s/import .*\.R;/import net.damsy.soupeaucaillou.heriswap.R;/" platforms/android/src/net/damsy/soupeaucaillou/heriswap/HeriswapActivity.java
 #replace log level
@@ -31,7 +28,7 @@ sed -i "s/SacActivity.LogLevel = SacActivity.*/SacActivity.LogLevel = SacActivit
 if (!(./sac/tools/build/build-all.sh --target android -x86 -release n -c)); then
     echo "Error when building x86 version"
     exit 1
-elif (!(./sac/tools/build/build-all.sh --target android -arm -release n -p -i r -c)); then
+elif (!(./sac/tools/build/build-all.sh --target android -c -arm -release n -p -u -i r)); then
     echo "Error when building ARM version"
     exit 1
 fi        
