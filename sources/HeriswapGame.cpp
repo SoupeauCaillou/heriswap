@@ -62,11 +62,14 @@
 #include "systems/TransformationSystem.h"
 #include "systems/ZSQDSystem.h"
 
-    
 #include <glm/glm.hpp>
 #include <glm/gtx/constants.hpp>
 
 #include <sstream>
+
+#if SAC_INGAME_EDITORS && SAC_DEBUG
+#include "util/HeriswapDebugConsole.h"
+#endif
 
 bool HeriswapGame::inGameState(Scene::Enum state) {
     switch (state) {
@@ -193,6 +196,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     sceneStateMachine.registerState(Scene::Help, Scene::CreateHelpSceneHandler(this), "Scene::Help");
     sceneStateMachine.registerState(Scene::RateIt, Scene::CreateRateItSceneHandler(this), "Scene::RateIt");
     sceneStateMachine.registerState(Scene::ElitePopup, Scene::CreateElitePopupSceneHandler(this), "Scene::ElitePopup");
+    sceneStateMachine.registerState(Scene::StartAt10, Scene::CreateStartAt10SceneHandler(this), "Scene::StartAt10");
 
     Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
 
@@ -284,6 +288,11 @@ void HeriswapGame::init(const uint8_t* in, int size) {
             gameThreadContext->gameCenterAPI->openDashboard();
         }     
     });
+
+    #if SAC_INGAME_EDITORS && SAC_DEBUG
+    HeriswapDebugConsole::init(this);
+    #endif
+
 
     LOGI("HeriswapGame initialisation done.");
 }

@@ -43,4 +43,7 @@
   <string name="help_mode2_1">"L'objectif est de supprimer toutes les feuilles ×feuille2,1× de l'arbre le plus vite possible.\n\nL'arbre se vide en alignant au moins 3 feuilles ×feuille1,1× ×feuille1,1× ×feuille1,1× identiques.\n\nCes combinaisons se créent en échangeant 2 feuilles ×feuille2,1× ×feuille3,1× voisines."</string>
   <string name="help_mode2_2">"Le ×herisson_2_5,2× représente la progression et la partie se termine lorsqu'il arrive au bord droit de l'écran.\n\nLe type de ×feuille5,1× sur son dos compte double."</string>
   <string name="help_mode3_1">"L'objectif est de marquer le plus de points en 100 secondes."</string>
+  <string name="start_at_level_10">"Vous semblez maîtriser les premiers niveaux! S'ils vous ennuient, vous pouvez passer directement au niveau 10!"</string>
+  <string name="start_at_level_10_yes">"Allons-y, niveau 10 !"</string>
+  <string name="start_at_level_10_no">"Non merci."</string>
 </resources>

@@ -511,7 +511,22 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 if (game->gameThreadContext->storageAPI->count(&ssp, "*", ss.str()) == 0) {
                     return Scene::Help;
                 } else {
-                    return Scene::CountDown;
+                    // If 5th last score is over 100k, we ask to player if he will begin at level 10
+                    bool goodPlayer = true;
+                    for (auto scoreText : scoresPoints) {
+                        std::istringstream iss(TEXT(scoreText)->text);
+                        int score;
+                        iss >> score;
+                        if (score < 100000){
+                            goodPlayer = false;
+                            break;
+                        }
+                    }
+                    if (goodPlayer) {
+                        return Scene::StartAt10;
+                    } else {
+                        return Scene::CountDown;
+                    }
                 }
             }
 

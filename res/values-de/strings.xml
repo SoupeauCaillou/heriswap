@@ -39,4 +39,7 @@
   <string name="help_general_2">"Die ×herisson_2_5,2× zeigt an, wie viel Zeit dir noch bleibt. Das Spiel ist vorbei wenn sie die Rechte Seite des Bildschirms erreicht."</string>
   <string name="help_mode1_1">"Dein Ziel ist es die meisten Punkte zu erreichen.\n\nDie Spielzeit ist begrenzt"</string>
   <string name="help_mode3_1">"The goal is to score the most points in exactly 100 seconds."</string>
+  <string name="start_at_level_10">"You seems to be good, maybe do you want to start this game at level 10 (with a score = 0) ?"</string>
+  <string name="start_at_level_10_yes">"Jumps at 10!"</string>
+  <string name="start_at_level_10_no">"No, I love first level"</string>
 </resources>

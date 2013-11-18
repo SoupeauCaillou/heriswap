@@ -43,4 +43,7 @@
   <string name="help_mode2_1">"O objetivo é remover todas as folhas ×feuille2,1× da árvore o mais rápido que você puder.\n\nFaça isto alinhando pelo menos 3 folhas iguais ×feuille1,1× ×feuille1,1× ×feuille1,1×.\n\nTroque 2 folhas vizinhas ×feuille2,1× ×feuille3,1× para criar uma combinação e ganhar pontos."</string>
   <string name="help_mode2_2">"×herisson_2_5,2× mostra o seu progreso. O jogo acaba quando ele chega ao canto direito da tela.\n\nCada combinação usando folhas de bônus ×feuille5,1× duplicam sua pontuação."</string>
   <string name="help_mode3_1">"O objetivo é marcar o máximo de pontos em 100 segundos."</string>
+  <string name="start_at_level_10">"You seems to be good, maybe do you want to start this game at level 10 (with a score = 0) ?"</string>
+  <string name="start_at_level_10_yes">"Jumps at 10!"</string>
+  <string name="start_at_level_10_no">"No, I love first level"</string>
 </resources>

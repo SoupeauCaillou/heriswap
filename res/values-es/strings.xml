@@ -36,4 +36,7 @@
   <string name="help_click_continue">"-toque para continuar-"</string>
   <string name="help_click_play">"-toque para jugar-"</string>
   <string name="help_mode3_1">"La meta es obtener la mayor cantidad de puntos en exactamente 100 segundos."</string>
+  <string name="start_at_level_10">"You seems to be good, maybe do you want to start this game at level 10 (with a score = 0) ?"</string>
+  <string name="start_at_level_10_yes">"Jumps at 10!"</string>
+  <string name="start_at_level_10_no">"No, I love first level"</string>
 </resources>

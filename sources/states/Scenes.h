@@ -42,6 +42,7 @@ namespace Scene {
         Spawn,
         // Unpause,
         UserInput,
+        StartAt10,
     };
 
 #define DECLARE_SCENE_HANDLER_FACTORY(name) \
@@ -65,4 +66,5 @@ namespace Scene {
     DECLARE_SCENE_HANDLER_FACTORY(Spawn)
     DECLARE_SCENE_HANDLER_FACTORY(Unpause)
     DECLARE_SCENE_HANDLER_FACTORY(UserInput)
+    DECLARE_SCENE_HANDLER_FACTORY(StartAt10)
 }
