@@ -8,3 +8,4 @@ z = 0.5
 texture = fond_menu_mode
 #~ Color
 color = 1, 1, 1, 0.5
+opaque_type = 0

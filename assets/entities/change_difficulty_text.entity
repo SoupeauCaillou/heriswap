@@ -1,10 +1,10 @@
 [Transformation]
-positionN%gimp = 44, 236
+positionN%gimp = 400, 236
 size%gimp = 640.8, 147
 z = 0.51
 
 [Text]
 color%name = green
-char_height%gimp_h = 55
+char_height%gimp_h = 85
 flags = 4
-positioning = 0
+positioning = 0.5

@@ -62,12 +62,7 @@ struct ElitePopupScene : public StateHandler<Scene::Enum> {
         
         std::stringstream a;
         for (int i=0; i<2; i++) {
-            a.str("");
-            a << "change_difficulty_button_text_" << i;
             eText[i] = theEntityManager.CreateEntityFromTemplate("change_difficulty_button_text");
-
-            a.str("");
-            a << "change_difficulty_button_" << i;
             eButton[i] = theEntityManager.CreateEntityFromTemplate("change_difficulty_button");
             
             TRANSFORM(eText[i])->position.y = TRANSFORM(eButton[i])->position.y = PlacementHelper::GimpYToScreen(850+i*183);
