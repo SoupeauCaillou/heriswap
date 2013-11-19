@@ -34,7 +34,7 @@ opaque_rect=11,2,1,3
 [image4]
 name=15f_typo
 original_size=16,31
-position_in_atlas=344,212
+position_in_atlas=366,212
 size_in_atlas=20,12
 crop_offset=0,10
 rotated=1
@@ -50,7 +50,7 @@ opaque_rect=1,0,2,12
 [image6]
 name=22_typo
 original_size=11,40
-position_in_atlas=416,212
+position_in_atlas=438,212
 size_in_atlas=8,9
 crop_offset=0,10
 rotated=1
@@ -138,7 +138,7 @@ opaque_rect=0,0,0,0
 [image17]
 name=3001_typo
 original_size=30,39
-position_in_atlas=426,212
+position_in_atlas=448,212
 size_in_atlas=8,9
 crop_offset=0,26
 rotated=0
@@ -146,7 +146,7 @@ opaque_rect=2,2,1,1
 [image18]
 name=3002_typo
 original_size=30,39
-position_in_atlas=404,212
+position_in_atlas=426,212
 size_in_atlas=10,9
 crop_offset=0,25
 rotated=1
@@ -938,7 +938,7 @@ opaque_rect=10,2,2,1
 [image117]
 name=3d_typo
 original_size=16,40
-position_in_atlas=388,212
+position_in_atlas=410,212
 size_in_atlas=14,9
 crop_offset=0,16
 rotated=0
@@ -1794,7 +1794,7 @@ opaque_rect=3,1,7,1
 [image224]
 name=74_typo
 original_size=10,38
-position_in_atlas=366,212
+position_in_atlas=388,212
 size_in_atlas=20,10
 crop_offset=0,10
 rotated=1
@@ -2240,6 +2240,14 @@ crop_offset=0,7
 rotated=1
 opaque_rect=1,8,1,14
 [image280]
+name=ee_typo
+original_size=16,31
+position_in_atlas=344,212
+size_in_atlas=20,13
+crop_offset=0,5
+rotated=1
+opaque_rect=6,7,1,12
+[image281]
 name=f3_typo
 original_size=17,40
 position_in_atlas=903,110
@@ -2247,7 +2255,7 @@ size_in_atlas=24,15
 crop_offset=0,8
 rotated=1
 opaque_rect=12,11,1,9
-[image281]
+[image282]
 name=f4_typo
 original_size=17,31
 position_in_atlas=322,212
@@ -2255,7 +2263,7 @@ size_in_atlas=20,14
 crop_offset=0,5
 rotated=1
 opaque_rect=0,0,0,0
-[image282]
+[image283]
 name=f6_typo
 original_size=17,31
 position_in_atlas=533,230
@@ -2263,7 +2271,7 @@ size_in_atlas=19,14
 crop_offset=0,6
 rotated=1
 opaque_rect=3,1,1,1
-[image283]
+[image284]
 name=f9_typo
 original_size=16,40
 position_in_atlas=1,196
@@ -2271,7 +2279,7 @@ size_in_atlas=24,14
 crop_offset=0,8
 rotated=1
 opaque_rect=11,8,2,15
-[image284]
+[image285]
 name=fa_typo
 original_size=16,40
 position_in_atlas=27,196
@@ -2279,7 +2287,7 @@ size_in_atlas=24,14
 crop_offset=0,8
 rotated=1
 opaque_rect=11,8,2,15
-[image285]
+[image286]
 name=fc_typo
 original_size=16,40
 position_in_atlas=176,212
@@ -2287,7 +2295,7 @@ size_in_atlas=23,14
 crop_offset=0,9
 rotated=1
 opaque_rect=11,7,2,15
-[image286]
+[image287]
 name=ff01_typo
 original_size=18,40
 position_in_atlas=448,10
@@ -2295,7 +2303,7 @@ size_in_atlas=22,4
 crop_offset=0,10
 rotated=1
 opaque_rect=1,1,2,11
-[image287]
+[image288]
 name=ff1f_typo
 original_size=22,39
 position_in_atlas=201,212
