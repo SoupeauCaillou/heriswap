@@ -37,7 +37,4 @@
   <string name="help_click_play">"-aanraken om te spelen-"</string>
   <string name="help_mode1_1">"Doel: scoor de meeste punten.\n\nHet spel heeft een tijdslimiet."</string>
   <string name="help_mode3_1">"Doel: scoor binnen 100 seconden de meeste punten."</string>
-  <string name="start_at_level_10">"You seems to be good, maybe do you want to start this game at level 10 (with a score = 0) ?"</string>
-  <string name="start_at_level_10_yes">"Jumps at 10!"</string>
-  <string name="start_at_level_10_no">"No, I love first level"</string>
 </resources>

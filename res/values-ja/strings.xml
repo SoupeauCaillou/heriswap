@@ -38,7 +38,4 @@
   <string name="help_mode2_1">"木から全ての葉っぱ ×feuille2,1× を可能な限り速く消していくことが目的です。\n\n葉っぱを消すには3枚以上の同じ葉っぱを一列に並べてください ×feuille1,1× ×feuille1,1× ×feuille1,1×。\n\n隣接する2枚の葉っぱ ×feuille2,1× ×feuille3,1× を入れ替えて、組み合わせを作ります。"</string>
   <string name="help_mode2_2">"この ×herisson_2_5,2× は進行度を表しています。 これが画面の右端に到達したらゲームは終了です。\n\n加点のある葉っぱ ×feuille5,1× を組み合わせると点数が2倍になります。"</string>
   <string name="help_mode3_1">"100秒以内に多くのスコアを獲得することが目的です。"</string>
-  <string name="start_at_level_10">"You seems to be good, maybe do you want to start this game at level 10 (with a score = 0) ?"</string>
-  <string name="start_at_level_10_yes">"Jumps at 10!"</string>
-  <string name="start_at_level_10_no">"No, I love first level"</string>
 </resources>
