@@ -39,7 +39,8 @@
 #include "base/PlacementHelper.h"
 #include "base/TimeUtil.h"
 #include "base/TouchInputManager.h"
-
+#include "base/StateMachine.inl"
+    
 #include "systems/ADSRSystem.h"
 #include "systems/AnimationSystem.h"
 #include "systems/AutoDestroySystem.h"
