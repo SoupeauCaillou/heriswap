@@ -188,13 +188,7 @@ int NormalGameModeManager::levelToLeaveToDelete(int, int nb, int initialLeaveCou
 }
 
 static float timeGain(int nb, int level, float time) {
-    if (level < 20) {
-        // = 0.75sec average in hard
-        return glm::min(time, 2.f*nb/theHeriswapGridSystem.GridSize);
-    } else {
-        // = 0.19 sec average in hard
-        return glm::min(time, 0.5f*nb/theHeriswapGridSystem.GridSize);
-    }
+    return glm::min(time, 2.f*nb/theHeriswapGridSystem.GridSize);
 }
 
 void NormalGameModeManager::WillScore(int count, int type, std::vector<BranchLeaf>& out) {
