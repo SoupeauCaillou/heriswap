@@ -22,10 +22,26 @@
 #include "HeriswapGame.h"
 #include "app/AppSetup.h"
 
+#include <string>
+#include <sstream>
+
 int main(int argc, char** argv) {
     #define MAX_SIZE 700
     #define RATIO (16.0 / 9.0)
-    if (initGame("Heriswap", glm::ivec2(MAX_SIZE / RATIO, MAX_SIZE))) {
+    float height = MAX_SIZE;
+    float width = MAX_SIZE / RATIO;
+    
+    if (argc > 1) {
+        std::istringstream buffer(argv[1]);
+        buffer >> height;
+        width = height / RATIO;
+    }
+    if (argc > 2) {
+        std::istringstream buffer(argv[2]);
+        buffer >> width;
+    }
+
+    if (initGame("Heriswap", glm::ivec2(width, height))) {
         LOGE("Failed to initialize");
         return 1;
     }
