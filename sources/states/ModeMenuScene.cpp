@@ -281,7 +281,6 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         std::string scoreS = (game->datas->mode == TilesAttack) ? 
             ObjectSerializer<int>::object2string((int)(1000 * game->datas->mode2Manager[game->datas->mode]->time))
             : ssp.getValue("points");
-        game->gameThreadContext->gameCenterAPI->submitScore(e, scoreS);
     }
 
     bool isCurrentScoreAHighOne() {
@@ -384,7 +383,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         CONTAINER(playContainer)->enable = CONTAINER(bDifficulty)->enable = true;
 
-        if (game->gameThreadContext->gameCenterAPI->isConnected()) {
+        if (0) {
             RENDERING(leaderboard[0])->show =
                 TEXT(leaderboard[1])->show = 
                     BUTTON(leaderboard[0])->enabled = true;
@@ -535,12 +534,6 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 pleaseGoBack = false;
                 SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
                 return Scene::MainMenu;
-            }
-
-            // lb button
-            else if (BUTTON(leaderboard[0])->clicked) {
-                const int e = (game->datas->mode * 3 + game->difficulty);
-                game->gameThreadContext->gameCenterAPI->openSpecificLeaderboard(e);
             }
         }
         return Scene::ModeMenu;

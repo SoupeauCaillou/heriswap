@@ -112,7 +112,8 @@ void SuccessManager::NewGame(Difficulty difficulty) {
 void SuccessManager::s6InARow(int nbInCombi) {
 	if (hardMode && !b6InARow) {
 		if (nbInCombi >= 6) {
-			gameCenterAPI->unlockAchievement(E6InARow);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(E6InARow);
 			b6InARow=true;
 		}
 	}
@@ -122,7 +123,8 @@ void SuccessManager::sHardScore(StorageAPI* storageAPI) {
 	if (!bHardScore) {
 		ScoreStorageProxy ssp;
 		if (storageAPI->sum(&ssp, "points")  > 1000000.f) {
-			gameCenterAPI->unlockAchievement(EHardScore);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(EHardScore);
 			bHardScore=true;
 		}
 	}
@@ -130,7 +132,8 @@ void SuccessManager::sHardScore(StorageAPI* storageAPI) {
 void SuccessManager::sFastAndFinish(float time) {
 	if (hardMode && !bFastAndFinish) {
 		if (time<=53.f) {
-			gameCenterAPI->unlockAchievement(EFastAndFinish);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(EFastAndFinish);
 			bFastAndFinish = true;
 		}
 	}
@@ -139,7 +142,8 @@ void SuccessManager::sFastAndFinish(float time) {
 void SuccessManager::sResetGrid() {
 	if (hardMode && !bResetGrid) {
 		if (!gridResetted) {
-			gameCenterAPI->unlockAchievement(EResetGrid);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(EResetGrid);
 			bResetGrid = true;
 		}
 	}
@@ -148,7 +152,8 @@ void SuccessManager::sResetGrid() {
 void SuccessManager::sTakeYourTime() {
 	if (hardMode && !bTakeYourTime) {
 		if (gameDuration > 900.) {
-			gameCenterAPI->unlockAchievement(ETakeYourTime);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(ETakeYourTime);
 			bTakeYourTime = true;
 		}
 	}
@@ -158,7 +163,8 @@ void SuccessManager::sTakeYourTime() {
 void SuccessManager::sExterminaScore(int points) {
 	if (hardMode && !bExterminaScore) {
 		if (points > 100000) {
-			gameCenterAPI->unlockAchievement(EExterminaScore);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(EExterminaScore);
 			bExterminaScore = true;
 		}
 	}
@@ -166,7 +172,8 @@ void SuccessManager::sExterminaScore(int points) {
 void SuccessManager::sLevel1For2K(int level, int points) {
 	if (hardMode && !bLevel1For2K) {
 		if (level==1 && points>=2000) {
-			gameCenterAPI->unlockAchievement(ELevel1For2K);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(ELevel1For2K);
 			bLevel1For2K = true;
 		}
 	}
@@ -175,7 +182,8 @@ void SuccessManager::sLevel1For2K(int level, int points) {
 void SuccessManager::sLevel10(int level) {
 	if (hardMode && !bLevel10) {
 		if (level == 10) {
-			gameCenterAPI->unlockAchievement(ELevel10);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(ELevel10);
 			bLevel10 = true;
 		}
 	}
@@ -198,10 +206,12 @@ void SuccessManager::sRainbow(int type) {
 		}
 		if (rainbow(succEveryTypeInARow)) {
 			if (!bRainbow) {
-				gameCenterAPI->unlockAchievement(ERainbow);
+				if (gameCenterAPI)
+					gameCenterAPI->unlockAchievement(ERainbow);
 				bRainbow = true;
 			} else {
-				gameCenterAPI->unlockAchievement(EDoubleRainbow);
+				if (gameCenterAPI)
+					gameCenterAPI->unlockAchievement(EDoubleRainbow);
 				bDoubleRainbow = true;
 			}
 		}
@@ -212,7 +222,8 @@ void SuccessManager::sBonusToExcess(int type, int bonus, int nb) {
 		if (type == bonus)
 			bonusTilesNumber +=nb;
 		if (bonusTilesNumber >= 100) {
-			gameCenterAPI->unlockAchievement(EBonusToExcess);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(EBonusToExcess);
 			bBonusToExcess = true;
 		}
 	}
@@ -226,7 +237,8 @@ void SuccessManager::sLuckyLuke() {
 			timeTotalPlayed = 0.f;
 
 		if (timeTotalPlayed >= 15.f) {
-			gameCenterAPI->unlockAchievement(ELuckyLuke);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(ELuckyLuke);
 			bLuckyLuke = true;
 		}
 	}
@@ -236,7 +248,8 @@ void SuccessManager::sTestEverything(StorageAPI* storageAPI) {
 	if (!bTestEverything) {
 		ScoreStorageProxy ssp;
 		if (storageAPI->count(&ssp, "distinct difficulty, mode") == 9) {
-			gameCenterAPI->unlockAchievement(ETestEverything);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(ETestEverything);
 			bTestEverything = true;
 		}
 	}
@@ -250,7 +263,8 @@ void SuccessManager::sBTAC(StorageAPI* storageAPI, Difficulty difficulty, unsign
 		storageAPI->loadEntries(&ssp, "points", ss.str());
 
 		if (ssp._queue.size() == 5 && (int)points > ssp._queue.back().points) {
-			gameCenterAPI->unlockAchievement(EBTAC);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(EBTAC);
 			bBTAC = true;
 		}
 	}
@@ -264,7 +278,8 @@ void SuccessManager::sBTAM(StorageAPI* storageAPI, Difficulty difficulty, float 
 		storageAPI->loadEntries(&ssp, "time", ss.str());
 
 		if (ssp._queue.size() == 5 && time > ssp._queue.back().time) {
-			gameCenterAPI->unlockAchievement(EBTAM);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(EBTAM);
 			bBTAM = true;
 		}
 	}
@@ -278,7 +293,8 @@ void SuccessManager::s666Loser(int level) {
 			l666numberLose = 0;
 
 		if (l666numberLose==3) {
-			gameCenterAPI->unlockAchievement(E666Loser);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(E666Loser);
 			b666Loser = true;
 		}
 	}
@@ -292,7 +308,8 @@ void SuccessManager::sTheyGood(bool Ibetter) {
 			lTheyGood=0;
 
 		if (lTheyGood==3) {
-			gameCenterAPI->unlockAchievement(ETheyGood);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(ETheyGood);
 			bTheyGood = true;
 		}
 	}
@@ -306,7 +323,8 @@ void SuccessManager::sWhatToDo(bool swapInPreparation, float dt) {
 			timeInSwappingPreparation=0.f;
 
 		if (timeInSwappingPreparation>5.0f) {
-			gameCenterAPI->unlockAchievement(EWhatToDo);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(EWhatToDo);
 			bWhatToDo = true;
 		}
 	}
@@ -323,7 +341,8 @@ void SuccessManager::sBimBamBoum(int newCombiCount) {
 		}
 
 		if (numberCombinationInARow >= 3) {
-			gameCenterAPI->unlockAchievement(EBimBamBoum);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(EBimBamBoum);
 			bBimBamBoum = true;
 		}
 	}
@@ -332,7 +351,8 @@ void SuccessManager::sBimBamBoum(int newCombiCount) {
 void SuccessManager::sDoubleInOne(std::vector<Combinais> &s) {
 	if (hardMode && !bDoubleInOne) {
 		if (s.size() > 1) {
-			gameCenterAPI->unlockAchievement(EDoubleInOne);
+			if (gameCenterAPI)
+				gameCenterAPI->unlockAchievement(EDoubleInOne);
 			bDoubleInOne = true;
 		}
 	}
