@@ -31,6 +31,8 @@ int main(int argc, char** argv) {
     float height = MAX_SIZE;
     float width = MAX_SIZE / RATIO;
     
+    // To debug ratio issue
+    // expected arguments are [height] [width] (optionnel both)
     if (argc > 1) {
         std::istringstream buffer(argv[1]);
         buffer >> height;
