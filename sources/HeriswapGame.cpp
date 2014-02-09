@@ -158,6 +158,7 @@ bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
         case ContextAPI::KeyboardInputHandler:
         case ContextAPI::Localize:
         case ContextAPI::Music:
+        case ContextAPI::OpenURL:
         case ContextAPI::Sound:
         case ContextAPI::Storage:
         case ContextAPI::StringInput:
@@ -378,7 +379,7 @@ void HeriswapGame::backPressed() {
             sceneStateMachine.forceNewState(Scene::Pause);
             break;
         case Scene::Pause:
-            sceneStateMachine.forceNewState(Scene::MainMenu);
+            sceneStateMachine.forceNewState(Scene::UserInput);
             break;
         default:
             break;
