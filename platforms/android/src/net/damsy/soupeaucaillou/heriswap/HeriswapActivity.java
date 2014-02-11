@@ -29,6 +29,7 @@ import net.damsy.soupeaucaillou.api.CommunicationAPI;
 import net.damsy.soupeaucaillou.api.GameCenterAPI;
 import net.damsy.soupeaucaillou.api.LocalizeAPI;
 import net.damsy.soupeaucaillou.api.MusicAPI;
+import net.damsy.soupeaucaillou.api.OpenURLAPI;
 import net.damsy.soupeaucaillou.api.SoundAPI;
 import net.damsy.soupeaucaillou.api.StorageAPI;
 import net.damsy.soupeaucaillou.api.StringInputAPI;
@@ -67,6 +68,7 @@ public class HeriswapActivity extends SacActivity {
 		LocalizeAPI.Instance().init(this.getResources(), this.getPackageName());
 		StorageAPI.Instance().init(this);
 		MusicAPI.Instance();
+        OpenURLAPI.Instance().init(this);
 		SoundAPI.Instance().init(getAssets());
 		CommunicationAPI.Instance().init(this, getPreferences(MODE_PRIVATE));
 		StringInputAPI.Instance().init(
