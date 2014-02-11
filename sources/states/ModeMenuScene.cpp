@@ -277,7 +277,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         //      E100SecondsDifficult,
         //      E100SecondsMedium,
 
-        int e = (game->datas->mode * 3 + game->difficulty);
+        // int e = (game->datas->mode * 3 + game->difficulty);
         std::string scoreS = (game->datas->mode == TilesAttack) ? 
             ObjectSerializer<int>::object2string((int)(1000 * game->datas->mode2Manager[game->datas->mode]->time))
             : ssp.getValue("points");

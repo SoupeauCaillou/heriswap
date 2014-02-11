@@ -1,9 +1,12 @@
 extends = button_text
 
 [Transformation]
-position%gimp = 150, 900
+#position%gimp = 150, 900
 #size = 1, 1
 z = 0.39
 
 [Text]
 positioning = 0
+
+[Anchor]
+parent%name=pause/bAbort

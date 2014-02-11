@@ -1,6 +1,18 @@
-extends = button
 
 [Transformation]
-position%gimp = 400, 900
+#position%gimp = 400, 900
 size%gimp = 708, 147
 z = 0.38
+
+[Rendering]
+texture = fond_bouton
+color = 1,1,1,0.5
+opaque_type = 0
+
+[SwypeButton]
+final_pos%gimp_pos = 800, 900
+idle_pos%gimp_pos = 400, 900
+enabled = 0
+animated = 1
+
+[Sound]

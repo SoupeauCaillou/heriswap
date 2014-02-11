@@ -101,7 +101,6 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
         LOGI("'" << __PRETTY_FUNCTION__ << "'");
         Color blue = Color(164.0/255.0, 164.0/255, 164.0/255);
 
-
         currentLevel = static_cast<NormalGameModeManager*>(game->datas->mode2Manager[game->datas->mode])->currentLevel();
         smallLevel = static_cast<NormalGameModeManager*>(game->datas->mode2Manager[game->datas->mode])->getSmallLevelEntity();
 
@@ -136,10 +135,9 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
         TextureRef pause = theRenderingSystem.loadTextureFile("pause");
         TextureRef sound1 = theRenderingSystem.loadTextureFile("sound_on");
         TextureRef sound2 = theRenderingSystem.loadTextureFile("sound_off");
-        std::vector<Entity> text = theTextSystem.RetrieveAllEntityWithComponent();
         std::vector<Entity> entities = theRenderingSystem.RetrieveAllEntityWithComponent();
-        for (unsigned int i=0; i<entities.size(); i++) {
-            RenderingComponent* rc = RENDERING(entities[i]);
+        for (auto e : entities) {
+            RenderingComponent* rc = RENDERING(e);
             if (rc->texture == branch || rc->texture == pause || rc->texture == sound1 || rc->texture == sound2) {
                 continue;
             }
@@ -147,8 +145,8 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
         }
 
         entities = theHeriswapGridSystem.RetrieveAllEntityWithComponent();
-        for (unsigned int i=0; i<entities.size(); i++) {
-            CombinationMark::markCellInCombination(entities[i]);
+        for (auto e: entities) {
+            CombinationMark::markCellInCombination(e);
         }
 
         game->stopInGameMusics();
@@ -166,9 +164,9 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
 
         float alpha = 1 - ADSR(eGrid)->value;
         std::vector<Entity> entities = theHeriswapGridSystem.RetrieveAllEntityWithComponent();
-        for (std::vector<Entity>::iterator it = entities.begin(); it != entities.end(); ++it ) {
-            RENDERING(*it)->color.a = alpha;
-            TWITCH(*it)->speed = alpha * 9;
+        for (auto e : entities) {
+            RENDERING(e)->color.a = alpha;
+            TWITCH(e)->speed = alpha * 9;
         }
 
         //start music at 0.5 s
@@ -207,17 +205,17 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
             RENDERING(game->datas->mode2Manager[game->datas->mode]->herisson)->effectRef = DefaultEffectRef;
             // generating the brand-new leaves
             game->datas->mode2Manager[game->datas->mode]->generateLeaves(0, theHeriswapGridSystem.Types);
-            for (unsigned int i=0; i<game->datas->mode2Manager[game->datas->mode]->branchLeaves.size(); i++) {
-                TRANSFORM(game->datas->mode2Manager[game->datas->mode]->branchLeaves[i].e)->size =glm::vec2(0.f);
+            for (auto s : game->datas->mode2Manager[game->datas->mode]->branchLeaves) {
+                TRANSFORM(s.e)->size = glm::vec2(0.f);
             }
         }
         if (levelState == BigScoreBeganToMove || levelState == BigScoreMoving) {
             levelState = BigScoreMoving;
             //if leaves created, make them grow!
-            for (unsigned int i=0; i<game->datas->mode2Manager[game->datas->mode]->branchLeaves.size(); i++) {
-                TRANSFORM(game->datas->mode2Manager[game->datas->mode]->branchLeaves[i].e)->size =
+            for (auto s : game->datas->mode2Manager[game->datas->mode]->branchLeaves) {
+                TRANSFORM(s.e)->size =
                     HeriswapGame::CellSize(8,
-                            game->datas->mode2Manager[game->datas->mode]->branchLeaves[i].type) * HeriswapGame::CellContentScale() * glm::min((duration-6) / 4.f, 1.f);
+                            s.type) * HeriswapGame::CellContentScale() * glm::min((duration-6) / 4.f, 1.f);
             }
             RENDERING(eSnowBranch)->color.a = 1-(duration-6)/(10-6);
             RENDERING(eSnowGround)->color.a = 1-(duration-6)/(10-6.f);

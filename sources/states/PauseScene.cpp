@@ -35,6 +35,7 @@
 #include "systems/ButtonSystem.h"
 #include "systems/MusicSystem.h"
 #include "systems/SoundSystem.h"
+#include "systems/SwypeButtonSystem.h"
 #include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
@@ -72,13 +73,11 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         //Help button
         bHelp = theEntityManager.CreateEntityFromTemplate("pause/bHelp");
 
-        //Abort text
-        eAbort = theEntityManager.CreateEntityFromTemplate("pause/eAbort");
-
-        TEXT(eAbort)->text = game->gameThreadContext->localizeAPI->text("give_up");
-
         //Abort button
         bAbort = theEntityManager.CreateEntityFromTemplate("pause/bAbort");
+        //Abort text
+        eAbort = theEntityManager.CreateEntityFromTemplate("pause/eAbort");
+        TEXT(eAbort)->text = game->gameThreadContext->localizeAPI->text("give_up");
     }
 
     ///----------------------------------------------------------------------------//
@@ -96,7 +95,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         TEXT(eHelp)->show = true;
         RENDERING(bHelp)->show = true;
         BUTTON(bRestart)->enabled = true;
-        BUTTON(bAbort)->enabled = true;
+        SWYPEBUTTON(bAbort)->enabled = true;
 
         // theMusicSystem.toggleMute(true);
         BUTTON(bHelp)->enabled = true;
@@ -118,7 +117,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
     ///--------------------- UPDATE SECTION ---------------------------------------//
     ///----------------------------------------------------------------------------//
     Scene::Enum update(float) override {
-        if (BUTTON(bAbort)->clicked) {
+        if (SWYPEBUTTON(bAbort)->clicked) {
             SOUND(bAbort)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
             return Scene::MainMenu;
         } if (BUTTON(bRestart)->clicked) {
@@ -151,7 +150,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
 
         BUTTON(bHelp)->enabled =
             BUTTON(bRestart)->enabled =
-            BUTTON(bAbort)->enabled = false;
+            SWYPEBUTTON(bAbort)->enabled = false;
 
         theMusicSystem.toggleMute(theSoundSystem.mute);
 

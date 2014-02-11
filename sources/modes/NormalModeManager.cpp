@@ -259,7 +259,6 @@ void NormalGameModeManager::startLevel(int lvl) {
     // c->ind = 0;
     bonus = Random::Int(0, theHeriswapGridSystem.Types-1);
     LoadHerissonTexture(bonus+1);
-    // RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[1]);
     SCROLLING(decor1er)->speed = 0;
 }
 

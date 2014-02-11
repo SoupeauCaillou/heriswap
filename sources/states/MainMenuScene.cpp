@@ -32,6 +32,7 @@
 
 #include "systems/BackgroundSystem.h"
 
+#include "api/OpenURLAPI.h"
 #include "api/StorageAPI.h"
 
 #include "base/EntityManager.h"
@@ -71,9 +72,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     HeriswapGame* game;
 
     GameMode choosenGameMode;
-    Entity eStart[3];
+    Entity eStart[4];
     Entity modeTitleToReset;
-    Entity bStart[3];
+    Entity bStart[4];
     Entity menufg, menubg;
     Entity ggsBg;
 
@@ -86,7 +87,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
         std::stringstream a;
         //Creating text entities
-        for (int i=0; i<3; i++) {
+        for (int i=0; i<4; i++) {
             a.str("");
             a << "eStart_" << i;
             eStart[i] = theEntityManager.CreateEntityFromTemplate("mainmenu/"+ a.str());
@@ -107,9 +108,10 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         TEXT(eStart[0])->text = game->gameThreadContext->localizeAPI->text("mode_1");
         TEXT(eStart[1])->text = game->gameThreadContext->localizeAPI->text("mode_2");
         TEXT(eStart[2])->text = game->gameThreadContext->localizeAPI->text("mode_3");
+        TEXT(eStart[3])->text = game->gameThreadContext->localizeAPI->text("about_us");
 
         //Containers properties
-        for (int i=0; i<3; i++) {
+        for (int i=0; i<4; i++) {
             TEXT(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(54);
             TEXT(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
             glm::vec2 target = glm::vec2((float)(PlacementHelper::GimpXToScreen(708)) ,
@@ -118,7 +120,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             MORPHING(eStart[i])->elements.push_back(posMorph);
         }
 
-        for (int i=0; i<3; i++) {
+        for (int i=0; i<4; i++) {
             TEXT(eStart[i])->flags |= TextComponent::AdjustHeightToFillWidthBit;
             TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9f;
         }
@@ -152,7 +154,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
         if (pState == Scene::Logo) {
             // setup fadein
-            for (int i=0; i<3; ++i) {
+            for (int i=0; i<4; ++i) {
                 game->datas->faderHelper.registerFadingInEntity(eStart[i]);
                 game->datas->faderHelper.registerFadingInEntity(bStart[i]);
             }
@@ -181,7 +183,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             // preload sound effect
             theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 
-            for (int i=0; i<3; ++i) {
+            for (int i=0; i<4; ++i) {
                 TEXT(eStart[i])->show = true;
                 RENDERING(bStart[i])->show = true;
                 BUTTON(bStart[i])->enabled = true;
@@ -244,6 +246,10 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
                 SOUND(bStart[2])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
                 return Scene::ModeMenu;
             }
+            if(BUTTON(bStart[3])->clicked){
+                SOUND(bStart[3])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
+                game->gameThreadContext->openURLAPI->openURL("http://www.soupeaucaillou.com/");
+            }
         }
         return Scene::MainMenu;
     }
@@ -255,7 +261,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         if (to == Scene::ModeMenu) {
             game->datas->mode = choosenGameMode;
         }
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             if (i != choosenGameMode)
                 TEXT(eStart[i])->show = false;
             RENDERING(bStart[i])->show = false;

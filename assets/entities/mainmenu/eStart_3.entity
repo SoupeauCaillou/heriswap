@@ -1,0 +1,16 @@
+extends = button_text
+
+[Transformation]
+position%gimp = 400, 1150
+
+[Text]
+#~ float
+char_height%gimp_h = 75
+#~ LEFT = 0.0f, CENTER = 0.5f, RIGHT = 1.0f
+positioning = 0.5
+#~ bool
+#show = 0
+
+[Morphing]
+#~ float
+timing = 0.2

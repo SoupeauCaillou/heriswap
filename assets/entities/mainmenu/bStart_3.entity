@@ -1,0 +1,5 @@
+extends = button
+
+[Transformation]
+position%gimp = 400, 1150
+size%screen = 0.95, 0.12
