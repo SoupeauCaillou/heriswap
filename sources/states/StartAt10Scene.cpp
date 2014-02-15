@@ -31,6 +31,7 @@
 #include "base/EntityManager.h"
 #include "base/PlacementHelper.h"
 
+#include "systems/AnchorSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/SoundSystem.h"
 #include "systems/TextSystem.h"
@@ -52,16 +53,16 @@ struct StartAt10Scene : public StateHandler<Scene::Enum> {
     }
 
     void setup() {
-        const Color green("green");
-        background = theEntityManager.CreateEntityFromTemplate("background");
+        background = theEntityManager.CreateEntityFromTemplate("change_difficulty_background");
 
         text = theEntityManager.CreateEntityFromTemplate("change_difficulty_text");
 
         for (int i=0; i<2; i++) {
-            eText[i] = theEntityManager.CreateEntityFromTemplate("change_difficulty_button_text");
             eButton[i] = theEntityManager.CreateEntityFromTemplate("change_difficulty_button");
-            
-            TRANSFORM(eText[i])->position.y = TRANSFORM(eButton[i])->position.y = PlacementHelper::GimpYToScreen(850+i*183);
+            eText[i] = theEntityManager.CreateEntityFromTemplate("change_difficulty_button_text");
+            ANCHOR(eText[i])->parent = eButton[i];
+
+            TRANSFORM(eButton[i])->position.y = PlacementHelper::GimpYToScreen(850+i*183);
         }
         TEXT(text)->text = game->gameThreadContext->localizeAPI->text("start_at_level_10");
         TEXT(eText[0])->text = game->gameThreadContext->localizeAPI->text("start_at_level_10_yes");

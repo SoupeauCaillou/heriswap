@@ -96,6 +96,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         RENDERING(bHelp)->show = true;
         BUTTON(bRestart)->enabled = true;
         SWYPEBUTTON(bAbort)->enabled = true;
+        TRANSFORM(bAbort)->position = SWYPEBUTTON(bAbort)->idlePos;
 
         // theMusicSystem.toggleMute(true);
         BUTTON(bHelp)->enabled = true;

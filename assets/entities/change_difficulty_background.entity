@@ -1,0 +1,11 @@
+[Transformation]
+position%screen = 0, 0.16
+size%screen = 0.96,0.50
+z = 0.5
+
+[Rendering]
+#~ TextureRef
+texture = fond_menu_mode
+#~ Color
+color = 1, 1, 1, 0.5
+opaque_type = 0

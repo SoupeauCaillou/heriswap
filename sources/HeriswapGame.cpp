@@ -364,8 +364,6 @@ void HeriswapGame::backPressed() {
     switch (state) {
 #if ! SAC_ANDROID
         case Scene::MainMenu:
-            //exit the game
-            isFinished = true;
             break;
 #endif
         case Scene::ModeMenu:
