@@ -507,7 +507,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 std::stringstream ss;
                 ss << "where mode = " << (int)game->datas->mode << " and difficulty = " << (int)game->difficulty;
                 ScoreStorageProxy ssp;
-                if (game->gameThreadContext->storageAPI->count(&ssp, "*", ss.str()) == 0) {
+                if (game->datas->mode != Normal || game->gameThreadContext->storageAPI->count(&ssp, "*", ss.str()) == 0) {
                     return Scene::Help;
                 } else {
                     // If 5th last score is over 100k, we ask to player if he will begin at level 10
