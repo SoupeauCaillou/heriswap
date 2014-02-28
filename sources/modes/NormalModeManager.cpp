@@ -187,7 +187,7 @@ int NormalGameModeManager::levelToLeaveToDelete(int, int nb, int initialLeaveCou
     }
 }
 
-static float timeGain(int nb, int level, float time) {
+static float timeGain(int nb, int, float time) {
     return glm::min(time, 2.f*nb/theHeriswapGridSystem.GridSize);
 }
 

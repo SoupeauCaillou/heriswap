@@ -254,7 +254,7 @@ void GameModeManager::generateLeaves(int* nb, int type) {
 }
 
 void GameModeManager::deleteLeaves(unsigned int type, int nb) {
-    if (type == (unsigned int)~0b0) {
+    if (type == ~0u) {
         while (branchLeaves.size()>0 && nb) {
             theEntityManager.DeleteEntity(branchLeaves[0].e);
             branchLeaves.erase(branchLeaves.begin());

@@ -302,7 +302,7 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
         return Scene::UserInput;
     }
 
-    void BackgroundUpdate(float dt __attribute__((unused))) {
+    void BackgroundUpdate(float) {
         for(int i=0; i<theHeriswapGridSystem.GridSize; i++) {
             for(int j=0; j<theHeriswapGridSystem.GridSize; j++) {
                 Entity e = theHeriswapGridSystem.GetOnPos(i,j);

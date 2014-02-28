@@ -317,7 +317,7 @@ std::vector<CellFall> HeriswapGridSystem::TileFall() {
     return result;
 }
 
-void HeriswapGridSystem::DoUpdate(float dt __attribute__((unused))) {
+void HeriswapGridSystem::DoUpdate(float) {
 }
 
 bool HeriswapGridSystem::NewCombiOnSwitch(Entity a, int i, int j) {

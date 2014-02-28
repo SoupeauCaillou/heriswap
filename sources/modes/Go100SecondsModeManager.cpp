@@ -237,9 +237,9 @@ void Go100SecondsGameModeManager::ScoreCalc(int nb, unsigned int type) {
 
 	if (type == bonus) {
 		score *= 2;
-		deleteLeaves(~0b0, 2*nb);
+		deleteLeaves(~0u, 2*nb);
 	} else {
-		deleteLeaves(~0b0, nb);
+		deleteLeaves(~0u, nb);
 	}
 	points += score;
 

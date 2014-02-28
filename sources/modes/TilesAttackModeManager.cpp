@@ -172,11 +172,11 @@ int TilesAttackGameModeManager::levelToLeaveToDelete(int leavesMaxSize, int limi
 void TilesAttackGameModeManager::ScoreCalc(int nb, unsigned int type) {
 	if (type == bonus) {
 		points += 10*2*nb*nb*nb/6;
-		deleteLeaves(~0b0, levelToLeaveToDelete(6*8, limit, 2*nb, leavesDone));
+		deleteLeaves(~0u, levelToLeaveToDelete(6*8, limit, 2*nb, leavesDone));
 		leavesDone+=2*nb;
 	} else {
 		points += 10*nb*nb*nb/6;
-		deleteLeaves(~0b0, levelToLeaveToDelete(6*8, limit, nb, leavesDone));
+		deleteLeaves(~0u, levelToLeaveToDelete(6*8, limit, nb, leavesDone));
 		leavesDone+=nb;
 	}
 	successMgr->sRainbow(type);
