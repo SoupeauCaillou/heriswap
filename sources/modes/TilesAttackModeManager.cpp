@@ -115,11 +115,8 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 	{
 	std::stringstream a;
 
-	//~not enable currently
-	//~a << rank << ". ";
-
-	int minute = ((int)time)/60;
-	int seconde= ((int)time)%60;
+	int minute = ((int)time) / 60;
+	int seconde= ((int)time) % 60;
 	int tenthsec = (time - minute * 60 - seconde) * 10;
 	if (minute) a << minute << ':';
 	a << std::setw(2) << std::setfill('0') << seconde << '.' << std::setw(1) << tenthsec << " s";
