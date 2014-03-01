@@ -102,11 +102,11 @@ void Go100SecondsGameModeManager::Enter() {
 
 void Go100SecondsGameModeManager::squall() {
 	squallGo = true;
-	float minX = PlacementHelper::ScreenSize.x/2.+1;
-	float maxX = PlacementHelper::ScreenSize.x/2.+3;
+	float minX = PlacementHelper::ScreenSize.x/2.f + 1;
+	float maxX = PlacementHelper::ScreenSize.x/2.f + 3;
 
 	float minY = PlacementHelper::GimpYToScreen(1000);
-	float maxY = -PlacementHelper::ScreenSize.y/2.;
+	float maxY = -PlacementHelper::ScreenSize.y / 2.f;
 	for (unsigned int i = 0; i < squallLeaves.size();  i++) {
 
 		Entity  e = squallLeaves[i];
@@ -216,7 +216,7 @@ void Go100SecondsGameModeManager::UiUpdate(float dt) {
 			text << countBranchLeavesOfType(i);
 			TEXT(debugEntities[2*i+1])->text = text.str();
 			TEXT(debugEntities[2*i+1])->show = true;
-			TEXT(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
+			TEXT(debugEntities[2*i+1])->color = Color(0.2f, 0.2f, 0.2f);
 		}
 	}
 #endif

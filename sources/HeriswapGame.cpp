@@ -98,9 +98,9 @@ bool HeriswapGame::pausableState(Scene::Enum state) {
     }
 }
 
-static const float offset = 0.2;
-static const float scale = 0.95;
-static const float size = (10 - 2 * offset) / 8;
+static const float offset = 0.2f;
+static const float scale = 0.95f;
+static const float size = (10 - 2 * offset) / 8.f;
 
 // grid: [48, 302] -> [752, 1006]  in gimp
 glm::vec2 HeriswapGame::GridCoordsToPosition(int i, int j, int gridSize) {
@@ -119,19 +119,19 @@ glm::vec2 HeriswapGame::CellSize(int gridSize, int cellType) {
     switch (cellType) {
         case 0:
         case 1:
-            coeff = 0.74 / 0.8;
+            coeff = 0.74f / 0.8f;
             break;
         case 2:
         case 3:
-            coeff = 0.62 / 0.8;
+            coeff = 0.62f / 0.8f;
             break;
         case 4:
         case 5:
-            coeff = 0.52 / 0.8;
+            coeff = 0.52f / 0.8f;
             break;
         case 6:
         case 7:
-            coeff = 0.38 / 0.8;
+            coeff = 0.38f / 0.8f;
             break;
     }
     return glm::vec2(y * coeff, y);
@@ -199,7 +199,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     sceneStateMachine.registerState(Scene::ElitePopup, Scene::CreateElitePopupSceneHandler(this), "Scene::ElitePopup");
     sceneStateMachine.registerState(Scene::StartAt10, Scene::CreateStartAt10SceneHandler(this), "Scene::StartAt10");
 
-    Color::nameColor(Color(3.0/255.0, 99.0/255, 71.0/255), "green");
+    Color::nameColor(Color(3.0f / 255.0f, 99.0f / 255.f, 71.0f / 255.f), "green");
 
     LOGI("\t- Load FX...");
     theRenderingSystem.effectLibrary.load("desaturate.fs");
@@ -741,26 +741,26 @@ void HeriswapGame::stopInGameMusics() {
 
 void HeriswapGame::setupGameProp() {
     if (datas->mode == Go100Seconds) {
-        datas->timing.deletion = 0.2;
-        datas->timing.swap = 0.03;
-        datas->timing.fall = 0.1;
-        datas->timing.haveToAddLeavesInGrid = 0.2;
-        datas->timing.replaceGrid = 0.5;
+        datas->timing.deletion = 0.2f;
+        datas->timing.swap = 0.03f;
+        datas->timing.fall = 0.1f;
+        datas->timing.haveToAddLeavesInGrid = 0.2f;
+        datas->timing.replaceGrid = 0.5f;
     } else {
         //update anim times
         Difficulty difficulty = theHeriswapGridSystem.sizeToDifficulty();
         if (difficulty == DifficultyEasy) {
-            datas->timing.deletion = 0.6;
-            datas->timing.swap = 0.14;
-            datas->timing.fall = 0.30;
-            datas->timing.haveToAddLeavesInGrid = 0.40;
-            datas->timing.replaceGrid = 1;
+            datas->timing.deletion = 0.6f;
+            datas->timing.swap = 0.14f;
+            datas->timing.fall = 0.30f;
+            datas->timing.haveToAddLeavesInGrid = 0.40f;
+            datas->timing.replaceGrid = 1.f;
         } else {
-            datas->timing.deletion = 0.3;
-            datas->timing.swap = 0.07;
-            datas->timing.fall = 0.15;
-            datas->timing.haveToAddLeavesInGrid = 0.40;
-            datas->timing.replaceGrid = 1;
+            datas->timing.deletion = 0.3f;
+            datas->timing.swap = 0.07f;
+            datas->timing.fall = 0.15f;
+            datas->timing.haveToAddLeavesInGrid = 0.40f;
+            datas->timing.replaceGrid = 1.f;
         }
     }
 

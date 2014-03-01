@@ -223,7 +223,7 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
 
             if (theTouchInputManager.isTouched(0)) {
                 // swap cell on axis
-                Entity c = moveToCell(currentCell, move, TRANSFORM(currentCell)->size.x * 0.01);
+                Entity c = moveToCell(currentCell, move, TRANSFORM(currentCell)->size.x * 0.01f);
 
                 // same cell, keep going
                 if (c && (!swappedCell || swappedCell == c)) {

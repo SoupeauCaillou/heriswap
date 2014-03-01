@@ -36,9 +36,9 @@
 INSTANCE_IMPL(BackgroundSystem);
 
 BackgroundSystem::BackgroundSystem() : ComponentSystemImpl<BackgroundComponent>("Background") {
-    skySpeed = -0.3;
+    skySpeed = -0.3f;
 
-    cloudStartX = Interval<float>(8.0,15.0);
+    cloudStartX = Interval<float>(8.0f, 15.0f);
 
     cloudY[0] = Interval<float>(PlacementHelper::GimpYToScreen(70), PlacementHelper::GimpYToScreen(240));
     cloudY[1] = Interval<float>(PlacementHelper::GimpYToScreen(390), PlacementHelper::GimpYToScreen(490));
@@ -57,24 +57,24 @@ BackgroundSystem::BackgroundSystem() : ComponentSystemImpl<BackgroundComponent>(
     LOGI("190 = '" << PlacementHelper::GimpWidthToScreen(190) << "' 230 = '" << PlacementHelper::GimpWidthToScreen(190) << "'");
     LOGI("100 = '" << PlacementHelper::GimpWidthToScreen(100) << "' 180 = '" << PlacementHelper::GimpWidthToScreen(180) << "'");
 
-    cloudSpeed[0] = Interval<float>(-0.4, -0.25);
-    cloudSpeed[1] = Interval<float>(-0.25, -0.13);
-    cloudSpeed[2] = Interval<float>(-0.1, -0.03);
+    cloudSpeed[0] = Interval<float>(-0.4f, -0.25f);
+    cloudSpeed[1] = Interval<float>(-0.25f, -0.13f);
+    cloudSpeed[2] = Interval<float>(-0.1f, -0.03f);
 
-    textures[0].push_back("haut_0"); width2HeightRatio[0].push_back(138.0 / 260.0);
-    textures[0].push_back("haut_1"); width2HeightRatio[0].push_back(197.0 / 336.0);
-    textures[0].push_back("haut_2"); width2HeightRatio[0].push_back(208.0 / 413.0);
-    textures[1].push_back("moyen_0"); width2HeightRatio[1].push_back(126.0 / 292.0);
-    textures[1].push_back("moyen_1"); width2HeightRatio[1].push_back(101.0 / 201.0);
-    textures[2].push_back("bas_0"); width2HeightRatio[2].push_back(75.0 / 220.0);
-    textures[2].push_back("bas_1"); width2HeightRatio[2].push_back(117.0 / 231.0);
-    textures[2].push_back("bas_2"); width2HeightRatio[2].push_back(67.0 / 128.0);
-    textures[2].push_back("bas_3"); width2HeightRatio[2].push_back(91.0 / 181.0);
-    textures[2].push_back("bas_4"); width2HeightRatio[2].push_back(79.0 / 205.0);
+    textures[0].push_back("haut_0"); width2HeightRatio[0].push_back(138.0f / 260.0);
+    textures[0].push_back("haut_1"); width2HeightRatio[0].push_back(197.0f / 336.0);
+    textures[0].push_back("haut_2"); width2HeightRatio[0].push_back(208.0f / 413.0);
+    textures[1].push_back("moyen_0"); width2HeightRatio[1].push_back(126.0f / 292.0);
+    textures[1].push_back("moyen_1"); width2HeightRatio[1].push_back(101.0f / 201.0);
+    textures[2].push_back("bas_0"); width2HeightRatio[2].push_back(75.0f / 220.0);
+    textures[2].push_back("bas_1"); width2HeightRatio[2].push_back(117.0f / 231.0);
+    textures[2].push_back("bas_2"); width2HeightRatio[2].push_back(67.0f / 128.0);
+    textures[2].push_back("bas_3"); width2HeightRatio[2].push_back(91.0f / 181.0);
+    textures[2].push_back("bas_4"); width2HeightRatio[2].push_back(79.0f / 205.0);
 }
 
 void BackgroundSystem::initCloud(Entity e, int group) {
-    float ratio = 1.67;
+    float ratio = 1.67f;
 
     LOGF_IF(group < 0 || group > 2, "Invalid group value: " << group);
     float width = cloudSize[group].random();

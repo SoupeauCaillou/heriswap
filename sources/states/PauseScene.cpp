@@ -156,7 +156,7 @@ struct PauseScene : public StateHandler<Scene::Enum> {
         theMusicSystem.toggleMute(theSoundSystem.mute);
 
         Entity herisson = game->datas->mode2Manager[game->datas->mode]->herisson;
-        ANIMATION(herisson)->playbackSpeed = 4.1;
+        ANIMATION(herisson)->playbackSpeed = 4.1f;
     }
 };
 

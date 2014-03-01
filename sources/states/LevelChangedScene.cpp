@@ -99,7 +99,7 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
 
     void onEnter(Scene::Enum) override {
         LOGI("'" << __PRETTY_FUNCTION__ << "'");
-        Color blue = Color(164.0/255.0, 164.0/255, 164.0/255);
+        Color blue = Color(164.0f/255.0, 164.0f/255, 164.0f/255);
 
         currentLevel = static_cast<NormalGameModeManager*>(game->datas->mode2Manager[game->datas->mode])->currentLevel();
         smallLevel = static_cast<NormalGameModeManager*>(game->datas->mode2Manager[game->datas->mode])->getSmallLevelEntity();

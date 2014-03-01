@@ -49,11 +49,11 @@
 #include <sstream>
 
 static float initialHerissonPosition(Entity herisson) {
-    return -PlacementHelper::ScreenSize.x * 0.5 + TRANSFORM(herisson)->size.x * 0.25;
+    return -PlacementHelper::ScreenSize.x * 0.5f + TRANSFORM(herisson)->size.x * 0.25f;
 }
 
 static float finalHerissonPosition(Entity herisson) {
-    return PlacementHelper::ScreenSize.x * 0.5 + TRANSFORM(herisson)->size.x * 0.5;
+    return PlacementHelper::ScreenSize.x * 0.5f + TRANSFORM(herisson)->size.x * 0.5f;
 }
 
 GameModeManager::GameModeManager(HeriswapGame* game, SuccessManager* sMgr, StorageAPI* sAPI) {
@@ -138,7 +138,7 @@ void GameModeManager::Setup() {
         TEXT(debugEntities[2*i + 1])->positioning = TextComponent::CENTER;
         ADD_COMPONENT(debugEntities[2*i + 1], Transformation);
         TRANSFORM(debugEntities[2*i + 1])->position = TRANSFORM(debugEntities[2*i])->position;
-        TRANSFORM(debugEntities[2*i+1])->z = DL_DebugLayer+0.01;
+        TRANSFORM(debugEntities[2*i+1])->z = DL_DebugLayer + 0.01f;
         TEXT(debugEntities[2*i + 1])->fontName = "typo";
         TEXT(debugEntities[2*i + 1])->charHeight = PlacementHelper::GimpHeightToScreen(25);
     }

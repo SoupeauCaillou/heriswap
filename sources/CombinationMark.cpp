@@ -38,8 +38,8 @@ void CombinationMark::markCellInCombination(Entity e){
     if (!e || TWITCH(e)->speed > 0)
         return;
     float angle = TRANSFORM(e)->rotation;
-    TWITCH(e)->minAngle = angle - 0.4;
-    TWITCH(e)->maxAngle = angle + 0.4;
+    TWITCH(e)->minAngle = angle - 0.4f;
+    TWITCH(e)->maxAngle = angle + 0.4f;
     TWITCH(e)->variance = glm::linearRand(0.0f, 1.0f) * 0.2f;
     TWITCH(e)->speed = glm::linearRand(10.0f, 15.0f);
 }

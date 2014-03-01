@@ -104,7 +104,7 @@ struct CountDownScene : public StateHandler<Scene::Enum> {
         RENDERING(vorhang)->show = false;
         if (game->datas->mode == TilesAttack || game->datas->mode == Go100Seconds) {
             Entity herisson = game->datas->mode2Manager[game->datas->mode]->herisson;
-            ANIMATION(herisson)->playbackSpeed = 4.1;
+            ANIMATION(herisson)->playbackSpeed = 4.1f;
         }
     }
 };

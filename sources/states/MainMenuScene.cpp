@@ -218,7 +218,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     Scene::Enum update(float dt) override {
         if (TRANSFORM(game->herisson)->position.x < PlacementHelper::GimpXToScreen(800)+TRANSFORM(game->herisson)->size.x) {
-            TRANSFORM(game->herisson)->position.x += ANIMATION(game->herisson)->playbackSpeed/8. * dt;
+            TRANSFORM(game->herisson)->position.x += ANIMATION(game->herisson)->playbackSpeed/8.f * dt;
         } else {
             std::stringstream a;
             a << "herisson_" << Random::Int(1, 8);

@@ -166,7 +166,7 @@ void NormalGameModeManager::UiUpdate(float dt) {
             text << (int)remain[i] << "," << (int)(level+2) << "," <<  countBranchLeavesOfType(i);
             TEXT(debugEntities[2*i+1])->text = text.str();
             TEXT(debugEntities[2*i+1])->show = true;
-            TEXT(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
+            TEXT(debugEntities[2*i+1])->color = Color(0.2f, 0.2f, 0.2f);
         }
     }
 #endif
@@ -202,8 +202,8 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<BranchLea
     }
 
     // move background during delete/spawn sequence (+ fall ?)
-    float deleteDuration = 0.3;
-    float spawnDuration = 0.2;
+    float deleteDuration = 0.3f;
+    float spawnDuration = 0.2f;
     // herisson distance
     float currentPos = TRANSFORM(herisson)->position.x;
     float newPos = GameModeManager::position(time - timeGain(count, level, time));

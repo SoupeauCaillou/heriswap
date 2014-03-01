@@ -116,7 +116,7 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	    ADD_COMPONENT(e, Twitch);
 
 		TRANSFORM(e)->position = HeriswapGame::GridCoordsToPosition(f.X, f.Y, theHeriswapGridSystem.GridSize);
-		TRANSFORM(e)->z = DL_Cell + Random::Float(0.f, 1.f) * 0.001;
+		TRANSFORM(e)->z = DL_Cell + Random::Float(0.f, 1.f) * 0.001f;
 		RenderingComponent* rc = RENDERING(e);
 		rc->show = true;
 

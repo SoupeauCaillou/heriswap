@@ -218,7 +218,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                     trcL->color = Color(1.0f,0.f,0.f);
                     alreadyRed = true;
                 } else {
-                    trcN->color = trcP->color = trcL->color = Color(3.0/255.0, 99.0/255, 71.0/255);
+                    trcN->color = trcP->color = trcL->color = Color(3.0f/255.0, 99.0f/255, 71.0f/255);
                 }
             } else {
                 trcP->show = false;

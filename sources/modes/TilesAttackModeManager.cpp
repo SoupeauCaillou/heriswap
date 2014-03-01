@@ -138,7 +138,7 @@ void TilesAttackGameModeManager::UiUpdate(float dt) {
 			}
 			TEXT(debugEntities[2*i+1])->text = text.str();
 			TEXT(debugEntities[2*i+1])->show = true;
-			TEXT(debugEntities[2*i+1])->color = Color(0.2, 0.2, 0.2);
+			TEXT(debugEntities[2*i+1])->color = Color(0.2f, 0.2f, 0.2f);
 		}
 	}
 #endif
