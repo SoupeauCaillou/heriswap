@@ -1,4 +1,4 @@
-/*
+	/*
     This file is part of Heriswap.
 
     @author Soupe au Caillou - Jordane Pelloux-Prayer
@@ -130,7 +130,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         // hack hack hack
         TRANSFORM(menufg)->size.x = TRANSFORM(menubg)->size.x = PlacementHelper::ScreenSize.x;
 
-        // ggsBg = theEntityManager.CreateEntityFromTemplate("mainmenu/bg_ggs");
+		if (game->gameThreadContext->gameCenterAPI) {
+			ggsBg = theEntityManager.CreateEntityFromTemplate("mainmenu/bg_ggs");
+		}
 
         game->herisson = theEntityManager.CreateEntityFromTemplate("mainmenu/herisson");
 
@@ -160,15 +162,29 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             }
             game->datas->faderHelper.registerFadingInEntity(menufg);
             game->datas->faderHelper.registerFadingInEntity(menubg);
-            // game->datas->faderHelper.registerFadingInEntity(ggsBg);
-            game->datas->faderHelper.registerFadingInEntity(game->herisson);
-            game->datas->faderHelper.registerFadingInEntity(game->datas->sky);
+			game->datas->faderHelper.registerFadingInEntity(game->herisson);
+			game->datas->faderHelper.registerFadingInEntity(game->datas->sky);
+
+			if (game->gameThreadContext->gameCenterAPI) {
+				game->datas->faderHelper.registerFadingInEntity(ggsBg);
+				game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.signButton);
+				game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.achievementsButton);
+				game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.leaderboardsButton);
+			}
 
             game->datas->faderHelper.registerFadingInCallback([this] () -> void {
                 theBackgroundSystem.showAll();
                 SCROLLING(game->datas->sky)->show = true;
+
+				if (game->gameThreadContext->gameCenterAPI) {
+					game->datas->gamecenterAPIHelper.displayUI();
+				}
             });
         } else {
+			if (game->gameThreadContext->gameCenterAPI) {
+				game->datas->gamecenterAPIHelper.displayUI();
+			}
+
             if (pState == Scene::Pause) {
                 LOGI("aborted. going to main menu");
                 if (game->datas->mode == Normal) {
@@ -189,9 +205,12 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
                 BUTTON(bStart[i])->enabled = true;
             }
 
+			if (game->gameThreadContext->gameCenterAPI) {
+				RENDERING(ggsBg)->show = true;
+			}
+
             RENDERING(menufg)->show =
                 RENDERING(menubg)->show =
-                // RENDERING(ggsBg)->show =
                 RENDERING(game->herisson)->show = true;
             SCROLLING(game->datas->sky)->show = true;
 
@@ -217,6 +236,10 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- UPDATE SECTION ---------------------------------------//
     ///----------------------------------------------------------------------------//
     Scene::Enum update(float dt) override {
+		if (game->gameThreadContext->gameCenterAPI) {
+			game->datas->gamecenterAPIHelper.updateUI();
+		}
+
         if (TRANSFORM(game->herisson)->position.x < PlacementHelper::GimpXToScreen(800)+TRANSFORM(game->herisson)->size.x) {
             TRANSFORM(game->herisson)->position.x += ANIMATION(game->herisson)->playbackSpeed/8.f * dt;
         } else {
@@ -267,8 +290,12 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             RENDERING(bStart[i])->show = false;
             BUTTON(bStart[i])->enabled = false;
         }
-        // RENDERING(ggsBg)->show = false;
 
+		if (game->gameThreadContext->gameCenterAPI) {
+			game->datas->gamecenterAPIHelper.hideUI();
+			RENDERING(ggsBg)->show = false;
+		}
+        
         if (modeTitleToReset) {
             theMorphingSystem.reverse(MORPHING(modeTitleToReset));
         }

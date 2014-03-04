@@ -155,6 +155,9 @@ bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
     switch (api) {
         case ContextAPI::Asset:
         case ContextAPI::Communication:
+#if SAC_RESTRICTIVE_PLUGINS
+        case ContextAPI::GameCenter:
+#endif
         case ContextAPI::KeyboardInputHandler:
         case ContextAPI::Localize:
         case ContextAPI::Music:
@@ -252,7 +255,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     // default camera
     Entity camera = theEntityManager.CreateEntityFromTemplate("camera");
 
-    SuccessManager *sm = new SuccessManager(NULL);
+    SuccessManager *sm = new SuccessManager(gameThreadContext->gameCenterAPI);
     datas = new PrivateData(this, gameThreadContext, sm);
 
     datas->Setup();
@@ -280,6 +283,17 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     } else {
         sceneStateMachine.start(Scene::Logo);
     }
+
+	if (gameThreadContext->gameCenterAPI) {
+		datas->gamecenterAPIHelper.init(gameThreadContext->gameCenterAPI, true, true, true, [this] {
+			if (sceneStateMachine.getCurrentState() == Scene::ModeMenu) {
+				int id = datas->mode * difficulty;
+				gameThreadContext->gameCenterAPI->openSpecificLeaderboard(id);
+			} else {
+				gameThreadContext->gameCenterAPI->openDashboard();
+			}
+		});
+	}
 
     #if SAC_INGAME_EDITORS && SAC_DEBUG
     HeriswapDebugConsole::init(this);

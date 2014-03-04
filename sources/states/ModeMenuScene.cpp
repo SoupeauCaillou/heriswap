@@ -266,21 +266,25 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         game->gameThreadContext->storageAPI->saveEntries(&ssp);
 
-        // This is the leaderboards order:
-        //      EScoreRaceEasy = 0,
-        //      EScoreRaceDifficult,
-        //      EScoreRaceMedium,
-        //      ETimeAttackEasy,
-        //      ETimeAttackDifficult,
-        //      ETimeAttackMedium,
-        //      E100SecondsEasy,
-        //      E100SecondsDifficult,
-        //      E100SecondsMedium,
 
-        // int e = (game->datas->mode * 3 + game->difficulty);
-        std::string scoreS = (game->datas->mode == TilesAttack) ? 
-            ObjectSerializer<int>::object2string((int)(1000 * game->datas->mode2Manager[game->datas->mode]->time))
-            : ssp.getValue("points");
+		if (game->gameThreadContext->gameCenterAPI) {
+			// This is the leaderboards order:
+			//      EScoreRaceEasy = 0,
+			//      EScoreRaceDifficult,
+			//      EScoreRaceMedium,
+			//      ETimeAttackEasy,
+			//      ETimeAttackDifficult,
+			//      ETimeAttackMedium,
+			//      E100SecondsEasy,
+			//      E100SecondsDifficult,
+			//      E100SecondsMedium,
+
+			int e = (game->datas->mode * 3 + game->difficulty);
+			std::string scoreS = (game->datas->mode == TilesAttack) ?
+				ObjectSerializer<int>::object2string((int)(1000 * game->datas->mode2Manager[game->datas->mode]->time))
+				: ssp.getValue("points");
+			game->gameThreadContext->gameCenterAPI->submitScore(e, scoreS);
+		}
     }
 
     bool isCurrentScoreAHighOne() {
@@ -383,7 +387,9 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         CONTAINER(playContainer)->enable = CONTAINER(bDifficulty)->enable = true;
 
-        if (0) {
+		if (game->gameThreadContext->gameCenterAPI 
+			&& game->gameThreadContext->gameCenterAPI->isConnected()) {
+
             RENDERING(leaderboard[0])->show =
                 TEXT(leaderboard[1])->show = 
                     BUTTON(leaderboard[0])->enabled = true;
@@ -534,6 +540,13 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 pleaseGoBack = false;
                 SOUND(back)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
                 return Scene::MainMenu;
+            }
+
+            // leaderboard button
+			else if (game->gameThreadContext->gameCenterAPI 
+				&& BUTTON(leaderboard[0])->clicked) {
+                const int e = (game->datas->mode * 3 + game->difficulty);
+                game->gameThreadContext->gameCenterAPI->openSpecificLeaderboard(e);
             }
         }
         return Scene::ModeMenu;
