@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="gpgs_debug_log_enabled">
+        false
+	</bool>
+    
+    <string-array name="gpgs_achievements">
+        <item>CgkIwJzk2eQSEAIQDA</item>
+        <item>CgkIwJzk2eQSEAIQDQ</item>
+		<item>CgkIwJzk2eQSEAIQAw</item>
+		<item>CgkIwJzk2eQSEAIQCg</item>
+		<item>CgkIwJzk2eQSEAIQCw</item>
+		<item>CgkIwJzk2eQSEAIQAQ</item>
+		<item>CgkIwJzk2eQSEAIQDg</item>
+		<item>CgkIwJzk2eQSEAIQBA</item>
+		<item>CgkIwJzk2eQSEAIQAg</item>
+		<item>CgkIwJzk2eQSEAIQEA</item>
+		<item>CgkIwJzk2eQSEAIQCA</item>
+		<item>CgkIwJzk2eQSEAIQDw</item>
+		<item>CgkIwJzk2eQSEAIQBw</item>
+		<item>CgkIwJzk2eQSEAIQBg</item>
+		<item>CgkIwJzk2eQSEAIQBQ</item>
+		<item>CgkIwJzk2eQSEAIQCQ</item>
+		<item>CgkIwJzk2eQSEAIQFA</item>
+		<item>CgkIwJzk2eQSEAIQEQ</item>
+		<item>CgkIwJzk2eQSEAIQEg</item>
+		<item>CgkIwJzk2eQSEAIQEw</item>
+    </string-array>
+    
+    <string-array name="gpgs_leaderboards">
+        <item>CgkIwJzk2eQSEAIQFg</item>
+		<item>CgkIwJzk2eQSEAIQFQ</item>
+		<item>CgkIwJzk2eQSEAIQGA</item>
+			            
+		<item>CgkIwJzk2eQSEAIQHQ</item>
+		<item>CgkIwJzk2eQSEAIQHg</item>
+		<item>CgkIwJzk2eQSEAIQHA</item>
+			
+		<item>CgkIwJzk2eQSEAIQGw</item>
+		<item>CgkIwJzk2eQSEAIQGQ</item>
+		<item>CgkIwJzk2eQSEAIQGg</item>
+    </string-array>
+</resources>

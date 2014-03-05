@@ -21,12 +21,9 @@
 
 package net.damsy.soupeaucaillou.heriswap;
  
-import java.util.Arrays;
-
 import net.damsy.soupeaucaillou.SacActivity;
 import net.damsy.soupeaucaillou.api.AssetAPI;
 import net.damsy.soupeaucaillou.api.CommunicationAPI;
-import net.damsy.soupeaucaillou.api.GameCenterAPI;
 import net.damsy.soupeaucaillou.api.LocalizeAPI;
 import net.damsy.soupeaucaillou.api.MusicAPI;
 import net.damsy.soupeaucaillou.api.OpenURLAPI;
@@ -34,7 +31,6 @@ import net.damsy.soupeaucaillou.api.SoundAPI;
 import net.damsy.soupeaucaillou.api.StorageAPI;
 import net.damsy.soupeaucaillou.api.StringInputAPI;
 import net.damsy.soupeaucaillou.api.VibrateAPI;
-import net.damsy.soupeaucaillou.googleplaygameservices.SacGooglePlayGameServicesPlugin;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -78,46 +74,5 @@ public class HeriswapActivity extends SacActivity {
 			(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)
 				);
 		VibrateAPI.Instance().init((Vibrator) getSystemService(Context.VIBRATOR_SERVICE));
-        
-        SacGooglePlayGameServicesPlugin sgpgsp = new SacGooglePlayGameServicesPlugin();
-        sgpgsp.init(this, sgpgsp.new GooglePlayGameServicesParams(false, 
-                Arrays.asList(new String[] { 
-            		"CgkIwJzk2eQSEAIQDA",
-            		"CgkIwJzk2eQSEAIQDQ",
-            		"CgkIwJzk2eQSEAIQAw",
-            		"CgkIwJzk2eQSEAIQCg",
-            		"CgkIwJzk2eQSEAIQCw",
-            		"CgkIwJzk2eQSEAIQAQ",
-            		"CgkIwJzk2eQSEAIQDg",
-            		"CgkIwJzk2eQSEAIQBA",
-            		"CgkIwJzk2eQSEAIQAg",
-            		"CgkIwJzk2eQSEAIQEA",
-            		"CgkIwJzk2eQSEAIQCA",
-            		"CgkIwJzk2eQSEAIQDw",
-            		"CgkIwJzk2eQSEAIQBw",
-            		"CgkIwJzk2eQSEAIQBg",
-            		"CgkIwJzk2eQSEAIQBQ",
-            		"CgkIwJzk2eQSEAIQCQ",
-            		"CgkIwJzk2eQSEAIQFA",
-            		"CgkIwJzk2eQSEAIQEQ",
-            		"CgkIwJzk2eQSEAIQEg",
-            		"CgkIwJzk2eQSEAIQEw",
-                }), 
-                Arrays.asList(new String[] {
-                	"CgkIwJzk2eQSEAIQFg",
-                	"CgkIwJzk2eQSEAIQFQ",
-                    "CgkIwJzk2eQSEAIQGA",
-                    
-            		"CgkIwJzk2eQSEAIQHQ",
-            		"CgkIwJzk2eQSEAIQHg",
-            		"CgkIwJzk2eQSEAIQHA",
-
-                    "CgkIwJzk2eQSEAIQGw",
-                    "CgkIwJzk2eQSEAIQGQ",
-                    "CgkIwJzk2eQSEAIQGg",
-                })
-            )
-        );
-        GameCenterAPI.Instance().init(this, sgpgsp);
 	}
 }
