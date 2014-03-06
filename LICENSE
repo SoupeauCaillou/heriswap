@@ -1,7 +1,5 @@
 /// Code license ///
-GPL3 for everything except :
-	- sac/base/Vector2.h sac/base/Vector2.cpp sac/base/MathUtil.h sac/base/MathUtil.cpp from Angel 2D engine (http://code.google.com/p/angel-engine/)
-	- sac/tools/texture_packer/TexturePacker.h sac/tools/texture_packer/TexturePacker.cpp from John W. Ratcliff
-	
+GPL3 for everything except Sac engine exceptions (see sac/LICENSE)
+
 /// Artwork license ///
 CC-by for everything in assets/unprepared_assets

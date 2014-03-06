@@ -1,30 +1,33 @@
-Prerequesites:
-git
-- Linux: (at least) cmake, g++, GLFW, UnitTest++
-- Android: android-sdk, android-ndk, eclipse Android (adt) plugin
+##########################
+#Prerequesites (at least)#
+##########################
+	All: git
+	Linux: cmake, g++
+	Android: android-sdk, android-ndk, adt
 
-Grab the sources:
-git clone --depth 1 --recursive git://git.damsy.net/sac/heriswap
+##########################
+#     Get the sources	 #
+##########################
+	git clone --recursive git://git.damsy.net/sac/heriswap
 
-Compile for linux:
-cd heriswap
-cmake .
-make
+##########################
+#     How to build	 #
+##########################
+To build the game, you can use script 'sac/tools/build/build-all.sh'.
+Use -h to get available options.
 
-Run (must be executed from heriswap folder):
-./source/tilematch
+For Unix/Linux:
+	./sac/tools/build/build-all.sh --target linux n
+For Android:
+	./sac/tools/build/build-all.sh --target android n
 
-Compile for Android:
-cd sac/libs/
-./convert_tremor_asm.sh
-cd -
-ndk-build NDK_DEBUG=0
+	To generate a signed APK:
+	./sac/tools/build/android_generated_signed_apk.sh
 
-Open Eclipse:
-File -> Import -> General -> Existing Project into workspace
-Select root directory: select 'heriswap' folder
-Then select Heriswap Project
+	To generate a free build (excluding Google Play):
+	./android_fdroid_APK.sh
 
-Fix compilation errors the way you want:
-- HeriswapSecret.java file is missing: it contains OpenFeint and ad providers app id
-- 2 jar files are missing: SDK from GreyStripes and Chartboost (ad provider)
+##########################
+#       Contact		 #
+##########################
+If you encounter any problem, please email us at soupeaucaillou@damsy.net
