@@ -1,0 +1,10 @@
+[Transformation]
+position%gimp = 400, 236
+size%screen = 0.90,0.50
+z = 0.51
+
+[Text]
+color%name = green
+char_height%gimp_h = 85
+flags = 4
+positioning = 0.5

@@ -1,6 +1,6 @@
 [Transformation]
-positionNW%gimp = 44, 236
-size%gimp = 800,1280
+position%screen = 0, 0.16
+size%screen = 0.96,0.50
 z = 0.5
 
 [Rendering]

@@ -56,14 +56,14 @@ struct ElitePopupScene : public StateHandler<Scene::Enum> {
 
     void setup() {
         const Color green("green");
-        background = theEntityManager.CreateEntityFromTemplate("background");
+        background = theEntityManager.CreateEntityFromTemplate("popup_background");
 
-        text = theEntityManager.CreateEntityFromTemplate("change_difficulty_text");
+        text = theEntityManager.CreateEntityFromTemplate("popup_text");
         
         std::stringstream a;
         for (int i=0; i<2; i++) {
-            eText[i] = theEntityManager.CreateEntityFromTemplate("change_difficulty_button_text");
-            eButton[i] = theEntityManager.CreateEntityFromTemplate("change_difficulty_button");
+            eText[i] = theEntityManager.CreateEntityFromTemplate("popup_button_text");
+            eButton[i] = theEntityManager.CreateEntityFromTemplate("popup_button");
             
             TRANSFORM(eText[i])->position.y = TRANSFORM(eButton[i])->position.y = PlacementHelper::GimpYToScreen(850+i*183);
         }
@@ -93,7 +93,6 @@ struct ElitePopupScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     Scene::Enum update(float) override {
         if (BUTTON(eButton[0])->clicked) {
-            LOGW("Change difficulty");
             theHeriswapGridSystem.setGridFromDifficulty(theHeriswapGridSystem.nextDifficulty(theHeriswapGridSystem.sizeToDifficulty()));
             game->datas->mode2Manager[Normal]->points = 0;
             static_cast<NormalGameModeManager*>(game->datas->mode2Manager[Normal])->changeLevel(1);

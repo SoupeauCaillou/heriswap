@@ -200,6 +200,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     sceneStateMachine.registerState(Scene::Help, Scene::CreateHelpSceneHandler(this), "Scene::Help");
     sceneStateMachine.registerState(Scene::RateIt, Scene::CreateRateItSceneHandler(this), "Scene::RateIt");
     sceneStateMachine.registerState(Scene::ElitePopup, Scene::CreateElitePopupSceneHandler(this), "Scene::ElitePopup");
+    sceneStateMachine.registerState(Scene::AboutUsPopup, Scene::CreateAboutUsPopupSceneHandler(this), "Scene::AboutUs");
     sceneStateMachine.registerState(Scene::StartAt10, Scene::CreateStartAt10SceneHandler(this), "Scene::StartAt10");
 
     Color::nameColor(Color(3.0f / 255.0f, 99.0f / 255.f, 71.0f / 255.f), "green");

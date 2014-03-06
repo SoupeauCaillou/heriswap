@@ -1,0 +1,12 @@
+[Transformation]
+position%gimp = 400, 850
+size%gimp = 354, 147
+z = 0.51
+
+[Text]
+color%name = green
+char_height%gimp_h = 80
+positioning = 0.5
+flags = 2
+
+[Anchor]

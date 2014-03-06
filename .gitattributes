@@ -9,6 +9,8 @@
 *.xml text eol=lf
 *.txt text eol=lf
 *.java text eol=lf
+*.sh text eol=lf
+*.py text eol=lf
 
 # Declare files that will always have CRLF line endings on checkout.
 *.sln text eol=crlf

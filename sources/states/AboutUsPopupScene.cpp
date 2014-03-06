@@ -17,6 +17,8 @@
     You should have received a copy of the GNU General Public License
     along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+
 #include "base/StateMachine.h"
 
 #include "Scenes.h"
@@ -31,7 +33,6 @@
 #include "base/EntityManager.h"
 #include "base/PlacementHelper.h"
 
-#include "systems/AnchorSystem.h"
 #include "systems/ButtonSystem.h"
 #include "systems/SoundSystem.h"
 #include "systems/TextSystem.h"
@@ -41,77 +42,63 @@
 
 #include <sstream>
 
-struct StartAt10Scene : public StateHandler<Scene::Enum> {
+struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
     HeriswapGame* game;
 
     // State variables
+    //NormalGameModeManager* normalGameModeManager;
     Entity background, text;
     Entity eButton[2], eText[2];
 
-    StartAt10Scene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
-        this->game = game;
+    AboutUsPopupScene(HeriswapGame* g) : StateHandler<Scene::Enum>(), game(g) {
     }
 
     void setup() {
-        background = theEntityManager.CreateEntityFromTemplate("popup_background");
+        const Color green("green");
+        background = theEntityManager.CreateEntityFromTemplate("donate_popup_background");
 
-        text = theEntityManager.CreateEntityFromTemplate("popup_text");
-
+        text = theEntityManager.CreateEntityFromTemplate("donate_popup_text");
+        
+        std::stringstream a;
         for (int i=0; i<2; i++) {
-            eButton[i] = theEntityManager.CreateEntityFromTemplate("popup_button");
-            eText[i] = theEntityManager.CreateEntityFromTemplate("popup_button_text");
-            ANCHOR(eText[i])->parent = eButton[i];
-
-            TRANSFORM(eButton[i])->position.y = PlacementHelper::GimpYToScreen(850+i*183);
+            eText[i] = theEntityManager.CreateEntityFromTemplate("donate_popup_button_text");
+            eButton[i] = theEntityManager.CreateEntityFromTemplate("donate_popup_button");
+            
+            TRANSFORM(eText[i])->position.x = TRANSFORM(eButton[i])->position.x = 
+                PlacementHelper::GimpXToScreen(400 + 200 * (2*i-1));
         }
-        TEXT(text)->text = game->gameThreadContext->localizeAPI->text("start_at_level_10");
-        TEXT(eText[0])->text = game->gameThreadContext->localizeAPI->text("start_at_level_10_yes");
-        TEXT(eText[1])->text = game->gameThreadContext->localizeAPI->text("start_at_level_10_no");
+        TEXT(text)->text = game->gameThreadContext->localizeAPI->text("donate");
+        TEXT(eText[0])->text = game->gameThreadContext->localizeAPI->text("donate_flattr");
+        TEXT(eText[1])->text = game->gameThreadContext->localizeAPI->text("donate_googleinapp");
     }
 
     ///----------------------------------------------------------------------------//
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
-    
+    void onPreEnter(Scene::Enum) override {
+    }
+
     void onEnter(Scene::Enum) override {
-        game->datas->faderHelper.start(Fading::In, 0.5);
-        game->datas->faderHelper.registerFadingInEntity(background);
-        game->datas->faderHelper.registerFadingInEntity(text);
+        RENDERING(background)->show = true;
+        TEXT(text)->show = true;
         for (int i=0; i<2; i++) {
-            game->datas->faderHelper.registerFadingInEntity(eButton[i]);
-            game->datas->faderHelper.registerFadingInEntity(eText[i]);
+            RENDERING(eButton[i])->show = true;
+            TEXT(eText[i])->show = true;
+            BUTTON(eButton[i])->enabled = true;
         }
-        
-        static_cast<NormalGameModeManager*>(game->datas->mode2Manager[Normal])->showGameDecor(true);
     }
 
     ///----------------------------------------------------------------------------//
     ///--------------------- UPDATE SECTION ---------------------------------------//
     ///----------------------------------------------------------------------------//
-    Scene::Enum update(float dt) override {
-        if (!game->datas->faderHelper.update(dt))
-            return Scene::StartAt10;
-        else {
-            RENDERING(background)->show = true;
-            TEXT(text)->show = true;
-            for (int i=0; i<2; i++) {
-                RENDERING(eButton[i])->show = true;
-                TEXT(eText[i])->show = true;
-                BUTTON(eButton[i])->enabled = true;
-            }
-        }
-
+    Scene::Enum update(float) override {
         if (BUTTON(eButton[0])->clicked) {
-            game->prepareNewGame();
-            game->setupGameProp();
-            game->datas->mode2Manager[Normal]->points = 0;
-            static_cast<NormalGameModeManager*>(game->datas->mode2Manager[Normal])->changeLevel(10);
-            
-            return Scene::Spawn;
+            return Scene::MainMenu;
         }
-        else if (BUTTON(eButton[1])->clicked)
-            return Scene::CountDown;
-        return Scene::StartAt10;
+        else if (BUTTON(eButton[1])->clicked) {
+            return Scene::MainMenu;
+        }
+        return Scene::AboutUsPopup;
     }
 
     ///----------------------------------------------------------------------------//
@@ -132,7 +119,7 @@ struct StartAt10Scene : public StateHandler<Scene::Enum> {
 };
 
 namespace Scene {
-    StateHandler<Scene::Enum>* CreateStartAt10SceneHandler(HeriswapGame* game) {
-        return new StartAt10Scene(game);
+    StateHandler<Scene::Enum>* CreateAboutUsPopupSceneHandler(HeriswapGame* game) {
+        return new AboutUsPopupScene(game);
     }
 }
