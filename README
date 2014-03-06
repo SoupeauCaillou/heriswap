@@ -11,7 +11,7 @@
 	git clone --recursive git://git.damsy.net/sac/heriswap
 
 ##########################
-#     How to build	 #
+#     How to build	     #
 ##########################
 To build the game, you can use script 'sac/tools/build/build-all.sh'.
 Use -h to get available options.
@@ -19,15 +19,15 @@ Use -h to get available options.
 For Unix/Linux:
 	./sac/tools/build/build-all.sh --target linux n
 For Android:
-	./sac/tools/build/build-all.sh --target android n
+	./sac/tools/build/build-all.sh --target android n -p -i r
 
 	To generate a signed APK:
-	./sac/tools/build/android_generated_signed_apk.sh
+	./sac/tools/build/android_generate_signed_apk.sh
 
 	To generate a free build (excluding Google Play):
 	./android_fdroid_APK.sh
 
 ##########################
-#       Contact		 #
+#       Contact		     #
 ##########################
 If you encounter any problem, please email us at soupeaucaillou@damsy.net
