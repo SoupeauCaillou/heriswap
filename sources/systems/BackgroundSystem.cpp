@@ -48,15 +48,6 @@ BackgroundSystem::BackgroundSystem() : ComponentSystemImpl<BackgroundComponent>(
     cloudSize[1] = Interval<float>(PlacementHelper::GimpWidthToScreen(190), PlacementHelper::GimpWidthToScreen(230));
     cloudSize[2] = Interval<float>(PlacementHelper::GimpWidthToScreen(100), PlacementHelper::GimpWidthToScreen(180));
 
-    LOGW("To Delete before commit! ! !");
-    LOGI("70 = '" << PlacementHelper::GimpYToScreen(70) << "' 240 = '" << PlacementHelper::GimpYToScreen(240) << "'");
-    LOGI("390 = '" << PlacementHelper::GimpYToScreen(390) << "' 490 = '" << PlacementHelper::GimpYToScreen(490) << "'");
-    LOGI("560 = '" << PlacementHelper::GimpYToScreen(560) << "' 650 = '" << PlacementHelper::GimpYToScreen(650) << "'");
-
-    LOGI("230 = '" << PlacementHelper::GimpWidthToScreen(230) << "' 380 = '" << PlacementHelper::GimpWidthToScreen(380) << "'");
-    LOGI("190 = '" << PlacementHelper::GimpWidthToScreen(190) << "' 230 = '" << PlacementHelper::GimpWidthToScreen(190) << "'");
-    LOGI("100 = '" << PlacementHelper::GimpWidthToScreen(100) << "' 180 = '" << PlacementHelper::GimpWidthToScreen(180) << "'");
-
     cloudSpeed[0] = Interval<float>(-0.4f, -0.25f);
     cloudSpeed[1] = Interval<float>(-0.25f, -0.13f);
     cloudSpeed[2] = Interval<float>(-0.1f, -0.03f);
