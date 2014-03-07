@@ -38,6 +38,8 @@
 #include "systems/TextSystem.h"
 #include "systems/TransformationSystem.h"
 
+#include <api/OpenURLAPI.h>
+    
 #include <glm/glm.hpp>
 
 #include <sstream>
@@ -48,7 +50,7 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
     // State variables
     //NormalGameModeManager* normalGameModeManager;
     Entity background, text;
-    Entity eButton[2], eText[2];
+    Entity eButton[3], eText[3];
 
     AboutUsPopupScene(HeriswapGame* g) : StateHandler<Scene::Enum>(), game(g) {
     }
@@ -60,16 +62,17 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
         text = theEntityManager.CreateEntityFromTemplate("donate_popup_text");
         
         std::stringstream a;
-        for (int i=0; i<2; i++) {
+        for (int i=0; i<3; i++) {
             eText[i] = theEntityManager.CreateEntityFromTemplate("donate_popup_button_text");
             eButton[i] = theEntityManager.CreateEntityFromTemplate("donate_popup_button");
             
-            TRANSFORM(eText[i])->position.x = TRANSFORM(eButton[i])->position.x = 
-                PlacementHelper::GimpXToScreen(400 + 200 * (2*i-1));
+            TRANSFORM(eText[i])->position.y = TRANSFORM(eButton[i])->position.y = 
+                PlacementHelper::GimpYToScreen(800 + 200 * (i-1));
         }
         TEXT(text)->text = game->gameThreadContext->localizeAPI->text("donate");
         TEXT(eText[0])->text = game->gameThreadContext->localizeAPI->text("donate_flattr");
         TEXT(eText[1])->text = game->gameThreadContext->localizeAPI->text("donate_googleinapp");
+        TEXT(eText[2])->text = game->gameThreadContext->localizeAPI->text("donate_sac_website");
     }
 
     ///----------------------------------------------------------------------------//
@@ -81,7 +84,7 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
     void onEnter(Scene::Enum) override {
         RENDERING(background)->show = true;
         TEXT(text)->show = true;
-        for (int i=0; i<2; i++) {
+        for (int i=0; i<3; i++) {
             RENDERING(eButton[i])->show = true;
             TEXT(eText[i])->show = true;
             BUTTON(eButton[i])->enabled = true;
@@ -93,10 +96,14 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     Scene::Enum update(float) override {
         if (BUTTON(eButton[0])->clicked) {
+            std::string url = game->gameThreadContext->localizeAPI->text("donate_flattr_url");
+            game->gameThreadContext->openURLAPI->openURL(url);
+            // return Scene::MainMenu;
+        } else if (BUTTON(eButton[1])->clicked) {
             return Scene::MainMenu;
-        }
-        else if (BUTTON(eButton[1])->clicked) {
-            return Scene::MainMenu;
+        } else if (BUTTON(eButton[2])->clicked) {
+            std::string url = "http://soupeaucaillou.com";
+            game->gameThreadContext->openURLAPI->openURL(url);
         }
         return Scene::AboutUsPopup;
     }
@@ -110,7 +117,7 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
     void onExit(Scene::Enum) override {
         RENDERING(background)->show = false;
         TEXT(text)->show = false;
-        for (int i=0; i<2; i++) {
+        for (int i=0; i<3; i++) {
             RENDERING(eButton[i])->show = false;
             BUTTON(eButton[i])->enabled = false;
             TEXT(eText[i])->show = false;

@@ -47,4 +47,5 @@
   <string name="start_at_level_10_yes">"Jumps to level 10!"</string>
   <string name="start_at_level_10_no">"No, Thanks"</string>
   <string name="about_us">"About us"</string>
+  <string name="donate_flattr_url">"https://flattr.com/submit/auto?user_id=soupeaucaillou&url=http://soupeaucaillou.com/heriswap.html&category=software&title=Heriswap,%20the%20little%20cute%20hedgehog!&description=I%20want%20to%20support%20Soupe%20au%20Caillou%20team%20for%20doing%20this%20little%20pet%20alive!&tags=game,android,opensource,puzzle%20game,match3"</string>
 </resources>
