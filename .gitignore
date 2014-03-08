@@ -16,3 +16,4 @@ Parameters.h
 *.o
 *.sublime-workspace
 local.properties
+build/
