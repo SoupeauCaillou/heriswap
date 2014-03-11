@@ -29,7 +29,7 @@
   <string name="please_rate_it">"If you enjoy using Heriswap, please take a moment to rate it. Thanks for your support!"</string>
   <string name="rate_now">"Rate now"</string>
   <string name="rate_later">"Later"</string>
-  <string name="rate_never">"No thanks"</string>
+  <string name="rate_never">"No, thanks"</string>
   <string name="change_difficulty">"You seem really good.\nWould you like to start a new game with increased difficulty?"</string>
   <string name="change_difficulty_yes">"Increase difficulty"</string>
   <string name="change_difficulty_no">"No, keep it easy"</string>
@@ -45,7 +45,5 @@
   <string name="help_mode3_1">"The goal is to score the most points in exactly 100 seconds."</string>
   <string name="start_at_level_10">"You seems to be good, maybe do you want to start this game at level 10 ?"</string>
   <string name="start_at_level_10_yes">"Jumps to level 10!"</string>
-  <string name="start_at_level_10_no">"No, Thanks"</string>
   <string name="about_us">"About us"</string>
-  <string name="donate_flattr_url">"https://flattr.com/submit/auto?user_id=soupeaucaillou&amp;url=http://soupeaucaillou.com/heriswap.html&amp;category=software&amp;title=Heriswap,%20the%20little%20cute%20hedgehog!&amp;description=I%20want%20to%20support%20Soupe%20au%20Caillou%20team%20for%20doing%20this%20little%20pet%20alive!&amp;tags=game,android,opensource,puzzle%20game,match3"</string>
 </resources>

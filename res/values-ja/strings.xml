@@ -25,7 +25,7 @@
   <string name="please_rate_it">"Heriswapを面白いと思ったら、お手数ですが評価をお願いします。遊んでくれてありがとう。"</string>
   <string name="rate_now">"すぐに評価する"</string>
   <string name="rate_later">"またの機会に"</string>
-  <string name="rate_never">"評価しない"</string>
+  <string name="rate_never">"いいえ、このまま"</string>
   <string name="change_difficulty">"とても上手ですね。\n難易度を上げて、新しくゲームを始めてみませんか？"</string>
   <string name="change_difficulty_yes">"難易度を上げる"</string>
   <string name="change_difficulty_no">"いいえ、このまま続ける"</string>
@@ -41,5 +41,4 @@
   <string name="help_mode3_1">"100秒以内に多くのスコアを\n獲得することが目的です。"</string>
   <string name="start_at_level_10">"とてもお上手ですね。\n10レベルから始められますがいかが？"</string>
   <string name="start_at_level_10_yes">"10レベルから始める"</string>
-  <string name="start_at_level_10_no">"いいえ、このまま"</string>
 </resources>

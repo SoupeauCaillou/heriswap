@@ -29,7 +29,7 @@
   <string name="please_rate_it">"Si vous aimez Heriswap, pourriez vous prendre quelques secondes pour laisser une évaluation ou un commentaire ? Merci d'avance !"</string>
   <string name="rate_now">"Évaluer !"</string>
   <string name="rate_later">"Plus tard"</string>
-  <string name="rate_never">"Non merci"</string>
+  <string name="rate_never">"Non, merci"</string>
   <string name="change_difficulty">"Excellent ! Que diriez-vous d'augmenter un peu la difficulté ?!"</string>
   <string name="change_difficulty_yes">"Allons-y, plus dur !"</string>
   <string name="change_difficulty_no">"Non merci."</string>
@@ -45,5 +45,5 @@
   <string name="help_mode3_1">"L'objectif est de marquer le plus de points en 100 secondes."</string>
   <string name="start_at_level_10">"Vous semblez maîtriser les premiers niveaux! S'ils vous ennuient, vous pouvez passer au niveau 10!"</string>
   <string name="start_at_level_10_yes">"Allons-y, niveau 10 !"</string>
-  <string name="start_at_level_10_no">"Non merci."</string>
+  <string name="about_us">"À propos de nous"</string>
 </resources>

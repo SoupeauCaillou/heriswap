@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="continue_">"Continuar"</string>
+  <string name="help">"Axuda"</string>
+  <string name="give_up">"Saír"</string>
+  <string name="mode_3">"100 segundos"</string>
+  <string name="diff_1">"Fácil"</string>
+  <string name="diff_2">"Medio"</string>
+  <string name="diff_3">"Difícil"</string>
+  <string name="enter_name">"Insire o teu nome"</string>
+  <string name="save_name">"Gardar"</string>
+  <string name="how_to_play">"Como xogar?"</string>
+  <string name="quit">"Saír"</string>
+  <string name="please_rate_it">"Se o pasas ben xogando con Heriswap, por favor dedícalle un pouco do teu tempo a valoralo. Grazas!"</string>
+  <string name="rate_now">"Valorar agora"</string>
+  <string name="rate_later">"Máis tarde"</string>
+  <string name="rate_never">"Non, grazas"</string>
+</resources>

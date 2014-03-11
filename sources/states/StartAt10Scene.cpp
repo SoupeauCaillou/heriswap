@@ -66,7 +66,7 @@ struct StartAt10Scene : public StateHandler<Scene::Enum> {
         }
         TEXT(text)->text = game->gameThreadContext->localizeAPI->text("start_at_level_10");
         TEXT(eText[0])->text = game->gameThreadContext->localizeAPI->text("start_at_level_10_yes");
-        TEXT(eText[1])->text = game->gameThreadContext->localizeAPI->text("start_at_level_10_no");
+        TEXT(eText[1])->text = game->gameThreadContext->localizeAPI->text("rate_never");
     }
 
     ///----------------------------------------------------------------------------//
