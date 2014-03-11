@@ -1,64 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
- 		xmlns:android="http://schemas.android.com/apk/res/android"
- 		android:id="@+id/parent_frame"
-  	android:layout_height="fill_parent" android:layout_width="fill_parent" >  
-    <LinearLayout
-        android:id="@+id/enter_name"
-        android:layout_width="250dp"
-        android:background="#F2F2F2F0"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_frame"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/congrat"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:visibility="gone" >
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#F2F2F2F0"
+        android:text="@string/congrats"
+        android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/congrat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/congrats" 
-        	android:background="#F2F2F2F0"
-        	android:textSize="20sp"
-            />
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/enter_name" 
-        	android:background="#F2F2F2F0"
-        	android:textSize="20sp"
-            />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/congrat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#F2F2F2F0"
+        android:text="@string/enter_name"
+        android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/player_name_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
-            android:inputType="textPersonName" >
+    <EditText
+        android:id="@+id/player_name_input"
+        android:layout_below="@id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionDone"
+        android:inputType="textPersonName" >
+    </EditText>
 
-            <requestFocus />
-        </EditText>
+    <Button
+        android:id="@+id/name_save"
+        android:layout_below="@id/player_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/save_name" />
 
-        <Button
-            android:id="@+id/name_save"
-            android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1"
-            android:text="@string/save_name" />
-        
-        <ListView
-		    android:id="@+id/names_list"
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:layout_marginLeft="20dp"
-		    android:layout_marginRight="20dp"
-		    android:background="#dddddd"
-		    android:longClickable="false"
-		    android:scrollbarAlwaysDrawVerticalTrack="true" />
+    <ListView
+        android:id="@+id/names_list"
+        android:layout_below="@id/name_save"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#dddddd"
+        android:longClickable="false"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
 
-    </LinearLayout>
 </RelativeLayout>
