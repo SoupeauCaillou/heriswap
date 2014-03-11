@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 public class HeriswapActivity extends SacActivity {
 	static {
@@ -70,6 +71,7 @@ public class HeriswapActivity extends SacActivity {
 		StringInputAPI.Instance().init(
 			(Button)findViewById(R.id.name_save),
 			(EditText)findViewById(R.id.player_name_input),
+			(ListView)findViewById(R.id.names_list),
 			(View)findViewById(R.id.enter_name),
 			(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)
 				);

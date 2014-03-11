@@ -413,6 +413,23 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         TEXT(title)->show = true;
     }
 
+    std::vector<std::string> getLastPlayerNames(int size) {
+        std::stringstream ss;
+        ss << "where name NOT LIKE 'rzehtrtyBg'";
+        ss << " order by rowid desc limit " << size;
+
+        ScoreStorageProxy ssp;
+        game->gameThreadContext->storageAPI->loadEntries(&ssp, "distinct name", ss.str());
+
+        std::vector<std::string> entries;
+        while (! ssp.isEmpty()) {
+            entries.push_back(ssp._queue.front().name);
+            ssp.popAnElement();
+        }
+
+        return entries;
+    }
+
     ///----------------------------------------------------------------------------//
     ///--------------------- UPDATE SECTION ---------------------------------------//
     ///----------------------------------------------------------------------------//
@@ -424,9 +441,10 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             case GameEnded: {
                 // ask player's name if needed
                 if (isCurrentScoreAHighOne()) {
-    #if ! SAC_MOBILE
+                #if ! SAC_MOBILE
                     TEXT(input_label)->show = TEXT(input_textbox)->show = RENDERING(input_background)->show = true;
-    #endif
+                #endif
+                    game->gameThreadContext->stringInputAPI->setNamesList(getLastPlayerNames(5));
                     game->gameThreadContext->stringInputAPI->askUserInput("", 14);
                     gameOverState = AskingPlayerName;
                     game->datas->successMgr->sTheyGood(true);
