@@ -513,12 +513,13 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 SOUND(bDifficulty)->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
                 game->difficulty = theHeriswapGridSystem.nextDifficulty(game->difficulty);
 
-                if (game->difficulty == DifficultyEasy)
+                if (game->difficulty == DifficultyEasy) {
                     TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_1") + " }";
-                else if (game->difficulty == DifficultyMedium)
+                } else if (game->difficulty == DifficultyMedium) {
                     TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_2") + " }";
-                else
+                } else {
                     TEXT(eDifficulty)->text = "{ " + game->gameThreadContext->localizeAPI->text("diff_3") + " }";
+                }
 
                 TEXT(playText)->text = game->gameThreadContext->localizeAPI->text("play");
                 loadScore(game->datas->mode, game->difficulty);
@@ -531,9 +532,9 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 std::stringstream ss;
                 ss << "where mode = " << (int)game->datas->mode << " and difficulty = " << (int)game->difficulty;
                 ScoreStorageProxy ssp;
-                if (game->datas->mode != Normal || game->gameThreadContext->storageAPI->count(&ssp, "*", ss.str()) == 0) {
+                if (game->gameThreadContext->storageAPI->count(&ssp, "*", ss.str()) == 0) {
                     return Scene::Help;
-                } else {
+                } else if (game->datas->mode == Normal) {
                     // If 5th last score is over 100k, we ask to player if he will begin at level 10
                     bool goodPlayer = true;
                     for (auto scoreText : scoresPoints) {
