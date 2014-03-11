@@ -650,13 +650,13 @@ int HeriswapGame::saveState(uint8_t** out) {
     uint8_t* ptr = *out;
 
     /* save entity/system thingie */
-    ptr = (uint8_t*)mempcpy(ptr, &gmSize, sizeof(int));
+    MEMPCPY(uint8_t*, ptr, &gmSize, sizeof(int));
 
-    ptr = (uint8_t*)mempcpy(ptr, game, gmSize);
-    ptr = (uint8_t*)mempcpy(ptr, entities, ss.entitySize);
-    ptr = (uint8_t*)mempcpy(ptr, ssm, ss.stateMachineSize);
-    ptr = (uint8_t*)mempcpy(ptr, success, ss.successSize);
-    ptr = (uint8_t*)mempcpy(ptr, gamemode, ss.gameStateSize);
+    MEMPCPY(uint8_t*, ptr, game, gmSize);
+    MEMPCPY(uint8_t*, ptr, entities, ss.entitySize);
+    MEMPCPY(uint8_t*, ptr, ssm, ss.stateMachineSize);
+    MEMPCPY(uint8_t*, ptr, success, ss.successSize);
+    MEMPCPY(uint8_t*, ptr, gamemode, ss.gameStateSize);
 
     return finalSize;
 }

@@ -262,7 +262,8 @@ int Go100SecondsGameModeManager::saveInternalState(uint8_t** out) {
     uint8_t* tmp;
     int parent = GameModeManager::saveInternalState(&tmp);
     uint8_t* ptr = *out = new uint8_t[parent];
-    ptr = (uint8_t*) mempcpy(ptr, tmp, parent);
+    MEMPCPY(uint8_t*, ptr, tmp, parent);
+    
 
     delete[] tmp;
     return (parent);

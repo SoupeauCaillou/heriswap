@@ -321,17 +321,18 @@ void GameModeManager::updateHerisson(float dt, float obj, float herissonSpeed) {
 int GameModeManager::saveInternalState(uint8_t** out) {
     int s = sizeof(time) + sizeof(limit) + sizeof(points) + sizeof(bonus) + 8 * sizeof(uint8_t);
     uint8_t* ptr = *out = new uint8_t[s];
-    ptr = (uint8_t*) mempcpy(ptr, &time, sizeof(time));
-    ptr = (uint8_t*) mempcpy(ptr, &limit, sizeof(limit));
-    ptr = (uint8_t*) mempcpy(ptr, &points, sizeof(points));
-    ptr = (uint8_t*) mempcpy(ptr, &bonus, sizeof(bonus));
+
+    MEMPCPY(uint8_t*, ptr, &time, sizeof(time));
+    MEMPCPY(uint8_t*, ptr, &limit, sizeof(limit));
+    MEMPCPY(uint8_t*, ptr, &points, sizeof(points));
+    MEMPCPY(uint8_t*, ptr, &bonus, sizeof(bonus));
     for (int i=0; i<8; i++) {
         uint8_t count = 0;
         for (unsigned int j=0; j<branchLeaves.size(); j++) {
             if (branchLeaves[j].type == (unsigned int)i)
                 count++;
         }
-        ptr = (uint8_t*) mempcpy(ptr, &count, sizeof(count));
+        MEMPCPY(uint8_t*, ptr, &count, sizeof(count));
     }
     return s;
 }

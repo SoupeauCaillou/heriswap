@@ -199,8 +199,8 @@ int TilesAttackGameModeManager::saveInternalState(uint8_t** out) {
     int parent = GameModeManager::saveInternalState(&tmp);
     int s = sizeof(leavesDone);
     uint8_t* ptr = *out = new uint8_t[parent + s];
-    ptr = (uint8_t*) mempcpy(ptr, tmp, parent);
-    ptr = (uint8_t*) mempcpy(ptr, &leavesDone, sizeof(leavesDone));
+    MEMPCPY(uint8_t*, ptr, tmp, parent);
+    MEMPCPY(uint8_t*, ptr, &leavesDone, sizeof(leavesDone));
 
 	TRANSFORM(herisson)->position.x = GameModeManager::position(leavesDone);
 

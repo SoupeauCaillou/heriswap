@@ -301,9 +301,9 @@ int NormalGameModeManager::saveInternalState(uint8_t** out) {
     int parent = GameModeManager::saveInternalState(&tmp);
     int s = sizeof(level) + sizeof(remain);
     uint8_t* ptr = *out = new uint8_t[parent + s];
-    ptr = (uint8_t*) mempcpy(ptr, tmp, parent);
-    ptr = (uint8_t*) mempcpy(ptr, &level, sizeof(level));
-    ptr = (uint8_t*) mempcpy(ptr, &remain[0], sizeof(remain));
+    MEMPCPY(uint8_t*, ptr, tmp, parent);
+    MEMPCPY(uint8_t*, ptr, &level, sizeof(level));
+    MEMPCPY(uint8_t*, ptr,  &remain[0], sizeof(remain));
 
     TRANSFORM(herisson)->position.x = GameModeManager::position(time);
 
