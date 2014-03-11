@@ -127,7 +127,7 @@ float NormalGameModeManager::GameProgressPercent() {
 
 
 void NormalGameModeManager::UiUpdate(float dt) {
-    #define CLOCHETTE_TIME 35.0f
+    const float CLOCHETTE_TIME = limit - 10.0f;
     ADSR(stressTrack)->active = (time > CLOCHETTE_TIME);
     if (ADSR(stressTrack)->active) {
         ADSR(stressTrack)->attackValue = ADSR(stressTrack)->sustainValue = glm::min((time - CLOCHETTE_TIME) / (limit - CLOCHETTE_TIME), 1.0f);
@@ -241,6 +241,8 @@ void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 
 void NormalGameModeManager::startLevel(int lvl) {
     level = lvl;
+
+    limit = glm::max(45.0f - (level - 1.0f) * 10, 10.0f);
 
     successMgr->sLevel10(lvl);
 
