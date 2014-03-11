@@ -14,7 +14,7 @@ cancel_changes() {
 	git checkout project.properties res/values/plugins.xml AndroidManifest.xml
 }
 
-options='--target android -release n -c --c "-DSAC_CUSTOM_DEFINES=-DSAC_RESTRICTIVE_PLUGINS=0"'
+options='--target android -release n -c --c -DUSE_RESTRICTIVE_PLUGINS=OFF'
 # Generate arm & x86 APK
 if ! bash sac/tools/build/build-all.sh -x86 $options; then
     echo "Error when building x86 version"

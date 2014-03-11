@@ -2,7 +2,7 @@
 GPL3 for everything except Sac engine exceptions (see sac/LICENSE).
 
 
-// Resources license
+/// Resources license ///
 	- external_res/ttf/1-DroidSansFallbackFull.ttf, Apache License.
 	- external_res/ttf/2-FreeMono.ttf, GNU General Public License.
 
