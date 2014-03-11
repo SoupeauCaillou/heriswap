@@ -46,10 +46,10 @@
 
 NormalGameModeManager::NormalGameModeManager(HeriswapGame* game, SuccessManager* SuccessMgr, StorageAPI* sAPI) : GameModeManager(game,SuccessMgr, sAPI) {
     pts.push_back(glm::vec2(0.f,0.f));
-    pts.push_back(glm::vec2(15.f,0.125f));
-    pts.push_back(glm::vec2(25.f,0.25f));
-    pts.push_back(glm::vec2(35.f,0.5f));
-    pts.push_back(glm::vec2(45.f,1.f));
+    pts.push_back(glm::vec2(15.f / 45.0f,0.125f));
+    pts.push_back(glm::vec2(25.f / 45.0f,0.25f));
+    pts.push_back(glm::vec2(35.f / 45.0f,0.5f));
+    pts.push_back(glm::vec2(45.f / 45.0f,1.f));
 
     helpAvailable = true;
     levelMoveDuration = 0;
@@ -149,14 +149,14 @@ void NormalGameModeManager::UiUpdate(float dt) {
     }
 
     if (levelMoveDuration > 0) {
-        updateHerisson(dt, time, nextHerissonSpeed);
+        updateHerisson(dt, time / limit, nextHerissonSpeed);
         levelMoveDuration -= dt;
         if (levelMoveDuration <= 0) {
             // stop scrolling
             SCROLLING(decor1er)->speed = 0;
         }
     } else {
-        updateHerisson(dt, time, 0);
+        updateHerisson(dt, time / limit, 0);
     }
 
 #if SAC_DEBUG
@@ -206,7 +206,7 @@ void NormalGameModeManager::WillScore(int count, int type, std::vector<BranchLea
     float spawnDuration = 0.2f;
     // herisson distance
     float currentPos = TRANSFORM(herisson)->position.x;
-    float newPos = GameModeManager::position(time - timeGain(count, level, time));
+    float newPos = GameModeManager::position((time - timeGain(count, level, time)) / limit);
     // update herisson and decor at the same time.
     levelMoveDuration = deleteDuration + spawnDuration;
     if (theHeriswapGridSystem.sizeToDifficulty() != DifficultyHard)
@@ -305,7 +305,7 @@ int NormalGameModeManager::saveInternalState(uint8_t** out) {
     MEMPCPY(uint8_t*, ptr, &level, sizeof(level));
     MEMPCPY(uint8_t*, ptr,  &remain[0], sizeof(remain));
 
-    TRANSFORM(herisson)->position.x = GameModeManager::position(time);
+    TRANSFORM(herisson)->position.x = GameModeManager::position(time / limit);
 
     delete[] tmp;
     return (parent + s);
@@ -316,7 +316,7 @@ const uint8_t* NormalGameModeManager::restoreInternalState(const uint8_t* in, in
     memcpy(&level, in, sizeof(level)); in += sizeof(level);
     memcpy(&remain[0], in, sizeof(remain)); in += sizeof(remain);
 
-    TRANSFORM(herisson)->position.x = GameModeManager::position(time);
+    TRANSFORM(herisson)->position.x = GameModeManager::position(time) / limit;
     MUSIC(stressTrack)->volume = 0;
     ADSR(stressTrack)->active = false;
     ADSR(stressTrack)->value = 0;
