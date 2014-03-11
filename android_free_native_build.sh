@@ -14,12 +14,13 @@ cancel_changes() {
 	git checkout project.properties res/values/plugins.xml AndroidManifest.xml
 }
 
+options='--target android -release n -c --c "-DSAC_CUSTOM_DEFINES=-DSAC_RESTRICTIVE_PLUGINS=0"'
 # Generate arm & x86 APK
-if ! bash sac/tools/build/build-all.sh --target android -x86 -release n -c --c "-DSAC_RESTRICTIVE_PLUGINS=0"; then
+if ! bash sac/tools/build/build-all.sh -x86 $options; then
     echo "Error when building x86 version"
     cancel_changes
     exit 1
-elif ! bash sac/tools/build/build-all.sh --target android -arm -release n -c --c "-DSAC_RESTRICTIVE_PLUGINS=0"; then
+elif ! bash sac/tools/build/build-all.sh -arm $options; then
     echo "Error when building ARM version"
     cancel_changes
     exit 2
