@@ -44,8 +44,7 @@
 #define DL_Help2 0.7f
 #define DL_HelpText 0.72f
 #define DL_HelpTextBg 0.71f
-#define DL_Hud 0.35f
-#define DL_LeafMax 0.34f
+#define DL_LeafMax 0.70f
 #define DL_LeafMin 0.33f
 #define DL_Logo 0.55f
 #define DL_LogoAnim 0.56f
