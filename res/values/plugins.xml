@@ -2,5 +2,6 @@
 <resources>
 	<string-array name='plugins_list'>
 		<item>net.damsy.soupeaucaillou.googleplaygameservices.SacGooglePlayGameServicesPlugin</item>
+		<item>net.damsy.soupeaucaillou.googleplayinappbilling.SacGooglePlayInAppBillingPlugin</item>
 	</string-array>
 </resources>

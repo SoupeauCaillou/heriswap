@@ -157,6 +157,7 @@ bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
         case ContextAPI::Communication:
 #if SAC_RESTRICTIVE_PLUGINS
         case ContextAPI::GameCenter:
+        case ContextAPI::InAppPurchase:
 #endif
         case ContextAPI::KeyboardInputHandler:
         case ContextAPI::Localize:
