@@ -200,7 +200,8 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
             PARTICULE(eSnowEmitter)->emissionRate = 0;
             //modifying the hedgehog
             TRANSFORM(game->datas->mode2Manager[game->datas->mode]->herisson)->position.x =
-                game->datas->mode2Manager[game->datas->mode]->position(game->datas->mode2Manager[game->datas->mode]->time);
+                game->datas->mode2Manager[game->datas->mode]->position(
+                    game->datas->mode2Manager[game->datas->mode]->time / game->datas->mode2Manager[game->datas->mode]->limit);
             RENDERING(game->datas->mode2Manager[game->datas->mode]->herisson)->color.a = 1;
             RENDERING(game->datas->mode2Manager[game->datas->mode]->herisson)->effectRef = DefaultEffectRef;
             // generating the brand-new leaves
