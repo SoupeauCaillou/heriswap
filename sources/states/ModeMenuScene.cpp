@@ -370,6 +370,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             TEXT(playText)->show = true;
 
         BUTTON(bDifficulty)->enabled = true;
+        BUTTON(playContainer)->enabled = true;
 
         CONTAINER(playContainer)->enable =
             CONTAINER(bDifficulty)->enable = true;
@@ -642,6 +643,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             TEXT(playText)->show = false;
 
         BUTTON(bDifficulty)->enabled = false;
+        BUTTON(playContainer)->enabled = false;
 
         CONTAINER(playContainer)->enable =
             CONTAINER(bDifficulty)->enable = false;
