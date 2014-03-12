@@ -368,9 +368,8 @@ bool HeriswapGame::willConsumeBackEvent() {
         case Scene::Help:
         case Scene::Pause:
         case Scene::AboutUsPopup:
-            return true;
         case Scene::ModeMenu:
-            return !modeMenuIsInNameInput;
+            return true;
         default:
             LOGI("HeriswapGame will not consume backEvent");
             return false;
