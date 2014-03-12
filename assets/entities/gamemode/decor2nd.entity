@@ -1,6 +1,6 @@
 [Transformation]
 positionN%gimp = 400, 610
-size%texture = 1
+size%gimp = 800, 470
 z = 0.07
 
 [Scrolling]
