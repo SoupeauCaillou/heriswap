@@ -301,7 +301,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     HeriswapDebugConsole::init(this);
     #endif
 
-
+    modeMenuIsInNameInput = false;
     LOGI("HeriswapGame initialisation done.");
 }
 
@@ -365,11 +365,12 @@ bool HeriswapGame::willConsumeBackEvent() {
         return true;
 
     switch (state) {
-        case Scene::ModeMenu:
         case Scene::Help:
         case Scene::Pause:
         case Scene::AboutUsPopup:
             return true;
+        case Scene::ModeMenu:
+            return !modeMenuIsInNameInput;
         default:
             LOGI("HeriswapGame will not consume backEvent");
             return false;
@@ -384,6 +385,8 @@ void HeriswapGame::backPressed() {
             break;
 #endif
         case Scene::ModeMenu:
+            if (modeMenuIsInNameInput)
+                break;
         case Scene::AboutUsPopup:
             sceneStateMachine.forceNewState(Scene::MainMenu);
             break;

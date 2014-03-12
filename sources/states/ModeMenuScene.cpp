@@ -436,9 +436,11 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     Scene::Enum update(float dt) override {
         switch (gameOverState) {
             case NoGame: {
+                game->modeMenuIsInNameInput = false;
                 break;
             }
             case GameEnded: {
+                game->modeMenuIsInNameInput = true;
                 // ask player's name if needed
                 if (isCurrentScoreAHighOne()) {
                 #if ! SAC_MOBILE
@@ -469,6 +471,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                 break;
             }
             case AskingPlayerName: {
+                game->modeMenuIsInNameInput = true;
 #if SAC_MOBILE
                 if (game->gameThreadContext->stringInputAPI->done(playerName)) {
 #else
@@ -578,6 +581,8 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- EXIT SECTION -----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreExit(Scene::Enum to) override {
+        game->modeMenuIsInNameInput = false;
+
         switch (to) {
             case Scene::MainMenu:
             case Scene::Help:

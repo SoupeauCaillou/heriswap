@@ -86,6 +86,7 @@ class HeriswapGame : public Game {
         PrivateData* datas;
         Entity herisson;
         Difficulty difficulty;
+        bool modeMenuIsInNameInput;
 
         void stopInGameMusics();
 
