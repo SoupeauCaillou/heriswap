@@ -73,6 +73,7 @@ public class HeriswapActivity extends SacActivity {
 			(EditText)findViewById(R.id.player_name_input),
 			(ListView)findViewById(R.id.names_list),
 			(View)findViewById(R.id.enter_name),
+			R.layout.namelist,
 			(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)
 				);
 		VibrateAPI.Instance().init((Vibrator) getSystemService(Context.VIBRATOR_SERVICE));

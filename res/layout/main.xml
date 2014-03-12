@@ -4,55 +4,67 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 <!-- Layout used to show/hide the group in StringInputAPI -->
+
     <RelativeLayout
         android:id="@+id/enter_name"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:visibility="gone">    
-    <TextView
-        android:id="@+id/congrat"
+        android:layout_width="300dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#F2F2F2F0"
-        android:text="@string/congrats"
-        android:textSize="20sp" />
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="50dp"
+        android:background="#4B4B4B"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:visibility="gone" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/congrat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#F2F2F2F0"
-        android:text="@string/enter_name"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/congrat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="#4B4B4B"
+            android:text="@string/congrats"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
 
-    <EditText
-        android:id="@+id/player_name_input"
-        android:layout_below="@id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:imeOptions="actionDone"
-        android:inputType="textPersonName" >
-    </EditText>
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/congrat"
+            android:layout_centerHorizontal="true"
+            android:background="#4B4B4B"
+            android:text="@string/enter_name"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/name_save"
-        android:layout_below="@id/player_name_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/save_name" />
+        <EditText
+            android:id="@+id/player_name_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView1"
+            android:imeOptions="actionDone"
+            android:inputType="textPersonName" />
 
-    <ListView
-        android:id="@+id/names_list"
-        android:layout_below="@id/name_save"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="#dddddd"
-        android:longClickable="false"
-        android:scrollbarAlwaysDrawVerticalTrack="true" />
-</RelativeLayout>
+        <Button
+            android:id="@+id/name_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/player_name_input"
+            android:text="@string/save_name" />
+
+        <ListView
+            android:id="@+id/names_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name_save"
+            android:background="#ffffff"
+            android:longClickable="false"
+            android:scrollbarAlwaysDrawVerticalTrack="true" >
+        </ListView>
+    </RelativeLayout>
+
 </RelativeLayout>
