@@ -72,11 +72,11 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     HeriswapGame* game;
 
     GameMode choosenGameMode;
-    Entity eStart[4];
+    Entity eStart[3];
     Entity modeTitleToReset;
-    Entity bStart[4];
+    Entity bStart[3];
     Entity menufg, menubg;
-    Entity ggsBg;
+    Entity aboutSac;
 
     MainMenuScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
         this->game = game;
@@ -87,7 +87,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
         std::stringstream a;
         //Creating text entities
-        for (int i=0; i<4; i++) {
+        for (int i=0; i<3; i++) {
             a.str("");
             a << "eStart_" << i;
             eStart[i] = theEntityManager.CreateEntityFromTemplate("mainmenu/"+ a.str());
@@ -108,10 +108,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         TEXT(eStart[0])->text = game->gameThreadContext->localizeAPI->text("mode_1");
         TEXT(eStart[1])->text = game->gameThreadContext->localizeAPI->text("mode_2");
         TEXT(eStart[2])->text = game->gameThreadContext->localizeAPI->text("mode_3");
-        TEXT(eStart[3])->text = game->gameThreadContext->localizeAPI->text("about_us");
 
         //Containers properties
-        for (int i=0; i<4; i++) {
+        for (int i=0; i<3; i++) {
             TEXT(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(54);
             TEXT(eStart[i])->charHeight = PlacementHelper::GimpHeightToScreen(75);
             glm::vec2 target = glm::vec2((float)(PlacementHelper::GimpXToScreen(708)) ,
@@ -120,7 +119,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             MORPHING(eStart[i])->elements.push_back(posMorph);
         }
 
-        for (int i=0; i<4; i++) {
+        for (int i=0; i<3; i++) {
             TEXT(eStart[i])->flags |= TextComponent::AdjustHeightToFillWidthBit;
             TRANSFORM(eStart[i])->size = TRANSFORM(bStart[i])->size * 0.9f;
         }
@@ -130,11 +129,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         // hack hack hack
         TRANSFORM(menufg)->size.x = TRANSFORM(menubg)->size.x = PlacementHelper::ScreenSize.x;
 
-		if (game->gameThreadContext->gameCenterAPI) {
-			ggsBg = theEntityManager.CreateEntityFromTemplate("mainmenu/bg_ggs");
-		}
-
         game->herisson = theEntityManager.CreateEntityFromTemplate("mainmenu/herisson");
+        aboutSac = theEntityManager.CreateEntityFromTemplate("mainmenu/sac");
 
         TRANSFORM(game->herisson)->size = randomHerissonSize();
         TRANSFORM(game->herisson)->position = AnchorSystem::adjustPositionWithCardinal(randomHerissionStart(),
@@ -156,7 +152,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
         if (pState == Scene::Logo) {
             // setup fadein
-            for (int i=0; i<4; ++i) {
+            for (int i=0; i<3; ++i) {
                 game->datas->faderHelper.registerFadingInEntity(eStart[i]);
                 game->datas->faderHelper.registerFadingInEntity(bStart[i]);
             }
@@ -164,9 +160,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             game->datas->faderHelper.registerFadingInEntity(menubg);
 			game->datas->faderHelper.registerFadingInEntity(game->herisson);
 			game->datas->faderHelper.registerFadingInEntity(game->datas->sky);
+            game->datas->faderHelper.registerFadingInEntity(aboutSac);
 
 			if (game->gameThreadContext->gameCenterAPI) {
-				game->datas->faderHelper.registerFadingInEntity(ggsBg);
 				game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.signButton);
 				game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.achievementsButton);
 				game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.leaderboardsButton);
@@ -199,19 +195,17 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             // preload sound effect
             theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 
-            for (int i=0; i<4; ++i) {
+            for (int i=0; i<3; ++i) {
                 TEXT(eStart[i])->show = true;
                 RENDERING(bStart[i])->show = true;
                 BUTTON(bStart[i])->enabled = true;
             }
 
-			if (game->gameThreadContext->gameCenterAPI) {
-				RENDERING(ggsBg)->show = true;
-			}
-
             RENDERING(menufg)->show =
                 RENDERING(menubg)->show =
-                RENDERING(game->herisson)->show = true;
+                RENDERING(game->herisson)->show =
+                RENDERING(aboutSac)->show = 
+                BUTTON(aboutSac)->enabled = true;
             SCROLLING(game->datas->sky)->show = true;
 
             theBackgroundSystem.showAll();
@@ -269,9 +263,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
                 SOUND(bStart[2])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
                 return Scene::ModeMenu;
             }
-            if(BUTTON(bStart[3])->clicked){
-                SOUND(bStart[3])->sound = theSoundSystem.loadSoundFile("audio/son_menu.ogg");
-                game->gameThreadContext->openURLAPI->openURL("http://www.soupeaucaillou.com/");
+            if(BUTTON(aboutSac)->clicked){
+                return Scene::AboutUsPopup;
             }
         }
         return Scene::MainMenu;
@@ -284,7 +277,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         if (to == Scene::ModeMenu) {
             game->datas->mode = choosenGameMode;
         }
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             if (i != choosenGameMode)
                 TEXT(eStart[i])->show = false;
             RENDERING(bStart[i])->show = false;
@@ -293,8 +286,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
 		if (game->gameThreadContext->gameCenterAPI) {
 			game->datas->gamecenterAPIHelper.hideUI();
-			RENDERING(ggsBg)->show = false;
 		}
+        RENDERING(aboutSac)->show =
+            BUTTON(aboutSac)->enabled = false;
         
         if (modeTitleToReset) {
             theMorphingSystem.reverse(MORPHING(modeTitleToReset));
@@ -305,8 +299,13 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 
         ANIMATION(game->herisson)->playbackSpeed = 4.5f;
 
-        BUTTON(game->datas->soundButton)->enabled = 
-            RENDERING(game->datas->soundButton)->show = true;
+        if (to == Scene::AboutUsPopup) {
+            RENDERING(game->herisson)->show = false;
+            TEXT(eStart[choosenGameMode])->show = false;
+        } else {
+            BUTTON(game->datas->soundButton)->enabled = 
+                RENDERING(game->datas->soundButton)->show = true;
+        }
     }
 
     bool updatePreExit(Scene::Enum, float) {

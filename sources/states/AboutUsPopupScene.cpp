@@ -44,50 +44,81 @@
 
 #include <sstream>
 
+#if SAC_RESTRICTIVE_PLUGINS
+#include "api/InAppPurchaseAPI.h"
+#endif
+
+namespace Image {
+    enum Enum {
+        Background = 0,
+        Wolf,
+        Count
+    };
+}
+
+namespace Button {
+    enum Enum {
+        Flattr = 0,
+#if SAC_RESTRICTIVE_PLUGINS
+        Iap,
+#endif
+        Web,
+        Back,
+        Count
+    };
+}
+
+namespace Text {
+    enum Enum {
+        SupportUs = 0,
+        AboutUs,
+        Count
+    };
+}
+
 struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
+
+
     HeriswapGame* game;
 
-    // State variables
-    //NormalGameModeManager* normalGameModeManager;
-    Entity background, text;
-    Entity eButton[3], eText[3];
+    Entity images[Image::Count];
+    Entity buttons[Button::Count];
+    Entity texts[Text::Count];
 
     AboutUsPopupScene(HeriswapGame* g) : StateHandler<Scene::Enum>(), game(g) {
     }
 
     void setup() {
         const Color green("green");
-        background = theEntityManager.CreateEntityFromTemplate("donate_popup_background");
 
-        text = theEntityManager.CreateEntityFromTemplate("donate_popup_text");
-        
-        std::stringstream a;
-        for (int i=0; i<3; i++) {
-            eText[i] = theEntityManager.CreateEntityFromTemplate("donate_popup_button_text");
-            eButton[i] = theEntityManager.CreateEntityFromTemplate("donate_popup_button");
-            
-            TRANSFORM(eText[i])->position.y = TRANSFORM(eButton[i])->position.y = 
-                PlacementHelper::GimpYToScreen(800 + 200 * (i-1));
-        }
-        TEXT(text)->text = game->gameThreadContext->localizeAPI->text("donate");
-        TEXT(eText[0])->text = game->gameThreadContext->localizeAPI->text("donate_flattr");
-        TEXT(eText[1])->text = game->gameThreadContext->localizeAPI->text("donate_googleinapp");
-        TEXT(eText[2])->text = game->gameThreadContext->localizeAPI->text("donate_sac_website");
+        images[Image::Background] = theEntityManager.CreateEntityFromTemplate("aboutus/background");
+        images[Image::Wolf] = theEntityManager.CreateEntityFromTemplate("aboutus/wolf");
+
+
+        texts[Text::SupportUs] = theEntityManager.CreateEntityFromTemplate("aboutus/supportus_text");
+        texts[Text::AboutUs] = theEntityManager.CreateEntityFromTemplate("aboutus/aboutus_text");
+
+        buttons[Button::Flattr] = theEntityManager.CreateEntityFromTemplate("aboutus/flattr_button");
+#if SAC_RESTRICTIVE_PLUGINS
+        buttons[Button::Iap] = theEntityManager.CreateEntityFromTemplate("aboutus/iap_button");
+#endif
+        buttons[Button::Web] = theEntityManager.CreateEntityFromTemplate("aboutus/web_button");
+        buttons[Button::Back] = theEntityManager.CreateEntityFromTemplate("modemenu/back_button");
     }
 
     ///----------------------------------------------------------------------------//
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum) override {
-    }
-
-    void onEnter(Scene::Enum) override {
-        RENDERING(background)->show = true;
-        TEXT(text)->show = true;
-        for (int i=0; i<3; i++) {
-            RENDERING(eButton[i])->show = true;
-            TEXT(eText[i])->show = true;
-            BUTTON(eButton[i])->enabled = true;
+        for (int i=0; i<Text::Count; i++) {
+            TEXT(texts[i])->show = true;
+        }
+        for (int i=0; i<Button::Count; i++) {
+            RENDERING(buttons[i])->show =
+                BUTTON(buttons[i])->enabled = true;
+        }
+        for (int i=0; i<Image::Count; i++) {
+            RENDERING(images[i])->show = true;
         }
     }
 
@@ -95,16 +126,23 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
     ///--------------------- UPDATE SECTION ---------------------------------------//
     ///----------------------------------------------------------------------------//
     Scene::Enum update(float) override {
-        if (BUTTON(eButton[0])->clicked) {
+        if (BUTTON(buttons[Button::Flattr])->clicked) {
             std::string url = game->gameThreadContext->localizeAPI->text("donate_flattr_url");
             game->gameThreadContext->openURLAPI->openURL(url);
             // return Scene::MainMenu;
-        } else if (BUTTON(eButton[1])->clicked) {
+        } else if (BUTTON(buttons[Button::Back])->clicked) {
             return Scene::MainMenu;
-        } else if (BUTTON(eButton[2])->clicked) {
+        } else if (BUTTON(buttons[Button::Web])->clicked) {
             std::string url = "http://soupeaucaillou.com";
             game->gameThreadContext->openURLAPI->openURL(url);
         }
+
+#if SAC_RESTRICTIVE_PLUGINS
+        if (BUTTON(buttons[Button::Iap])->clicked) {
+            game->gameThreadContext->inAppPurchaseAPI->purchase("donate");
+        }
+#endif
+
         return Scene::AboutUsPopup;
     }
 
@@ -115,12 +153,15 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
     }
 
     void onExit(Scene::Enum) override {
-        RENDERING(background)->show = false;
-        TEXT(text)->show = false;
-        for (int i=0; i<3; i++) {
-            RENDERING(eButton[i])->show = false;
-            BUTTON(eButton[i])->enabled = false;
-            TEXT(eText[i])->show = false;
+        for (int i=0; i<Text::Count; i++) {
+            TEXT(texts[i])->show = false;
+        }
+        for (int i=0; i<Button::Count; i++) {
+            RENDERING(buttons[i])->show =
+                BUTTON(buttons[i])->enabled = false;
+        }
+        for (int i=0; i<Image::Count; i++) {
+            RENDERING(images[i])->show = false;
         }
     }
 };

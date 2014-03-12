@@ -1,10 +1,10 @@
 [Transformation]
-size%gimp = 150, 107
+size%texture = 1
 
 [Anchor]
-parent%name = mainmenu/bg_ggs
-position%gimp_size = -247,0
-z = 0.1
+parent%name = googleplay/leaderboards_button
+position%gimp_size = -368,0
+z = 0.
 
 [Rendering]
 opaque_type = 0
@@ -12,5 +12,3 @@ texture = gg_achievements
 
 [Button]
 overSize = 1.0
-texture_inactive = gg_achievements
-texture_active = gg_achievements_active

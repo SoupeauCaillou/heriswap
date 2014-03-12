@@ -1,0 +1,11 @@
+[Transformation]
+position%gimp = 140, 230
+size%screen = 0.90,0.50
+z = 0.51
+
+[Text]
+color%name = green
+char_height%gimp_h = 75
+flags = 0
+positioning = 0
+text%loc = support_us

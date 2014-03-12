@@ -1,0 +1,12 @@
+[Transformation]
+size%texture = 1
+positionSW%screen = -0.5, -0.54
+z = 0.8
+
+[Rendering]
+opaque_type = 0
+show = 0
+texture = sac
+
+[Button]
+enabled = 0

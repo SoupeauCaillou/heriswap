@@ -367,6 +367,7 @@ bool HeriswapGame::willConsumeBackEvent() {
         case Scene::ModeMenu:
         case Scene::Help:
         case Scene::Pause:
+        case Scene::AboutUsPopup:
             return true;
         default:
             LOGI("HeriswapGame will not consume backEvent");
@@ -382,6 +383,7 @@ void HeriswapGame::backPressed() {
             break;
 #endif
         case Scene::ModeMenu:
+        case Scene::AboutUsPopup:
             sceneStateMachine.forceNewState(Scene::MainMenu);
             break;
         case Scene::Spawn:

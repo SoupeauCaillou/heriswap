@@ -1,0 +1,10 @@
+[Transformation]
+size%texture = 1
+z = 0.8
+position%gimp = 400, 370
+
+[Rendering]
+opaque_type = 0
+texture = flattr
+
+[Button]

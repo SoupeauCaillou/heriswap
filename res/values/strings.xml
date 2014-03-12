@@ -45,5 +45,6 @@
   <string name="help_mode3_1">"The goal is to score the most points in exactly 100 seconds."</string>
   <string name="start_at_level_10">"You seems to be good, maybe do you want to start this game at level 10 ?"</string>
   <string name="start_at_level_10_yes">"Jumps to level 10!"</string>
+  <string name="support_us">"Support us"</string>
   <string name="about_us">"About us"</string>
 </resources>
