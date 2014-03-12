@@ -552,6 +552,8 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                     } else {
                         return Scene::CountDown;
                     }
+                } else {
+                        return Scene::CountDown;
                 }
             }
 
