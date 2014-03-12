@@ -294,15 +294,15 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             theMorphingSystem.reverse(MORPHING(modeTitleToReset));
         }
 
-        MORPHING(eStart[choosenGameMode])->active = true;
-        modeTitleToReset = eStart[choosenGameMode];
-
         ANIMATION(game->herisson)->playbackSpeed = 4.5f;
 
         if (to == Scene::AboutUsPopup) {
             RENDERING(game->herisson)->show = false;
             TEXT(eStart[choosenGameMode])->show = false;
+            modeTitleToReset = 0;
         } else {
+            MORPHING(eStart[choosenGameMode])->active = true;
+            modeTitleToReset = eStart[choosenGameMode];
             BUTTON(game->datas->soundButton)->enabled = 
                 RENDERING(game->datas->soundButton)->show = true;
         }
