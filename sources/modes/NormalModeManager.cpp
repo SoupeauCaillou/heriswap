@@ -242,7 +242,7 @@ void NormalGameModeManager::ScoreCalc(int nb, unsigned int type) {
 void NormalGameModeManager::startLevel(int lvl) {
     level = lvl;
 
-    limit = glm::max(45.0f - (level - 1.0f) * 10, 10.0f);
+    limit = glm::max(45.0f - (level - 1.0f), 10.0f);
 
     successMgr->sLevel10(lvl);
 
