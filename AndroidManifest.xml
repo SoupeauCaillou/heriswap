@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.damsy.soupeaucaillou.heriswap"
-    android:versionCode="1403121922"
+    android:versionCode="1403122047"
     android:versionName="2.1.0"
     android:installLocation="auto"
     >

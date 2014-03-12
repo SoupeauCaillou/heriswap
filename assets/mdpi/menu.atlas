@@ -18,7 +18,7 @@ opaque_rect=16,91,384,194
 [image2]
 name=back
 original_size=30,18
-position_in_atlas=984,1
+position_in_atlas=974,40
 size_in_atlas=30,18
 crop_offset=0,0
 rotated=0
@@ -56,6 +56,14 @@ crop_offset=2,1
 rotated=0
 opaque_rect=39,52,4,10
 [image7]
+name=gg_leaderboards2
+original_size=52,37
+position_in_atlas=984,1
+size_in_atlas=33,25
+crop_offset=10,6
+rotated=0
+opaque_rect=6,15,20,6
+[image8]
 name=gg_leaderboards
 original_size=82,159
 position_in_atlas=500,356
@@ -63,7 +71,7 @@ size_in_atlas=81,72
 crop_offset=1,43
 rotated=0
 opaque_rect=24,37,29,8
-[image8]
+[image9]
 name=gg_signin
 original_size=82,74
 position_in_atlas=583,356
@@ -71,7 +79,7 @@ size_in_atlas=79,72
 crop_offset=2,1
 rotated=0
 opaque_rect=22,18,33,33
-[image9]
+[image10]
 name=gg_signout
 original_size=81,74
 position_in_atlas=389,431
@@ -79,7 +87,7 @@ size_in_atlas=81,74
 crop_offset=0,0
 rotated=0
 opaque_rect=22,18,36,35
-[image10]
+[image11]
 name=iap_playstore
 original_size=166,133
 position_in_atlas=805,98
@@ -87,7 +95,7 @@ size_in_atlas=166,133
 crop_offset=0,0
 rotated=0
 opaque_rect=8,2,150,129
-[image11]
+[image12]
 name=loup2
 original_size=105,90
 position_in_atlas=282,431
@@ -95,7 +103,7 @@ size_in_atlas=105,90
 crop_offset=0,0
 rotated=0
 opaque_rect=39,14,28,17
-[image12]
+[image13]
 name=sac
 original_size=82,159
 position_in_atlas=282,356
@@ -103,7 +111,7 @@ size_in_atlas=127,73
 crop_offset=0,3
 rotated=1
 opaque_rect=9,47,24,24
-[image13]
+[image14]
 name=web
 original_size=290,66
 position_in_atlas=1,288
