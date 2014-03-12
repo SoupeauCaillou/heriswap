@@ -3,7 +3,12 @@
     android:id="@+id/parent_frame"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-
+<!-- Layout used to show/hide the group in StringInputAPI -->
+    <RelativeLayout
+        android:id="@+id/enter_name"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:visibility="gone">    
     <TextView
         android:id="@+id/congrat"
         android:layout_centerHorizontal="true"
@@ -49,5 +54,5 @@
         android:background="#dddddd"
         android:longClickable="false"
         android:scrollbarAlwaysDrawVerticalTrack="true" />
-
+</RelativeLayout>
 </RelativeLayout>
