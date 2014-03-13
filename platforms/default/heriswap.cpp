@@ -25,6 +25,8 @@
 #include <string>
 #include <sstream>
 
+#include <HeriswapGitVersion.h>
+
 int main(int argc, char** argv) {
     #define MAX_SIZE 700
     #define RATIO (16.0 / 9.0)
@@ -43,7 +45,11 @@ int main(int argc, char** argv) {
         buffer >> width;
     }
 
-    if (initGame("Heriswap", glm::ivec2(width, height))) {
+    std::string title = "Heriswap";
+    #if SAC_DEBUG
+        title = title + " - " + TAG_NAME + " - " + VERSION_NAME;
+    #endif
+    if (initGame(title, glm::ivec2(width, height))) {
         LOGE("Failed to initialize");
         return 1;
     }
