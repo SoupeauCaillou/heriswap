@@ -813,7 +813,7 @@ original_size=15,40
 position_in_atlas=335,196
 size_in_atlas=22,8
 crop_offset=0,10
-rotated=1
+rotated=0
 opaque_rect=6,0,1,21
 [image102]
 name=32_gdtypo

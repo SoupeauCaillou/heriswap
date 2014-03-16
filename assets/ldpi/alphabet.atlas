@@ -130,7 +130,7 @@ opaque_rect=0,0,0,0
 [image16]
 name=3000_typo
 original_size=15,19
-position_in_atlas=82,38
+position_in_atlas=1022,1
 size_in_atlas=1,1
 crop_offset=15,19
 rotated=0
@@ -1490,10 +1490,10 @@ opaque_rect=0,0,0,0
 [image186]
 name=5f_typo
 original_size=6,18
-position_in_atlas=1020,43
-size_in_atlas=2,6
+position_in_atlas=185,58
+size_in_atlas=6,2
 crop_offset=0,15
-rotated=1
+rotated=0
 opaque_rect=0,0,0,0
 [image187]
 name=601d_typo
