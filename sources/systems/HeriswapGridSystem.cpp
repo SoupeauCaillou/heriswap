@@ -99,10 +99,9 @@ void HeriswapGridSystem::print() {
 }
 
 void HeriswapGridSystem::ShowAll(bool activate) {
-    for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-        Entity e = (*it).first;
+    forEachEntityDo([activate] (Entity e) -> void {
         RENDERING(e)->show = activate;
-    }
+    });
 }
 
 void HeriswapGridSystem::DeleteAll() {
@@ -113,21 +112,20 @@ void HeriswapGridSystem::DeleteAll() {
 }
 
 Entity HeriswapGridSystem::GetOnPos(int i, int j) {
-    for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-        Entity a = (*it).first;
-        HeriswapGridComponent* bc = (*it).second;
-        if (bc->i == i && bc->j == j)
-            return a;
-    }
-    return 0;
+    Entity a = 0;
+    forEachECDo([&a, i, j] (Entity e, HeriswapGridComponent* bc ) -> void {
+        if (bc->i == i && bc->j == j) {
+            a = e;
+        }
+    });
+    return a;
 }
 
 void HeriswapGridSystem::ResetTest() {
-    for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-        HeriswapGridComponent* bc = (*it).second;
+    forEachECDo([] (Entity, HeriswapGridComponent* bc ) -> void {
         bc->checkedH = false;
         bc->checkedV = false;
-    }
+    });
 }
 
 bool HeriswapGridSystem::Intersec(std::vector<glm::vec2> v1, std::vector<glm::vec2> v2){
@@ -180,8 +178,7 @@ std::vector<Combinais> HeriswapGridSystem::MergeCombination(std::vector<Combinai
 std::vector<Combinais> HeriswapGridSystem::LookForCombination(bool markAsChecked, bool recheckEveryone) {
     std::vector<Combinais> combinaisons;
 
-    for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-        HeriswapGridComponent* gc = (*it).second;
+    forEachECDo([this, &combinaisons, markAsChecked, recheckEveryone] (Entity, HeriswapGridComponent* gc) -> void {
         int i=gc->i;
         int j=gc->j;
         Combinais potential;
@@ -278,9 +275,7 @@ std::vector<Combinais> HeriswapGridSystem::LookForCombination(bool markAsChecked
 
             if (markAsChecked) gc->checkedH = true;
         }
-
-
-    }
+    });
 
     return MergeCombination(combinaisons);
 }
@@ -326,9 +321,9 @@ bool HeriswapGridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
     if (e) {
         HERISWAPGRID(e)->i--;
         HERISWAPGRID(a)->i++;
-        HERISWAPGRID(e)->checkedH = 
-            HERISWAPGRID(a)->checkedH = 
-            HERISWAPGRID(e)->checkedV = 
+        HERISWAPGRID(e)->checkedH =
+            HERISWAPGRID(a)->checkedH =
+            HERISWAPGRID(e)->checkedV =
             HERISWAPGRID(a)->checkedV = false;
         std::vector<Combinais> combin = LookForCombination(true,true);
         HERISWAPGRID(e)->i++;
@@ -339,9 +334,9 @@ bool HeriswapGridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
     if (e) {
         HERISWAPGRID(e)->j--;
         HERISWAPGRID(a)->j++;
-        HERISWAPGRID(e)->checkedH = 
-            HERISWAPGRID(a)->checkedH = 
-            HERISWAPGRID(e)->checkedV = 
+        HERISWAPGRID(e)->checkedH =
+            HERISWAPGRID(a)->checkedH =
+            HERISWAPGRID(e)->checkedV =
             HERISWAPGRID(a)->checkedV = false;
         std::vector<Combinais> combin = LookForCombination(true,true);
         HERISWAPGRID(e)->j++;
@@ -354,7 +349,7 @@ bool HeriswapGridSystem::NewCombiOnSwitch(Entity a, int i, int j) {
 void HeriswapGridSystem::SetCheckInCombi(std::vector<Combinais> c) {
     for (std::vector<Combinais>::reverse_iterator itc = c.rbegin(); itc != c.rend(); ++itc) {
         for (std::vector<glm::vec2>::reverse_iterator it = itc->points.rbegin(); it != itc->points.rend(); ++it) {
-            HERISWAPGRID(GetOnPos(it->x, it->y))->checkedV = 
+            HERISWAPGRID(GetOnPos(it->x, it->y))->checkedV =
                 HERISWAPGRID(GetOnPos(it->x,it->y))->checkedH = false;
         }
     }
@@ -368,8 +363,16 @@ bool HeriswapGridSystem::StillCombinations() {
         SetCheckInCombi(combin);
         return true;
     }
+
+#if SAC_USE_VECTOR_STORAGE
+    for (auto e: entityWithComponent) {
+        const auto* comp = &components[e];
+#else
     for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-        if (NewCombiOnSwitch(it->first,it->second->i,it->second->j)) {
+        auto e = it->first;
+        const auto* comp = it->second;
+#endif
+        if (NewCombiOnSwitch(e, comp->i, comp->j)) {
             SetCheckInCombi(combin);
             return true;
         }

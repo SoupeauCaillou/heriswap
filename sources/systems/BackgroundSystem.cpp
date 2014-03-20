@@ -98,16 +98,16 @@ void BackgroundSystem::DoUpdate(float dt) {
 }
 
 void BackgroundSystem::showAll() {
-    FOR_EACH_ENTITY(Background, e)
+    FOR_EACH_ENTITY_COMPONENT(Background, e, bc)
         RENDERING(e)->show =
-            BACKGROUND(e)->visible =
-            BACKGROUND(e)->enable = true;
+            bc->visible =
+            bc->enable = true;
     END_FOR_EACH()
 }
 
 void BackgroundSystem::hideAll() {
-    FOR_EACH_ENTITY(Background, e)
+    FOR_EACH_ENTITY_COMPONENT(Background, e, bc)
         RENDERING(e)->show =
-            BACKGROUND(e)->visible = false;
+            bc->visible = false;
     END_FOR_EACH()
 }
