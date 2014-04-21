@@ -1,10 +1,11 @@
 [Transformation]
-positionSW%gimp = 299, 1149
-size%gimp = 310, 253
+positionSW%gimp_pos = 299, 1149
+positionSW%gimp_pos = 299, 1149
+size%gimp_size = 310, 253
 z = 0.48
 
 [Rendering]
-opaque_type = 0
+flags = 1
 
 [Animation]
 #~ float

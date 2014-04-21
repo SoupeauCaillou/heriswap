@@ -71,7 +71,7 @@ class HeriswapGame : public Game {
 		static glm::vec2 GridCoordsToPosition(int i, int j, int s);
 		static glm::vec2 CellSize(int gridSize, int cellType);
 		static float CellContentScale();
-		static std::string cellTypeToTextureNameAndRotation(int type, float* rotation);
+		static const char* cellTypeToTextureNameAndRotation(int type, float* rotation);
 		static float cellTypeToRotation(int type);
 
         void prepareNewGame();

@@ -1,9 +1,9 @@
 [Transformation]
-position%gimp = 400, 650
+position%gimp_pos = 400, 650
 z = 0.49
 
 [Text]
 font_name = gdtypo
 color%name = green
-char_height%gimp = 300
+char_height%gimp_h = 300
 positioning = 0.5

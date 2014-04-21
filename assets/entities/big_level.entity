@@ -1,5 +1,5 @@
 [Transformation]
-position%gimp = 400, 846
+position%gimp_pos = 400, 846
 z = 0.45
 
 [Text]

@@ -147,10 +147,9 @@ void Go100SecondsGameModeManager::GameUpdate(float dt, Scene::Enum state) {
 		//if the central leaf is next to the herisson, change his bonus
 		if (TRANSFORM(squallLeaves[0])->position.x <= TRANSFORM(herisson)->position.x) {
 			// LoadHerissonTexture(bonus+1);
-			std::stringstream a;
-			a << "herisson_" << bonus+1;
-			ANIMATION(herisson)->name = a.str();
-			// RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
+			char buf[10];
+			sprintf(buf, "herisson_%d", Random::Int(1, 8));
+        	ANIMATION(herisson)->name = Murmur::RuntimeHash(buf);
 		}
 		//make the tree leaves grow ...
 		for (unsigned int i = 0; i < branchLeaves.size(); i++) {

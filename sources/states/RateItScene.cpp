@@ -86,8 +86,8 @@ struct RateItScene : public StateHandler<Scene::Enum> {
     }
 
     void onEnter(Scene::Enum) override {
-        Entity menufg = theEntityManager.getEntityByName("mainmenu/foreground");
-        Entity menubg = theEntityManager.getEntityByName("mainmenu/background");
+        Entity menufg = theEntityManager.getEntityByName(HASH("mainmenu/foreground", 0x0));
+        Entity menubg = theEntityManager.getEntityByName(HASH("mainmenu/background", 0X0));
         RENDERING(menubg)->show =
             RENDERING(menufg)->show = true;
 

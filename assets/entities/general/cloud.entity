@@ -3,7 +3,7 @@ position%screen = 1, 0
 z = 0.71
 
 [Rendering]
-opaque_type = 0
+flags = 1
 
 [ADSR]
 

@@ -1,7 +1,7 @@
 extends = button_text
 
 [Transformation]
-position%gimp = 708, 147
+position%gimp_pos = 708, 147
 
 [Text]
 char_height%gimp_h = 54

@@ -1,5 +1,5 @@
 [Transformation]
-position%gimp = 140, 855
+position%gimp_pos = 140, 855
 size%screen = 0.90,0.50
 z = 0.51
 

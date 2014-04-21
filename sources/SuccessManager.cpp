@@ -65,21 +65,23 @@ SuccessManager::SuccessManager(GameCenterAPI* gAPI) {
 
 void SuccessManager::initSerializer(Serializer& s) {
 	SuccessManager sm(0);
-    s.add(new Property<float>("timeTotalPlayed", OFFSET(timeTotalPlayed, sm)));
-    s.add(new Property<float>("timeUserInputloop", OFFSET(timeUserInputloop, sm)));
-    s.add(new Property<float>("timeInSwappingPreparation", OFFSET(timeInSwappingPreparation, sm)));
+    s.add(new Property<float>(HASH("timeTotalPlayed", 0x0), OFFSET(timeTotalPlayed, sm)));
+    s.add(new Property<float>(HASH("timeUserInputloop", 0x0), OFFSET(timeUserInputloop, sm)));
+    s.add(new Property<float>(HASH("timeInSwappingPreparation", 0x0), OFFSET(timeInSwappingPreparation, sm)));
     
-    s.add(new Property<int>("l666numberLose", OFFSET(l666numberLose, sm)));
-    s.add(new Property<int>("lTheyGood", OFFSET(lTheyGood, sm)));
-    s.add(new Property<float>("gameDuration", OFFSET(gameDuration, sm)));
+    s.add(new Property<int>(HASH("l666numberLose", 0x0), OFFSET(l666numberLose, sm)));
+    s.add(new Property<int>(HASH("lTheyGood", 0x0), OFFSET(lTheyGood, sm)));
+    s.add(new Property<float>(HASH("gameDuration", 0x0), OFFSET(gameDuration, sm)));
 
-    s.add(new Property<bool>("hardMode", OFFSET(hardMode, sm)));
-    s.add(new Property<int>("numberCombinationInARow", OFFSET(numberCombinationInARow, sm)));
+    s.add(new Property<bool>(HASH("hardMode", 0x0), OFFSET(hardMode, sm)));
+    s.add(new Property<int>(HASH("numberCombinationInARow", 0x0), OFFSET(numberCombinationInARow, sm)));
 
+    std::stringstream ss;
     for (int i=0; i<8; i++) {
-    	std::stringstream ss;
+    	ss.clear();
     	ss << "succEveryTypeInARow_" << i;
-    	s.add(new Property<int>(ss.str(), OFFSET(succEveryTypeInARow[i], sm)));
+    	std::string sss = ss.str();
+    	s.add(new Property<int>(Murmur::RuntimeHash(sss.c_str()), OFFSET(succEveryTypeInARow[i], sm)));
     }
     
 }

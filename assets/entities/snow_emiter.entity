@@ -1,5 +1,5 @@
 [Transformation]
-positionS%gimp = 400, 0
+positionS%gimp_pos = 400, 0
 size%screen = 1, 0.1
 z = 0.42
 
@@ -17,4 +17,4 @@ force_amplitude = 0, 0
 moment = -3, 3
 mass = 1
 gravity = 0, -1
-opaque_type = 0
+rendering_flags = 1

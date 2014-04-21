@@ -1,6 +1,6 @@
 [Transformation]
 position = 0, 3
-size%gimp = 720, 1280
+size%gimp_size = 720, 1280
 z = 0.72
 
 [Text]

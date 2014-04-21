@@ -5,7 +5,7 @@ z = 0.51
 
 [Rendering]
 texture = sound_on
-opaque_type = 0
+flags = 1
 
 [Button]
 over_size = 1.3

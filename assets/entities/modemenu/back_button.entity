@@ -1,11 +1,12 @@
 [Transformation]
-positionW%gimp = 92, 95
-size%gimp = 100, 75
+positionW%gimp_pos = 92, 95
+positionW%gimp_pos = 92, 95
+size%gimp_size = 100, 75
 z = 0.51
 
 [Rendering]
 texture = back
-opaque_type = 0
+flags = 1
 
 [Button]
 #~ bool

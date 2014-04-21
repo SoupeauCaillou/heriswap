@@ -1,8 +1,8 @@
 [Transformation]
 size%texture = 1
 z = 0.9
-positionS%gimp = 627, 250
+positionS%gimp_pos = 627, 250
 
 [Rendering]
-opaque_type = 0
+flags = 1
 texture = loup2

@@ -1,8 +1,9 @@
 [Transformation]
-positionS%gimp = 400, 1100
-size%gimp = 800, 570
+positionS%gimp_pos = 400, 1100
+positionS%gimp_pos = 400, 1100
+size%gimp_size = 800, 570
 z = 0.47
 
 [Rendering]
 texture = 2emeplan
-opaque_type = 0
+flags = 1

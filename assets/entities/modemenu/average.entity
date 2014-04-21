@@ -1,8 +1,8 @@
 extends = modemenu/text
 
 [Transformation]
-position%gimp = 92, 1075
-size%gimp = 620, 0
+position%gimp_pos = 92, 1075
+size%gimp_size = 620, 0
 
 [TextRendering]
 flags = 2

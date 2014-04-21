@@ -1,7 +1,7 @@
 extends = button_text
 
 [Transformation]
-position%gimp = 400, 1150
+position%gimp_pos = 400, 1150
 
 [Text]
 #~ float

@@ -267,10 +267,10 @@ void HeriswapGame::init(const uint8_t* in, int size) {
 
     datas->sky = theEntityManager.CreateEntityFromTemplate("general/sky");
 
-    SCROLLING(datas->sky)->images.push_back("ciel0");
-    SCROLLING(datas->sky)->images.push_back("ciel1");
-    SCROLLING(datas->sky)->images.push_back("ciel2");
-    SCROLLING(datas->sky)->images.push_back("ciel3");
+    SCROLLING(datas->sky)->images.push_back(HASH("ciel0", 0x89b9427));
+    SCROLLING(datas->sky)->images.push_back(HASH("ciel1", 0xd296102e));
+    SCROLLING(datas->sky)->images.push_back(HASH("ciel2", 0x22648ee8));
+    SCROLLING(datas->sky)->images.push_back(HASH("ciel3", 0x7f710b96));
 
     SCROLLING(datas->sky)->displaySize = glm::vec2(TRANSFORM(datas->sky)->size.x * 1.01,
                                                    TRANSFORM(datas->sky)->size.y);
@@ -519,13 +519,13 @@ void HeriswapGame::tick(float dt) {
                     LOGW("(music)\t'" << musics[i].c_str() << "'");
                 }
 
-                MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0]);
+                MUSIC(datas->inGameMusic.masterTrack)->music = theMusicSystem.loadMusicFile(musics[0].c_str());
                 MUSIC(datas->inGameMusic.masterTrack)->fadeIn = 1;
 
                 unsigned int i;
                 for (i=0; i<musics.size() - 1; i++) {
                      MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
-                     mc->music = theMusicSystem.loadMusicFile(musics[i+1]);
+                     mc->music = theMusicSystem.loadMusicFile(musics[i+1].c_str());
                      mc->fadeIn = 1;
                      mc->control = MusicControl::Play;
                      mc->volume = 1;
@@ -540,11 +540,11 @@ void HeriswapGame::tick(float dt) {
                     LOGW("(music)\t'" << musics[i].c_str() << "'");
                 }
 
-                MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile(musics[0]);
+                MUSIC(datas->inGameMusic.masterTrack)->loopNext = theMusicSystem.loadMusicFile(musics[0].c_str());
                 unsigned int i;
                 for (i=0; i<musics.size() - 1; i++) {
                     MusicComponent* mc = MUSIC(datas->inGameMusic.secondaryTracks[i]);
-                    mc->loopNext = theMusicSystem.loadMusicFile(musics[i+1]);
+                    mc->loopNext = theMusicSystem.loadMusicFile(musics[i+1].c_str());
                     mc->control = MusicControl::Play;
                 }
             } else {
@@ -593,14 +593,14 @@ struct SavedState {
 
 void HeriswapGame::initSerializer(Serializer& s) const {
     SavedState ss;
-    s.add(new Property<int>("mode", OFFSET(mode, ss)));
-    s.add(new Property<int>("grid_size", OFFSET(gridSize, ss)));
-    s.add(new Property<bool>("game_was_paused", OFFSET(gameWasPaused, ss)));
+    s.add(new Property<int>(HASH("mode", 0x0), OFFSET(mode, ss)));
+    s.add(new Property<int>(HASH("grid_size", 0x0), OFFSET(gridSize, ss)));
+    s.add(new Property<bool>(HASH("game_was_paused", 0x0), OFFSET(gameWasPaused, ss)));
     
-    s.add(new Property<int>("state_machine_size", OFFSET(stateMachineSize, ss)));
-    s.add(new Property<int>("entity_size", OFFSET(entitySize, ss)));
-    s.add(new Property<int>("success_size", OFFSET(successSize, ss)));
-    s.add(new Property<int>("game_state_size", OFFSET(gameStateSize, ss)));
+    s.add(new Property<int>(HASH("state_machine_size", 0x0), OFFSET(stateMachineSize, ss)));
+    s.add(new Property<int>(HASH("entity_size", 0x0), OFFSET(entitySize, ss)));
+    s.add(new Property<int>(HASH("success_size", 0x0), OFFSET(successSize, ss)));
+    s.add(new Property<int>(HASH("game_state_size", 0x0), OFFSET(gameStateSize, ss)));
 }
 
 int HeriswapGame::saveState(uint8_t** out) {
@@ -717,13 +717,15 @@ static float rotations[] = {
     -glm::quarter_pi<float>()
 };
 
-std::string HeriswapGame::cellTypeToTextureNameAndRotation(int type, float* rotation) {
+const char* HeriswapGame::cellTypeToTextureNameAndRotation(int type, float* rotation) {
     if (rotation)
         *rotation = rotations[type];
 
-    std::stringstream s;
-    s << "feuille" << (type+1);
-    return s.str();
+    // std::stringstream s;
+    // s << "feuille" << (type+1);
+    char result[8];
+    std::sprintf(result, "feuille%d", type+1);
+    return result;
 }
 
 float HeriswapGame::cellTypeToRotation(int type) {

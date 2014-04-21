@@ -1,6 +1,6 @@
 [Transformation]
-positionN%gimp = 400, 25
-size%gimp = 640.8, 147
+positionN%gimp_pos = 400, 25
+size%gimp_size = 640.8, 147
 z = 0.51
 
 [Text]

@@ -1,4 +1,4 @@
 extends = modemenu/input_label
 
 [Transformation]
-position%gimp = 400, 390
+position%gimp_pos = 400, 390

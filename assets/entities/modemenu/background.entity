@@ -1,9 +1,10 @@
 [Transformation]
-positionNW%gimp = 44, 24
-size%gimp = 712, 1050
+positionNW%gimp_pos = 44, 24
+positionNW%gimp_pos = 44, 24
+size%gimp_size = 712, 1050
 z = 0.50
 
 [Rendering]
 texture = fond_menu_mode
 color = 1,1,1,0.5
-opaque_type = 0
+flags = 1

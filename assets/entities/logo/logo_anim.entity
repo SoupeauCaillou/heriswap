@@ -1,5 +1,5 @@
 [Transformation]
-size%gimp = 49,40
+size%gimp_size = 49,40
 
 [Anchor]
 z = 0.99

@@ -1,6 +1,6 @@
 [Transformation]
-position%gimp = 0, 0
-size%gimp = 800, 1280
+position%gimp_pos = 0, 0
+size%gimp_size = 800, 1280
 z = 0.61
 
 [Rendering]

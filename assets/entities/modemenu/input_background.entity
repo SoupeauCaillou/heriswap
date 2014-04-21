@@ -1,8 +1,8 @@
 [Transformation]
-position%gimp = 400, 320
-size%gimp = 708, 256
+position%gimp_pos = 400, 320
+size%gimp_size = 708, 256
 z = 0.70
 
 [Rendering]
 texture = fond_bouton
-opaque_type = 0
+flags = 1

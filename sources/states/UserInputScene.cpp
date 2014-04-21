@@ -68,12 +68,12 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
     }
 
     void setup() {
-        swapAnimation = theEntityManager.CreateEntity("swapAnimation",
+        swapAnimation = theEntityManager.CreateEntity(HASH("swapAnimation", 0x697f9a4f),
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("swap_animation"));
         originI = originJ = -1;
         swapI = swapJ = 0;
 
-        rollback = theEntityManager.CreateEntity("rollback",
+        rollback = theEntityManager.CreateEntity(HASH("rollback", 0x8afeeda2),
             EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("rollback"));
     }
 

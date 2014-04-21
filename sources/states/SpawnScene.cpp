@@ -110,7 +110,7 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	}
 
 	static Entity createCell(Feuille& f, bool assignGridPos) {
-		Entity e = theEntityManager.CreateEntity("Cell",
+		Entity e = theEntityManager.CreateEntity(HASH("Cell", 0x0),
 			EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("spawn/cell"));
 		ADD_COMPONENT(e, HeriswapGrid);
 	    ADD_COMPONENT(e, Twitch);

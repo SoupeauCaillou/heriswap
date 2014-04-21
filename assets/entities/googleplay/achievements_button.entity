@@ -7,8 +7,8 @@ position%gimp_size = -368,0
 z = 0.
 
 [Rendering]
-opaque_type = 0
+flags = 1
 texture = gg_achievements
 
 [Button]
-overSize = 1.0
+over_size = 1.0

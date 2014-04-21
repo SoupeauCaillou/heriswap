@@ -4,4 +4,4 @@ z = 0.81
 [ADSR]
 
 [Rendering]
-opaque_type = 0
+flags = 1

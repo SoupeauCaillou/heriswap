@@ -3,8 +3,8 @@ size%texture = 1
 positionSE%screen = 0.5, -0.54
 
 [Rendering]
-opaque_type = 0
+flags = 1
 texture = gg_leaderboards
 
 [Button]
-overSize = 1.0
+over_size = 1.0

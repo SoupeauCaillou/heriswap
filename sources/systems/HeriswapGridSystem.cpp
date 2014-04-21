@@ -36,9 +36,9 @@ HeriswapGridSystem::HeriswapGridSystem() : ComponentSystemImpl<HeriswapGridCompo
     GridSize = Types = 8;
     nbmin = 3;
     HeriswapGridComponent a;
-    componentSerializer.add(new Property<int>("i", OFFSET(i, a)));
-    componentSerializer.add(new Property<int>("j", OFFSET(j, a)));
-    componentSerializer.add(new Property<int>("type", OFFSET(type, a)));
+    componentSerializer.add(new Property<int>(HASH("i", 0x87ea58bf), OFFSET(i, a)));
+    componentSerializer.add(new Property<int>(HASH("j", 0xfe3dcbb), OFFSET(j, a)));
+    componentSerializer.add(new Property<int>(HASH("type", 0xf3ebd1bf), OFFSET(type, a)));
 }
 
 Difficulty HeriswapGridSystem::sizeToDifficulty() {
@@ -368,9 +368,7 @@ bool HeriswapGridSystem::StillCombinations() {
     for (auto e: entityWithComponent) {
         const auto* comp = &components[e];
 #else
-    for(ComponentIt it=components.begin(); it!=components.end(); ++it) {
-        auto e = it->first;
-        const auto* comp = it->second;
+    FOR_EACH_ENTITY_COMPONENT(Background, e, comp)
 #endif
         if (NewCombiOnSwitch(e, comp->i, comp->j)) {
             SetCheckInCombi(combin);

@@ -1,7 +1,7 @@
 extends = modemenu/text
 
 [Transformation]
-position%gimp = 400, 225
+position%gimp_pos = 400, 225
 
 [Text]
 #~ float

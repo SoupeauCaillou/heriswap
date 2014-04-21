@@ -1,7 +1,7 @@
 extends = button_text
 
 [Transformation]
-position%gimp = 150, 500
+position%gimp_pos = 150, 500
 z = 0.39
 
 [Text]

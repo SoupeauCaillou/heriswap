@@ -5,4 +5,4 @@ z = 0.12
 
 [Rendering]
 texture = branche
-opaque_type = 0
+flags = 1

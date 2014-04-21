@@ -1,6 +1,6 @@
 [Transformation]
-positionN%gimp = 400, 25
-size%gimp = 710,1110
+positionN%gimp_pos = 400, 25
+size%gimp_size = 710,1110
 z = 0.5
 
 [Rendering]
@@ -8,4 +8,4 @@ z = 0.5
 texture = fond_menu_mode
 #~ Color
 color = 1, 1, 1, 0.5
-opaque_type = 0
+flags = 1

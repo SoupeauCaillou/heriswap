@@ -74,7 +74,7 @@ void BackgroundSystem::initCloud(Entity e, int group) {
     TRANSFORM(e)->z = DL_Cloud;
 
     int idx = Random::Int(0, textures[group].size()-1);
-    RENDERING(e)->texture = theRenderingSystem.loadTextureFile(textures[group][idx]);
+    RENDERING(e)->texture = theRenderingSystem.loadTextureFile(textures[group][idx].c_str());
     RENDERING(e)->color = Color(1,1,1, Random::Float(0.6f, 0.9f));
     RENDERING(e)->show = true;
     TRANSFORM(e)->size = glm::vec2(width, width / ratio);

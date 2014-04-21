@@ -7,7 +7,7 @@ z = 0.5
 [Rendering]
 texture = fond_bouton
 color = 1,1,1,0.5
-opaque_type = 0
+flags = 1
 
 [Button]
 

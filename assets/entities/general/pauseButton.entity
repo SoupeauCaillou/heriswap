@@ -5,7 +5,7 @@ z = 0.45
 
 [Rendering]
 texture = pause
-opaque_type = 0
+flags = 1
 
 [Sound]
 

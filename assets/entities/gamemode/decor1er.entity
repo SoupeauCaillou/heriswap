@@ -1,10 +1,10 @@
 [Transformation]
-positionS%gimp = 400, 1280
-size%gimp = 800, 300
+positionS%gimp_pos = 400, 1280
+size%gimp_size = 800, 300
 z = 0.1
 
 [Scrolling]
 direction = -1, 0
 speed = 0
 display_size%screen = 1.01, 0.234
-opaque_type = 0
+rendering_flags = 1

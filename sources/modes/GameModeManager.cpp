@@ -85,39 +85,39 @@ float GameModeManager::position(float t) {
 }
 
 void GameModeManager::LoadHerissonTexture(int type) {
-    std::stringstream a;
     LOGW_IF(type > 8, "type > 8");
     LOGW_IF(type < 1, "type < 1");
     type = (type > 8 ? 8 : (type < 1 ? 1 : type));
-    a << "herisson_" << type;
-    ANIMATION(herisson)->name = a.str();
+    char buf[10];
+    sprintf(buf, "herisson_%d", type);
+    ANIMATION(herisson)->name = Murmur::RuntimeHash(buf);
 }
 
 void GameModeManager::Setup() {
-    herisson = theEntityManager.CreateEntity("herisson",
+    herisson = theEntityManager.CreateEntity(HASH("herisson", 0x65d0bf21),
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/herisson"));
 
-    branch = theEntityManager.CreateEntity("branch",
+    branch = theEntityManager.CreateEntity(HASH("branch", 0x9c5e930f),
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/branch"));
 
-    decor2nd = theEntityManager.CreateEntity("decor2nd",
+    decor2nd = theEntityManager.CreateEntity(HASH("decor2nd", 0x26718086),
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/decor2nd"));
     // HACK
     TRANSFORM(decor2nd)->size.x = PlacementHelper::ScreenSize.x;
 
-    SCROLLING(decor2nd)->images.push_back("decor2nd_0");
-    SCROLLING(decor2nd)->images.push_back("decor2nd_3");
-    SCROLLING(decor2nd)->images.push_back("decor2nd_2");
-    SCROLLING(decor2nd)->images.push_back("decor2nd_1");
+    SCROLLING(decor2nd)->images.push_back(HASH("decor2nd_0", 0x2da4a4da));
+    SCROLLING(decor2nd)->images.push_back(HASH("decor2nd_3", 0xb93314de));
+    SCROLLING(decor2nd)->images.push_back(HASH("decor2nd_2", 0xc2edcdae));
+    SCROLLING(decor2nd)->images.push_back(HASH("decor2nd_1", 0xe8c9a7d4));
 
-    decor1er = theEntityManager.CreateEntity("decor1er",
+    decor1er = theEntityManager.CreateEntity(HASH("decor1er", 0x4d3ed5d1),
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/decor1er"));
     TRANSFORM(decor1er)->size.x = PlacementHelper::ScreenSize.x;
 
-    SCROLLING(decor1er)->images.push_back("decor1er_0");
-    SCROLLING(decor1er)->images.push_back("decor1er_1");
-    SCROLLING(decor1er)->images.push_back("decor1er_2");
-    SCROLLING(decor1er)->images.push_back("decor1er_3");
+    SCROLLING(decor1er)->images.push_back(HASH("decor1er_0", 0x3a3efebf));
+    SCROLLING(decor1er)->images.push_back(HASH("decor1er_1", 0x5ba415d2));
+    SCROLLING(decor1er)->images.push_back(HASH("decor1er_2", 0x68f8263e));
+    SCROLLING(decor1er)->images.push_back(HASH("decor1er_3", 0x4d7b9af));
 
     fillVec();
 
@@ -126,14 +126,14 @@ void GameModeManager::Setup() {
     #if SAC_DEBUG
     _debug = false;
     for(int i=0; i<8; i++) {
-        debugEntities[2*i] = theEntityManager.CreateEntity("debugEntities");
+        debugEntities[2*i] = theEntityManager.CreateEntity(HASH("debugEntities", 0x8553a249));
         ADD_COMPONENT(debugEntities[2*i], Rendering);
         ADD_COMPONENT(debugEntities[2*i], Transformation);
         RENDERING(debugEntities[2*i])->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(i, 0));
         TRANSFORM(debugEntities[2*i])->z = DL_DebugLayer;
         TRANSFORM(debugEntities[2*i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(80));
 
-        debugEntities[2*i + 1] = theEntityManager.CreateEntity("debugEntities");
+        debugEntities[2*i + 1] = theEntityManager.CreateEntity(HASH("debugEntities", 0x8553a249));
         ADD_COMPONENT(debugEntities[2*i + 1], Text);
         TEXT(debugEntities[2*i + 1])->positioning = TextComponent::CENTER;
         ADD_COMPONENT(debugEntities[2*i + 1], Transformation);
@@ -205,13 +205,13 @@ void GameModeManager::TogglePauseDisplay(bool paused) {
 }
 
 Entity GameModeManager::createAndAddLeave(int type, const glm::vec2& position, float rotation) {
-    Entity e = theEntityManager.CreateEntity("leave");
+    Entity e = theEntityManager.CreateEntity(HASH("leave", 0x8a4da686));
     ADD_COMPONENT(e, Transformation);
     ADD_COMPONENT(e, Rendering);
     ADD_COMPONENT(e, Twitch);
     RENDERING(e)->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(type, 0));
     RENDERING(e)->show = true;
-    RENDERING(e)->opaqueType = RenderingComponent::NON_OPAQUE;
+    RENDERING(e)->flags = RenderingFlags::NonOpaque;
 
     TRANSFORM(e)->size = HeriswapGame::CellSize(8, type) * HeriswapGame::CellContentScale();
 

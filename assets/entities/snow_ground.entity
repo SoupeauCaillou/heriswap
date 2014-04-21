@@ -1,8 +1,8 @@
 [Transformation]
-positionS%gimp = 400, 1280
+positionS%gimp_pos = 400, 1280
 size%screen_w,texture_ratio = 1
 z = 0.4
 
 [Rendering]
 texture = snow_ground
-opaque_type = 0
+flags = 1

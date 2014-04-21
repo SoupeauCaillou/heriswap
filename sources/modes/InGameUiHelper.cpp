@@ -42,13 +42,13 @@ void InGameUiHelper::build() {
     if (built)
         return;
 
-    smallLevel = theEntityManager.CreateEntity("smallLevel",
+    smallLevel = theEntityManager.CreateEntity(HASH("smallLevel", 0x6f7ef0af),
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/smallLevel"));
 
-    pauseButton = theEntityManager.CreateEntity("pauseButton",
+    pauseButton = theEntityManager.CreateEntity(HASH("pauseButton", 0x4274f14d),
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/pauseButton"));
 
-    scoreProgress = theEntityManager.CreateEntity("scoreProgress",
+    scoreProgress = theEntityManager.CreateEntity(HASH("scoreProgress", 0x939c5735),
         EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/scoreProgress"));
 
     built = true;

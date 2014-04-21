@@ -6,4 +6,4 @@ z = 0.41
 [Rendering]
 texture = snow_branch
 show = 0
-opaque_type = 0
+flags = 1
