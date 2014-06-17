@@ -139,7 +139,8 @@ void GameModeManager::Setup() {
         ADD_COMPONENT(debugEntities[2*i + 1], Transformation);
         TRANSFORM(debugEntities[2*i + 1])->position = TRANSFORM(debugEntities[2*i])->position;
         TRANSFORM(debugEntities[2*i+1])->z = DL_DebugLayer + 0.01f;
-        TEXT(debugEntities[2*i + 1])->fontName = "typo";
+        /*TEXT(debugEntities[2*i + 1])->fontName = "typo";*/
+        LOGE("*************************************Could not set the font*************************");
         TEXT(debugEntities[2*i + 1])->charHeight = PlacementHelper::GimpHeightToScreen(25);
     }
     #endif

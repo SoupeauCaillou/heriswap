@@ -29,7 +29,7 @@
 
 INSTANCE_IMPL(TwitchSystem);
 
-TwitchSystem::TwitchSystem() : ComponentSystemImpl<TwitchComponent>("twitch_") {
+TwitchSystem::TwitchSystem() : ComponentSystemImpl<TwitchComponent>(HASH("Twitch", 0x0)) {
 }
 
 void TwitchSystem::DoUpdate(float dt) {

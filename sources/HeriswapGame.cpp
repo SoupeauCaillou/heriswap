@@ -40,7 +40,7 @@
 #include "base/TimeUtil.h"
 #include "base/TouchInputManager.h"
 #include "base/StateMachine.inl"
-    
+
 #include "systems/ADSRSystem.h"
 #include "systems/AnimationSystem.h"
 #include "systems/AutoDestroySystem.h"
@@ -229,13 +229,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     //used for gamecenter api debug...
     AutoDestroySystem::DestroyInstance();
 #endif
-    AutonomousAgentSystem::DestroyInstance();
-    CollisionSystem::DestroyInstance();
-    DebuggingSystem::DestroyInstance();
-    GraphSystem::DestroyInstance();
-    GridSystem::DestroyInstance();
-    ZSQDSystem::DestroyInstance();
-    
+
     Game::buildOrderedSystemsToUpdateList();
 
     LOGI("SAC engine initialisation done.");
@@ -596,7 +590,7 @@ void HeriswapGame::initSerializer(Serializer& s) const {
     s.add(new Property<int>(HASH("mode", 0x0), OFFSET(mode, ss)));
     s.add(new Property<int>(HASH("grid_size", 0x0), OFFSET(gridSize, ss)));
     s.add(new Property<bool>(HASH("game_was_paused", 0x0), OFFSET(gameWasPaused, ss)));
-    
+
     s.add(new Property<int>(HASH("state_machine_size", 0x0), OFFSET(stateMachineSize, ss)));
     s.add(new Property<int>(HASH("entity_size", 0x0), OFFSET(entitySize, ss)));
     s.add(new Property<int>(HASH("success_size", 0x0), OFFSET(successSize, ss)));

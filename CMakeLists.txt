@@ -5,9 +5,22 @@ project(Heriswap)
 
 option(USE_RESTRICTIVE_PLUGINS "Use restrictive plugins (Google Play Game Services)" ON)
 
-if (USE_RESTRICTIVE_PLUGINS) 
+if (USE_RESTRICTIVE_PLUGINS)
 	add_definitions(-DSAC_RESTRICTIVE_PLUGINS=1)
 endif()
+
+add_definitions(
+    -DDISABLE_AUTONOMOUS_SYSTEM=1
+    -DDISABLE_COLLISION_SYSTEM=1
+    -DDISABLE_GRAPH_SYSTEM=1
+    -DDISABLE_GRID_SYSTEM=1
+    -DDISABLE_DEBUGGING_SYSTEM=1
+    -DDISABLE_ZSQD_SYSTEM=1
+    -DDISABLE_SPOT_SYSTEM=1
+    -DDISABLE_BLINK_SYSTEM=1
+    -DDISABLE_DEBUGGING_SYSTEM=1
+    -DDISABLE_NETWORK_SYSTEM=1
+)
 
 #and let the magic begin :-)
 include(sac/build/cmake/CMakeLists.txt)
