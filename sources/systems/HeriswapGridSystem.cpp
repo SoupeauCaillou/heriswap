@@ -32,7 +32,7 @@
 #include "util/Random.h"
 INSTANCE_IMPL(HeriswapGridSystem);
 
-HeriswapGridSystem::HeriswapGridSystem() : ComponentSystemImpl<HeriswapGridComponent>(HASH("HeriswapGrid",0x0)) {
+HeriswapGridSystem::HeriswapGridSystem() : ComponentSystemImpl<HeriswapGridComponent>(HASH("HeriswapGrid",0xb859c88c)) {
     GridSize = Types = 8;
     nbmin = 3;
     HeriswapGridComponent a;

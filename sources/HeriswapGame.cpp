@@ -250,6 +250,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     LOGI("\t- Create camera...");
     // default camera
     Entity camera = theEntityManager.CreateEntityFromTemplate("camera");
+    theTouchInputManager.setCamera( camera );
 
     SuccessManager *sm = new SuccessManager(gameThreadContext->gameCenterAPI);
     datas = new PrivateData(this, gameThreadContext, sm);
