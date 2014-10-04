@@ -66,6 +66,8 @@ class HeriswapGame : public Game {
         void backPressed();
         bool willConsumeBackEvent();
 
+        bool isLandscape() const override { return false; }
+
 		static bool inGameState(Scene::Enum state);
 		static bool pausableState(Scene::Enum state);
 		static glm::vec2 GridCoordsToPosition(int i, int j, int s);

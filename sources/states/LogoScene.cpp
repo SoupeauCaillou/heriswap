@@ -61,7 +61,8 @@ public:
     ///----------------------------------------------------------------------------//
     #define FADE 1
     void onPreEnter(Scene::Enum) override {
-        RENDERING(logo)->show = RENDERING(logobg)->show = true;
+        RENDERING(logo)->show = true;
+        RENDERING(logobg)->show = true;
         game->datas->faderHelper.start(Fading::In, FADE);
         // preload sound
         theSoundSystem.loadSoundFile("audio/son_monte.ogg");

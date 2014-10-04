@@ -148,9 +148,24 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         BUTTON(game->datas->soundButton)->enabled =
             RENDERING(game->datas->soundButton)->show = false;
 
+        for (int i=0; i<3; ++i) {
+            TEXT(eStart[i])->show = true;
+            RENDERING(bStart[i])->show = true;
+            BUTTON(bStart[i])->enabled = true;
+        }
+
+        RENDERING(menufg)->show =
+        RENDERING(menubg)->show =
+        RENDERING(game->herisson)->show =
+        RENDERING(aboutSac)->show =
+        BUTTON(aboutSac)->enabled = true;
+        SCROLLING(game->datas->sky)->show = true;
+
+        theBackgroundSystem.showAll();
+
         if (pState == Scene::Logo) {
             // setup fadein
-            for (int i=0; i<3; ++i) {
+            /*for (int i=0; i<3; ++i) {
                 game->datas->faderHelper.registerFadingInEntity(eStart[i]);
                 game->datas->faderHelper.registerFadingInEntity(bStart[i]);
             }
@@ -173,7 +188,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 				if (game->gameThreadContext->gameCenterAPI) {
 					game->datas->gamecenterAPIHelper.displayUI();
 				}
-            });
+            });*/
         } else {
 			if (game->gameThreadContext->gameCenterAPI) {
 				game->datas->gamecenterAPIHelper.displayUI();
@@ -193,20 +208,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             // preload sound effect
             theSoundSystem.loadSoundFile("audio/son_menu.ogg");
 
-            for (int i=0; i<3; ++i) {
-                TEXT(eStart[i])->show = true;
-                RENDERING(bStart[i])->show = true;
-                BUTTON(bStart[i])->enabled = true;
-            }
 
-            RENDERING(menufg)->show =
-                RENDERING(menubg)->show =
-                RENDERING(game->herisson)->show =
-                RENDERING(aboutSac)->show =
-                BUTTON(aboutSac)->enabled = true;
-            SCROLLING(game->datas->sky)->show = true;
-
-            theBackgroundSystem.showAll();
 
             if (modeTitleToReset) {
                 theMorphingSystem.reverse(MORPHING(modeTitleToReset));
