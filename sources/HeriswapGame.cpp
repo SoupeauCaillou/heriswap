@@ -231,6 +231,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
 void HeriswapGame::init(const uint8_t* in, int size) {
     LOGI("HeriswapGame initialisation begins...");
 
+    CAMERA(camera)->clearColor = Color(0.49,0.59,0,1);
 
     ScoreStorageProxy ssp;
     //init database

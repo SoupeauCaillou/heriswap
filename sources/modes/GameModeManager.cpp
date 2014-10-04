@@ -122,14 +122,14 @@ void GameModeManager::Setup() {
     #if SAC_DEBUG
     _debug = false;
     for(int i=0; i<8; i++) {
-        debugEntities[2*i] = theEntityManager.CreateEntity(HASH("debugEntities", 0x8553a249));
+        debugEntities[2*i] = theEntityManager.CreateEntity(HASH("debug/Entities", 0x8553a249));
         ADD_COMPONENT(debugEntities[2*i], Rendering);
         ADD_COMPONENT(debugEntities[2*i], Transformation);
         RENDERING(debugEntities[2*i])->texture = theRenderingSystem.loadTextureFile(HeriswapGame::cellTypeToTextureNameAndRotation(i, 0));
         TRANSFORM(debugEntities[2*i])->z = DL_DebugLayer;
         TRANSFORM(debugEntities[2*i])->size = glm::vec2((float)PlacementHelper::GimpWidthToScreen(80));
 
-        debugEntities[2*i + 1] = theEntityManager.CreateEntity(HASH("debugEntities", 0x8553a249));
+        debugEntities[2*i + 1] = theEntityManager.CreateEntity(HASH("debug/Entities", 0x8553a249));
         ADD_COMPONENT(debugEntities[2*i + 1], Text);
         TEXT(debugEntities[2*i + 1])->positioning = TextComponent::CENTER;
         ADD_COMPONENT(debugEntities[2*i + 1], Transformation);
@@ -201,7 +201,7 @@ void GameModeManager::TogglePauseDisplay(bool paused) {
 }
 
 Entity GameModeManager::createAndAddLeave(int type, const glm::vec2& position, float rotation) {
-    Entity e = theEntityManager.CreateEntity(HASH("leave", 0x8a4da686));
+    Entity e = theEntityManager.CreateEntity(HASH("branch/leave", 0x8a4da686));
     ADD_COMPONENT(e, Transformation);
     ADD_COMPONENT(e, Rendering);
     ADD_COMPONENT(e, Twitch);
