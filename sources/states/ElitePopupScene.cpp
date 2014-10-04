@@ -56,14 +56,14 @@ struct ElitePopupScene : public StateHandler<Scene::Enum> {
 
     void setup(AssetAPI*) override {
         const Color green("green");
-        background = theEntityManager.CreateEntityFromTemplate("popup_background");
+        background = theEntityManager.CreateEntityFromTemplate("popup/background");
 
-        text = theEntityManager.CreateEntityFromTemplate("popup_text");
+        text = theEntityManager.CreateEntityFromTemplate("popup/text");
 
         std::stringstream a;
         for (int i=0; i<2; i++) {
-            eText[i] = theEntityManager.CreateEntityFromTemplate("popup_button_text");
-            eButton[i] = theEntityManager.CreateEntityFromTemplate("popup_button");
+            eText[i] = theEntityManager.CreateEntityFromTemplate("popup/button_text");
+            eButton[i] = theEntityManager.CreateEntityFromTemplate("popup/button");
 
             TRANSFORM(eText[i])->position.y = TRANSFORM(eButton[i])->position.y = PlacementHelper::GimpYToScreen(850+i*183);
         }

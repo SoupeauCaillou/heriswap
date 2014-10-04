@@ -53,13 +53,13 @@ struct StartAt10Scene : public StateHandler<Scene::Enum> {
     }
 
     void setup(AssetAPI*) override {
-        background = theEntityManager.CreateEntityFromTemplate("popup_background");
+        background = theEntityManager.CreateEntityFromTemplate("popup/background");
 
-        text = theEntityManager.CreateEntityFromTemplate("popup_text");
+        text = theEntityManager.CreateEntityFromTemplate("popup/text");
 
         for (int i=0; i<2; i++) {
-            eButton[i] = theEntityManager.CreateEntityFromTemplate("popup_button");
-            eText[i] = theEntityManager.CreateEntityFromTemplate("popup_button_text");
+            eButton[i] = theEntityManager.CreateEntityFromTemplate("popup/button");
+            eText[i] = theEntityManager.CreateEntityFromTemplate("popup/button_text");
             ANCHOR(eText[i])->parent = eButton[i];
 
             TRANSFORM(eButton[i])->position.y = PlacementHelper::GimpYToScreen(850+i*183);

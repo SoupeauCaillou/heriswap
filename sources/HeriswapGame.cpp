@@ -792,7 +792,7 @@ void HeriswapGame::setupGameProp() {
     datas->storageAPI->loadEntries(&ssp, "*", ss.str());
 
     datas->bestScores.clear();
-    datas->bestScores.reserve(ssp._queue.size());
+    datas->bestScores.resize(ssp._queue.size());
     datas->scoreboardRankInSight = ssp._queue.size();
 
     for (unsigned i = 0; i < ssp._queue.size(); ++i) {

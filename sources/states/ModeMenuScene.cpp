@@ -357,8 +357,8 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         loadScore(game->datas->mode, game->difficulty);
 
-        Entity menufg = theEntityManager.getEntityByName(HASH("mainmenu/foreground", 0X0));
-        Entity menubg = theEntityManager.getEntityByName(HASH("mainmenu/background", 0x0));
+        Entity menufg = theEntityManager.getEntityByName(HASH("mainmenu/foreground", 0x59734f25));
+        Entity menubg = theEntityManager.getEntityByName(HASH("mainmenu/background", 0xc625225a));
         RENDERING(back)->show =
             RENDERING(game->herisson)->show =
             RENDERING(menubg)->show =
@@ -611,8 +611,8 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             game->datas->successMgr->NewGame(game->difficulty);
             TRANSFORM(game->herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(game->herisson)->size.x;
 
-            Entity menufg = theEntityManager.getEntityByName(HASH("mainmenu/foreground", 0x0));
-            Entity menubg = theEntityManager.getEntityByName(HASH("mainmenu/background", 0x0));
+            Entity menufg = theEntityManager.getEntityByName(HASH("mainmenu/foreground", 0x59734f25));
+            Entity menubg = theEntityManager.getEntityByName(HASH("mainmenu/background", 0xc625225a));
             RENDERING(game->herisson)->show =
                 RENDERING(menubg)->show =
                 RENDERING(menufg)->show = false;
