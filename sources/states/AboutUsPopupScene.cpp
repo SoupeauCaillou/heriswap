@@ -39,7 +39,7 @@
 #include "systems/TransformationSystem.h"
 
 #include <api/OpenURLAPI.h>
-    
+
 #include <glm/glm.hpp>
 
 #include <sstream>
@@ -85,10 +85,10 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
     Entity buttons[Button::Count];
     Entity texts[Text::Count];
 
-    AboutUsPopupScene(HeriswapGame* g) : StateHandler<Scene::Enum>(), game(g) {
+    AboutUsPopupScene(HeriswapGame* g) : StateHandler<Scene::Enum>("aboutus_popup_scene"), game(g) {
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         const Color green("green");
 
         images[Image::Background] = theEntityManager.CreateEntityFromTemplate("aboutus/background");

@@ -79,11 +79,11 @@ struct LevelChangedScene : public StateHandler<Scene::Enum> {
         BigScoreMoving
     } levelState;
 
-    LevelChangedScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    LevelChangedScene(HeriswapGame* game) : StateHandler<Scene::Enum>("level_changed_scene") {
         this->game = game;
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         eGrid = theEntityManager.CreateEntityFromTemplate("grid");
         eBigLevel = theEntityManager.CreateEntityFromTemplate("big_level");
         eSnowEmitter = theEntityManager.CreateEntityFromTemplate("snow_emiter");

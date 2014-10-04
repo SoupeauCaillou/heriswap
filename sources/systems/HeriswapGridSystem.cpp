@@ -32,7 +32,7 @@
 #include "util/Random.h"
 INSTANCE_IMPL(HeriswapGridSystem);
 
-HeriswapGridSystem::HeriswapGridSystem() : ComponentSystemImpl<HeriswapGridComponent>(HASH("HeriswapGrid",0xb859c88c)) {
+HeriswapGridSystem::HeriswapGridSystem() : ComponentSystemImpl<HeriswapGridComponent>(HASH("HeriswapGrid", 0xb859c88c)) {
     GridSize = Types = 8;
     nbmin = 3;
     HeriswapGridComponent a;
@@ -364,12 +364,8 @@ bool HeriswapGridSystem::StillCombinations() {
         return true;
     }
 
-#if SAC_USE_VECTOR_STORAGE
     for (auto e: entityWithComponent) {
         const auto* comp = &components[e];
-#else
-    FOR_EACH_ENTITY_COMPONENT(Background, e, comp)
-#endif
         if (NewCombiOnSwitch(e, comp->i, comp->j)) {
             SetCheckInCombi(combin);
             return true;

@@ -45,11 +45,11 @@ struct FallScene : public StateHandler<Scene::Enum> {
     Entity fallAnimation;
     std::vector<CellFall> falling;
 
-    FallScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    FallScene(HeriswapGame* game) : StateHandler<Scene::Enum>("fall_scene") {
         this->game = game;
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         fallAnimation = theEntityManager.CreateEntityFromTemplate("fallAnimation");
     }
 

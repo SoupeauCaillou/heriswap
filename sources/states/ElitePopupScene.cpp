@@ -50,21 +50,21 @@ struct ElitePopupScene : public StateHandler<Scene::Enum> {
     Entity background, text;
     Entity eButton[2], eText[2];
 
-    ElitePopupScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    ElitePopupScene(HeriswapGame* game) : StateHandler<Scene::Enum>("elite_popup_scene") {
         this->game = game;
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         const Color green("green");
         background = theEntityManager.CreateEntityFromTemplate("popup_background");
 
         text = theEntityManager.CreateEntityFromTemplate("popup_text");
-        
+
         std::stringstream a;
         for (int i=0; i<2; i++) {
             eText[i] = theEntityManager.CreateEntityFromTemplate("popup_button_text");
             eButton[i] = theEntityManager.CreateEntityFromTemplate("popup_button");
-            
+
             TRANSFORM(eText[i])->position.y = TRANSFORM(eButton[i])->position.y = PlacementHelper::GimpYToScreen(850+i*183);
         }
         TEXT(text)->text = game->gameThreadContext->localizeAPI->text("change_difficulty");

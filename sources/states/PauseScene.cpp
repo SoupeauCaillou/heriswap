@@ -52,11 +52,11 @@ struct PauseScene : public StateHandler<Scene::Enum> {
     Entity eHelp, bHelp;
     Scene::Enum previousState;
 
-    PauseScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    PauseScene(HeriswapGame* game) : StateHandler<Scene::Enum>("pause_scene") {
         this->game = game;
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         const Color green("green");
 
         //Restart Text

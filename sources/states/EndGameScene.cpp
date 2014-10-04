@@ -26,11 +26,11 @@
 struct EndGameScene : public StateHandler<Scene::Enum> {
     HeriswapGame* game;
 
-    EndGameScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    EndGameScene(HeriswapGame* game) : StateHandler<Scene::Enum>("end_game_scene") {
         this->game = game;
     }
 
-    void setup() { }
+    void setup(AssetAPI*) override {}
 
     ///----------------------------------------------------------------------------//
     ///--------------------- UPDATE SECTION ---------------------------------------//

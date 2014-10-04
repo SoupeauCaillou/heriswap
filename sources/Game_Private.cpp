@@ -57,8 +57,7 @@ PrivateData::PrivateData(HeriswapGame* game, GameContext* context, SuccessManage
  }
 
  void PrivateData::Setup() {
-    soundButton = theEntityManager.CreateEntity(HASH("soundButton", 0x5e022060),
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("general/soundButton"));
+    soundButton = theEntityManager.CreateEntityFromTemplate("general/soundButton");
 
     if (storageAPI->isOption("sound", "on"))
         RENDERING(soundButton)->texture = theRenderingSystem.loadTextureFile("sound_on");

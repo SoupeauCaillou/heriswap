@@ -68,7 +68,7 @@ void SuccessManager::initSerializer(Serializer& s) {
     s.add(new Property<float>(HASH("timeTotalPlayed", 0x0), OFFSET(timeTotalPlayed, sm)));
     s.add(new Property<float>(HASH("timeUserInputloop", 0x0), OFFSET(timeUserInputloop, sm)));
     s.add(new Property<float>(HASH("timeInSwappingPreparation", 0x0), OFFSET(timeInSwappingPreparation, sm)));
-    
+
     s.add(new Property<int>(HASH("l666numberLose", 0x0), OFFSET(l666numberLose, sm)));
     s.add(new Property<int>(HASH("lTheyGood", 0x0), OFFSET(lTheyGood, sm)));
     s.add(new Property<float>(HASH("gameDuration", 0x0), OFFSET(gameDuration, sm)));
@@ -76,14 +76,13 @@ void SuccessManager::initSerializer(Serializer& s) {
     s.add(new Property<bool>(HASH("hardMode", 0x0), OFFSET(hardMode, sm)));
     s.add(new Property<int>(HASH("numberCombinationInARow", 0x0), OFFSET(numberCombinationInARow, sm)));
 
+    char tmp[32];
     std::stringstream ss;
     for (int i=0; i<8; i++) {
-    	ss.clear();
-    	ss << "succEveryTypeInARow_" << i;
-    	std::string sss = ss.str();
-    	s.add(new Property<int>(Murmur::RuntimeHash(sss.c_str()), OFFSET(succEveryTypeInARow[i], sm)));
+        snprintf(tmp, 32, "succEveryTypeInARow_%d", i);
+    	s.add(new Property<int>(Murmur::RuntimeHash(tmp), OFFSET(succEveryTypeInARow[i], sm)));
     }
-    
+
 }
 
 int SuccessManager::saveState(uint8_t** out) {

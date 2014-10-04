@@ -78,22 +78,19 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     Entity menufg, menubg;
     Entity aboutSac;
 
-    MainMenuScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    MainMenuScene(HeriswapGame* game) : StateHandler<Scene::Enum>("main_menu_scene") {
         this->game = game;
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         const Color green("green");
 
-        // std::stringstream a;
-        char buf[17];
+        char tmp[64];
+        std::stringstream a;
         //Creating text entities
         for (int i=0; i<3; i++) {
-            // a.str("");
-            // a << "mainmenu/eStart_" << i;
-            std::sprintf(buf, "mainmenu/eStart_%d", i);
-
-            eStart[i] = theEntityManager.CreateEntityFromTemplate(buf);
+            snprintf(tmp, 64, "mainmenu/eStart_%d", i);
+            eStart[i] = theEntityManager.CreateEntityFromTemplate(tmp);
 
             TypedMorphElement<float>* sizeMorph = new TypedMorphElement<float>(
                 &TEXT(eStart[i])->charHeight,
@@ -104,10 +101,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
                 &TEXT(eStart[i])->positioning, 0, 1);
             MORPHING(eStart[i])->elements.push_back(alignMorph);
 
-            // a.str("");
-            // a << "mainmenu/bStart_" << i;
-            std::sprintf(buf, "mainmenu/bStart_%d", i);
-            bStart[i] = theEntityManager.CreateEntityFromTemplate(buf);
+            tmp[strlen("mainmenu/")] = 'b';
+            bStart[i] = theEntityManager.CreateEntityFromTemplate(tmp);
         }
         TEXT(eStart[0])->text = game->gameThreadContext->localizeAPI->text("mode_1");
         TEXT(eStart[1])->text = game->gameThreadContext->localizeAPI->text("mode_2");
@@ -140,10 +135,8 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         TRANSFORM(game->herisson)->position = AnchorSystem::adjustPositionWithCardinal(randomHerissionStart(),
                 TRANSFORM(game->herisson)->size, Cardinal::SE);
 
-        // a.str("");
-        // a << "herisson_" << Random::Int(1, 8);
-        sprintf(buf, "herisson_%d", Random::Int(1, 8));
-        ANIMATION(game->herisson)->name = Murmur::RuntimeHash(buf);
+        snprintf(tmp, 64, "herisson_%d", Random::Int(1, 8));
+        ANIMATION(game->herisson)->name = Murmur::RuntimeHash(tmp);
 
         modeTitleToReset = 0;
     }
@@ -152,7 +145,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum pState) override {
-        BUTTON(game->datas->soundButton)->enabled = 
+        BUTTON(game->datas->soundButton)->enabled =
             RENDERING(game->datas->soundButton)->show = false;
 
         if (pState == Scene::Logo) {
@@ -209,7 +202,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             RENDERING(menufg)->show =
                 RENDERING(menubg)->show =
                 RENDERING(game->herisson)->show =
-                RENDERING(aboutSac)->show = 
+                RENDERING(aboutSac)->show =
                 BUTTON(aboutSac)->enabled = true;
             SCROLLING(game->datas->sky)->show = true;
 
@@ -242,9 +235,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         if (TRANSFORM(game->herisson)->position.x < PlacementHelper::GimpXToScreen(800)+TRANSFORM(game->herisson)->size.x) {
             TRANSFORM(game->herisson)->position.x += ANIMATION(game->herisson)->playbackSpeed/8.f * dt;
         } else {
-            char buf[10];
-            sprintf(buf, "herisson_%d", Random::Int(1, 8));
-            ANIMATION(game->herisson)->name = Murmur::RuntimeHash(buf);
+            std::stringstream a;
+            a << "herisson_" << Random::Int(1, 8);
+            ANIMATION(game->herisson)->name = Murmur::RuntimeHash(a.str().c_str());
             ANIMATION(game->herisson)->playbackSpeed = Random::Float(2.0f, 4.0f);
             TRANSFORM(game->herisson)->size = randomHerissonSize();
             TRANSFORM(game->herisson)->position = AnchorSystem::adjustPositionWithCardinal(randomHerissionStart(),
@@ -294,7 +287,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
 		}
         RENDERING(aboutSac)->show =
             BUTTON(aboutSac)->enabled = false;
-        
+
         if (modeTitleToReset) {
             theMorphingSystem.reverse(MORPHING(modeTitleToReset));
         }
@@ -308,7 +301,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
         } else {
             MORPHING(eStart[choosenGameMode])->active = true;
             modeTitleToReset = eStart[choosenGameMode];
-            BUTTON(game->datas->soundButton)->enabled = 
+            BUTTON(game->datas->soundButton)->enabled =
                 RENDERING(game->datas->soundButton)->show = true;
         }
     }

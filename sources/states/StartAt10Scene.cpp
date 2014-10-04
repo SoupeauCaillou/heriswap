@@ -48,11 +48,11 @@ struct StartAt10Scene : public StateHandler<Scene::Enum> {
     Entity background, text;
     Entity eButton[2], eText[2];
 
-    StartAt10Scene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    StartAt10Scene(HeriswapGame* game) : StateHandler<Scene::Enum>("start_at_10_scene") {
         this->game = game;
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         background = theEntityManager.CreateEntityFromTemplate("popup_background");
 
         text = theEntityManager.CreateEntityFromTemplate("popup_text");
@@ -72,7 +72,7 @@ struct StartAt10Scene : public StateHandler<Scene::Enum> {
     ///----------------------------------------------------------------------------//
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
-    
+
     void onEnter(Scene::Enum) override {
         game->datas->faderHelper.start(Fading::In, 0.5);
         game->datas->faderHelper.registerFadingInEntity(background);
@@ -81,7 +81,7 @@ struct StartAt10Scene : public StateHandler<Scene::Enum> {
             game->datas->faderHelper.registerFadingInEntity(eButton[i]);
             game->datas->faderHelper.registerFadingInEntity(eText[i]);
         }
-        
+
         static_cast<NormalGameModeManager*>(game->datas->mode2Manager[Normal])->showGameDecor(true);
     }
 
@@ -106,7 +106,7 @@ struct StartAt10Scene : public StateHandler<Scene::Enum> {
             game->setupGameProp();
             game->datas->mode2Manager[Normal]->points = 0;
             static_cast<NormalGameModeManager*>(game->datas->mode2Manager[Normal])->changeLevel(10);
-            
+
             return Scene::Spawn;
         }
         else if (BUTTON(eButton[1])->clicked)

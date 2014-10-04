@@ -63,18 +63,16 @@ struct UserInputScene : public StateHandler<Scene::Enum> {
     Entity currentCell, swappedCell;
     Entity rollback;
 
-    UserInputScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    UserInputScene(HeriswapGame* game) : StateHandler<Scene::Enum>("user_input_scene") {
         this->game = game;
     }
 
-    void setup() {
-        swapAnimation = theEntityManager.CreateEntity(HASH("swapAnimation", 0x697f9a4f),
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("swap_animation"));
+    void setup(AssetAPI*) override {
+        swapAnimation = theEntityManager.CreateEntityFromTemplate("swap_animation");
         originI = originJ = -1;
         swapI = swapJ = 0;
 
-        rollback = theEntityManager.CreateEntity(HASH("rollback", 0x8afeeda2),
-            EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("rollback"));
+        rollback = theEntityManager.CreateEntityFromTemplate("rollback");
     }
 
     static bool contains(const std::vector<Combinais>& combi, const HeriswapGridComponent* g) {

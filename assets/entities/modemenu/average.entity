@@ -4,6 +4,6 @@ extends = modemenu/text
 position%gimp_pos = 92, 1075
 size%gimp_size = 620, 0
 
-[TextRendering]
+[Text]
 flags = 2
 char_height%gimp_h = 54

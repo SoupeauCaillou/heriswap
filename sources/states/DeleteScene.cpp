@@ -47,11 +47,11 @@ struct DeleteScene : public StateHandler<Scene::Enum> {
     std::vector<Combinais> removing;
     std::vector<GameModeManager::BranchLeaf> littleLeavesDeleted;
 
-    DeleteScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    DeleteScene(HeriswapGame* game) : StateHandler<Scene::Enum>("delete_scene") {
         this->game = game;
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         deleteAnimation = theEntityManager.CreateEntityFromTemplate("deleteAnimation");
     }
 

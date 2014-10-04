@@ -53,11 +53,11 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	Entity haveToAddLeavesInGrid, replaceGrid;
 	std::vector<Feuille> newLeaves;
 
-	SpawnScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+	SpawnScene(HeriswapGame* game) : StateHandler<Scene::Enum>("spawn_scene") {
 	    this->game = game;
 	}
 
-	void setup() {
+	void setup(AssetAPI*) override {
 		haveToAddLeavesInGrid = theEntityManager.CreateEntityFromTemplate("spawn/haveToAddLeavesInGrid");
 		replaceGrid = theEntityManager.CreateEntityFromTemplate("spawn/replaceGrid");
 	}
@@ -110,8 +110,7 @@ struct SpawnScene : public StateHandler<Scene::Enum> {
 	}
 
 	static Entity createCell(Feuille& f, bool assignGridPos) {
-		Entity e = theEntityManager.CreateEntity(HASH("Cell", 0x0),
-			EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("spawn/cell"));
+		Entity e = theEntityManager.CreateEntityFromTemplate("spawn/cell");
 		ADD_COMPONENT(e, HeriswapGrid);
 	    ADD_COMPONENT(e, Twitch);
 

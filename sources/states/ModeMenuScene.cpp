@@ -87,11 +87,11 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
         Entity input_label, input_textbox, input_background;
 #endif
 
-    ModeMenuScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    ModeMenuScene(HeriswapGame* game) : StateHandler<Scene::Enum>("mode_menu_scene") {
         this->game = game;
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         const Color green("green");
 
         title = theEntityManager.CreateEntityFromTemplate("modemenu/title");
@@ -305,7 +305,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- ENTER SECTION ----------------------------------------//
     ///----------------------------------------------------------------------------//
     void onPreEnter(Scene::Enum from) override {
-        BUTTON(game->datas->soundButton)->enabled = 
+        BUTTON(game->datas->soundButton)->enabled =
             RENDERING(game->datas->soundButton)->show = false;
 
         std::stringstream textId;
@@ -357,7 +357,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         loadScore(game->datas->mode, game->difficulty);
 
-        Entity menufg = theEntityManager.getEntityByName(HASH("mainmenu/foreground", 0x0));
+        Entity menufg = theEntityManager.getEntityByName(HASH("mainmenu/foreground", 0X0));
         Entity menubg = theEntityManager.getEntityByName(HASH("mainmenu/background", 0x0));
         RENDERING(back)->show =
             RENDERING(game->herisson)->show =
@@ -388,16 +388,16 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
 
         CONTAINER(playContainer)->enable = CONTAINER(bDifficulty)->enable = true;
 
-		if (game->gameThreadContext->gameCenterAPI 
+		if (game->gameThreadContext->gameCenterAPI
 			&& game->gameThreadContext->gameCenterAPI->isConnected()) {
 
             RENDERING(leaderboard[0])->show =
-                TEXT(leaderboard[1])->show = 
+                TEXT(leaderboard[1])->show =
                     BUTTON(leaderboard[0])->enabled = true;
             TEXT(leaderboard[1])->text = game->gameThreadContext->localizeAPI->text("leaderboard");
         } else {
             RENDERING(leaderboard[0])->show =
-                TEXT(leaderboard[1])->show = 
+                TEXT(leaderboard[1])->show =
                     BUTTON(leaderboard[0])->enabled = false;
         }
     }
@@ -569,7 +569,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             }
 
             // leaderboard button
-			else if (game->gameThreadContext->gameCenterAPI 
+			else if (game->gameThreadContext->gameCenterAPI
 				&& BUTTON(leaderboard[0])->clicked) {
                 const int e = (game->datas->mode * 3 + game->difficulty);
                 game->gameThreadContext->gameCenterAPI->openSpecificLeaderboard(e);
@@ -612,17 +612,17 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
             TRANSFORM(game->herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(game->herisson)->size.x;
 
             Entity menufg = theEntityManager.getEntityByName(HASH("mainmenu/foreground", 0x0));
-            Entity menubg = theEntityManager.getEntityByName(HASH("mainmenu/background", 0X0));
+            Entity menubg = theEntityManager.getEntityByName(HASH("mainmenu/background", 0x0));
             RENDERING(game->herisson)->show =
                 RENDERING(menubg)->show =
                 RENDERING(menufg)->show = false;
 
-            BUTTON(game->datas->soundButton)->enabled = 
+            BUTTON(game->datas->soundButton)->enabled =
                 RENDERING(game->datas->soundButton)->show = true;
         }
 
         RENDERING(leaderboard[0])->show =
-            TEXT(leaderboard[1])->show = 
+            TEXT(leaderboard[1])->show =
             BUTTON(leaderboard[0])->enabled = false;
 
         TEXT(title)->show = false;

@@ -187,22 +187,22 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     BackgroundSystem::CreateInstance();
 
     LOGI("\t- Init sceneStateMachine...");
-    sceneStateMachine.registerState(Scene::CountDown, Scene::CreateCountDownSceneHandler(this), "Scene::CountDown");
-    sceneStateMachine.registerState(Scene::Spawn, Scene::CreateSpawnSceneHandler(this), "Scene::Spawn");
-    sceneStateMachine.registerState(Scene::UserInput, Scene::CreateUserInputSceneHandler(this), "Scene::UserInput");
-    sceneStateMachine.registerState(Scene::Delete, Scene::CreateDeleteSceneHandler(this), "Scene::Delete");
-    sceneStateMachine.registerState(Scene::Fall, Scene::CreateFallSceneHandler(this), "Scene::Fall");
-    sceneStateMachine.registerState(Scene::LevelChanged, Scene::CreateLevelChangedSceneHandler(this), "Scene::LevelChanged");
-    sceneStateMachine.registerState(Scene::Pause, Scene::CreatePauseSceneHandler(this), "Scene::Pause");
-    sceneStateMachine.registerState(Scene::MainMenu, Scene::CreateMainMenuSceneHandler(this), "Scene::MainMenu");
-    sceneStateMachine.registerState(Scene::ModeMenu, Scene::CreateModeMenuSceneHandler(this), "Scene::ModeMenu");
-    sceneStateMachine.registerState(Scene::EndGame, Scene::CreateEndGameSceneHandler(this), "Scene::EndGame");
-    sceneStateMachine.registerState(Scene::Logo, Scene::CreateLogoSceneHandler(this), "Scene::Logo");
-    sceneStateMachine.registerState(Scene::Help, Scene::CreateHelpSceneHandler(this), "Scene::Help");
-    sceneStateMachine.registerState(Scene::RateIt, Scene::CreateRateItSceneHandler(this), "Scene::RateIt");
-    sceneStateMachine.registerState(Scene::ElitePopup, Scene::CreateElitePopupSceneHandler(this), "Scene::ElitePopup");
-    sceneStateMachine.registerState(Scene::AboutUsPopup, Scene::CreateAboutUsPopupSceneHandler(this), "Scene::AboutUs");
-    sceneStateMachine.registerState(Scene::StartAt10, Scene::CreateStartAt10SceneHandler(this), "Scene::StartAt10");
+    sceneStateMachine.registerState(Scene::CountDown, Scene::CreateCountDownSceneHandler(this));
+    sceneStateMachine.registerState(Scene::Spawn, Scene::CreateSpawnSceneHandler(this));
+    sceneStateMachine.registerState(Scene::UserInput, Scene::CreateUserInputSceneHandler(this));
+    sceneStateMachine.registerState(Scene::Delete, Scene::CreateDeleteSceneHandler(this));
+    sceneStateMachine.registerState(Scene::Fall, Scene::CreateFallSceneHandler(this));
+    sceneStateMachine.registerState(Scene::LevelChanged, Scene::CreateLevelChangedSceneHandler(this));
+    sceneStateMachine.registerState(Scene::Pause, Scene::CreatePauseSceneHandler(this));
+    sceneStateMachine.registerState(Scene::MainMenu, Scene::CreateMainMenuSceneHandler(this));
+    sceneStateMachine.registerState(Scene::ModeMenu, Scene::CreateModeMenuSceneHandler(this));
+    sceneStateMachine.registerState(Scene::EndGame, Scene::CreateEndGameSceneHandler(this));
+    sceneStateMachine.registerState(Scene::Logo, Scene::CreateLogoSceneHandler(this));
+    sceneStateMachine.registerState(Scene::Help, Scene::CreateHelpSceneHandler(this));
+    sceneStateMachine.registerState(Scene::RateIt, Scene::CreateRateItSceneHandler(this));
+    sceneStateMachine.registerState(Scene::ElitePopup, Scene::CreateElitePopupSceneHandler(this));
+    sceneStateMachine.registerState(Scene::AboutUsPopup, Scene::CreateAboutUsPopupSceneHandler(this));
+    sceneStateMachine.registerState(Scene::StartAt10, Scene::CreateStartAt10SceneHandler(this));
 
     Color::nameColor(Color(3.0f / 255.0f, 99.0f / 255.f, 71.0f / 255.f), "green");
 
@@ -223,13 +223,6 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     LOGI("\t- Define vibrateAPI...");
     theButtonSystem.vibrateAPI = gameThreadContext->vibrateAPI;
 
-    // destroy sac unused systems
-
-#if ! SAC_DESKTOP
-    //used for gamecenter api debug...
-    AutoDestroySystem::DestroyInstance();
-#endif
-
     Game::buildOrderedSystemsToUpdateList();
 
     LOGI("SAC engine initialisation done.");
@@ -246,11 +239,6 @@ void HeriswapGame::init(const uint8_t* in, int size) {
     gameThreadContext->storageAPI->setOption("sound", std::string(), "on");
     gameThreadContext->storageAPI->setOption("gameCount", std::string(), "0");
     gameThreadContext->storageAPI->createTable(&ssp);
-
-    LOGI("\t- Create camera...");
-    // default camera
-    Entity camera = theEntityManager.CreateEntityFromTemplate("camera");
-    theTouchInputManager.setCamera( camera );
 
     SuccessManager *sm = new SuccessManager(gameThreadContext->gameCenterAPI);
     datas = new PrivateData(this, gameThreadContext, sm);
@@ -272,7 +260,7 @@ void HeriswapGame::init(const uint8_t* in, int size) {
 
     datas->faderHelper.init(camera);
 
-    sceneStateMachine.setup();
+    sceneStateMachine.setup(gameThreadContext->assetAPI);
     if (in && size) {
         loadGameState(in, size);
         SCROLLING(datas->sky)->show = true;
@@ -496,12 +484,15 @@ void HeriswapGame::tick(float dt) {
     }
 
     //update music
+    LOGT_EVERY_N(30, "FIX ME");
+    #if 0
     if (!theMusicSystem.isMuted()) {
         const Scene::Enum state = sceneStateMachine.getCurrentState();
         //si on est en jeu et/ou  fin de musiques, charger de nouvelles musiques
         if ((pausableState(state) &&
             state != Scene::LevelChanged &&
             state != Scene::Pause)) {
+
             // TODO || state == Scene::BlackToSpawn) {
             MUSIC(datas->inGameMusic.masterTrack)->control = MusicControl::Play;
             MUSIC(datas->inGameMusic.masterTrack)->volume = 1;
@@ -565,6 +556,7 @@ void HeriswapGame::tick(float dt) {
             }
         }
     }
+    #endif
 
     PROFILE("Game", "Tick", EndEvent);
 
@@ -701,7 +693,7 @@ void HeriswapGame::loadGameState(const uint8_t* in, int ) {
     setupGameProp();
 }
 
-static float rotations[] = {
+static const float rotations[] = {
     glm::quarter_pi<float>(),
     -glm::half_pi<float>(),
     0.0f,
@@ -711,16 +703,23 @@ static float rotations[] = {
     -glm::pi<float>(),
     -glm::quarter_pi<float>()
 };
+static const char* feuilles [] = {
+    "feuille1",
+    "feuille2",
+    "feuille3",
+    "feuille4",
+    "feuille5",
+    "feuille6",
+    "feuille7",
+    "feuille8",
+};
 
 const char* HeriswapGame::cellTypeToTextureNameAndRotation(int type, float* rotation) {
     if (rotation)
         *rotation = rotations[type];
 
-    // std::stringstream s;
-    // s << "feuille" << (type+1);
-    char result[8];
-    std::sprintf(result, "feuille%d", type+1);
-    return result;
+    LOGF_IF(type >= 8, "Invalid type value:" << type);
+    return feuilles[type];
 }
 
 float HeriswapGame::cellTypeToRotation(int type) {

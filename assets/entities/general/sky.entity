@@ -7,4 +7,3 @@ z = 0.01
 direction = -1, 0
 speed = 0.1
 show = 0
-rendering_flags = 0

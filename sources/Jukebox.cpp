@@ -92,7 +92,7 @@ static void build3SongsComposition(std::vector<std::string>& selection) {
 	    selection.push_back(themes[Random::Int(0, 1)]);
 	    // 2 diff accomp
 	    int a[2];
-	    
+
 	    randomNumbersInRange(A, E, a, 2, A, G);
 	    for (int i=0; i<2; i++) {
 	        selection.push_back(accomp[a[i]]);
@@ -199,7 +199,7 @@ const std::vector<std::string>& Jukebox::pickNextSongs(int maxSongCount) {
 	    		songCount = glm::min(maxSongCount, Random::Int(currentSelection.size() - 1, currentSelection.size() + 1));
 	    		break;
     	}
-    
+
         std::vector<std::string> newSelection;
         int maxTries = 100;
         do {

@@ -5,7 +5,4 @@ z = 0.7
 [Text]
 color%name = green
 char_height%gimp_h = 75
-
-[Text]
-char_height%gimp_h = 75
 positioning = 0

@@ -11,4 +11,4 @@ positioning = 0
 timing = 0.2
 
 #[Anchor]
-#parent%name = 
+#parent%name =

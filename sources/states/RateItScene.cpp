@@ -47,11 +47,11 @@ struct RateItScene : public StateHandler<Scene::Enum> {
     Entity textToRead, textToReadContainer;
     Entity boutonText[3], boutonContainer[3];
 
-    RateItScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    RateItScene(HeriswapGame* game) : StateHandler<Scene::Enum>("rate_it_scene") {
         this->game = game;
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         //Creating text entities
         textToReadContainer = theEntityManager.CreateEntityFromTemplate("rateit/container");
 
@@ -87,7 +87,7 @@ struct RateItScene : public StateHandler<Scene::Enum> {
 
     void onEnter(Scene::Enum) override {
         Entity menufg = theEntityManager.getEntityByName(HASH("mainmenu/foreground", 0x0));
-        Entity menubg = theEntityManager.getEntityByName(HASH("mainmenu/background", 0X0));
+        Entity menubg = theEntityManager.getEntityByName(HASH("mainmenu/background", 0x0));
         RENDERING(menubg)->show =
             RENDERING(menufg)->show = true;
 

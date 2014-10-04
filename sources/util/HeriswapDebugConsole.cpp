@@ -39,11 +39,9 @@ HeriswapGame* HeriswapDebugConsole::_game = 0;
 void HeriswapDebugConsole::init(HeriswapGame* game) {
     _game = game;
 
-    DebugConsole::RegisterMethod("Go to level 9", callbackJumpAt9);
 }
 
 void HeriswapDebugConsole::callbackJumpAt9(void*) {
-    static_cast<NormalGameModeManager*>(_game->datas->mode2Manager[Normal])->changeLevel(9);
 }
 
 #endif

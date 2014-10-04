@@ -88,20 +88,17 @@ void GameModeManager::LoadHerissonTexture(int type) {
     LOGW_IF(type > 8, "type > 8");
     LOGW_IF(type < 1, "type < 1");
     type = (type > 8 ? 8 : (type < 1 ? 1 : type));
-    char buf[10];
-    sprintf(buf, "herisson_%d", type);
-    ANIMATION(herisson)->name = Murmur::RuntimeHash(buf);
+    char tmp[32];
+    snprintf(tmp, 32, "herisson_%d", type);
+    ANIMATION(herisson)->name = Murmur::RuntimeHash(tmp);
 }
 
 void GameModeManager::Setup() {
-    herisson = theEntityManager.CreateEntity(HASH("herisson", 0x65d0bf21),
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/herisson"));
+    herisson = theEntityManager.CreateEntityFromTemplate("gamemode/herisson");
 
-    branch = theEntityManager.CreateEntity(HASH("branch", 0x9c5e930f),
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/branch"));
+    branch = theEntityManager.CreateEntityFromTemplate("gamemode/branch");
 
-    decor2nd = theEntityManager.CreateEntity(HASH("decor2nd", 0x26718086),
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/decor2nd"));
+    decor2nd = theEntityManager.CreateEntityFromTemplate("gamemode/decor2nd");
     // HACK
     TRANSFORM(decor2nd)->size.x = PlacementHelper::ScreenSize.x;
 
@@ -110,8 +107,7 @@ void GameModeManager::Setup() {
     SCROLLING(decor2nd)->images.push_back(HASH("decor2nd_2", 0xc2edcdae));
     SCROLLING(decor2nd)->images.push_back(HASH("decor2nd_1", 0xe8c9a7d4));
 
-    decor1er = theEntityManager.CreateEntity(HASH("decor1er", 0x4d3ed5d1),
-        EntityType::Persistent, theEntityManager.entityTemplateLibrary.load("gamemode/decor1er"));
+    decor1er = theEntityManager.CreateEntityFromTemplate("gamemode/decor1er");
     TRANSFORM(decor1er)->size.x = PlacementHelper::ScreenSize.x;
 
     SCROLLING(decor1er)->images.push_back(HASH("decor1er_0", 0x3a3efebf));
@@ -139,8 +135,7 @@ void GameModeManager::Setup() {
         ADD_COMPONENT(debugEntities[2*i + 1], Transformation);
         TRANSFORM(debugEntities[2*i + 1])->position = TRANSFORM(debugEntities[2*i])->position;
         TRANSFORM(debugEntities[2*i+1])->z = DL_DebugLayer + 0.01f;
-        /*TEXT(debugEntities[2*i + 1])->fontName = "typo";*/
-        LOGE("*************************************Could not set the font*************************");
+        TEXT(debugEntities[2*i + 1])->fontName = HASH("typo", 0x5a18f4a9);
         TEXT(debugEntities[2*i + 1])->charHeight = PlacementHelper::GimpHeightToScreen(25);
     }
     #endif

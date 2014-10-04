@@ -44,11 +44,11 @@ struct CountDownScene : public StateHandler<Scene::Enum> {
     Entity vorhang;
     float timeRemaining;
 
-    CountDownScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    CountDownScene(HeriswapGame* game) : StateHandler<Scene::Enum>("countdown_scene") {
         this->game = game;
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         counter = theEntityManager.CreateEntityFromTemplate("counter");
         vorhang = theEntityManager.CreateEntityFromTemplate("vorhang");
     }

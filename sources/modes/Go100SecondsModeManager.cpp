@@ -147,9 +147,10 @@ void Go100SecondsGameModeManager::GameUpdate(float dt, Scene::Enum state) {
 		//if the central leaf is next to the herisson, change his bonus
 		if (TRANSFORM(squallLeaves[0])->position.x <= TRANSFORM(herisson)->position.x) {
 			// LoadHerissonTexture(bonus+1);
-			char buf[10];
-			sprintf(buf, "herisson_%d", Random::Int(1, 8));
-        	ANIMATION(herisson)->name = Murmur::RuntimeHash(buf);
+            char tmp[32];
+            snprintf(tmp, 32, "herisson_%d", bonus + 1);
+			ANIMATION(herisson)->name = Murmur::RuntimeHash(tmp);
+			// RENDERING(herisson)->texture = theRenderingSystem.loadTextureFile(c->anim[0]);
 		}
 		//make the tree leaves grow ...
 		for (unsigned int i = 0; i < branchLeaves.size(); i++) {
@@ -262,7 +263,7 @@ int Go100SecondsGameModeManager::saveInternalState(uint8_t** out) {
     int parent = GameModeManager::saveInternalState(&tmp);
     uint8_t* ptr = *out = new uint8_t[parent];
     MEMPCPY(uint8_t*, ptr, tmp, parent);
-    
+
 
     delete[] tmp;
     return (parent);

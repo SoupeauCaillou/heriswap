@@ -42,11 +42,11 @@ class LogoScene : public StateHandler<Scene::Enum> {
 
 public:
 
-    LogoScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    LogoScene(HeriswapGame* game) : StateHandler<Scene::Enum>("logo_scene") {
         this->game = game;
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         logo = theEntityManager.CreateEntityFromTemplate("logo/logo");
         logobg = theEntityManager.CreateEntityFromTemplate("logo/logo_bg");
         animLogo = theEntityManager.CreateEntityFromTemplate("logo/logo_anim");

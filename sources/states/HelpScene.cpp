@@ -50,11 +50,11 @@ struct HelpScene : public StateHandler<Scene::Enum> {
         Objective
     } state;
 
-    HelpScene(HeriswapGame* game) : StateHandler<Scene::Enum>() {
+    HelpScene(HeriswapGame* game) : StateHandler<Scene::Enum>("help_scene") {
         this->game = game;
     }
 
-    void setup() {
+    void setup(AssetAPI*) override {
         const Color green("green");
 
         title = theEntityManager.CreateEntityFromTemplate("help/title");

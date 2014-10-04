@@ -35,7 +35,7 @@
 
 INSTANCE_IMPL(BackgroundSystem);
 
-BackgroundSystem::BackgroundSystem() : ComponentSystemImpl<BackgroundComponent>(HASH("Background",0x5e4973c4)) {
+BackgroundSystem::BackgroundSystem() : ComponentSystemImpl<BackgroundComponent>(HASH("Background", 0x5e4973c4)) {
     skySpeed = -0.3f;
 
     cloudStartX = Interval<float>(8.0f, 15.0f);
