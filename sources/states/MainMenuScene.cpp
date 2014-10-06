@@ -186,9 +186,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
                 SCROLLING(game->datas->sky)->show = true;
 
 				if (game->gameThreadContext->gameCenterAPI) {
-					game->datas->gamecenterAPIHelper.displayUI();
-				}
+                }
             });*/
+			game->datas->gamecenterAPIHelper.displayUI();
         } else {
 			if (game->gameThreadContext->gameCenterAPI) {
 				game->datas->gamecenterAPIHelper.displayUI();
