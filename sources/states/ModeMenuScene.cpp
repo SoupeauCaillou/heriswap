@@ -491,7 +491,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
                     loadScore(game->datas->mode, game->difficulty);
                     gameOverState = NoGame;
 
-#if SAC_RESTRICTIVE_PLUGINS
+#if SAC_USE_PROPRIETARY_PLUGINS
                     if (game->gameThreadContext->communicationAPI->mustShowRateDialog()) {
                         TRANSFORM(game->herisson)->position.x = (float)PlacementHelper::GimpXToScreen(0)-TRANSFORM(game->herisson)->size.x;
                         TEXT(title)->show = false;

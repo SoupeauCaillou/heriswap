@@ -44,7 +44,7 @@
 
 #include <sstream>
 
-#if SAC_RESTRICTIVE_PLUGINS
+#if SAC_USE_PROPRIETARY_PLUGINS
 #include "api/InAppPurchaseAPI.h"
 #endif
 
@@ -59,7 +59,7 @@ namespace Image {
 namespace Button {
     enum Enum {
         Flattr = 0,
-#if SAC_RESTRICTIVE_PLUGINS
+#if SAC_USE_PROPRIETARY_PLUGINS
         Iap,
 #endif
         Web,
@@ -99,7 +99,7 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
         texts[Text::AboutUs] = theEntityManager.CreateEntityFromTemplate("aboutus/aboutus_text");
 
         buttons[Button::Flattr] = theEntityManager.CreateEntityFromTemplate("aboutus/flattr_button");
-#if SAC_RESTRICTIVE_PLUGINS
+#if SAC_USE_PROPRIETARY_PLUGINS
         buttons[Button::Iap] = theEntityManager.CreateEntityFromTemplate("aboutus/iap_button");
 #endif
         buttons[Button::Web] = theEntityManager.CreateEntityFromTemplate("aboutus/web_button");
@@ -137,7 +137,7 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
             game->gameThreadContext->openURLAPI->openURL(url);
         }
 
-#if SAC_RESTRICTIVE_PLUGINS
+#if SAC_USE_PROPRIETARY_PLUGINS
         if (BUTTON(buttons[Button::Iap])->clicked) {
             game->gameThreadContext->inAppPurchaseAPI->purchase("donate");
         }

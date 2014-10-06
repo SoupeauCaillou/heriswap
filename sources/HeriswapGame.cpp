@@ -155,7 +155,7 @@ bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
     switch (api) {
         case ContextAPI::Asset:
         case ContextAPI::Communication:
-#if SAC_RESTRICTIVE_PLUGINS
+#if SAC_USE_PROPRIETARY_PLUGINS
         case ContextAPI::GameCenter:
         case ContextAPI::InAppPurchase:
 #endif
