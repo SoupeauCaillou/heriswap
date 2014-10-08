@@ -6,11 +6,10 @@
     android:installLocation="auto"
     >
 
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="com.android.vending.BILLING" />
 
-	<uses-feature android:glEsVersion="0x00020000" />
+    <uses-feature android:glEsVersion="0x00020000" />
 
     <!-- minSdkVersion = 9 because of http://code.google.com/p/android/issues/detail?id=43819 -->
     <!-- targetSdkVersion = 11 because of https://developer.android.com/distribute/googleplay/quality/tablet.html#android-versions -->
@@ -28,7 +27,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="\ 645507124800" /> <!-- the space is important since we cannot write int values without making the app crash -->
     </application>
 </manifest>
