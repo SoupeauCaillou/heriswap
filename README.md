@@ -31,5 +31,23 @@ Use -h to get available options.
 #License
 See [License file](LICENSE).
 
+#Author
+* Gautier Pelloux-Prayer <gautier@damsy.net>, developer
+* Jordane Pelloux-Prayer <jordane@damsy.net>, developer
+* Marion Pelloux-Prayer <marion@damsy.net>, graphist & sound
+* Pierre-Eric Pelloux-Prayer <pierre-eric@damsy.net>, developer
+
+-----------
+
+* Special thanks to our translators from www.transifex.com [(you can help us too!)](www.transifex.com):
+  * xesusmosquera  for Galician (Spain)
+  * fmoliveira  for Portuguese (Brazil)
+  * kokumaro  for Japanese
+  * Nienke84 and darwinel  for Dutch
+  * Brainmote  for Italian
+  * kingu  for Norwegian
+
 #Contact
-If you encounter any problem, please email us at soupeaucaillou@damsy.net.
+If you are willing to contact us, please email us at soupeaucaillou@damsy.net.
+
+
