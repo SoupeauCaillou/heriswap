@@ -1,4 +1,4 @@
-Heriswap is a match-3 game, published on Android ([Google Play](https://play.google.com/store/apps/details?id=net.damsy.soupeaucaillou.heriswap), [F-droid](https://f-droid.org/repository/browse/?fdfilter=heriswap&fdid=net.damsy.soupeaucaillou.heriswap) and [direct download](http://soupeaucaillou.com/games/heriswap.apk)). It can also run on Linux, Windows, MacOSX and iOS devices.
+Heriswap is a match-3 game, published on Android ([Google Play](https://play.google.com/store/apps/details?id=net.damsy.soupeaucaillou.heriswap), [F-droid](https://f-droid.org/repository/browse/?fdfilter=heriswap&fdid=net.damsy.soupeaucaillou.heriswap) and [direct download](http://soupeaucaillou.com/games/Heriswap.apk)). It can also run on Linux, Windows, MacOSX and iOS devices.
 
 [It uses sac (Soupe au Caillou) 2D engine](https://github.com/soupeaucaillou/sac).
 
