@@ -171,28 +171,30 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             }
             game->datas->faderHelper.registerFadingInEntity(menufg);
             game->datas->faderHelper.registerFadingInEntity(menubg);
-			game->datas->faderHelper.registerFadingInEntity(game->herisson);
-			game->datas->faderHelper.registerFadingInEntity(game->datas->sky);
+            game->datas->faderHelper.registerFadingInEntity(game->herisson);
+            game->datas->faderHelper.registerFadingInEntity(game->datas->sky);
             game->datas->faderHelper.registerFadingInEntity(aboutSac);
 
-			if (game->gameThreadContext->gameCenterAPI) {
-				game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.signButton);
-				game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.achievementsButton);
-				game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.leaderboardsButton);
-			}
+            if (game->gameThreadContext->gameCenterAPI) {
+                game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.signButton);
+                game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.achievementsButton);
+                game->datas->faderHelper.registerFadingInEntity(game->datas->gamecenterAPIHelper.leaderboardsButton);
+            }
 
             game->datas->faderHelper.registerFadingInCallback([this] () -> void {
                 theBackgroundSystem.showAll();
                 SCROLLING(game->datas->sky)->show = true;
 
-				if (game->gameThreadContext->gameCenterAPI) {
+                if (game->gameThreadContext->gameCenterAPI) {
                 }
             });*/
-			game->datas->gamecenterAPIHelper.displayUI();
+            if (game->gameThreadContext->gameCenterAPI) {
+                game->datas->gamecenterAPIHelper.displayUI();
+            }
         } else {
-			if (game->gameThreadContext->gameCenterAPI) {
-				game->datas->gamecenterAPIHelper.displayUI();
-			}
+            if (game->gameThreadContext->gameCenterAPI) {
+                game->datas->gamecenterAPIHelper.displayUI();
+            }
 
             if (pState == Scene::Pause) {
                 LOGI("aborted. going to main menu");
@@ -230,9 +232,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     ///--------------------- UPDATE SECTION ---------------------------------------//
     ///----------------------------------------------------------------------------//
     Scene::Enum update(float dt) override {
-		if (game->gameThreadContext->gameCenterAPI) {
-			game->datas->gamecenterAPIHelper.updateUI();
-		}
+        if (game->gameThreadContext->gameCenterAPI) {
+            game->datas->gamecenterAPIHelper.updateUI();
+        }
 
         if (TRANSFORM(game->herisson)->position.x < PlacementHelper::GimpXToScreen(800)+TRANSFORM(game->herisson)->size.x) {
             TRANSFORM(game->herisson)->position.x += ANIMATION(game->herisson)->playbackSpeed/8.f * dt;
@@ -284,9 +286,9 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
             BUTTON(bStart[i])->enabled = false;
         }
 
-		if (game->gameThreadContext->gameCenterAPI) {
-			game->datas->gamecenterAPIHelper.hideUI();
-		}
+        if (game->gameThreadContext->gameCenterAPI) {
+            game->datas->gamecenterAPIHelper.hideUI();
+        }
         RENDERING(aboutSac)->show =
             BUTTON(aboutSac)->enabled = false;
 
