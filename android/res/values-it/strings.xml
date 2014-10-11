@@ -11,7 +11,8 @@
   <string name="restart">"Rigioca"</string>
   <string name="diff_1">"Debuttante"</string>
   <string name="diff_2">"Medio"</string>
-  <string name="diff_3">"Confermato"</string>
+  <string name="diff_3">"Esperto"</string>
+  <string name="leaderboard">"×gg_leaderboards2,1× Classifica"</string>
   <string name="lvl">"liv"</string>
   <string name="lvlcap">"Liv"</string>
   <string name="enter_name">"Digita il tuo nome"</string>
@@ -35,4 +36,27 @@
   <string name="average_score">"Media dei punteggi recenti:"</string>
   <string name="help_click_continue">"-tocca per continuare-"</string>
   <string name="help_click_play">"-tocca per giocare-"</string>
+  <string name="help_general_1">"Allinea almeno 3 foglie identiche ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+
+Scambia 2 foglie vicine ×feuille2,1× ×feuille3,1× per creare una combinazione e guadagnare punti."</string>
+  <string name="help_general_2">"Il ×herisson_2_5,2× mostra quanto tempo ti rimane e il gioco finisce quando raggiunge il lato destro dello schermo. Premici sopra per avere dei consigli!"</string>
+  <string name="help_mode1_1">"L'obiettivo è realizzare più punti possibile.
+
+E' un gioco a tempo."</string>
+  <string name="help_mode1_2">"Il ×feuille5,1× mostra i punti bonus.
+
+Per ogni combinazione riuscita guadagni del tempo extra. Il modo migliore per guadagnare tempo è completare il livello. Questo si ottiene ripulendo il ramo da tutte le sue foglie."</string>
+  <string name="help_mode2_1">"Lo scopo è rimuovere tutte le foglie ×feuille2,1× dall'albero il più veloce possibile.
+
+Questo si può fare allineando almeno 3 foglie identiche ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+
+Scambia 2 foglie vicine ×feuille2,1× ×feuille3,1× per creare una combinazione."</string>
+  <string name="help_mode2_2">"Il ×herisson_2_5,2× mostra i progressi. Il gioco finisce quando raggiunge il bordo destro dello schermo.
+
+Ogni combinazione formata da foglie di tipo bonus ×feuille5,1× raddoppiano il punteggio."</string>
+  <string name="help_mode3_1">"L'obiettivo è realizzare più punti possibile in 100 secondi esatti."</string>
+  <string name="start_at_level_10">"Sembri bravo, vuoi forse iniziare questo gioco dal livello 10 ?"</string>
+  <string name="start_at_level_10_yes">"Salta al livello 10!"</string>
+  <string name="support_us">"Supportaci"</string>
+  <string name="about_us">"Chi siamo"</string>
 </resources>

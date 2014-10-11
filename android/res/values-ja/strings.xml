@@ -26,19 +26,54 @@
   <string name="rate_now">"すぐに評価する"</string>
   <string name="rate_later">"またの機会に"</string>
   <string name="rate_never">"いいえ、このまま"</string>
-  <string name="change_difficulty">"とても上手ですね。\n難易度を上げて、新しくゲームを始めてみませんか？"</string>
+  <string name="change_difficulty">"とても上手ですね。
+難易度を上げて、新しくゲームを始めてみませんか？"</string>
   <string name="change_difficulty_yes">"難易度を上げる"</string>
   <string name="change_difficulty_no">"いいえ、このまま続ける"</string>
   <string name="average_score">"平均スコア"</string>
   <string name="help_click_continue">"-タッチして次へ-"</string>
   <string name="help_click_play">"-タッチしてプレイ-"</string>
-  <string name="help_general_1">"3枚以上の同じ葉っぱを一列に並べます。\n×feuille1,1× ×feuille1,1× ×feuille1,1×。\n\n隣接する2枚の葉っぱを入れ替えて、 ×feuille2,1× ×feuille3,1× \n組み合わせを作り、点数をかせぎます。"</string>
-  <string name="help_general_2">"この ×herisson_2_5,2× はどれだけの時間が\n残されているかを示していて、 \n彼が画面の右端に到達したときに\nゲームが終了します。\n彼にタッチするとヒントがもらえます！"</string>
-  <string name="help_mode1_1">"ゲームの目的は多くのスコアを\n獲得することです。\n\nゲームには時間制限があります。"</string>
-  <string name="help_mode1_2">"彼の背中の葉っぱ ×feuille5,1× を消すと\nボーナスが加算されます。\n\n組み合わせが成功するごとに、\n残り時間が加算されます。\n時間を増やす最も良い方法は\nそのレベルをクリアすることです。\nクリアするには画面上の\n枝についた葉っぱを全て消してください。"</string>
-  <string name="help_mode2_1">"木から全ての葉っぱ ×feuille2,1× を\n可能な限り速く消していくことが目的です。\n\n葉っぱを消すには3枚以上の\n同じ葉っぱを一列に並べてください。\n ×feuille1,1× ×feuille1,1× ×feuille1,1×\n\n隣接する2枚の葉っぱ ×feuille2,1× ×feuille3,1× を\n入れ替えて、組み合わせを作ります。"</string>
-  <string name="help_mode2_2">"この ×herisson_2_5,2× は進行度を表しています。\n これが画面の右端に到達すると\nゲームは終了です。\n\n加点のある葉っぱ ×feuille5,1× を組み合わせると\n点数が2倍になります。"</string>
-  <string name="help_mode3_1">"100秒以内に多くのスコアを\n獲得することが目的です。"</string>
-  <string name="start_at_level_10">"とてもお上手ですね。\n10レベルから始められますがいかが？"</string>
+  <string name="help_general_1">"3枚以上の同じ葉っぱを一列に並べます。
+×feuille1,1× ×feuille1,1× ×feuille1,1×。
+
+隣接する2枚の葉っぱを入れ替えて、 ×feuille2,1× ×feuille3,1× 
+組み合わせを作り、点数をかせぎます。"</string>
+  <string name="help_general_2">"この ×herisson_2_5,2× はどれだけの時間が
+残されているかを示していて、 
+彼が画面の右端に到達したときに
+ゲームが終了します。
+彼にタッチするとヒントがもらえます！"</string>
+  <string name="help_mode1_1">"ゲームの目的は多くのスコアを
+獲得することです。
+
+ゲームには時間制限があります。"</string>
+  <string name="help_mode1_2">"彼の背中の葉っぱ ×feuille5,1× を消すと
+ボーナスが加算されます。
+
+組み合わせが成功するごとに、
+残り時間が加算されます。
+時間を増やす最も良い方法は
+そのレベルをクリアすることです。
+クリアするには画面上の
+枝についた葉っぱを全て消してください。"</string>
+  <string name="help_mode2_1">"木から全ての葉っぱ ×feuille2,1× を
+可能な限り速く消していくことが目的です。
+
+葉っぱを消すには3枚以上の
+同じ葉っぱを一列に並べてください。
+ ×feuille1,1× ×feuille1,1× ×feuille1,1×
+
+隣接する2枚の葉っぱ ×feuille2,1× ×feuille3,1× を
+入れ替えて、組み合わせを作ります。"</string>
+  <string name="help_mode2_2">"この ×herisson_2_5,2× は進行度を表しています。
+ これが画面の右端に到達すると
+ゲームは終了です。
+
+加点のある葉っぱ ×feuille5,1× を組み合わせると
+点数が2倍になります。"</string>
+  <string name="help_mode3_1">"100秒以内に多くのスコアを
+獲得することが目的です。"</string>
+  <string name="start_at_level_10">"とてもお上手ですね。
+10レベルから始められますがいかが？"</string>
   <string name="start_at_level_10_yes">"10レベルから始める"</string>
 </resources>

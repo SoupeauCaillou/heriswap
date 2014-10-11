@@ -4,7 +4,7 @@
   <string name="help">"Axuda"</string>
   <string name="give_up">"Saír"</string>
   <string name="mode_1">"Carreira de puntos"</string>
-  <string name="mode_2">"Contrarreloxo"</string>
+  <string name="mode_2">"Contra o reloxo"</string>
   <string name="mode_3">"100 segundos"</string>
   <string name="score">"Puntuacións máis altas:"</string>
   <string name="play">"Xogar"</string>
@@ -30,20 +30,34 @@
   <string name="rate_now">"Valorar agora"</string>
   <string name="rate_later">"Máis tarde"</string>
   <string name="rate_never">"Non, grazas"</string>
-  <string name="change_difficulty">"Parece que non se che dá mal.\nGustaríache comezar un novo xogo cunha maior dificultade?"</string>
+  <string name="change_difficulty">"Parece que non se che dá mal.
+Gustaríache comezar un novo xogo cunha maior dificultade?"</string>
   <string name="change_difficulty_yes">"Incrementar a dificultade"</string>
   <string name="change_difficulty_no">"Non, está ben como está"</string>
   <string name="average_score">"Puntuacións recentes:"</string>
   <string name="help_click_continue">"-toca para continuar-"</string>
   <string name="help_click_play">"-toca para xogar-"</string>
-  <string name="help_general_1">"Aliña cando menos tres follas idénticas ×feuille1,1× ×feuille1,1× ×feuille1,1×.\n\nTroca de posición dúas follas veciñas ×feuille2,1× ×feuille3,1× para crear unha combinación e obter puntos."</string>
+  <string name="help_general_1">"Aliña cando menos tres follas idénticas ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+
+Troca de posición dúas follas lindeiras ×feuille2,1× ×feuille3,1× para crear unha combinación e obter puntos."</string>
   <string name="help_general_2">"O ourizo ×herisson_2_5,2× mostra cando tempo queda; o xogo remata cando chega á parte dereita da pantalla. Toca nel para obter unha pista!"</string>
-  <string name="help_mode1_1">"O obxectivo é obter o maior número de puntos.\n\nO tempo é limitado!"</string>
-  <string name="help_mode1_2">"A folla que carrexa o ourizo ×feuille5,1× supón un bonus de puntos.\n\nPor cada nova combinación conséguese tempo extra. O mellor xeito de gañar moito tempo é completar o nivel. Isto faise limpando as pólas da árbore de follas."</string>
-  <string name="help_mode2_1">"O obxectivo é eliminar todas as follas ×feuille2,1× da póla da árbore tan rápido como for posible.\n\nIsto conséguese aliñando cando menos tres follas idénticas ×feuille1,1× ×feuille1,1× ×feuille1,1×.\n\nTroca de posición dúas follas veciñas ×feuille2,1× ×feuille3,1× para crear unha combinación."</string>
-  <string name="help_mode2_2">"O ourizo ×herisson_2_5,2× mostra o progreso. O xogo remata cando alcanza a parte dereita da pantalla.\n\nCada combinación coincidente coa folla que carrexa ×feuille5,1× supón unha puntuación dobre."</string>
+  <string name="help_mode1_1">"O obxectivo é obter o maior número de puntos.
+
+O tempo é limitado!"</string>
+  <string name="help_mode1_2">"A folla que carrexa o ourizo ×feuille5,1× supón un bonus de puntos.
+
+Por cada nova combinación conséguese tempo extra. O mellor xeito de obter moito tempo é completar o nivel. Isto faise limpando as pólas da árbore de follas."</string>
+  <string name="help_mode2_1">"O obxectivo é eliminar todas as follas ×feuille2,1× da póla da árbore tan rápido como for posible.
+
+Isto conséguese xuntando cando menos tres follas idénticas ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+
+Troca de posición dúas follas lindeiras ×feuille2,1× ×feuille3,1× para crear unha combinación."</string>
+  <string name="help_mode2_2">"O ourizo ×herisson_2_5,2× mostra o progreso. O xogo remata cando alcanza a parte dereita da pantalla.
+
+Cada combinación coincidente coa folla que carrexa ×feuille5,1× supón unha puntuación dobre."</string>
   <string name="help_mode3_1">"A meta é conseguir o maior número de puntos en 100 segundos exactamente."</string>
   <string name="start_at_level_10">"Parece que non se che dá mal, quizais queiras iniciar o xogo no nivel 10?"</string>
   <string name="start_at_level_10_yes">"Saltar ao nivel 10!"</string>
+  <string name="support_us">"Apoianos"</string>
   <string name="about_us">"Acerca de"</string>
 </resources>

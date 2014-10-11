@@ -1,14 +1,15 @@
 [main]
 host = https://www.transifex.com
+minimum_perc = 10
 
 [heriswap.playstore-presentation]
-file_filter = external_res/documents/android/presentation_playstore/<lang>.txt
-source_file = external_res/documents/android/presentation_playstore/en.txt
+file_filter = datas/external_res/documents/android/presentation_playstore/<lang>.txt
+source_file = datas/external_res/documents/android/presentation_playstore/en.txt
 source_lang = en
 
 
 [heriswap.ingame-strings-v2]
-file_filter = res/values-<lang>/strings.xml
-source_file = res/values/strings.xml
+file_filter = android/res/values-<lang>/strings.xml
+source_file = android/res/values/strings.xml
 source_lang = en
 

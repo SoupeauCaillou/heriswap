@@ -29,12 +29,15 @@
   <string name="rate_now">"Nu beoordelen"</string>
   <string name="rate_later">"Later"</string>
   <string name="rate_never">"Nee, dank u."</string>
-  <string name="change_difficulty">"Je bent erg goed.\nWil je een nieuw spel met hogere moeilijkheidsgraad spelen?"</string>
+  <string name="change_difficulty">"Je bent erg goed.
+Wil je een nieuw spel met hogere moeilijkheidsgraad spelen?"</string>
   <string name="change_difficulty_yes">"Moeilijkheidsgraad verhogen"</string>
   <string name="change_difficulty_no">"Nee, hou het gemakkelijk"</string>
   <string name="average_score">"Gemiddelde recente scores:"</string>
   <string name="help_click_continue">"-aanraken om verder te gaan-"</string>
   <string name="help_click_play">"-aanraken om te spelen-"</string>
-  <string name="help_mode1_1">"Doel: scoor de meeste punten.\n\nHet spel heeft een tijdslimiet."</string>
+  <string name="help_mode1_1">"Doel: scoor de meeste punten.
+
+Het spel heeft een tijdslimiet."</string>
   <string name="help_mode3_1">"Doel: scoor binnen 100 seconden de meeste punten."</string>
 </resources>

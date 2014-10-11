@@ -30,18 +30,30 @@
   <string name="rate_now">"Stem nå"</string>
   <string name="rate_later">"Senere"</string>
   <string name="rate_never">"Nei takk"</string>
-  <string name="change_difficulty">"Det later til at du er veldig god.\nVil du starte på nytt med økt vanskelighetsgrad?"</string>
+  <string name="change_difficulty">"Det later til at du er veldig god.
+Vil du starte på nytt med økt vanskelighetsgrad?"</string>
   <string name="change_difficulty_yes">"Øk vanskelighetsgrad"</string>
   <string name="change_difficulty_no">"Nei, forsett som før"</string>
   <string name="average_score">"Snitt nylige poengsummer:"</string>
   <string name="help_click_continue">"-trykk for å fortsette-"</string>
   <string name="help_click_play">"-berøring starter spillet-"</string>
-  <string name="help_general_1">"Lag en rekke med minst 3 identiske løv ×feuille1,1× ×feuille1,1× ×feuille1,1×.\nBytt 2 hosliggende løv ×feuille2,1× ×feuille3,1× til en kombinasjon for å samle poeng."</string>
+  <string name="help_general_1">"Lag en rekke med minst 3 identiske løv ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+Bytt 2 hosliggende løv ×feuille2,1× ×feuille3,1× til en kombinasjon for å samle poeng."</string>
   <string name="help_general_2">"×herisson_2_5,2× viser hvor mye tid som gjenstår, spillet er over når den når høyresiden av skjermen. Trykk på ham for å få et hint!"</string>
-  <string name="help_mode1_1">"Målet er å sanke flest poeng.\n\nSpilltiden er avgrenset."</string>
-  <string name="help_mode1_2">"×feuille5,1× på rygg gir doble bonuspoeng.\n\nFor hver kombinasjon som lykkes vil ekstra tid bli lagt til. Den beste måten å tjene tid på er å fullføre et nivå. Dette gjøres ved å renske toppgreina for løv."</string>
-  <string name="help_mode2_1">"Målet er å fjerne alle bladene ×feuille2,1× fra treet så fort som mulig.\n\nDette gjøres ved å justere minst 3 identiske blader på linje ×feuille1,1××feuille1,1× ×feuille1,1×.\n\nBytt 2 hosliggende løv ×feuille2,1× ×feuille3,1× for å oppnå dette."</string>
-  <string name="help_mode2_2">"×herisson_2_5,2× viser framdrift. Spillet er ferdig når den når høyresiden av skjermen.\n\nHver kombinasjon som gjør bruk av løv av bonustypen ×feuille5,1× gir doble poeng."</string>
+  <string name="help_mode1_1">"Målet er å sanke flest poeng.
+
+Spilltiden er avgrenset."</string>
+  <string name="help_mode1_2">"×feuille5,1× på rygg gir doble bonuspoeng.
+
+For hver kombinasjon som lykkes vil ekstra tid bli lagt til. Den beste måten å tjene tid på er å fullføre et nivå. Dette gjøres ved å renske toppgreina for løv."</string>
+  <string name="help_mode2_1">"Målet er å fjerne alle bladene ×feuille2,1× fra treet så fort som mulig.
+
+Dette gjøres ved å justere minst 3 identiske blader på linje ×feuille1,1××feuille1,1× ×feuille1,1×.
+
+Bytt 2 hosliggende løv ×feuille2,1× ×feuille3,1× for å oppnå dette."</string>
+  <string name="help_mode2_2">"×herisson_2_5,2× viser framdrift. Spillet er ferdig når den når høyresiden av skjermen.
+
+Hver kombinasjon som gjør bruk av løv av bonustypen ×feuille5,1× gir doble poeng."</string>
   <string name="help_mode3_1">"Målet er å sanke flest mulig poeng i løpet av 100 sekunder"</string>
   <string name="start_at_level_10">"Det later til at du er god, kanskje du vil starte spillet på nivå 10?"</string>
   <string name="start_at_level_10_yes">"Hopper til nivå 10!"</string>
