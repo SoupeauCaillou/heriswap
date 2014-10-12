@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="continue_">"Teruskan"</string>
+  <string name="help">"Bantuan"</string>
+  <string name="give_up">"Keluar"</string>
+  <string name="mode_1">"Skor perlumbaan"</string>
+  <string name="mode_2">"Serangan masa"</string>
+  <string name="mode_3">"100 saat"</string>
+  <string name="score">"Skor tertinggi:"</string>
+  <string name="play">"Mula"</string>
+  <string name="restart">"Mula semula"</string>
+  <string name="diff_1">"Mudah"</string>
+  <string name="diff_2">"Sederhana"</string>
+  <string name="diff_3">"Sukar"</string>
+  <string name="leaderboard">"×gg_leaderboards2,1× Papan Peneraju"</string>
+  <string name="lvl">"thp"</string>
+  <string name="lvlcap">"Thp"</string>
+  <string name="enter_name">"Masukkan nama anda"</string>
+  <string name="save_name">"Simpan"</string>
+  <string name="congrats">"Skor tinggi baharu"</string>
+  <string name="reuse_name">"Atau ambil satu:"</string>
+  <string name="success">"Berjaya"</string>
+  <string name="how_to_play">"Bagaimana hendak main?"</string>
+  <string name="bonus_x2">"Bonus x2"</string>
+  <string name="objective">"Matlamat"</string>
+  <string name="level">"Tahap"</string>
+  <string name="leave_left">"daun berbaki"</string>
+  <string name="quit">"Keluar"</string>
+  <string name="please_rate_it">"Jika anda menyukai Heriswap, sila berikan penarafan padanya. Terima kasih atas  sokongan anda!"</string>
+  <string name="rate_now">"Tarafkan sekarang"</string>
+  <string name="rate_later">"Kemudian"</string>
+  <string name="rate_never">"Tidak, terima kasih"</string>
+  <string name="change_difficulty">"Anda memang hebat.
+Anda mahu mulakan permainan baharu dengan tahap kesukaran ditingkatkan?"</string>
+  <string name="change_difficulty_yes">"Tingkatkan kesukaran"</string>
+  <string name="change_difficulty_no">"Tidak, kekalkan mudah"</string>
+  <string name="average_score">"Pur. skor terkini:"</string>
+  <string name="help_click_continue">"-sentuh untuk teruskan-"</string>
+  <string name="help_click_play">"-sentuk untuk main-"</string>
+  <string name="help_general_1">"Jajar sekurang-kurangnya 3 keping daun yang serupa ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+
+Silih 2 keping daun bersebelahan ×feuille2,1× ×feuille3,1× untuk hasilkan satu gabungan dan dapatkan mata."</string>
+  <string name="help_general_2">"×herisson_2_5,2× menunjukkan berapa banyak masa berbaki, dan permainan tamat bila ia sampai ke sebelah kanan skrin. Ketik padanya  untuk dapatkan pembayang!"</string>
+  <string name="help_mode1_1">"Matlamatnya adalah mendapatkan skor
+mata yang terbanyak
+
+Masa permainan terhad."</string>
+  <string name="help_mode1_2">"×feuille5,1× diatasnya menunjukkan mata bonus.
+
+Bagi setiap gabungan yang berjaya masa tambahan ditambah. Cara terbaik mendapatkan banyak masa adalah dengan menyelesaikan tahap. Ia dilakukan dengan mengosongkan semua daun yang ada dari cabang atas"</string>
+  <string name="help_mode2_1">"Matlamatnya adalah membuang semua daun ×feuille2,1× dari pokok secepat yang mungkin.
+
+Ia boleh dilakukan dengan menjajarkan sekurang-kurangnya 3 helai daun yang serupa ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+
+Silih 2 helai daun yang bersebelahan ×feuille2,1× ×feuille3,1× untuk hasilkan satu gabungan."</string>
+  <string name="help_mode2_2">"×herisson_2_5,2× menunjukkan perkembangan permainan. Permainan tamat jika dia tiba di sebelah kanan skrin.
+
+Setiap gabungan menggunakan daun jenis bonus ×feuille5,1× mendapat skor dua kali ganda."</string>
+  <string name="help_mode3_1">"Matlamatnya adalah untuk mendapatkan lebih mata dalam tempoh 100 saat."</string>
+  <string name="start_at_level_10">"Anda memang bagus, mungkin anda boleh mulakan permainan ini pada tahap 10?"</string>
+  <string name="start_at_level_10_yes">"Lompat ke tahap 10!"</string>
+  <string name="support_us">"Sokong kami"</string>
+  <string name="about_us">"Perihal kami"</string>
+</resources>
