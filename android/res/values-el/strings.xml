@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="continue_">Συνέχεια</string>
+  <string name="help">Βοήθεια</string>
+  <string name="give_up">Έξοδος</string>
+  <string name="mode_1">Αποτέλεσμα αγώνα</string>
+  <string name="mode_2">επίθεση Χρόνος</string>
+  <string name="mode_3">100 δευτερόλεπτα</string>
+  <string name="score">Βαθμολογία:</string>
+  <string name="play">Έναρξη</string>
+  <string name="restart">Επανεκκίνηση</string>
+  <string name="diff_1">Εύκολα</string>
+  <string name="diff_2">Μεσαία</string>
+  <string name="diff_3">Δυσκολα</string>
+  <string name="leaderboard">×gg_leaderboards2,1× Πίνακας κατάταξης</string>
+  <string name="lvl">lvl</string>
+  <string name="lvlcap">Lvl</string>
+  <string name="enter_name">Εισάγετε το όνομα σας</string>
+  <string name="save_name">Αποθήκευση</string>
+  <string name="congrats">Νέα υψηλή βαθμολογία!</string>
+  <string name="reuse_name">Ή επιλέξτε ένα:</string>
+  <string name="success">Επιτυχία</string>
+  <string name="how_to_play">Πώς παίζετε;</string>
+  <string name="bonus_x2">Μπόνους x2</string>
+  <string name="objective">Στόχος</string>
+  <string name="level">Επίπεδο</string>
+  <string name="leave_left">φύλλα</string>
+  <string name="quit">Εξοδος</string>
+  <string name="please_rate_it">Αν σας αρέσει να χρησιμοποιείτε το Heriswap, αφιερώστε λίγο χρόνο για να το αξιολογήσετε. Ευχαριστούμε για την υποστήριξή σας!</string>
+  <string name="rate_now">Βαθμολογήστε τώρα</string>
+  <string name="rate_later">Αργότερα</string>
+  <string name="rate_never">Όχι, ευχαριστώ</string>
+  <string name="change_difficulty">Είστε πραγματικά πολυ καλος παικτης.
+Θέλετε να ξεκινήσετε ένα νέο παιχνίδι με αυξημένη δυσκολία;</string>
+  <string name="change_difficulty_yes">Αύξηση δυσκολίας</string>
+  <string name="change_difficulty_no">Όχι, να το κρατήσετε εύκολο</string>
+  <string name="average_score">Πρόσφατες βαθμολογίες avg:</string>
+  <string name="help_click_continue">-αγγίξτε για να συνεχίσετε-</string>
+  <string name="help_click_play">-Αγγίξτε για αναπαραγωγή-</string>
+  <string name="help_general_1">Ευθυγράμμιση τουλάχιστον 3 ίδια φύλλων × feuille1,1 × × × × feuille1,1 feuille1,1 × .
+
+Εναλλαγή 2 γειτονικά φύλλα × feuille2,1 × × × feuille3,1 να δημιουργήσετε έναν συνδυασμό και κερδίστε πόντους.</string>
+  <string name="help_general_2">Η × × herisson_2_5,2 δείχνει πώς απομένει πολύς χρόνος, και το παιχνίδι τελειώνει όταν φτάσει δεξιά άκρη της οθόνης. Αγγίξτε αυτόν να πάρει μια υπόδειξη!</string>
+  <string name="help_mode1_1">Ο στόχος είναι να σκοράρετε τους περισσότερους ποντους.
+
+Το παιχνίδι περιορίζεται χρονικά.</string>
+  <string name="help_mode1_2">Η × × feuille5,1 για μπόνους βαθμολογίες.
+
+Για κάθε επιτυχημένο συνδυασμό προστίθεται επιπλέον χρόνος. Ο καλύτερος τρόπος για να κερδίσετε πολύ χρόνο είναι να ολοκληρώσετε ένα επίπεδο. Αυτό γίνεται με τον καθαρισμό του επάνω κλάδου.</string>
+  <string name="help_mode2_1">Ο στόχος είναι να αφαιρέσετε όλα τα φύλλα × × feuille2,1 από το δέντρο όσο πιο γρήγορα γινεται.
+
+Αυτό γίνεται με την ευθυγράμμιση τουλάχιστον 3 ίδιων φύλλων × feuille1,1 × × × × feuille1,1 feuille1,1 × .
+
+Εναλλαγή 2 γειτονικών φύλλων × feuille2,1 × × × feuille3,1 να δημιουργήσετε ένα συνδυασμό.</string>
+  <string name="help_mode2_2">Η × × herisson_2_5,2 δείχνει την πρόοδο. Το παιχνίδι έχει τελειώσει όταν φτάσει δεξιά στην οθόνη.
+
+Κάθε συνδυασμός χρησιμοποιώντας μπόνους φύλλα × × feuille5,1 σκοράρει διπλά.</string>
+  <string name="help_mode3_1">Ο στόχος είναι να συγκεντρώσετε την μεγαλύτερη βαθμολογία σε ακριβώς 100 δευτερόλεπτα.</string>
+  <string name="start_at_level_10">Φαίνεται πς ειστε καλος παικτης, θέλετε να ξεκινήσετε το παιχνίδι στο επίπεδο 10;</string>
+  <string name="start_at_level_10_yes">Μετάβαση στο επίπεδο 10!</string>
+  <string name="support_us">Υποστηρίξτε μας</string>
+  <string name="about_us">Σχετικά με εμάς</string>
+</resources>

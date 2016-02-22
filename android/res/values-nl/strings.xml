@@ -1,43 +1,63 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="continue_">"Doorgaan"</string>
-  <string name="help">"Hulp"</string>
-  <string name="give_up">"Stoppen"</string>
-  <string name="mode_1">"Scorerace"</string>
-  <string name="mode_2">"Tijdrace"</string>
-  <string name="mode_3">"100 seconden"</string>
-  <string name="score">"Beste scoren:"</string>
-  <string name="play">"Spelen"</string>
-  <string name="restart">"Opnieuw"</string>
-  <string name="diff_1">"Amateur"</string>
-  <string name="diff_2">"Gemiddeld"</string>
-  <string name="diff_3">"Ervaren"</string>
-  <string name="lvl">"lvl"</string>
-  <string name="lvlcap">"Lvl"</string>
-  <string name="enter_name">"Voer je naam in"</string>
-  <string name="save_name">"Opslaan"</string>
-  <string name="congrats">"Nieuwe beste score!"</string>
-  <string name="reuse_name">"Of een van de lijst"</string>
-  <string name="success">"Succes"</string>
-  <string name="how_to_play">"Hoe moet je spelen?"</string>
-  <string name="bonus_x2">"Bonus x2"</string>
-  <string name="objective">"Doel"</string>
-  <string name="level">"Level"</string>
-  <string name="leave_left">"resterende bladeren"</string>
-  <string name="quit">"Afsluiten"</string>
-  <string name="please_rate_it">"Als je Heriswap leuk vindt, neem dan even de tijd om het spel te beoordelen. Bedankt voor je steun!"</string>
-  <string name="rate_now">"Nu beoordelen"</string>
-  <string name="rate_later">"Later"</string>
-  <string name="rate_never">"Nee, dank u."</string>
-  <string name="change_difficulty">"Je bent erg goed.
-Wil je een nieuw spel met hogere moeilijkheidsgraad spelen?"</string>
-  <string name="change_difficulty_yes">"Moeilijkheidsgraad verhogen"</string>
-  <string name="change_difficulty_no">"Nee, hou het gemakkelijk"</string>
-  <string name="average_score">"Gemiddelde recente scores:"</string>
-  <string name="help_click_continue">"-aanraken om verder te gaan-"</string>
-  <string name="help_click_play">"-aanraken om te spelen-"</string>
-  <string name="help_mode1_1">"Doel: scoor de meeste punten.
+  <string name="continue_">Doorgaan</string>
+  <string name="help">Hulp</string>
+  <string name="give_up">Afsluiten</string>
+  <string name="mode_1">Scorerace</string>
+  <string name="mode_2">Tijdrace</string>
+  <string name="mode_3">100 seconden</string>
+  <string name="score">Hoogste scores:</string>
+  <string name="play">Starten</string>
+  <string name="restart">Herstarten</string>
+  <string name="diff_1">Makkelijk</string>
+  <string name="diff_2">Redelijk moeilijk</string>
+  <string name="diff_3">Moeilijk</string>
+  <string name="leaderboard">×gg_leaderboards2,1× Klassement</string>
+  <string name="lvl">lvl</string>
+  <string name="lvlcap">Lvl</string>
+  <string name="enter_name">Vul uw naam in</string>
+  <string name="save_name">Opslaan</string>
+  <string name="congrats">Nieuwe hoogste score!</string>
+  <string name="reuse_name">Of kies er één uit:</string>
+  <string name="success">Succes</string>
+  <string name="how_to_play">Hoe speel ik dit?</string>
+  <string name="bonus_x2">Bonus x2</string>
+  <string name="objective">Doel</string>
+  <string name="level">Level</string>
+  <string name="leave_left">resterende bladeren</string>
+  <string name="quit">Afsluiten</string>
+  <string name="please_rate_it">Als u Heriswap leuk vindt, neem dan even de tijd om het spel te waarderen. Bedankt voor uw steun!</string>
+  <string name="rate_now">Nu waarderen</string>
+  <string name="rate_later">Later</string>
+  <string name="rate_never">Nee, bedankt</string>
+  <string name="change_difficulty">U lijkt het erg goed te doen.
+Wilt u een nieuw spel starten met een hogere moeilijkheidsgraad?</string>
+  <string name="change_difficulty_yes">Moeilijkheidsgraad verhogen</string>
+  <string name="change_difficulty_no">Nee, houd het gemakkelijk</string>
+  <string name="average_score">Gemiddelde recente scores:</string>
+  <string name="help_click_continue">-aanraken om door te gaan-</string>
+  <string name="help_click_play">-aanraken om te spelen-</string>
+  <string name="help_general_1">Minimaal 3 identieke bladeren uitlijnen feuille1,1× ×feuille1,1× ×feuille1,1×.
 
-Het spel heeft een tijdslimiet."</string>
-  <string name="help_mode3_1">"Doel: scoor binnen 100 seconden de meeste punten."</string>
+Verwissel 2 aan elkaar grenzende bladeren ×feuille2,1× ×feuille3,1× om een combinatie te creëren en punten te verdienen.</string>
+  <string name="help_general_2">De ×herisson_2_5,2× toont de resterende tijd. Wanneer de rechterkant van het scherm wordt bereikt is het game over. Raak hem aan om een hint te krijgen!</string>
+  <string name="help_mode1_1">Het doel is om de meeste punten te scoren.
+
+Het spel heeft een tijdslimiet.</string>
+  <string name="help_mode1_2">De ×feuille5,1× op zijn rug scoort bonuspunten.
+
+Bij elke succesvolle combinatie wordt er extra tijd toegevoegd. De beste manier om veel tijd de verdienen is door level te voltooien. Dit kan worden gedaan door de bovenste tak te ontdoen van al zijn bladeren.</string>
+  <string name="help_mode2_1">Het doel is om zo snel mogelijk alle bladeren ×feuille2,1× van de boom te verwijderen.
+
+Dit kan worden gedaan door minimaal 3 identieke bladeren ×feuille1,1× ×feuille1,1× ×feuille1,1× uit te lijnen.
+
+Verwissel 2 aan elkaar grenzende bladeren xfeuille2,1× ×feuille3,1× om een combinatie te creëren.</string>
+  <string name="help_mode2_2">De ×herisson_2_5,2× toont de voortgang. Het spel is afgerond wanneer de rechterkant van het scherm wordt bereikt.
+
+Elke combinatie met bonusbladeren ×feuille5,1× zorgt voor een dubbele score.</string>
+  <string name="help_mode3_1">Het doel is om binnen 100 seconden de meeste punten te scoren.</string>
+  <string name="start_at_level_10">U lijkt het erg goed te doen. Wilt u een nieuw spel starten op level 10?</string>
+  <string name="start_at_level_10_yes">Breng me naar level 10!</string>
+  <string name="support_us">Ondersteun ons</string>
+  <string name="about_us">Over ons</string>
 </resources>

@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="continue_">Kontynuuj</string>
+  <string name="help">Pomoc</string>
+  <string name="give_up">Zakończ</string>
+  <string name="mode_1">Wyścig o wynik</string>
+  <string name="mode_2">Atak czasu</string>
+  <string name="mode_3">100 sekund</string>
+  <string name="score">Najlepsze wyniki:</string>
+  <string name="play">Start</string>
+  <string name="restart">Restart</string>
+  <string name="diff_1">Łatwy</string>
+  <string name="diff_2">Średni</string>
+  <string name="diff_3">Trudny</string>
+  <string name="leaderboard">Tabela liderów ×gg_leaderboards2,1×</string>
+  <string name="lvl">lvl</string>
+  <string name="lvlcap">Lvl</string>
+  <string name="enter_name">Wpisz twoje imię</string>
+  <string name="save_name">Zapisz</string>
+  <string name="congrats">Nowy wysoki wynik!</string>
+  <string name="reuse_name">Albo wybierz jeden:</string>
+  <string name="success">Sukces</string>
+  <string name="how_to_play">Jak grać?</string>
+  <string name="bonus_x2">Bonus x2</string>
+  <string name="objective">Cel</string>
+  <string name="level">Poziom</string>
+  <string name="leave_left">pozostałych liści</string>
+  <string name="quit">Wyjdź</string>
+  <string name="please_rate_it">Jeśli podoba ci się Heriswap, poświęć chwilę, aby nas ocenić. Dzięki za wsparcie!</string>
+  <string name="rate_now">Oceń teraz</string>
+  <string name="rate_later">Później</string>
+  <string name="rate_never">Nie, dziękuję</string>
+  <string name="change_difficulty">Wydajesz się być coraz lepszy.
+Czy chcesz rozpocząć nową grę o zwiększonej trudności?</string>
+  <string name="change_difficulty_yes">Zwiększ trudność</string>
+  <string name="change_difficulty_no">Nie, spokojnie</string>
+  <string name="average_score">Najnowsze wyniki:</string>
+  <string name="help_click_continue">-dotknij, aby kontynuować-</string>
+  <string name="help_click_play">-dotknij, aby grać-</string>
+  <string name="help_general_1">Dopasuj co najmniej 3 identyczne liście ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+
+Zamień dwa sąsiednie liście ×feuille2,1× ×feuille3,1× aby stworzyć połączenie i zdobyć punkty.</string>
+  <string name="help_general_2">×herisson_2_5,2× pokazuje ile czasu pozostało, a gra kończy się, gdy osiągnie on prawą krawędź ekranu. Dotknij go, aby uzyskać podpowiedź!</string>
+  <string name="help_mode1_1">Celem jest, zdobyć jak najwięcej punktów..
+
+Gra jest ograniczona w czasie.</string>
+  <string name="help_mode1_2">×feuille5,1× zdobywa punktów bonusowych.
+
+Za każdym udanym połączeniem dodawany jest dodatkowy czas. Aby otrzymać dużo czasu, najlepiej jest ukończyć poziom. Robisz to poprzez usunięcie wszystkich liści z górnej gałęzi.</string>
+  <string name="help_mode2_1">Celem jest, usunąć wszystkie liście ×feuille2,1× z drzewa w najkrótszym czasie.
+
+Robisz to poprzez dopasowanie co najmniej 3 identycznych liści ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+
+Zamień dwa sąsiednie liście ×feuille2,1× ×feuille3,1× aby stworzyć połączenie.</string>
+  <string name="help_mode2_2">×herisson_2_5,2× pokazuje postęp. Gra kończy się, gdy osiągnie prawą krawędź ekranu.
+
+Każde połączenie z liści bonusowych ×feuille5,1× liczy się podwójnie.</string>
+  <string name="help_mode3_1">Celem jest, zdobyć jak najwięcej punktów w dokładnie 100 sekund.</string>
+  <string name="start_at_level_10">Wydajesz się być dobry, może chcesz rozpocząć nową grę na poziomie 10?</string>
+  <string name="start_at_level_10_yes">Skocz do poziomu 10!</string>
+  <string name="support_us">Wesprzyj nas</string>
+  <string name="about_us">O nas</string>
+</resources>
