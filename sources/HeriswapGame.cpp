@@ -175,6 +175,55 @@ bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
     }
 }
 
+void HeriswapGame::sacInitFromGameThread() {
+    Game::sacInitFromGameThread();
+
+    HeriswapGridSystem::CreateInstance();
+    TwitchSystem::CreateInstance();
+    BackgroundSystem::CreateInstance();
+
+    LOGI("\t- Init sceneStateMachine...");
+    sceneStateMachine.registerState(Scene::CountDown, Scene::CreateCountDownSceneHandler(this));
+    sceneStateMachine.registerState(Scene::Spawn, Scene::CreateSpawnSceneHandler(this));
+    sceneStateMachine.registerState(Scene::UserInput, Scene::CreateUserInputSceneHandler(this));
+    sceneStateMachine.registerState(Scene::Delete, Scene::CreateDeleteSceneHandler(this));
+    sceneStateMachine.registerState(Scene::Fall, Scene::CreateFallSceneHandler(this));
+    sceneStateMachine.registerState(Scene::LevelChanged, Scene::CreateLevelChangedSceneHandler(this));
+    sceneStateMachine.registerState(Scene::Pause, Scene::CreatePauseSceneHandler(this));
+    sceneStateMachine.registerState(Scene::MainMenu, Scene::CreateMainMenuSceneHandler(this));
+    sceneStateMachine.registerState(Scene::ModeMenu, Scene::CreateModeMenuSceneHandler(this));
+    sceneStateMachine.registerState(Scene::EndGame, Scene::CreateEndGameSceneHandler(this));
+    sceneStateMachine.registerState(Scene::Logo, Scene::CreateLogoSceneHandler(this));
+    sceneStateMachine.registerState(Scene::Help, Scene::CreateHelpSceneHandler(this));
+    sceneStateMachine.registerState(Scene::RateIt, Scene::CreateRateItSceneHandler(this));
+    sceneStateMachine.registerState(Scene::ElitePopup, Scene::CreateElitePopupSceneHandler(this));
+    sceneStateMachine.registerState(Scene::AboutUsPopup, Scene::CreateAboutUsPopupSceneHandler(this));
+    sceneStateMachine.registerState(Scene::StartAt10, Scene::CreateStartAt10SceneHandler(this));
+
+    Color::nameColor(Color(3.0f / 255.0f, 99.0f / 255.f, 71.0f / 255.f), HASH("green", 0x0));
+
+    LOGI("\t- Load FX...");
+    theRenderingSystem.effectLibrary.load("desaturate.fs");
+
+    LOGI("\t- Load animations...");
+    // Animations
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_1", "herisson_1");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_2", "herisson_2");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_3", "herisson_3");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_4", "herisson_4");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_5", "herisson_5");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_6", "herisson_6");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_7", "herisson_7");
+    theAnimationSystem.loadAnim(renderThreadContext->assetAPI, "herisson_8", "herisson_8");
+
+    LOGI("\t- Define vibrateAPI...");
+    theButtonSystem.vibrateAPI = gameThreadContext->vibrateAPI;
+
+    Game::buildOrderedSystemsToUpdateList();
+
+    LOGI("SAC engine initialisation done.");
+}
+
 void HeriswapGame::quickInit() {
     // sceneStateMachine.reEnterCurrentState();
 }
