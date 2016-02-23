@@ -88,7 +88,7 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
     AboutUsPopupScene(HeriswapGame* g) : StateHandler<Scene::Enum>("aboutus_popup_scene"), game(g) {}
 
     void setup(AssetAPI*) override {
-        const Color green(HASH("green", 0x0));
+        const Color green(HASH("green", 0x615465c4));
 
         images[Image::Background] = theEntityManager.CreateEntityFromTemplate("aboutus/background");
         images[Image::Wolf] = theEntityManager.CreateEntityFromTemplate("aboutus/wolf");

@@ -92,7 +92,7 @@ struct ModeMenuScene : public StateHandler<Scene::Enum> {
     }
 
     void setup(AssetAPI*) override {
-        const Color green(HASH("green", 0x0));
+        const Color green(HASH("green", 0x615465c4));
 
         title = theEntityManager.CreateEntityFromTemplate("modemenu/title");
         // Creating text entities
