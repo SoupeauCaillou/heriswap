@@ -204,7 +204,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
     sceneStateMachine.registerState(Scene::AboutUsPopup, Scene::CreateAboutUsPopupSceneHandler(this));
     sceneStateMachine.registerState(Scene::StartAt10, Scene::CreateStartAt10SceneHandler(this));
 
-    Color::nameColor(Color(3.0f / 255.0f, 99.0f / 255.f, 71.0f / 255.f), "green");
+    Color::nameColor(Color(3.0f / 255.0f, 99.0f / 255.f, 71.0f / 255.f), HASH("green", 0x0));
 
     LOGI("\t- Load FX...");
     theRenderingSystem.effectLibrary.load("desaturate.fs");

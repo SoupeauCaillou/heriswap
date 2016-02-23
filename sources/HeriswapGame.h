@@ -49,26 +49,26 @@ struct SavedState;
 
 class HeriswapGame : public Game {
 	public:
-		HeriswapGame();
-        ~HeriswapGame();
+    HeriswapGame();
+    ~HeriswapGame();
 
-        bool wantsAPI(ContextAPI::Enum api) const;
+    bool wantsAPI(ContextAPI::Enum api) const override;
 
-		void sacInit(int windowW, int windowH);
-		void init(const uint8_t* in = 0, int size = 0);
-		void quickInit();
-		void tick(float dt);
-		void togglePause(bool activate);
-		void toggleShowCombi(bool enabled);
-		void setMode();
-		int saveState(uint8_t** out);
+    void sacInit(int windowW, int windowH);
+    void init(const uint8_t* in = 0, int size = 0) override;
+    void quickInit() override;
+    void tick(float dt) override;
+    void togglePause(bool activate) override;
+    void toggleShowCombi(bool enabled);
+    void setMode();
+    int saveState(uint8_t** out) override;
 
-        void backPressed();
-        bool willConsumeBackEvent();
+    void backPressed() override;
+    bool willConsumeBackEvent() override;
 
-        bool isLandscape() const override { return false; }
+    bool isLandscape() const override { return false; }
 
-		static bool inGameState(Scene::Enum state);
+        static bool inGameState(Scene::Enum state);
 		static bool pausableState(Scene::Enum state);
 		static glm::vec2 GridCoordsToPosition(int i, int j, int s);
 		static glm::vec2 CellSize(int gridSize, int cellType);

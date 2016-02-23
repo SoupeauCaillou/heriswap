@@ -18,10 +18,10 @@
     along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #pragma once
 
 #include "systems/System.h"
+#include "base/Interval.h"
 
 struct BackgroundComponent {
     BackgroundComponent() : speed(0), group(0), enable(false), visible(false) {}
