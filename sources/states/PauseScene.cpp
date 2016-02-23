@@ -57,25 +57,25 @@ struct PauseScene : public StateHandler<Scene::Enum> {
     }
 
     void setup(AssetAPI*) override {
-        const Color green("green");
+        const Color green(HASH("green", 0x0));
 
-        //Restart Text
+        // Restart Text
         eRestart = theEntityManager.CreateEntityFromTemplate("pause/eRestart");
         TEXT(eRestart)->text = game->gameThreadContext->localizeAPI->text("continue_");
 
-        //Restart button
+        // Restart button
         bRestart = theEntityManager.CreateEntityFromTemplate("pause/bRestart");
 
-        //Help Text
+        // Help Text
         eHelp = theEntityManager.CreateEntityFromTemplate("pause/eHelp");
         TEXT(eHelp)->text = game->gameThreadContext->localizeAPI->text("help");
 
-        //Help button
+        // Help button
         bHelp = theEntityManager.CreateEntityFromTemplate("pause/bHelp");
 
-        //Abort button
+        // Abort button
         bAbort = theEntityManager.CreateEntityFromTemplate("pause/bAbort");
-        //Abort text
+        // Abort text
         eAbort = theEntityManager.CreateEntityFromTemplate("pause/eAbort");
         TEXT(eAbort)->text = game->gameThreadContext->localizeAPI->text("give_up");
     }

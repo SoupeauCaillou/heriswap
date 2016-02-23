@@ -97,3 +97,8 @@ class HeriswapGame : public Game {
 
         void initSerializer(Serializer& s) const;
 };
+
+#define MEMPCPY(type, a, b, s) do { \
+        a = (type)memcpy(a, b, s); \
+        a += s; \
+    } while(false)

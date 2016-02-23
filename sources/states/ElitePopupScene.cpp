@@ -55,7 +55,7 @@ struct ElitePopupScene : public StateHandler<Scene::Enum> {
     }
 
     void setup(AssetAPI*) override {
-        const Color green("green");
+        const Color green(HASH("green", 0x0));
         background = theEntityManager.CreateEntityFromTemplate("popup/background");
 
         text = theEntityManager.CreateEntityFromTemplate("popup/text");

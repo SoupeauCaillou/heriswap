@@ -63,6 +63,8 @@
 #include "systems/TransformationSystem.h"
 #include "systems/ZSQDSystem.h"
 
+#include "util/SerializerProperty.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtx/constants.hpp>
 
@@ -173,10 +175,13 @@ bool HeriswapGame::wantsAPI(ContextAPI::Enum api) const {
     }
 }
 
-void HeriswapGame::quickInit(){
-//    sceneStateMachine.reEnterCurrentState();
+void HeriswapGame::quickInit() {
+    // sceneStateMachine.reEnterCurrentState();
 }
 
+#if 1
+#warning FIXME
+#else
 void HeriswapGame::sacInit(int windowW, int windowH) {
     LOGI("SAC engine initialisation begins:");
     Game::sacInit(windowW, windowH);
@@ -227,6 +232,7 @@ void HeriswapGame::sacInit(int windowW, int windowH) {
 
     LOGI("SAC engine initialisation done.");
 }
+#endif
 
 void HeriswapGame::init(const uint8_t* in, int size) {
     LOGI("HeriswapGame initialisation begins...");

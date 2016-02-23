@@ -47,6 +47,8 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include "base/Profiler.h"
+#include "util/Random.h"
 
 static float initialHerissonPosition(Entity herisson) {
     return -PlacementHelper::ScreenSize.x * 0.5f + TRANSFORM(herisson)->size.x * 0.25f;
@@ -214,7 +216,7 @@ Entity GameModeManager::createAndAddLeave(int type, const glm::vec2& position, f
     TRANSFORM(e)->position = position;
     TRANSFORM(e)->rotation = rotation;
 
-    TRANSFORM(e)->z = glm::lerp(DL_LeafMin, DL_LeafMax, glm::linearRand(0.f, 1.f));
+    TRANSFORM(e)->z = glm::lerp(DL_LeafMin, DL_LeafMax, Random::Float(0.f, 1.f));
 
     return e;
 }

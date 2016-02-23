@@ -55,7 +55,7 @@ struct HelpScene : public StateHandler<Scene::Enum> {
     }
 
     void setup(AssetAPI*) override {
-        const Color green("green");
+        const Color green(HASH("green", 0x0));
 
         title = theEntityManager.CreateEntityFromTemplate("help/title");
 

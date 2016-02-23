@@ -83,7 +83,7 @@ struct MainMenuScene : public StateHandler<Scene::Enum> {
     }
 
     void setup(AssetAPI*) override {
-        const Color green("green");
+        const Color green(HASH("green", 0x0));
 
         char tmp[64];
         std::stringstream a;

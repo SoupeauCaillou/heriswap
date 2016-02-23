@@ -85,15 +85,13 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
     Entity buttons[Button::Count];
     Entity texts[Text::Count];
 
-    AboutUsPopupScene(HeriswapGame* g) : StateHandler<Scene::Enum>("aboutus_popup_scene"), game(g) {
-    }
+    AboutUsPopupScene(HeriswapGame* g) : StateHandler<Scene::Enum>("aboutus_popup_scene"), game(g) {}
 
     void setup(AssetAPI*) override {
-        const Color green("green");
+        const Color green(HASH("green", 0x0));
 
         images[Image::Background] = theEntityManager.CreateEntityFromTemplate("aboutus/background");
         images[Image::Wolf] = theEntityManager.CreateEntityFromTemplate("aboutus/wolf");
-
 
         texts[Text::SupportUs] = theEntityManager.CreateEntityFromTemplate("aboutus/supportus_text");
         texts[Text::AboutUs] = theEntityManager.CreateEntityFromTemplate("aboutus/aboutus_text");

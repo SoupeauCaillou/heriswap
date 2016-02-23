@@ -18,11 +18,10 @@
     along with Heriswap.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "HeriswapGridSystem.h"
 
 #include <iostream>
-
+#include "util/SerializerProperty.h"
 #include "systems/System.h"
 #include "systems/TransformationSystem.h"
 #include "systems/RenderingSystem.h"

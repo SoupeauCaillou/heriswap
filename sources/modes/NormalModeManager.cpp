@@ -39,6 +39,7 @@
 #include <glm/glm.hpp>
 
 #include <sstream>
+#include "base/Profiler.h"
 
 #define SKY_SPEED 2.3
 #define DECOR2_SPEED 1.6
