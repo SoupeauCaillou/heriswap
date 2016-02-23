@@ -488,8 +488,6 @@ void HeriswapGame::tick(float dt) {
     }
 
     //update music
-    LOGT_EVERY_N(30, "FIX ME");
-    #if 0
     if (!theMusicSystem.isMuted()) {
         const Scene::Enum state = sceneStateMachine.getCurrentState();
         //si on est en jeu et/ou  fin de musiques, charger de nouvelles musiques
@@ -560,7 +558,6 @@ void HeriswapGame::tick(float dt) {
             }
         }
     }
-    #endif
 
     PROFILE("Game", "Tick", EndEvent);
 
