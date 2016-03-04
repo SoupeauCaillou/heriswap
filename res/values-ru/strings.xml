@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="continue_">Продолжить</string>
+  <string name="help">Помощь</string>
+  <string name="give_up">Выход</string>
+  <string name="mode_1">Гонка на счет</string>
+  <string name="mode_2">Время атакует</string>
+  <string name="mode_3">100 секунд</string>
+  <string name="score">Рекорды:</string>
+  <string name="play">Начать</string>
+  <string name="restart">Повторить</string>
+  <string name="diff_1">Легко</string>
+  <string name="diff_2">Средне</string>
+  <string name="diff_3">Сложно</string>
+  <string name="leaderboard">×gg_leaderboards2,1× Список лидеров</string>
+  <string name="lvl">lvl</string>
+  <string name="lvlcap">Lvl</string>
+  <string name="enter_name">Введите ваше имя</string>
+  <string name="save_name">Сохранить</string>
+  <string name="congrats">Новый рекорд!</string>
+  <string name="reuse_name">Или выбрать один:</string>
+  <string name="success">Удачно</string>
+  <string name="how_to_play">Как играть?</string>
+  <string name="bonus_x2">Бонус x2</string>
+  <string name="objective">Цель</string>
+  <string name="level">Уровень</string>
+  <string name="leave_left">листков осталось</string>
+  <string name="quit">Выход</string>
+  <string name="please_rate_it">Если вам нравится использовать Heriswap, пожалуйста, оцените его, это займет немного времени. Спасибо за поддержку!</string>
+  <string name="rate_now">Оценить</string>
+  <string name="rate_later">Поом</string>
+  <string name="rate_never">Нет, спасибо</string>
+  <string name="change_difficulty">Кажется, вы действительно хороши.
+Хотите начать новою игру с увеличенным уровнем сложности?</string>
+  <string name="change_difficulty_yes">Увеличить сложность</string>
+  <string name="change_difficulty_no">Нет, оставим также</string>
+  <string name="average_score">Последние оценки avg:</string>
+  <string name="help_click_continue">-нажмите для продолжения-</string>
+  <string name="help_click_play">-нажмите, чтобы начать-</string>
+  <string name="help_general_1">Выстраивайте в линию по крайней мере 3 одинаковый листка ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+
+Сдвиньте 2 соседних листка ×feuille2,1× ×feuille3,1×, чтобы сделать комбинацию и заработать очки.</string>
+  <string name="help_general_2">×herisson_2_5,2× показывает сколько осталось времени, и игра закончится, когда он достигнет правого края экрана. Нажмите на него, чтобы получить подсказку!</string>
+  <string name="help_mode1_1">Цель - набрать как можно больше очков.
+
+Время игры ограничено.</string>
+  <string name="help_mode1_2">×feuille5,1× сзади считает дополнительные очки.
+
+Для каждой правильно сложенной комбинации добавляется дополнительное время. Лучший способ заработать много времени - пройти уровень. Чтобы сделать это, вы должны очистить верхушку ветки от всех листьев.</string>
+  <string name="help_mode2_1">Цель - удалить как можно быстрее все листья ×feuille2,1× с дерева.
+
+Это можно сделать, выстраивая в линию 3 одинаковых листка ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+
+Сдвиньте 2 соседних листка ×feuille2,1× ×feuille3,1×, чтобы сделать комбинацию.</string>
+  <string name="help_mode2_2">×herisson_2_5,2× показывает прогресс. Игра завершается, когда он достигает правого края экрана.
+
+Каждая комбинация, использующая тип бонуса с листьями ×feuille5,1×, удваивает очки.</string>
+  <string name="help_mode3_1">Цель - набрать как можно больше очков всего лишь в 100 секунд</string>
+  <string name="start_at_level_10">Кажется, вы хороший игрок, может быть вы хотели бы начать игру на уровне 10 ?</string>
+  <string name="start_at_level_10_yes">Перейти на 10 уровень!</string>
+  <string name="support_us">Помочь нам</string>
+  <string name="about_us">О нас</string>
+</resources>

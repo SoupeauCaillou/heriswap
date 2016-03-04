@@ -1,39 +1,62 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="continue_">"Continuar"</string>
-  <string name="help">"Ayuda"</string>
-  <string name="give_up">"Abandonar"</string>
-  <string name="mode_1">"Carrera de puntos"</string>
-  <string name="mode_2">"Contrarreloj"</string>
-  <string name="mode_3">"100 segundos"</string>
-  <string name="score">"Mejores puntuaciones:"</string>
-  <string name="play">"Jugar"</string>
-  <string name="restart">"Jugar de nuevo"</string>
-  <string name="diff_1">"Facil"</string>
-  <string name="diff_2">"Intermedio"</string>
-  <string name="diff_3">"Dificil"</string>
-  <string name="lvl">"nvl"</string>
-  <string name="lvlcap">"Nvl"</string>
-  <string name="enter_name">"Escribe tu nombre"</string>
-  <string name="save_name">"Guardar"</string>
-  <string name="congrats">"¡Nuevo récord!"</string>
-  <string name="reuse_name">"O elige uno:"</string>
-  <string name="success">"Éxito"</string>
-  <string name="how_to_play">"¿Como se juega?"</string>
-  <string name="bonus_x2">"Puntos x2"</string>
-  <string name="objective">"Objetivo"</string>
-  <string name="level">"Nivel"</string>
-  <string name="leave_left">"hojas que quedan"</string>
-  <string name="quit">"Dejar"</string>
-  <string name="please_rate_it">"Si te gusta Heriswap, dedica un momento a valorarlo. ¡Gracias por tu apoyo!"</string>
-  <string name="rate_now">"¡Valóralo!"</string>
-  <string name="rate_later">"Más tarde"</string>
-  <string name="rate_never">"Nunca"</string>
-  <string name="change_difficulty">"Usted es muy bueno, quereis aumentar la difficultad ?"</string>
-  <string name="change_difficulty_yes">"Aumentar dificultad"</string>
-  <string name="change_difficulty_no">"No gracias"</string>
-  <string name="average_score">"Promedio de las últimas puntuaciones:"</string>
-  <string name="help_click_continue">"-toque para continuar-"</string>
-  <string name="help_click_play">"-toque para jugar-"</string>
-  <string name="help_mode3_1">"La meta es obtener la mayor cantidad de puntos en exactamente 100 segundos."</string>
+  <string name="continue_">Continuar</string>
+  <string name="help">Ayuda</string>
+  <string name="give_up">Abandonar</string>
+  <string name="mode_1">Carrera de puntos</string>
+  <string name="mode_2">Contrarreloj</string>
+  <string name="mode_3">100 segundos</string>
+  <string name="score">Mejores puntuaciones:</string>
+  <string name="play">Jugar</string>
+  <string name="restart">Jugar de nuevo</string>
+  <string name="diff_1">Fácil</string>
+  <string name="diff_2">Intermedio</string>
+  <string name="diff_3">Difícil</string>
+  <string name="leaderboard">×gg_leaderboards2,1× Paseo de la fama</string>
+  <string name="lvl">nvl</string>
+  <string name="lvlcap">Nvl</string>
+  <string name="enter_name">Escribe tu nombre</string>
+  <string name="save_name">Guardar</string>
+  <string name="congrats">¡Nuevo récord!</string>
+  <string name="reuse_name">O elige uno:</string>
+  <string name="success">Éxito</string>
+  <string name="how_to_play">¿Cómo se juega?</string>
+  <string name="bonus_x2">Puntos x2</string>
+  <string name="objective">Objetivo</string>
+  <string name="level">Nivel</string>
+  <string name="leave_left">hojas que quedan</string>
+  <string name="quit">Dejar</string>
+  <string name="please_rate_it">Si te gusta Heriswap, dedica un momento a valorarlo. ¡Gracias por tu apoyo!</string>
+  <string name="rate_now">¡Valóralo!</string>
+  <string name="rate_later">Más tarde</string>
+  <string name="rate_never">Nunca</string>
+  <string name="change_difficulty">Pareces muy bueno, ¿quieres empezar un nuevo juego aumentando la dificultad?</string>
+  <string name="change_difficulty_yes">Aumentar dificultad</string>
+  <string name="change_difficulty_no">No, gracias</string>
+  <string name="average_score">Promedio de las últimas puntuaciones:</string>
+  <string name="help_click_continue">-toca para continuar-</string>
+  <string name="help_click_play">-toca para jugar-</string>
+  <string name="help_general_1">Alinea al menos 3 hojas idénticas ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+
+Intercambia 2 hojas vecinas ×feuille2,1× ×feuille3,1× para crear una combinación y ganar puntos.</string>
+  <string name="help_general_2">El ×herisson_2_5,2× muestra cuánto tiempo queda, y el juego se termina cuando alcanza el borde derecho de la pantalla. ¡Tócalo para que te dé una pista!</string>
+  <string name="help_mode1_1">La meta es conseguir la puntuación más alta.
+
+El juego tiene un tiempo limitado.</string>
+  <string name="help_mode1_2">La ×feuille5,1× en su espalda marca los puntos de bonificación.
+
+Para cada combinación exitosa se añade tiempo adicional. La mejor manera de ganar mucho tiempo es completar un nivel. Esto se hace limpiando la rama principal de todas sus hojas.</string>
+  <string name="help_mode2_1">La meta es quitar todas las hojas ×feuille2,1× del árbol lo más rápido posible.
+
+Esto se hace alineando al menos 3 hojas idénticas ×feuille1,1× ×feuille1,1× ×feuille1,1×.
+
+Intercambia 2 hojas vecinas ×feuille2,1× ×feuille3,1× para crear una combinación.</string>
+  <string name="help_mode2_2">El ×herisson_2_5,2× muestra el progreso. El juego se termina cuando alcanza el borde derecho de la pantalla.
+
+Cada combinación que use hojas de tipo bonificación ×feuille5,1× puntúa el doble.</string>
+  <string name="help_mode3_1">La meta es obtener la mayor cantidad de puntos en exactamente 100 segundos.</string>
+  <string name="start_at_level_10">Pareces bueno, ¿quizá quieres empezar este juego en el nivel 10?</string>
+  <string name="start_at_level_10_yes">¡Salta al nivel 10!</string>
+  <string name="support_us">Apóyanos</string>
+  <string name="about_us">Acerca de nosotros</string>
 </resources>
