@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="continue_">ᎲᎵᏱᎴᎦ</string>
+  <string name="help">ᎠᏍᏕᎵᏙᏗ</string>
+  <string name="give_up">ᎯᏑᎳᎪᎦ</string>
+  <string name="mode_1">ᎤᏍᏆᏗᏍᏗ ᏙᎩᏯᏍᏗ</string>
+  <string name="mode_2">ᏄᎵᏍᏛᎢ ᎿᏛᎦ</string>
+  <string name="mode_3">100 ᏗᏯᏔᏅᎢ</string>
+  <string name="score">ᎦᎸᎳᏗ ᏧᏍᏆᏗᏍᏗ</string>
+  <string name="play">ᎭᎴᎾ</string>
+  <string name="restart">ᏏᏊ ᎭᎴᎾ</string>
+  <string name="diff_1">ᏩᏁ</string>
+  <string name="diff_2">ᎠᏰᎵ</string>
+  <string name="diff_3">ᏍᏔᏯ</string>
+  <string name="leaderboard">xxgg_ᏓᏂᎶᏍᎩ ᏚᎾᏙᎥ ᎪᏪᎳᏅ 2,1x ᏓᏂᎶᏍᎩ ᏚᎾᏙᎥ ᎪᏪᎳᏅ</string>
+  <string name="lvl">ᎠᎩᎶᏒᏘ</string>
+  <string name="lvlcap">ᎠᎩᎶᏒᏘ</string>
+  <string name="enter_name">ᏕᏣᏙᎥ ᎯᏍᏕᏱᏓ</string>
+  <string name="save_name">ᎠᎳᏏᏅᏙᏗ</string>
+  <string name="congrats">ᎠᏤ ᎦᎸᎳᏗ ᎤᏍᏆᏗᏍᏗ</string>
+  <string name="reuse_name">ᎠᎴ ᏐᏊ ᎯᏑᎩ:</string>
+  <string name="success">ᎤᎦᏙᎲᏒᎢ</string>
+  <string name="how_to_play">ᏗᎧᏃᏩᏛᏍᏗ ᏣᏁᏟᏙᏗ</string>
+  <string name="bonus_x2">x2 ᏭᎾᏗᏅᏓ</string>
+  <string name="objective">ᎤᎵᏐᏍᏙᏗ</string>
+  <string name="level">ᎠᎩᎶᏒᏘ</string>
+  <string name="leave_left">ᏧᎦᎶᎦ ᎤᏓᎷᎳ</string>
+  <string name="quit">ᎦᏄᎪᎢᏍᏙᏗᎢ</string>
+  <string name="please_rate_it">Heriswap ᏱᏣᎸᏉᏗ, ᎦᏣᏄᎳ ᏍᎩᏃᎯᏎᎸᎢ - ᏍᎩ!</string>
+  <string name="rate_now">ᏃᏊ ᎯᎬᏩᎶᏍᏗᎭ Heriswap</string>
+  <string name="rate_later">ᎣᏂᏗᏨ</string>
+  <string name="rate_never">ᎭᏗ</string>
+  <string name="change_difficulty">ᎡᎵᏍᏗ ᏙᏳ ᎣᏍᏓ ᎭᏁᏟᏗᏍᎪ.
+ᎠᏍᏓᏯᎯᎨ ᎠᏤ ᎠᏁᏟᏙᏗᏧ ᏣᏁᏟᏙᏗ ᏣᏚᎵ?</string>
+  <string name="change_difficulty_yes">ᎠᏍᏓᏯᎯᎨ ᏅᎦ</string>
+  <string name="change_difficulty_no">ᎭᏗ, Ꮟ ᏩᎾ ᎠᏁᏟᏙᏗ ᎠᎩᏁᏟᏙᏗ ᎠᏆᏚᎵ</string>
+  <string name="average_score">ᎥᏍᎩ ᎢᎦᏘᎭ ᎢᎬᏁᎸ ᏚᏂᏅ ᎾᏞᎬ:</string>
+  <string name="help_click_continue">-ᎯᏯᏒᏂᎦ ᏣᎵᏱᎵᏙᏗ ᏱᏣᏚᎵ-</string>
+  <string name="help_click_play">-ᎯᏯᏒᏂᎦ ᏣᏁᏟᏙᏗ ᏱᏣᏚᎵ-</string>
+  <string name="help_general_1">ᎠᏍᏓᏅᏅ ᏱᏅᎦ, 3 ᎢᏯᏂ ᏧᏂᏐᏱ ᏧᎦᎶᎦ ×feuille1,1× ×feuille1,1× ×feuille1,1× ᎬᏗ
+2 ᎢᏯᏂ ᏧᎦᎶᎦ ×feuille2,1× ×feuille3,1× ᎭᏓᏁᏟᏴᏓ ᏃᎴ ᎤᎾᏓᏣᏅ ᏅᎦ. ᎾᎿ ᏔᏅᎥᎦ.</string>
+  <string name="help_general_2">×herisson_2_5,2× ᏕᏣᏃᎯᏎᎵ ᎲᎦ ᎢᏔᏬᏍᏔᏅ ᎤᏓᎷᎳ. ᎠᏰᏙᎳᏛᎢ ᎠᎦᏘᏏ ᎠᏍᏛᎢ ᏭᎷᏨ ×herisson_2_5,2× ᎠᏍᏆᏓ ᎠᏁᎵᏙᏗ. ×herisson_2_5,2× ᎭᏐᏅᏍᏓ ᏣᏍᏕᎵᏙᏗ ᏱᏣᏚᎵ.</string>
+  <string name="help_mode1_1">ᎤᎪᏗᏗ ᏣᏅᎥᎪᏗ ᎭᎵᏐᏍᏗᎭ.
+ᎦᏣᏄᎵ ᏣᏛᏁᏘ ᎨᏎᏍᏗ.</string>
+  <string name="help_mode1_2">ᏔᎵ ᎢᏳᏩᎪᏗ ᎦᏅᎥᎪ ×feuille5,1× ᎦᏐᎯ ᏥᎦᏅᎦ.
+
+ᏂᎦᏓ ᎣᏍᏓ ᏚᎾᏓᏥᏒ ᏱᏅᎦ, ᎡᎵᏊ ᎠᎦᏓ ᎢᏯᏔᏅᎢ ᏥᏣᏁᏟᏙᏗ. ᎣᎯᏍᏗᏳ ᏥᏣᏛᎦ ᎢᎪᎯᏓ ᏱᏣᏁᏟᏙᏗ, ᏍᏈᏍᏓ ᏓᎩᏠᏒᏘ ᏣᏍᏆᏗᏍᏗ. ᎦᎸᎳᏗᏣ ᎤᏩᏂᎦᏢᎢ ᏂᎦᏓ ᏧᎦᎶᎦ ᏘᎲᎾ, ᎥᏍᎩ ᏱᏣᏛᏁᏘ.</string>
+  <string name="help_mode2_1">ᏂᎦᏓ ᏧᎦᎶᎦ ×feuille2,1× ᏣᎲᏍᏗ ᎭᎵᏐᏍᏗᎭ, ᏄᏟᏍᏛᎢ.
+
+3 ᎢᏯᏂ ᏧᏂᏐᏱ ᏧᎦᎶᎦ ×feuille1,1× ×feuille1,1× ×feuille1,1× ᎯᏍᏓᏅᏅᎾ, ᎢᏱᏣᏛᏁᏘ.
+
+2 ᎢᏯᏂ ᏧᎦᎶᎦ ᎭᏓᏁᏟᏴᏓ, ᎤᎾᏓᏣᏅ ᏂᏣᏴᏁᏍᏗ.</string>
+  <string name="help_mode2_2">ᎠᎵᎢᎵᏒ ᏕᏣᏃᎯᏎᎵ ×herisson_2_5,2×. ᎠᎦᏘᏏ ᎠᏍᏛᎢ ᎠᏰᏙᎳᏛᎢ ᏭᎷᏨ, ᎠᏍᏆᏓ ᎠᏁᎵᏙᏗ.
+ᏭᎾᏗᏅᏓ ᏧᎦᎶᎦ ×feuille5,1× ᏯᏅᏗᏍᎪ, ᏚᎾᏓᏥᏒ ᏱᏨᏁᏗ, ᏔᎵ ᎢᏳᏩᎪᏗ ᎦᏅᎥᎦ. </string>
+  <string name="help_mode3_1">100 ᎢᏯᏔᏅᎢ ᎤᏓᎷᎳ, ᎤᎪᏗᏗ ᏣᏅᎥᎪᏗ ᎭᎵᏐᏍᏗᎭ.</string>
+  <string name="start_at_level_10">ᎡᎵᏍᏗᏗ ᎣᏍᏓ ᎭᏁᎵᏗᎰᎢ! 10Ꮑ ᎠᎩᏠᏒᏘ ᏣᏓᎴᏅᏍᏗᏧ ᏣᏚᎵ? </string>
+  <string name="start_at_level_10_yes">10Ꮑ ᎠᎩᏠᏒᏘ ᎢᏗᏣ ᎭᏓᎾᏫᏓ!</string>
+  <string name="support_us">ᎣᏥᎫᏍᏓ</string>
+  <string name="about_us">ᎧᏃᎮᏓ ᎣᎦᏤᎵᎢ</string>
+</resources>
