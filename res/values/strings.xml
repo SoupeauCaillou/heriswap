@@ -1,60 +1,50 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="continue_">ᎲᎵᏱᎴᎦ</string>
-  <string name="help">ᎠᏍᏕᎵᏙᏗ</string>
-  <string name="give_up">ᎯᏑᎳᎪᎦ</string>
-  <string name="mode_1">ᎤᏍᏆᏗᏍᏗ ᏙᎩᏯᏍᏗ</string>
-  <string name="mode_2">ᏄᎵᏍᏛᎢ ᎿᏛᎦ</string>
-  <string name="mode_3">100 ᏗᏯᏔᏅᎢ</string>
-  <string name="score">ᎦᎸᎳᏗ ᏧᏍᏆᏗᏍᏗ</string>
-  <string name="play">ᎭᎴᎾ</string>
-  <string name="restart">ᏏᏊ ᎭᎴᎾ</string>
-  <string name="diff_1">ᏩᏁ</string>
-  <string name="diff_2">ᎠᏰᎵ</string>
-  <string name="diff_3">ᏍᏔᏯ</string>
-  <string name="leaderboard">xxgg_ᏓᏂᎶᏍᎩ ᏚᎾᏙᎥ ᎪᏪᎳᏅ 2,1x ᏓᏂᎶᏍᎩ ᏚᎾᏙᎥ ᎪᏪᎳᏅ</string>
-  <string name="lvl">ᎠᎩᎶᏒᏘ</string>
-  <string name="lvlcap">ᎠᎩᎶᏒᏘ</string>
-  <string name="enter_name">ᏕᏣᏙᎥ ᎯᏍᏕᏱᏓ</string>
-  <string name="save_name">ᎠᎳᏏᏅᏙᏗ</string>
-  <string name="congrats">ᎠᏤ ᎦᎸᎳᏗ ᎤᏍᏆᏗᏍᏗ</string>
-  <string name="reuse_name">ᎠᎴ ᏐᏊ ᎯᏑᎩ:</string>
-  <string name="success">ᎤᎦᏙᎲᏒᎢ</string>
-  <string name="how_to_play">ᏗᎧᏃᏩᏛᏍᏗ ᏣᏁᏟᏙᏗ</string>
-  <string name="bonus_x2">x2 ᏭᎾᏗᏅᏓ</string>
-  <string name="objective">ᎤᎵᏐᏍᏙᏗ</string>
-  <string name="level">ᎠᎩᎶᏒᏘ</string>
-  <string name="leave_left">ᏧᎦᎶᎦ ᎤᏓᎷᎳ</string>
-  <string name="quit">ᎦᏄᎪᎢᏍᏙᏗᎢ</string>
-  <string name="please_rate_it">Heriswap ᏱᏣᎸᏉᏗ, ᎦᏣᏄᎳ ᏍᎩᏃᎯᏎᎸᎢ - ᏍᎩ!</string>
-  <string name="rate_now">ᏃᏊ ᎯᎬᏩᎶᏍᏗᎭ Heriswap</string>
-  <string name="rate_later">ᎣᏂᏗᏨ</string>
-  <string name="rate_never">ᎭᏗ</string>
-  <string name="change_difficulty">ᎡᎵᏍᏗ ᏙᏳ ᎣᏍᏓ ᎭᏁᏟᏗᏍᎪ.
-ᎠᏍᏓᏯᎯᎨ ᎠᏤ ᎠᏁᏟᏙᏗᏧ ᏣᏁᏟᏙᏗ ᏣᏚᎵ?</string>
-  <string name="change_difficulty_yes">ᎠᏍᏓᏯᎯᎨ ᏅᎦ</string>
-  <string name="change_difficulty_no">ᎭᏗ, Ꮟ ᏩᎾ ᎠᏁᏟᏙᏗ ᎠᎩᏁᏟᏙᏗ ᎠᏆᏚᎵ</string>
-  <string name="average_score">ᎥᏍᎩ ᎢᎦᏘᎭ ᎢᎬᏁᎸ ᏚᏂᏅ ᎾᏞᎬ:</string>
-  <string name="help_click_continue">-ᎯᏯᏒᏂᎦ ᏣᎵᏱᎵᏙᏗ ᏱᏣᏚᎵ-</string>
-  <string name="help_click_play">-ᎯᏯᏒᏂᎦ ᏣᏁᏟᏙᏗ ᏱᏣᏚᎵ-</string>
-  <string name="help_general_1">ᎠᏍᏓᏅᏅ ᏱᏅᎦ, 3 ᎢᏯᏂ ᏧᏂᏐᏱ ᏧᎦᎶᎦ ×feuille1,1× ×feuille1,1× ×feuille1,1× ᎬᏗ
-2 ᎢᏯᏂ ᏧᎦᎶᎦ ×feuille2,1× ×feuille3,1× ᎭᏓᏁᏟᏴᏓ ᏃᎴ ᎤᎾᏓᏣᏅ ᏅᎦ. ᎾᎿ ᏔᏅᎥᎦ.</string>
-  <string name="help_general_2">×herisson_2_5,2× ᏕᏣᏃᎯᏎᎵ ᎲᎦ ᎢᏔᏬᏍᏔᏅ ᎤᏓᎷᎳ. ᎠᏰᏙᎳᏛᎢ ᎠᎦᏘᏏ ᎠᏍᏛᎢ ᏭᎷᏨ ×herisson_2_5,2× ᎠᏍᏆᏓ ᎠᏁᎵᏙᏗ. ×herisson_2_5,2× ᎭᏐᏅᏍᏓ ᏣᏍᏕᎵᏙᏗ ᏱᏣᏚᎵ.</string>
-  <string name="help_mode1_1">ᎤᎪᏗᏗ ᏣᏅᎥᎪᏗ ᎭᎵᏐᏍᏗᎭ.
-ᎦᏣᏄᎵ ᏣᏛᏁᏘ ᎨᏎᏍᏗ.</string>
-  <string name="help_mode1_2">ᏔᎵ ᎢᏳᏩᎪᏗ ᎦᏅᎥᎪ ×feuille5,1× ᎦᏐᎯ ᏥᎦᏅᎦ.
-
-ᏂᎦᏓ ᎣᏍᏓ ᏚᎾᏓᏥᏒ ᏱᏅᎦ, ᎡᎵᏊ ᎠᎦᏓ ᎢᏯᏔᏅᎢ ᏥᏣᏁᏟᏙᏗ. ᎣᎯᏍᏗᏳ ᏥᏣᏛᎦ ᎢᎪᎯᏓ ᏱᏣᏁᏟᏙᏗ, ᏍᏈᏍᏓ ᏓᎩᏠᏒᏘ ᏣᏍᏆᏗᏍᏗ. ᎦᎸᎳᏗᏣ ᎤᏩᏂᎦᏢᎢ ᏂᎦᏓ ᏧᎦᎶᎦ ᏘᎲᎾ, ᎥᏍᎩ ᏱᏣᏛᏁᏘ.</string>
-  <string name="help_mode2_1">ᏂᎦᏓ ᏧᎦᎶᎦ ×feuille2,1× ᏣᎲᏍᏗ ᎭᎵᏐᏍᏗᎭ, ᏄᏟᏍᏛᎢ.
-
-3 ᎢᏯᏂ ᏧᏂᏐᏱ ᏧᎦᎶᎦ ×feuille1,1× ×feuille1,1× ×feuille1,1× ᎯᏍᏓᏅᏅᎾ, ᎢᏱᏣᏛᏁᏘ.
-
-2 ᎢᏯᏂ ᏧᎦᎶᎦ ᎭᏓᏁᏟᏴᏓ, ᎤᎾᏓᏣᏅ ᏂᏣᏴᏁᏍᏗ.</string>
-  <string name="help_mode2_2">ᎠᎵᎢᎵᏒ ᏕᏣᏃᎯᏎᎵ ×herisson_2_5,2×. ᎠᎦᏘᏏ ᎠᏍᏛᎢ ᎠᏰᏙᎳᏛᎢ ᏭᎷᏨ, ᎠᏍᏆᏓ ᎠᏁᎵᏙᏗ.
-ᏭᎾᏗᏅᏓ ᏧᎦᎶᎦ ×feuille5,1× ᏯᏅᏗᏍᎪ, ᏚᎾᏓᏥᏒ ᏱᏨᏁᏗ, ᏔᎵ ᎢᏳᏩᎪᏗ ᎦᏅᎥᎦ. </string>
-  <string name="help_mode3_1">100 ᎢᏯᏔᏅᎢ ᎤᏓᎷᎳ, ᎤᎪᏗᏗ ᏣᏅᎥᎪᏗ ᎭᎵᏐᏍᏗᎭ.</string>
-  <string name="start_at_level_10">ᎡᎵᏍᏗᏗ ᎣᏍᏓ ᎭᏁᎵᏗᎰᎢ! 10Ꮑ ᎠᎩᏠᏒᏘ ᏣᏓᎴᏅᏍᏗᏧ ᏣᏚᎵ? </string>
-  <string name="start_at_level_10_yes">10Ꮑ ᎠᎩᏠᏒᏘ ᎢᏗᏣ ᎭᏓᎾᏫᏓ!</string>
-  <string name="support_us">ᎣᏥᎫᏍᏓ</string>
-  <string name="about_us">ᎧᏃᎮᏓ ᎣᎦᏤᎵᎢ</string>
+  <string name="continue_">"Continue"</string>
+  <string name="help">"Help"</string>
+  <string name="give_up">"Quit"</string>
+  <string name="mode_1">"Score race"</string>
+  <string name="mode_2">"Time attack"</string>
+  <string name="mode_3">"100 seconds"</string>
+  <string name="score">"Highscores:"</string>
+  <string name="play">"Start"</string>
+  <string name="restart">"Restart"</string>
+  <string name="diff_1">"Easy"</string>
+  <string name="diff_2">"Medium"</string>
+  <string name="diff_3">"Hard"</string>
+  <string name="leaderboard">"×gg_leaderboards2,1× Leaderboard"</string>
+  <string name="lvl">"lvl"</string>
+  <string name="lvlcap">"Lvl"</string>
+  <string name="enter_name">"Enter your name"</string>
+  <string name="save_name">"Save"</string>
+  <string name="congrats">"New high score!"</string>
+  <string name="reuse_name">"Or pick one:"</string>
+  <string name="success">"Success"</string>
+  <string name="how_to_play">"How to play?"</string>
+  <string name="bonus_x2">"Bonus x2"</string>
+  <string name="objective">"Goal"</string>
+  <string name="level">"Level"</string>
+  <string name="leave_left">"leaves left"</string>
+  <string name="quit">"Exit"</string>
+  <string name="please_rate_it">"If you enjoy using Heriswap, please take a moment to rate it. Thanks for your support!"</string>
+  <string name="rate_now">"Rate now"</string>
+  <string name="rate_later">"Later"</string>
+  <string name="rate_never">"No, thanks"</string>
+  <string name="change_difficulty">"You seem really good.\nWould you like to start a new game with increased difficulty?"</string>
+  <string name="change_difficulty_yes">"Increase difficulty"</string>
+  <string name="change_difficulty_no">"No, keep it easy"</string>
+  <string name="average_score">"Recent scores avg:"</string>
+  <string name="help_click_continue">"-touch to continue-"</string>
+  <string name="help_click_play">"-touch to play-"</string>
+  <string name="help_general_1">"Aligning at least 3 identical leaves ×feuille1,1× ×feuille1,1× ×feuille1,1×.\n\nSwap 2 neighbouring leaves ×feuille2,1× ×feuille3,1× to create a combination and earn points."</string>
+  <string name="help_general_2">"The ×herisson_2_5,2× shows how much time is left, and the game is over when it reaches screen's right edge. Tap him to get a hint!"</string>
+  <string name="help_mode1_1">"The goal is to score the most points.\n\nGame is time limited."</string>
+  <string name="help_mode1_2">"The ×feuille5,1× on its back scores bonus points.\n\nFor each successful combination extra time is added. The best way to earn lot of time is to complete a level. This is done by clearing the top branch of all its leaves."</string>
+  <string name="help_mode2_1">"The goal is to remove all the leaves ×feuille2,1× from the tree as fast as possible.\n\nThis is done by aligning at least 3 identical leaves ×feuille1,1× ×feuille1,1× ×feuille1,1×.\n\nSwap 2 neighbouring leaves ×feuille2,1× ×feuille3,1× to create a combination."</string>
+  <string name="help_mode2_2">"The ×herisson_2_5,2× shows the progress. Game is finished when it reaches screen's right edge.\n\nEvery combination using bonus type leaves ×feuille5,1× score double."</string>
+  <string name="help_mode3_1">"The goal is to score the most points in exactly 100 seconds."</string>
+  <string name="start_at_level_10">"You seems to be good, maybe do you want to start this game at level 10 ?"</string>
+  <string name="start_at_level_10_yes">"Jumps to level 10!"</string>
+  <string name="support_us">"Support us"</string>
+  <string name="about_us">"About us"</string>
 </resources>
