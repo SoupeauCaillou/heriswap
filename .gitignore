@@ -17,3 +17,4 @@ Parameters.h
 *.sublime-workspace
 local.properties
 build/
+sources/HeriswapGitVersion.h
