@@ -39,7 +39,7 @@
 #include "systems/TransformationSystem.h"
 
 #include <api/OpenURLAPI.h>
-    
+
 #include <glm/glm.hpp>
 
 #include <sstream>
@@ -51,7 +51,6 @@
 namespace Image {
     enum Enum {
         Background = 0,
-        Wolf,
         Count
     };
 }
@@ -62,6 +61,7 @@ namespace Button {
 #if SAC_RESTRICTIVE_PLUGINS
         Iap,
 #endif
+        Wolf,
         Web,
         Back,
         Count
@@ -92,8 +92,6 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
         const Color green("green");
 
         images[Image::Background] = theEntityManager.CreateEntityFromTemplate("aboutus/background");
-        images[Image::Wolf] = theEntityManager.CreateEntityFromTemplate("aboutus/wolf");
-
 
         texts[Text::SupportUs] = theEntityManager.CreateEntityFromTemplate("aboutus/supportus_text");
         texts[Text::AboutUs] = theEntityManager.CreateEntityFromTemplate("aboutus/aboutus_text");
@@ -102,6 +100,7 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
 #if SAC_RESTRICTIVE_PLUGINS
         buttons[Button::Iap] = theEntityManager.CreateEntityFromTemplate("aboutus/iap_button");
 #endif
+        buttons[Button::Wolf] = theEntityManager.CreateEntityFromTemplate("aboutus/wolf");
         buttons[Button::Web] = theEntityManager.CreateEntityFromTemplate("aboutus/web_button");
         buttons[Button::Back] = theEntityManager.CreateEntityFromTemplate("modemenu/back_button");
     }
@@ -132,6 +131,8 @@ struct AboutUsPopupScene : public StateHandler<Scene::Enum> {
             // return Scene::MainMenu;
         } else if (BUTTON(buttons[Button::Back])->clicked) {
             return Scene::MainMenu;
+        } else if (BUTTON(buttons[Button::Wolf])->clicked) {
+            game->gameThreadContext->openURLAPI->openURL("heriswap://settings");
         } else if (BUTTON(buttons[Button::Web])->clicked) {
             std::string url = "http://soupeaucaillou.com";
             game->gameThreadContext->openURLAPI->openURL(url);

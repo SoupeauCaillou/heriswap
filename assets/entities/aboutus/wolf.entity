@@ -6,3 +6,5 @@ positionS%gimp = 627, 250
 [Rendering]
 opaque_type = 0
 texture = loup2
+
+[Button]

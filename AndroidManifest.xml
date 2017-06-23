@@ -9,7 +9,7 @@
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="com.android.vending.BILLING" />
-    
+
 	<uses-feature android:glEsVersion="0x00020000" />
 
     <!-- minSdkVersion = 9 because of http://code.google.com/p/android/issues/detail?id=43819 -->
@@ -21,14 +21,25 @@
 
         <!-- Our activity is the built-in NativeActivity framework class.
              This will take care of integrating with our NDK code. -->
-        <activity android:name="net.damsy.soupeaucaillou.heriswap.HeriswapActivity"
+        <activity android:name=".HeriswapActivity"
                 android:label="Heriswap" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+        <activity android:name=".HeriswapSettingsActivity">
+            <intent-filer>
+                <action android:name=".Preferences" />
+                <category android:name="android.intent.category.PREFERENCE" />
+            </intent-filer>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+                <category android:name="android.intent.category.BROWSABLE"></category>
+                <data android:host="settings" android:scheme="heriswap"></data>
+            </intent-filter>
+        </activity>
         <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="\ 645507124800" /> <!-- the space is important since we cannot write int values without making the app crash -->
     </application>
 </manifest>

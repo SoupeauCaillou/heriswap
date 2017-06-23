@@ -20,7 +20,7 @@
 
 
 package net.damsy.soupeaucaillou.heriswap;
- 
+
 import net.damsy.soupeaucaillou.SacActivity;
 import net.damsy.soupeaucaillou.api.AssetAPI;
 import net.damsy.soupeaucaillou.api.CommunicationAPI;
@@ -32,6 +32,7 @@ import net.damsy.soupeaucaillou.api.StorageAPI;
 import net.damsy.soupeaucaillou.api.StringInputAPI;
 import net.damsy.soupeaucaillou.api.VibrateAPI;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
@@ -40,23 +41,38 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import im.delight.android.languages.LanguageList;
+import java.util.Arrays;
+import android.content.res.Configuration;
+import im.delight.android.languages.Language;
+
 public class HeriswapActivity extends SacActivity {
 	static {
         System.loadLibrary("sac");
     }
- 
+
     public int getLayoutId() {
         return R.layout.main;
     }
 
 	public int getParentViewId() {
-        return R.id.parent_frame; 
-    } 
+        return R.id.parent_frame;
+    }
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
 		SacActivity.LogI("-> onCreate [" + savedInstanceState);
         super.onCreate(savedInstanceState);
+        Language.setFromPreference(this, "myPreferenceKey");
+
+        SacActivity.LogE("LanguageList.getHumanReadable() = "+Arrays.toString(LanguageList.getHumanReadable()));
+        SacActivity.LogE("LanguageList.getMachineReadable() = "+Arrays.toString(LanguageList.getMachineReadable()));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Language.setFromPreference(this, "myPreferenceKey");
     }
 
 	@Override

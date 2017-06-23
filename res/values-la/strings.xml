@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="continue_">Continua</string>
+  <string name="help">Auxilium</string>
+  <string name="give_up">Exi</string>
+  <string name="mode_2">Contra tempus</string>
+  <string name="mode_3">100 secunda</string>
+  <string name="play">Incipe</string>
+  <string name="restart">Incipe iterum</string>
+  <string name="diff_1">Facile</string>
+  <string name="diff_2">Medium</string>
+  <string name="diff_3">Difficile</string>
+  <string name="enter_name">Scribe nomen tuum</string>
+  <string name="save_name">Conserva</string>
+  <string name="reuse_name">Vel dilige unum:</string>
+  <string name="success">Victoria</string>
+  <string name="how_to_play">Quomodo luditur?</string>
+  <string name="quit">Exitus</string>
+  <string name="help_click_continue">-tango ut continues-</string>
+  <string name="help_click_play">-tango ut ludas-</string>
+  <string name="support_us">Adjuva nos</string>
+</resources>
